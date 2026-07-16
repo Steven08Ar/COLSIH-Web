@@ -18,7 +18,7 @@ export default function Contacto() {
 
     return (
         <AppLayout>
-            <Head title="Contacto" />
+            <Head title="Contacto | COLSIH" />
 
             <section>
                 <h1>Contáctanos</h1>

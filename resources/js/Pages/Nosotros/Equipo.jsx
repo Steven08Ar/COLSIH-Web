@@ -23,7 +23,7 @@ const areas = [
 export default function Equipo() {
     return (
         <AppLayout>
-            <Head title="Nuestro Equipo — Nosotros" />
+            <Head title="Nuestro Equipo | COLSIH" />
 
             {/* Header Hero Section */}
             <section className="relative bg-gradient-to-b from-[#08111F] to-[#0D1B2E] pt-32 pb-20 text-center text-white overflow-hidden">

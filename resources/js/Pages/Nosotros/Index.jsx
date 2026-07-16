@@ -5,8 +5,7 @@ import AboutHero from './components/AboutHero';
 export default function NosotrosIndex() {
     return (
         <AppLayout>
-            <Head>
-                <title>Quiénes Somos</title>
+            <Head title="Quiénes Somos | COLSIH">
                 <link rel="preconnect" href="https://fonts.googleapis.com" />
                 <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />
                 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap" rel="stylesheet" />

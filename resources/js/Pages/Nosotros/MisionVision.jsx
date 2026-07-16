@@ -14,7 +14,7 @@ export default function MisionVision() {
 
     return (
         <AppLayout>
-            <Head title="Misión y Visión — Nosotros" />
+            <Head title="Misión y Visión | COLSIH" />
 
             {/* Header Hero Section */}
             <section className="relative bg-gradient-to-b from-[#08111F] to-[#0D1B2E] pt-32 pb-20 text-center text-white overflow-hidden">

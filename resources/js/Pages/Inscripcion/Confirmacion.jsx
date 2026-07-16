@@ -4,7 +4,7 @@ import AppLayout from '@/Layouts/AppLayout';
 export default function Confirmacion({ inscripcion }) {
     return (
         <AppLayout>
-            <Head title="Inscripción recibida" />
+            <Head title="Confirmación de Inscripción | COLSIH" />
 
             <section>
                 <h1>¡Inscripción recibida!</h1>

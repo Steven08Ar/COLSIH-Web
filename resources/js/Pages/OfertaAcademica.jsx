@@ -36,7 +36,7 @@ const jornadas = [
 export default function OfertaAcademica() {
     return (
         <AppLayout>
-            <Head title="Oferta Académica" />
+            <Head title="Oferta Académica | COLSIH" />
 
             <section>
                 <h1>Oferta Académica</h1>

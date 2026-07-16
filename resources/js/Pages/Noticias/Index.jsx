@@ -15,7 +15,7 @@ export default function NoticiasIndex({ noticias, categoriaActual }) {
 
     return (
         <AppLayout>
-            <Head title="Noticias y Eventos" />
+            <Head title="Noticias | COLSIH" />
 
             <section>
                 <h1>Noticias y Eventos</h1>

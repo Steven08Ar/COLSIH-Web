@@ -46,7 +46,7 @@ const requisitos = [
 export default function Admisiones() {
     return (
         <AppLayout>
-            <Head title="Admisiones" />
+            <Head title="Admisiones | COLSIH" />
 
             <section>
                 <h1>Proceso de Admisiones</h1>

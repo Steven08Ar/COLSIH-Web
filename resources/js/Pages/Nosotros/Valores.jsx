@@ -16,7 +16,7 @@ export default function Valores() {
 
     return (
         <AppLayout>
-            <Head title="Valores Corporativos — Nosotros" />
+            <Head title="Valores | COLSIH" />
 
             {/* Header Hero Section */}
             <section className="relative bg-gradient-to-b from-[#08111F] to-[#0D1B2E] pt-32 pb-20 text-center text-white overflow-hidden">

@@ -359,7 +359,7 @@ export default function InscripcionIndex() {
 
     return (
         <AppLayout>
-            <Head title="Formulario de inscripción" />
+            <Head title="Inscripción | COLSIH" />
 
             <section>
                 <h1>Formulario de inscripción</h1>

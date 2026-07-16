@@ -14,7 +14,7 @@ const hitos = [
 export default function Historia() {
     return (
         <AppLayout>
-            <Head title="Historia — Nosotros" />
+            <Head title="Historia | COLSIH" />
 
             {/* Header Hero Section */}
             <section className="relative bg-gradient-to-b from-[#08111F] to-[#0D1B2E] pt-32 pb-20 text-center text-white overflow-hidden">

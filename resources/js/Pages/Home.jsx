@@ -21,7 +21,7 @@ export default function Home({ noticias }) {
 
     return (
         <div className="relative min-h-screen bg-white overflow-hidden flex flex-col font-sans selection:bg-red-100 selection:text-red-900">
-            <Head title="Inicio - Colegio Santa Isabel de Hungría" />
+            <Head title="Colegio Santa Isabel de Hungría" />
 
             {/* Section 1: Hero */}
             <Hero setVideoOpen={setVideoOpen} />

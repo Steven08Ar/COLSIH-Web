@@ -1,14 +1,19 @@
+import { useState } from 'react';
 import { Link } from '@inertiajs/react';
+import { motion, AnimatePresence } from 'framer-motion';
 import ScrollReveal from './ScrollReveal';
 
 export default function Programs() {
-    const programs = [
+    // Default to Primaria (index 1) expanded
+    const [hoveredIndex, setHoveredIndex] = useState(1);
+
+    const list = [
         {
             num: "01",
-            title: "Preescolar / Jardín",
-            tagline: "Sembrando la curiosidad e imaginación",
-            description: "Enfoque lúdico e interactivo diseñado para promover las habilidades sociales, motoras y cognitivas básicas. Fomentamos la fe y los valores cristianos desde los primeros años en un ambiente estimulante y seguro bajo la pedagogía de la confianza.",
-            duration: "3 Años (Prejardín, Jardín y Transición)",
+            title: "Preescolar",
+            tagline: "Sembrando la curiosidad",
+            description: "Enfoque lúdico e interactivo diseñado para promover las habilidades sociales, motoras y cognitivas básicas en un ambiente estimulante y seguro bajo la pedagogía de la confianza.",
+            duration: "3 Años (Prejardín a Transición)",
             image: "/Estudiantes COLSIH.png",
             ctaLink: "/oferta-academica",
             ctaText: "Explorar Preescolar"
@@ -16,8 +21,8 @@ export default function Programs() {
         {
             num: "02",
             title: "Primaria",
-            tagline: "Construyendo las bases intelectuales y morales",
-            description: "Desarrollo profundo de habilidades lógicas, matemáticas, lectoescritura e inglés. Potenciamos la creatividad, el trabajo colaborativo y la formación de valores cívicos y espirituales salesianos en una cultura de paz.",
+            tagline: "Bases intelectuales y morales",
+            description: "Desarrollo profundo de habilidades lógicas, matemáticas, lectoescritura e inglés. Potenciamos el trabajo colaborativo y la formación de valores salesianos en una cultura de paz.",
             duration: "5 Años (Primero a Quinto)",
             image: "/Estudiantes COLSIH.png",
             ctaLink: "/oferta-academica",
@@ -26,8 +31,8 @@ export default function Programs() {
         {
             num: "03",
             title: "Bachillerato",
-            tagline: "Liderazgo, ciencia e innovación para el futuro",
-            description: "Preparación académica avanzada con énfasis en la Media Técnica comercial y contable en convenio de articulación con el SENA, capacitando laboralmente a nuestros bachilleres para responder con éxito a los desafíos profesionales de la sociedad.",
+            tagline: "Liderazgo, ciencia e innovación",
+            description: "Preparación académica avanzada con énfasis en la Media Técnica comercial y contable en convenio de articulación con el SENA, capacitando laboralmente a nuestros egresados.",
             duration: "6 Años (Sexto a Undécimo)",
             image: "/Estudiantes COLSIH.png",
             ctaLink: "/oferta-academica",
@@ -53,67 +58,132 @@ export default function Programs() {
                     </ScrollReveal>
                 </div>
 
-                {/* Editorial Catalog List Layout */}
-                <div className="border-t border-slate-100 divide-y divide-slate-100">
-                    {programs.map((program, index) => (
-                        <ScrollReveal 
-                            key={index}
-                            distance="translate-y-12"
-                            delay={index * 100}
-                        >
-                            <div className="group grid grid-cols-12 gap-8 py-10 lg:py-14 items-center text-left">
-                                
-                                {/* 01. Number (Col 1-2) */}
-                                <div className="col-span-12 md:col-span-2">
-                                    <span className="text-4xl lg:text-5xl font-light text-slate-200 group-hover:text-[#0057D9] transition-colors duration-300 font-sans tracking-tighter">
-                                        {program.num}
-                                    </span>
+                {/* Interactive Expanding Accordion Panels */}
+                <div className="flex flex-col lg:flex-row items-stretch gap-6 h-auto lg:h-[580px] w-full min-h-[580px]">
+                    {list.map((item, index) => {
+                        const isExpanded = hoveredIndex === index;
+
+                        return (
+                            <div
+                                key={index}
+                                onMouseEnter={() => setHoveredIndex(index)}
+                                className={`relative rounded-3xl overflow-hidden cursor-pointer transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] flex flex-col justify-between ${
+                                    isExpanded 
+                                        ? 'flex-[2.5] h-[480px] lg:h-full bg-slate-900 border-transparent shadow-xl' 
+                                        : 'flex-[1] h-[180px] lg:h-full bg-slate-950 border border-white/5'
+                                }`}
+                            >
+                                {/* Layer 1: Background Image with elegant transitions */}
+                                <div className="absolute inset-0 w-full h-full z-0 transition-transform duration-[1200ms] ease-out">
+                                    <img 
+                                        src={item.image} 
+                                        alt={item.title} 
+                                        className={`w-full h-full object-cover transition-all duration-700 ${
+                                            isExpanded 
+                                                ? 'scale-103 grayscale-0 brightness-[0.35]' 
+                                                : 'scale-100 grayscale brightness-[0.15] blur-[1px]'
+                                        }`}
+                                    />
                                 </div>
 
-                                {/* 02. Details & Info (Col 3-9) */}
-                                <div className="col-span-12 md:col-span-7 space-y-4">
-                                    <div className="space-y-1">
-                                        <span className="text-[11px] font-extrabold uppercase tracking-widest text-[#0057D9] block">
-                                            {program.duration}
+                                {/* Layer 2: Interactive Content Overlays */}
+                                <div className="relative z-10 w-full h-full p-8 md:p-10 flex flex-col justify-between items-start text-left">
+                                    
+                                    {/* Top row: Number badge */}
+                                    <div className="w-full flex justify-between items-start">
+                                        <span className={`text-3xl font-light font-sans tracking-tighter transition-colors duration-300 ${
+                                            isExpanded ? 'text-[#0057D9]' : 'text-slate-500'
+                                        }`}>
+                                            {item.num}
                                         </span>
-                                        <h3 className="text-2xl sm:text-3xl font-extrabold text-[#08111F] group-hover:text-[#0057D9] transition-colors duration-300">
-                                            {program.title}
-                                        </h3>
-                                        <p className="text-xs font-extrabold text-slate-400 tracking-wider">
-                                            {program.tagline}
-                                        </p>
+                                        {!isExpanded && (
+                                            <span className="text-[10px] font-extrabold uppercase tracking-widest text-slate-500 lg:hidden">
+                                                {item.duration}
+                                            </span>
+                                        )}
                                     </div>
-                                    <p className="text-sm lg:text-base font-semibold text-slate-500 leading-relaxed max-w-3xl">
-                                        {program.description}
-                                    </p>
-                                    <div className="pt-2">
-                                        <Link 
-                                            href={program.ctaLink}
-                                            className="inline-flex items-center gap-1.5 text-xs font-extrabold text-[#E31C23] hover:text-[#c4181e] uppercase tracking-wider transition-colors"
-                                        >
-                                            {program.ctaText}
-                                            <svg className="w-3.5 h-3.5 transition-transform duration-300 translate-x-0 group-hover:translate-x-1" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                                            </svg>
-                                        </Link>
+
+                                    {/* Middle/Bottom block: Animated text reveals */}
+                                    <div className="w-full flex flex-col lg:flex-row justify-between items-end gap-6 mt-auto">
+                                        
+                                        {/* Left text column */}
+                                        <div className="space-y-3 max-w-xl">
+                                            {/* Accordion title block */}
+                                            <h3 className={`text-2xl sm:text-3xl font-extrabold tracking-tight transition-colors duration-300 ${
+                                                isExpanded ? 'text-white' : 'text-slate-400'
+                                            }`}>
+                                                {item.title}
+                                            </h3>
+
+                                            {/* Expand details on hover */}
+                                            <AnimatePresence initial={false}>
+                                                {isExpanded && (
+                                                    <motion.div
+                                                        initial={{ opacity: 0, height: 0 }}
+                                                        animate={{ opacity: 1, height: 'auto' }}
+                                                        exit={{ opacity: 0, height: 0 }}
+                                                        transition={{ duration: 0.4, ease: 'easeOut' }}
+                                                        className="space-y-4 overflow-hidden"
+                                                    >
+                                                        <p className="text-xs font-extrabold text-[#E31C23] tracking-widest uppercase">
+                                                            {item.tagline}
+                                                        </p>
+                                                        <p className="text-sm font-medium text-slate-300 leading-relaxed">
+                                                            {item.description}
+                                                        </p>
+                                                        <span className="block text-xs font-bold text-slate-400">
+                                                            {item.duration}
+                                                        </span>
+                                                    </motion.div>
+                                                )}
+                                            </AnimatePresence>
+                                        </div>
+
+                                        {/* Right action column: Link triggers */}
+                                        {isExpanded && (
+                                            <motion.div
+                                                initial={{ opacity: 0, scale: 0.9 }}
+                                                animate={{ opacity: 1, scale: 1 }}
+                                                transition={{ delay: 0.1, duration: 0.3 }}
+                                                className="shrink-0 pt-2 lg:pt-0"
+                                            >
+                                                <Link
+                                                    href={item.ctaLink}
+                                                    className="inline-flex items-center gap-2 bg-white text-[#08111F] hover:bg-[#0057D9] hover:text-white font-extrabold text-xs uppercase tracking-wider px-6 py-4.5 rounded-xl transition-all cursor-pointer focus:outline-none"
+                                                >
+                                                    {item.ctaText}
+                                                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                                                    </svg>
+                                                </Link>
+                                            </motion.div>
+                                        )}
+
                                     </div>
+
                                 </div>
 
-                                {/* 03. Crisp Rectangular Image (Col 10-12) */}
-                                <div className="col-span-12 md:col-span-3 hidden md:block">
-                                    <div className="relative aspect-[4/3] rounded-xl overflow-hidden group">
-                                        <img 
-                                            src={program.image} 
-                                            alt={program.title} 
-                                            className="w-full h-full object-cover transition-transform duration-[1200ms] group-hover:scale-103"
-                                        />
-                                        <div className="absolute inset-0 bg-slate-950/5 group-hover:bg-transparent transition-colors duration-300"></div>
+                                {/* Desktop vertical spine text label if contracted */}
+                                {!isExpanded && (
+                                    <div 
+                                        className="absolute hidden lg:flex items-center justify-center pointer-events-none z-10"
+                                        style={{
+                                            left: '50%',
+                                            top: '45%',
+                                            transform: 'translate(-50%, -50%) rotate(90deg)',
+                                            width: '300px',
+                                            transformOrigin: 'center center'
+                                        }}
+                                    >
+                                        <span className="text-xs font-extrabold uppercase tracking-[4px] text-slate-500 whitespace-nowrap">
+                                            {item.title}
+                                        </span>
                                     </div>
-                                </div>
+                                )}
 
                             </div>
-                        </ScrollReveal>
-                    ))}
+                        );
+                    })}
                 </div>
 
             </div>

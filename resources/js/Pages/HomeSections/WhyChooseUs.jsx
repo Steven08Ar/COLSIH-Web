@@ -1,30 +1,148 @@
+import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { useRef } from 'react';
 import ScrollReveal from './ScrollReveal';
+
+function TiltCard({ pillar, index }) {
+    const cardRef = useRef(null);
+
+    // Motion values for tracking cursor offset coordinates inside the card
+    const rotateX = useMotionValue(0);
+    const rotateY = useMotionValue(0);
+
+    // Springs for smooth rotation return and tilt transition
+    const springX = useSpring(rotateX, { damping: 25, stiffness: 120 });
+    const springY = useSpring(rotateY, { damping: 25, stiffness: 120 });
+
+    // Cursor tracking coordinate spots for the radial spotlight gradient
+    const spotlightX = useMotionValue(-1000);
+    const spotlightY = useMotionValue(-1000);
+
+    const handleMouseMove = (e) => {
+        if (!cardRef.current) return;
+        const rect = cardRef.current.getBoundingClientRect();
+        
+        // Calculate mouse relative coordinates
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        spotlightX.set(x);
+        spotlightY.set(y);
+
+        // Normalize coordinates relative to card center (-0.5 to 0.5)
+        const normX = (x / rect.width) - 0.5;
+        const normY = (y / rect.height) - 0.5;
+
+        // Apply a gentle 12 degree 3D rotation tilt
+        rotateX.set(-normY * 12);
+        rotateY.set(normX * 12);
+    };
+
+    const handleMouseLeave = () => {
+        // Smoothly snap back to center and throw spotlight out of view
+        rotateX.set(0);
+        rotateY.set(0);
+        spotlightX.set(-1000);
+        spotlightY.set(-1000);
+    };
+
+    // Parallax depth shifts for card interior elements
+    const parallaxX = useTransform(springY, val => val * 0.8);
+    const parallaxY = useTransform(springX, val => -val * 0.8);
+
+    // Dynamic color radial gradient spotlight tracking computed at CSS layer
+    const spotlightBackground = useTransform(
+        [spotlightX, spotlightY],
+        ([x, y]) => {
+            const glowColor = pillar.num === "02" || pillar.num === "04" 
+                ? "rgba(227,28,35,0.07)" // Red glow accent
+                : "rgba(0,87,217,0.07)";  // Blue glow accent
+            return `radial-gradient(circle 240px at ${x}px ${y}px, ${glowColor} 0%, transparent 70%)`;
+        }
+    );
+
+    return (
+        <ScrollReveal 
+            distance="translate-y-8"
+            delay={index * 100}
+            className="h-full"
+        >
+            <motion.div
+                ref={cardRef}
+                onMouseMove={handleMouseMove}
+                onMouseLeave={handleMouseLeave}
+                style={{
+                    rotateX: springX,
+                    rotateY: springY,
+                    transformStyle: 'preserve-3d',
+                    perspective: 1000
+                }}
+                className="relative h-full min-h-[340px] border border-slate-100 p-8 md:p-10 lg:p-12 rounded-3xl bg-white select-none transition-all duration-300 hover:border-slate-200/80 hover:shadow-[0_25px_60px_rgba(8,17,31,0.05)] cursor-pointer group flex flex-col justify-between"
+            >
+                {/* Spotlight Tracker Background Layer */}
+                <motion.div 
+                    className="absolute inset-0 z-0 pointer-events-none rounded-3xl"
+                    style={{ background: spotlightBackground }}
+                />
+
+                {/* Floating Content container with 3D Pop depth */}
+                <div 
+                    className="space-y-6 text-left relative z-10" 
+                    style={{ transform: 'translateZ(30px)' }}
+                >
+                    {/* Parallaxing Number Tag */}
+                    <motion.span 
+                        style={{ x: parallaxX, y: parallaxY }}
+                        className="block text-5xl font-light text-slate-200 group-hover:text-[#0057D9] transition-colors duration-300 font-sans tracking-tighter"
+                    >
+                        {pillar.num}
+                    </motion.span>
+                    
+                    <div className="space-y-3">
+                        <h3 className="font-extrabold text-[20px] text-[#08111F] group-hover:text-[#0057D9] transition-colors duration-300">
+                            {pillar.title}
+                        </h3>
+                        <p className="text-[15px] font-semibold text-slate-500 leading-relaxed">
+                            {pillar.description}
+                        </p>
+                    </div>
+                </div>
+
+                {/* Arrow indicator slide-in at the bottom */}
+                <div 
+                    className="pt-6 flex justify-start items-center gap-1.5 text-xs font-extrabold tracking-wider uppercase text-slate-400 group-hover:text-[#0057D9] transition-colors duration-300 relative z-10"
+                    style={{ transform: 'translateZ(15px)' }}
+                >
+                    Saber más
+                    <svg className="w-3.5 h-3.5 transition-all duration-300 translate-x-0 opacity-0 group-hover:translate-x-1 group-hover:opacity-100" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                    </svg>
+                </div>
+            </motion.div>
+        </ScrollReveal>
+    );
+}
 
 export default function WhyChooseUs() {
     const pillars = [
         {
             num: "01",
             title: "Excelencia Académica",
-            description: "Plan de estudios riguroso e innovador que fomenta el pensamiento crítico y prepara a los estudiantes para los estándares de educación superior del país.",
-            accentColor: "bg-[#0057D9]"
+            description: "Plan de estudios riguroso e innovador que fomenta el pensamiento crítico y prepara a los estudiantes para los estándares de educación superior del país."
         },
         {
             num: "02",
             title: "Formación en Valores",
-            description: "Fundamentados en el Sistema Preventivo Salesiano (Razón, Religión y Amor), inculcamos valores éticos y cristianos para formar buenos cristianos y honestos ciudadanos.",
-            accentColor: "bg-[#E31C23]"
+            description: "Fundamentados en el Sistema Preventivo Salesiano (Razón, Religión y Amor), inculcamos valores éticos y cristianos para formar buenos cristianos y honestos ciudadanos."
         },
         {
             num: "03",
             title: "Docentes Comprometidos",
-            description: "Un equipo docente altamente calificado con metodologías innovadoras y acompañamiento personalizado para potenciar el talento único de cada alumno.",
-            accentColor: "bg-[#0057D9]"
+            description: "Un equipo docente altamente calificado con metodologías innovadoras y acompañamiento personalizado para potenciar el talento único de cada alumno."
         },
         {
             num: "04",
             title: "Entorno Seguro",
-            description: "Aulas inteligentes, laboratorios de robótica y amplios espacios recreativos en un entorno protegido y de sana convivencia salesiana.",
-            accentColor: "bg-[#E31C23]"
+            description: "Aulas inteligentes, laboratorios de robótica y amplios espacios recreativos en un entorno protegido y de sana convivencia salesiana."
         }
     ];
 
@@ -46,34 +164,10 @@ export default function WhyChooseUs() {
                     </ScrollReveal>
                 </div>
 
-                {/* Flat Border-only Grid Layout */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 border-t border-b lg:border-r lg:border-l border-slate-100 divide-y md:divide-y-0 md:divide-x divide-slate-100">
+                {/* 3D Tilt Card Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                     {pillars.map((pillar, index) => (
-                        <ScrollReveal 
-                            key={index}
-                            distance="translate-y-8"
-                            delay={index * 100}
-                            className="relative group p-8 md:p-10 lg:p-12 transition-all duration-300 hover:bg-slate-50/50 flex flex-col justify-between min-h-[300px]"
-                        >
-                            <div className="space-y-6 text-left">
-                                {/* Number Marker in fine serif/sans format */}
-                                <span className="block text-4xl font-light text-slate-200 group-hover:text-[#0057D9] transition-colors duration-300 font-sans tracking-tighter">
-                                    {pillar.num}
-                                </span>
-                                
-                                <div className="space-y-3">
-                                    <h3 className="font-extrabold text-[20px] text-[#08111F] group-hover:text-[#0057D9] transition-colors duration-300">
-                                        {pillar.title}
-                                    </h3>
-                                    <p className="text-[15px] font-semibold text-slate-500 leading-relaxed">
-                                        {pillar.description}
-                                    </p>
-                                </div>
-                            </div>
-
-                            {/* Minimal slide up accent bar indicator on hover */}
-                            <div className={`absolute bottom-0 left-0 w-full h-[3px] bg-transparent transition-all duration-300 group-hover:${pillar.accentColor}`} />
-                        </ScrollReveal>
+                        <TiltCard key={index} pillar={pillar} index={index} />
                     ))}
                 </div>
 

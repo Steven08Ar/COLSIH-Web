@@ -5,9 +5,24 @@ import ScrollReveal from './HomeSections/ScrollReveal';
 
 export default function Mjs() {
     useEffect(() => {
-        const favicon = document.querySelector("link[rel='icon']");
-        if (favicon) favicon.href = '/Logo-MJS.svg';
-        return () => { if (favicon) favicon.href = '/Logo COLSIH.svg'; };
+        const favicon =
+            document.querySelector("link[rel='icon']") ||
+            document.querySelector("link[rel='shortcut icon']");
+        if (favicon) {
+            favicon.href = '/Logo-MJS.svg';
+        } else {
+            const link = document.createElement('link');
+            link.rel = 'icon';
+            link.type = 'image/svg+xml';
+            link.href = '/Logo-MJS.svg';
+            document.head.appendChild(link);
+        }
+        return () => {
+            const el =
+                document.querySelector("link[rel='icon']") ||
+                document.querySelector("link[rel='shortcut icon']");
+            if (el) el.href = '/Logo COLSIH.svg';
+        };
     }, []);
     const groups = [
         {

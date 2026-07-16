@@ -12,6 +12,11 @@ use Illuminate\Support\Facades\Route;
 // Home
 Route::get('/', HomeController::class)->name('home');
 
+// MJS
+Route::get('/mjs', function () {
+    return inertia('Mjs');
+})->name('mjs');
+
 // Nosotros
 Route::prefix('nosotros')->name('nosotros.')->group(function () {
     Route::get('/', [NosotrosController::class, 'index'])->name('index');

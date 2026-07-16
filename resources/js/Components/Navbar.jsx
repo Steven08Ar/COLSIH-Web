@@ -140,33 +140,29 @@ export default function Navbar() {
                 {/* CTA + mobile toggle — mismo estilo que Hero */}
                 <div className="flex items-center gap-3 shrink-0">
                     {url === '/mjs' ? (
-                        <a
+                        <Link
                             href="/"
-                            target="_blank"
-                            rel="noopener noreferrer"
                             className="hidden lg:inline-flex items-center justify-center focus:outline-none cursor-pointer"
                             title="Ir al Colegio Santa Isabel de Hungría"
                         >
-                            <img 
-                                src="/Logo COLSIH.svg" 
-                                alt="Logo COLSIH" 
+                            <img
+                                src="/Logo COLSIH.svg"
+                                alt="Logo COLSIH"
                                 className="h-12 w-auto object-contain hover:scale-105 transition-all duration-300"
                             />
-                        </a>
+                        </Link>
                     ) : (
-                        <a
+                        <Link
                             href="/mjs"
-                            target="_blank"
-                            rel="noopener noreferrer"
                             className="hidden lg:inline-flex items-center justify-center focus:outline-none cursor-pointer"
                             title="Movimiento Juvenil Salesiano"
                         >
-                            <img 
-                                src="/Logo-MJS.svg" 
-                                alt="Logo MJS Colombia" 
+                            <img
+                                src="/Logo-MJS.svg"
+                                alt="Logo MJS Colombia"
                                 className="h-12 w-auto object-contain hover:scale-105 transition-all duration-300"
                             />
-                        </a>
+                        </Link>
                     )}
 
                     <button
@@ -222,35 +218,31 @@ export default function Navbar() {
                         ))}
                         <div className="pt-2 border-t border-white/10 flex justify-center">
                             {url === '/mjs' ? (
-                                <a 
-                                    href="/" 
-                                    target="_blank" 
-                                    rel="noopener noreferrer" 
+                                <Link
+                                    href="/"
                                     onClick={() => setMobileOpen(false)}
                                     className="py-2 focus:outline-none cursor-pointer"
                                     title="Ir al Colegio Santa Isabel de Hungría"
                                 >
-                                    <img 
-                                        src="/Logo COLSIH.svg" 
-                                        alt="Logo COLSIH" 
+                                    <img
+                                        src="/Logo COLSIH.svg"
+                                        alt="Logo COLSIH"
                                         className="h-10 w-auto object-contain hover:scale-105 transition-all duration-300"
                                     />
-                                </a>
+                                </Link>
                             ) : (
-                                <a 
-                                    href="/mjs" 
-                                    target="_blank" 
-                                    rel="noopener noreferrer" 
+                                <Link
+                                    href="/mjs"
                                     onClick={() => setMobileOpen(false)}
                                     className="py-2 focus:outline-none cursor-pointer"
                                     title="Movimiento Juvenil Salesiano"
                                 >
-                                    <img 
-                                        src="/Logo-MJS.svg" 
-                                        alt="Logo MJS Colombia" 
+                                    <img
+                                        src="/Logo-MJS.svg"
+                                        alt="Logo MJS Colombia"
                                         className="h-10 w-auto object-contain hover:scale-105 transition-all duration-300"
                                     />
-                                </a>
+                                </Link>
                             )}
                         </div>
                     </div>

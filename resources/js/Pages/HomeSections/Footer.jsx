@@ -1,7 +1,10 @@
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import ScrollReveal from './ScrollReveal';
 
 export default function Footer() {
+    const { url } = usePage();
+    const isMjs = url === '/mjs';
+
     return (
         <footer className="relative bg-[#08111F] text-white overflow-hidden border-t border-white/5 select-none">
             {/* Soft background glow circles */}
@@ -18,22 +21,42 @@ export default function Footer() {
                     
                     {/* Brand Info (4 columns) */}
                     <div className="col-span-12 lg:col-span-4 space-y-6 text-left">
-                        <Link href="/" className="flex items-center gap-3 group focus:outline-none shrink-0">
-                            <img 
-                                src="/Logo COLSIH.svg" 
-                                alt="Logo COLSIH" 
-                                className="h-14 w-auto object-contain transition-transform duration-300 group-hover:scale-105" 
-                            />
-                            <div className="flex flex-col leading-none text-white">
-                                <span className="text-[11px] tracking-widest uppercase opacity-60 font-semibold">Colegio</span>
-                                <span className="text-[20px] font-black tracking-tight text-white mt-0.5">
-                                    SANTA ISABEL
-                                </span>
-                                <span className="text-[12px] tracking-wide font-medium opacity-80 mt-0.5">de Hungría</span>
-                            </div>
-                        </Link>
+                        {isMjs ? (
+                            <Link href="/mjs" className="flex items-center gap-3 group focus:outline-none shrink-0">
+                                <img 
+                                    src="/MJS-Colombia.png" 
+                                    alt="Logo MJS Colombia" 
+                                    className="h-14 w-auto object-contain transition-transform duration-300 group-hover:scale-105" 
+                                />
+                                <div className="flex flex-col leading-none text-white font-sans">
+                                    <span className="text-[11px] tracking-widest uppercase opacity-60 font-semibold">Movimiento</span>
+                                    <span className="text-[20px] font-black tracking-tight text-white mt-0.5">
+                                        JUVENIL
+                                    </span>
+                                    <span className="text-[12px] tracking-wide font-medium opacity-80 mt-0.5">Salesiano</span>
+                                </div>
+                            </Link>
+                        ) : (
+                            <Link href="/" className="flex items-center gap-3 group focus:outline-none shrink-0">
+                                <img 
+                                    src="/Logo COLSIH.svg" 
+                                    alt="Logo COLSIH" 
+                                    className="h-14 w-auto object-contain transition-transform duration-300 group-hover:scale-105" 
+                                />
+                                <div className="flex flex-col leading-none text-white font-sans">
+                                    <span className="text-[11px] tracking-widest uppercase opacity-60 font-semibold">Colegio</span>
+                                    <span className="text-[20px] font-black tracking-tight text-white mt-0.5">
+                                        SANTA ISABEL
+                                    </span>
+                                    <span className="text-[12px] tracking-wide font-medium opacity-80 mt-0.5">de Hungría</span>
+                                </div>
+                            </Link>
+                        )}
                         <p className="text-sm font-semibold text-slate-400 leading-relaxed max-w-sm">
-                            Formando líderes integrales con fe, ciencia y justicia desde 1989, en Floridablanca, Santander, Colombia.
+                            {isMjs 
+                                ? "Espacio asociativo de fe, alegría y protagonismo juvenil que acompaña el crecimiento integral y el liderazgo de la juventud en COLSIH."
+                                : "Formando líderes integrales con fe, ciencia y justicia desde 1989, en Floridablanca, Santander, Colombia."
+                            }
                         </p>
                         
                         {/* Social Icons */}
@@ -55,45 +78,82 @@ export default function Footer() {
 
                     {/* Columns (4 columns for categories) */}
                     <div className="col-span-12 lg:col-span-5 grid grid-cols-2 md:grid-cols-3 gap-8">
-                        {/* Quick links */}
-                        <div className="space-y-4 text-left">
-                            <h4 className="text-sm font-extrabold uppercase tracking-wider relative pb-2.5 text-white">
-                                Institución
-                                <span className="absolute bottom-0 left-0 w-8 h-[2px] bg-[#E31C23] rounded-full" />
-                            </h4>
-                            <div className="flex flex-col gap-3 text-sm font-semibold text-slate-400">
-                                <Link href="/nosotros" className="hover:text-white transition-colors">Quiénes Somos</Link>
-                                <Link href="/nosotros/historia" className="hover:text-white transition-colors">Historia</Link>
-                                <Link href="/nosotros/mision-vision" className="hover:text-white transition-colors">Misión y Visión</Link>
-                                <Link href="/nosotros/valores" className="hover:text-white transition-colors">Valores</Link>
-                                <Link href="/nosotros/equipo" className="hover:text-white transition-colors">Nuestro Equipo</Link>
-                            </div>
-                        </div>
+                        {isMjs ? (
+                            <>
+                                {/* MJS groups */}
+                                <div className="space-y-4 text-left">
+                                    <h4 className="text-sm font-extrabold uppercase tracking-wider relative pb-2.5 text-white font-sans">
+                                        Líneas MJS
+                                        <span className="absolute bottom-0 left-0 w-8 h-[2px] bg-[#E31C23] rounded-full" />
+                                    </h4>
+                                    <div className="flex flex-col gap-3 text-sm font-semibold text-slate-400">
+                                        <a href="#" className="hover:text-white transition-colors">Líderes Salesianos</a>
+                                        <a href="#" className="hover:text-white transition-colors">Servidores del Altar</a>
+                                        <a href="#" className="hover:text-white transition-colors">Infancia Misionera</a>
+                                        <a href="#" className="hover:text-white transition-colors">Gestores Ambientales</a>
+                                    </div>
+                                </div>
 
-                        {/* Academics */}
-                        <div className="space-y-4 text-left">
-                            <h4 className="text-sm font-extrabold uppercase tracking-wider relative pb-2.5 text-white">
-                                Procesos
-                                <span className="absolute bottom-0 left-0 w-8 h-[2px] bg-[#0057D9] rounded-full" />
-                            </h4>
-                            <div className="flex flex-col gap-3 text-sm font-semibold text-slate-400">
-                                <Link href="/oferta-academica" className="hover:text-white transition-colors">Oferta Académica</Link>
-                                <Link href="/admisiones" className="hover:text-white transition-colors">Admisiones</Link>
-                                <Link href="/inscripcion" className="hover:text-white transition-colors">Matrículas</Link>
-                                <Link href="/noticias" className="hover:text-white transition-colors">Noticias</Link>
-                                <Link href="/contacto" className="hover:text-white transition-colors">Contacto</Link>
-                            </div>
-                        </div>
+                                {/* Institutional MJS */}
+                                <div className="space-y-4 text-left">
+                                    <h4 className="text-sm font-extrabold uppercase tracking-wider relative pb-2.5 text-white font-sans">
+                                        Navegación
+                                        <span className="absolute bottom-0 left-0 w-8 h-[2px] bg-[#0057D9] rounded-full" />
+                                    </h4>
+                                    <div className="flex flex-col gap-3 text-sm font-semibold text-slate-400">
+                                        <Link href="/" className="hover:text-white transition-colors">Volver al Colegio</Link>
+                                        <Link href="/oferta-academica" className="hover:text-white transition-colors">Oferta Académica</Link>
+                                        <Link href="/noticias" className="hover:text-white transition-colors">Comunidad</Link>
+                                        <Link href="/contacto" className="hover:text-white transition-colors">Contacto</Link>
+                                    </div>
+                                </div>
+                            </>
+                        ) : (
+                            <>
+                                {/* Quick links */}
+                                <div className="space-y-4 text-left">
+                                    <h4 className="text-sm font-extrabold uppercase tracking-wider relative pb-2.5 text-white font-sans">
+                                        Institución
+                                        <span className="absolute bottom-0 left-0 w-8 h-[2px] bg-[#E31C23] rounded-full" />
+                                    </h4>
+                                    <div className="flex flex-col gap-3 text-sm font-semibold text-slate-400">
+                                        <Link href="/nosotros" className="hover:text-white transition-colors">Quiénes Somos</Link>
+                                        <Link href="/nosotros/historia" className="hover:text-white transition-colors">Historia</Link>
+                                        <Link href="/nosotros/mision-vision" className="hover:text-white transition-colors">Misión y Visión</Link>
+                                        <Link href="/nosotros/valores" className="hover:text-white transition-colors">Valores</Link>
+                                        <Link href="/nosotros/equipo" className="hover:text-white transition-colors">Nuestro Equipo</Link>
+                                    </div>
+                                </div>
+
+                                {/* Academics */}
+                                <div className="space-y-4 text-left">
+                                    <h4 className="text-sm font-extrabold uppercase tracking-wider relative pb-2.5 text-white font-sans">
+                                        Procesos
+                                        <span className="absolute bottom-0 left-0 w-8 h-[2px] bg-[#0057D9] rounded-full" />
+                                    </h4>
+                                    <div className="flex flex-col gap-3 text-sm font-semibold text-slate-400">
+                                        <Link href="/oferta-academica" className="hover:text-white transition-colors">Oferta Académica</Link>
+                                        <Link href="/admisiones" className="hover:text-white transition-colors">Admisiones</Link>
+                                        <Link href="/inscripcion" className="hover:text-white transition-colors">Matrículas</Link>
+                                        <Link href="/noticias" className="hover:text-white transition-colors">Noticias</Link>
+                                        <Link href="/contacto" className="hover:text-white transition-colors">Contacto</Link>
+                                    </div>
+                                </div>
+                            </>
+                        )}
                     </div>
 
                     {/* Newsletter (3 columns) */}
                     <div className="col-span-12 lg:col-span-3 space-y-4 text-left">
-                        <h4 className="text-sm font-extrabold uppercase tracking-wider relative pb-2.5 text-white">
-                            Boletín
+                        <h4 className="text-sm font-extrabold uppercase tracking-wider relative pb-2.5 text-white font-sans">
+                            {isMjs ? "Únete al MJS" : "Boletín"}
                             <span className="absolute bottom-0 left-0 w-8 h-[2px] bg-[#E31C23] rounded-full" />
                         </h4>
                         <p className="text-sm font-semibold text-slate-400">
-                            Suscríbete para recibir circulares, noticias y eventos escolares.
+                            {isMjs 
+                                ? "Suscríbete para recibir noticias de campamentos, retiros y servicio social."
+                                : "Suscríbete para recibir circulares, noticias y eventos escolares."
+                            }
                         </p>
                         
                         {/* Signup Form */}
@@ -104,7 +164,7 @@ export default function Footer() {
                                 placeholder="tu@correo.com"
                             />
                             <button className="w-full bg-white/10 hover:bg-white text-[#08111F] hover:text-slate-900 font-extrabold text-xs py-3 rounded-full transition-all cursor-pointer">
-                                Suscribirme
+                                {isMjs ? "Participar" : "Suscribirme"}
                             </button>
                         </div>
                     </div>
@@ -113,8 +173,13 @@ export default function Footer() {
 
                 {/* Lower Footer: Copyright */}
                 <div className="border-t border-white/5 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs font-semibold text-slate-500">
-                    <p>© {new Date().getFullYear()} COLSIH. Todos los derechos reservados.</p>
-                    <p>Diseñado para la excelencia escolar y el liderazgo del mañana.</p>
+                    <p>© {new Date().getFullYear()} {isMjs ? "MJS COLSIH" : "COLSIH"}. Todos los derechos reservados.</p>
+                    <p>
+                        {isMjs 
+                            ? "Formando buenos cristianos y honestos ciudadanos en la alegría salesiana."
+                            : "Diseñado para la excelencia escolar y el liderazgo del mañana."
+                        }
+                    </p>
                 </div>
 
             </div>

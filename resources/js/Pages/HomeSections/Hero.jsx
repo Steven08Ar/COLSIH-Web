@@ -125,12 +125,19 @@ export default function Hero({ setVideoOpen }) {
 
                     {/* CTA + Mobile toggle */}
                     <div className="flex items-center gap-3 shrink-0">
-                        <Link
-                            href="/inscripcion"
-                            className="hidden lg:inline-flex items-center justify-center bg-[#E31C23] hover:bg-[#c4181e] text-white font-extrabold text-sm px-6 py-3.5 rounded-full transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+                        <a
+                            href="/mjs"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="hidden lg:inline-flex items-center justify-center focus:outline-none cursor-pointer"
+                            title="Movimiento Juvenil Salesiano"
                         >
-                            Matricúlate
-                        </Link>
+                            <img 
+                                src="/Logo-MJS.svg" 
+                                alt="Logo MJS Colombia" 
+                                className="h-12 w-auto object-contain hover:scale-105 transition-all duration-300"
+                            />
+                        </a>
 
                         {/* Mobile toggle */}
                         <button
@@ -170,10 +177,21 @@ export default function Hero({ setVideoOpen }) {
                             <Link href="/admisiones" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 text-sm font-semibold text-white/75 hover:text-white rounded-lg hover:bg-white/10 transition-colors">Admisiones</Link>
                             <Link href="/noticias" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 text-sm font-semibold text-white/75 hover:text-white rounded-lg hover:bg-white/10 transition-colors">Comunidad</Link>
                             <Link href="/contacto" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 text-sm font-semibold text-white/75 hover:text-white rounded-lg hover:bg-white/10 transition-colors">Contacto</Link>
-                            <div className="pt-2 border-t border-white/10">
-                                <Link href="/inscripcion" onClick={() => setMobileOpen(false)} className="w-full flex items-center justify-center bg-[#E31C23] hover:bg-[#c4181e] text-white font-extrabold py-3 px-4 rounded-xl transition-colors">
-                                    Matricúlate
-                                </Link>
+                            <div className="pt-2 border-t border-white/10 flex justify-center">
+                                <a 
+                                    href="/mjs" 
+                                    target="_blank" 
+                                    rel="noopener noreferrer" 
+                                    onClick={() => setMobileOpen(false)}
+                                    className="py-2 focus:outline-none cursor-pointer"
+                                    title="Movimiento Juvenil Salesiano"
+                                >
+                                    <img 
+                                        src="/Logo-MJS.svg" 
+                                        alt="Logo MJS Colombia" 
+                                        className="h-10 w-auto object-contain hover:scale-105 transition-all duration-300"
+                                    />
+                                </a>
                             </div>
                         </div>
                     </div>

@@ -12,10 +12,11 @@
     --font-serif: 'Caveat', cursive, Georgia, serif;
 }
 
-/* Liquid Glass Scrollbar */
+/* Custom Minimalist Scrollbar */
 ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+    width: 5px;
+    height: 5px;
+    background: transparent;
 }
 
 ::-webkit-scrollbar-track {
@@ -23,27 +24,41 @@
 }
 
 ::-webkit-scrollbar-thumb {
-    background: linear-gradient(
-        180deg,
-        rgba(0, 87, 217, 0.5) 0%,
-        rgba(227, 28, 35, 0.4) 100%
-    );
+    background: rgba(0, 87, 217, 0.55);
     border-radius: 9999px;
-    box-shadow:
-        inset 0 1px 2px rgba(255, 255, 255, 0.3),
-        0 0 6px rgba(0, 87, 217, 0.2);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(
-        180deg,
-        rgba(0, 87, 217, 0.7) 0%,
-        rgba(227, 28, 35, 0.6) 100%
-    );
+    background: rgba(227, 28, 35, 0.85);
+}
+
+::-webkit-scrollbar-button {
+    display: none;
 }
 
 /* Firefox */
 * {
     scrollbar-width: thin;
-    scrollbar-color: rgba(0, 87, 217, 0.45) transparent;
+    scrollbar-color: rgba(0, 87, 217, 0.5) transparent;
+}
+
+@keyframes stroke-draw {
+    0% {
+        stroke-dashoffset: 2000;
+    }
+    100% {
+        stroke-dashoffset: 0;
+    }
+}
+
+@keyframes logo-glow {
+    0% {
+        filter: drop-shadow(0 0 12px rgba(227, 28, 35, 0.45)) invert(16%) sepia(89%) saturate(6039%) hue-rotate(351deg) brightness(90%) contrast(100%);
+    }
+    50% {
+        filter: drop-shadow(0 0 12px rgba(251, 191, 36, 0.45)) invert(82%) sepia(45%) saturate(3015%) hue-rotate(352deg) brightness(101%) contrast(98%);
+    }
+    100% {
+        filter: drop-shadow(0 0 12px rgba(227, 28, 35, 0.45)) invert(16%) sepia(89%) saturate(6039%) hue-rotate(351deg) brightness(90%) contrast(100%);
+    }
 }

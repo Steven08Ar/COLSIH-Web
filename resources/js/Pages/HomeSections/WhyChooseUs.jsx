@@ -54,8 +54,8 @@ function TiltCard({ pillar, index }) {
         [spotlightX, spotlightY],
         ([x, y]) => {
             const glowColor = pillar.num === "02" || pillar.num === "04" 
-                ? "rgba(227,28,35,0.07)" // Red glow accent
-                : "rgba(0,87,217,0.07)";  // Blue glow accent
+                ? "rgba(227,28,35,0.12)" // Red glow accent
+                : "rgba(0,87,217,0.15)";  // Blue glow accent
             return `radial-gradient(circle 240px at ${x}px ${y}px, ${glowColor} 0%, transparent 70%)`;
         }
     );
@@ -76,7 +76,7 @@ function TiltCard({ pillar, index }) {
                     transformStyle: 'preserve-3d',
                     perspective: 1000
                 }}
-                className="relative h-full min-h-[340px] border border-slate-100 p-8 md:p-10 lg:p-12 rounded-3xl bg-white select-none transition-all duration-300 hover:border-slate-200/80 hover:shadow-[0_25px_60px_rgba(8,17,31,0.05)] cursor-pointer group flex flex-col justify-between"
+                className="relative h-full min-h-[340px] border border-white/10 p-8 md:p-10 lg:p-12 rounded-3xl bg-white/[0.02] backdrop-blur-md select-none transition-all duration-300 hover:border-white/20 hover:bg-white/[0.05] hover:shadow-[0_25px_60px_rgba(0,0,0,0.3)] cursor-pointer group flex flex-col justify-between"
             >
                 {/* Spotlight Tracker Background Layer */}
                 <motion.div 
@@ -92,16 +92,16 @@ function TiltCard({ pillar, index }) {
                     {/* Parallaxing Number Tag */}
                     <motion.span 
                         style={{ x: parallaxX, y: parallaxY }}
-                        className="block text-5xl font-light text-slate-200 group-hover:text-[#0057D9] transition-colors duration-300 font-sans tracking-tighter"
+                        className="block text-5xl font-light text-white/10 group-hover:text-white/30 transition-colors duration-300 font-sans tracking-tighter"
                     >
                         {pillar.num}
                     </motion.span>
                     
                     <div className="space-y-3">
-                        <h3 className="font-extrabold text-[20px] text-[#08111F] group-hover:text-[#0057D9] transition-colors duration-300">
+                        <h3 className="font-extrabold text-[20px] text-white group-hover:text-[#0057D9] transition-colors duration-300">
                             {pillar.title}
                         </h3>
-                        <p className="text-[15px] font-semibold text-slate-500 leading-relaxed">
+                        <p className="text-[15px] font-semibold text-slate-400 leading-relaxed group-hover:text-slate-300 transition-colors duration-300">
                             {pillar.description}
                         </p>
                     </div>
@@ -109,7 +109,7 @@ function TiltCard({ pillar, index }) {
 
                 {/* Arrow indicator slide-in at the bottom */}
                 <div 
-                    className="pt-6 flex justify-start items-center gap-1.5 text-xs font-extrabold tracking-wider uppercase text-slate-400 group-hover:text-[#0057D9] transition-colors duration-300 relative z-10"
+                    className="pt-6 flex justify-start items-center gap-1.5 text-xs font-extrabold tracking-wider uppercase text-slate-500 group-hover:text-white transition-colors duration-300 relative z-10"
                     style={{ transform: 'translateZ(15px)' }}
                 >
                     Saber más
@@ -147,8 +147,20 @@ export default function WhyChooseUs() {
     ];
 
     return (
-        <section className="relative py-24 lg:py-32 bg-white overflow-hidden select-none border-b border-slate-100">
-            <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] space-y-20">
+        <section className="relative py-36 lg:py-48 bg-[#08111F] overflow-hidden select-none">
+            
+            {/* Top Wave (White SVG transition) */}
+            <div className="absolute top-0 left-0 w-full overflow-hidden leading-none z-20 pointer-events-none">
+                <svg className="relative block w-full h-[60px] md:h-[100px]" viewBox="0 0 1440 100" preserveAspectRatio="none">
+                    <path d="M0,0 C380,90 760,10 1080,70 C1200,90 1320,80 1440,40 L1440,0 L0,0 Z" fill="#ffffff"></path>
+                </svg>
+            </div>
+
+            {/* Background glowing effects for visual depth */}
+            <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[500px] h-[500px] bg-[#0057D9]/10 rounded-full blur-[140px] pointer-events-none z-0"></div>
+            <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-[500px] h-[500px] bg-[#E31C23]/8 rounded-full blur-[140px] pointer-events-none z-0"></div>
+
+            <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] space-y-20 relative z-10">
                 
                 {/* Section Header */}
                 <div className="max-w-2xl text-left space-y-4">
@@ -158,13 +170,13 @@ export default function WhyChooseUs() {
                         </span>
                     </ScrollReveal>
                     <ScrollReveal distance="translate-y-6" delay={150}>
-                        <h2 className="text-4xl sm:text-5xl lg:text-[56px] font-black text-[#08111F] leading-[1.05] tracking-tight font-sans">
+                        <h2 className="text-4xl sm:text-5xl lg:text-[56px] font-black text-white leading-[1.05] tracking-tight font-sans">
                             Pilares de nuestra excelencia
                         </h2>
                     </ScrollReveal>
                 </div>
 
-                {/* 3D Tilt Card Grid */}
+                {/* 3D Tilt Glassmorphic Card Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                     {pillars.map((pillar, index) => (
                         <TiltCard key={index} pillar={pillar} index={index} />
@@ -172,6 +184,14 @@ export default function WhyChooseUs() {
                 </div>
 
             </div>
+
+            {/* Bottom Wave (White SVG transition back to white background) */}
+            <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-none z-20 pointer-events-none">
+                <svg className="relative block w-full h-[60px] md:h-[100px]" viewBox="0 0 1440 100" preserveAspectRatio="none">
+                    <path d="M0,100 C380,10 760,90 1080,30 C1200,10 1320,20 1440,60 L1440,100 L0,100 Z" fill="#ffffff"></path>
+                </svg>
+            </div>
+
         </section>
     );
 }

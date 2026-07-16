@@ -1,8 +1,14 @@
 import { Head } from '@inertiajs/react';
+import { useEffect } from 'react';
 import AppLayout from '@/Layouts/AppLayout';
 import ScrollReveal from './HomeSections/ScrollReveal';
 
 export default function Mjs() {
+    useEffect(() => {
+        const favicon = document.querySelector("link[rel='icon']");
+        if (favicon) favicon.href = '/MJS-Colombia.png';
+        return () => { if (favicon) favicon.href = '/Logo COLSIH.svg'; };
+    }, []);
     const groups = [
         {
             num: "01",

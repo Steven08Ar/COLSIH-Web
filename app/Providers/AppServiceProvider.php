@@ -14,10 +14,12 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        if (config('app.env') === 'production') {
-            $root = str_replace('http://', 'https://', config('app.url'));
-            URL::forceRootUrl($root);
+        if (
+            isset($_SERVER['HTTP_X_FORWARDED_PROTO']) &&
+            $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https'
+        ) {
             URL::forceScheme('https');
+            URL::forceRootUrl('https://' . $_SERVER['HTTP_HOST']);
         }
     }
 }

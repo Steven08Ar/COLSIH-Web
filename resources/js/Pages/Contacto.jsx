@@ -32,19 +32,11 @@ export default function Contacto() {
                 {/* Información de contacto */}
                 <section>
                     <h2>Información de contacto</h2>
-                    <address>
-                        <p><strong>Dirección:</strong> [Dirección del colegio]</p>
-                        <p><strong>Teléfono:</strong> [Número de teléfono]</p>
-                        <p><strong>WhatsApp:</strong> [Número de WhatsApp]</p>
-                        <p><strong>Email:</strong> [Email institucional]</p>
-                        <p><strong>Horario de atención:</strong> Lunes a viernes, [horario]</p>
+                    <address className="not-italic space-y-2 mt-4 text-slate-600 font-medium">
+                        <p><strong>Dirección:</strong> Calle 13 # 13-30 Barrio Villabel, Floridablanca, Santander</p>
+                        <p><strong>Email:</strong> santaisabeldehungria@hotmail.com</p>
+                        <p><strong>Horario de atención:</strong> Lunes a viernes, 6:30 A.M. - 2:00 P.M. (Jornada Única)</p>
                     </address>
-
-                    <section>
-                        <h3>Redes sociales</h3>
-                        <p>Facebook: [Enlace o nombre]</p>
-                        <p>Instagram: [Enlace o nombre]</p>
-                    </section>
 
                     <section>
                         <h3>Ubicación</h3>

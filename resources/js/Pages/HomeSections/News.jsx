@@ -24,9 +24,9 @@ export default function News({ noticias }) {
         },
         {
             id: 3,
-            titulo: "Olimpiadas Deportivas Franciscanas y convivencia COLSIH 2026",
+            titulo: "Olimpiadas Deportivas Salesianas y convivencia COLSIH 2026",
             resumen: "Una semana dedicada al deporte, la sana recreación y el fortalecimiento de los valores de solidaridad y paz de toda la comunidad educativa.",
-            slug: "olimpiadas-deportivas-franciscanas",
+            slug: "olimpiadas-deportivas-salesianas",
             imagen: null,
             categoria: "Comunidad",
             publicado_en: "2026-06-18"

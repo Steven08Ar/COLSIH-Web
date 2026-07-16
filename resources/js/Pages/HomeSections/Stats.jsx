@@ -7,14 +7,12 @@ function CountUp({ end, duration = 1500, startCount = false }) {
     useEffect(() => {
         if (!startCount) return;
 
-        // Extract pure number (e.g. "+2.000" -> 2000)
         const target = parseInt(end.replace(/\+/g, '').replace(/\./g, ''));
         let start = 0;
         
         if (target === 0) return;
         
-        // Calculate step increments for smooth duration
-        const stepTime = Math.max(Math.floor(duration / 60), 16); // ~60fps target
+        const stepTime = Math.max(Math.floor(duration / 60), 16); 
         const increment = Math.ceil(target / (duration / stepTime));
 
         const timer = setInterval(() => {
@@ -30,10 +28,8 @@ function CountUp({ end, duration = 1500, startCount = false }) {
         return () => clearInterval(timer);
     }, [end, duration, startCount]);
 
-    // Format nicely
     const formatNumber = (num) => {
         if (num >= 1000) {
-            // e.g. 2000 -> "2.000"
             return num.toLocaleString('es-CO');
         }
         return num.toString();
@@ -74,84 +70,55 @@ export default function Stats() {
         };
     }, []);
 
+    // Real, high-fidelity PEI statistics
     const stats = [
         {
-            value: "+40",
+            value: "37",
             label: "Años",
-            sublabel: "de trayectoria escolar",
-            icon: (
-                <svg className="w-7 h-7 text-[#E31C23] transition-transform duration-300 group-hover:rotate-[15deg]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                </svg>
-            )
+            sublabel: "de trayectoria educativa"
         },
         {
-            value: "+2.000",
-            label: "Estudiantes",
-            sublabel: "egresados de bachillerato",
-            icon: (
-                <svg className="w-7 h-7 text-[#0057D9] transition-transform duration-300 group-hover:-translate-y-1" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-            )
+            value: "+3.000",
+            label: "Egresados",
+            sublabel: "con proyección profesional"
         },
         {
-            value: "+150",
+            value: "+60",
             label: "Docentes",
-            sublabel: "altamente especializados",
-            icon: (
-                <svg className="w-7 h-7 text-[#E31C23] transition-transform duration-300 group-hover:scale-110" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
-            )
+            sublabel: "y directivos calificados"
         },
         {
             value: "4",
             label: "Niveles",
-            sublabel: "de educación integral",
-            icon: (
-                <svg className="w-7 h-7 text-[#0057D9] transition-transform duration-300 group-hover:-rotate-[10deg]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                </svg>
-            )
+            sublabel: "desde Preescolar a Media Técnica"
         }
     ];
 
     return (
         <section 
             ref={ref}
-            className="relative py-20 lg:py-28 bg-white border-b border-slate-100 overflow-hidden select-none"
+            className="relative py-20 lg:py-24 bg-white border-b border-slate-100 overflow-hidden select-none"
         >
             <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px]">
                 
-                {/* Horizontal Stat Items */}
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8 items-stretch divide-y lg:divide-y-0 lg:divide-x divide-slate-100">
+                {/* Horizontal Stat Items divided by fine line grid */}
+                <div className="grid grid-cols-2 lg:grid-cols-4 border-t border-b lg:border-l lg:border-r border-slate-100 divide-y lg:divide-y-0 lg:divide-x divide-slate-100">
                     {stats.map((stat, index) => (
                         <ScrollReveal 
                             key={index}
                             distance="translate-y-8"
                             delay={index * 100}
-                            className={`flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-4 lg:px-6 first:pl-0 ${
-                                index >= 2 ? 'pt-8 sm:pt-0' : ''
-                            }`}
+                            className="flex flex-col justify-center p-8 md:p-10 lg:p-12 text-left"
                         >
-                            {/* Icon */}
-                            <div className="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center text-slate-800 shadow-xs shrink-0 group">
-                                {stat.icon}
-                            </div>
-                            
-                            {/* Numbers & Texts */}
-                            <div className="space-y-1">
-                                <span className="block text-4xl sm:text-5xl font-black text-slate-900 tracking-tight leading-none">
-                                    <CountUp end={stat.value} startCount={inView} />
-                                </span>
-                                <span className="block text-[15px] font-black text-[#08111F]">
-                                    {stat.label}
-                                </span>
-                                <span className="block text-xs font-bold text-slate-400">
-                                    {stat.sublabel}
-                                </span>
-                            </div>
+                            <span className="block text-4xl sm:text-5xl lg:text-6xl font-black text-[#0B1F3A] tracking-tighter leading-none font-sans">
+                                <CountUp end={stat.value} startCount={inView} />
+                            </span>
+                            <span className="block text-[14px] font-extrabold uppercase tracking-widest text-[#E31C23] mt-4 font-sans">
+                                {stat.label}
+                            </span>
+                            <span className="block text-xs font-semibold text-slate-400 mt-1">
+                                {stat.sublabel}
+                            </span>
                         </ScrollReveal>
                     ))}
                 </div>

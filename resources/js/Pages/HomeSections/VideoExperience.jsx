@@ -37,9 +37,9 @@ export default function VideoExperience({ setVideoOpen }) {
                 className="absolute inset-0 w-full h-full z-0 pointer-events-none select-none"
             >
                 <img 
-                    src="/Estudiantes COLSIH.png" 
-                    alt="Colegio" 
-                    className="w-full h-full object-cover grayscale brightness-50 contrast-105"
+                    src="/Panoramica COLSIH.png" 
+                    alt="Panorámica Colegio" 
+                    className="w-full h-full object-cover brightness-50 contrast-105"
                 />
             </div>
 

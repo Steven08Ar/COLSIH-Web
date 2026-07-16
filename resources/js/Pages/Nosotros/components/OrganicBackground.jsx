@@ -1,13 +1,20 @@
-import { motion, useTransform } from 'framer-motion';
+import { motion, useTransform, useMotionValue } from 'framer-motion';
 import AnimatedBlob from './AnimatedBlob';
 
 export default function OrganicBackground({ mouseX, mouseY }) {
-    // Transforms for the giant background circles (zero React re-renders)
-    const circle1X = useTransform(mouseX, val => val * 12);
-    const circle1Y = useTransform(mouseY, val => val * 12);
+    // Fallback MotionValues to ensure no "undefined" crashes
+    const fallbackX = useMotionValue(0);
+    const fallbackY = useMotionValue(0);
 
-    const circle2X = useTransform(mouseX, val => -val * 15);
-    const circle2Y = useTransform(mouseY, val => -val * 15);
+    const activeMouseX = mouseX || fallbackX;
+    const activeMouseY = mouseY || fallbackY;
+
+    // Transforms for the giant background circles (zero React re-renders)
+    const circle1X = useTransform(activeMouseX, val => val * 12);
+    const circle1Y = useTransform(activeMouseY, val => val * 12);
+
+    const circle2X = useTransform(activeMouseX, val => -val * 15);
+    const circle2Y = useTransform(activeMouseY, val => -val * 15);
 
     return (
         <div className="absolute inset-0 w-full h-full z-0 overflow-hidden pointer-events-none select-none">
@@ -41,14 +48,14 @@ export default function OrganicBackground({ mouseX, mouseY }) {
             {/* Background Parallax Blur Lights (Azul & Rojo) */}
             <AnimatedBlob 
                 className="w-96 h-96 bg-[#0057D9]/10 -top-24 -left-24 blur-3xl" 
-                mouseX={mouseX} 
-                mouseY={mouseY} 
+                mouseX={activeMouseX} 
+                mouseY={activeMouseY} 
                 speed={0.8} 
             />
             <AnimatedBlob 
                 className="w-[500px] h-[500px] bg-[#E31C23]/8 bottom-24 -right-12 blur-3xl" 
-                mouseX={mouseX} 
-                mouseY={mouseY} 
+                mouseX={activeMouseX} 
+                mouseY={activeMouseY} 
                 speed={0.6} 
             />
         </div>

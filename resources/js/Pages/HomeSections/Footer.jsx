@@ -33,7 +33,7 @@ export default function Footer() {
                             </div>
                         </Link>
                         <p className="text-sm font-semibold text-slate-400 leading-relaxed max-w-sm">
-                            Formando líderes integrales con fe, ciencia y justicia desde hace más de 40 años, en Bogotá, Colombia.
+                            Formando líderes integrales con fe, ciencia y justicia desde 1989, en Floridablanca, Santander, Colombia.
                         </p>
                         
                         {/* Social Icons */}

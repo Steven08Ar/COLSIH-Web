@@ -4,27 +4,30 @@ import ScrollReveal from './ScrollReveal';
 export default function Programs() {
     const programs = [
         {
+            num: "01",
             title: "Preescolar / Jardín",
             tagline: "Sembrando la curiosidad e imaginación",
-            description: "Enfoque lúdico e interactivo diseñado para promover las habilidades sociales, motoras y cognitivas básicas. Fomentamos la fe y los valores desde los primeros años en un ambiente estimulante y seguro.",
+            description: "Enfoque lúdico e interactivo diseñado para promover las habilidades sociales, motoras y cognitivas básicas. Fomentamos la fe y los valores cristianos desde los primeros años en un ambiente estimulante y seguro bajo la pedagogía de la confianza.",
             duration: "3 Años (Prejardín, Jardín y Transición)",
-            image: "/Estudiantes COLSIH.png", // Reutilizando la imagen de alta calidad
+            image: "/Estudiantes COLSIH.png",
             ctaLink: "/oferta-academica",
             ctaText: "Explorar Preescolar"
         },
         {
+            num: "02",
             title: "Primaria",
             tagline: "Construyendo las bases intelectuales y morales",
-            description: "Desarrollo profundo de habilidades lógicas, de lectoescritura e idiomas. Potenciamos la creatividad, el trabajo colaborativo y la formación de valores cívicos y espirituales franciscanos.",
+            description: "Desarrollo profundo de habilidades lógicas, matemáticas, lectoescritura e inglés. Potenciamos la creatividad, el trabajo colaborativo y la formación de valores cívicos y espirituales salesianos en una cultura de paz.",
             duration: "5 Años (Primero a Quinto)",
             image: "/Estudiantes COLSIH.png",
             ctaLink: "/oferta-academica",
             ctaText: "Explorar Primaria"
         },
         {
+            num: "03",
             title: "Bachillerato",
             tagline: "Liderazgo, ciencia e innovación para el futuro",
-            description: "Preparación académica avanzada enfocada en ciencias, tecnología y humanidades. Desarrollamos el liderazgo responsable, la ética profesional y preparamos a los estudiantes para el ingreso a la universidad.",
+            description: "Preparación académica avanzada con énfasis en la Media Técnica comercial y contable en convenio de articulación con el SENA, capacitando laboralmente a nuestros bachilleres para responder con éxito a los desafíos profesionales de la sociedad.",
             duration: "6 Años (Sexto a Undécimo)",
             image: "/Estudiantes COLSIH.png",
             ctaLink: "/oferta-academica",
@@ -33,76 +36,78 @@ export default function Programs() {
     ];
 
     return (
-        <section className="relative py-28 lg:py-36 bg-[#F8F9FB] overflow-hidden select-none">
-            {/* Background Blob decoration */}
-            <div className="absolute top-1/3 left-0 w-[450px] h-[450px] rounded-full bg-[#0057D9]/5 blur-[130px] pointer-events-none"></div>
-
+        <section className="relative py-24 lg:py-32 bg-white overflow-hidden select-none border-b border-slate-100">
             <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] space-y-20">
                 
                 {/* Section Header */}
                 <div className="max-w-2xl text-left space-y-4">
-                    <ScrollReveal distance="translate-y-8" className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#0057D9]/10 text-[#0057D9] text-[13px] font-bold tracking-widest uppercase">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#0057D9]"></span>
-                        Oferta Educativa
+                    <ScrollReveal distance="translate-y-6">
+                        <span className="text-[#E31C23] text-[13px] font-bold tracking-[3px] uppercase block font-sans">
+                            NIVELES
+                        </span>
                     </ScrollReveal>
-                    <ScrollReveal distance="translate-y-8" delay={150}>
-                        <h2 className="text-4xl sm:text-5xl lg:text-[56px] font-black text-[#08111F] leading-[1.1] tracking-tight font-sans">
-                            Nuestros niveles académicos
+                    <ScrollReveal distance="translate-y-6" delay={150}>
+                        <h2 className="text-4xl sm:text-5xl lg:text-[56px] font-black text-[#08111F] leading-[1.05] tracking-tight font-sans">
+                            Nuestra oferta académica
                         </h2>
                     </ScrollReveal>
                 </div>
 
-                {/* Alternating Horizontal Program Cards */}
-                <div className="space-y-12">
+                {/* Editorial Catalog List Layout */}
+                <div className="border-t border-slate-100 divide-y divide-slate-100">
                     {programs.map((program, index) => (
                         <ScrollReveal 
                             key={index}
-                            distance="translate-y-16"
+                            distance="translate-y-12"
                             delay={index * 100}
                         >
-                            <div className="group bg-white rounded-3xl border border-slate-100 overflow-hidden shadow-sm hover:shadow-2xl hover:scale-[1.01] hover:rotate-[0.3deg] odd:hover:-rotate-[0.3deg] transition-all duration-500 grid grid-cols-1 md:grid-cols-12">
+                            <div className="group grid grid-cols-12 gap-8 py-10 lg:py-14 items-center text-left">
                                 
-                                {/* Image side (5 cols) - Alternates left/right on md screen */}
-                                <div className={`col-span-12 md:col-span-5 relative aspect-video md:aspect-auto overflow-hidden min-h-[300px] ${
-                                    index % 2 === 1 ? 'md:order-last' : ''
-                                }`}>
-                                    {/* Grayscale overlay with opacity transition */}
-                                    <div className="absolute inset-0 bg-slate-900/10 group-hover:bg-slate-900/0 z-10 transition-colors duration-500" />
-                                    <img 
-                                        src={program.image} 
-                                        alt={program.title} 
-                                        className="w-full h-full object-cover grayscale transition-all duration-[1500ms] group-hover:scale-105 group-hover:grayscale-0"
-                                    />
+                                {/* 01. Number (Col 1-2) */}
+                                <div className="col-span-12 md:col-span-2">
+                                    <span className="text-4xl lg:text-5xl font-light text-slate-200 group-hover:text-[#0057D9] transition-colors duration-300 font-sans tracking-tighter">
+                                        {program.num}
+                                    </span>
                                 </div>
 
-                                {/* Content side (7 cols) */}
-                                <div className="col-span-12 md:col-span-7 p-8 md:p-12 lg:p-16 flex flex-col justify-between text-left space-y-8">
-                                    <div className="space-y-4">
-                                        <span className="text-[12px] font-extrabold uppercase tracking-widest text-[#0057D9]">
+                                {/* 02. Details & Info (Col 3-9) */}
+                                <div className="col-span-12 md:col-span-7 space-y-4">
+                                    <div className="space-y-1">
+                                        <span className="text-[11px] font-extrabold uppercase tracking-widest text-[#0057D9] block">
                                             {program.duration}
                                         </span>
-                                        <h3 className="text-2xl sm:text-3xl lg:text-4xl font-black text-[#08111F] tracking-tight">
+                                        <h3 className="text-2xl sm:text-3xl font-extrabold text-[#08111F] group-hover:text-[#0057D9] transition-colors duration-300">
                                             {program.title}
                                         </h3>
-                                        <p className="text-slate-400 font-bold text-sm tracking-wide">
+                                        <p className="text-xs font-extrabold text-slate-400 tracking-wider">
                                             {program.tagline}
                                         </p>
-                                        <p className="text-base font-semibold text-slate-500 leading-relaxed max-w-2xl">
-                                            {program.description}
-                                        </p>
                                     </div>
-
-                                    {/* Slide up CTA Link */}
+                                    <p className="text-sm lg:text-base font-semibold text-slate-500 leading-relaxed max-w-3xl">
+                                        {program.description}
+                                    </p>
                                     <div className="pt-2">
                                         <Link 
                                             href={program.ctaLink}
-                                            className="inline-flex items-center gap-2 text-sm font-extrabold text-[#E31C23] hover:text-[#c4181e] group/link transition-colors"
+                                            className="inline-flex items-center gap-1.5 text-xs font-extrabold text-[#E31C23] hover:text-[#c4181e] uppercase tracking-wider transition-colors"
                                         >
                                             {program.ctaText}
-                                            <svg className="w-4 h-4 transition-transform duration-300 translate-x-0 group-hover/link:translate-x-1" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                                            <svg className="w-3.5 h-3.5 transition-transform duration-300 translate-x-0 group-hover:translate-x-1" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                                                 <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                                             </svg>
                                         </Link>
+                                    </div>
+                                </div>
+
+                                {/* 03. Crisp Rectangular Image (Col 10-12) */}
+                                <div className="col-span-12 md:col-span-3 hidden md:block">
+                                    <div className="relative aspect-[4/3] rounded-xl overflow-hidden group">
+                                        <img 
+                                            src={program.image} 
+                                            alt={program.title} 
+                                            className="w-full h-full object-cover transition-transform duration-[1200ms] group-hover:scale-103"
+                                        />
+                                        <div className="absolute inset-0 bg-slate-950/5 group-hover:bg-transparent transition-colors duration-300"></div>
                                     </div>
                                 </div>
 

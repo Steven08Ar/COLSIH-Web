@@ -13,7 +13,6 @@ import Gallery from './HomeSections/Gallery';
 import News from './HomeSections/News';
 import Admissions from './HomeSections/Admissions';
 import FAQ from './HomeSections/FAQ';
-import Contact from './HomeSections/Contact';
 import Footer from './HomeSections/Footer';
 
 export default function Home({ noticias }) {
@@ -55,9 +54,6 @@ export default function Home({ noticias }) {
 
             {/* Section 11: FAQ */}
             <FAQ />
-
-            {/* Section 12: Contact */}
-            <Contact />
 
             {/* Footer */}
             <Footer />

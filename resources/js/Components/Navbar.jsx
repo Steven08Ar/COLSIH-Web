@@ -57,17 +57,25 @@ export default function Navbar() {
             <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] flex items-center justify-between">
 
                 {/* Logo — mismo layout que Hero, colores para fondo oscuro */}
-                <Link href="/" className="flex items-center gap-3 group focus:outline-none shrink-0">
+                <Link href={url === '/mjs' ? '/mjs' : '/'} className="flex items-center gap-3 group focus:outline-none shrink-0">
                     <img
-                        src="/Logo COLSIH.svg"
-                        alt="Logo COLSIH"
+                        src={url === '/mjs' ? '/Logo-MJS.svg' : '/Logo COLSIH.svg'}
+                        alt={url === '/mjs' ? 'Logo MJS' : 'Logo COLSIH'}
                         className="h-14 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
                     />
-                    <div className="flex flex-col leading-none text-white">
-                        <span className="text-[11px] tracking-widest uppercase opacity-60 font-semibold">Colegio</span>
-                        <span className="text-[20px] font-black tracking-tight text-white mt-0.5">SANTA ISABEL</span>
-                        <span className="text-[12px] tracking-wide font-medium opacity-80 mt-0.5">de Hungría</span>
-                    </div>
+                    {url === '/mjs' ? (
+                        <div className="flex flex-col leading-none text-white">
+                            <span className="text-[11px] tracking-widest uppercase opacity-60 font-semibold">Movimiento</span>
+                            <span className="text-[20px] font-black tracking-tight text-white mt-0.5">JUVENIL</span>
+                            <span className="text-[12px] tracking-wide font-medium opacity-80 mt-0.5">Salesiano</span>
+                        </div>
+                    ) : (
+                        <div className="flex flex-col leading-none text-white">
+                            <span className="text-[11px] tracking-widest uppercase opacity-60 font-semibold">Colegio</span>
+                            <span className="text-[20px] font-black tracking-tight text-white mt-0.5">SANTA ISABEL</span>
+                            <span className="text-[12px] tracking-wide font-medium opacity-80 mt-0.5">de Hungría</span>
+                        </div>
+                    )}
                 </Link>
 
                 {/* Desktop nav — misma estructura y gaps que Hero */}
@@ -131,12 +139,35 @@ export default function Navbar() {
 
                 {/* CTA + mobile toggle — mismo estilo que Hero */}
                 <div className="flex items-center gap-3 shrink-0">
-                    <Link
-                        href="/inscripcion"
-                        className="hidden lg:inline-flex items-center justify-center bg-[#E31C23] hover:bg-[#c4181e] text-white font-extrabold text-sm px-6 py-3.5 rounded-full transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
-                    >
-                        Matricúlate
-                    </Link>
+                    {url === '/mjs' ? (
+                        <a
+                            href="/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="hidden lg:inline-flex items-center justify-center focus:outline-none cursor-pointer"
+                            title="Ir al Colegio Santa Isabel de Hungría"
+                        >
+                            <img 
+                                src="/Logo COLSIH.svg" 
+                                alt="Logo COLSIH" 
+                                className="h-12 w-auto object-contain hover:scale-105 transition-all duration-300"
+                            />
+                        </a>
+                    ) : (
+                        <a
+                            href="/mjs"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="hidden lg:inline-flex items-center justify-center focus:outline-none cursor-pointer"
+                            title="Movimiento Juvenil Salesiano"
+                        >
+                            <img 
+                                src="/Logo-MJS.svg" 
+                                alt="Logo MJS Colombia" 
+                                className="h-12 w-auto object-contain hover:scale-105 transition-all duration-300"
+                            />
+                        </a>
+                    )}
 
                     <button
                         onClick={() => setMobileOpen(!mobileOpen)}
@@ -189,12 +220,38 @@ export default function Navbar() {
                                 {link.label}
                             </Link>
                         ))}
-                        <div className="pt-2 border-t border-white/10">
-                            <Link href="/inscripcion" onClick={() => setMobileOpen(false)}
-                                className="w-full flex items-center justify-center bg-[#E31C23] hover:bg-[#c4181e] text-white font-extrabold py-3 px-4 rounded-xl transition-colors"
-                            >
-                                Matricúlate
-                            </Link>
+                        <div className="pt-2 border-t border-white/10 flex justify-center">
+                            {url === '/mjs' ? (
+                                <a 
+                                    href="/" 
+                                    target="_blank" 
+                                    rel="noopener noreferrer" 
+                                    onClick={() => setMobileOpen(false)}
+                                    className="py-2 focus:outline-none cursor-pointer"
+                                    title="Ir al Colegio Santa Isabel de Hungría"
+                                >
+                                    <img 
+                                        src="/Logo COLSIH.svg" 
+                                        alt="Logo COLSIH" 
+                                        className="h-10 w-auto object-contain hover:scale-105 transition-all duration-300"
+                                    />
+                                </a>
+                            ) : (
+                                <a 
+                                    href="/mjs" 
+                                    target="_blank" 
+                                    rel="noopener noreferrer" 
+                                    onClick={() => setMobileOpen(false)}
+                                    className="py-2 focus:outline-none cursor-pointer"
+                                    title="Movimiento Juvenil Salesiano"
+                                >
+                                    <img 
+                                        src="/Logo-MJS.svg" 
+                                        alt="Logo MJS Colombia" 
+                                        className="h-10 w-auto object-contain hover:scale-105 transition-all duration-300"
+                                    />
+                                </a>
+                            )}
                         </div>
                     </div>
                 </div>

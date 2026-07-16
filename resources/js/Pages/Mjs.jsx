@@ -6,7 +6,7 @@ import ScrollReveal from './HomeSections/ScrollReveal';
 export default function Mjs() {
     useEffect(() => {
         const favicon = document.querySelector("link[rel='icon']");
-        if (favicon) favicon.href = '/MJS-Colombia.png';
+        if (favicon) favicon.href = '/Logo-MJS.svg';
         return () => { if (favicon) favicon.href = '/Logo COLSIH.svg'; };
     }, []);
     const groups = [
@@ -47,7 +47,7 @@ export default function Mjs() {
     return (
         <AppLayout>
             <Head title="Movimiento Juvenil Salesiano (MJS) | COLSIH">
-                <link rel="icon" type="image/png" href="/MJS-Colombia.png" inertia="favicon" />
+                <link rel="icon" type="image/png" href="/Logo-MJS.svg" inertia="favicon" />
             </Head>
 
             {/* Hero MJS Header Block */}
@@ -77,7 +77,7 @@ export default function Mjs() {
                         <ScrollReveal distance="scale-90" delay={450}>
                             <div className="w-48 h-48 md:w-56 md:h-56 bg-white/5 rounded-full flex items-center justify-center p-6 border border-white/10 backdrop-blur-md">
                                 <img 
-                                    src="/MJS-Colombia.png" 
+                                    src="/Logo-MJS.svg" 
                                     alt="MJS Colombia Logo" 
                                     className="w-full h-full object-contain animate-fadeIn"
                                 />

@@ -10,9 +10,6 @@ export default function AppLayout({ children }) {
         <div className="min-h-screen bg-white flex flex-col font-sans selection:bg-red-100 selection:text-red-900">
             <Navbar />
 
-            {/* Espacio para compensar el header fixed */}
-            <div className="h-[88px]" />
-
             {/* Flash Message Banner */}
             {flash.success && (
                 <div className="bg-emerald-50 border-b border-emerald-100 py-3.5 px-4 shadow-inner">

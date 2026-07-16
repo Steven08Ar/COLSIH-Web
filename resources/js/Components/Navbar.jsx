@@ -51,8 +51,8 @@ export default function Navbar() {
     const nosotrosActive = nosotrosLinks.some(l => url === l.href || url.startsWith(l.href + '/'));
 
     return (
-        <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
-            scrolled ? 'bg-[#08111F]/90 backdrop-blur-md shadow-lg py-3.5 border-b border-white/5' : 'bg-[#08111F] py-5 border-b border-white/5'
+        <header className={`fixed top-0 left-0 w-full z-50 py-4 transition-all duration-300 bg-gradient-to-b from-[#08111F]/60 to-transparent ${
+            scrolled ? 'bg-[#08111F]/40 backdrop-blur-md' : 'backdrop-blur-[2px]'
         }`}>
             <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] flex items-center justify-between">
 

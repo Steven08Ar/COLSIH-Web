@@ -20,9 +20,9 @@ export default function Footer() {
                     <div className="col-span-12 lg:col-span-4 space-y-6 text-left">
                         <Link href="/" className="flex items-center gap-3 group focus:outline-none shrink-0">
                             <img 
-                                src="/escudo.png" 
-                                alt="Escudo COLSIH" 
-                                className="h-14 w-auto object-contain brightness-0 invert transition-transform duration-300 group-hover:scale-105" 
+                                src="/Logo COLSIH.svg" 
+                                alt="Logo COLSIH" 
+                                className="h-14 w-auto object-contain transition-transform duration-300 group-hover:scale-105" 
                             />
                             <div className="flex flex-col leading-none text-white">
                                 <span className="text-[11px] tracking-widest uppercase opacity-60 font-semibold">Colegio</span>

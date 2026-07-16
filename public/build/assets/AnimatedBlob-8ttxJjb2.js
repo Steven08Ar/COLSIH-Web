@@ -1,1 +1,0 @@
-import{j as a}from"./app-DcjewXXC.js";import{m as e}from"./proxy-jjaIgIBQ.js";function f({className:o,mousePos:t,speed:n=1}){const i=t.x*n*30,s=t.y*n*30;return a.jsx(e.div,{className:`absolute rounded-full pointer-events-none ${o}`,animate:{x:i,y:s},transition:{type:"spring",damping:25,stiffness:120}})}export{f as default};

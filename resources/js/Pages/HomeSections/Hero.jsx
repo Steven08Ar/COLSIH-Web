@@ -61,9 +61,9 @@ export default function Hero({ setVideoOpen }) {
                     {/* Logo (left) */}
                     <Link href="/" className="flex items-center gap-3 group focus:outline-none shrink-0">
                         <img
-                            src="/escudo.png"
-                            alt="Escudo COLSIH"
-                            className="h-14 w-auto object-contain brightness-0 invert transition-transform duration-300 group-hover:scale-105"
+                            src="/Logo COLSIH.svg"
+                            alt="Logo COLSIH"
+                            className="h-14 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
                         />
                         <div className="flex flex-col leading-none text-white">
                             <span className="text-[11px] tracking-widest uppercase opacity-60 font-semibold">Colegio</span>
@@ -181,14 +181,16 @@ export default function Hero({ setVideoOpen }) {
             </header>
 
             {/* Background Video (60% right side / Immersive) */}
-            <div className="absolute inset-0 w-full h-full z-0 pointer-events-none select-none overflow-hidden">
+            <div className="absolute inset-0 w-full h-full z-0 select-none overflow-hidden">
                 <iframe
                     className="absolute top-1/2 left-1/2 w-[100vw] h-[56.25vw] min-h-[100vh] min-w-[177.77vh] -translate-x-1/2 -translate-y-1/2 pointer-events-none contrast-[1.05] brightness-75 md:brightness-[0.85] scale-105"
-                    src="https://www.youtube.com/embed/7hO_uWb8aLs?autoplay=1&mute=1&loop=1&playlist=7hO_uWb8aLs&controls=0&showinfo=0&rel=0&iv_load_policy=3&playsinline=1&enablejsapi=1"
+                    src="https://www.youtube.com/embed/7hO_uWb8aLs?autoplay=1&mute=1&loop=1&playlist=7hO_uWb8aLs&controls=0&showinfo=0&rel=0&iv_load_policy=3&playsinline=1&enablejsapi=1&disablekb=1&fs=0&modestbranding=1&cc_load_policy=0"
                     title="Background Video"
                     frameBorder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 ></iframe>
+                {/* Transparent cover overlay to shield iframe from any touch, focus or clicks */}
+                <div className="absolute inset-0 z-10 w-full h-full bg-transparent pointer-events-auto"></div>
             </div>
 
             {/* Dark Gradient Overlay for Mobile (full overlay) */}

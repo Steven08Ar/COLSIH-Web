@@ -16,6 +16,8 @@ export default defineConfig({
     resolve: {
         alias: {
             '@': resolve(__dirname, 'resources/js'),
+            'react': resolve(__dirname, 'node_modules/react'),
+            'react-dom': resolve(__dirname, 'node_modules/react-dom'),
         },
     },
     server: {

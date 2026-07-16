@@ -104,7 +104,7 @@ export default function News({ noticias }) {
                                         <div className="w-full h-full flex items-center justify-center bg-slate-50 relative">
                                             {/* Grayscale school image fallback */}
                                             <img src="/Estudiantes COLSIH.png" alt="COLSIH" className="w-full h-full object-cover grayscale opacity-15" />
-                                            <img src="/escudo.png" alt="Escudo COLSIH" className="w-14 h-auto opacity-10 absolute center" />
+                                            <img src="/Logo COLSIH.svg" alt="Logo COLSIH" className="w-14 h-auto opacity-10 absolute center" />
                                         </div>
                                     )}
                                     {item.categoria && (

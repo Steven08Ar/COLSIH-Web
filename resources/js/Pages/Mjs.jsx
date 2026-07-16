@@ -5,24 +5,16 @@ import ScrollReveal from './HomeSections/ScrollReveal';
 
 export default function Mjs() {
     useEffect(() => {
-        const favicon =
-            document.querySelector("link[rel='icon']") ||
-            document.querySelector("link[rel='shortcut icon']");
-        if (favicon) {
-            favicon.href = '/Logo-MJS.svg';
-        } else {
+        function setFavicon(href) {
+            document.querySelectorAll("link[rel*='icon']").forEach(el => el.remove());
             const link = document.createElement('link');
             link.rel = 'icon';
             link.type = 'image/svg+xml';
-            link.href = '/Logo-MJS.svg';
+            link.href = href + '?v=' + Date.now();
             document.head.appendChild(link);
         }
-        return () => {
-            const el =
-                document.querySelector("link[rel='icon']") ||
-                document.querySelector("link[rel='shortcut icon']");
-            if (el) el.href = '/Logo COLSIH.svg';
-        };
+        setFavicon('/Logo-MJS.svg');
+        return () => setFavicon('/Logo COLSIH.svg');
     }, []);
     const groups = [
         {
@@ -61,9 +53,7 @@ export default function Mjs() {
 
     return (
         <AppLayout>
-            <Head title="Movimiento Juvenil Salesiano (MJS) | COLSIH">
-                <link rel="icon" type="image/png" href="/Logo-MJS.svg" inertia="favicon" />
-            </Head>
+            <Head title="Movimiento Juvenil Salesiano (MJS) | COLSIH" />
 
             {/* Hero MJS Header Block */}
             <section className="relative min-h-[500px] flex items-center pt-40 pb-20 bg-[#08111F] text-left select-none overflow-hidden border-b border-white/5">

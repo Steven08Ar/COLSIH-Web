@@ -51,28 +51,28 @@ export default function Navbar() {
     const nosotrosActive = nosotrosLinks.some(l => url === l.href || url.startsWith(l.href + '/'));
 
     return (
-        <header className={`sticky top-0 z-50 transition-all duration-300 ${
-            scrolled ? 'bg-white/95 backdrop-blur-md shadow-md py-4' : 'bg-white py-6'
+        <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
+            scrolled ? 'bg-[#08111F]/90 backdrop-blur-md shadow-lg py-3.5 border-b border-white/5' : 'bg-[#08111F] py-5 border-b border-white/5'
         }`}>
             <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] flex items-center justify-between">
 
-                {/* Logo — mismo layout que Hero, colores para fondo blanco */}
+                {/* Logo — mismo layout que Hero, colores para fondo oscuro */}
                 <Link href="/" className="flex items-center gap-3 group focus:outline-none shrink-0">
                     <img
-                        src="/escudo.png"
-                        alt="Escudo COLSIH"
+                        src="/Logo COLSIH.svg"
+                        alt="Logo COLSIH"
                         className="h-14 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
                     />
-                    <div className="flex flex-col leading-none">
-                        <span className="text-[11px] tracking-widest uppercase text-slate-400 font-semibold">Colegio</span>
-                        <span className="text-[20px] font-black tracking-tight text-red-700 mt-0.5">SANTA ISABEL</span>
-                        <span className="text-[12px] tracking-wide font-medium text-slate-500 mt-0.5">de Hungría</span>
+                    <div className="flex flex-col leading-none text-white">
+                        <span className="text-[11px] tracking-widest uppercase opacity-60 font-semibold">Colegio</span>
+                        <span className="text-[20px] font-black tracking-tight text-white mt-0.5">SANTA ISABEL</span>
+                        <span className="text-[12px] tracking-wide font-medium opacity-80 mt-0.5">de Hungría</span>
                     </div>
                 </Link>
 
                 {/* Desktop nav — misma estructura y gaps que Hero */}
-                <div className="hidden lg:flex items-center gap-10 text-[15px] font-semibold text-slate-500">
-                    <Link href="/" className={`transition-colors ${url === '/' ? 'text-red-700' : 'hover:text-slate-800'}`}>
+                <div className="hidden lg:flex items-center gap-10 text-[15px] font-semibold text-white/80">
+                    <Link href="/" className={`transition-colors ${url === '/' ? 'text-white font-extrabold' : 'hover:text-white'}`}>
                         Inicio
                     </Link>
 
@@ -84,13 +84,13 @@ export default function Navbar() {
                     >
                         <button
                             className={`flex items-center gap-1 transition-colors focus:outline-none cursor-pointer ${
-                                nosotrosActive ? 'text-red-700' : 'hover:text-slate-800'
+                                nosotrosActive ? 'text-white font-extrabold' : 'hover:text-white'
                             }`}
                             aria-expanded={dropdownOpen}
                         >
                             Nuestro Colegio
                             <svg
-                                className={`w-3.5 h-3.5 transition-transform duration-150 ${dropdownOpen ? 'rotate-180' : ''}`}
+                                className={`w-3.5 h-3.5 transition-transform duration-300 ${dropdownOpen ? 'rotate-180' : ''}`}
                                 fill="none" stroke="currentColor" viewBox="0 0 24 24"
                             >
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" />
@@ -99,21 +99,20 @@ export default function Navbar() {
 
                         {dropdownVisible && (
                             <div
-                                className={`absolute left-1/2 -translate-x-1/2 top-full mt-3 w-52 bg-white border border-slate-100 rounded-2xl shadow-xl py-2 z-50 origin-top
-                                    transition-all duration-150 ease-out
+                                className={`absolute left-1/2 -translate-x-1/2 top-full mt-1.5 w-52 bg-gradient-to-b from-[#08111F]/95 to-[#08111F]/85 backdrop-blur-xl border border-white/10 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.4)] py-2.5 z-50 origin-top
+                                    transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]
                                     ${dropdownOpen
                                         ? 'opacity-100 translate-y-0 scale-100'
-                                        : 'opacity-0 -translate-y-2 scale-95'
+                                        : 'opacity-0 -translate-y-2 scale-[0.98]'
                                     }`}
                             >
-                                <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 rotate-45 bg-white border-t border-l border-slate-100" />
                                 <div className="relative">
                                     {nosotrosLinks.map((item) => (
                                         <Link
                                             key={item.href}
                                             href={item.href}
-                                            className={`block px-5 py-2.5 text-sm font-medium transition-colors hover:bg-slate-50 hover:text-red-700 ${
-                                                url === item.href ? 'text-red-700 bg-red-50/50' : 'text-slate-600'
+                                            className={`block px-4 py-2.5 mx-1.5 text-[14px] font-semibold rounded-xl transition-all duration-200 hover:bg-white/[0.08] hover:text-white ${
+                                                url === item.href ? 'text-white bg-white/[0.06]' : 'text-white/70'
                                             }`}
                                         >
                                             {item.label}
@@ -124,10 +123,10 @@ export default function Navbar() {
                         )}
                     </div>
 
-                    <Link href="/oferta-academica" className={`transition-colors ${url === '/oferta-academica' ? 'text-red-700' : 'hover:text-slate-800'}`}>Oferta Académica</Link>
-                    <Link href="/admisiones" className={`transition-colors ${url === '/admisiones' ? 'text-red-700' : 'hover:text-slate-800'}`}>Admisiones</Link>
-                    <Link href="/noticias" className={`transition-colors ${url.startsWith('/noticias') ? 'text-red-700' : 'hover:text-slate-800'}`}>Comunidad</Link>
-                    <Link href="/contacto" className={`transition-colors ${url === '/contacto' ? 'text-red-700' : 'hover:text-slate-800'}`}>Contacto</Link>
+                    <Link href="/oferta-academica" className={`transition-colors ${url === '/oferta-academica' ? 'text-white font-extrabold' : 'hover:text-white'}`}>Oferta Académica</Link>
+                    <Link href="/admisiones" className={`transition-colors ${url === '/admisiones' ? 'text-white font-extrabold' : 'hover:text-white'}`}>Admisiones</Link>
+                    <Link href="/noticias" className={`transition-colors ${url.startsWith('/noticias') ? 'text-white font-extrabold' : 'hover:text-white'}`}>Comunidad</Link>
+                    <Link href="/contacto" className={`transition-colors ${url === '/contacto' ? 'text-white font-extrabold' : 'hover:text-white'}`}>Contacto</Link>
                 </div>
 
                 {/* CTA + mobile toggle — mismo estilo que Hero */}
@@ -141,7 +140,7 @@ export default function Navbar() {
 
                     <button
                         onClick={() => setMobileOpen(!mobileOpen)}
-                        className="lg:hidden p-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors focus:outline-none cursor-pointer"
+                        className="lg:hidden p-2 rounded-xl text-white/80 hover:text-white hover:bg-white/10 transition-colors focus:outline-none cursor-pointer"
                         aria-label="Abrir menú"
                     >
                         {mobileOpen ? (
@@ -157,21 +156,21 @@ export default function Navbar() {
                 </div>
             </div>
 
-            {/* Mobile panel — mismo estilo que Hero pero en blanco */}
+            {/* Mobile panel — mismo estilo que Hero */}
             {mobileOpen && (
-                <div className="lg:hidden mt-2 mx-6 md:mx-12 bg-white border border-slate-100 rounded-2xl shadow-xl overflow-hidden">
+                <div className="lg:hidden mt-2 mx-6 md:mx-12 bg-[#08111F]/90 backdrop-blur-md border border-white/10 rounded-2xl shadow-2xl overflow-hidden">
                     <div className="px-4 py-4 space-y-1">
                         <Link href="/" onClick={() => setMobileOpen(false)}
-                            className={`block px-3 py-2.5 text-sm font-semibold rounded-lg transition-colors ${url === '/' ? 'text-red-700 bg-red-50/80' : 'text-slate-700 hover:text-slate-900 hover:bg-slate-50'}`}
+                            className={`block px-3 py-2.5 text-sm font-semibold rounded-lg transition-colors ${url === '/' ? 'text-white bg-white/10' : 'text-white/85 hover:text-white hover:bg-white/5'}`}
                         >
                             Inicio
                         </Link>
                         <div>
-                            <span className="block px-3 py-2 text-xs font-bold text-slate-400 uppercase tracking-wider">Nuestro Colegio</span>
-                            <div className="ml-3 border-l-2 border-slate-100 pl-3 space-y-1">
+                            <span className="block px-3 py-2 text-xs font-bold text-white/40 uppercase tracking-wider">Nuestro Colegio</span>
+                            <div className="ml-3 border-l border-white/20 pl-3 space-y-1">
                                 {nosotrosLinks.map((item) => (
                                     <Link key={item.href} href={item.href} onClick={() => setMobileOpen(false)}
-                                        className={`block px-3 py-2 text-sm font-medium rounded-lg transition-colors ${url === item.href ? 'text-red-700 bg-red-50/50' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'}`}
+                                        className={`block px-3 py-2 text-sm font-medium rounded-lg transition-colors ${url === item.href ? 'text-white bg-white/10' : 'text-white/75 hover:text-white hover:bg-white/5'}`}
                                     >
                                         {item.label}
                                     </Link>
@@ -185,12 +184,12 @@ export default function Navbar() {
                             { label: 'Contacto', href: '/contacto' },
                         ].map((link) => (
                             <Link key={link.href} href={link.href} onClick={() => setMobileOpen(false)}
-                                className={`block px-3 py-2.5 text-sm font-semibold rounded-lg transition-colors ${url === link.href ? 'text-red-700 bg-red-50/80' : 'text-slate-700 hover:text-slate-900 hover:bg-slate-50'}`}
+                                className={`block px-3 py-2.5 text-sm font-semibold rounded-lg transition-colors ${url === link.href ? 'text-white bg-white/10' : 'text-white/85 hover:text-white hover:bg-white/5'}`}
                             >
                                 {link.label}
                             </Link>
                         ))}
-                        <div className="pt-2 border-t border-slate-100">
+                        <div className="pt-2 border-t border-white/10">
                             <Link href="/inscripcion" onClick={() => setMobileOpen(false)}
                                 className="w-full flex items-center justify-center bg-[#E31C23] hover:bg-[#c4181e] text-white font-extrabold py-3 px-4 rounded-xl transition-colors"
                             >

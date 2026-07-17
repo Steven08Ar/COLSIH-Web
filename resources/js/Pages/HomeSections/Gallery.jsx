@@ -31,14 +31,14 @@ export default function Gallery() {
     return (
         <section className="relative py-28 lg:py-36 bg-white overflow-hidden select-none">
             {/* Background Blob decoration */}
-            <div className="absolute top-1/3 right-0 w-[450px] h-[450px] rounded-full bg-[#E31C23]/5 blur-[130px] pointer-events-none"></div>
+            <div className="absolute top-1/3 right-0 w-[450px] h-[450px] rounded-full bg-[#800A15]/5 blur-[130px] pointer-events-none"></div>
 
             <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] space-y-16">
                 
                 {/* Section Header */}
                 <div className="max-w-2xl text-left space-y-4">
-                    <ScrollReveal distance="translate-y-8" className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#E31C23]/10 text-[#E31C23] text-[13px] font-bold tracking-widest uppercase">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#E31C23]"></span>
+                    <ScrollReveal distance="translate-y-8" className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#800A15]/10 text-[#800A15] text-[13px] font-bold tracking-widest uppercase">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#800A15]"></span>
                         Galería
                     </ScrollReveal>
                     <ScrollReveal distance="translate-y-8" delay={150}>
@@ -71,7 +71,7 @@ export default function Gallery() {
 
                                 {/* Floating info (Overlay title) */}
                                 <div className="absolute bottom-6 left-6 z-20 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 text-left">
-                                    <span className="block text-[11px] font-extrabold uppercase tracking-widest text-[#E31C23]">
+                                    <span className="block text-[11px] font-extrabold uppercase tracking-widest text-[#800A15]">
                                         {item.category}
                                     </span>
                                     <h3 className="text-[20px] font-black text-white mt-1 leading-tight tracking-tight">

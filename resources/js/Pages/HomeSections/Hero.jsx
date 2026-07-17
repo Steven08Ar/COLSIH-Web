@@ -243,10 +243,10 @@ export default function Hero({ setVideoOpen }) {
             <div className="absolute bottom-0 left-0 w-full h-[120px] sm:h-[150px] md:h-[220px] z-20 pointer-events-none select-none">
                 <svg className="w-full h-full" viewBox="0 0 1200 200" preserveAspectRatio="none" fill="none">
                     {/* Onda Roja (Atrás izquierda) */}
-                    <path d="M 0 70 C 200 150, 450 180, 700 180 L 1200 200 L 0 200 Z" fill="#E31C23" />
+                    <path d="M 0 70 C 200 150, 450 180, 700 180 L 1200 200 L 0 200 Z" fill="#800A15" />
 
                     {/* Onda Azul (Atrás derecha) */}
-                    <path d="M 0 130 C 350 190, 700 150, 1200 0 L 1200 200 L 0 200 Z" fill="#0057D9" />
+                    <path d="M 0 130 C 350 190, 700 150, 1200 0 L 1200 200 L 0 200 Z" fill="#003C8F" />
 
                     {/* Onda Blanca (Al frente) */}
                     <path d="M 0 130 C 250 210, 600 190, 900 110 C 1050 70, 1150 35, 1200 15 L 1200 200 L 0 200 Z" fill="white" />
@@ -276,7 +276,7 @@ export default function Hero({ setVideoOpen }) {
                             {/* Primary CTA */}
                             <Link
                                 href="/inscripcion"
-                                className="inline-flex items-center justify-center bg-[#E31C23] hover:bg-[#c4181e] text-white font-extrabold text-sm px-8 py-4.5 rounded-full shadow-lg shadow-red-700/10 active:scale-[0.98] transition-all cursor-pointer"
+                                className="inline-flex items-center justify-center bg-[#800A15] hover:bg-[#c4181e] text-white font-extrabold text-sm px-8 py-4.5 rounded-full shadow-lg shadow-red-700/10 active:scale-[0.98] transition-all cursor-pointer"
                             >
                                 Iniciar Proceso Online
                             </Link>

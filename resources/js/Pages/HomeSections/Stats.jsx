@@ -97,30 +97,44 @@ export default function Stats() {
     return (
         <section 
             ref={ref}
-            className="relative py-20 lg:py-24 bg-white border-b border-slate-100 overflow-hidden select-none"
+            className="relative py-10 lg:py-12 bg-white border-b border-slate-100 overflow-hidden select-none"
         >
             <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px]">
                 
-                {/* Horizontal Stat Items divided by fine line grid */}
+                {/* Horizontal Stat Items divided by fine line grid with top animated borders */}
                 <div className="grid grid-cols-2 lg:grid-cols-4 border-t border-b lg:border-l lg:border-r border-slate-100 divide-y lg:divide-y-0 lg:divide-x divide-slate-100">
-                    {stats.map((stat, index) => (
-                        <ScrollReveal 
-                            key={index}
-                            distance="translate-y-8"
-                            delay={index * 100}
-                            className="flex flex-col justify-center p-8 md:p-10 lg:p-12 text-left"
-                        >
-                            <span className="block text-4xl sm:text-5xl lg:text-6xl font-black text-[#0B1F3A] tracking-tighter leading-none font-sans">
-                                <CountUp end={stat.value} startCount={inView} />
-                            </span>
-                            <span className="block text-[14px] font-extrabold uppercase tracking-widest text-[#E31C23] mt-4 font-sans">
-                                {stat.label}
-                            </span>
-                            <span className="block text-xs font-semibold text-slate-400 mt-1">
-                                {stat.sublabel}
-                            </span>
-                        </ScrollReveal>
-                    ))}
+                    {stats.map((stat, index) => {
+                        const isEven = index % 2 === 0;
+                        const accentColor = isEven ? '#003C8F' : '#800A15';
+                        const hoverBgClass = isEven ? 'hover:bg-blue-50/10' : 'hover:bg-red-50/10';
+                        return (
+                            <ScrollReveal 
+                                key={index}
+                                distance="translate-y-8"
+                                delay={index * 100}
+                                className={`group relative flex flex-col justify-center p-6 md:p-8 lg:p-10 text-left transition-all duration-300 ${hoverBgClass} overflow-hidden`}
+                            >
+                                {/* Top sliding brand border indicator */}
+                                <div 
+                                    className="absolute top-0 left-0 w-0 h-1 transition-all duration-300 group-hover:w-full"
+                                    style={{ backgroundColor: accentColor }}
+                                />
+
+                                <span className="block text-4xl sm:text-5xl lg:text-6xl font-black text-[#08111F] tracking-tighter leading-none font-sans transition-all duration-300 group-hover:text-[var(--accent-hover)] group-hover:translate-x-1" style={{ '--accent-hover': accentColor }}>
+                                    <CountUp end={stat.value} startCount={inView} />
+                                </span>
+                                <span 
+                                    className="block text-[13px] font-extrabold uppercase tracking-widest mt-4 font-sans transition-colors duration-300"
+                                    style={{ color: accentColor }}
+                                >
+                                    {stat.label}
+                                </span>
+                                <span className="block text-xs font-semibold text-slate-400 mt-1">
+                                    {stat.sublabel}
+                                </span>
+                            </ScrollReveal>
+                        );
+                    })}
                 </div>
 
             </div>

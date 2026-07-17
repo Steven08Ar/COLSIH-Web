@@ -47,7 +47,7 @@ export default function Programs() {
                 {/* Section Header */}
                 <div className="max-w-2xl text-left space-y-4">
                     <ScrollReveal distance="translate-y-6">
-                        <span className="text-[#E31C23] text-[13px] font-bold tracking-[3px] uppercase block font-sans">
+                        <span className="text-[#800A15] text-[13px] font-bold tracking-[3px] uppercase block font-sans">
                             NIVELES
                         </span>
                     </ScrollReveal>
@@ -92,7 +92,7 @@ export default function Programs() {
                                     {/* Top row: Number badge */}
                                     <div className="w-full flex justify-between items-start">
                                         <span className={`text-3xl font-light font-sans tracking-tighter transition-colors duration-300 ${
-                                            isExpanded ? 'text-[#0057D9]' : 'text-slate-500'
+                                            isExpanded ? 'text-[#003C8F]' : 'text-slate-500'
                                         }`}>
                                             {item.num}
                                         </span>
@@ -125,7 +125,7 @@ export default function Programs() {
                                                         transition={{ duration: 0.4, ease: 'easeOut' }}
                                                         className="space-y-4 overflow-hidden"
                                                     >
-                                                        <p className="text-xs font-extrabold text-[#E31C23] tracking-widest uppercase">
+                                                        <p className="text-xs font-extrabold text-[#800A15] tracking-widest uppercase">
                                                             {item.tagline}
                                                         </p>
                                                         <p className="text-sm font-medium text-slate-300 leading-relaxed">
@@ -149,7 +149,7 @@ export default function Programs() {
                                             >
                                                 <Link
                                                     href={item.ctaLink}
-                                                    className="inline-flex items-center gap-2 bg-white text-[#08111F] hover:bg-[#0057D9] hover:text-white font-extrabold text-xs uppercase tracking-wider px-6 py-4.5 rounded-xl transition-all cursor-pointer focus:outline-none"
+                                                    className="inline-flex items-center gap-2 bg-white text-[#08111F] hover:bg-[#003C8F] hover:text-white font-extrabold text-xs uppercase tracking-wider px-6 py-4.5 rounded-xl transition-all cursor-pointer focus:outline-none"
                                                 >
                                                     {item.ctaText}
                                                     <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">

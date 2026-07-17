@@ -11,7 +11,7 @@ export default function PrimaryButton({ href, children }) {
         >
             <Link
                 href={href}
-                className="inline-flex items-center justify-center bg-[#E31C23] hover:bg-[#c4181e] text-white font-extrabold text-sm py-[18px] px-[34px] rounded-full transition-all duration-200 cursor-pointer shadow-lg shadow-red-700/10 group focus:outline-none"
+                className="inline-flex items-center justify-center bg-[#800A15] hover:bg-[#c4181e] text-white font-extrabold text-sm py-[18px] px-[34px] rounded-full transition-all duration-200 cursor-pointer shadow-lg shadow-red-700/10 group focus:outline-none"
             >
                 {children}
                 <svg 

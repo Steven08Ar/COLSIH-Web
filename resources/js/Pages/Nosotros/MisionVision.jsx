@@ -18,7 +18,7 @@ export default function MisionVision() {
 
             {/* Header Hero Section */}
             <section className="relative bg-gradient-to-b from-[#08111F] to-[#0D1B2E] pt-32 pb-20 text-center text-white overflow-hidden">
-                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(0,87,217,0.12),transparent_60%)]"></div>
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(0, 60, 143,0.12),transparent_60%)]"></div>
                 <div className="relative z-10 max-w-[1200px] mx-auto px-6">
                     <nav className="text-sm font-semibold text-slate-400 mb-4 flex items-center justify-center gap-2">
                         <Link href="/nosotros" className="hover:text-white transition-colors">Quiénes Somos</Link>
@@ -38,7 +38,7 @@ export default function MisionVision() {
                         {/* Misión */}
                         <div className="bg-slate-50 border border-slate-100 p-8 md:p-10 rounded-3xl text-left flex flex-col justify-between">
                             <div>
-                                <div className="w-12 h-12 rounded-2xl bg-[#E31C23]/10 text-[#E31C23] flex items-center justify-center mb-6">
+                                <div className="w-12 h-12 rounded-2xl bg-[#800A15]/10 text-[#800A15] flex items-center justify-center mb-6">
                                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 10V3L4 14h7v7l9-11h-7z" />
                                     </svg>
@@ -52,7 +52,7 @@ export default function MisionVision() {
 
                         {/* Visión */}
                         <div className="bg-[#08111F] text-white p-8 md:p-10 rounded-3xl text-left relative overflow-hidden flex flex-col justify-between">
-                            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,rgba(0,87,217,0.15),transparent_70%)]"></div>
+                            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,rgba(0, 60, 143,0.15),transparent_70%)]"></div>
                             <div className="relative z-10">
                                 <div className="w-12 h-12 rounded-2xl bg-white/10 text-white flex items-center justify-center mb-6">
                                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -77,12 +77,12 @@ export default function MisionVision() {
                         <h2 className="text-3xl font-extrabold text-[#08111F] tracking-tight mb-2">
                             Objetivos Institucionales
                         </h2>
-                        <div className="w-16 h-1 bg-[#E31C23] rounded-full mb-8"></div>
+                        <div className="w-16 h-1 bg-[#800A15] rounded-full mb-8"></div>
                         
                         <div className="space-y-4">
                             {objetivos.map((obj, index) => (
                                 <div key={index} className="flex items-start gap-4 bg-white p-5 rounded-2xl border border-slate-100 shadow-xs">
-                                    <span className="w-8 h-8 rounded-full bg-[#0057D9]/10 text-[#0057D9] flex items-center justify-center font-bold text-sm shrink-0 mt-0.5">
+                                    <span className="w-8 h-8 rounded-full bg-[#003C8F]/10 text-[#003C8F] flex items-center justify-center font-bold text-sm shrink-0 mt-0.5">
                                         {index + 1}
                                     </span>
                                     <p className="text-[15px] text-[#08111F] font-bold leading-relaxed">
@@ -97,11 +97,11 @@ export default function MisionVision() {
 
             {/* Footer Navigation Tabs */}
             <nav className="py-12 bg-white border-t border-slate-100 flex items-center justify-center gap-6">
-                <Link href="/nosotros/historia" className="text-sm font-bold text-slate-500 hover:text-[#E31C23] transition-colors flex items-center gap-1.5">
+                <Link href="/nosotros/historia" className="text-sm font-bold text-slate-500 hover:text-[#800A15] transition-colors flex items-center gap-1.5">
                     ← Reseña Histórica
                 </Link>
                 <span className="text-slate-300">|</span>
-                <Link href="/nosotros/valores" className="text-sm font-bold text-[#08111F] hover:text-[#E31C23] transition-colors flex items-center gap-1.5">
+                <Link href="/nosotros/valores" className="text-sm font-bold text-[#08111F] hover:text-[#800A15] transition-colors flex items-center gap-1.5">
                     Valores Corporativos →
                 </Link>
             </nav>

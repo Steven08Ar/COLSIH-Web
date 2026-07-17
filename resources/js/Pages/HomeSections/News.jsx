@@ -50,15 +50,15 @@ export default function News({ noticias }) {
     return (
         <section className="relative py-28 lg:py-36 bg-[#F8F9FB] overflow-hidden select-none">
             {/* Background Blob decoration */}
-            <div className="absolute top-1/2 left-0 -translate-y-1/2 w-[450px] h-[450px] rounded-full bg-[#0057D9]/5 blur-[120px] pointer-events-none"></div>
+            <div className="absolute top-1/2 left-0 -translate-y-1/2 w-[450px] h-[450px] rounded-full bg-[#003C8F]/5 blur-[120px] pointer-events-none"></div>
 
             <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] space-y-16">
                 
                 {/* Section Header */}
                 <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-6">
                     <div className="text-left space-y-4 max-w-xl">
-                        <ScrollReveal distance="translate-y-8" className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#E31C23]/10 text-[#E31C23] text-[13px] font-bold tracking-widest uppercase">
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#E31C23]"></span>
+                        <ScrollReveal distance="translate-y-8" className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#800A15]/10 text-[#800A15] text-[13px] font-bold tracking-widest uppercase">
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#800A15]"></span>
                             Nuestra Comunidad
                         </ScrollReveal>
                         <ScrollReveal distance="translate-y-8" delay={150}>
@@ -71,7 +71,7 @@ export default function News({ noticias }) {
                     <ScrollReveal distance="translate-y-8" delay={250} className="shrink-0">
                         <Link 
                             href="/noticias" 
-                            className="group inline-flex items-center gap-2 text-sm font-extrabold text-[#E31C23] hover:text-[#c4181e] transition-colors"
+                            className="group inline-flex items-center gap-2 text-sm font-extrabold text-[#800A15] hover:text-[#c4181e] transition-colors"
                         >
                             Ver todas las noticias
                             <svg className="w-4.5 h-4.5 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
@@ -120,7 +120,7 @@ export default function News({ noticias }) {
                                         <time className="text-[10px] font-black text-slate-400 uppercase tracking-widest" dateTime={item.publicado_en}>
                                             {formatDate(item.publicado_en)}
                                         </time>
-                                        <h3 className="font-extrabold text-[20px] text-[#08111F] leading-snug group-hover:text-[#E31C23] transition-colors duration-200">
+                                        <h3 className="font-extrabold text-[20px] text-[#08111F] leading-snug group-hover:text-[#800A15] transition-colors duration-200">
                                             <Link href={`/noticias/${item.slug}`} className="focus:outline-none">
                                                 {item.titulo}
                                             </Link>
@@ -134,7 +134,7 @@ export default function News({ noticias }) {
                                     <div className="pt-2">
                                         <Link 
                                             href={`/noticias/${item.slug}`}
-                                            className="inline-flex items-center gap-2 text-xs font-extrabold text-[#08111F] group-hover:text-[#E31C23] uppercase tracking-wider transition-colors"
+                                            className="inline-flex items-center gap-2 text-xs font-extrabold text-[#08111F] group-hover:text-[#800A15] uppercase tracking-wider transition-colors"
                                         >
                                             Leer noticia
                                             <svg className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">

@@ -17,7 +17,7 @@ export default function VideoButton({ onClick }) {
                 </svg>
             </motion.span>
             <div className="flex flex-col leading-none">
-                <span className="text-sm font-bold text-[#08111F] group-hover:text-[#E31C23] transition-colors">
+                <span className="text-sm font-bold text-[#08111F] group-hover:text-[#800A15] transition-colors">
                     Ver video
                 </span>
                 <span className="text-[11px] font-semibold text-slate-400 mt-1">

@@ -8,32 +8,32 @@ export default function Admissions() {
             title: "Inscripción Online",
             description: "Diligencia el formulario digital de admisión y carga los documentos del estudiante de forma rápida.",
             tip: "Ten a la mano el Registro Civil del aspirante y los certificados de notas previos en formato PDF.",
-            color: "border-t-[#0057D9]",
-            glowColor: "hover:border-[#0057D9]/20 hover:shadow-[0_20px_50px_rgba(0,87,217,0.03)]"
+            color: "border-t-[#003C8F]",
+            glowColor: "hover:border-[#003C8F]/20 hover:shadow-[0_20px_50px_rgba(0, 60, 143,0.03)]"
         },
         {
             num: "02",
             title: "Entrevista y Pruebas",
             description: "Presenta las pruebas básicas y asiste a la entrevista psicológica virtual o presencial.",
             tip: "Las pruebas evalúan lógica y comprensión lectora básica. La entrevista se realiza junto a los padres.",
-            color: "border-t-[#E31C23]",
-            glowColor: "hover:border-[#E31C23]/20 hover:shadow-[0_20px_50px_rgba(227,28,35,0.03)]"
+            color: "border-t-[#800A15]",
+            glowColor: "hover:border-[#800A15]/20 hover:shadow-[0_20px_50px_rgba(128, 10, 21,0.03)]"
         },
         {
             num: "03",
             title: "Resultados",
             description: "Revisa el estado de la postulación en nuestra plataforma y recibe la confirmación vía correo.",
             tip: "Los resultados se notifican formalmente en un plazo de 3 a 5 días hábiles tras concluir las pruebas.",
-            color: "border-t-[#0057D9]",
-            glowColor: "hover:border-[#0057D9]/20 hover:shadow-[0_20px_50px_rgba(0,87,217,0.03)]"
+            color: "border-t-[#003C8F]",
+            glowColor: "hover:border-[#003C8F]/20 hover:shadow-[0_20px_50px_rgba(0, 60, 143,0.03)]"
         },
         {
             num: "04",
             title: "Matrícula Financiera",
             description: "Efectúa el pago del cupo y firma el contrato de matrícula digitalmente para asegurar la vacante.",
             tip: "Puedes realizar el pago de matrícula cómodamente por PSE o descargar el recibo para pago en ventanilla bancaria.",
-            color: "border-t-[#E31C23]",
-            glowColor: "hover:border-[#E31C23]/20 hover:shadow-[0_20px_50px_rgba(227,28,35,0.03)]"
+            color: "border-t-[#800A15]",
+            glowColor: "hover:border-[#800A15]/20 hover:shadow-[0_20px_50px_rgba(128, 10, 21,0.03)]"
         }
     ];
 
@@ -44,7 +44,7 @@ export default function Admissions() {
                 {/* Section Header */}
                 <div className="max-w-2xl text-left space-y-4">
                     <ScrollReveal distance="translate-y-6">
-                        <span className="text-[#E31C23] text-[13px] font-bold tracking-[3px] uppercase block font-sans">
+                        <span className="text-[#800A15] text-[13px] font-bold tracking-[3px] uppercase block font-sans">
                             ADMISIÓN
                         </span>
                     </ScrollReveal>
@@ -66,11 +66,11 @@ export default function Admissions() {
                         >
                             <div className={`h-full border border-slate-100/80 border-t-[3px] ${step.color} p-8 rounded-3xl bg-white transition-all duration-500 relative flex flex-col justify-between hover:-translate-y-2 group overflow-hidden ${step.glowColor}`}>
                                 <div className="space-y-6 text-left">
-                                    <span className="block text-4xl font-light text-slate-200 group-hover:text-[#0057D9] transition-colors duration-300 font-sans tracking-tighter">
+                                    <span className="block text-4xl font-light text-slate-200 group-hover:text-[#003C8F] transition-colors duration-300 font-sans tracking-tighter">
                                         {step.num}
                                     </span>
                                     <div className="space-y-2">
-                                        <h3 className="font-extrabold text-[18px] text-[#08111F] group-hover:text-[#0057D9] transition-colors duration-300">
+                                        <h3 className="font-extrabold text-[18px] text-[#08111F] group-hover:text-[#003C8F] transition-colors duration-300">
                                             {step.title}
                                         </h3>
                                         <p className="text-sm font-semibold text-slate-500 leading-relaxed">
@@ -84,7 +84,7 @@ export default function Admissions() {
                                     <span className="block text-[10px] font-extrabold text-slate-400 uppercase tracking-widest mb-1.5 font-sans">
                                         CONSEJO DE ADMISIÓN
                                     </span>
-                                    <p className="text-[13px] font-semibold text-[#E31C23] leading-relaxed">
+                                    <p className="text-[13px] font-semibold text-[#800A15] leading-relaxed">
                                         {step.tip}
                                     </p>
                                 </div>
@@ -98,13 +98,13 @@ export default function Admissions() {
                     <div className="inline-flex flex-col sm:flex-row items-center gap-6">
                         <Link 
                             href="/inscripcion" 
-                            className="inline-flex items-center justify-center bg-[#E31C23] hover:bg-[#c4181e] text-white font-extrabold text-sm px-8 py-4.5 rounded-xl shadow-sm active:scale-[0.98] transition-all cursor-pointer"
+                            className="inline-flex items-center justify-center bg-[#800A15] hover:bg-[#c4181e] text-white font-extrabold text-sm px-8 py-4.5 rounded-xl shadow-sm active:scale-[0.98] transition-all cursor-pointer"
                         >
                             Iniciar inscripción online
                         </Link>
                         <Link 
                             href="/admisiones" 
-                            className="inline-flex items-center gap-1.5 text-xs font-extrabold text-[#08111F] hover:text-[#E31C23] uppercase tracking-wider transition-colors"
+                            className="inline-flex items-center gap-1.5 text-xs font-extrabold text-[#08111F] hover:text-[#800A15] uppercase tracking-wider transition-colors"
                         >
                             Ver costos y requisitos
                             <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">

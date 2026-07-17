@@ -51,13 +51,13 @@ export default function Admisiones() {
             {/* 1. HERO SECTION (Dark theme matching established style) */}
             <section className="relative pt-36 pb-32 md:pt-44 md:pb-40 bg-[#08111F] overflow-hidden select-none">
                 {/* Glowing light blobs */}
-                <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[400px] h-[400px] bg-[#0057D9]/10 rounded-full blur-[120px] pointer-events-none z-0"></div>
-                <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-[400px] h-[400px] bg-[#E31C23]/8 rounded-full blur-[120px] pointer-events-none z-0"></div>
+                <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[400px] h-[400px] bg-[#003C8F]/10 rounded-full blur-[120px] pointer-events-none z-0"></div>
+                <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-[400px] h-[400px] bg-[#800A15]/8 rounded-full blur-[120px] pointer-events-none z-0"></div>
 
                 <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] relative z-10 text-left">
                     <div className="max-w-3xl space-y-6">
                         <ScrollReveal distance="translate-y-6">
-                            <span className="text-[#E31C23] text-xs md:text-[13px] font-bold tracking-[3px] uppercase block font-sans">
+                            <span className="text-[#800A15] text-xs md:text-[13px] font-bold tracking-[3px] uppercase block font-sans">
                                 PROCESO DE MATRÍCULA
                             </span>
                         </ScrollReveal>
@@ -88,7 +88,7 @@ export default function Admisiones() {
                     
                     <div className="max-w-2xl text-left space-y-4">
                         <ScrollReveal distance="translate-y-6">
-                            <span className="text-[#0057D9] text-xs font-bold tracking-[3px] uppercase block font-sans">
+                            <span className="text-[#003C8F] text-xs font-bold tracking-[3px] uppercase block font-sans">
                                 RUTAS DE ADMISIÓN
                             </span>
                         </ScrollReveal>
@@ -105,14 +105,14 @@ export default function Admisiones() {
                                 <div className="group h-full border border-slate-100 p-8 rounded-3xl bg-slate-50/50 hover:bg-white hover:border-slate-200/80 hover:shadow-[0_20px_50px_rgba(8,17,31,0.04)] transition-all duration-300 flex flex-col justify-between text-left">
                                     <div className="space-y-6">
                                         <div className="flex justify-between items-center">
-                                            <span className="text-3xl font-black text-[#0057D9] opacity-40 group-hover:opacity-100 transition-opacity duration-300 font-sans">
+                                            <span className="text-3xl font-black text-[#003C8F] opacity-40 group-hover:opacity-100 transition-opacity duration-300 font-sans">
                                                 {paso.numero}
                                             </span>
-                                            <span className="w-2.5 h-2.5 rounded-full bg-[#E31C23]" />
+                                            <span className="w-2.5 h-2.5 rounded-full bg-[#800A15]" />
                                         </div>
                                         
                                         <div className="space-y-3">
-                                            <h3 className="text-lg font-extrabold text-[#08111F] font-sans group-hover:text-[#0057D9] transition-colors duration-300">
+                                            <h3 className="text-lg font-extrabold text-[#08111F] font-sans group-hover:text-[#003C8F] transition-colors duration-300">
                                                 {paso.titulo}
                                             </h3>
                                             <p className="text-[14px] font-semibold text-slate-500 leading-relaxed font-sans">
@@ -123,7 +123,7 @@ export default function Admisiones() {
 
                                     {/* Collapsible/Details Drawer style at step card bottom */}
                                     <div className="border-t border-slate-100 pt-5 mt-6 space-y-2">
-                                        <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#E31C23] font-sans block">
+                                        <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#800A15] font-sans block">
                                             Consejo útil:
                                         </span>
                                         <p className="text-xs font-semibold text-slate-400 leading-relaxed font-sans">
@@ -144,7 +144,7 @@ export default function Admisiones() {
                     
                     <div className="lg:col-span-4 text-left space-y-4 lg:sticky lg:top-28">
                         <ScrollReveal distance="translate-y-6">
-                            <span className="text-[#E31C23] text-xs font-bold tracking-[3px] uppercase block font-sans">
+                            <span className="text-[#800A15] text-xs font-bold tracking-[3px] uppercase block font-sans">
                                 FECHAS CLAVE
                             </span>
                         </ScrollReveal>
@@ -168,7 +168,7 @@ export default function Admisiones() {
                                         <h3 className="font-extrabold text-[15px] text-[#08111F] font-sans">
                                             {etapa.etapa}
                                         </h3>
-                                        <span className="block text-2xl font-black text-[#0057D9] font-sans">
+                                        <span className="block text-2xl font-black text-[#003C8F] font-sans">
                                             {etapa.fecha}
                                         </span>
                                     </div>
@@ -189,7 +189,7 @@ export default function Admisiones() {
                     
                     <div className="max-w-2xl text-left space-y-4">
                         <ScrollReveal distance="translate-y-6">
-                            <span className="text-[#0057D9] text-xs font-bold tracking-[3px] uppercase block font-sans">
+                            <span className="text-[#003C8F] text-xs font-bold tracking-[3px] uppercase block font-sans">
                                 DOCUMENTACIÓN
                             </span>
                         </ScrollReveal>
@@ -206,13 +206,13 @@ export default function Admisiones() {
                                 <div className="p-8 border border-slate-100 rounded-3xl bg-white space-y-6 h-full hover:border-slate-200 transition-colors duration-300 text-left flex flex-col justify-between">
                                     <div className="space-y-4">
                                         <h3 className="text-lg font-black text-[#08111F] flex items-center gap-2 font-sans">
-                                            <span className="w-1.5 h-6 rounded-full bg-[#E31C23]" />
+                                            <span className="w-1.5 h-6 rounded-full bg-[#800A15]" />
                                             Requisitos {cat.categoria}
                                         </h3>
                                         <ul className="space-y-3 pt-2">
                                             {cat.items.map((item, iIdx) => (
                                                 <li key={iIdx} className="text-xs font-semibold text-slate-500 leading-relaxed font-sans flex items-start gap-2">
-                                                    <span className="text-[#0057D9] font-bold shrink-0 mt-0.5">•</span>
+                                                    <span className="text-[#003C8F] font-bold shrink-0 mt-0.5">•</span>
                                                     <span>{item}</span>
                                                 </li>
                                             ))}
@@ -236,7 +236,7 @@ export default function Admisiones() {
                 <div className="max-w-[1000px] mx-auto px-6 text-center space-y-10">
                     <div className="space-y-4">
                         <ScrollReveal distance="translate-y-6">
-                            <span className="text-[#0057D9] text-xs font-bold tracking-[3px] uppercase block font-sans">
+                            <span className="text-[#003C8F] text-xs font-bold tracking-[3px] uppercase block font-sans">
                                 FORMULARIO EN LÍNEA
                             </span>
                         </ScrollReveal>
@@ -253,7 +253,7 @@ export default function Admisiones() {
                     </div>
 
                     <ScrollReveal distance="translate-y-6" delay={450} className="flex flex-col sm:flex-row justify-center items-center gap-4">
-                        <Link href="/inscripcion" className="w-full sm:w-auto px-8 py-4 bg-[#0057D9] hover:bg-[#08111F] text-white font-extrabold text-xs tracking-wider uppercase rounded-full shadow-md hover:shadow-lg transition-all duration-300 font-sans cursor-pointer">
+                        <Link href="/inscripcion" className="w-full sm:w-auto px-8 py-4 bg-[#003C8F] hover:bg-[#08111F] text-white font-extrabold text-xs tracking-wider uppercase rounded-full shadow-md hover:shadow-lg transition-all duration-300 font-sans cursor-pointer">
                             Iniciar Inscripción en Línea
                         </Link>
                         <Link href="/contacto" className="w-full sm:w-auto px-8 py-4 bg-white border border-slate-200 hover:border-slate-400 text-[#08111F] font-extrabold text-xs tracking-wider uppercase rounded-full transition-all duration-300 font-sans cursor-pointer">

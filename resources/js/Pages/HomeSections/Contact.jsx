@@ -24,7 +24,7 @@ export default function Contact() {
     return (
         <section className="relative py-28 lg:py-36 bg-white overflow-hidden select-none">
             {/* Background Blob decoration */}
-            <div className="absolute top-1/3 left-0 w-[450px] h-[450px] rounded-full bg-[#E31C23]/5 blur-[120px] pointer-events-none"></div>
+            <div className="absolute top-1/3 left-0 w-[450px] h-[450px] rounded-full bg-[#800A15]/5 blur-[120px] pointer-events-none"></div>
 
             <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px]">
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-start">
@@ -32,8 +32,8 @@ export default function Contact() {
                     {/* Left Column: Contact info (5 columns) */}
                     <div className="col-span-12 lg:col-span-5 space-y-12 text-left">
                         <div className="space-y-4">
-                            <ScrollReveal distance="translate-y-8" className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#0057D9]/10 text-[#0057D9] text-[13px] font-bold tracking-widest uppercase">
-                                <span className="w-1.5 h-1.5 rounded-full bg-[#0057D9]"></span>
+                            <ScrollReveal distance="translate-y-8" className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#003C8F]/10 text-[#003C8F] text-[13px] font-bold tracking-widest uppercase">
+                                <span className="w-1.5 h-1.5 rounded-full bg-[#003C8F]"></span>
                                 Contacto
                             </ScrollReveal>
                             <ScrollReveal distance="translate-y-8" delay={150}>
@@ -52,7 +52,7 @@ export default function Contact() {
                             <div className="space-y-6">
                                 {/* Address */}
                                 <div className="flex items-start gap-4">
-                                    <div className="w-11 h-11 rounded-xl bg-slate-50 text-[#0057D9] flex items-center justify-center shrink-0">
+                                    <div className="w-11 h-11 rounded-xl bg-slate-50 text-[#003C8F] flex items-center justify-center shrink-0">
                                         <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                                             <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -66,7 +66,7 @@ export default function Contact() {
 
                                 {/* Phone */}
                                 <div className="flex items-start gap-4">
-                                    <div className="w-11 h-11 rounded-xl bg-slate-50 text-[#E31C23] flex items-center justify-center shrink-0">
+                                    <div className="w-11 h-11 rounded-xl bg-slate-50 text-[#800A15] flex items-center justify-center shrink-0">
                                         <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.94.725l.548 2.2a1 1 0 01-.321.988l-1.305.98a10.582 10.582 0 004.872 4.872l.98-1.305a1 1 0 01.988-.321l2.2.548a1 1 0 01.725.94V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                                         </svg>
@@ -79,7 +79,7 @@ export default function Contact() {
 
                                 {/* Email */}
                                 <div className="flex items-start gap-4">
-                                    <div className="w-11 h-11 rounded-xl bg-slate-50 text-[#0057D9] flex items-center justify-center shrink-0">
+                                    <div className="w-11 h-11 rounded-xl bg-slate-50 text-[#003C8F] flex items-center justify-center shrink-0">
                                         <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                                         </svg>
@@ -125,7 +125,7 @@ export default function Contact() {
                                                 required
                                                 value={form.nombre}
                                                 onChange={(e) => setForm({...form, nombre: e.target.value})}
-                                                className="w-full px-5 py-4 border border-slate-200 bg-white rounded-2xl text-sm font-semibold focus:outline-none focus:border-[#0057D9] focus:ring-1 focus:ring-[#0057D9] transition-all"
+                                                className="w-full px-5 py-4 border border-slate-200 bg-white rounded-2xl text-sm font-semibold focus:outline-none focus:border-[#003C8F] focus:ring-1 focus:ring-[#003C8F] transition-all"
                                                 placeholder="Ej. Juan Pérez"
                                             />
                                         </div>
@@ -138,7 +138,7 @@ export default function Contact() {
                                                 required
                                                 value={form.telefono}
                                                 onChange={(e) => setForm({...form, telefono: e.target.value})}
-                                                className="w-full px-5 py-4 border border-slate-200 bg-white rounded-2xl text-sm font-semibold focus:outline-none focus:border-[#0057D9] focus:ring-1 focus:ring-[#0057D9] transition-all"
+                                                className="w-full px-5 py-4 border border-slate-200 bg-white rounded-2xl text-sm font-semibold focus:outline-none focus:border-[#003C8F] focus:ring-1 focus:ring-[#003C8F] transition-all"
                                                 placeholder="Ej. 300 123 4567"
                                             />
                                         </div>
@@ -152,7 +152,7 @@ export default function Contact() {
                                             required
                                             value={form.email}
                                             onChange={(e) => setForm({...form, email: e.target.value})}
-                                            className="w-full px-5 py-4 border border-slate-200 bg-white rounded-2xl text-sm font-semibold focus:outline-none focus:border-[#0057D9] focus:ring-1 focus:ring-[#0057D9] transition-all"
+                                            className="w-full px-5 py-4 border border-slate-200 bg-white rounded-2xl text-sm font-semibold focus:outline-none focus:border-[#003C8F] focus:ring-1 focus:ring-[#003C8F] transition-all"
                                             placeholder="juan.perez@ejemplo.com"
                                         />
                                     </div>
@@ -165,7 +165,7 @@ export default function Contact() {
                                             rows="4"
                                             value={form.mensaje}
                                             onChange={(e) => setForm({...form, mensaje: e.target.value})}
-                                            className="w-full px-5 py-4 border border-slate-200 bg-white rounded-2xl text-sm font-semibold focus:outline-none focus:border-[#0057D9] focus:ring-1 focus:ring-[#0057D9] transition-all resize-none"
+                                            className="w-full px-5 py-4 border border-slate-200 bg-white rounded-2xl text-sm font-semibold focus:outline-none focus:border-[#003C8F] focus:ring-1 focus:ring-[#003C8F] transition-all resize-none"
                                             placeholder="Escribe tu consulta aquí..."
                                         />
                                     </div>
@@ -174,7 +174,7 @@ export default function Contact() {
                                     <div className="pt-2 text-left">
                                         <button 
                                             type="submit" 
-                                            className="w-full inline-flex items-center justify-center bg-[#0057D9] hover:bg-[#004bb8] text-white font-extrabold text-sm px-8 py-4.5 rounded-full shadow-lg shadow-blue-700/10 active:scale-[0.98] transition-all cursor-pointer focus:outline-none"
+                                            className="w-full inline-flex items-center justify-center bg-[#003C8F] hover:bg-[#004bb8] text-white font-extrabold text-sm px-8 py-4.5 rounded-full shadow-lg shadow-blue-700/10 active:scale-[0.98] transition-all cursor-pointer focus:outline-none"
                                         >
                                             Enviar mensaje
                                         </button>

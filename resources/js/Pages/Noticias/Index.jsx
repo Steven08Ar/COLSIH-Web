@@ -17,11 +17,11 @@ export default function NoticiasIndex({ noticias, categoriaActual }) {
     const getBadgeStyle = (cat) => {
         switch (cat?.toLowerCase()) {
             case 'evento':
-                return 'bg-[#E31C23]/10 text-[#E31C23] border-[#E31C23]/20';
+                return 'bg-[#800A15]/10 text-[#800A15] border-[#800A15]/20';
             case 'comunicado':
                 return 'bg-[#FBBF24]/10 text-[#D97706] border-[#FBBF24]/20';
             default:
-                return 'bg-[#0057D9]/10 text-[#0057D9] border-[#0057D9]/20';
+                return 'bg-[#003C8F]/10 text-[#003C8F] border-[#003C8F]/20';
         }
     };
 
@@ -33,13 +33,13 @@ export default function NoticiasIndex({ noticias, categoriaActual }) {
             <section className="relative pt-36 pb-32 md:pt-44 md:pb-40 bg-[#08111F] overflow-hidden select-none">
                 
                 {/* Glowing background elements */}
-                <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[400px] h-[400px] bg-[#0057D9]/10 rounded-full blur-[120px] pointer-events-none z-0"></div>
-                <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-[400px] h-[400px] bg-[#E31C23]/8 rounded-full blur-[120px] pointer-events-none z-0"></div>
+                <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[400px] h-[400px] bg-[#003C8F]/10 rounded-full blur-[120px] pointer-events-none z-0"></div>
+                <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-[400px] h-[400px] bg-[#800A15]/8 rounded-full blur-[120px] pointer-events-none z-0"></div>
 
                 <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] relative z-10 text-left">
                     <div className="max-w-3xl space-y-6">
                         <ScrollReveal distance="translate-y-6">
-                            <span className="text-[#E31C23] text-xs md:text-[13px] font-bold tracking-[3px] uppercase block font-sans">
+                            <span className="text-[#800A15] text-xs md:text-[13px] font-bold tracking-[3px] uppercase block font-sans">
                                 VIDA ESCOLAR
                             </span>
                         </ScrollReveal>
@@ -86,7 +86,7 @@ export default function NoticiasIndex({ noticias, categoriaActual }) {
                                                 onClick={() => filtrarPorCategoria(cat.value)}
                                                 className={`w-full text-left px-4 py-3 rounded-xl text-xs font-extrabold tracking-wider uppercase border transition-all duration-300 cursor-pointer ${
                                                     isActive 
-                                                        ? 'bg-[#0057D9] text-white border-[#0057D9] shadow-sm'
+                                                        ? 'bg-[#003C8F] text-white border-[#003C8F] shadow-sm'
                                                         : 'bg-white text-slate-500 border-slate-200/60 hover:bg-slate-100/50 hover:text-[#08111F]'
                                                 }`}
                                             >
@@ -100,12 +100,12 @@ export default function NoticiasIndex({ noticias, categoriaActual }) {
                             {/* MJS Banner Promo */}
                             <div className="relative p-8 overflow-hidden rounded-3xl bg-[#08111F] border border-white/10 text-left shadow-lg group select-none">
                                 {/* Decorative elements */}
-                                <div className="absolute -top-10 -right-10 w-32 h-32 bg-[#E31C23]/20 rounded-full blur-[30px] group-hover:bg-[#E31C23]/30 transition-colors duration-500"></div>
-                                <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-[#0057D9]/20 rounded-full blur-[30px]"></div>
+                                <div className="absolute -top-10 -right-10 w-32 h-32 bg-[#800A15]/20 rounded-full blur-[30px] group-hover:bg-[#800A15]/30 transition-colors duration-500"></div>
+                                <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-[#003C8F]/20 rounded-full blur-[30px]"></div>
 
                                 <div className="relative z-10 space-y-6 flex flex-col justify-between h-full">
                                     <div className="space-y-3">
-                                        <span className="text-[#E31C23] text-[10px] font-black tracking-widest uppercase font-sans">
+                                        <span className="text-[#800A15] text-[10px] font-black tracking-widest uppercase font-sans">
                                             PASTORAL ASOCIATIVA
                                         </span>
                                         <h3 className="text-xl font-black text-white leading-tight font-sans">
@@ -116,7 +116,7 @@ export default function NoticiasIndex({ noticias, categoriaActual }) {
                                         </p>
                                     </div>
                                     <div className="pt-2">
-                                        <Link href="/mjs" className="inline-flex items-center gap-2 px-5 py-2.5 bg-white text-[#08111F] hover:bg-[#E31C23] hover:text-white font-extrabold text-[10px] tracking-wider uppercase rounded-full shadow-md transition-all duration-300 font-sans cursor-pointer">
+                                        <Link href="/mjs" className="inline-flex items-center gap-2 px-5 py-2.5 bg-white text-[#08111F] hover:bg-[#800A15] hover:text-white font-extrabold text-[10px] tracking-wider uppercase rounded-full shadow-md transition-all duration-300 font-sans cursor-pointer">
                                             Conocer el MJS
                                             <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                                                 <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
@@ -163,7 +163,7 @@ export default function NoticiasIndex({ noticias, categoriaActual }) {
                                                             <span className={`px-3 py-1 text-[10px] font-extrabold uppercase tracking-wider rounded-md border font-sans ${getBadgeStyle(noticia.categoria)}`}>
                                                                 {noticia.categoria}
                                                             </span>
-                                                            <span className="w-1.5 h-1.5 rounded-full bg-[#E31C23]" />
+                                                            <span className="w-1.5 h-1.5 rounded-full bg-[#800A15]" />
                                                         </div>
                                                     )}
 
@@ -177,7 +177,7 @@ export default function NoticiasIndex({ noticias, categoriaActual }) {
                                                             })}
                                                         </time>
                                                         
-                                                        <h3 className="text-lg font-black text-[#08111F] group-hover:text-[#0057D9] transition-colors duration-300 leading-snug font-sans">
+                                                        <h3 className="text-lg font-black text-[#08111F] group-hover:text-[#003C8F] transition-colors duration-300 leading-snug font-sans">
                                                             <Link href={`/noticias/${noticia.slug}`}>{noticia.titulo}</Link>
                                                         </h3>
                                                         
@@ -191,7 +191,7 @@ export default function NoticiasIndex({ noticias, categoriaActual }) {
                                                 <div className="px-6 py-4 border-t border-slate-50 bg-slate-50/20 flex justify-end">
                                                     <Link 
                                                         href={`/noticias/${noticia.slug}`} 
-                                                        className="text-xs font-extrabold text-[#0057D9] hover:text-[#E31C23] flex items-center gap-1.5 transition-colors duration-300 font-sans"
+                                                        className="text-xs font-extrabold text-[#003C8F] hover:text-[#800A15] flex items-center gap-1.5 transition-colors duration-300 font-sans"
                                                     >
                                                         Leer más
                                                         <svg className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
@@ -220,7 +220,7 @@ export default function NoticiasIndex({ noticias, categoriaActual }) {
                                                     dangerouslySetInnerHTML={{ __html: link.label }}
                                                     className={`px-4 py-2 border rounded-xl text-xs font-bold transition-all duration-300 select-none ${
                                                         isActive
-                                                            ? 'bg-[#0057D9] text-white border-[#0057D9]'
+                                                            ? 'bg-[#003C8F] text-white border-[#003C8F]'
                                                             : 'bg-white text-slate-500 border-slate-200 hover:bg-slate-50 hover:text-[#08111F]'
                                                     }`}
                                                     aria-current={isActive ? 'page' : undefined}

@@ -37,7 +37,7 @@ export default function About() {
                             </div>
 
                             {/* Minimal background border outline frame offset */}
-                            <div className="absolute inset-4 translate-x-4 translate-y-4 border border-[#0057D9]/20 rounded-2xl -z-10"></div>
+                            <div className="absolute inset-4 translate-x-4 translate-y-4 border border-[#003C8F]/20 rounded-2xl -z-10"></div>
 
                             {/* Main Image Container */}
                             <div className="relative aspect-[4/5] rounded-2xl overflow-hidden group">
@@ -55,7 +55,7 @@ export default function About() {
                     <div className="col-span-12 lg:col-span-6 space-y-12 text-left">
                         <div className="space-y-4">
                             <ScrollReveal distance="translate-y-6">
-                                <span className="text-[#E31C23] text-[13px] font-bold tracking-[3px] uppercase block font-sans">
+                                <span className="text-[#800A15] text-[13px] font-bold tracking-[3px] uppercase block font-sans">
                                     FILOSOFÍA INSTITUCIONAL
                                 </span>
                             </ScrollReveal>
@@ -79,11 +79,11 @@ export default function About() {
                                     className="group flex items-center justify-between py-6 transition-all duration-300 cursor-pointer focus:outline-none"
                                 >
                                     <div className="flex items-baseline gap-6">
-                                        <span className="text-sm font-extrabold text-[#0057D9] tracking-wider font-sans">
+                                        <span className="text-sm font-extrabold text-[#003C8F] tracking-wider font-sans">
                                             {link.num}
                                         </span>
                                         <div className="space-y-1">
-                                            <h4 className="font-extrabold text-[18px] text-[#08111F] group-hover:text-[#0057D9] transition-colors duration-300">
+                                            <h4 className="font-extrabold text-[18px] text-[#08111F] group-hover:text-[#003C8F] transition-colors duration-300">
                                                 {link.title}
                                             </h4>
                                             <p className="text-sm font-semibold text-slate-400 max-w-lg leading-normal">
@@ -91,7 +91,7 @@ export default function About() {
                                             </p>
                                         </div>
                                     </div>
-                                    <div className="text-slate-300 group-hover:text-[#E31C23] group-hover:translate-x-1.5 transition-all duration-300 shrink-0">
+                                    <div className="text-slate-300 group-hover:text-[#800A15] group-hover:translate-x-1.5 transition-all duration-300 shrink-0">
                                         <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                                         </svg>
@@ -104,7 +104,7 @@ export default function About() {
                         <ScrollReveal distance="translate-y-6" delay={400}>
                             <Link
                                 href="/nosotros"
-                                className="inline-flex items-center gap-2 bg-[#08111F] hover:bg-[#0057D9] text-white font-extrabold text-xs uppercase tracking-wider px-8 py-4.5 rounded-xl transition-all shadow-sm active:scale-[0.98] cursor-pointer"
+                                className="inline-flex items-center gap-2 bg-[#08111F] hover:bg-[#003C8F] text-white font-extrabold text-xs uppercase tracking-wider px-8 py-4.5 rounded-xl transition-all shadow-sm active:scale-[0.98] cursor-pointer"
                             >
                                 Conocer más
                                 <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">

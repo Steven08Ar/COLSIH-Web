@@ -79,7 +79,7 @@ export default function AboutHero() {
                     {/* Text pequeño: QUIÉNES SOMOS */}
                     <motion.span 
                         variants={itemVariants}
-                        className="text-[#E31C23] text-[15px] font-bold tracking-[3px] uppercase block font-sans"
+                        className="text-[#800A15] text-[15px] font-bold tracking-[3px] uppercase block font-sans"
                     >
                         QUIÉNES SOMOS
                     </motion.span>
@@ -91,10 +91,10 @@ export default function AboutHero() {
                     >
                         Una historia de fe,<br />
                         educación y<br />
-                        <span className="relative inline-block text-[#0057D9]" style={{ fontFamily: "'Caveat', cursive" }}>
+                        <span className="relative inline-block text-[#003C8F]" style={{ fontFamily: "'Caveat', cursive" }}>
                             transformación
                             {/* Drawn red underline SVG */}
-                            <svg className="absolute -bottom-3.5 left-0 w-full h-2.5 text-[#E31C23] opacity-80" viewBox="0 0 100 10" preserveAspectRatio="none">
+                            <svg className="absolute -bottom-3.5 left-0 w-full h-2.5 text-[#800A15] opacity-80" viewBox="0 0 100 10" preserveAspectRatio="none">
                                 <path d="M0,5 Q50,10 100,5" stroke="currentColor" strokeWidth="4" fill="none" strokeLinecap="round" />
                             </svg>
                         </span>
@@ -156,21 +156,21 @@ export default function AboutHero() {
                 <div className="absolute inset-0 z-0 pointer-events-none scale-110">
                     {/* Blob azul enorme */}
                     <AnimatedBlob 
-                        className="w-80 h-80 bg-[#0057D9]/15 -top-12 -left-12 blur-2xl" 
+                        className="w-80 h-80 bg-[#003C8F]/15 -top-12 -left-12 blur-2xl" 
                         mouseX={springX} 
                         mouseY={springY} 
                         speed={1.3} 
                     />
                     {/* Blob rojo */}
                     <AnimatedBlob 
-                        className="w-[360px] h-[360px] bg-[#E31C23]/10 -bottom-16 -right-16 blur-3xl" 
+                        className="w-[360px] h-[360px] bg-[#800A15]/10 -bottom-16 -right-16 blur-3xl" 
                         mouseX={springX} 
                         mouseY={springY} 
                         speed={0.9} 
                     />
                     {/* Blur spots */}
-                    <div className="absolute top-1/3 left-1/4 w-32 h-32 bg-[#0057D9]/15 rounded-full blur-3xl"></div>
-                    <div className="absolute bottom-1/3 right-1/4 w-40 h-40 bg-[#E31C23]/12 rounded-full blur-3xl"></div>
+                    <div className="absolute top-1/3 left-1/4 w-32 h-32 bg-[#003C8F]/15 rounded-full blur-3xl"></div>
+                    <div className="absolute bottom-1/3 right-1/4 w-40 h-40 bg-[#800A15]/12 rounded-full blur-3xl"></div>
                     {/* Giant outline circles */}
                     <div className="absolute w-[440px] h-[440px] border border-slate-200/30 rounded-full top-4 left-4 opacity-40"></div>
                     <div className="absolute w-[320px] h-[320px] border border-slate-200/30 rounded-full bottom-4 right-4 opacity-40"></div>
@@ -205,7 +205,7 @@ export default function AboutHero() {
                     {/* Red Wave on the left */}
                     <path 
                         d="M0,160 C200,70 400,140 600,135 C750,130 900,145 1050,160 L1050,160 L0,160 Z" 
-                        fill="#E31C23" 
+                        fill="#800A15" 
                     />
                     {/* Dark Blue Wave on the right */}
                     <path 

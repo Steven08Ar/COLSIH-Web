@@ -17,7 +17,7 @@ export default function NosotrosIndex() {
 
             {/* SECTION 2: NUESTRA FILOSOFÍA Y SISTEMA PREVENTIVO */}
             <section className="py-24 bg-slate-50/50 text-left relative overflow-hidden">
-                <div className="absolute top-1/2 -right-64 w-[500px] h-[500px] bg-[#0057D9]/5 rounded-full blur-3xl pointer-events-none"></div>
+                <div className="absolute top-1/2 -right-64 w-[500px] h-[500px] bg-[#003C8F]/5 rounded-full blur-3xl pointer-events-none"></div>
                 
                 {/* Wavy bottom decoration */}
                 <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-none z-10 pointer-events-none">
@@ -31,12 +31,12 @@ export default function NosotrosIndex() {
                         
                         {/* Left column */}
                         <div className="col-span-12 lg:col-span-5 space-y-6">
-                            <span className="text-[#E31C23] font-extrabold text-[12px] uppercase tracking-widest block font-sans">
+                            <span className="text-[#800A15] font-extrabold text-[12px] uppercase tracking-widest block font-sans">
                                 NUESTRA FILOSOFÍA
                             </span>
                             <h2 className="text-3xl sm:text-4xl lg:text-[48px] font-black text-[#08111F] leading-[1.08] tracking-tight font-sans">
                                 El Sistema Preventivo:<br />
-                                <span className="relative text-[#0057D9] inline-block mt-1" style={{ fontFamily: "'Caveat', cursive" }}>
+                                <span className="relative text-[#003C8F] inline-block mt-1" style={{ fontFamily: "'Caveat', cursive" }}>
                                     Razón, Religión y Amor.
                                 </span>
                             </h2>
@@ -49,7 +49,7 @@ export default function NosotrosIndex() {
                         <div className="col-span-12 lg:col-span-7 space-y-6">
                             {/* Razón */}
                             <div className="bg-white border border-slate-100 p-8 rounded-[28px] shadow-sm hover:shadow-md transition-all duration-300 flex flex-col md:flex-row gap-6 items-start">
-                                <div className="w-12 h-12 rounded-2xl bg-[#0057D9]/10 text-[#0057D9] flex items-center justify-center shrink-0">
+                                <div className="w-12 h-12 rounded-2xl bg-[#003C8F]/10 text-[#003C8F] flex items-center justify-center shrink-0">
                                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                                     </svg>
@@ -64,7 +64,7 @@ export default function NosotrosIndex() {
 
                             {/* Religión */}
                             <div className="bg-white border border-slate-100 p-8 rounded-[28px] shadow-sm hover:shadow-md transition-all duration-300 flex flex-col md:flex-row gap-6 items-start">
-                                <div className="w-12 h-12 rounded-2xl bg-[#E31C23]/10 text-[#E31C23] flex items-center justify-center shrink-0">
+                                <div className="w-12 h-12 rounded-2xl bg-[#800A15]/10 text-[#800A15] flex items-center justify-center shrink-0">
                                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z" />
                                     </svg>
@@ -102,7 +102,7 @@ export default function NosotrosIndex() {
             <section className="py-24 bg-white text-left relative">
                 <div className="max-w-[1400px] mx-auto px-6 md:px-12">
                     <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
-                        <span className="text-[#0057D9] font-extrabold text-[12px] uppercase tracking-widest block font-sans">
+                        <span className="text-[#003C8F] font-extrabold text-[12px] uppercase tracking-widest block font-sans">
                             INFORMACIÓN INSTITUCIONAL
                         </span>
                         <h2 className="text-3xl sm:text-4xl font-black text-[#08111F] tracking-tight font-sans">
@@ -116,7 +116,7 @@ export default function NosotrosIndex() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         {/* Naturaleza y Convenio */}
                         <div className="bg-slate-50/50 border border-slate-100 rounded-3xl p-8 hover:shadow-md transition-all duration-300 flex gap-6 items-start">
-                            <div className="w-12 h-12 rounded-2xl bg-red-100 text-[#E31C23] flex items-center justify-center shrink-0">
+                            <div className="w-12 h-12 rounded-2xl bg-red-100 text-[#800A15] flex items-center justify-center shrink-0">
                                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                                 </svg>
@@ -131,7 +131,7 @@ export default function NosotrosIndex() {
 
                         {/* Dirección Pastoral */}
                         <div className="bg-slate-50/50 border border-slate-100 rounded-3xl p-8 hover:shadow-md transition-all duration-300 flex gap-6 items-start">
-                            <div className="w-12 h-12 rounded-2xl bg-blue-100 text-[#0057D9] flex items-center justify-center shrink-0">
+                            <div className="w-12 h-12 rounded-2xl bg-blue-100 text-[#003C8F] flex items-center justify-center shrink-0">
                                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a3 3 0 11-6 0 3 3 0 016 0z" />
                                 </svg>
@@ -180,7 +180,7 @@ export default function NosotrosIndex() {
 
             {/* SECTION 4: ¿POR QUÉ ELEGIRNOS? (Dark slate section) */}
             <section className="py-24 bg-[#08111F] text-white relative overflow-hidden text-left">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_right,rgba(0,87,217,0.18),transparent_60%)] pointer-events-none"></div>
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_right,rgba(0, 60, 143,0.18),transparent_60%)] pointer-events-none"></div>
 
                 <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] relative z-10">
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
@@ -194,9 +194,9 @@ export default function NosotrosIndex() {
                                 Formamos para la<br />
                                 vida, preparamos<br />
                                 para el{' '}
-                                <span className="relative text-[#0057D9] inline-block font-sans">
+                                <span className="relative text-[#003C8F] inline-block font-sans">
                                     futuro.
-                                    <span className="absolute bottom-1.5 left-0 w-full h-1.5 bg-[#0057D9]"></span>
+                                    <span className="absolute bottom-1.5 left-0 w-full h-1.5 bg-[#003C8F]"></span>
                                 </span>
                             </h2>
                         </div>
@@ -206,7 +206,7 @@ export default function NosotrosIndex() {
                             
                             {/* Educación integral */}
                             <div className="flex gap-4.5 items-start">
-                                <div className="w-12 h-12 rounded-2xl bg-[#0057D9]/25 text-white flex items-center justify-center shrink-0">
+                                <div className="w-12 h-12 rounded-2xl bg-[#003C8F]/25 text-white flex items-center justify-center shrink-0">
                                     <svg className="w-5.5 h-5.5 text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 14l9-5-9-5-9 5 9 5z" />
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
@@ -222,7 +222,7 @@ export default function NosotrosIndex() {
 
                             {/* Acompañamiento personalizado */}
                             <div className="flex gap-4.5 items-start">
-                                <div className="w-12 h-12 rounded-2xl bg-[#E31C23]/25 text-white flex items-center justify-center shrink-0">
+                                <div className="w-12 h-12 rounded-2xl bg-[#800A15]/25 text-white flex items-center justify-center shrink-0">
                                     <svg className="w-5.5 h-5.5 text-red-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                                     </svg>
@@ -276,7 +276,7 @@ export default function NosotrosIndex() {
                 <div className="bg-white border border-slate-100 rounded-3xl shadow-xl shadow-slate-200/40 p-8 grid grid-cols-2 lg:grid-cols-4 gap-8">
                     {/* Stat 1 */}
                     <div className="flex items-center gap-4.5 text-left md:justify-center">
-                        <div className="w-12 h-12 rounded-full bg-[#E31C23]/10 text-[#E31C23] flex items-center justify-center shrink-0">
+                        <div className="w-12 h-12 rounded-full bg-[#800A15]/10 text-[#800A15] flex items-center justify-center shrink-0">
                             <svg className="w-5.5 h-5.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                             </svg>
@@ -289,7 +289,7 @@ export default function NosotrosIndex() {
 
                     {/* Stat 2 */}
                     <div className="flex items-center gap-4.5 text-left md:justify-center">
-                        <div className="w-12 h-12 rounded-full bg-[#0057D9]/10 text-[#0057D9] flex items-center justify-center shrink-0">
+                        <div className="w-12 h-12 rounded-full bg-[#003C8F]/10 text-[#003C8F] flex items-center justify-center shrink-0">
                             <svg className="w-5.5 h-5.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
                             </svg>
@@ -332,7 +332,7 @@ export default function NosotrosIndex() {
             {/* SECTION 6: BOTTOM RED CTA BANNER */}
             <section className="py-8 bg-white text-center mt-20">
                 <div className="max-w-[1200px] mx-auto px-6">
-                    <div className="relative bg-[#E31C23] text-white py-16 px-8 md:px-16 rounded-[40px] shadow-xl shadow-red-700/10 overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8 text-left">
+                    <div className="relative bg-[#800A15] text-white py-16 px-8 md:px-16 rounded-[40px] shadow-xl shadow-red-700/10 overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8 text-left">
                         {/* Wavy background shapes inside the banner */}
                         <div className="absolute right-0 top-0 w-[40%] h-[150%] bg-white/5 rounded-bl-full pointer-events-none transform -rotate-12"></div>
                         
@@ -347,7 +347,7 @@ export default function NosotrosIndex() {
 
                         <Link
                             href="/contacto"
-                            className="bg-white hover:bg-slate-50 text-[#E31C23] font-black text-sm px-8 py-4.5 rounded-full transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] shadow-lg shrink-0 relative z-10 flex items-center gap-2 cursor-pointer"
+                            className="bg-white hover:bg-slate-50 text-[#800A15] font-black text-sm px-8 py-4.5 rounded-full transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] shadow-lg shrink-0 relative z-10 flex items-center gap-2 cursor-pointer"
                         >
                             Agenda tu visita
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

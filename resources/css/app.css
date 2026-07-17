@@ -24,12 +24,12 @@
 }
 
 ::-webkit-scrollbar-thumb {
-    background: rgba(0, 87, 217, 0.55);
+    background: rgba(0, 60, 143, 0.55);
     border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: rgba(227, 28, 35, 0.85);
+    background: rgba(128, 10, 21, 0.85);
 }
 
 ::-webkit-scrollbar-button {
@@ -39,7 +39,7 @@
 /* Firefox */
 * {
     scrollbar-width: thin;
-    scrollbar-color: rgba(0, 87, 217, 0.5) transparent;
+    scrollbar-color: rgba(0, 60, 143, 0.5) transparent;
 }
 
 @keyframes stroke-draw {
@@ -53,12 +53,35 @@
 
 @keyframes logo-glow {
     0% {
-        filter: drop-shadow(0 0 12px rgba(227, 28, 35, 0.45)) invert(16%) sepia(89%) saturate(6039%) hue-rotate(351deg) brightness(90%) contrast(100%);
+        filter: drop-shadow(0 0 12px rgba(128, 10, 21, 0.45)) invert(13%) sepia(87%) saturate(2256%) hue-rotate(328deg) brightness(93%) contrast(106%);
     }
     50% {
         filter: drop-shadow(0 0 12px rgba(251, 191, 36, 0.45)) invert(82%) sepia(45%) saturate(3015%) hue-rotate(352deg) brightness(101%) contrast(98%);
     }
     100% {
-        filter: drop-shadow(0 0 12px rgba(227, 28, 35, 0.45)) invert(16%) sepia(89%) saturate(6039%) hue-rotate(351deg) brightness(90%) contrast(100%);
+        filter: drop-shadow(0 0 12px rgba(128, 10, 21, 0.45)) invert(13%) sepia(87%) saturate(2256%) hue-rotate(328deg) brightness(93%) contrast(106%);
+    }
+}
+
+@keyframes mjs-logo-glow {
+    0%, 100% {
+        filter: drop-shadow(0 0 15px rgba(255, 232, 0, 0.65));
+    }
+    33% {
+        filter: drop-shadow(0 0 15px rgba(11, 9, 161, 0.65));
+    }
+    66% {
+        filter: drop-shadow(0 0 15px rgba(243, 11, 15, 0.65));
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }

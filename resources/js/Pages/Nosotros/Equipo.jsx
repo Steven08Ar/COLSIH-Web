@@ -27,7 +27,7 @@ export default function Equipo() {
 
             {/* Header Hero Section */}
             <section className="relative bg-gradient-to-b from-[#08111F] to-[#0D1B2E] pt-32 pb-20 text-center text-white overflow-hidden">
-                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(0,87,217,0.12),transparent_60%)]"></div>
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(0, 60, 143,0.12),transparent_60%)]"></div>
                 <div className="relative z-10 max-w-[1200px] mx-auto px-6">
                     <nav className="text-sm font-semibold text-slate-400 mb-4 flex items-center justify-center gap-2">
                         <Link href="/nosotros" className="hover:text-white transition-colors">Quiénes Somos</Link>
@@ -47,7 +47,7 @@ export default function Equipo() {
                         <h2 className="text-3xl font-extrabold text-[#08111F] tracking-tight">
                             Equipo Directivo
                         </h2>
-                        <div className="w-16 h-1 bg-[#E31C23] rounded-full mx-auto mt-4 mb-4"></div>
+                        <div className="w-16 h-1 bg-[#800A15] rounded-full mx-auto mt-4 mb-4"></div>
                         <p className="text-slate-500 font-medium">
                             Comunidad Hijas de María Auxiliadora y directivos al frente de la administración escolar.
                         </p>
@@ -57,13 +57,13 @@ export default function Equipo() {
                         {directivos.map((persona) => (
                             <div key={persona.nombre} className="bg-slate-50 border border-slate-100 p-8 rounded-3xl relative overflow-hidden flex flex-col justify-between hover:border-slate-200 transition-all">
                                 <div>
-                                    <div className="w-10 h-10 rounded-xl bg-[#0057D9]/10 text-[#0057D9] flex items-center justify-center mb-6">
+                                    <div className="w-10 h-10 rounded-xl bg-[#003C8F]/10 text-[#003C8F] flex items-center justify-center mb-6">
                                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                         </svg>
                                     </div>
                                     <h3 className="text-xl font-bold text-[#08111F] mb-1 font-sans">{persona.nombre}</h3>
-                                    <span className="inline-block text-xs font-extrabold text-[#E31C23] uppercase tracking-wider mb-4">
+                                    <span className="inline-block text-xs font-extrabold text-[#800A15] uppercase tracking-wider mb-4">
                                         {persona.cargo}
                                     </span>
                                     <p className="text-slate-500 text-sm font-semibold leading-relaxed">
@@ -83,7 +83,7 @@ export default function Equipo() {
                         <h2 className="text-3xl font-extrabold text-[#08111F] tracking-tight">
                             Áreas de Formación
                         </h2>
-                        <div className="w-16 h-1 bg-[#E31C23] rounded-full mx-auto mt-4 mb-4"></div>
+                        <div className="w-16 h-1 bg-[#800A15] rounded-full mx-auto mt-4 mb-4"></div>
                         <p className="text-slate-500 font-medium">
                             Nuestros educadores son profesionales altamente capacitados comprometidos con cada asignatura.
                         </p>
@@ -92,7 +92,7 @@ export default function Equipo() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {areas.map((area, idx) => (
                             <div key={idx} className="bg-white border border-slate-100 p-6 rounded-2xl shadow-xs flex items-start gap-4">
-                                <span className="w-8 h-8 rounded-lg bg-[#E31C23]/5 text-[#E31C23] flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">
+                                <span className="w-8 h-8 rounded-lg bg-[#800A15]/5 text-[#800A15] flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">
                                     0{idx + 1}
                                 </span>
                                 <div>
@@ -107,11 +107,11 @@ export default function Equipo() {
 
             {/* Footer Navigation Tabs */}
             <nav className="py-12 bg-white border-t border-slate-100 flex items-center justify-center gap-6">
-                <Link href="/nosotros/valores" className="text-sm font-bold text-slate-500 hover:text-[#E31C23] transition-colors flex items-center gap-1.5">
+                <Link href="/nosotros/valores" className="text-sm font-bold text-slate-500 hover:text-[#800A15] transition-colors flex items-center gap-1.5">
                     ← Valores Corporativos
                 </Link>
                 <span className="text-slate-300">|</span>
-                <Link href="/" className="text-sm font-bold text-[#08111F] hover:text-[#E31C23] transition-colors flex items-center gap-1.5">
+                <Link href="/" className="text-sm font-bold text-[#08111F] hover:text-[#800A15] transition-colors flex items-center gap-1.5">
                     Ir al Inicio →
                 </Link>
             </nav>

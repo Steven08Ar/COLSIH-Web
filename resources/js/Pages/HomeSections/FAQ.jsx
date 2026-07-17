@@ -33,7 +33,7 @@ export default function FAQ() {
                 
                 {/* Section Header */}
                 <div className="max-w-2xl mx-auto text-center space-y-4">
-                    <span className="text-[#E31C23] text-[13px] font-bold tracking-[3px] uppercase block font-sans">
+                    <span className="text-[#800A15] text-[13px] font-bold tracking-[3px] uppercase block font-sans">
                         SOPORTE
                     </span>
                     <h2 className="text-4xl sm:text-5xl lg:text-[56px] font-black text-[#08111F] leading-[1.05] tracking-tight font-sans">
@@ -57,11 +57,11 @@ export default function FAQ() {
                                     onClick={() => toggleIndex(index)}
                                     className="w-full py-6 flex items-center justify-between text-left cursor-pointer focus:outline-none group"
                                 >
-                                    <span className="font-extrabold text-[17px] md:text-[19px] text-[#08111F] group-hover:text-[#0057D9] transition-colors duration-300 pr-8">
+                                    <span className="font-extrabold text-[17px] md:text-[19px] text-[#08111F] group-hover:text-[#003C8F] transition-colors duration-300 pr-8">
                                         {item.question}
                                     </span>
                                     {/* Minimal Plus/Minus Icon */}
-                                    <span className="text-slate-400 group-hover:text-[#0057D9] transition-colors duration-300 shrink-0 pr-2">
+                                    <span className="text-slate-400 group-hover:text-[#003C8F] transition-colors duration-300 shrink-0 pr-2">
                                         {isOpen ? (
                                             <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                                                 <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 12h-15" />

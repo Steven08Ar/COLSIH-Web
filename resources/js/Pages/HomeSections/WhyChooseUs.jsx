@@ -54,8 +54,8 @@ function TiltCard({ pillar, index }) {
         [spotlightX, spotlightY],
         ([x, y]) => {
             const glowColor = pillar.num === "02" || pillar.num === "04" 
-                ? "rgba(227,28,35,0.12)" // Red glow accent
-                : "rgba(0,87,217,0.15)";  // Blue glow accent
+                ? "rgba(128, 10, 21, 0.38)" // More intense Vinotinto glow accent
+                : "rgba(0, 60, 143, 0.25)";  // Blue glow accent
             return `radial-gradient(circle 240px at ${x}px ${y}px, ${glowColor} 0%, transparent 70%)`;
         }
     );
@@ -98,7 +98,11 @@ function TiltCard({ pillar, index }) {
                     </motion.span>
                     
                     <div className="space-y-3">
-                        <h3 className="font-extrabold text-[20px] text-white group-hover:text-[#0057D9] transition-colors duration-300">
+                        <h3 className={`font-extrabold text-[20px] text-white transition-colors duration-300 ${
+                            pillar.num === "02" || pillar.num === "04"
+                                ? 'group-hover:text-[#800A15]'
+                                : 'group-hover:text-[#003C8F]'
+                        }`}>
                             {pillar.title}
                         </h3>
                         <p className="text-[15px] font-semibold text-slate-400 leading-relaxed group-hover:text-slate-300 transition-colors duration-300">
@@ -157,15 +161,15 @@ export default function WhyChooseUs() {
             </div>
 
             {/* Background glowing effects for visual depth */}
-            <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[500px] h-[500px] bg-[#0057D9]/10 rounded-full blur-[140px] pointer-events-none z-0"></div>
-            <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-[500px] h-[500px] bg-[#E31C23]/8 rounded-full blur-[140px] pointer-events-none z-0"></div>
+            <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[500px] h-[500px] bg-[#003C8F]/10 rounded-full blur-[140px] pointer-events-none z-0"></div>
+            <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-[500px] h-[500px] bg-[#800A15]/8 rounded-full blur-[140px] pointer-events-none z-0"></div>
 
             <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] space-y-20 relative z-10">
                 
                 {/* Section Header */}
                 <div className="max-w-2xl text-left space-y-4">
                     <ScrollReveal distance="translate-y-6">
-                        <span className="text-[#E31C23] text-[13px] font-bold tracking-[3px] uppercase block font-sans">
+                        <span className="text-[#800A15] text-[13px] font-bold tracking-[3px] uppercase block font-sans">
                             DIFERENCIAL
                         </span>
                     </ScrollReveal>

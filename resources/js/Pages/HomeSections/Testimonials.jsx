@@ -46,7 +46,7 @@ export default function Testimonials() {
                 
                 {/* Section Header */}
                 <div className="max-w-2xl mx-auto text-center space-y-4">
-                    <span className="text-[#E31C23] text-[13px] font-bold tracking-[3px] uppercase block font-sans">
+                    <span className="text-[#800A15] text-[13px] font-bold tracking-[3px] uppercase block font-sans">
                         TESTIMONIOS
                     </span>
                     <h2 className="text-4xl sm:text-5xl lg:text-[56px] font-black text-[#08111F] leading-[1.05] tracking-tight font-sans">
@@ -88,7 +88,7 @@ export default function Testimonials() {
                         {/* Prev Arrow */}
                         <button 
                             onClick={handlePrev}
-                            className="w-10 h-10 rounded-full border border-slate-100 text-slate-400 hover:text-[#0057D9] hover:border-[#0057D9]/30 flex items-center justify-center transition-all cursor-pointer focus:outline-none"
+                            className="w-10 h-10 rounded-full border border-slate-100 text-slate-400 hover:text-[#003C8F] hover:border-[#003C8F]/30 flex items-center justify-center transition-all cursor-pointer focus:outline-none"
                             aria-label="Anterior testimonio"
                         >
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
@@ -103,7 +103,7 @@ export default function Testimonials() {
                                     key={index}
                                     onClick={() => setActiveIndex(index)}
                                     className={`h-2 rounded-full transition-all duration-300 ${
-                                        activeIndex === index ? 'w-6 bg-[#E31C23]' : 'w-2 bg-slate-200'
+                                        activeIndex === index ? 'w-6 bg-[#800A15]' : 'w-2 bg-slate-200'
                                     } cursor-pointer focus:outline-none`}
                                     aria-label={`Ir al testimonio ${index + 1}`}
                                 />
@@ -113,7 +113,7 @@ export default function Testimonials() {
                         {/* Next Arrow */}
                         <button 
                             onClick={handleNext}
-                            className="w-10 h-10 rounded-full border border-slate-100 text-slate-400 hover:text-[#0057D9] hover:border-[#0057D9]/30 flex items-center justify-center transition-all cursor-pointer focus:outline-none"
+                            className="w-10 h-10 rounded-full border border-slate-100 text-slate-400 hover:text-[#003C8F] hover:border-[#003C8F]/30 flex items-center justify-center transition-all cursor-pointer focus:outline-none"
                             aria-label="Siguiente testimonio"
                         >
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">

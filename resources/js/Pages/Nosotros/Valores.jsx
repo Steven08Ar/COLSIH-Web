@@ -20,7 +20,7 @@ export default function Valores() {
 
             {/* Header Hero Section */}
             <section className="relative bg-gradient-to-b from-[#08111F] to-[#0D1B2E] pt-32 pb-20 text-center text-white overflow-hidden">
-                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(0,87,217,0.12),transparent_60%)]"></div>
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(0, 60, 143,0.12),transparent_60%)]"></div>
                 <div className="relative z-10 max-w-[1200px] mx-auto px-6">
                     <nav className="text-sm font-semibold text-slate-400 mb-4 flex items-center justify-center gap-2">
                         <Link href="/nosotros" className="hover:text-white transition-colors">Quiénes Somos</Link>
@@ -39,7 +39,7 @@ export default function Valores() {
                     <p className="text-sm font-semibold text-slate-500 uppercase tracking-widest">
                         Lema Institucional
                     </p>
-                    <h3 className="text-2xl font-black text-[#E31C23] mt-1 font-sans">
+                    <h3 className="text-2xl font-black text-[#800A15] mt-1 font-sans">
                         "Buenos Cristianos y Honestos Ciudadanos"
                     </h3>
                 </div>
@@ -74,11 +74,11 @@ export default function Valores() {
 
             {/* Footer Navigation Tabs */}
             <nav className="py-12 bg-slate-50/50 border-t border-slate-100 flex items-center justify-center gap-6">
-                <Link href="/nosotros/mision-vision" className="text-sm font-bold text-slate-500 hover:text-[#E31C23] transition-colors flex items-center gap-1.5">
+                <Link href="/nosotros/mision-vision" className="text-sm font-bold text-slate-500 hover:text-[#800A15] transition-colors flex items-center gap-1.5">
                     ← Misión y Visión
                 </Link>
                 <span className="text-slate-300">|</span>
-                <Link href="/nosotros/equipo" className="text-sm font-bold text-[#08111F] hover:text-[#E31C23] transition-colors flex items-center gap-1.5">
+                <Link href="/nosotros/equipo" className="text-sm font-bold text-[#08111F] hover:text-[#800A15] transition-colors flex items-center gap-1.5">
                     Equipo Docente →
                 </Link>
             </nav>

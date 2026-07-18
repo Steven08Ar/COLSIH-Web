@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react';
-import { router } from '@inertiajs/react';
+import { router, usePage } from '@inertiajs/react';
 
 export default function PageTransitionLoader() {
+    const { component } = usePage();
+    if (component?.startsWith('Admin/')) return null;
+
     const [visible, setVisible] = useState(true);
     const [animating, setAnimating] = useState(true);
     const [isMjs, setIsMjs] = useState(false);

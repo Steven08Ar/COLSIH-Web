@@ -76,7 +76,7 @@ export default function Home({ noticias }) {
                         <div className="aspect-video w-full">
                             <iframe 
                                 className="w-full h-full"
-                                src="https://www.youtube.com/embed/9yc15O2qTus?autoplay=1" 
+                                src="https://www.youtube-nocookie.com/embed/9yc15O2qTus?autoplay=1"
                                 title="Video institucional COLSIH"
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                                 allowFullScreen

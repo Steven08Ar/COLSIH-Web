@@ -1,1 +1,0 @@
-import{j as p}from"./app-Br0tgfoG.js";import{u as s,a}from"./use-transform-CLGaCeUA.js";import{m as x}from"./proxy-B1YmPg5u.js";function j({className:n,mouseX:e,mouseY:r,speed:t=1}){const u=s(0),c=s(0),i=e||u,l=r||c,m=a(i,o=>o*t*30),f=a(l,o=>o*t*30);return p.jsx(x.div,{className:`absolute rounded-full pointer-events-none ${n}`,style:{x:m,y:f}})}export{j as default};

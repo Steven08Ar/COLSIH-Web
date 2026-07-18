@@ -1,25 +1,30 @@
 import { useState } from 'react';
 import ScrollReveal from './ScrollReveal';
 
-export default function FAQ() {
-    const list = [
-        {
-            question: "¿Cuáles son los requisitos principales para la inscripción virtual?",
-            answer: "Los documentos básicos incluyen el registro civil de nacimiento del aspirante, certificados de notas de los años anteriores, copia de los documentos de identidad de los padres o acudientes y la ficha de observador del colegio de procedencia."
-        },
-        {
-            question: "¿El colegio cuenta con servicio de transporte y alimentación escolar?",
-            answer: "Sí, disponemos de rutas escolares seguras y certificadas que cubren las principales zonas de Floridablanca y el área metropolitana. Asimismo, contamos con servicio de restaurante escolar supervisado por nutricionistas."
-        },
-        {
-            question: "¿Qué convenios e idiomas ofrecen en el bachillerato?",
-            answer: "Contamos con el convenio de articulación de la Media Técnica con el SENA para otorgar doble titulación comercial/contable. Nuestro plan de estudios intensifica la enseñanza del inglés como segunda lengua en todos los niveles."
-        },
-        {
-            question: "¿Cómo funciona el proceso de pago y legalización de matrícula?",
-            answer: "Una vez admitido el estudiante, recibirás las credenciales para el portal de pagos en línea. Tras realizar el pago correspondiente, los contratos de matrícula se firman de manera digital y segura desde la plataforma institucional."
-        }
-    ];
+const FALLBACK = [
+    {
+        question: "¿Cuáles son los requisitos principales para la inscripción virtual?",
+        answer: "Los documentos básicos incluyen el registro civil de nacimiento del aspirante, certificados de notas de los años anteriores, copia de los documentos de identidad de los padres o acudientes y la ficha de observador del colegio de procedencia."
+    },
+    {
+        question: "¿El colegio cuenta con servicio de transporte y alimentación escolar?",
+        answer: "Sí, disponemos de rutas escolares seguras y certificadas que cubren las principales zonas de Floridablanca y el área metropolitana. Asimismo, contamos con servicio de restaurante escolar supervisado por nutricionistas."
+    },
+    {
+        question: "¿Qué convenios e idiomas ofrecen en el bachillerato?",
+        answer: "Contamos con el convenio de articulación de la Media Técnica con el SENA para otorgar doble titulación comercial/contable. Nuestro plan de estudios intensifica la enseñanza del inglés como segunda lengua en todos los niveles."
+    },
+    {
+        question: "¿Cómo funciona el proceso de pago y legalización de matrícula?",
+        answer: "Una vez admitido el estudiante, recibirás las credenciales para el portal de pagos en línea. Tras realizar el pago correspondiente, los contratos de matrícula se firman de manera digital y segura desde la plataforma institucional."
+    }
+];
+
+export default function FAQ({ preguntas }) {
+    const list = (preguntas && preguntas.length > 0 ? preguntas : FALLBACK).map(p => ({
+        question: p.pregunta ?? p.question,
+        answer:   p.respuesta ?? p.answer,
+    }));
 
     const [openIndex, setOpenIndex] = useState(null);
 

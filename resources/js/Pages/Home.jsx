@@ -15,7 +15,7 @@ import Admissions from './HomeSections/Admissions';
 import FAQ from './HomeSections/FAQ';
 import Footer from './HomeSections/Footer';
 
-export default function Home({ noticias }) {
+export default function Home({ noticias, testimonios, preguntas }) {
     const [videoOpen, setVideoOpen] = useState(false);
 
     return (
@@ -41,7 +41,7 @@ export default function Home({ noticias }) {
             <Stats />
 
             {/* Section 7: Testimonials */}
-            <Testimonials />
+            <Testimonials testimonios={testimonios} />
 
             {/* Section 8: Gallery */}
             <Gallery />
@@ -53,7 +53,7 @@ export default function Home({ noticias }) {
             <Admissions />
 
             {/* Section 11: FAQ */}
-            <FAQ />
+            <FAQ preguntas={preguntas} />
 
             {/* Footer */}
             <Footer />

@@ -1,27 +1,31 @@
 import { useState, useEffect } from 'react';
 import ScrollReveal from './ScrollReveal';
 
-export default function Testimonials() {
-    const list = [
-        {
-            quote: "“La educación integral del colegio no solo potenció mi excelencia académica en ciencias, sino que me enseñó el verdadero valor de liderar con justicia social y valores cristianos.”",
-            name: "María Camila Restrepo",
-            program: "Egresada Promoción 2024",
-            image: "/Estudiantes COLSIH.png"
-        },
-        {
-            quote: "“Como padre de familia, me siento plenamente respaldado. El acompañamiento docente y la formación en valores salesianos son el pilar fundamental que guía a mis hijos cada día.”",
-            name: "Dr. Alejandro Gómez",
-            program: "Padre de Familia - Primaria",
-            image: "/Estudiantes COLSIH.png"
-        },
-        {
-            quote: "“Aprender en aulas modernas con laboratorios interactivos me motiva a explorar mi pasión por la ciencia. Los profesores siempre nos impulsan a ir más allá.”",
-            name: "Mateo Suárez",
-            program: "Estudiante de 10º Grado",
-            image: "/Estudiantes COLSIH.png"
-        }
-    ];
+const FALLBACK = [
+    {
+        texto: 'La educacion integral del colegio potencio mi excelencia academica y me enseno el valor de liderar con justicia social y valores cristianos.',
+        nombre: 'Maria Camila Restrepo',
+        cargo: 'Egresada Promocion 2024',
+    },
+    {
+        texto: 'Como padre de familia, me siento plenamente respaldado. El acompanamiento docente y la formacion en valores salesianos guia a mis hijos cada dia.',
+        nombre: 'Dr. Alejandro Gomez',
+        cargo: 'Padre de Familia - Primaria',
+    },
+    {
+        texto: 'Aprender con laboratorios interactivos me motiva a explorar mi pasion por la ciencia. Los profesores siempre nos impulsan a ir mas alla.',
+        nombre: 'Mateo Suarez',
+        cargo: 'Estudiante de 10 Grado',
+    },
+];
+
+export default function Testimonials({ testimonios }) {
+    const list = (testimonios && testimonios.length > 0 ? testimonios : FALLBACK).map(t => ({
+        quote: `«${t.texto}»`,
+        name: t.nombre,
+        program: t.cargo ?? '',
+        image: '/Estudiantes COLSIH.png',
+    }));
 
     const [activeIndex, setActiveIndex] = useState(0);
 

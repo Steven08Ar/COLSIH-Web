@@ -1,9 +1,17 @@
 import { useEffect, useState } from 'react';
-import { router, usePage } from '@inertiajs/react';
+import { router } from '@inertiajs/react';
 
-export default function PageTransitionLoader() {
-    const { component } = usePage();
-    if (component?.startsWith('Admin/')) return null;
+export default function PageTransitionLoader({ initialComponent }) {
+    const [currentComponent, setCurrentComponent] = useState(initialComponent ?? '');
+
+    useEffect(() => {
+        const unbind = router.on('navigate', (e) => {
+            setCurrentComponent(e.detail.page.component ?? '');
+        });
+        return unbind;
+    }, []);
+
+    if (currentComponent.startsWith('Admin/')) return null;
 
     const [visible, setVisible] = useState(true);
     const [animating, setAnimating] = useState(true);

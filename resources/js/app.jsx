@@ -11,7 +11,7 @@ createInertiaApp({
         createRoot(el).render(
             <>
                 <App {...props} />
-                <PageTransitionLoader />
+                <PageTransitionLoader initialComponent={props.initialPage.component} />
             </>
         );
     },

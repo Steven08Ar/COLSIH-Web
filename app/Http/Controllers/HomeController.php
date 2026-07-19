@@ -17,7 +17,7 @@ class HomeController extends Controller
                                 ->latest('publicado_en')
                                 ->limit(3)
                                 ->get(['id', 'titulo', 'slug', 'resumen', 'imagen', 'publicado_en', 'categoria']),
-            'testimonios' => Testimonio::activos()->get(['id', 'nombre', 'cargo', 'texto']),
+            'testimonios' => Testimonio::activos()->get(['id', 'nombre', 'cargo', 'texto', 'imagen', 'video_url']),
             'preguntas'   => PreguntaFrecuente::activas()->get(['id', 'pregunta', 'respuesta']),
         ]);
     }

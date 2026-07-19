@@ -16,14 +16,16 @@ class Noticia extends Model
         'resumen',
         'contenido',
         'imagen',
+        'bloques',
         'categoria',
         'activo',
         'publicado_en',
     ];
 
     protected $casts = [
-        'activo' => 'boolean',
+        'activo'       => 'boolean',
         'publicado_en' => 'datetime',
+        'bloques'      => 'array',
     ];
 
     protected static function booted(): void

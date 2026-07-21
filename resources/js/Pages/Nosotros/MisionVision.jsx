@@ -208,7 +208,7 @@ export default function MisionVision() {
 
                         {/* Texto Introductorio */}
                         <ScrollReveal delay={300} duration={800}>
-                            <p className="text-slate-500 dark:text-slate-400 text-sm md:text-base font-medium max-w-xl mx-auto leading-relaxed">
+                            <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm md:text-base font-medium max-w-xl mx-auto leading-relaxed break-words">
                                 Conoce los principios que orientan nuestras decisiones y el propósito que inspira cada paso de nuestra comunidad educativa.
                             </p>
                         </ScrollReveal>
@@ -222,15 +222,15 @@ export default function MisionVision() {
                         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-24 items-center">
                             
                             {/* Left Text */}
-                            <div className="col-span-12 lg:col-span-7 space-y-6 text-left min-w-0">
-                                <span className="text-xs font-bold uppercase tracking-widest text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/20 px-3.5 py-1.5 rounded-md">
+                            <div className="col-span-12 lg:col-span-7 space-y-6 text-center lg:text-left min-w-0">
+                                <span className="inline-block text-xs font-bold uppercase tracking-widest text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/20 px-3.5 py-1.5 rounded-md">
                                     Misión Institucional
                                 </span>
                                 <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-slate-900 dark:text-white font-sans leading-tight">
                                     Nuestra Misión
                                 </h2>
-                                <div className="w-20 h-1.5 bg-indigo-600 rounded-full" />
-                                <p className="text-slate-600 dark:text-slate-300 text-lg md:text-xl leading-relaxed font-medium pt-2">
+                                <div className="w-20 h-1.5 bg-indigo-600 rounded-full mx-auto lg:mx-0" />
+                                <p className="text-slate-600 dark:text-slate-300 text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed font-medium pt-2 break-words">
                                     El Colegio Santa Isabel de Hungría es una institución educativa de carácter privado de la Arquidiócesis de Bucaramanga, que educa con principios evangélicos según el sistema preventivo salesiano, fundamentado en la religión, la amabilidad y la razón. Ofrecemos los niveles de jardín, preescolar, primaria, básica y media técnica, con énfasis en comercio, empeñados en alcanzar una educación contextual que pase de la enseñanza al aprendizaje.
                                 </p>
                             </div>
@@ -292,15 +292,15 @@ export default function MisionVision() {
                              </div>
 
                             {/* Right Text */}
-                            <div className="col-span-12 lg:col-span-7 space-y-6 order-1 lg:order-2 text-left min-w-0">
-                                <span className="text-xs font-bold uppercase tracking-widest text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 px-3.5 py-1.5 rounded-md">
+                            <div className="col-span-12 lg:col-span-7 space-y-6 order-1 lg:order-2 text-center lg:text-left min-w-0">
+                                <span className="inline-block text-xs font-bold uppercase tracking-widest text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 px-3.5 py-1.5 rounded-md">
                                     Visión de Futuro
                                 </span>
                                 <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-slate-900 dark:text-white font-sans leading-tight">
                                     Nuestra Visión
                                 </h2>
-                                <div className="w-20 h-1.5 bg-emerald-500 rounded-full" />
-                                <p className="text-slate-600 dark:text-slate-300 text-lg md:text-xl leading-relaxed font-medium pt-2">
+                                <div className="w-20 h-1.5 bg-emerald-500 rounded-full mx-auto lg:mx-0" />
+                                <p className="text-slate-600 dark:text-slate-300 text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed font-medium pt-2 break-words">
                                     En el año 2028, el Colegio Santa Isabel de Hungría será reconocido en la región por la formación integral de líderes comprometidos con el cuidado de la vida en todas sus manifestaciones, aportando a la ecología integral en el respeto y cuidado de la Casa Común, fundamentados en el sistema salesiano, viviendo como "Buenos Cristianos y Honestos Ciudadanos".
                                 </p>
                             </div>
@@ -320,7 +320,7 @@ export default function MisionVision() {
                                 Objetivos Estratégicos
                             </h2>
                             <div className="w-20 h-1.5 bg-amber-500 rounded-full mx-auto" />
-                            <p className="text-slate-600 dark:text-slate-300 text-lg md:text-xl leading-relaxed font-medium max-w-3xl mx-auto pt-2">
+                            <p className="text-slate-600 dark:text-slate-300 text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed font-medium max-w-3xl mx-auto pt-2 break-words">
                                 Orientamos el rumbo y el quehacer institucional a través de directrices y metas claras de excelencia formativa, técnica, espiritual y humana, asegurando el desarrollo integral de cada miembro de nuestra comunidad estudiantil.
                             </p>
                         </div>

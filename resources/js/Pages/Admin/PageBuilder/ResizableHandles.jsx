@@ -1,0 +1,20 @@
+import React from 'react';
+
+export default function ResizableHandles() {
+    return (
+        <div className="absolute inset-0 border border-blue-600 rounded-[24px] pointer-events-none select-none z-10">
+            {/* Corners handles */}
+            <div className="absolute -top-1.5 -left-1.5 w-3 h-3 bg-white border-2 border-blue-600 rounded-full cursor-nwse-resize pointer-events-auto hover:scale-125 transition"></div>
+            <div className="absolute -top-1.5 -right-1.5 w-3 h-3 bg-white border-2 border-blue-600 rounded-full cursor-nesw-resize pointer-events-auto hover:scale-125 transition"></div>
+            <div className="absolute -bottom-1.5 -left-1.5 w-3 h-3 bg-white border-2 border-blue-600 rounded-full cursor-nesw-resize pointer-events-auto hover:scale-125 transition"></div>
+            <div className="absolute -bottom-1.5 -right-1.5 w-3 h-3 bg-white border-2 border-blue-600 rounded-full cursor-nwse-resize pointer-events-auto hover:scale-125 transition"></div>
+
+            {/* Sides handles */}
+            <div className="absolute top-1/2 -translate-y-1/2 -left-1.5 w-2 h-4 bg-white border-2 border-blue-600 rounded-md cursor-ew-resize pointer-events-auto hover:scale-110 transition"></div>
+            <div className="absolute top-1/2 -translate-y-1/2 -right-1.5 w-2 h-4 bg-white border-2 border-blue-600 rounded-md cursor-ew-resize pointer-events-auto hover:scale-110 transition"></div>
+            
+            {/* Bottom-center handle */}
+            <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-4 h-2 bg-white border-2 border-blue-600 rounded-md cursor-ns-resize pointer-events-auto hover:scale-110 transition"></div>
+        </div>
+    );
+}

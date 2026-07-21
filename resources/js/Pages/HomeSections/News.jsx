@@ -90,61 +90,63 @@ export default function News({ noticias }) {
                             delay={index * 150}
                             className="h-full"
                         >
-                            <article className="h-full bg-white rounded-3xl border border-slate-100/60 overflow-hidden shadow-xs hover:shadow-xl hover:-translate-y-2 transition-all duration-300 flex flex-col group">
-                                
-                                {/* Image cover */}
-                                <div className="aspect-video w-full overflow-hidden bg-slate-50 relative shrink-0">
-                                    {item.imagen ? (
-                                        <img 
-                                            src={`/storage/${item.imagen}`} 
-                                            alt={item.titulo} 
-                                            className="w-full h-full object-cover transition-transform duration-[1200ms] group-hover:scale-105"
-                                        />
-                                    ) : (
-                                        <div className="w-full h-full flex items-center justify-center bg-slate-50 relative">
-                                            {/* Grayscale school image fallback */}
-                                            <img src="/Estudiantes COLSIH.png" alt="COLSIH" className="w-full h-full object-cover grayscale opacity-15" />
-                                            <img src="/Logo COLSIH.svg" alt="Logo COLSIH" className="w-14 h-auto opacity-10 absolute center" />
-                                        </div>
-                                    )}
-                                    {item.categoria && (
-                                        <span className="absolute top-4 left-4 bg-white/90 backdrop-blur-xs text-[#08111F] font-extrabold text-[10px] uppercase tracking-widest px-3.5 py-1.5 rounded-full shadow-xs">
-                                            {item.categoria}
-                                        </span>
-                                    )}
-                                </div>
-
-                                {/* Body */}
-                                <div className="p-8 flex-grow flex flex-col justify-between text-left space-y-6">
-                                    <div className="space-y-3">
-                                        <time className="text-[10px] font-black text-slate-400 uppercase tracking-widest" dateTime={item.publicado_en}>
-                                            {formatDate(item.publicado_en)}
-                                        </time>
-                                        <h3 className="font-extrabold text-[20px] text-[#08111F] leading-snug group-hover:text-[#800A15] transition-colors duration-200">
-                                            <Link href={`/noticias/${item.slug}`} className="focus:outline-none">
+                            <Link 
+                                href={`/noticias/${item.slug}`}
+                                className="block h-full cursor-pointer group"
+                            >
+                                <article className="h-full bg-white rounded-3xl border border-slate-100/60 overflow-hidden shadow-xs hover:shadow-xl hover:-translate-y-2 transition-all duration-300 flex flex-col">
+                                    
+                                    {/* Image cover */}
+                                    <div className="aspect-video w-full overflow-hidden bg-slate-50 relative shrink-0">
+                                        {item.imagen ? (
+                                            <img 
+                                                src={`/storage/${item.imagen}`} 
+                                                alt={item.titulo} 
+                                                className="w-full h-full object-cover transition-transform duration-[1200ms] group-hover:scale-105"
+                                            />
+                                        ) : (
+                                            <div className="w-full h-full flex items-center justify-center bg-slate-50 relative">
+                                                {/* Grayscale school image fallback */}
+                                                <img src="/Estudiantes COLSIH.png" alt="COLSIH" className="w-full h-full object-cover grayscale opacity-15" />
+                                                <img src="/Logo COLSIH.svg" alt="Logo COLSIH" className="w-14 h-auto opacity-10 absolute center" />
+                                            </div>
+                                        )}
+                                        {item.categoria && (
+                                            <span className="absolute top-4 left-4 bg-white/90 backdrop-blur-xs text-[#08111F] font-extrabold text-[10px] uppercase tracking-widest px-3.5 py-1.5 rounded-full shadow-xs">
+                                                {item.categoria}
+                                            </span>
+                                        )}
+                                    </div>
+ 
+                                    {/* Body */}
+                                    <div className="p-8 flex-grow flex flex-col justify-between text-left space-y-6">
+                                        <div className="space-y-3">
+                                            <time className="text-[10px] font-black text-slate-400 uppercase tracking-widest" dateTime={item.publicado_en}>
+                                                {formatDate(item.publicado_en)}
+                                            </time>
+                                            <h3 className="font-extrabold text-[20px] text-[#08111F] leading-snug group-hover:text-[#800A15] transition-colors duration-200">
                                                 {item.titulo}
-                                            </Link>
-                                        </h3>
-                                        <p className="text-xs font-semibold text-slate-500 line-clamp-3 leading-relaxed">
-                                            {item.resumen}
-                                        </p>
+                                            </h3>
+                                            <p className="text-xs font-semibold text-slate-500 line-clamp-3 leading-relaxed">
+                                                {item.resumen}
+                                            </p>
+                                        </div>
+ 
+                                        {/* Arrow slides on hover link */}
+                                        <div className="pt-2">
+                                            <div 
+                                                className="inline-flex items-center gap-2 text-xs font-extrabold text-[#08111F] group-hover:text-[#800A15] uppercase tracking-wider transition-colors"
+                                            >
+                                                Leer noticia
+                                                <svg className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                                                </svg>
+                                            </div>
+                                        </div>
                                     </div>
-
-                                    {/* Arrow slides on hover link */}
-                                    <div className="pt-2">
-                                        <Link 
-                                            href={`/noticias/${item.slug}`}
-                                            className="inline-flex items-center gap-2 text-xs font-extrabold text-[#08111F] group-hover:text-[#800A15] uppercase tracking-wider transition-colors"
-                                        >
-                                            Leer noticia
-                                            <svg className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                                            </svg>
-                                        </Link>
-                                    </div>
-                                </div>
-
-                            </article>
+ 
+                                </article>
+                            </Link>
                         </ScrollReveal>
                     ))}
                 </div>

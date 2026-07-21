@@ -88,6 +88,9 @@ class NoticiaAdminController extends Controller
                 if (($b['tipo'] ?? '') === 'imagen' && !empty($b['imagen'])) {
                     Storage::disk('public')->delete($b['imagen']);
                 }
+                if (($b['tipo'] ?? '') === 'video' && !empty($b['videoFile'])) {
+                    Storage::disk('public')->delete($b['videoFile']);
+                }
             }
         }
         $noticia->forceDelete();
@@ -200,23 +203,29 @@ class NoticiaAdminController extends Controller
         }
 
         foreach ($bloques as $idx => &$bloque) {
-            if (($bloque['tipo'] ?? '') !== 'imagen') {
-                continue;
-            }
+            $tipo = $bloque['tipo'] ?? '';
 
-            $fileKey = "img_bloque_{$idx}";
-            if ($request->hasFile($fileKey)) {
-                // Si habia imagen previa para este bloque, borrarla
-                if (!empty($bloque['imagen'])) {
-                    Storage::disk('public')->delete($bloque['imagen']);
+            if ($tipo === 'imagen') {
+                $fileKey = "img_bloque_{$idx}";
+                if ($request->hasFile($fileKey)) {
+                    if (!empty($bloque['imagen']) && !str_starts_with($bloque['imagen'], 'http')) {
+                        Storage::disk('public')->delete($bloque['imagen']);
+                    }
+                    $bloque['imagen'] = $request->file($fileKey)->store('noticias/bloques', 'public');
+                } elseif (empty($bloque['imagen']) && !empty($bloque['_key']) && isset($existentes[$bloque['_key']])) {
+                    $bloque['imagen'] = $existentes[$bloque['_key']];
                 }
-                $bloque['imagen'] = $request->file($fileKey)->store('noticias/bloques', 'public');
-            } elseif (empty($bloque['imagen']) && !empty($bloque['_key']) && isset($existentes[$bloque['_key']])) {
-                // Conservar imagen existente
-                $bloque['imagen'] = $existentes[$bloque['_key']];
+                unset($bloque['_file_pending']);
+            } elseif ($tipo === 'video') {
+                $videoKey = "video_bloque_{$idx}";
+                if ($request->hasFile($videoKey)) {
+                    if (!empty($bloque['videoFile'])) {
+                        Storage::disk('public')->delete($bloque['videoFile']);
+                    }
+                    $bloque['videoFile'] = $request->file($videoKey)->store('noticias/videos', 'public');
+                    $bloque['url'] = '';
+                }
             }
-
-            unset($bloque['_file_pending']);
         }
         unset($bloque);
 

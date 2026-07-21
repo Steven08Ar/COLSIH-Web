@@ -27,7 +27,7 @@ export default function NosotrosIndex() {
                 </div>
 
                 <div className="max-w-[1400px] mx-auto px-6 md:px-12 relative z-10">
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
                         
                         {/* Left column */}
                         <div className="col-span-12 lg:col-span-5 space-y-6">
@@ -183,7 +183,7 @@ export default function NosotrosIndex() {
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_right,rgba(0, 60, 143,0.18),transparent_60%)] pointer-events-none"></div>
 
                 <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] relative z-10">
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
                         
                         {/* Left column */}
                         <div className="col-span-12 lg:col-span-5 space-y-4">

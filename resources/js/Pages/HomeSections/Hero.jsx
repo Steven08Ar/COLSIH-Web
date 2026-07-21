@@ -119,7 +119,7 @@ export default function Hero({ setVideoOpen }) {
 
                         <Link href="/oferta-academica" className="hover:text-white transition-colors">Oferta Académica</Link>
                         <Link href="/admisiones" className="hover:text-white transition-colors">Admisiones</Link>
-                        <Link href="/noticias" className="hover:text-white transition-colors">Comunidad</Link>
+                        <Link href="/noticias" className="hover:text-white transition-colors">Noticias</Link>
                         <Link href="/contacto" className="hover:text-white transition-colors">Contacto</Link>
                     </div>
 
@@ -173,7 +173,7 @@ export default function Hero({ setVideoOpen }) {
                             </div>
                             <Link href="/oferta-academica" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 text-sm font-semibold text-white/75 hover:text-white rounded-lg hover:bg-white/10 transition-colors">Oferta Académica</Link>
                             <Link href="/admisiones" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 text-sm font-semibold text-white/75 hover:text-white rounded-lg hover:bg-white/10 transition-colors">Admisiones</Link>
-                            <Link href="/noticias" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 text-sm font-semibold text-white/75 hover:text-white rounded-lg hover:bg-white/10 transition-colors">Comunidad</Link>
+                            <Link href="/noticias" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 text-sm font-semibold text-white/75 hover:text-white rounded-lg hover:bg-white/10 transition-colors">Noticias</Link>
                             <Link href="/contacto" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 text-sm font-semibold text-white/75 hover:text-white rounded-lg hover:bg-white/10 transition-colors">Contacto</Link>
                             <div className="pt-2 border-t border-white/10 flex justify-center">
                                 <Link

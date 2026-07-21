@@ -133,7 +133,7 @@ export default function Navbar() {
 
                     <Link href="/oferta-academica" className={`transition-colors ${url === '/oferta-academica' ? 'text-white font-extrabold' : 'hover:text-white'}`}>Oferta Académica</Link>
                     <Link href="/admisiones" className={`transition-colors ${url === '/admisiones' ? 'text-white font-extrabold' : 'hover:text-white'}`}>Admisiones</Link>
-                    <Link href="/noticias" className={`transition-colors ${url.startsWith('/noticias') ? 'text-white font-extrabold' : 'hover:text-white'}`}>Comunidad</Link>
+                    <Link href="/noticias" className={`transition-colors ${url.startsWith('/noticias') ? 'text-white font-extrabold' : 'hover:text-white'}`}>Noticias</Link>
                     <Link href="/contacto" className={`transition-colors ${url === '/contacto' ? 'text-white font-extrabold' : 'hover:text-white'}`}>Contacto</Link>
                 </div>
 
@@ -207,7 +207,7 @@ export default function Navbar() {
                         {[
                             { label: 'Oferta Académica', href: '/oferta-academica' },
                             { label: 'Admisiones', href: '/admisiones' },
-                            { label: 'Comunidad', href: '/noticias' },
+                            { label: 'Noticias', href: '/noticias' },
                             { label: 'Contacto', href: '/contacto' },
                         ].map((link) => (
                             <Link key={link.href} href={link.href} onClick={() => setMobileOpen(false)}

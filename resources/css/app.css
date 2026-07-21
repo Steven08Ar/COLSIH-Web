@@ -1,5 +1,23 @@
 @import 'tailwindcss';
 
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* =========================================================
+   GLOBAL OVERFLOW PREVENTION - Critical for mobile responsive
+   ========================================================= */
+html,
+body {
+    overflow-x: hidden;
+    max-width: 100%;
+    width: 100%;
+}
+
+/* Prevent any element from exceeding viewport width */
+* {
+    box-sizing: border-box;
+    min-width: 0;
+}
+
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 @source '../**/*.blade.php';

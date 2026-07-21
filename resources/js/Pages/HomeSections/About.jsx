@@ -24,12 +24,12 @@ export default function About() {
     ];
 
     return (
-        <section className="relative py-24 lg:py-32 bg-white overflow-hidden select-none border-b border-slate-100">
-            <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px]">
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-center">
+        <section className="relative py-16 lg:py-32 bg-white overflow-hidden select-none border-b border-slate-100 w-full">
+            <div className="max-w-[1680px] mx-auto px-4 sm:px-6 md:px-12 lg:px-[120px]">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center">
                     
                     {/* Left Column: Image with offset line frame */}
-                    <div className="col-span-12 lg:col-span-6 relative flex justify-center">
+                    <div className="relative flex justify-center">
                         <ScrollReveal distance="translate-y-12" className="relative w-full max-w-[540px]">
                             {/* EST 1989 badge overlay */}
                             <div className="absolute top-6 left-6 bg-[#08111F] text-white text-[11px] font-extrabold tracking-[2px] px-4 py-2 rounded-md z-20 shadow-sm uppercase font-sans">
@@ -52,7 +52,7 @@ export default function About() {
                     </div>
 
                     {/* Right Column: Information & Horizontal Row Navigation */}
-                    <div className="col-span-12 lg:col-span-6 space-y-12 text-left">
+                    <div className="space-y-8 lg:space-y-12 text-left w-full min-w-0">
                         <div className="space-y-4">
                             <ScrollReveal distance="translate-y-6">
                                 <span className="text-[#800A15] text-[13px] font-bold tracking-[3px] uppercase block font-sans">
@@ -61,10 +61,10 @@ export default function About() {
                             </ScrollReveal>
 
                             <ScrollReveal distance="translate-y-6" delay={150} className="space-y-6">
-                                <h2 className="text-4xl sm:text-5xl lg:text-[56px] font-black text-[#08111F] leading-[1.05] tracking-tight font-sans">
+                                <h2 className="text-3xl sm:text-4xl lg:text-[56px] font-black text-[#08111F] leading-[1.05] tracking-tight font-sans">
                                     Nuestra Identidad
                                 </h2>
-                                <p className="text-[17px] text-slate-500 font-semibold leading-relaxed max-w-xl">
+                                <p className="text-[15px] sm:text-[17px] text-slate-500 font-semibold leading-relaxed">
                                     El Colegio Santa Isabel de Hungría de Floridablanca es una institución educativa arquidiocesana de carácter católico y privado, administrada por la Comunidad de Hijas de María Auxiliadora. Formamos de manera integral bajo la pedagogía del <strong>Sistema Preventivo Salesiano</strong> desde los pilares de Razón, Religión y Amor.
                                 </p>
                             </ScrollReveal>
@@ -76,22 +76,22 @@ export default function About() {
                                 <Link 
                                     key={link.num} 
                                     href={link.href} 
-                                    className="group flex items-center justify-between py-6 transition-all duration-300 cursor-pointer focus:outline-none"
+                                    className="group flex items-center justify-between py-5 sm:py-6 transition-all duration-300 cursor-pointer focus:outline-none"
                                 >
-                                    <div className="flex items-baseline gap-6">
-                                        <span className="text-sm font-extrabold text-[#003C8F] tracking-wider font-sans">
+                                    <div className="flex items-baseline gap-4 sm:gap-6 min-w-0">
+                                        <span className="text-sm font-extrabold text-[#003C8F] tracking-wider font-sans shrink-0">
                                             {link.num}
                                         </span>
-                                        <div className="space-y-1">
-                                            <h4 className="font-extrabold text-[18px] text-[#08111F] group-hover:text-[#003C8F] transition-colors duration-300">
+                                        <div className="space-y-1 min-w-0">
+                                            <h4 className="font-extrabold text-[16px] sm:text-[18px] text-[#08111F] group-hover:text-[#003C8F] transition-colors duration-300">
                                                 {link.title}
                                             </h4>
-                                            <p className="text-sm font-semibold text-slate-400 max-w-lg leading-normal">
+                                            <p className="text-sm font-semibold text-slate-400 leading-normal line-clamp-2">
                                                 {link.desc}
                                             </p>
                                         </div>
                                     </div>
-                                    <div className="text-slate-300 group-hover:text-[#800A15] group-hover:translate-x-1.5 transition-all duration-300 shrink-0">
+                                    <div className="text-slate-300 group-hover:text-[#800A15] group-hover:translate-x-1.5 transition-all duration-300 shrink-0 ml-3">
                                         <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                                         </svg>
@@ -104,7 +104,7 @@ export default function About() {
                         <ScrollReveal distance="translate-y-6" delay={400}>
                             <Link
                                 href="/nosotros"
-                                className="inline-flex items-center gap-2 bg-[#08111F] hover:bg-[#003C8F] text-white font-extrabold text-xs uppercase tracking-wider px-8 py-4.5 rounded-xl transition-all shadow-sm active:scale-[0.98] cursor-pointer"
+                                className="inline-flex items-center gap-2 bg-[#08111F] hover:bg-[#003C8F] text-white font-extrabold text-xs uppercase tracking-wider px-8 py-4 rounded-xl transition-all shadow-sm active:scale-[0.98] cursor-pointer"
                             >
                                 Conocer más
                                 <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">

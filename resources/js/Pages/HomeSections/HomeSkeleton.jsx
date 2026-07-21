@@ -27,7 +27,7 @@ export default function HomeSkeleton() {
 
             {/* 2. Hero Section Skeleton */}
             <section className="relative min-h-[900px] flex items-center pt-32 pb-20 border-b border-slate-100 bg-[#08111F]/5">
-                <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] w-full grid grid-cols-12 gap-8 items-center">
+                <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] w-full grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
                     {/* Left text column */}
                     <div className="col-span-12 lg:col-span-6 space-y-8 text-left">
                         <div className="space-y-3">
@@ -53,7 +53,7 @@ export default function HomeSkeleton() {
 
             {/* 3. About Section Skeleton */}
             <section className="py-24 border-b border-slate-100 bg-white">
-                <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] grid grid-cols-12 gap-16 items-center">
+                <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
                     {/* Left Image column */}
                     <div className="col-span-12 lg:col-span-6 flex justify-center">
                         <div className="w-full max-w-[480px] aspect-[4/5] bg-slate-200 rounded-2xl"></div>

@@ -27,7 +27,7 @@ export default function Contact() {
             <div className="absolute top-1/3 left-0 w-[450px] h-[450px] rounded-full bg-[#800A15]/5 blur-[120px] pointer-events-none"></div>
 
             <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px]">
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-start">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24 items-start">
                     
                     {/* Left Column: Contact info (5 columns) */}
                     <div className="col-span-12 lg:col-span-5 space-y-12 text-left">

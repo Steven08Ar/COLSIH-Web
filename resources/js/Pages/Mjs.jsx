@@ -58,7 +58,7 @@ export default function Mjs() {
             {/* Hero MJS Header Block */}
             <section className="relative min-h-[500px] flex items-center pt-40 pb-20 bg-[#08111F] text-left select-none overflow-hidden border-b border-white/5">
                 <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_top_right,rgba(0, 60, 143,0.15)_0%,transparent_50%)]"></div>
-                <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] relative z-10 w-full grid grid-cols-12 gap-8 items-center">
+                <div className="max-w-[1680px] mx-auto px-4 sm:px-6 md:px-12 lg:px-[120px] relative z-10 w-full grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
                     
                     <div className="col-span-12 lg:col-span-8 space-y-6">
                         <ScrollReveal distance="translate-y-6">

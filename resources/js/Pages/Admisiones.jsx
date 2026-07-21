@@ -140,7 +140,7 @@ export default function Admisiones() {
 
             {/* 3. CALENDARIO DE FECHAS (Timeline component) */}
             <section className="relative py-24 bg-slate-50 border-y border-slate-100 overflow-hidden select-none">
-                <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+                <div className="max-w-[1680px] mx-auto px-4 sm:px-6 md:px-12 lg:px-[120px] grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
                     
                     <div className="lg:col-span-4 text-left space-y-4 lg:sticky lg:top-28">
                         <ScrollReveal distance="translate-y-6">
@@ -184,6 +184,7 @@ export default function Admisiones() {
             </section>
 
             {/* 4. REQUISITOS DE DOCUMENTOS (Category blocks) */}
+
             <section className="relative py-24 md:py-32 bg-white overflow-hidden select-none">
                 <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] space-y-20">
                     

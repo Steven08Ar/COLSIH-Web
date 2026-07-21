@@ -6,24 +6,18 @@
     <stop offset="100%" stop-color="#F30B0F" />
   </linearGradient>
   <style>
-    @keyframes stroke-draw-infinite {
+    @keyframes stroke-loading {
       0% {
-        stroke-dashoffset: 10000;
-      }
-      75% {
-        stroke-dashoffset: 0;
-      }
-      92% {
-        stroke-dashoffset: 0;
+        stroke-dashoffset: 4000;
       }
       100% {
-        stroke-dashoffset: 10000;
+        stroke-dashoffset: 0;
       }
     }
     .animated-stroke {
-      stroke-dasharray: 10000;
-      stroke-dashoffset: 10000;
-      animation: stroke-draw-infinite 5.2s cubic-bezier(0.25, 1, 0.3, 1) infinite;
+      stroke-dasharray: 450 1500;
+      stroke-dashoffset: 4000;
+      animation: stroke-loading 5.0s linear infinite;
     }
   </style>
 </defs>

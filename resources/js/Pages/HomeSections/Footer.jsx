@@ -17,7 +17,7 @@ export default function Footer() {
             <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] py-16 md:py-24 space-y-16">
                 
                 {/* Upper Footer: Branding & Columns */}
-                <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-8 items-start">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 md:gap-8 items-start">
                     
                     {/* Brand Info (4 columns) */}
                     <div className="col-span-12 lg:col-span-4 space-y-6 text-left">
@@ -77,7 +77,7 @@ export default function Footer() {
                     </div>
 
                     {/* Columns (4 columns for categories) */}
-                    <div className="col-span-12 lg:col-span-5 grid grid-cols-2 md:grid-cols-3 gap-8">
+                    <div className="lg:col-span-5 grid grid-cols-2 md:grid-cols-3 gap-8">
                         {isMjs ? (
                             <>
                                 {/* MJS groups */}
@@ -103,7 +103,7 @@ export default function Footer() {
                                     <div className="flex flex-col gap-3 text-sm font-semibold text-slate-400">
                                         <Link href="/" className="hover:text-white transition-colors">Volver al Colegio</Link>
                                         <Link href="/oferta-academica" className="hover:text-white transition-colors">Oferta Académica</Link>
-                                        <Link href="/noticias" className="hover:text-white transition-colors">Comunidad</Link>
+                                        <Link href="/noticias" className="hover:text-white transition-colors">Noticias</Link>
                                         <Link href="/contacto" className="hover:text-white transition-colors">Contacto</Link>
                                     </div>
                                 </div>

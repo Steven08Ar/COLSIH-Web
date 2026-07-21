@@ -155,9 +155,9 @@ export default function OfertaAcademica() {
 
             {/* 3. JORNADAS Y HORARIOS (Minimalist block) */}
             <section className="relative py-20 bg-slate-50 border-y border-slate-100 overflow-hidden select-none">
-                <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <div className="max-w-[1680px] mx-auto px-4 sm:px-6 md:px-12 lg:px-[120px] grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
                     
-                    <div className="lg:col-span-4 text-left space-y-4">
+                    <div className="col-span-12 lg:col-span-4 text-left space-y-4">
                         <ScrollReveal distance="translate-y-6">
                             <span className="text-[#800A15] text-xs font-bold tracking-[3px] uppercase block font-sans">
                                 ORGANIZACIÓN
@@ -175,7 +175,7 @@ export default function OfertaAcademica() {
                         </ScrollReveal>
                     </div>
 
-                    <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div className="col-span-12 lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-6">
                         <ScrollReveal distance="translate-x-6" className="h-full">
                             <div className="p-8 bg-white border border-slate-200/50 rounded-2xl text-left space-y-4 flex flex-col justify-between">
                                 <div className="space-y-2">
@@ -244,9 +244,9 @@ export default function OfertaAcademica() {
 
             {/* 5. FORMACIÓN COMPLEMENTARIA (Extracurricular activities and MJS link) */}
             <section className="relative py-24 bg-slate-50 border-t border-slate-100 overflow-hidden select-none">
-                <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+                <div className="max-w-[1680px] mx-auto px-4 sm:px-6 md:px-12 lg:px-[120px] grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
                     
-                    <div className="lg:col-span-5 text-left space-y-6">
+                    <div className="col-span-12 lg:col-span-5 text-left space-y-6">
                         <div className="space-y-4">
                             <ScrollReveal distance="translate-y-6">
                                 <span className="text-[#800A15] text-xs font-bold tracking-[3px] uppercase block font-sans">
@@ -274,7 +274,7 @@ export default function OfertaAcademica() {
                         </ScrollReveal>
                     </div>
 
-                    <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div className="col-span-12 lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-6">
                         {extracurriculares.map((item, idx) => (
                             <ScrollReveal key={idx} distance="translate-x-6" delay={idx * 150} className="h-full">
                                 <div className="p-6 bg-white border border-slate-200/50 rounded-2xl text-left space-y-2 hover:border-slate-300 transition-all duration-300">

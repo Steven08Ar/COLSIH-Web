@@ -2,6 +2,7 @@ import { Head } from '@inertiajs/react';
 import { useForm } from '@inertiajs/react';
 import AppLayout from '@/Layouts/AppLayout';
 import ScrollReveal from './HomeSections/ScrollReveal';
+import { Briefcase, Phone, Mail, Award } from 'lucide-react';
 
 export default function Contacto() {
     const { data, setData, post, processing, errors, reset, wasSuccessful } = useForm({
@@ -11,6 +12,13 @@ export default function Contacto() {
         asunto: '',
         mensaje: '',
     });
+
+    // Same administrative contact card records
+    const administracion = [
+        { area: 'Rectoría', encargado: 'Sor María Eugenia', cargo: 'Rectora', tel: '(601) 123 4567', email: 'rectoria@santaisabel.edu.co' },
+        { area: 'Contabilidad', encargado: 'Paola Andrea Silva', cargo: 'Contadora', tel: '(601) 123 4568', email: 'contabilidad@santaisabel.edu.co' },
+        { area: 'Secretaría', encargado: 'Carolina Martínez', cargo: 'Secretaria', tel: '(601) 123 4569', email: 'secretaria@santaisabel.edu.co' }
+    ];
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -59,10 +67,10 @@ export default function Contacto() {
             {/* 2. CONTACT LAYOUT (Two-column grid) */}
             <section className="relative py-24 md:py-32 bg-white overflow-hidden select-none">
                 <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px]">
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
                         
                         {/* LEFT COLUMN: Contact Information & Interactive Map */}
-                        <div className="lg:col-span-5 space-y-8 text-left">
+                        <div className="col-span-12 lg:col-span-5 space-y-8 text-left">
                             
                             <div className="space-y-4">
                                 <ScrollReveal distance="translate-y-6">
@@ -124,7 +132,7 @@ export default function Contacto() {
                         </div>
 
                         {/* RIGHT COLUMN: Contact Form */}
-                        <div className="lg:col-span-7 text-left">
+                        <div className="col-span-12 lg:col-span-7 text-left">
                             
                             <ScrollReveal distance="translate-y-6" className="p-8 md:p-10 border border-slate-100 bg-slate-50/50 rounded-3xl space-y-8 h-full">
                                 <div className="space-y-3">
@@ -228,6 +236,94 @@ export default function Contacto() {
                             </ScrollReveal>
 
                         </div>
+
+                    </div>
+                </div>
+            </section>
+
+            {/* 3. ADMINISTRACIÓN CONTACT CARDS (Placed at the very bottom as requested) */}
+            <section className="relative py-24 bg-slate-50/50 dark:bg-slate-900/30 border-t border-slate-100 dark:border-slate-800/80 overflow-hidden select-none text-left">
+                <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] space-y-12">
+                    
+                    {/* Section Header */}
+                    <div className="flex items-center gap-3.5 border-b border-slate-200/60 dark:border-slate-800 pb-4 max-w-[1240px] mx-auto">
+                        <div className="w-10 h-10 rounded-2xl bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0 shadow-sm">
+                            <Briefcase className="w-5.5 h-5.5" />
+                        </div>
+                        <div>
+                            <h2 className="text-2xl font-black text-slate-800 dark:text-white leading-tight font-sans">
+                                Contactos Administrativos
+                            </h2>
+                            <p className="text-xs text-slate-400 dark:text-slate-500 font-semibold mt-0.5 font-sans">
+                                Canales de comunicación directa con el personal de oficina
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* Cards Grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 items-stretch max-w-[1240px] mx-auto">
+                        {administracion.map((item, idx) => {
+                            const isVino = idx % 2 === 0;
+                            const borderClass = isVino ? 'border-l-4 border-l-[#800A15]' : 'border-l-4 border-l-[#003C8F]';
+                            const badgeBg = isVino ? 'bg-[#800A15]/10 text-[#800A15]' : 'bg-[#003C8F]/10 text-[#003C8F]';
+
+                            return (
+                                <ScrollReveal key={idx} distance="translate-y-6" delay={idx * 100}>
+                                    <div 
+                                        className={`bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800/80 rounded-3xl p-6 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow relative overflow-hidden h-full ${borderClass}`}
+                                    >
+                                        <div className="space-y-4">
+                                            <div className="flex items-center justify-between">
+                                                <h4 className="text-lg font-black text-slate-800 dark:text-white font-sans">
+                                                    {item.area}
+                                                </h4>
+                                                <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${badgeBg}`}>
+                                                    <Briefcase className="w-4 h-4" />
+                                                </div>
+                                            </div>
+                                            <div className="space-y-1">
+                                                <p className="text-sm font-bold text-slate-700 dark:text-slate-300 leading-tight font-sans">
+                                                    {item.encargado}
+                                                </p>
+                                                <span className="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest block font-sans">
+                                                    {item.cargo}
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div className="mt-5 pt-4 border-t border-slate-100 dark:border-slate-800/80 space-y-2 text-left">
+                                            <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 dark:text-slate-400 font-sans">
+                                                <Phone className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                                                {item.tel}
+                                            </div>
+                                            <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 dark:text-slate-400 break-all font-sans">
+                                                <Mail className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                                                {item.email}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ScrollReveal>
+                            );
+                        })}
+
+                        {/* Elegant banner card (Column 4) */}
+                        <ScrollReveal distance="translate-y-6" delay={300}>
+                            <div 
+                                className="bg-gradient-to-tr from-blue-500/10 to-indigo-500/5 dark:from-blue-950/20 dark:to-transparent border border-blue-100/50 dark:border-slate-800 rounded-3xl p-6 flex flex-col justify-center gap-4 relative overflow-hidden text-left h-full"
+                            >
+                                {/* Shield background design vector */}
+                                <div className="absolute top-1/2 -right-8 -translate-y-1/2 opacity-25 text-blue-500 pointer-events-none">
+                                    <Award className="w-32 h-32" />
+                                </div>
+
+                                <div className="space-y-3 relative z-10">
+                                    <p className="text-slate-600 dark:text-slate-300 text-xs md:text-sm font-bold leading-relaxed font-sans">
+                                        Cada área trabaja con compromiso y dedicación para brindar una educación de calidad.
+                                    </p>
+                                    <div className="w-10 h-[3px] bg-[#800A15] rounded-full" />
+                                </div>
+                            </div>
+                        </ScrollReveal>
 
                     </div>
                 </div>

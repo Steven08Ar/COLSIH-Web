@@ -74,7 +74,7 @@ export default function AboutHero() {
             >
                 
                 {/* Left Column (45% width) - Vertically Centered */}
-                <div className="col-span-12 lg:col-span-1 lg:max-w-[580px] text-left space-y-7 z-10 lg:py-20 flex flex-col justify-center h-full">
+                <div className="w-full lg:max-w-[580px] text-left space-y-7 z-10 lg:py-20 flex flex-col justify-center h-full">
                     
                     {/* Text pequeño: QUIÉNES SOMOS */}
                     <motion.span 
@@ -83,7 +83,7 @@ export default function AboutHero() {
                     >
                         QUIÉNES SOMOS
                     </motion.span>
-
+ 
                     {/* Título grande (Tres líneas exactamente) */}
                     <motion.h1 
                         variants={itemVariants}
@@ -99,7 +99,7 @@ export default function AboutHero() {
                             </svg>
                         </span>
                     </motion.h1>
-
+ 
                     {/* Descripción (Máximo 3 líneas) */}
                     <motion.p 
                         variants={itemVariants}
@@ -107,7 +107,7 @@ export default function AboutHero() {
                     >
                         Somos una institución educativa católica que forma personas íntegras, líderes con propósito y comprometidos con la construcción de un mundo más justo.
                     </motion.p>
-
+ 
                     {/* Botones (Removed Video Button) */}
                     <motion.div 
                         variants={itemVariants}
@@ -118,11 +118,11 @@ export default function AboutHero() {
                         </PrimaryButton>
                     </motion.div>
                 </div>
-
+ 
                 {/* Right Column Spacer for Desktop / Stacking Inline Container on Mobile & Tablet */}
-                <div className="col-span-12 lg:col-span-1 relative flex justify-center mt-12 lg:mt-0 w-full max-w-[549px] lg:max-w-none aspect-[549/568] lg:aspect-auto lg:h-full lg:opacity-0 pointer-events-none select-none translate-y-[60px] md:translate-y-[120px] lg:translate-y-0 lg:hidden">
+                <div className="relative flex justify-center mt-12 lg:mt-0 w-full max-w-[549px] aspect-[549/568] pointer-events-none select-none translate-y-[60px] md:translate-y-[120px] lg:hidden">
                     {/* Mobile/Tablet inline copy (rendered inside the grid) */}
-                    <div className="relative w-full h-full flex items-end justify-end">
+                    <div className="relative w-full h-full flex items-end justify-center">
                         {/* Layer 1: Background School Mask */}
                         <div 
                             style={{ clipPath: 'url(#school-mask)', WebkitClipPath: 'url(#school-mask)' }}
@@ -134,7 +134,7 @@ export default function AboutHero() {
                                 className="w-full h-full object-cover scale-105" 
                             />
                         </div>
-
+ 
                         {/* Layer 2: Foreground Transparent Cutout Students walking away */}
                         <img 
                             src="/Estudiantes de espaldas.png" 
@@ -143,9 +143,9 @@ export default function AboutHero() {
                         />
                     </div>
                 </div>
-
+ 
                 {/* Desktop Empty Spacer block inside the grid row */}
-                <div className="hidden lg:block col-span-12 lg:col-span-1 pointer-events-none select-none"></div>
+                <div className="hidden lg:block pointer-events-none select-none"></div>
 
             </motion.div>
 

@@ -30,7 +30,7 @@ export default function NosotrosIndex() {
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
                         
                         {/* Left column */}
-                        <div className="col-span-12 lg:col-span-5 space-y-6">
+                        <div className="col-span-full lg:col-span-5 space-y-6">
                             <span className="text-[#800A15] font-extrabold text-[12px] uppercase tracking-widest block font-sans">
                                 NUESTRA FILOSOFÍA
                             </span>
@@ -46,7 +46,7 @@ export default function NosotrosIndex() {
                         </div>
 
                         {/* Right column: 3 Pillars Cards */}
-                        <div className="col-span-12 lg:col-span-7 space-y-6">
+                        <div className="col-span-full lg:col-span-7 space-y-6">
                             {/* Razón */}
                             <div className="bg-white border border-slate-100 p-8 rounded-[28px] shadow-sm hover:shadow-md transition-all duration-300 flex flex-col md:flex-row gap-6 items-start">
                                 <div className="w-12 h-12 rounded-2xl bg-[#003C8F]/10 text-[#003C8F] flex items-center justify-center shrink-0">
@@ -186,7 +186,7 @@ export default function NosotrosIndex() {
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
                         
                         {/* Left column */}
-                        <div className="col-span-12 lg:col-span-5 space-y-4">
+                        <div className="col-span-full lg:col-span-5 space-y-4">
                             <span className="text-red-500 font-extrabold text-[12px] uppercase tracking-widest block font-sans">
                                 ¿Por qué elegirnos?
                             </span>
@@ -202,7 +202,7 @@ export default function NosotrosIndex() {
                         </div>
 
                         {/* Right column grid */}
-                        <div className="col-span-12 lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-8">
+                        <div className="col-span-full lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-8">
                             
                             {/* Educación integral */}
                             <div className="flex gap-4.5 items-start">

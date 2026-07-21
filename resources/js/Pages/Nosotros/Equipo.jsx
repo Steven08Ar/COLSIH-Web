@@ -126,10 +126,10 @@ export default function Equipo() {
                     {/* Left & Right abstract curves */}
                     <div className="absolute right-0 bottom-0 top-0 w-[35%] opacity-15 border-l border-amber-400 rounded-l-[50%] bg-gradient-to-r from-transparent to-amber-400/5 pointer-events-none hidden lg:block" />
 
-                    <div className="relative z-10 max-w-[1240px] mx-auto text-left">
+                    <div className="relative z-10 max-w-[1240px] mx-auto text-center lg:text-left">
                         {/* Hero Left Info */}
-                        <div className="max-w-2xl space-y-4">
-                            <div className="flex items-center gap-2 text-amber-400 font-bold uppercase tracking-wider text-xs">
+                        <div className="max-w-2xl mx-auto lg:mx-0 space-y-4 flex flex-col items-center lg:items-start">
+                            <div className="flex items-center justify-center lg:justify-start gap-2 text-amber-400 font-bold uppercase tracking-wider text-xs">
                                 <Users className="w-4 h-4 text-amber-400" />
                                 Conoce a quienes hacen posible
                             </div>
@@ -393,7 +393,7 @@ export default function Equipo() {
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
                         
                         {/* Teachers List Column (lg:col-span-8) */}
-                        <div className="col-span-12 lg:col-span-8 grid grid-cols-2 sm:grid-cols-4 gap-4">
+                        <div className="col-span-full lg:col-span-8 grid grid-cols-2 sm:grid-cols-4 gap-4">
                             {profesoresPorArea[selectedArea]?.map((prof, idx) => {
                                 const isVino = idx % 2 === 0;
                                 const borderClass = isVino ? 'border-b-4 border-b-[#800A15]' : 'border-b-4 border-b-[#003C8F]';
@@ -432,7 +432,7 @@ export default function Equipo() {
                             initial={{ opacity: 0, y: 25 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
-                            className="col-span-12 lg:col-span-4 bg-[#800A15] border border-rose-950 rounded-3xl p-8 text-white flex flex-col justify-between space-y-8 relative overflow-hidden shadow-xl text-left"
+                            className="col-span-full lg:col-span-4 bg-[#800A15] border border-rose-950 rounded-3xl p-8 text-white flex flex-col justify-between space-y-8 relative overflow-hidden shadow-xl text-left"
                         >
                             {/* Abstract glowing background inside banner */}
                             <div className="absolute -top-10 -right-10 w-36 h-36 rounded-full bg-white/5 blur-2xl pointer-events-none" />

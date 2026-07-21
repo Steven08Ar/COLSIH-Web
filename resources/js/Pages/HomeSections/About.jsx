@@ -52,19 +52,19 @@ export default function About() {
                     </div>
 
                     {/* Right Column: Information & Horizontal Row Navigation */}
-                    <div className="space-y-8 lg:space-y-12 text-left w-full min-w-0">
-                        <div className="space-y-4">
+                    <div className="space-y-8 lg:space-y-12 text-center lg:text-left w-full min-w-0 flex flex-col items-center lg:items-start">
+                        <div className="space-y-4 flex flex-col items-center lg:items-start w-full">
                             <ScrollReveal distance="translate-y-6">
                                 <span className="text-[#800A15] text-[13px] font-bold tracking-[3px] uppercase block font-sans">
                                     FILOSOFÍA INSTITUCIONAL
                                 </span>
                             </ScrollReveal>
 
-                            <ScrollReveal distance="translate-y-6" delay={150} className="space-y-6">
+                            <ScrollReveal distance="translate-y-6" delay={150} className="space-y-6 flex flex-col items-center lg:items-start">
                                 <h2 className="text-3xl sm:text-4xl lg:text-[56px] font-black text-[#08111F] leading-[1.05] tracking-tight font-sans">
                                     Nuestra Identidad
                                 </h2>
-                                <p className="text-[15px] sm:text-[17px] text-slate-500 font-semibold leading-relaxed">
+                                <p className="text-[15px] sm:text-[17px] text-slate-500 font-semibold leading-relaxed text-center lg:text-left">
                                     El Colegio Santa Isabel de Hungría de Floridablanca es una institución educativa arquidiocesana de carácter católico y privado, administrada por la Comunidad de Hijas de María Auxiliadora. Formamos de manera integral bajo la pedagogía del <strong>Sistema Preventivo Salesiano</strong> desde los pilares de Razón, Religión y Amor.
                                 </p>
                             </ScrollReveal>

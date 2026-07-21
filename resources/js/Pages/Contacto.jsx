@@ -36,8 +36,8 @@ export default function Contacto() {
                 <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[400px] h-[400px] bg-[#003C8F]/10 rounded-full blur-[120px] pointer-events-none z-0"></div>
                 <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-[400px] h-[400px] bg-[#800A15]/8 rounded-full blur-[120px] pointer-events-none z-0"></div>
 
-                <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] relative z-10 text-left">
-                    <div className="max-w-3xl space-y-6">
+                <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] relative z-10 text-center lg:text-left">
+                    <div className="max-w-3xl mx-auto lg:mx-0 space-y-6 flex flex-col items-center lg:items-start">
                         <ScrollReveal distance="translate-y-6">
                             <span className="text-[#800A15] text-xs md:text-[13px] font-bold tracking-[3px] uppercase block font-sans">
                                 CANALES OFICIALES
@@ -70,9 +70,9 @@ export default function Contacto() {
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
                         
                         {/* LEFT COLUMN: Contact Information & Interactive Map */}
-                        <div className="col-span-12 lg:col-span-5 space-y-8 text-left">
+                        <div className="col-span-full lg:col-span-5 space-y-8 text-center lg:text-left flex flex-col items-center lg:items-start">
                             
-                            <div className="space-y-4">
+                            <div className="space-y-4 flex flex-col items-center lg:items-start">
                                 <ScrollReveal distance="translate-y-6">
                                     <span className="text-[#003C8F] text-xs font-bold tracking-[3px] uppercase block font-sans">
                                         UBICACIÓN
@@ -132,10 +132,10 @@ export default function Contacto() {
                         </div>
 
                         {/* RIGHT COLUMN: Contact Form */}
-                        <div className="col-span-12 lg:col-span-7 text-left">
+                        <div className="col-span-full lg:col-span-7 text-center lg:text-left">
                             
-                            <ScrollReveal distance="translate-y-6" className="p-8 md:p-10 border border-slate-100 bg-slate-50/50 rounded-3xl space-y-8 h-full">
-                                <div className="space-y-3">
+                            <ScrollReveal distance="translate-y-6" className="p-8 md:p-10 border border-slate-100 bg-slate-50/50 rounded-3xl space-y-8 h-full text-left">
+                                <div className="space-y-3 flex flex-col items-center lg:items-start text-center lg:text-left">
                                     <h2 className="text-2xl font-black text-[#08111F] font-sans">
                                         Envíanos un mensaje
                                     </h2>

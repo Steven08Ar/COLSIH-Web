@@ -54,8 +54,8 @@ export default function Admisiones() {
                 <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[400px] h-[400px] bg-[#003C8F]/10 rounded-full blur-[120px] pointer-events-none z-0"></div>
                 <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-[400px] h-[400px] bg-[#800A15]/8 rounded-full blur-[120px] pointer-events-none z-0"></div>
 
-                <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] relative z-10 text-left">
-                    <div className="max-w-3xl space-y-6">
+                <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] relative z-10 text-center lg:text-left">
+                    <div className="max-w-3xl mx-auto lg:mx-0 space-y-6 flex flex-col items-center lg:items-start">
                         <ScrollReveal distance="translate-y-6">
                             <span className="text-[#800A15] text-xs md:text-[13px] font-bold tracking-[3px] uppercase block font-sans">
                                 PROCESO DE MATRÍCULA
@@ -86,7 +86,7 @@ export default function Admisiones() {
             <section className="relative py-24 md:py-32 bg-white overflow-hidden select-none">
                 <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] space-y-20">
                     
-                    <div className="max-w-2xl text-left space-y-4">
+                    <div className="max-w-2xl mx-auto lg:mx-0 text-center lg:text-left space-y-4 flex flex-col items-center lg:items-start">
                         <ScrollReveal distance="translate-y-6">
                             <span className="text-[#003C8F] text-xs font-bold tracking-[3px] uppercase block font-sans">
                                 RUTAS DE ADMISIÓN
@@ -141,8 +141,7 @@ export default function Admisiones() {
             {/* 3. CALENDARIO DE FECHAS (Timeline component) */}
             <section className="relative py-24 bg-slate-50 border-y border-slate-100 overflow-hidden select-none">
                 <div className="max-w-[1680px] mx-auto px-4 sm:px-6 md:px-12 lg:px-[120px] grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
-                    
-                    <div className="lg:col-span-4 text-left space-y-4 lg:sticky lg:top-28">
+                    <div className="lg:col-span-4 text-center lg:text-left space-y-4 lg:sticky lg:top-28 flex flex-col items-center lg:items-start">
                         <ScrollReveal distance="translate-y-6">
                             <span className="text-[#800A15] text-xs font-bold tracking-[3px] uppercase block font-sans">
                                 FECHAS CLAVE
@@ -188,7 +187,7 @@ export default function Admisiones() {
             <section className="relative py-24 md:py-32 bg-white overflow-hidden select-none">
                 <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] space-y-20">
                     
-                    <div className="max-w-2xl text-left space-y-4">
+                    <div className="max-w-2xl mx-auto lg:mx-0 text-center lg:text-left space-y-4 flex flex-col items-center lg:items-start">
                         <ScrollReveal distance="translate-y-6">
                             <span className="text-[#003C8F] text-xs font-bold tracking-[3px] uppercase block font-sans">
                                 DOCUMENTACIÓN

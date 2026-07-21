@@ -222,21 +222,21 @@ export default function MisionVision() {
                         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-24 items-center">
                             
                             {/* Left Text */}
-                            <div className="col-span-12 lg:col-span-7 space-y-6 text-center lg:text-left min-w-0">
-                                <span className="inline-block text-xs font-bold uppercase tracking-widest text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/20 px-3.5 py-1.5 rounded-md">
+                            <div className="col-span-full lg:col-span-7 space-y-6 text-center lg:text-left min-w-0 flex flex-col items-center lg:items-start">
+                                <span className="inline-block text-xs font-bold uppercase tracking-widest text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/20 px-3.5 py-1.5 rounded-md select-none">
                                     Misión Institucional
                                 </span>
                                 <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-slate-900 dark:text-white font-sans leading-tight">
                                     Nuestra Misión
                                 </h2>
-                                <div className="w-20 h-1.5 bg-indigo-600 rounded-full mx-auto lg:mx-0" />
+                                <div className="w-20 h-1.5 bg-indigo-600 rounded-full" />
                                 <p className="text-slate-600 dark:text-slate-300 text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed font-medium pt-2 break-words">
                                     El Colegio Santa Isabel de Hungría es una institución educativa de carácter privado de la Arquidiócesis de Bucaramanga, que educa con principios evangélicos según el sistema preventivo salesiano, fundamentado en la religión, la amabilidad y la razón. Ofrecemos los niveles de jardín, preescolar, primaria, básica y media técnica, con énfasis en comercio, empeñados en alcanzar una educación contextual que pase de la enseñanza al aprendizaje.
                                 </p>
                             </div>
 
                             {/* Right Abstract Graphic composition */}
-                            <div className="col-span-12 lg:col-span-5 relative w-full max-w-md mx-auto aspect-video md:aspect-square flex flex-col justify-center gap-5">
+                            <div className="col-span-full lg:col-span-5 relative w-full max-w-md mx-auto aspect-video md:aspect-square flex flex-col justify-center gap-5">
                                 <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/10 to-purple-500/5 dark:from-indigo-950/20 dark:to-purple-950/10 rounded-3xl blur-2xl pointer-events-none" />
                                 
                                 <div className="relative bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800/80 rounded-2xl p-6 shadow-[0_10px_30px_rgba(0,0,0,0.01)] dark:shadow-none hover:translate-x-2 transition-transform duration-300 flex items-center gap-4.5">
@@ -274,7 +274,7 @@ export default function MisionVision() {
                         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-24 items-center">
                             
                              {/* Left Abstract Graphic Container (Alternating) */}
-                             <div className="col-span-12 lg:col-span-5 relative w-full max-w-md mx-auto aspect-video md:aspect-square flex items-center justify-center order-2 lg:order-1">
+                             <div className="col-span-full lg:col-span-5 relative w-full max-w-md mx-auto aspect-video md:aspect-square flex items-center justify-center order-2 lg:order-1">
                                  <div className="absolute inset-0 bg-gradient-to-tr from-emerald-500/10 to-teal-500/5 dark:from-emerald-950/20 dark:to-teal-950/10 rounded-3xl blur-2xl pointer-events-none" />
  
                                  <div className="relative w-64 h-64 sm:w-72 sm:h-72 rounded-full border border-slate-200/50 dark:border-slate-800 flex items-center justify-center shrink-0">
@@ -292,14 +292,14 @@ export default function MisionVision() {
                              </div>
 
                             {/* Right Text */}
-                            <div className="col-span-12 lg:col-span-7 space-y-6 order-1 lg:order-2 text-center lg:text-left min-w-0">
+                            <div className="col-span-full lg:col-span-7 space-y-6 order-1 lg:order-2 text-center lg:text-left min-w-0 flex flex-col items-center lg:items-start">
                                 <span className="inline-block text-xs font-bold uppercase tracking-widest text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 px-3.5 py-1.5 rounded-md">
                                     Visión de Futuro
                                 </span>
                                 <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-slate-900 dark:text-white font-sans leading-tight">
                                     Nuestra Visión
                                 </h2>
-                                <div className="w-20 h-1.5 bg-emerald-500 rounded-full mx-auto lg:mx-0" />
+                                <div className="w-20 h-1.5 bg-emerald-500 rounded-full" />
                                 <p className="text-slate-600 dark:text-slate-300 text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed font-medium pt-2 break-words">
                                     En el año 2028, el Colegio Santa Isabel de Hungría será reconocido en la región por la formación integral de líderes comprometidos con el cuidado de la vida en todas sus manifestaciones, aportando a la ecología integral en el respeto y cuidado de la Casa Común, fundamentados en el sistema salesiano, viviendo como "Buenos Cristianos y Honestos Ciudadanos".
                                 </p>

@@ -57,8 +57,8 @@ export default function NoticiasIndex({ noticias, categoriaActual }) {
                 <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[400px] h-[400px] bg-[#003C8F]/10 rounded-full blur-[120px] pointer-events-none z-0"></div>
                 <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-[400px] h-[400px] bg-[#800A15]/8 rounded-full blur-[120px] pointer-events-none z-0"></div>
 
-                <div className="max-w-[1240px] mx-auto px-6 relative z-10 text-left">
-                    <div className="max-w-3xl space-y-6">
+                <div className="max-w-[1240px] mx-auto px-6 relative z-10 text-center lg:text-left">
+                    <div className="max-w-3xl mx-auto lg:mx-0 space-y-6 flex flex-col items-center lg:items-start">
                         <ScrollReveal distance="translate-y-6">
                             <span className="text-amber-400 text-xs md:text-[13px] font-black tracking-[3px] uppercase block font-sans">
                                 Boletín Escolar
@@ -229,7 +229,7 @@ export default function NoticiasIndex({ noticias, categoriaActual }) {
                             <div className="absolute -bottom-12 -left-12 w-64 h-64 bg-[#003C8F]/10 rounded-full blur-[60px]"></div>
 
                             <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center">
-                                <div className="col-span-12 lg:col-span-8 space-y-4">
+                                <div className="col-span-full lg:col-span-8 space-y-4">
                                     <span className="text-[#800A15] text-xs font-black tracking-widest uppercase font-sans">
                                         PASTORAL ASOCIATIVA
                                     </span>
@@ -240,7 +240,7 @@ export default function NoticiasIndex({ noticias, categoriaActual }) {
                                         Sé el protagonista de tu propia formación en valores, fe y alegría. ¡Únete a los grupos asociativos del MJS y vive la experiencia Don Bosco de cerca!
                                     </p>
                                 </div>
-                                <div className="col-span-12 lg:col-span-4 lg:text-right">
+                                <div className="col-span-full lg:col-span-4 lg:text-right">
                                     <Link href="/mjs" className="inline-flex items-center gap-2 px-7 py-3.5 bg-white text-[#08111F] hover:bg-[#800A15] hover:text-white font-black text-xs tracking-wider uppercase rounded-full shadow-md transition-all duration-300 font-sans cursor-pointer">
                                         Conocer el MJS
                                         <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">

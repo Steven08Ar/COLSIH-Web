@@ -60,7 +60,7 @@ export default function Mjs() {
                 <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_top_right,rgba(0, 60, 143,0.15)_0%,transparent_50%)]"></div>
                 <div className="max-w-[1680px] mx-auto px-4 sm:px-6 md:px-12 lg:px-[120px] relative z-10 w-full grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
                     
-                    <div className="col-span-12 lg:col-span-8 space-y-6">
+                    <div className="col-span-full lg:col-span-8 space-y-6 text-center lg:text-left flex flex-col items-center lg:items-start">
                         <ScrollReveal distance="translate-y-6">
                             <span className="text-[#800A15] text-[13px] font-bold tracking-[3px] uppercase block font-sans">
                                 PASTORAL JUVENIL
@@ -78,7 +78,7 @@ export default function Mjs() {
                         </ScrollReveal>
                     </div>
 
-                    <div className="col-span-12 lg:col-span-4 flex justify-center lg:justify-end">
+                    <div className="col-span-full lg:col-span-4 flex justify-center lg:justify-end">
                         <ScrollReveal distance="scale-90" delay={450}>
                             <div className="w-48 h-48 md:w-56 md:h-56 bg-white/5 rounded-full flex items-center justify-center p-6 border border-white/10 backdrop-blur-md">
                                 <img 
@@ -98,7 +98,7 @@ export default function Mjs() {
                 <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] space-y-20">
                     
                     {/* Header */}
-                    <div className="max-w-2xl text-left space-y-4">
+                    <div className="max-w-2xl mx-auto lg:mx-0 text-center lg:text-left space-y-4 flex flex-col items-center lg:items-start">
                         <ScrollReveal distance="translate-y-6">
                             <span className="text-[#003C8F] text-[13px] font-bold tracking-[3px] uppercase block font-sans">
                                 GRUPOS ASOCIATIVOS

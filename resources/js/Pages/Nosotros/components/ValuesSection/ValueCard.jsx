@@ -37,7 +37,7 @@ export default function ValueCard({ value, index, onOpenGallery }) {
                 
                 {/* 1. Main Cover Image Zone */}
                 <div 
-                    className={`col-span-12 relative w-full aspect-[4/3] lg:aspect-auto lg:h-[230px] rounded-2xl overflow-hidden shadow-sm group cursor-pointer ${
+                    className={`col-span-full relative w-full aspect-[4/3] lg:aspect-auto lg:h-[230px] rounded-2xl overflow-hidden shadow-sm group cursor-pointer ${
                         isEven ? 'lg:col-span-4 lg:order-1' : 'lg:col-span-4 lg:order-3'
                     }`}
                     onClick={() => onOpenGallery(0)}
@@ -52,7 +52,7 @@ export default function ValueCard({ value, index, onOpenGallery }) {
 
                 {/* 2. Central Information Zone */}
                 <div 
-                    className={`col-span-12 space-y-4 text-left ${
+                    className={`col-span-full space-y-4 text-left ${
                         isEven ? 'lg:col-span-5 lg:order-2' : 'lg:col-span-5 lg:order-2 lg:pl-4'
                     }`}
                 >
@@ -74,7 +74,7 @@ export default function ValueCard({ value, index, onOpenGallery }) {
                 </div>
 
                 <div 
-                    className={`col-span-12 flex flex-col gap-4 items-center sm:items-start lg:items-center ${
+                    className={`col-span-full flex flex-col gap-4 items-center sm:items-start lg:items-center ${
                         isEven ? 'lg:col-span-3 lg:order-3' : 'lg:col-span-3 lg:order-1'
                     }`}
                 >

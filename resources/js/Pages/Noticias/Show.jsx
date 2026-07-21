@@ -164,14 +164,14 @@ export default function NoticiasShow({ noticia, relacionadas }) {
                 <div className="max-w-7xl mx-auto px-4 md:px-8 w-full">
 
                     <article className="space-y-8">
-                        <header className="space-y-4 text-left">
+                        <header className="space-y-4 text-center lg:text-left flex flex-col items-center lg:items-start">
                             <span className={`inline-block text-[11px] font-extrabold uppercase tracking-widest px-4 py-2 rounded-full border ${getCategoryStyles(noticia.categoria)}`}>
                                 {categoryLabel(noticia.categoria)}
                             </span>
                             <h1 className="text-2xl sm:text-4xl lg:text-[52px] font-black text-[#08111F] leading-[1.15] tracking-tight">
                                 {noticia.titulo}
                             </h1>
-                            <div className="flex items-center gap-6 text-xs text-slate-400 font-bold border-b border-slate-100 pb-6">
+                            <div className="flex items-center justify-center lg:justify-start gap-6 text-xs text-slate-400 font-bold border-b border-slate-100 pb-6 w-full">
                                 <time className="flex items-center gap-1.5" dateTime={noticia.publicado_en}>
                                     <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />

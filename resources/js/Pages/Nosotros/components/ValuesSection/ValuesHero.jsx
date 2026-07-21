@@ -8,7 +8,7 @@ export default function ValuesHero() {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
                 
                 {/* Left Side: Content & Features */}
-                <div className="col-span-12 lg:col-span-6 space-y-6 text-left">
+                <div className="col-span-full lg:col-span-6 space-y-6 text-center lg:text-left flex flex-col items-center lg:items-start">
                     
                     {/* Upper Badge Tag */}
                     <motion.span 
@@ -39,7 +39,7 @@ export default function ValuesHero() {
                         initial={{ opacity: 0, y: 15 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6, delay: 0.2 }}
-                        className="text-slate-500 dark:text-slate-400 text-sm md:text-base font-semibold max-w-xl leading-relaxed"
+                        className="text-slate-500 dark:text-slate-400 text-sm md:text-base font-semibold max-w-xl mx-auto lg:mx-0 leading-relaxed"
                     >
                         Son los principios que guían nuestras acciones, decisiones y relaciones. Vivimos nuestros valores y los reflejamos en cada paso que damos en nuestra comunidad educativa.
                     </motion.p>
@@ -49,31 +49,31 @@ export default function ValuesHero() {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ duration: 0.8, delay: 0.3 }}
-                        className="grid grid-cols-1 sm:grid-cols-3 gap-5 pt-4"
+                        className="grid grid-cols-1 sm:grid-cols-3 gap-5 pt-4 w-full"
                     >
-                        <div className="flex items-start sm:flex-col lg:flex-row gap-3.5 items-center bg-white/50 dark:bg-slate-900/30 backdrop-blur-sm border border-slate-100 dark:border-slate-800/80 p-3.5 rounded-2xl">
+                        <div className="flex flex-row items-center justify-center sm:flex-col lg:flex-row lg:justify-start gap-3.5 bg-white/50 dark:bg-slate-900/30 backdrop-blur-sm border border-slate-100 dark:border-slate-800/80 p-3.5 rounded-2xl">
                             <div className="w-10 h-10 rounded-full bg-rose-50 text-[#800A15] dark:bg-rose-950/40 dark:text-rose-400 flex items-center justify-center shrink-0 shadow-sm shadow-red-500/5">
                                 <Heart className="w-4.5 h-4.5" fill="currentColor" />
                             </div>
-                            <span className="text-xs font-extrabold text-slate-700 dark:text-slate-300 leading-tight">
+                            <span className="text-xs font-extrabold text-slate-700 dark:text-slate-300 leading-tight text-center sm:text-left">
                                 Forman <br className="hidden sm:inline lg:hidden" /><span className="text-slate-400 font-medium">nuestro carácter</span>
                             </span>
                         </div>
 
-                        <div className="flex items-start sm:flex-col lg:flex-row gap-3.5 items-center bg-white/50 dark:bg-slate-900/30 backdrop-blur-sm border border-slate-100 dark:border-slate-800/80 p-3.5 rounded-2xl">
+                        <div className="flex flex-row items-center justify-center sm:flex-col lg:flex-row lg:justify-start gap-3.5 bg-white/50 dark:bg-slate-900/30 backdrop-blur-sm border border-slate-100 dark:border-slate-800/80 p-3.5 rounded-2xl">
                             <div className="w-10 h-10 rounded-full bg-blue-50 text-blue-600 dark:bg-blue-950/40 dark:text-blue-400 flex items-center justify-center shrink-0 shadow-sm shadow-blue-500/5">
                                 <Users className="w-4.5 h-4.5" fill="currentColor" />
                             </div>
-                            <span className="text-xs font-extrabold text-slate-700 dark:text-slate-300 leading-tight">
+                            <span className="text-xs font-extrabold text-slate-700 dark:text-slate-300 leading-tight text-center sm:text-left">
                                 Fortalecen <br className="hidden sm:inline lg:hidden" /><span className="text-slate-400 font-medium">nuestra comunidad</span>
                             </span>
                         </div>
 
-                        <div className="flex items-start sm:flex-col lg:flex-row gap-3.5 items-center bg-white/50 dark:bg-slate-900/30 backdrop-blur-sm border border-slate-100 dark:border-slate-800/80 p-3.5 rounded-2xl">
+                        <div className="flex flex-row items-center justify-center sm:flex-col lg:flex-row lg:justify-start gap-3.5 bg-white/50 dark:bg-slate-900/30 backdrop-blur-sm border border-slate-100 dark:border-slate-800/80 p-3.5 rounded-2xl">
                             <div className="w-10 h-10 rounded-full bg-amber-50 text-amber-500 dark:bg-amber-950/40 dark:text-amber-400 flex items-center justify-center shrink-0 shadow-sm shadow-amber-500/5">
                                 <Star className="w-4.5 h-4.5" fill="currentColor" />
                             </div>
-                            <span className="text-xs font-extrabold text-slate-700 dark:text-slate-300 leading-tight">
+                            <span className="text-xs font-extrabold text-slate-700 dark:text-slate-300 leading-tight text-center sm:text-left">
                                 Nos impulsan <br className="hidden sm:inline lg:hidden" /><span className="text-slate-400 font-medium">a ser mejores</span>
                             </span>
                         </div>
@@ -82,7 +82,7 @@ export default function ValuesHero() {
                 </div>
 
                 {/* Right Side: Shield and Students Graphic Composition */}
-                <div className="col-span-12 lg:col-span-6 flex justify-center relative select-none">
+                <div className="col-span-full lg:col-span-6 flex justify-center relative select-none">
                     
                     {/* Main Shield Layout Wrapper */}
                     <motion.div 

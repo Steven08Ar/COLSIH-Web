@@ -62,8 +62,8 @@ export default function OfertaAcademica() {
                 <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[400px] h-[400px] bg-[#003C8F]/10 rounded-full blur-[120px] pointer-events-none z-0"></div>
                 <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-[400px] h-[400px] bg-[#800A15]/8 rounded-full blur-[120px] pointer-events-none z-0"></div>
 
-                <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] relative z-10 text-left">
-                    <div className="max-w-3xl space-y-6">
+                <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] relative z-10 text-center lg:text-left">
+                    <div className="max-w-3xl mx-auto lg:mx-0 space-y-6 flex flex-col items-center lg:items-start">
                         <ScrollReveal distance="translate-y-6">
                             <span className="text-[#800A15] text-xs md:text-[13px] font-bold tracking-[3px] uppercase block font-sans">
                                 PROYECTO EDUCATIVO
@@ -94,7 +94,7 @@ export default function OfertaAcademica() {
             <section className="relative py-24 md:py-32 bg-white overflow-hidden select-none">
                 <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] space-y-20">
                     
-                    <div className="max-w-2xl text-left space-y-4">
+                    <div className="max-w-2xl mx-auto lg:mx-0 text-center lg:text-left space-y-4 flex flex-col items-center lg:items-start">
                         <ScrollReveal distance="translate-y-6">
                             <span className="text-[#003C8F] text-xs font-bold tracking-[3px] uppercase block font-sans">
                                 ETAPAS FORMATIVAS
@@ -157,7 +157,7 @@ export default function OfertaAcademica() {
             <section className="relative py-20 bg-slate-50 border-y border-slate-100 overflow-hidden select-none">
                 <div className="max-w-[1680px] mx-auto px-4 sm:px-6 md:px-12 lg:px-[120px] grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
                     
-                    <div className="col-span-12 lg:col-span-4 text-left space-y-4">
+                    <div className="col-span-full lg:col-span-4 text-center lg:text-left space-y-4 flex flex-col items-center lg:items-start">
                         <ScrollReveal distance="translate-y-6">
                             <span className="text-[#800A15] text-xs font-bold tracking-[3px] uppercase block font-sans">
                                 ORGANIZACIÓN
@@ -175,7 +175,7 @@ export default function OfertaAcademica() {
                         </ScrollReveal>
                     </div>
 
-                    <div className="col-span-12 lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div className="col-span-full lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-6">
                         <ScrollReveal distance="translate-x-6" className="h-full">
                             <div className="p-8 bg-white border border-slate-200/50 rounded-2xl text-left space-y-4 flex flex-col justify-between">
                                 <div className="space-y-2">
@@ -209,7 +209,7 @@ export default function OfertaAcademica() {
             <section className="relative py-24 md:py-32 bg-white overflow-hidden select-none">
                 <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] space-y-20">
                     
-                    <div className="max-w-2xl text-left space-y-4">
+                    <div className="max-w-2xl mx-auto lg:mx-0 text-center lg:text-left space-y-4 flex flex-col items-center lg:items-start">
                         <ScrollReveal distance="translate-y-6">
                             <span className="text-[#003C8F] text-xs font-bold tracking-[3px] uppercase block font-sans">
                                 PLAN ACADÉMICO
@@ -246,8 +246,8 @@ export default function OfertaAcademica() {
             <section className="relative py-24 bg-slate-50 border-t border-slate-100 overflow-hidden select-none">
                 <div className="max-w-[1680px] mx-auto px-4 sm:px-6 md:px-12 lg:px-[120px] grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
                     
-                    <div className="col-span-12 lg:col-span-5 text-left space-y-6">
-                        <div className="space-y-4">
+                    <div className="col-span-full lg:col-span-5 text-center lg:text-left space-y-6 flex flex-col items-center lg:items-start">
+                        <div className="space-y-4 flex flex-col items-center lg:items-start">
                             <ScrollReveal distance="translate-y-6">
                                 <span className="text-[#800A15] text-xs font-bold tracking-[3px] uppercase block font-sans">
                                     INTEGRALIDAD
@@ -274,7 +274,7 @@ export default function OfertaAcademica() {
                         </ScrollReveal>
                     </div>
 
-                    <div className="col-span-12 lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div className="col-span-full lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-6">
                         {extracurriculares.map((item, idx) => (
                             <ScrollReveal key={idx} distance="translate-x-6" delay={idx * 150} className="h-full">
                                 <div className="p-6 bg-white border border-slate-200/50 rounded-2xl text-left space-y-2 hover:border-slate-300 transition-all duration-300">

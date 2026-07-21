@@ -1,4 +1,4 @@
-import { Head, Link } from '@inertiajs/react';
+import { Head } from '@inertiajs/react';
 import AppLayout from '@/Layouts/AppLayout';
 import { useState, useRef, useEffect } from 'react';
 import ScrollReveal from '@/Components/ScrollReveal';
@@ -198,7 +198,7 @@ export default function MisionVision() {
 
                         {/* Título Grande */}
                         <ScrollReveal delay={200} duration={700}>
-                            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight leading-[1.1] text-slate-900 dark:text-white">
+                            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight leading-[1.1] text-slate-900 dark:text-white">
                                 Misión, Visión y <br />
                                 <span className="bg-gradient-to-r from-[#003C8F] to-[#800A15] bg-clip-text text-transparent">
                                     Objetivos Institucionales
@@ -222,11 +222,11 @@ export default function MisionVision() {
                         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-24 items-center">
                             
                             {/* Left Text */}
-                            <div className="col-span-12 lg:col-span-7 space-y-6 text-left">
+                            <div className="col-span-12 lg:col-span-7 space-y-6 text-left min-w-0">
                                 <span className="text-xs font-bold uppercase tracking-widest text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/20 px-3.5 py-1.5 rounded-md">
                                     Misión Institucional
                                 </span>
-                                <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-slate-900 dark:text-white font-sans leading-tight">
+                                <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-slate-900 dark:text-white font-sans leading-tight">
                                     Nuestra Misión
                                 </h2>
                                 <div className="w-20 h-1.5 bg-indigo-600 rounded-full" />
@@ -292,11 +292,11 @@ export default function MisionVision() {
                              </div>
 
                             {/* Right Text */}
-                            <div className="col-span-12 lg:col-span-7 space-y-6 order-1 lg:order-2 text-left">
+                            <div className="col-span-12 lg:col-span-7 space-y-6 order-1 lg:order-2 text-left min-w-0">
                                 <span className="text-xs font-bold uppercase tracking-widest text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 px-3.5 py-1.5 rounded-md">
                                     Visión de Futuro
                                 </span>
-                                <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-slate-900 dark:text-white font-sans leading-tight">
+                                <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-slate-900 dark:text-white font-sans leading-tight">
                                     Nuestra Visión
                                 </h2>
                                 <div className="w-20 h-1.5 bg-emerald-500 rounded-full" />
@@ -316,7 +316,7 @@ export default function MisionVision() {
                             <span className="text-xs font-bold uppercase tracking-widest text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 px-3.5 py-1.5 rounded-md">
                                 Directrices y Misión
                             </span>
-                            <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-slate-900 dark:text-white font-sans leading-tight">
+                            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-slate-900 dark:text-white font-sans leading-tight">
                                 Objetivos Estratégicos
                             </h2>
                             <div className="w-20 h-1.5 bg-amber-500 rounded-full mx-auto" />

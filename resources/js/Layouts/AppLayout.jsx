@@ -7,7 +7,7 @@ export default function AppLayout({ children }) {
     const flash = props.flash ?? {};
 
     return (
-        <div className="min-h-screen bg-white flex flex-col font-sans selection:bg-red-100 selection:text-red-900">
+        <div className="min-h-screen bg-white flex flex-col font-sans selection:bg-red-100 selection:text-red-900 overflow-x-hidden">
             <Navbar />
 
             {/* Flash Message Banner */}

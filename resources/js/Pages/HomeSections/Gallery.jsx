@@ -42,7 +42,7 @@ export default function Gallery() {
                         Galería
                     </ScrollReveal>
                     <ScrollReveal distance="translate-y-8" delay={150}>
-                        <h2 className="text-4xl sm:text-5xl lg:text-[56px] font-black text-[#08111F] leading-[1.1] tracking-tight font-sans">
+                        <h2 className="text-3xl sm:text-4xl lg:text-[56px] font-black text-[#08111F] leading-[1.1] tracking-tight font-sans">
                             Nuestros espacios educativos
                         </h2>
                     </ScrollReveal>

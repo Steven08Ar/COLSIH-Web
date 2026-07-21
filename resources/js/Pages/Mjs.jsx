@@ -67,7 +67,7 @@ export default function Mjs() {
                             </span>
                         </ScrollReveal>
                         <ScrollReveal distance="translate-y-6" delay={150}>
-                            <h1 className="text-4xl sm:text-5xl lg:text-[64px] font-black text-white leading-[1.05] tracking-tight font-sans">
+                            <h1 className="text-3xl sm:text-4xl lg:text-[64px] font-black text-white leading-[1.05] tracking-tight font-sans">
                                 Movimiento Juvenil Salesiano
                             </h1>
                         </ScrollReveal>

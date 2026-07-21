@@ -62,7 +62,7 @@ export default function News({ noticias }) {
                             Nuestra Comunidad
                         </ScrollReveal>
                         <ScrollReveal distance="translate-y-8" delay={150}>
-                            <h2 className="text-4xl sm:text-5xl lg:text-[56px] font-black text-[#08111F] leading-[1.1] tracking-tight font-sans">
+                            <h2 className="text-3xl sm:text-4xl lg:text-[56px] font-black text-[#08111F] leading-[1.1] tracking-tight font-sans">
                                 Últimas noticias y eventos
                             </h2>
                         </ScrollReveal>
@@ -119,7 +119,7 @@ export default function News({ noticias }) {
                                     </div>
  
                                     {/* Body */}
-                                    <div className="p-8 flex-grow flex flex-col justify-between text-left space-y-6">
+                                    <div className="p-5 sm:p-8 flex-grow flex flex-col justify-between text-left space-y-6">
                                         <div className="space-y-3">
                                             <time className="text-[10px] font-black text-slate-400 uppercase tracking-widest" dateTime={item.publicado_en}>
                                                 {formatDate(item.publicado_en)}

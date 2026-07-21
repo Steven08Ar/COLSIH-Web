@@ -59,7 +59,7 @@ export default function Programs() {
                 </div>
 
                 {/* Interactive Expanding Accordion Panels */}
-                <div className="flex flex-col lg:flex-row items-stretch gap-6 h-auto lg:h-[580px] w-full min-h-[580px]">
+                <div className="flex flex-col lg:flex-row items-stretch gap-6 h-auto lg:h-[580px] w-full lg:min-h-[580px]">
                     {list.map((item, index) => {
                         const isExpanded = hoveredIndex === index;
 
@@ -87,7 +87,7 @@ export default function Programs() {
                                 </div>
 
                                 {/* Layer 2: Interactive Content Overlays */}
-                                <div className="relative z-10 w-full h-full p-8 md:p-10 flex flex-col justify-between items-start text-left">
+                                <div className="relative z-10 w-full h-full p-5 sm:p-8 md:p-10 flex flex-col justify-between items-start text-left">
                                     
                                     {/* Top row: Number badge */}
                                     <div className="w-full flex justify-between items-start">
@@ -149,7 +149,7 @@ export default function Programs() {
                                             >
                                                 <Link
                                                     href={item.ctaLink}
-                                                    className="inline-flex items-center gap-2 bg-white text-[#08111F] hover:bg-[#003C8F] hover:text-white font-extrabold text-xs uppercase tracking-wider px-6 py-4.5 rounded-xl transition-all cursor-pointer focus:outline-none"
+                                                    className="inline-flex items-center gap-2 bg-white text-[#08111F] hover:bg-[#003C8F] hover:text-white font-extrabold text-[10px] sm:text-xs uppercase tracking-wider px-4 sm:px-6 py-3 sm:py-4 rounded-xl transition-all cursor-pointer focus:outline-none w-full sm:w-auto justify-center sm:justify-start"
                                                 >
                                                     {item.ctaText}
                                                     <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">

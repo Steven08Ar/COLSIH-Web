@@ -102,7 +102,7 @@ export default function Stats() {
             <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px]">
                 
                 {/* Horizontal Stat Items divided by fine line grid with top animated borders */}
-                <div className="grid grid-cols-2 md:grid-cols-4 border-t border-b md:border-l md:border-r border-slate-100 divide-y md:divide-y-0 md:divide-x divide-slate-100">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 border-t border-b md:border-l md:border-r border-slate-100 divide-y md:divide-y-0 md:divide-x divide-slate-100">
                     {stats.map((stat, index) => {
                         const isEven = index % 2 === 0;
                         const accentColor = isEven ? '#003C8F' : '#800A15';
@@ -112,7 +112,7 @@ export default function Stats() {
                                 key={index}
                                 distance="translate-y-8"
                                 delay={index * 100}
-                                className={`group relative flex flex-col justify-center p-6 md:p-8 lg:p-10 text-left transition-all duration-300 ${hoverBgClass} overflow-hidden`}
+                                className={`group relative flex flex-col justify-center p-4 sm:p-6 md:p-8 lg:p-10 text-left transition-all duration-300 ${hoverBgClass} overflow-hidden`}
                             >
                                 {/* Top sliding brand border indicator */}
                                 <div 
@@ -120,7 +120,7 @@ export default function Stats() {
                                     style={{ backgroundColor: accentColor }}
                                 />
 
-                                <span className="block text-4xl sm:text-5xl lg:text-6xl font-black text-[#08111F] tracking-tighter leading-none font-sans transition-all duration-300 group-hover:text-[var(--accent-hover)] group-hover:translate-x-1" style={{ '--accent-hover': accentColor }}>
+                                <span className="block text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-[#08111F] tracking-tighter leading-none font-sans transition-all duration-300 group-hover:text-[var(--accent-hover)] group-hover:translate-x-1" style={{ '--accent-hover': accentColor }}>
                                     <CountUp end={stat.value} startCount={inView} />
                                 </span>
                                 <span 
@@ -129,7 +129,7 @@ export default function Stats() {
                                 >
                                     {stat.label}
                                 </span>
-                                <span className="block text-xs font-semibold text-slate-400 mt-1">
+                                <span className="block text-[10px] sm:text-xs font-semibold text-slate-400 mt-1">
                                     {stat.sublabel}
                                 </span>
                             </ScrollReveal>

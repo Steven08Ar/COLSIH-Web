@@ -96,9 +96,9 @@ export default function Admissions() {
                 {/* Bottom CTA block */}
                 <ScrollReveal distance="translate-y-6" delay={300} className="pt-8 text-left">
                     <div className="inline-flex flex-col sm:flex-row items-center gap-6">
-                        <Link 
-                            href="/inscripcion" 
-                            className="inline-flex items-center justify-center bg-[#800A15] hover:bg-[#c4181e] text-white font-extrabold text-sm px-8 py-4.5 rounded-xl shadow-sm active:scale-[0.98] transition-all cursor-pointer"
+                        <Link
+                            href="/inscripcion"
+                            className="inline-flex items-center justify-center bg-[#800A15] hover:bg-[#c4181e] text-white font-extrabold text-xs sm:text-sm w-full sm:w-auto px-6 sm:px-8 py-4.5 rounded-xl shadow-sm active:scale-[0.98] transition-all cursor-pointer"
                         >
                             Iniciar inscripción online
                         </Link>

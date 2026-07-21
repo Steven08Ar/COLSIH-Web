@@ -76,7 +76,7 @@ function TiltCard({ pillar, index }) {
                     transformStyle: 'preserve-3d',
                     perspective: 1000
                 }}
-                className="relative h-full min-h-[340px] border border-white/10 p-8 md:p-10 lg:p-12 rounded-3xl bg-white/[0.02] backdrop-blur-md select-none transition-all duration-300 hover:border-white/20 hover:bg-white/[0.05] hover:shadow-[0_25px_60px_rgba(0,0,0,0.3)] cursor-pointer group flex flex-col justify-between"
+                className="relative h-full min-h-[280px] sm:min-h-[340px] border border-white/10 p-6 sm:p-8 rounded-3xl bg-white/[0.02] backdrop-blur-md select-none transition-all duration-300 hover:border-white/20 hover:bg-white/[0.05] hover:shadow-[0_25px_60px_rgba(0,0,0,0.3)] cursor-pointer group flex flex-col justify-between"
             >
                 {/* Spotlight Tracker Background Layer */}
                 <motion.div 
@@ -174,7 +174,7 @@ export default function WhyChooseUs() {
                         </span>
                     </ScrollReveal>
                     <ScrollReveal distance="translate-y-6" delay={150}>
-                        <h2 className="text-4xl sm:text-5xl lg:text-[56px] font-black text-white leading-[1.05] tracking-tight font-sans">
+                        <h2 className="text-3xl sm:text-4xl lg:text-[56px] font-black text-white leading-[1.05] tracking-tight font-sans">
                             Pilares de nuestra excelencia
                         </h2>
                     </ScrollReveal>

@@ -41,7 +41,7 @@ export default function FAQ({ preguntas }) {
                     <span className="text-[#800A15] text-[13px] font-bold tracking-[3px] uppercase block font-sans">
                         SOPORTE
                     </span>
-                    <h2 className="text-4xl sm:text-5xl lg:text-[56px] font-black text-[#08111F] leading-[1.05] tracking-tight font-sans">
+                    <h2 className="text-3xl sm:text-4xl lg:text-[56px] font-black text-[#08111F] leading-[1.05] tracking-tight font-sans">
                         Preguntas frecuentes
                     </h2>
                 </div>

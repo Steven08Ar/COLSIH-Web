@@ -168,7 +168,7 @@ export default function NoticiasShow({ noticia, relacionadas }) {
                             <span className={`inline-block text-[11px] font-extrabold uppercase tracking-widest px-4 py-2 rounded-full border ${getCategoryStyles(noticia.categoria)}`}>
                                 {categoryLabel(noticia.categoria)}
                             </span>
-                            <h1 className="text-4xl sm:text-5xl lg:text-[52px] font-black text-[#08111F] leading-[1.15] tracking-tight">
+                            <h1 className="text-2xl sm:text-4xl lg:text-[52px] font-black text-[#08111F] leading-[1.15] tracking-tight">
                                 {noticia.titulo}
                             </h1>
                             <div className="flex items-center gap-6 text-xs text-slate-400 font-bold border-b border-slate-100 pb-6">
@@ -191,7 +191,7 @@ export default function NoticiasShow({ noticia, relacionadas }) {
                         )}
 
                         {/* Contenido del tablero (Full width flex wrap) */}
-                        <div className="bg-white border border-slate-100 rounded-[32px] p-8 md:p-12 shadow-xs space-y-6">
+                        <div className="bg-white border border-slate-100 rounded-[32px] p-5 sm:p-8 md:p-12 shadow-xs space-y-6">
                             {noticia.resumen && (
                                 <div className="border-l-4 border-[#800A15] pl-6 py-1.5 text-left mb-6">
                                     <p className="text-lg md:text-[22px] font-bold text-slate-700 leading-relaxed">

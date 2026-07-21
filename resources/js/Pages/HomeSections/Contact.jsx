@@ -37,7 +37,7 @@ export default function Contact() {
                                 Contacto
                             </ScrollReveal>
                             <ScrollReveal distance="translate-y-8" delay={150}>
-                                <h2 className="text-4xl sm:text-5xl lg:text-[56px] font-black text-[#08111F] leading-[1.1] tracking-tight font-sans">
+                                <h2 className="text-3xl sm:text-4xl lg:text-[56px] font-black text-[#08111F] leading-[1.1] tracking-tight font-sans">
                                     Conéctate con nosotros
                                 </h2>
                             </ScrollReveal>
@@ -95,7 +95,7 @@ export default function Contact() {
 
                     {/* Right Column: Modern Contact Form (7 columns) */}
                     <div className="col-span-12 lg:col-span-7">
-                        <ScrollReveal distance="translate-y-16" delay={450} className="w-full max-w-xl mx-auto lg:mr-0 bg-slate-50 border border-slate-100 rounded-3xl p-8 md:p-12 shadow-xs">
+                        <ScrollReveal distance="translate-y-16" delay={450} className="w-full max-w-xl mx-auto lg:mr-0 bg-slate-50 border border-slate-100 rounded-3xl p-5 sm:p-8 md:p-12 shadow-xs">
                             {submitted ? (
                                 <div className="min-h-[300px] flex flex-col justify-center items-center text-center space-y-4 animate-fadeIn">
                                     <div className="w-16 h-16 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shadow-md animate-bounce">

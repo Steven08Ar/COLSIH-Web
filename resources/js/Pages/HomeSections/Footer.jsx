@@ -17,10 +17,10 @@ export default function Footer() {
             <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] py-16 md:py-24 space-y-16">
                 
                 {/* Upper Footer: Branding & Columns */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 md:gap-8 items-start">
-                    
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+
                     {/* Brand Info (4 columns) */}
-                    <div className="col-span-12 lg:col-span-4 space-y-6 text-left">
+                    <div className="lg:col-span-4 space-y-6 text-left">
                         {isMjs ? (
                             <Link href="/mjs" className="flex items-center gap-3 group focus:outline-none shrink-0">
                                 <img 
@@ -77,7 +77,7 @@ export default function Footer() {
                     </div>
 
                     {/* Columns (4 columns for categories) */}
-                    <div className="lg:col-span-5 grid grid-cols-2 md:grid-cols-3 gap-8">
+                    <div className="lg:col-span-5 grid grid-cols-1 sm:grid-cols-2 gap-8">
                         {isMjs ? (
                             <>
                                 {/* MJS groups */}
@@ -144,7 +144,7 @@ export default function Footer() {
                     </div>
 
                     {/* Newsletter (3 columns) */}
-                    <div className="col-span-12 lg:col-span-3 space-y-4 text-left">
+                    <div className="lg:col-span-3 space-y-4 text-left">
                         <h4 className="text-sm font-extrabold uppercase tracking-wider relative pb-2.5 text-white font-sans">
                             {isMjs ? "Únete al MJS" : "Boletín"}
                             <span className="absolute bottom-0 left-0 w-8 h-[2px] bg-[#800A15] rounded-full" />

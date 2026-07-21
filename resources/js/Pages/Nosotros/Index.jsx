@@ -273,7 +273,7 @@ export default function NosotrosIndex() {
 
             {/* SECTION 5: NUESTRO IMPACTO (Floating card overlay) */}
             <section className="relative z-20 max-w-[1440px] mx-auto px-6 md:px-12 -mt-16 text-center">
-                <div className="bg-white border border-slate-100 rounded-3xl shadow-xl shadow-slate-200/40 p-8 grid grid-cols-2 lg:grid-cols-4 gap-8">
+                <div className="bg-white border border-slate-100 rounded-3xl shadow-xl shadow-slate-200/40 p-6 md:p-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
                     {/* Stat 1 */}
                     <div className="flex items-center gap-4.5 text-left md:justify-center">
                         <div className="w-12 h-12 rounded-full bg-[#800A15]/10 text-[#800A15] flex items-center justify-center shrink-0">

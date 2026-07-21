@@ -102,7 +102,7 @@ export default function Stats() {
             <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px]">
                 
                 {/* Horizontal Stat Items divided by fine line grid with top animated borders */}
-                <div className="grid grid-cols-2 lg:grid-cols-4 border-t border-b lg:border-l lg:border-r border-slate-100 divide-y lg:divide-y-0 lg:divide-x divide-slate-100">
+                <div className="grid grid-cols-2 md:grid-cols-4 border-t border-b md:border-l md:border-r border-slate-100 divide-y md:divide-y-0 md:divide-x divide-slate-100">
                     {stats.map((stat, index) => {
                         const isEven = index % 2 === 0;
                         const accentColor = isEven ? '#003C8F' : '#800A15';

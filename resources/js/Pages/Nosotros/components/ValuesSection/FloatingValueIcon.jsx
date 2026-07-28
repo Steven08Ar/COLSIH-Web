@@ -1,10 +1,34 @@
 import React from 'react';
-import * as LucideIcons from 'lucide-react';
+import { 
+    Sun, 
+    HandHelping, 
+    Heart, 
+    ShieldCheck, 
+    Smile, 
+    Users, 
+    Lightbulb, 
+    HeartHandshake, 
+    Star, 
+    Sparkles 
+} from 'lucide-react';
 import { motion } from 'framer-motion';
+
+const ICON_MAP = {
+    Sun,
+    HandHelping,
+    Heart,
+    ShieldCheck,
+    Smile,
+    Users,
+    Lightbulb,
+    HeartHandshake,
+    Star,
+    Sparkles,
+};
 
 export default function FloatingValueIcon({ iconName, alignment, index }) {
     // Dynamic icon lookup with a safe fallback
-    const IconComponent = LucideIcons[iconName] || LucideIcons.Sparkles;
+    const IconComponent = ICON_MAP[iconName] || Sparkles;
 
     // Alternating institutional colors: odd cards = Vino tinto, even cards = Azul rey
     const isVino = index % 2 === 0;

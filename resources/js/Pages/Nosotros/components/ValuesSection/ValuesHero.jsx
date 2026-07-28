@@ -92,29 +92,40 @@ export default function ValuesHero() {
                         className="relative w-full max-w-[430px] aspect-[4/5] flex items-center justify-center"
                     >
                         
-                        {/* Outer Shield Frame shape in background */}
-                        <div className="absolute inset-0 bg-gradient-to-b from-[#800A15]/10 to-[#003C8F]/10 dark:from-slate-900 dark:to-slate-950 rounded-[48px] blur-2xl pointer-events-none" />
+                        {/* Outer Shield Frame shape in background blur */}
+                        <div className="absolute inset-0 bg-gradient-to-b from-[#800A15]/15 to-[#003C8F]/15 dark:from-slate-900 dark:to-slate-950 rounded-[48px] blur-2xl pointer-events-none" />
 
-                        {/* Styled Graphic Frame - Shield Mask */}
+                        {/* Single Graphic Frame - Shield / Diamond Mask */}
                         <div 
-                            className="w-[90%] h-[90%] bg-slate-100 dark:bg-slate-900 border-[6px] border-white dark:border-slate-800 shadow-2xl relative overflow-hidden flex items-center justify-center"
+                            className="w-[90%] h-[90%] bg-slate-100 dark:bg-slate-900 border-[6px] border-white dark:border-slate-800 shadow-2xl relative overflow-hidden flex items-center justify-center z-10"
                             style={{
                                 clipPath: 'polygon(50% 0%, 100% 15%, 100% 80%, 50% 100%, 0% 80%, 0% 15%)'
                             }}
                         >
+                            {/* 1. Full Background JPG Photo (Shifted Upwards & Focused on Children) */}
                             <img 
-                                src="/galeria/estudiantes-colsih.png"
-                                alt="Estudiantes del Colegio"
-                                className="w-full h-full object-cover scale-110 -translate-y-2"
+                                src="/valores/hermanos.JPG"
+                                alt="Hermanos Salesianos"
+                                className="absolute inset-0 w-full h-full object-cover object-[center_82%] scale-[1.45] -translate-y-12"
+                            />
+
+                            {/* 2. Soft Darkening Vignette Gradient Overlay */}
+                            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent pointer-events-none" />
+
+                            {/* 3. Transparent PNG Cutout Layer with Enhanced Drop Shadow (Aligns 1:1 with JPG) */}
+                            <img 
+                                src="/valores/hermanos_sin_fondo.png"
+                                alt="Hermanos Salesianos (Sin Fondo)"
+                                className="absolute inset-0 w-full h-full object-cover object-[center_82%] scale-[1.45] -translate-y-12 filter drop-shadow-[0_25px_35px_rgba(0,0,0,0.85)] drop-shadow-[0_5px_12px_rgba(0,0,0,0.5)]"
                             />
                         </div>
 
-                        {/* Floating elements surrounding the shield */}
+                        {/* Floating elements surrounding the shield - Elevated z-index (z-30) */}
                         {/* 1. Left Heart (Blue) */}
                         <motion.div 
                             animate={{ y: [0, -10, 0] }}
                             transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-                            className="absolute top-[12%] -left-4 w-12 h-12 rounded-2xl bg-blue-600 dark:bg-blue-800 text-white shadow-xl shadow-blue-500/20 flex items-center justify-center rotate-12"
+                            className="absolute top-[12%] -left-4 w-12 h-12 rounded-2xl bg-blue-600 dark:bg-blue-800 text-white shadow-xl shadow-blue-500/30 flex items-center justify-center rotate-12 z-30"
                         >
                             <Heart className="w-5.5 h-5.5" fill="currentColor" />
                         </motion.div>
@@ -123,7 +134,7 @@ export default function ValuesHero() {
                         <motion.div 
                             animate={{ y: [0, 8, 0] }}
                             transition={{ duration: 4.5, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
-                            className="absolute top-[8%] -right-2 w-14 h-14 rounded-2xl bg-amber-400 text-white shadow-xl shadow-amber-400/20 flex items-center justify-center -rotate-12"
+                            className="absolute top-[8%] -right-2 w-14 h-14 rounded-2xl bg-amber-400 text-white shadow-xl shadow-amber-400/30 flex items-center justify-center -rotate-12 z-30"
                         >
                             <Star className="w-7 h-7" fill="currentColor" />
                         </motion.div>
@@ -132,7 +143,7 @@ export default function ValuesHero() {
                         <motion.div 
                             animate={{ y: [0, -6, 0] }}
                             transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
-                            className="absolute bottom-[10%] right-[10%] w-12 h-12 rounded-2xl bg-[#800A15] text-white shadow-xl shadow-red-500/20 flex items-center justify-center rotate-[15deg]"
+                            className="absolute bottom-[10%] right-[10%] w-12 h-12 rounded-2xl bg-[#800A15] text-white shadow-xl shadow-red-500/30 flex items-center justify-center rotate-[15deg] z-30"
                         >
                             <Compass className="w-6 h-6" />
                         </motion.div>

@@ -29,7 +29,7 @@ class NoticiaAdminController extends Controller
             'categoria'    => 'required|in:noticia,evento,comunicado',
             'activo'       => 'nullable',
             'publicado_en' => 'nullable|date',
-            'portada'      => 'nullable|image|max:6144',
+            'portada'      => 'nullable|file|mimes:jpeg,png,jpg,gif,svg,webp,heic,heif,HEIC,HEIF|max:20480',
         ]);
 
         $data = $request->only(['titulo', 'resumen', 'categoria', 'publicado_en']);
@@ -57,7 +57,7 @@ class NoticiaAdminController extends Controller
             'categoria'    => 'required|in:noticia,evento,comunicado',
             'activo'       => 'nullable',
             'publicado_en' => 'nullable|date',
-            'portada'      => 'nullable|image|max:6144',
+            'portada'      => 'nullable|file|mimes:jpeg,png,jpg,gif,svg,webp,heic,heif,HEIC,HEIF|max:20480',
         ]);
 
         $data = $request->only(['titulo', 'resumen', 'categoria', 'publicado_en']);

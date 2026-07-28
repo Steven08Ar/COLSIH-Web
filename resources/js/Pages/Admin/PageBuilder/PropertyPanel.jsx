@@ -4,6 +4,7 @@ import {
     Type, SlidersHorizontal, Sparkles, Image, Video,
     Minus, Quote, List
 } from 'lucide-react';
+import { processImageFile } from '@/utils/heicConverter';
 
 function toEmbedUrl(url) {
     if (!url) return null;
@@ -19,9 +20,10 @@ function ImagenPanel({ block, onUpdateContent }) {
     const previewUrl = block.content.url || null;
     const externalUrl = block.content.dbPath?.startsWith('http') ? block.content.dbPath : '';
 
-    function handleFile(file) {
-        if (!file || !file.type.startsWith('image/')) return;
-        onUpdateContent({ url: URL.createObjectURL(file), _pendingFile: file, dbPath: '' });
+    async function handleFile(file) {
+        if (!file) return;
+        const processed = await processImageFile(file);
+        onUpdateContent({ url: URL.createObjectURL(processed), _pendingFile: processed, dbPath: '' });
     }
 
     function handleExternalUrl(e) {
@@ -66,9 +68,9 @@ function ImagenPanel({ block, onUpdateContent }) {
                         <Image className="w-5 h-5 text-slate-300" />
                     </div>
                     <span className="text-xs font-bold text-slate-600">{previewUrl && !externalUrl ? 'Cambiar imagen' : 'Arrastrar o hacer clic'}</span>
-                    <span className="text-[10px] text-slate-400">PNG, JPG, WebP · Máx. 6MB</span>
+                    <span className="text-[10px] text-slate-400">PNG, JPG, WebP, HEIC · Máx. 20MB</span>
                 </div>
-                <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={(e) => handleFile(e.target.files[0])} />
+                <input ref={fileRef} type="file" accept="image/*,.heic,.heif,image/heic,image/heif" className="hidden" onChange={(e) => handleFile(e.target.files[0])} />
             </div>
 
             {/* Divider */}

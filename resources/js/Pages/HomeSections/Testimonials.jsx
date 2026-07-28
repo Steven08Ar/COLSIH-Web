@@ -1,11 +1,17 @@
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import ScrollReveal from './ScrollReveal';
 
 function toEmbedUrl(url) {
     if (!url) return null;
-    if (url.includes('/embed/')) return url;
-    const m = url.match(/(?:v=|youtu\.be\/)([A-Za-z0-9_-]{11})/);
-    return m ? `https://www.youtube-nocookie.com/embed/${m[1]}` : url;
+    let clean = url.trim();
+    if (clean.includes('watch?v=')) {
+        clean = clean.replace('watch?v=', 'embed/');
+    } else if (clean.includes('youtu.be/')) {
+        clean = clean.replace('youtu.be/', 'youtube.com/embed/');
+    }
+    const baseUrl = clean.split('?')[0];
+    return `${baseUrl}?autoplay=1&modestbranding=1&rel=0&playsinline=1&enablejsapi=1`;
 }
 
 export default function Testimonials({ testimonios }) {
@@ -43,11 +49,12 @@ export default function Testimonials({ testimonios }) {
         setActiveIndex((prev) => (prev - 1 + list.length) % list.length);
     };
 
-    // Auto rotate every 7 seconds
+    // Auto rotate every 7 seconds (paused when video modal is open)
     useEffect(() => {
+        if (activeVideoUrl) return;
         const interval = setInterval(handleNext, 7000);
         return () => clearInterval(interval);
-    }, [activeIndex]);
+    }, [activeIndex, activeVideoUrl]);
 
     // Escape key listener to close modal
     useEffect(() => {
@@ -60,15 +67,18 @@ export default function Testimonials({ testimonios }) {
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, []);
 
-    // Prevent background scrolling when modal is open
+    // Prevent background scrolling on html & body when video modal is open
     useEffect(() => {
         if (activeVideoUrl) {
             document.body.style.overflow = 'hidden';
+            document.documentElement.style.overflow = 'hidden';
         } else {
-            document.body.style.overflow = 'unset';
+            document.body.style.overflow = '';
+            document.documentElement.style.overflow = '';
         }
         return () => {
-            document.body.style.overflow = 'unset';
+            document.body.style.overflow = '';
+            document.documentElement.style.overflow = '';
         };
     }, [activeVideoUrl]);
 
@@ -195,8 +205,8 @@ export default function Testimonials({ testimonios }) {
                                             style={{ objectPosition: `center ${item.fotoPos}%` }}
                                         />
                                         
-                                        {/* Dark overlay mask - z-10 to stay on top of the image */}
-                                        <div className="absolute inset-0 bg-slate-950/75 group-hover:bg-slate-950/80 transition-colors duration-500 z-10"></div>
+                                        {/* Light gradient overlay mask - vibrant photo visibility with text readability */}
+                                        <div className="absolute inset-0 bg-gradient-to-t from-[#08111F]/90 via-[#08111F]/35 to-transparent group-hover:from-[#08111F]/95 group-hover:via-[#08111F]/45 transition-all duration-500 z-10"></div>
 
                                         {/* Play Button Overlay — solo si video_activo */}
                                         {item.videoActivo && (
@@ -276,35 +286,37 @@ export default function Testimonials({ testimonios }) {
                     </div>
                 </ScrollReveal>
 
-                {/* Floating Video Modal */}
-                {activeVideoUrl && (
+                {/* Floating Video Modal mounted to document.body via Portal */}
+                {activeVideoUrl && typeof document !== 'undefined' && createPortal(
                     <div
-                        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm transition-opacity duration-300"
+                        className="fixed inset-0 z-[999999] flex items-center justify-center p-4 sm:p-6 md:p-10 bg-slate-950/95 transform-gpu transition-opacity duration-200 animate-fadeIn"
                         onClick={() => setActiveVideoUrl(null)}
                     >
-                        {/* Close button outside wrapper */}
+                        {/* Sleek Floating Close Button */}
                         <button
                             onClick={() => setActiveVideoUrl(null)}
-                            className="absolute top-6 right-6 w-12 h-12 bg-white/10 hover:bg-white/20 text-white rounded-full flex items-center justify-center text-xl transition-all cursor-pointer border border-white/10 z-55"
+                            className="absolute top-5 right-5 sm:top-8 sm:right-8 w-12 h-12 bg-white/15 hover:bg-white/25 active:scale-95 hover:scale-110 text-white rounded-full flex items-center justify-center text-lg font-bold transition-all duration-200 cursor-pointer border border-white/25 backdrop-blur-md shadow-2xl z-[1000000]"
                             aria-label="Cerrar video"
                         >
                             ✕
                         </button>
 
-                        {/* Responsive Video Container */}
+                        {/* Isolated Responsive Video Frame */}
                         <div
-                            className="relative bg-black rounded-3xl overflow-hidden max-w-4xl w-full aspect-video shadow-2xl border border-white/10 transform scale-100 transition-transform duration-300"
+                            className="relative bg-black rounded-2xl sm:rounded-3xl overflow-hidden max-w-4xl w-full aspect-video shadow-[0_25px_80px_rgba(0,0,0,0.98)] border border-white/20 ring-1 ring-white/15 transform-gpu transition-all duration-300 z-[1000000]"
                             onClick={(e) => e.stopPropagation()}
                         >
                             <iframe
-                                src={`${activeVideoUrl}?autoplay=1`}
-                                title="Testimonio de Video"
-                                className="w-full h-full"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                src={activeVideoUrl}
+                                title="Testimonio de Video COLSIH"
+                                className="w-full h-full border-0 rounded-2xl sm:rounded-3xl transform-gpu"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                                 allowFullScreen
-                            ></iframe>
+                                loading="eager"
+                            />
                         </div>
-                    </div>
+                    </div>,
+                    document.body
                 )}
             </div>
 

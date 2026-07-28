@@ -24,8 +24,8 @@ export default function Footer() {
                         {isMjs ? (
                             <Link href="/mjs" className="flex items-center gap-3 group focus:outline-none shrink-0">
                                 <img 
-                                    src="/MJS-Colombia.png" 
-                                    alt="Logo MJS Colombia" 
+                                    src="/marca/mjs-colombia.png"
+                                    alt="Logo MJS Colombia"
                                     className="h-14 w-auto object-contain transition-transform duration-300 group-hover:scale-105" 
                                 />
                                 <div className="flex flex-col leading-none text-white font-sans">
@@ -39,9 +39,9 @@ export default function Footer() {
                         ) : (
                             <Link href="/" className="flex items-center gap-3 group focus:outline-none shrink-0">
                                 <img 
-                                    src="/Logo COLSIH.svg" 
-                                    alt="Logo COLSIH" 
-                                    className="h-14 w-auto object-contain transition-transform duration-300 group-hover:scale-105" 
+                                    src="/marca/logo-colsih.svg"
+                                    alt="Logo COLSIH"
+                                    className="h-14 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
                                 />
                                 <div className="flex flex-col leading-none text-white font-sans">
                                     <span className="text-[11px] tracking-widest uppercase opacity-60 font-semibold">Colegio</span>

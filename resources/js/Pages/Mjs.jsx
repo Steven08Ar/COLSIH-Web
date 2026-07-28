@@ -13,8 +13,8 @@ export default function Mjs() {
             link.href = href + '?v=' + Date.now();
             document.head.appendChild(link);
         }
-        setFavicon('/Logo-MJS.svg');
-        return () => setFavicon('/Logo COLSIH.svg');
+        setFavicon('/marca/logo-mjs.svg');
+        return () => setFavicon('/marca/logo-colsih.svg');
     }, []);
     const groups = [
         {

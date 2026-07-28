@@ -61,7 +61,7 @@ export default function Hero({ setVideoOpen }) {
                     {/* Logo (left) */}
                     <Link href="/" className="flex items-center gap-3 group focus:outline-none shrink-0">
                         <img
-                            src="/Logo COLSIH.svg"
+                            src="/marca/logo-colsih.svg"
                             alt="Logo COLSIH"
                             className="h-14 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
                         />
@@ -131,7 +131,7 @@ export default function Hero({ setVideoOpen }) {
                             title="Movimiento Juvenil Salesiano"
                         >
                             <img
-                                src="/Logo-MJS.svg"
+                                src="/marca/logo-mjs.svg"
                                 alt="Logo MJS Colombia"
                                 className="h-12 w-auto object-contain hover:scale-105 transition-all duration-300"
                             />
@@ -183,7 +183,7 @@ export default function Hero({ setVideoOpen }) {
                                     title="Movimiento Juvenil Salesiano"
                                 >
                                     <img
-                                        src="/Logo-MJS.svg"
+                                        src="/marca/logo-mjs.svg"
                                         alt="Logo MJS Colombia"
                                         className="h-10 w-auto object-contain hover:scale-105 transition-all duration-300"
                                     />

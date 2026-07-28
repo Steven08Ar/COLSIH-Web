@@ -183,8 +183,8 @@ export default function PageTransitionLoader({ initialComponent }) {
                     key={`ske-${loaderSessionId}`}
                     src={
                         isMjs 
-                            ? '/Esqueleto MJS.svg' 
-                            : (isReturningFromMjs ? '/Bordado COLSIH Draw.svg' : '/Bordado COLSIH.svg')
+                            ? '/marca/esqueleto-mjs.svg'
+                            : (isReturningFromMjs ? '/marca/bordado-draw.svg' : '/marca/bordado-colsih.svg')
                     } 
                     alt={isMjs ? 'Esqueleto MJS' : 'Bordado COLSIH'} 
                     className="absolute inset-0 w-full h-full object-contain p-6 overflow-visible transition-opacity duration-[800ms] ease-out"
@@ -204,8 +204,8 @@ export default function PageTransitionLoader({ initialComponent }) {
                 {isMjs && (
                     <img 
                         key={`fill-mjs-${loaderSessionId}`}
-                        src="/Logo-MJS.svg" 
-                        alt="Logo MJS" 
+                        src="/marca/logo-mjs.svg"
+                        alt="Logo MJS"
                         className={`absolute inset-0 w-full h-full object-contain p-6 transition-all duration-[800ms] ease-out pointer-events-none ${
                             showMjsFilled ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 translate-y-1'
                         }`}
@@ -219,8 +219,8 @@ export default function PageTransitionLoader({ initialComponent }) {
                 {isReturningFromMjs && (
                     <img 
                         key={`fill-colsih-${loaderSessionId}`}
-                        src="/Logo COLSIH.svg" 
-                        alt="Logo COLSIH" 
+                        src="/marca/logo-colsih.svg"
+                        alt="Logo COLSIH"
                         className={`absolute inset-0 w-full h-full object-contain p-6 transition-all duration-[800ms] ease-out pointer-events-none ${
                             showColsihFilled ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 translate-y-1'
                         }`}

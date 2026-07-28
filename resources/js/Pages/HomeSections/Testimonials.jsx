@@ -6,21 +6,21 @@ const FALLBACK = [
         texto: 'La educación integral del colegio potenció mi excelencia académica y me enseñó el valor de liderar con justicia social y valores cristianos.',
         nombre: 'María Camila Restrepo',
         cargo: 'Egresada Promoción 2024',
-        image: '/testimonio_egresada.png',
+        image: '/testimonios/egresada.png',
         videoUrl: 'https://www.youtube.com/embed/g3jS1rD5Kwk',
     },
     {
         texto: 'Como padre de familia, me siento plenamente respaldado. El acompañamiento docente y la formación en valores salesianos guía a mis hijos cada día.',
         nombre: 'Dr. Alejandro Gómez',
         cargo: 'Padre de Familia - Primaria',
-        image: '/testimonio_padre.png',
+        image: '/testimonios/padre.png',
         videoUrl: 'https://www.youtube.com/embed/qK10_2gR_U4',
     },
     {
         texto: 'Aprender con laboratorios interactivos me motiva a explorar mi pasión por la ciencia. Los profesores siempre nos impulsan a ir más allá.',
         nombre: 'Mateo Suárez',
         cargo: 'Estudiante de 10° Grado',
-        image: '/testimonio_estudiante.png',
+        image: '/testimonios/estudiante.png',
         videoUrl: 'https://www.youtube.com/embed/4b_W-N90e0c',
     },
 ];
@@ -33,7 +33,7 @@ function toEmbedUrl(url) {
 }
 
 export default function Testimonials({ testimonios }) {
-    const defaultImages = ['/testimonio_egresada.png', '/testimonio_padre.png', '/testimonio_estudiante.png'];
+    const defaultImages = ['/testimonios/egresada.png', '/testimonios/padre.png', '/testimonios/estudiante.png'];
     const defaultVideos = [
         'https://www.youtube-nocookie.com/embed/g3jS1rD5Kwk',
         'https://www.youtube-nocookie.com/embed/qK10_2gR_U4',

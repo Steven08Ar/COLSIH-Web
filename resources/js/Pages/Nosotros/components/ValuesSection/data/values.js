@@ -5,11 +5,11 @@ export const valoresData = [
         titulo: "Espiritualidad",
         descripcion: "Vivir la trascendencia y la búsqueda de la felicidad.",
         iconName: "Sun",
-        portada: "/Colegio Afuera.webp",
+        portada: "/galeria/colegio-afuera.webp",
         galeria: [
-            "/historia_1983.png",
-            "/historia_1995.png",
-            "/historia_2010.png"
+            "/nosotros/historia/historia-1983.png",
+            "/nosotros/historia/historia-1995.png",
+            "/nosotros/historia/historia-2010.png"
         ]
     },
     {
@@ -18,11 +18,11 @@ export const valoresData = [
         titulo: "Solidaridad",
         descripcion: "Sentir con el otro y comprender su situación.",
         iconName: "HandHelping",
-        portada: "/Estudiantes COLSIH.png",
+        portada: "/galeria/estudiantes-colsih.png",
         galeria: [
-            "/testimonio_egresada.png",
-            "/testimonio_estudiante.png",
-            "/testimonio_padre.png"
+            "/testimonios/egresada.png",
+            "/testimonios/estudiante.png",
+            "/testimonios/padre.png"
         ]
     },
     {
@@ -31,11 +31,11 @@ export const valoresData = [
         titulo: "Gratitud",
         descripcion: "Aceptación de la interdependencia humana desde Dios.",
         iconName: "Heart",
-        portada: "/Estudiantes de espaldas.png",
+        portada: "/galeria/estudiantes-espaldas.png",
         galeria: [
-            "/historia_hoy.png",
-            "/historia_1995.png",
-            "/historia_2010.png"
+            "/nosotros/historia/historia-hoy.png",
+            "/nosotros/historia/historia-1995.png",
+            "/nosotros/historia/historia-2010.png"
         ]
     },
     {
@@ -44,11 +44,11 @@ export const valoresData = [
         titulo: "Honestidad",
         descripcion: "Reconocimiento de la dignidad del otro y de su importancia.",
         iconName: "ShieldCheck",
-        portada: "/Colegio Afuera.webp",
+        portada: "/galeria/colegio-afuera.webp",
         galeria: [
-            "/testimonio_egresada.png",
-            "/testimonio_estudiante.png",
-            "/testimonio_padre.png"
+            "/testimonios/egresada.png",
+            "/testimonios/estudiante.png",
+            "/testimonios/padre.png"
         ]
     },
     {
@@ -57,11 +57,11 @@ export const valoresData = [
         titulo: "Perdón",
         descripcion: "Aceptación de la vulnerabilidad humana y capacidad de convivencia.",
         iconName: "Smile",
-        portada: "/Estudiantes COLSIH.png",
+        portada: "/galeria/estudiantes-colsih.png",
         galeria: [
-            "/historia_1983.png",
-            "/historia_1995.png",
-            "/historia_2010.png"
+            "/nosotros/historia/historia-1983.png",
+            "/nosotros/historia/historia-1995.png",
+            "/nosotros/historia/historia-2010.png"
         ]
     },
     {
@@ -70,11 +70,11 @@ export const valoresData = [
         titulo: "Pertenencia",
         descripcion: "Una manera concreta de vivir y estar en el mundo.",
         iconName: "Users",
-        portada: "/Estudiantes de espaldas.png",
+        portada: "/galeria/estudiantes-espaldas.png",
         galeria: [
-            "/historia_hoy.png",
-            "/historia_1995.png",
-            "/historia_2010.png"
+            "/nosotros/historia/historia-hoy.png",
+            "/nosotros/historia/historia-1995.png",
+            "/nosotros/historia/historia-2010.png"
         ]
     },
     {
@@ -83,11 +83,11 @@ export const valoresData = [
         titulo: "Innovación",
         descripcion: "Capacidad de transformar la realidad social humanizándola.",
         iconName: "Lightbulb",
-        portada: "/Colegio Afuera.webp",
+        portada: "/galeria/colegio-afuera.webp",
         galeria: [
-            "/testimonio_egresada.png",
-            "/testimonio_estudiante.png",
-            "/testimonio_padre.png"
+            "/testimonios/egresada.png",
+            "/testimonios/estudiante.png",
+            "/testimonios/padre.png"
         ]
     },
     {
@@ -96,11 +96,11 @@ export const valoresData = [
         titulo: "Respeto",
         descripcion: "Reconocimiento del que está a mi lado.",
         iconName: "HeartHandshake",
-        portada: "/Estudiantes COLSIH.png",
+        portada: "/galeria/estudiantes-colsih.png",
         galeria: [
-            "/historia_1983.png",
-            "/historia_1995.png",
-            "/historia_2010.png"
+            "/nosotros/historia/historia-1983.png",
+            "/nosotros/historia/historia-1995.png",
+            "/nosotros/historia/historia-2010.png"
         ]
     },
     {
@@ -109,11 +109,11 @@ export const valoresData = [
         titulo: "Calidad de Vida",
         descripcion: "Respuesta al sueño creador de Dios que nos dio el mundo para cuidarlo.",
         iconName: "Star",
-        portada: "/Estudiantes de espaldas.png",
+        portada: "/galeria/estudiantes-espaldas.png",
         galeria: [
-            "/historia_hoy.png",
-            "/historia_1995.png",
-            "/historia_2010.png"
+            "/nosotros/historia/historia-hoy.png",
+            "/nosotros/historia/historia-1995.png",
+            "/nosotros/historia/historia-2010.png"
         ]
     }
 ];

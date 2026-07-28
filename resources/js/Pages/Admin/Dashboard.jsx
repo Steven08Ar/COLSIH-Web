@@ -85,7 +85,7 @@ function TestimoniosTab({ testimonios, flash }) {
         } else if (editando && editando.imagen) {
             setPreviewImage(`/storage/${editando.imagen}`);
         } else {
-            setPreviewImage('/testimonio_egresada.png');
+            setPreviewImage('/testimonios/egresada.png');
         }
     }, [form.data.imagen, editando, creando]);
 
@@ -828,8 +828,8 @@ function NoticiasTab({ noticias, flash }) {
                                             <img src={portadaPreview} alt={titulo} className="w-full h-full object-cover transition duration-500" />
                                         ) : (
                                             <div className="w-full h-full flex items-center justify-center bg-slate-50 relative">
-                                                <img src="/Estudiantes COLSIH.png" className="w-full h-full object-cover grayscale opacity-15" />
-                                                <img src="/Logo COLSIH.svg" className="w-10 h-auto opacity-10 absolute center" />
+                                                <img src="/galeria/estudiantes-colsih.png" className="w-full h-full object-cover grayscale opacity-15" />
+                                                <img src="/marca/logo-colsih.svg" className="w-10 h-auto opacity-10 absolute center" />
                                             </div>
                                         )}
                                         <span className="absolute top-3 left-3 bg-[#800A15] text-white font-extrabold text-[9px] uppercase tracking-widest px-3 py-1 rounded-full shadow-xs">
@@ -1136,7 +1136,7 @@ export default function AdminDashboard({ seccion, testimonios, noticias, pregunt
                     <div>
                         {/* Sidebar Header Brand */}
                         <div className="h-20 px-8 flex items-center gap-3 border-b border-slate-100 dark:border-slate-800/80">
-                            <img src="/Logo COLSIH.svg" alt="COLSIH" className="h-10 w-auto object-contain" />
+                            <img src="/marca/logo-colsih.svg" alt="COLSIH" className="h-10 w-auto object-contain" />
                             <div className="flex flex-col">
                                 <span className="font-black text-slate-800 dark:text-white text-sm leading-tight uppercase tracking-wide">COLSIH</span>
                                 <span className="text-[10px] font-bold text-blue-600 uppercase">Admin Panel</span>

@@ -60,7 +60,7 @@ function BloqueRenderer({ bloque, onOpenVideo, onOpenImage }) {
                         </div>
                     ) : (
                         <div className="rounded-2xl overflow-hidden border border-slate-100 shadow-sm bg-slate-50 aspect-video flex items-center justify-center">
-                            <img src="/Estudiantes COLSIH.png" className="w-full h-full object-cover grayscale opacity-20" />
+                            <img src="/galeria/estudiantes-colsih.png" className="w-full h-full object-cover grayscale opacity-20" />
                         </div>
                     )}
                     {bloque.leyenda && (

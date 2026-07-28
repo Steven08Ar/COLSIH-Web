@@ -14,7 +14,7 @@ export default function Programs() {
             tagline: "Sembrando la curiosidad",
             description: "Enfoque lúdico e interactivo diseñado para promover las habilidades sociales, motoras y cognitivas básicas en un ambiente estimulante y seguro bajo la pedagogía de la confianza.",
             duration: "3 Años (Prejardín a Transición)",
-            image: "/Estudiantes COLSIH.png",
+            image: "/galeria/estudiantes-colsih.png",
             ctaLink: "/oferta-academica",
             ctaText: "Explorar Preescolar"
         },
@@ -24,7 +24,7 @@ export default function Programs() {
             tagline: "Bases intelectuales y morales",
             description: "Desarrollo profundo de habilidades lógicas, matemáticas, lectoescritura e inglés. Potenciamos el trabajo colaborativo y la formación de valores salesianos en una cultura de paz.",
             duration: "5 Años (Primero a Quinto)",
-            image: "/Estudiantes COLSIH.png",
+            image: "/galeria/estudiantes-colsih.png",
             ctaLink: "/oferta-academica",
             ctaText: "Explorar Primaria"
         },
@@ -34,7 +34,7 @@ export default function Programs() {
             tagline: "Liderazgo, ciencia e innovación",
             description: "Preparación académica avanzada con énfasis en la Media Técnica comercial y contable en convenio de articulación con el SENA, capacitando laboralmente a nuestros egresados.",
             duration: "6 Años (Sexto a Undécimo)",
-            image: "/Estudiantes COLSIH.png",
+            image: "/galeria/estudiantes-colsih.png",
             ctaLink: "/oferta-academica",
             ctaText: "Explorar Bachillerato"
         }

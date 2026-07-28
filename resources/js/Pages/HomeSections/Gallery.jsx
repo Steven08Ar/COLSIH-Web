@@ -6,25 +6,25 @@ export default function Gallery() {
             title: "Aulas de Innovación",
             category: "Instalaciones",
             size: "col-span-12 md:col-span-8 h-[350px]",
-            image: "/Estudiantes COLSIH.png"
+            image: "/galeria/estudiantes-colsih.png"
         },
         {
             title: "Biblioteca Escolar",
             category: "Espacios de Lectura",
             size: "col-span-12 md:col-span-4 h-[350px]",
-            image: "/Estudiantes COLSIH.png"
+            image: "/galeria/estudiantes-colsih.png"
         },
         {
             title: "Zonas Deportivas",
             category: "Deportes y Convivencia",
             size: "col-span-12 md:col-span-4 h-[300px]",
-            image: "/Estudiantes COLSIH.png"
+            image: "/galeria/estudiantes-colsih.png"
         },
         {
             title: "Laboratorio de Ciencias",
             category: "Investigación",
             size: "col-span-12 md:col-span-8 h-[300px]",
-            image: "/Estudiantes COLSIH.png"
+            image: "/galeria/estudiantes-colsih.png"
         }
     ];
 

@@ -129,7 +129,7 @@ export default function AboutHero() {
                             className="absolute inset-0 w-full h-full bg-[#08111F] overflow-hidden"
                         >
                             <img 
-                                src="/Colegio Afuera.webp" 
+                                src="/galeria/colegio-afuera.webp" 
                                 alt="Colegio Santa Isabel de Hungría" 
                                 className="w-full h-full object-cover scale-105" 
                             />
@@ -137,7 +137,7 @@ export default function AboutHero() {
  
                         {/* Layer 2: Foreground Transparent Cutout Students walking away */}
                         <img 
-                            src="/Estudiantes de espaldas.png" 
+                            src="/galeria/estudiantes-espaldas.png" 
                             alt="Estudiantes COLSIH" 
                             className="absolute bottom-[-10px] left-[-2%] w-[100%] max-w-none z-20 pointer-events-none object-contain drop-shadow-[0_20px_40px_rgba(8,17,31,0.3)]" 
                         />
@@ -184,7 +184,7 @@ export default function AboutHero() {
                         className="absolute inset-0 w-full h-full bg-[#08111F] overflow-hidden"
                     >
                         <img 
-                            src="/Colegio Afuera.webp" 
+                            src="/galeria/colegio-afuera.webp" 
                             alt="Colegio Santa Isabel de Hungría" 
                             className="w-full h-full object-cover scale-105" 
                         />
@@ -192,7 +192,7 @@ export default function AboutHero() {
 
                     {/* Layer 2: Foreground Transparent Cutout Students walking away */}
                     <img 
-                        src="/Estudiantes de espaldas.png" 
+                        src="/galeria/estudiantes-espaldas.png" 
                         alt="Estudiantes COLSIH" 
                         className="absolute bottom-[-10px] left-[-2%] w-[100%] max-w-none z-20 pointer-events-none object-contain drop-shadow-[0_20px_40px_rgba(8,17,31,0.3)] hover:scale-[1.01] transition-transform duration-500" 
                     />

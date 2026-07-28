@@ -31,7 +31,7 @@ export default function AdminLogin() {
                         {/* Logo & Header */}
                         <div className="flex flex-col items-center text-center mb-8">
                             <div className="flex items-center gap-3 mb-4">
-                                <img src="/Logo COLSIH.svg" alt="COLSIH" className="h-12 w-auto object-contain" />
+                                <img src="/marca/logo-colsih.svg" alt="COLSIH" className="h-12 w-auto object-contain" />
                                 <div className="h-6 w-[1px] bg-slate-200"></div>
                                 <span className="text-[10px] font-bold tracking-[1.5px] uppercase text-blue-600 bg-blue-50 px-2.5 py-1 rounded-md">
                                     ADMIN v9.6.1

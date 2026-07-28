@@ -18,19 +18,19 @@ export default function Equipo() {
 
     // Custom Directivos Data
     const directivos = [
-        { nombre: 'Sor María Eugenia', cargo: 'Rectora', foto: '/testimonio_egresada.png' },
-        { nombre: 'Juan Camilo López', cargo: 'Coordinador Académico', foto: '/testimonio_padre.png' },
-        { nombre: 'Laura Pérez', cargo: 'Coordinadora de Convivencia', foto: '/testimonio_egresada.png' },
-        { nombre: 'Carlos Ramírez', cargo: 'Coordinador Pastoral', foto: '/testimonio_padre.png' }
+        { nombre: 'Sor María Eugenia', cargo: 'Rectora', foto: '/testimonios/egresada.png' },
+        { nombre: 'Juan Camilo López', cargo: 'Coordinador Académico', foto: '/testimonios/padre.png' },
+        { nombre: 'Laura Pérez', cargo: 'Coordinadora de Convivencia', foto: '/testimonios/egresada.png' },
+        { nombre: 'Carlos Ramírez', cargo: 'Coordinador Pastoral', foto: '/testimonios/padre.png' }
     ];
 
     // Custom Acta Directiva Data
     const actaDirectiva = [
-        { nombre: 'P. Alberto Gómez', cargo: 'Presidente', foto: '/testimonio_padre.png' },
-        { nombre: 'María Claudia R.', cargo: 'Vicepresidente', foto: '/testimonio_egresada.png' },
-        { nombre: 'José Ignacio T.', cargo: 'Secretario', foto: '/testimonio_padre.png' },
-        { nombre: 'Ana Milena S.', cargo: 'Vocal', foto: '/testimonio_egresada.png' },
-        { nombre: 'Andrés Felipe B.', cargo: 'Vocal', foto: '/testimonio_padre.png' }
+        { nombre: 'P. Alberto Gómez', cargo: 'Presidente', foto: '/testimonios/padre.png' },
+        { nombre: 'María Claudia R.', cargo: 'Vicepresidente', foto: '/testimonios/egresada.png' },
+        { nombre: 'José Ignacio T.', cargo: 'Secretario', foto: '/testimonios/padre.png' },
+        { nombre: 'Ana Milena S.', cargo: 'Vocal', foto: '/testimonios/egresada.png' },
+        { nombre: 'Andrés Felipe B.', cargo: 'Vocal', foto: '/testimonios/padre.png' }
     ];
 
     // Administration area cards
@@ -43,46 +43,46 @@ export default function Equipo() {
     // Teachers listed per school area category
     const profesoresPorArea = {
         'Matemáticas': [
-            { nombre: 'Natalia Gómez', cargo: 'Docente', foto: '/testimonio_egresada.png' },
-            { nombre: 'Diego Mora', cargo: 'Docente', foto: '/testimonio_padre.png' },
-            { nombre: 'Valentina Ruiz', cargo: 'Docente', foto: '/testimonio_egresada.png' },
-            { nombre: 'Santiago Diaz', cargo: 'Docente', foto: '/testimonio_padre.png' }
+            { nombre: 'Natalia Gómez', cargo: 'Docente', foto: '/testimonios/egresada.png' },
+            { nombre: 'Diego Mora', cargo: 'Docente', foto: '/testimonios/padre.png' },
+            { nombre: 'Valentina Ruiz', cargo: 'Docente', foto: '/testimonios/egresada.png' },
+            { nombre: 'Santiago Diaz', cargo: 'Docente', foto: '/testimonios/padre.png' }
         ],
         'Ciencias Naturales': [
-            { nombre: 'Camilo Torres', cargo: 'Docente', foto: '/testimonio_padre.png' },
-            { nombre: 'Diana Reyes', cargo: 'Docente', foto: '/testimonio_egresada.png' },
-            { nombre: 'Andrés Mendoza', cargo: 'Docente', foto: '/testimonio_padre.png' },
-            { nombre: 'Laura Medina', cargo: 'Docente', foto: '/testimonio_egresada.png' }
+            { nombre: 'Camilo Torres', cargo: 'Docente', foto: '/testimonios/padre.png' },
+            { nombre: 'Diana Reyes', cargo: 'Docente', foto: '/testimonios/egresada.png' },
+            { nombre: 'Andrés Mendoza', cargo: 'Docente', foto: '/testimonios/padre.png' },
+            { nombre: 'Laura Medina', cargo: 'Docente', foto: '/testimonios/egresada.png' }
         ],
         'Lengua Castellana': [
-            { nombre: 'María José Ortiz', cargo: 'Docente', foto: '/testimonio_egresada.png' },
-            { nombre: 'Felipe Rueda', cargo: 'Docente', foto: '/testimonio_padre.png' },
-            { nombre: 'Isabella Castro', cargo: 'Docente', foto: '/testimonio_egresada.png' },
-            { nombre: 'Mateo Gómez', cargo: 'Docente', foto: '/testimonio_padre.png' }
+            { nombre: 'María José Ortiz', cargo: 'Docente', foto: '/testimonios/egresada.png' },
+            { nombre: 'Felipe Rueda', cargo: 'Docente', foto: '/testimonios/padre.png' },
+            { nombre: 'Isabella Castro', cargo: 'Docente', foto: '/testimonios/egresada.png' },
+            { nombre: 'Mateo Gómez', cargo: 'Docente', foto: '/testimonios/padre.png' }
         ],
         'Inglés': [
-            { nombre: 'Daniela Vergara', cargo: 'Docente', foto: '/testimonio_egresada.png' },
-            { nombre: 'Ricardo Rojas', cargo: 'Docente', foto: '/testimonio_padre.png' },
-            { nombre: 'Sofía Londoño', cargo: 'Docente', foto: '/testimonio_egresada.png' },
-            { nombre: 'Lucas Villa', cargo: 'Docente', foto: '/testimonio_padre.png' }
+            { nombre: 'Daniela Vergara', cargo: 'Docente', foto: '/testimonios/egresada.png' },
+            { nombre: 'Ricardo Rojas', cargo: 'Docente', foto: '/testimonios/padre.png' },
+            { nombre: 'Sofía Londoño', cargo: 'Docente', foto: '/testimonios/egresada.png' },
+            { nombre: 'Lucas Villa', cargo: 'Docente', foto: '/testimonios/padre.png' }
         ],
         'Ciencias Sociales': [
-            { nombre: 'Alejandra Pérez', cargo: 'Docente', foto: '/testimonio_egresada.png' },
-            { nombre: 'Javier Restrepo', cargo: 'Docente', foto: '/testimonio_padre.png' },
-            { nombre: 'Clara Inés Silva', cargo: 'Docente', foto: '/testimonio_egresada.png' },
-            { nombre: 'Juan Pablo Marín', cargo: 'Docente', foto: '/testimonio_padre.png' }
+            { nombre: 'Alejandra Pérez', cargo: 'Docente', foto: '/testimonios/egresada.png' },
+            { nombre: 'Javier Restrepo', cargo: 'Docente', foto: '/testimonios/padre.png' },
+            { nombre: 'Clara Inés Silva', cargo: 'Docente', foto: '/testimonios/egresada.png' },
+            { nombre: 'Juan Pablo Marín', cargo: 'Docente', foto: '/testimonios/padre.png' }
         ],
         'Educación Artística': [
-            { nombre: 'Tatiana Suárez', cargo: 'Docente', foto: '/testimonio_egresada.png' },
-            { nombre: 'Carlos Mario Gil', cargo: 'Docente', foto: '/testimonio_padre.png' },
-            { nombre: 'Gabriela Muñoz', cargo: 'Docente', foto: '/testimonio_egresada.png' },
-            { nombre: 'Esteban Ortiz', cargo: 'Docente', foto: '/testimonio_padre.png' }
+            { nombre: 'Tatiana Suárez', cargo: 'Docente', foto: '/testimonios/egresada.png' },
+            { nombre: 'Carlos Mario Gil', cargo: 'Docente', foto: '/testimonios/padre.png' },
+            { nombre: 'Gabriela Muñoz', cargo: 'Docente', foto: '/testimonios/egresada.png' },
+            { nombre: 'Esteban Ortiz', cargo: 'Docente', foto: '/testimonios/padre.png' }
         ],
         'Educación Física': [
-            { nombre: 'Mauricio Henao', cargo: 'Docente', foto: '/testimonio_padre.png' },
-            { nombre: 'Andrea Guerrero', cargo: 'Docente', foto: '/testimonio_egresada.png' },
-            { nombre: 'Nelson Caicedo', cargo: 'Docente', foto: '/testimonio_padre.png' },
-            { nombre: 'Paola Andrea G.', cargo: 'Docente', foto: '/testimonio_egresada.png' }
+            { nombre: 'Mauricio Henao', cargo: 'Docente', foto: '/testimonios/padre.png' },
+            { nombre: 'Andrea Guerrero', cargo: 'Docente', foto: '/testimonios/egresada.png' },
+            { nombre: 'Nelson Caicedo', cargo: 'Docente', foto: '/testimonios/padre.png' },
+            { nombre: 'Paola Andrea G.', cargo: 'Docente', foto: '/testimonios/egresada.png' }
         ]
     };
 
@@ -120,7 +120,7 @@ export default function Equipo() {
                     {/* Background image overlay */}
                     <div 
                         className="absolute inset-0 bg-cover bg-center opacity-10 brightness-[0.2] pointer-events-none"
-                        style={{ backgroundImage: "url('/Panoramica COLSIH.png')" }}
+                        style={{ backgroundImage: "url('/galeria/panoramica.png')" }}
                     />
 
                     {/* Left & Right abstract curves */}

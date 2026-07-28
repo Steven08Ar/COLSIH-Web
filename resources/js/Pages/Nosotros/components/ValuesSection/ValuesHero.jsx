@@ -103,8 +103,8 @@ export default function ValuesHero() {
                             }}
                         >
                             <img 
-                                src="/Estudiantes COLSIH.png" 
-                                alt="Estudiantes del Colegio" 
+                                src="/galeria/estudiantes-colsih.png"
+                                alt="Estudiantes del Colegio"
                                 className="w-full h-full object-cover scale-110 -translate-y-2"
                             />
                         </div>

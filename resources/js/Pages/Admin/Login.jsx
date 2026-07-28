@@ -27,7 +27,7 @@ export default function AdminLogin() {
 
                 <div className="w-full max-w-[440px] relative z-10">
                     {/* Card container */}
-                    <div className="bg-white border border-slate-100 rounded-[32px] p-10 shadow-[0_20px_60px_rgba(31,41,55,0.06)] backdrop-blur-sm">
+                    <div className="bg-white border border-slate-100 rounded-[28px] sm:rounded-[32px] p-6 sm:p-8 md:p-10 shadow-[0_20px_60px_rgba(31,41,55,0.06)] backdrop-blur-sm">
                         {/* Logo & Header */}
                         <div className="flex flex-col items-center text-center mb-8">
                             <div className="flex items-center gap-3 mb-4">

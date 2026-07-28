@@ -19,11 +19,11 @@ function Flash({ message }) {
 
 function Modal({ title, onClose, isWide = false, children }) {
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm px-4 py-8 animate-fadeIn" onClick={onClose}>
-            <div className={`bg-white border border-slate-100 rounded-[28px] p-8 w-full ${isWide ? 'max-w-4xl' : 'max-w-xl'} max-h-[90vh] overflow-y-auto shadow-2xl transform scale-100 transition-all duration-300`} onClick={e => e.stopPropagation()}>
-                <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-100">
-                    <h3 className="text-slate-800 font-extrabold text-lg tracking-tight">{title}</h3>
-                    <button onClick={onClose} className="w-8 h-8 rounded-full bg-slate-50 hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition flex items-center justify-center text-lg leading-none cursor-pointer">✕</button>
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-3 sm:p-6 md:p-8 animate-fadeIn" onClick={onClose}>
+            <div className={`bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl sm:rounded-[28px] p-4 sm:p-6 md:p-8 w-full ${isWide ? 'max-w-5xl' : 'max-w-xl'} max-h-[92vh] overflow-y-auto shadow-2xl transform scale-100 transition-all duration-300`} onClick={e => e.stopPropagation()}>
+                <div className="flex items-center justify-between mb-4 sm:mb-6 pb-3 sm:pb-4 border-b border-slate-100 dark:border-slate-800">
+                    <h3 className="text-slate-800 dark:text-slate-100 font-extrabold text-base sm:text-lg tracking-tight">{title}</h3>
+                    <button onClick={onClose} className="w-8 h-8 rounded-full bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-400 hover:text-slate-600 transition flex items-center justify-center text-lg leading-none cursor-pointer">✕</button>
                 </div>
                 {children}
             </div>
@@ -197,14 +197,14 @@ function TestimoniosTab({ testimonios, flash }) {
     }
 
     return (
-        <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800/80 rounded-[24px] p-8 shadow-sm">
+        <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800/80 rounded-2xl sm:rounded-[24px] p-4 sm:p-6 lg:p-8 shadow-sm">
             <Flash message={flash} />
-            <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-100 dark:border-slate-800/80">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-slate-100 dark:border-slate-800/80">
                 <div>
-                    <h2 className="text-slate-800 dark:text-slate-100 font-extrabold text-lg tracking-tight">Testimonios ({testimonios.length})</h2>
-                    <p className="text-slate-400 text-xs mt-1">Gestiona las citas del carrusel de inicio</p>
+                    <h2 className="text-slate-800 dark:text-slate-100 font-extrabold text-base sm:text-lg tracking-tight">Testimonios ({testimonios.length})</h2>
+                    <p className="text-slate-400 text-xs mt-0.5">Gestiona las citas del carrusel de inicio</p>
                 </div>
-                <button onClick={abrirCrear} className="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-md shadow-blue-500/10 transition duration-200 cursor-pointer active:scale-95 flex items-center gap-1.5">
+                <button onClick={abrirCrear} className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-md shadow-blue-500/10 transition duration-200 cursor-pointer active:scale-95 flex items-center justify-center gap-1.5">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                     </svg>
@@ -219,11 +219,11 @@ function TestimoniosTab({ testimonios, flash }) {
                     </div>
                 )}
                 {testimonios.map(t => (
-                    <div key={t.id} className="bg-slate-50/50 dark:bg-slate-800/20 hover:bg-slate-50 dark:hover:bg-slate-800/40 border border-slate-200/60 dark:border-slate-800/60 hover:border-slate-300/80 rounded-2xl p-5 flex items-start gap-4 transition duration-200">
+                    <div key={t.id} className="bg-slate-50/50 dark:bg-slate-800/20 hover:bg-slate-50 dark:hover:bg-slate-800/40 border border-slate-200/60 dark:border-slate-800/60 hover:border-slate-300/80 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-start gap-4 transition duration-200">
                         {t.imagen && (
                             <img src={`/storage/${t.imagen}`} alt={t.nombre} className="w-14 h-14 rounded-xl object-cover shrink-0 border border-slate-200 dark:border-slate-700" />
                         )}
-                        <div className="flex-1 min-w-0">
+                        <div className="flex-1 min-w-0 w-full">
                             <div className="flex items-center gap-2 flex-wrap">
                                 <span className="font-bold text-slate-800 dark:text-slate-100 text-sm">{t.nombre}</span>
                                 {t.cargo && <span className="text-slate-400 dark:text-slate-500 text-xs font-medium bg-slate-100 dark:bg-slate-800/65 px-2 py-0.5 rounded-md">{t.cargo}</span>}
@@ -240,7 +240,7 @@ function TestimoniosTab({ testimonios, flash }) {
                             </div>
                             <p className="text-slate-500 dark:text-slate-400 text-xs mt-2 italic leading-relaxed">«{t.texto}»</p>
                         </div>
-                        <div className="flex gap-1 shrink-0">
+                        <div className="flex gap-2 shrink-0 w-full sm:w-auto justify-end border-t sm:border-t-0 pt-3 sm:pt-0 border-slate-200/60 dark:border-slate-800/60">
                             <button onClick={() => abrirEditar(t)} className="text-xs font-bold text-blue-600 dark:text-blue-400 hover:text-blue-800 hover:bg-blue-50 dark:hover:bg-slate-800 px-3 py-1.5 rounded-lg transition cursor-pointer">Editar</button>
                             <button onClick={() => eliminar(t.id)} className="text-xs font-bold text-rose-600 dark:text-rose-400 hover:text-rose-800 hover:bg-rose-50 dark:hover:bg-slate-800 px-3 py-1.5 rounded-lg transition cursor-pointer">Eliminar</button>
                         </div>
@@ -250,13 +250,13 @@ function TestimoniosTab({ testimonios, flash }) {
 
             {(creando || editando) && (
                 <Modal title={editando ? 'Editar Testimonio' : 'Crear Nuevo Testimonio'} onClose={cerrar} isWide={true}>
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
 
                         {/* Left: Card Preview */}
-                        <div className="lg:col-span-5 flex flex-col items-center justify-start space-y-4">
+                        <div className="order-2 lg:order-1 lg:col-span-5 flex flex-col items-center justify-start space-y-4">
                             <span className="text-slate-400 text-[11px] font-bold uppercase tracking-wider block">Vista Previa en Web</span>
-                            <div className="w-full bg-[#030712] p-6 rounded-3xl flex items-center justify-center border border-slate-900 shadow-inner flex-1 min-h-[440px]">
-                                <div className="w-full max-w-[280px] min-h-[380px] rounded-3xl overflow-hidden shadow-2xl border border-slate-800/80 bg-slate-900/50 relative flex flex-col justify-between p-6 select-none">
+                            <div className="w-full bg-[#030712] p-4 sm:p-6 rounded-3xl flex items-center justify-center border border-slate-900 shadow-inner min-h-[360px] sm:min-h-[440px]">
+                                <div className="w-full max-w-[280px] min-h-[360px] sm:min-h-[380px] rounded-3xl overflow-hidden shadow-2xl border border-slate-800/80 bg-slate-900/50 relative flex flex-col justify-between p-6 select-none">
                                     {previewImage ? (
                                         <img
                                             src={previewImage}
@@ -308,7 +308,7 @@ function TestimoniosTab({ testimonios, flash }) {
                         </div>
 
                         {/* Right: Form */}
-                        <form onSubmit={guardar} className="lg:col-span-7 space-y-4 text-left flex flex-col justify-between">
+                        <form onSubmit={guardar} className="order-1 lg:order-2 lg:col-span-7 space-y-4 text-left flex flex-col justify-between">
                             <div className="space-y-4">
 
                                 {/* Nombre */}
@@ -448,11 +448,11 @@ function TestimoniosTab({ testimonios, flash }) {
                                 </div>
                             </div>
 
-                            <div className="flex gap-3 pt-4 border-t border-slate-100 mt-5">
+                            <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-slate-100 dark:border-slate-800 mt-5">
                                 <button type="submit" disabled={form.processing} className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-bold rounded-xl py-3 text-sm transition cursor-pointer shadow-md shadow-blue-500/10 active:scale-[0.98]">
                                     {form.processing ? 'Guardando…' : 'Guardar Testimonio'}
                                 </button>
-                                <button type="button" onClick={cerrar} className="px-5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl py-3 text-sm transition font-bold cursor-pointer">Cancelar</button>
+                                <button type="button" onClick={cerrar} className="w-full sm:w-auto px-5 bg-slate-100 hover:bg-slate-200 text-slate-600 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 rounded-xl py-3 text-sm transition font-bold cursor-pointer">Cancelar</button>
                             </div>
                         </form>
 
@@ -868,14 +868,14 @@ function NoticiasTab({ noticias, flash }) {
     }
 
     return (
-        <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800/80 rounded-[24px] p-8 shadow-sm">
+        <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800/80 rounded-2xl sm:rounded-[24px] p-4 sm:p-6 lg:p-8 shadow-sm">
             <Flash message={flash} />
-            <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-100 dark:border-slate-800/80">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-slate-100 dark:border-slate-800/80">
                 <div>
-                    <h2 className="text-slate-800 dark:text-slate-100 font-extrabold text-lg tracking-tight">Noticias y Eventos ({noticias.length})</h2>
-                    <p className="text-slate-400 text-xs mt-1">Gestiona las publicaciones y eventos escolares</p>
+                    <h2 className="text-slate-800 dark:text-slate-100 font-extrabold text-base sm:text-lg tracking-tight">Noticias y Eventos ({noticias.length})</h2>
+                    <p className="text-slate-400 text-xs mt-0.5">Gestiona las publicaciones y eventos escolares</p>
                 </div>
-                <button onClick={abrirCrear} className="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-md shadow-blue-500/10 transition duration-200 cursor-pointer active:scale-95 flex items-center gap-1.5">
+                <button onClick={abrirCrear} className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-md shadow-blue-500/10 transition duration-200 cursor-pointer active:scale-95 flex items-center justify-center gap-1.5">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                     </svg>
@@ -922,7 +922,7 @@ function NoticiasTab({ noticias, flash }) {
                                 </p>
                             )}
                         </div>
-                        <div className="flex gap-1 shrink-0">
+                        <div className="flex gap-2 shrink-0 w-full sm:w-auto justify-end border-t sm:border-t-0 pt-3 sm:pt-0 border-slate-200/60 dark:border-slate-800/60">
                             <button onClick={() => abrirEditar(n)} className="text-xs font-bold text-blue-600 dark:text-blue-400 hover:text-blue-800 hover:bg-blue-50 dark:hover:bg-slate-800 px-3 py-1.5 rounded-lg transition cursor-pointer">Editar</button>
                             <button onClick={() => eliminar(n.id)} className="text-xs font-bold text-rose-600 dark:text-rose-400 hover:text-rose-800 hover:bg-rose-50 dark:hover:bg-slate-800 px-3 py-1.5 rounded-lg transition cursor-pointer">Eliminar</button>
                         </div>
@@ -1123,8 +1123,8 @@ function PreguntasTab({ preguntas, flash }) {
                     </div>
                 )}
                 {preguntas.map(p => (
-                    <div key={p.id} className="bg-slate-50/50 dark:bg-slate-800/20 hover:bg-slate-50 dark:hover:bg-slate-800/40 border border-slate-200/60 dark:border-slate-800/60 hover:border-slate-300/80 rounded-2xl p-5 flex items-start gap-4 transition duration-200">
-                        <div className="flex-1 min-w-0">
+                    <div key={p.id} className="bg-slate-50/50 dark:bg-slate-800/20 hover:bg-slate-50 dark:hover:bg-slate-800/40 border border-slate-200/60 dark:border-slate-800/60 hover:border-slate-300/80 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-start gap-4 transition duration-200">
+                        <div className="flex-1 min-w-0 w-full">
                             <div className="flex items-center gap-2 flex-wrap">
                                 <span className="font-bold text-slate-800 dark:text-slate-100 text-sm">{p.pregunta}</span>
                                 <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${
@@ -1137,7 +1137,7 @@ function PreguntasTab({ preguntas, flash }) {
                             </div>
                             <p className="text-slate-500 dark:text-slate-400 text-xs mt-2 leading-relaxed">{p.respuesta}</p>
                         </div>
-                        <div className="flex gap-1 shrink-0">
+                        <div className="flex gap-2 shrink-0 w-full sm:w-auto justify-end border-t sm:border-t-0 pt-3 sm:pt-0 border-slate-200/60 dark:border-slate-800/60">
                             <button onClick={() => abrirEditar(p)} className="text-xs font-bold text-blue-600 dark:text-blue-400 hover:text-blue-800 hover:bg-blue-50 dark:hover:bg-slate-800 px-3 py-1.5 rounded-lg transition cursor-pointer">Editar</button>
                             <button onClick={() => eliminar(p.id)} className="text-xs font-bold text-rose-600 dark:text-rose-400 hover:text-rose-800 hover:bg-rose-50 dark:hover:bg-slate-800 px-3 py-1.5 rounded-lg transition cursor-pointer">Eliminar</button>
                         </div>
@@ -1217,6 +1217,7 @@ const TABS = [
 export default function AdminDashboard({ seccion, testimonios, noticias, preguntas, flash }) {
     const basePath = window.location.pathname.replace(/\/[^/]+$/, '');
     const [darkMode, setDarkMode] = useState(() => localStorage.getItem('sih-dark-mode') === 'true');
+    const [sidebarOpen, setSidebarOpen] = useState(false);
 
     useEffect(() => {
         if (darkMode) {
@@ -1243,22 +1244,41 @@ export default function AdminDashboard({ seccion, testimonios, noticias, pregunt
     return (
         <>
             <Head title="Panel Administrativo | COLSIH" />
-            <div className="min-h-screen bg-[#F4F7FA] dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-sans antialiased flex">
+            <div className="min-h-screen bg-[#F4F7FA] dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-sans antialiased flex relative">
 
-                {/* ── Sidebar Izquierda (Able Pro layout) ── */}
-                <aside className="w-72 bg-white dark:bg-slate-900 border-r border-slate-100 dark:border-slate-800/80 h-screen fixed left-0 top-0 z-40 flex flex-col justify-between">
+                {/* Mobile Sidebar Overlay Backdrop */}
+                {sidebarOpen && (
+                    <div
+                        className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-40 lg:hidden transition-opacity duration-300"
+                        onClick={() => setSidebarOpen(false)}
+                    />
+                )}
+
+                {/* ── Sidebar Izquierda (Able Pro layout, 100% Responsive) ── */}
+                <aside className={`w-72 bg-white dark:bg-slate-900 border-r border-slate-100 dark:border-slate-800/80 h-screen fixed left-0 top-0 z-50 flex flex-col justify-between transition-transform duration-300 ease-in-out ${
+                    sidebarOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full lg:translate-x-0'
+                }`}>
                     <div>
                         {/* Sidebar Header Brand */}
-                        <div className="h-20 px-8 flex items-center gap-3 border-b border-slate-100 dark:border-slate-800/80">
-                            <img src="/marca/logo-colsih.svg" alt="COLSIH" className="h-10 w-auto object-contain" />
-                            <div className="flex flex-col">
-                                <span className="font-black text-slate-800 dark:text-white text-sm leading-tight uppercase tracking-wide">COLSIH</span>
-                                <span className="text-[10px] font-bold text-blue-600 uppercase">Admin Panel</span>
+                        <div className="h-20 px-6 sm:px-8 flex items-center justify-between border-b border-slate-100 dark:border-slate-800/80">
+                            <div className="flex items-center gap-3">
+                                <img src="/marca/logo-colsih.svg" alt="COLSIH" className="h-10 w-auto object-contain" />
+                                <div className="flex flex-col">
+                                    <span className="font-black text-slate-800 dark:text-white text-sm leading-tight uppercase tracking-wide">COLSIH</span>
+                                    <span className="text-[10px] font-bold text-blue-600 uppercase">Admin Panel</span>
+                                </div>
                             </div>
+                            <button
+                                type="button"
+                                onClick={() => setSidebarOpen(false)}
+                                className="lg:hidden p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+                            >
+                                ✕
+                            </button>
                         </div>
 
                         {/* User profile card inside sidebar */}
-                        <div className="m-5 p-4 bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800/60 rounded-2xl flex items-center justify-between shadow-sm">
+                        <div className="m-4 sm:m-5 p-4 bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800/60 rounded-2xl flex items-center justify-between shadow-sm">
                             <div className="flex items-center gap-3">
                                 <div className="w-10 h-10 rounded-full bg-blue-600 text-white font-extrabold flex items-center justify-center text-sm shadow-md shadow-blue-500/10">
                                     A
@@ -1283,6 +1303,7 @@ export default function AdminDashboard({ seccion, testimonios, noticias, pregunt
                                     <Link
                                         key={tab.key}
                                         href={`${basePath}/${tab.key}`}
+                                        onClick={() => setSidebarOpen(false)}
                                         className={`flex items-center justify-between px-7 py-3.5 mx-3 rounded-xl font-bold text-sm transition-all duration-200 ${
                                             isActive
                                                 ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 border-l-4 border-blue-600 pl-6'
@@ -1310,7 +1331,7 @@ export default function AdminDashboard({ seccion, testimonios, noticias, pregunt
                                         
                                         {/* Count badge */}
                                         <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${
-                                            isActive ? 'bg-blue-100 text-blue-600' : 'bg-slate-100 text-slate-500'
+                                            isActive ? 'bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300' : 'bg-slate-100 dark:bg-slate-800 text-slate-500'
                                         }`}>
                                             {tab.key === 'testimonios' && testimonios.length}
                                             {tab.key === 'noticias' && noticias.length}
@@ -1325,7 +1346,7 @@ export default function AdminDashboard({ seccion, testimonios, noticias, pregunt
                     {/* Sidebar Footer */}
                     <div className="p-5 border-t border-slate-100 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-900/50">
                         <form method="POST" action={`${basePath}/logout`} onSubmit={e => { e.preventDefault(); router.post(`${basePath}/logout`); }}>
-                            <button type="submit" className="w-full flex items-center justify-center gap-2 text-xs font-bold text-rose-600 hover:text-rose-800 bg-rose-50 hover:bg-rose-100/60 border border-rose-100 px-4 py-3 rounded-xl transition duration-200 cursor-pointer shadow-sm active:scale-[0.98]">
+                            <button type="submit" className="w-full flex items-center justify-center gap-2 text-xs font-bold text-rose-600 dark:text-rose-400 hover:text-rose-800 dark:hover:text-rose-300 bg-rose-50 dark:bg-rose-900/20 hover:bg-rose-100/60 dark:hover:bg-rose-900/30 border border-rose-100 dark:border-rose-900/30 px-4 py-3 rounded-xl transition duration-200 cursor-pointer shadow-sm active:scale-[0.98]">
                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                                 </svg>
@@ -1336,28 +1357,43 @@ export default function AdminDashboard({ seccion, testimonios, noticias, pregunt
                 </aside>
 
                 {/* ── Right Content Container ── */}
-                <div className="flex-1 pl-72 flex flex-col min-h-screen">
+                <div className="flex-1 pl-0 lg:pl-72 flex flex-col min-h-screen w-full">
                     
                     {/* Header Top Navbar */}
-                    <header className="h-20 bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800/80 fixed top-0 left-72 right-0 z-30 flex items-center justify-between px-8 shadow-[0_1px_3px_rgba(0,0,0,0.01)]">
-                        {/* Search input mock */}
-                        <div className="relative bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/80 rounded-xl px-4.5 py-2 flex items-center gap-3 w-80">
-                            <svg className="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                            </svg>
-                            <input 
-                                type="text" 
-                                placeholder="Buscar en el panel..." 
-                                className="bg-transparent text-xs font-medium text-slate-600 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none w-full"
-                                readOnly
-                            />
-                            <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-[9px] font-bold text-slate-400 px-1.5 py-0.5 rounded shadow-sm">
-                                Ctrl + K
+                    <header className="h-16 sm:h-20 bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800/80 fixed top-0 left-0 lg:left-72 right-0 z-30 flex items-center justify-between px-4 sm:px-8 shadow-[0_1px_3px_rgba(0,0,0,0.01)]">
+                        
+                        <div className="flex items-center gap-3">
+                            {/* Mobile drawer hamburger menu button */}
+                            <button
+                                type="button"
+                                onClick={() => setSidebarOpen(!sidebarOpen)}
+                                className="lg:hidden p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 transition cursor-pointer"
+                                aria-label="Abrir Menú"
+                            >
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                                </svg>
+                            </button>
+
+                            {/* Search input mock */}
+                            <div className="hidden sm:flex relative bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/80 rounded-xl px-4 py-2 flex items-center gap-3 w-44 md:w-80">
+                                <svg className="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                </svg>
+                                <input 
+                                    type="text" 
+                                    placeholder="Buscar en el panel..." 
+                                    className="bg-transparent text-xs font-medium text-slate-600 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none w-full"
+                                    readOnly
+                                />
+                                <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-[9px] font-bold text-slate-400 px-1.5 py-0.5 rounded shadow-sm">
+                                    Ctrl + K
+                                </div>
                             </div>
                         </div>
 
                         {/* Topbar Right Tools */}
-                        <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-2.5 sm:gap-4">
                             {/* Functional Dark/Light Mode Switch */}
                             <button 
                                 onClick={() => setDarkMode(!darkMode)}
@@ -1375,16 +1411,16 @@ export default function AdminDashboard({ seccion, testimonios, noticias, pregunt
                             <div className="h-6 w-[1px] bg-slate-200 dark:bg-slate-700"></div>
                             
                             <div className="flex items-center gap-2.5">
-                                <div className="w-9 h-9 rounded-full bg-blue-100 text-blue-700 font-extrabold flex items-center justify-center text-xs shadow-sm">
+                                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-blue-100 text-blue-700 font-extrabold flex items-center justify-center text-xs shadow-sm">
                                     A
                                 </div>
-                                <span className="text-xs font-bold text-slate-700 dark:text-slate-200">Administrador</span>
+                                <span className="text-xs font-bold text-slate-700 dark:text-slate-200 hidden sm:inline-block">Administrador</span>
                             </div>
                         </div>
                     </header>
 
                     {/* Main Scrollable Area */}
-                    <main className="flex-1 p-8 pt-28 bg-[#F4F7FA] dark:bg-slate-950 overflow-y-auto">
+                    <main className="flex-1 p-3 sm:p-6 lg:p-8 pt-20 sm:pt-28 bg-[#F4F7FA] dark:bg-slate-950 overflow-y-auto">
                         
                         {/* ── Active Module Content Card ── */}
                         <div className="transition-all duration-300">
@@ -1396,7 +1432,7 @@ export default function AdminDashboard({ seccion, testimonios, noticias, pregunt
                     </main>
 
                     {/* Footer branding */}
-                    <footer className="h-14 bg-white border-t border-slate-100 px-8 flex items-center justify-between text-xs text-slate-400 font-semibold select-none">
+                    <footer className="py-4 px-4 sm:px-8 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-400 font-semibold select-none">
                         <span>Colegio Santa Isabel de Hungría &copy; {new Date().getFullYear()}</span>
                         <span>Desarrollado con React & InertiaJS</span>
                     </footer>

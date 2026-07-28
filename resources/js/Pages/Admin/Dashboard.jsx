@@ -1,7 +1,8 @@
 import { Head, Link, useForm, router } from '@inertiajs/react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import PageBuilder from './PageBuilder/PageBuilder';
 import { Sun, Moon } from 'lucide-react';
+import { processImageFile } from '@/utils/heicConverter';
 
 /* ── helpers ── */
 function Flash({ message }) {
@@ -31,48 +32,131 @@ function Modal({ title, onClose, isWide = false, children }) {
 }
 
 /* ── Testimonios ── */
+const ROLES_TESTIMONIO = ['Estudiante', 'Docente', 'Administrativo', 'Planta'];
+
+function FotoPositionEditor({ previewImage, posicion, onChange }) {
+    const containerRef = useRef(null);
+    const isDragging = useRef(false);
+    const startY = useRef(0);
+    const startPos = useRef(50);
+
+    function getClientY(e) {
+        return e.touches ? e.touches[0].clientY : e.clientY;
+    }
+
+    function onStart(e) {
+        isDragging.current = true;
+        startY.current = getClientY(e);
+        startPos.current = posicion;
+        e.preventDefault();
+    }
+
+    function onMove(e) {
+        if (!isDragging.current) return;
+        const dy = getClientY(e) - startY.current;
+        const h = containerRef.current?.offsetHeight || 1;
+        const next = Math.round(Math.max(0, Math.min(100, startPos.current + (dy / h) * 100)));
+        onChange(next);
+    }
+
+    function onEnd() { isDragging.current = false; }
+
+    return (
+        <div className="space-y-2">
+            <label className="text-slate-500 text-[10px] font-bold uppercase tracking-wider block">
+                Posición de la Foto
+            </label>
+            <div
+                ref={containerRef}
+                className="relative rounded-xl overflow-hidden h-36 cursor-ns-resize select-none border border-slate-200 dark:border-slate-700"
+                onMouseDown={onStart} onMouseMove={onMove} onMouseUp={onEnd} onMouseLeave={onEnd}
+                onTouchStart={onStart} onTouchMove={onMove} onTouchEnd={onEnd}
+            >
+                {previewImage ? (
+                    <img
+                        src={previewImage}
+                        alt="Posición"
+                        draggable={false}
+                        className="w-full h-full object-cover pointer-events-none"
+                        style={{ objectPosition: `center ${posicion}%` }}
+                    />
+                ) : (
+                    <div className="w-full h-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
+                        <span className="text-slate-400 text-xs">Sube una foto primero</span>
+                    </div>
+                )}
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                    <div className="bg-black/50 backdrop-blur-sm text-white text-[10px] font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5">
+                        <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M7 16V4m0 0L3 8m4-4l4 4M17 8v12m0 0l4-4m-4 4l-4-4" />
+                        </svg>
+                        Arrastra para ajustar
+                    </div>
+                </div>
+            </div>
+            <div className="flex items-center gap-2">
+                <button type="button" onClick={() => onChange(Math.max(0, posicion - 10))}
+                    className="flex-1 text-xs font-bold py-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-lg transition cursor-pointer">
+                    ↑ Arriba
+                </button>
+                <span className="text-[11px] font-bold text-slate-400 w-12 text-center shrink-0">{posicion}%</span>
+                <button type="button" onClick={() => onChange(Math.min(100, posicion + 10))}
+                    className="flex-1 text-xs font-bold py-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-lg transition cursor-pointer">
+                    ↓ Abajo
+                </button>
+            </div>
+        </div>
+    );
+}
+
 function TestimoniosTab({ testimonios, flash }) {
     const [editando, setEditando] = useState(null);
     const [creando, setCreando] = useState(false);
     const [previewImage, setPreviewImage] = useState(null);
 
-    const form = useForm({ 
-        nombre: '', 
-        cargo: '', 
-        texto: '', 
-        imagen: null, 
-        video_url: '', 
-        activo: true, 
-        orden: 0 
+    const form = useForm({
+        nombre: '',
+        cargo: 'Estudiante',
+        texto: '',
+        imagen: null,
+        foto_posicion: 50,
+        video_url: '',
+        video_activo: false,
+        activo: true,
+        orden: 0
     });
 
     function abrirCrear() {
         form.reset();
+        form.setData('cargo', 'Estudiante');
+        form.setData('foto_posicion', 50);
+        form.setData('video_activo', false);
         setEditando(null);
         setCreando(true);
     }
 
     function abrirEditar(t) {
-        form.setData({ 
-            nombre: t.nombre, 
-            cargo: t.cargo ?? '', 
-            texto: t.texto, 
-            imagen: null, 
-            video_url: t.video_url ?? '', 
-            activo: !!t.activo, 
-            orden: t.orden ?? 0 
+        form.setData({
+            nombre: t.nombre,
+            cargo: t.cargo ?? 'Estudiante',
+            texto: t.texto,
+            imagen: null,
+            foto_posicion: Number(t.foto_posicion ?? 50),
+            video_url: t.video_url ?? '',
+            video_activo: !!t.video_activo,
+            activo: !!t.activo,
+            orden: t.orden ?? 0
         });
         setEditando(t);
         setCreando(false);
     }
 
-    function cerrar() { 
-        setCreando(false); 
-        setEditando(null); 
-        form.clearErrors(); 
+    function cerrar() {
+        setCreando(false);
+        setEditando(null);
+        form.clearErrors();
     }
 
-    // Effect hook to load selected or existing image in real-time
     useEffect(() => {
         if (form.data.imagen) {
             if (form.data.imagen instanceof File) {
@@ -85,7 +169,7 @@ function TestimoniosTab({ testimonios, flash }) {
         } else if (editando && editando.imagen) {
             setPreviewImage(`/storage/${editando.imagen}`);
         } else {
-            setPreviewImage('/testimonios/egresada.png');
+            setPreviewImage(null);
         }
     }, [form.data.imagen, editando, creando]);
 
@@ -167,168 +251,196 @@ function TestimoniosTab({ testimonios, flash }) {
             {(creando || editando) && (
                 <Modal title={editando ? 'Editar Testimonio' : 'Crear Nuevo Testimonio'} onClose={cerrar} isWide={true}>
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-                        
-                        {/* Left column: Card Preview (lg:col-span-5) */}
+
+                        {/* Left: Card Preview */}
                         <div className="lg:col-span-5 flex flex-col items-center justify-start space-y-4">
                             <span className="text-slate-400 text-[11px] font-bold uppercase tracking-wider block">Vista Previa en Web</span>
                             <div className="w-full bg-[#030712] p-6 rounded-3xl flex items-center justify-center border border-slate-900 shadow-inner flex-1 min-h-[440px]">
-                                
-                                {/* Card preview wrapper */}
                                 <div className="w-full max-w-[280px] min-h-[380px] rounded-3xl overflow-hidden shadow-2xl border border-slate-800/80 bg-slate-900/50 relative flex flex-col justify-between p-6 select-none">
-                                    {/* Background Image */}
-                                    <img 
-                                        src={previewImage} 
-                                        alt="Vista Previa" 
-                                        className="absolute inset-0 w-full h-full object-cover z-0 select-none pointer-events-none"
-                                    />
-                                    
-                                    {/* Dark overlay mask */}
-                                    <div className="absolute inset-0 bg-slate-950/75 transition-colors duration-500 z-10"></div>
-                                    
-                                    {/* Absolute Play Button Overlay */}
-                                    {form.data.video_url && (
-                                        <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/25 opacity-100 pointer-events-none">
+                                    {previewImage ? (
+                                        <img
+                                            src={previewImage}
+                                            alt="Vista Previa"
+                                            className="absolute inset-0 w-full h-full object-cover z-0 select-none pointer-events-none"
+                                            style={{ objectPosition: `center ${form.data.foto_posicion}%` }}
+                                        />
+                                    ) : (
+                                        <div className="absolute inset-0 bg-slate-800 z-0 flex items-center justify-center">
+                                            <span className="text-slate-600 text-xs">Sin imagen</span>
+                                        </div>
+                                    )}
+                                    <div className="absolute inset-0 bg-slate-950/75 z-10"></div>
+                                    {form.data.video_activo && form.data.video_url && (
+                                        <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/25 pointer-events-none">
                                             <div className="w-14 h-14 rounded-full bg-white/20 text-white border border-white/30 backdrop-blur-md flex items-center justify-center shadow-xl">
-                                                <svg className="w-5 h-5 fill-current ml-0.5" viewBox="0 0 24 24">
-                                                    <path d="M8 5v14l11-7z" />
-                                                </svg>
+                                                <svg className="w-5 h-5 fill-current ml-0.5" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
                                             </div>
                                         </div>
                                     )}
-
-                                    {/* Content layer */}
                                     <div className="relative z-30 flex flex-col justify-between h-full flex-1">
                                         <div className="flex justify-between items-start">
-                                            <span className="text-6xl font-serif text-white/25 select-none pointer-events-none leading-none">“</span>
-                                            {form.data.video_url && (
-                                                <div className="bg-[#800A15] text-white text-[9px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full shadow-md flex items-center gap-1 select-none">
+                                            <span className="text-6xl font-serif text-white/25 leading-none">"</span>
+                                            {form.data.video_activo && form.data.video_url && (
+                                                <div className="bg-[#800A15] text-white text-[9px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full flex items-center gap-1">
                                                     <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>
                                                     Video
                                                 </div>
                                             )}
                                         </div>
-
-                                        {/* Spacing */}
                                         <div className="flex-1 min-h-[60px]"></div>
-
-                                        {/* Bottom row */}
                                         <div className="space-y-3">
-                                            {/* Text Quote with layered shadows */}
-                                            <p 
-                                                className="text-white text-[11px] md:text-xs font-bold italic leading-relaxed font-sans text-left"
-                                                style={{
-                                                    textShadow: '0 2px 4px rgba(0,0,0,0.95), 0 4px 10px rgba(0,0,0,0.85), 0 0 15px rgba(0,0,0,0.5)'
-                                                }}
-                                            >
-                                                {form.data.texto ? `«${form.data.texto}»` : '«Aquí se mostrará el texto de tu testimonio...»'}
+                                            <p className="text-white text-[11px] font-bold italic leading-relaxed text-left"
+                                                style={{ textShadow: '0 2px 4px rgba(0,0,0,0.95)' }}>
+                                                {form.data.texto ? `«${form.data.texto}»` : '«Texto del testimonio...»'}
                                             </p>
-                                            
                                             <div className="text-left">
-                                                <span className="block text-xs font-extrabold text-white font-sans drop-shadow-[0_1.5px_2px_rgba(0,0,0,0.9)]">
+                                                <span className="block text-xs font-extrabold text-white drop-shadow-[0_1.5px_2px_rgba(0,0,0,0.9)]">
                                                     {form.data.nombre || 'Nombre de la Persona'}
                                                 </span>
-                                                <span className="block text-[9px] font-bold text-[#3b82f6] uppercase tracking-wider mt-1 font-sans drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
-                                                    {form.data.cargo || 'Cargo / Rol en el Colegio'}
+                                                <span className="block text-[9px] font-bold text-[#3b82f6] uppercase tracking-wider mt-1 drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
+                                                    {form.data.cargo || 'Rol'}
                                                 </span>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
 
-                        {/* Right column: Form Inputs (lg:col-span-7) */}
+                        {/* Right: Form */}
                         <form onSubmit={guardar} className="lg:col-span-7 space-y-4 text-left flex flex-col justify-between">
                             <div className="space-y-4">
+
+                                {/* Nombre */}
                                 <div>
                                     <label className="text-slate-500 text-[10px] font-bold uppercase tracking-wider block mb-1">Nombre Completo *</label>
-                                    <input 
-                                        value={form.data.nombre} 
-                                        onChange={e => form.setData('nombre', e.target.value)} 
-                                        required 
+                                    <input
+                                        value={form.data.nombre}
+                                        onChange={e => form.setData('nombre', e.target.value)}
+                                        required
                                         placeholder="Ej: María Camila Restrepo"
-                                        className="w-full bg-slate-50 border border-slate-200 text-slate-800 placeholder-slate-400 rounded-xl px-4 py-2 text-sm focus:outline-none focus:bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-100 transition font-medium" 
+                                        className="w-full bg-slate-50 border border-slate-200 text-slate-800 placeholder-slate-400 rounded-xl px-4 py-2 text-sm focus:outline-none focus:bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-100 transition font-medium"
                                     />
                                     {form.errors.nombre && <p className="text-rose-500 text-xs mt-1 font-semibold">{form.errors.nombre}</p>}
                                 </div>
+
+                                {/* Rol — select fijo */}
                                 <div>
-                                    <label className="text-slate-500 text-[10px] font-bold uppercase tracking-wider block mb-1">Cargo / Rol</label>
-                                    <input 
-                                        value={form.data.cargo} 
-                                        onChange={e => form.setData('cargo', e.target.value)} 
-                                        placeholder="Ej: Egresada Promoción 2024"
-                                        className="w-full bg-slate-50 border border-slate-200 text-slate-800 placeholder-slate-400 rounded-xl px-4 py-2 text-sm focus:outline-none focus:bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-100 transition font-medium" 
-                                    />
+                                    <label className="text-slate-500 text-[10px] font-bold uppercase tracking-wider block mb-1">Rol *</label>
+                                    <select
+                                        value={form.data.cargo}
+                                        onChange={e => form.setData('cargo', e.target.value)}
+                                        className="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-4 py-2 text-sm focus:outline-none focus:bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-100 transition font-medium cursor-pointer"
+                                    >
+                                        {ROLES_TESTIMONIO.map(r => (
+                                            <option key={r} value={r}>{r}</option>
+                                        ))}
+                                    </select>
                                 </div>
+
+                                {/* Texto */}
                                 <div>
                                     <label className="text-slate-500 text-[10px] font-bold uppercase tracking-wider block mb-1">Texto del Testimonio *</label>
-                                    <textarea 
-                                        value={form.data.texto} 
-                                        onChange={e => form.setData('texto', e.target.value)} 
-                                        required 
-                                        rows={4} 
+                                    <textarea
+                                        value={form.data.texto}
+                                        onChange={e => form.setData('texto', e.target.value)}
+                                        required
+                                        rows={3}
                                         placeholder="Escribe el testimonio aquí..."
-                                        className="w-full bg-slate-50 border border-slate-200 text-slate-800 placeholder-slate-400 rounded-xl px-4 py-2 text-sm focus:outline-none focus:bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-100 transition font-medium resize-none" 
+                                        className="w-full bg-slate-50 border border-slate-200 text-slate-800 placeholder-slate-400 rounded-xl px-4 py-2 text-sm focus:outline-none focus:bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-100 transition font-medium resize-none"
                                     />
                                     {form.errors.texto && <p className="text-rose-500 text-xs mt-1 font-semibold">{form.errors.texto}</p>}
                                 </div>
-                                
-                                {/* Photo upload field */}
+
+                                {/* Foto + botón subir */}
                                 <div>
                                     <label className="text-slate-500 text-[10px] font-bold uppercase tracking-wider block mb-1.5">Foto de Fondo *</label>
                                     <div className="flex items-center gap-3">
-                                        <input 
-                                            type="file" 
-                                            accept="image/*" 
-                                            onChange={e => form.setData('imagen', e.target.files[0])} 
+                                        <input
+                                            type="file"
+                                            accept="image/*,.heic,.heif,image/heic,image/heif"
+                                            onChange={async (e) => {
+                                                const f = e.target.files[0];
+                                                if (!f) return;
+                                                const processed = await processImageFile(f);
+                                                form.setData('imagen', processed);
+                                            }}
                                             required={!editando}
-                                            className="hidden" 
+                                            className="hidden"
                                             id="testimonio-file-upload"
                                         />
-                                        <label 
-                                            htmlFor="testimonio-file-upload" 
-                                            className="px-4.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl border border-slate-200 transition cursor-pointer select-none"
-                                        >
-                                            {form.data.imagen ? 'Cambiar Imagen' : 'Seleccionar Imagen'}
+                                        <label htmlFor="testimonio-file-upload"
+                                            className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl border border-slate-200 transition cursor-pointer select-none whitespace-nowrap">
+                                            {form.data.imagen ? 'Cambiar Foto' : 'Seleccionar Foto'}
                                         </label>
-                                        <span className="text-xs text-slate-400 font-medium truncate max-w-[200px]">
-                                            {form.data.imagen ? form.data.imagen.name : (editando ? 'Conservar imagen actual' : 'Ningún archivo seleccionado')}
+                                        <span className="text-xs text-slate-400 font-medium truncate">
+                                            {form.data.imagen ? form.data.imagen.name : (editando ? 'Conservar foto actual' : 'Ningún archivo')}
                                         </span>
                                     </div>
                                     {form.errors.imagen && <p className="text-rose-500 text-xs mt-1 font-semibold">{form.errors.imagen}</p>}
                                 </div>
 
-                                {/* Video URL field */}
-                                <div>
-                                    <label className="text-slate-500 text-[10px] font-bold uppercase tracking-wider block mb-1">URL del Video (Youtube)</label>
-                                    <input 
-                                        value={form.data.video_url} 
-                                        onChange={e => form.setData('video_url', e.target.value)} 
-                                        placeholder="Ej: https://www.youtube.com/embed/..."
-                                        className="w-full bg-slate-50 border border-slate-200 text-slate-800 placeholder-slate-400 rounded-xl px-4 py-2 text-sm focus:outline-none focus:bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-100 transition font-medium" 
-                                    />
-                                    {form.errors.video_url && <p className="text-rose-500 text-xs mt-1 font-semibold">{form.errors.video_url}</p>}
+                                {/* Editor de posición de foto */}
+                                <FotoPositionEditor
+                                    previewImage={previewImage}
+                                    posicion={form.data.foto_posicion}
+                                    onChange={v => form.setData('foto_posicion', v)}
+                                />
+
+                                {/* Toggle de video */}
+                                <div className="border border-slate-200 dark:border-slate-700 rounded-xl p-4 space-y-3">
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            <span className="text-slate-700 dark:text-slate-200 text-sm font-bold">Video del testimonio</span>
+                                            <p className="text-slate-400 text-[11px] mt-0.5">
+                                                {form.data.video_activo ? 'Habilitado — se mostrará botón de reproducción' : 'Deshabilitado — la tarjeta no tendrá video'}
+                                            </p>
+                                        </div>
+                                        <button
+                                            type="button"
+                                            onClick={() => form.setData('video_activo', !form.data.video_activo)}
+                                            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 focus:outline-none cursor-pointer ${
+                                                form.data.video_activo ? 'bg-blue-600' : 'bg-slate-300 dark:bg-slate-600'
+                                            }`}
+                                        >
+                                            <span className={`inline-block h-4 w-4 transform rounded-full bg-white shadow-sm transition-transform duration-200 ${
+                                                form.data.video_activo ? 'translate-x-6' : 'translate-x-1'
+                                            }`} />
+                                        </button>
+                                    </div>
+                                    {form.data.video_activo && (
+                                        <div>
+                                            <label className="text-slate-500 text-[10px] font-bold uppercase tracking-wider block mb-1">URL de YouTube</label>
+                                            <input
+                                                value={form.data.video_url}
+                                                onChange={e => form.setData('video_url', e.target.value)}
+                                                placeholder="https://www.youtube.com/watch?v=..."
+                                                className="w-full bg-slate-50 border border-slate-200 text-slate-800 placeholder-slate-400 rounded-xl px-4 py-2 text-sm focus:outline-none focus:bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-100 transition font-medium"
+                                            />
+                                            {form.errors.video_url && <p className="text-rose-500 text-xs mt-1 font-semibold">{form.errors.video_url}</p>}
+                                        </div>
+                                    )}
                                 </div>
 
+                                {/* Orden + Visible */}
                                 <div className="flex gap-4 items-center">
                                     <div className="flex-1">
                                         <label className="text-slate-500 text-[10px] font-bold uppercase tracking-wider block mb-1">Orden</label>
-                                        <input 
-                                            type="number" 
-                                            min="0" 
-                                            value={form.data.orden} 
-                                            onChange={e => form.setData('orden', Number(e.target.value))} 
-                                            className="w-full bg-slate-50 border border-slate-200 text-slate-800 placeholder-slate-400 rounded-xl px-4.5 py-2 text-sm focus:outline-none focus:bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-100 transition font-medium" 
+                                        <input
+                                            type="number"
+                                            min="0"
+                                            value={form.data.orden}
+                                            onChange={e => form.setData('orden', Number(e.target.value))}
+                                            className="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-4 py-2 text-sm focus:outline-none focus:bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-100 transition font-medium"
                                         />
                                     </div>
-                                    <div className="flex items-end h-full pt-4">
+                                    <div className="flex items-end pb-0.5 h-full pt-5">
                                         <label className="flex items-center gap-2 cursor-pointer select-none">
-                                            <input 
-                                                type="checkbox" 
-                                                checked={form.data.activo} 
-                                                onChange={e => form.setData('activo', e.target.checked)} 
-                                                className="w-5 h-5 text-blue-600 border-slate-300 rounded focus:ring-blue-500 focus:ring-opacity-25" 
+                                            <input
+                                                type="checkbox"
+                                                checked={form.data.activo}
+                                                onChange={e => form.setData('activo', e.target.checked)}
+                                                className="w-5 h-5 text-blue-600 border-slate-300 rounded focus:ring-blue-500"
                                             />
                                             <span className="text-slate-600 text-sm font-semibold">Visible</span>
                                         </label>
@@ -345,7 +457,7 @@ function TestimoniosTab({ testimonios, flash }) {
                         </form>
 
                     </div>
-                 </Modal>
+                </Modal>
             )}
         </div>
     );
@@ -367,11 +479,12 @@ function BloqueEditor({ bloque, idx, total, onChange, onDelete, onMoveUp, onMove
     const width = bloque.width || 'completo';
     const widthClass = width === 'estrecho' ? 'w-full md:w-1/3 px-2 mb-4' : (width === 'mediano' ? 'w-full md:w-1/2 px-2 mb-4' : 'w-full px-2 mb-4');
 
-    function handleFile(e) {
+    async function handleFile(e) {
         const f = e.target.files[0];
         if (!f) return;
-        fileRef(idx, f);
-        onChange(idx, { ...bloque, _preview: URL.createObjectURL(f), imagen: '' });
+        const processed = await processImageFile(f);
+        fileRef(idx, processed);
+        onChange(idx, { ...bloque, _preview: URL.createObjectURL(processed), imagen: '' });
     }
 
     const previewSrc = bloque._preview || (bloque.imagen ? `/storage/${bloque.imagen}` : null);
@@ -529,7 +642,7 @@ function BloqueEditor({ bloque, idx, total, onChange, onDelete, onMoveUp, onMove
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                 </svg>
                                 <span className="text-xs text-slate-400 font-semibold">{previewSrc ? 'Cambiar imagen' : 'Seleccionar imagen'}</span>
-                                <input type="file" accept="image/*" className="hidden" onChange={handleFile} />
+                                <input type="file" accept="image/*,.heic,.heif,image/heic,image/heif" className="hidden" onChange={handleFile} />
                             </label>
                             <input 
                                 value={bloque.leyenda || ''} 
@@ -687,11 +800,12 @@ function NoticiasTab({ noticias, flash }) {
         else if (tipo === 'ficha') setBloques(p => [...p, { ...base, titulo: 'Ficha Técnica', items: '' }]);
     }
 
-    function handlePortada(e) {
+    async function handlePortada(e) {
         const f = e.target.files[0];
         if (!f) return;
-        setPortadaFile(f);
-        setPortadaPreview(URL.createObjectURL(f));
+        const processed = await processImageFile(f);
+        setPortadaFile(processed);
+        setPortadaPreview(URL.createObjectURL(processed));
     }
 
     async function guardar(e, builderData = null) {
@@ -889,7 +1003,7 @@ function NoticiasTab({ noticias, flash }) {
                                 <div>
                                     <label className="text-slate-500 text-[10px] font-bold uppercase tracking-wider block mb-1.5">Foto de Portada</label>
                                     <div className="flex items-center gap-3">
-                                        <input type="file" accept="image/*" onChange={handlePortada} className="hidden" id="noticia-portada-upload" />
+                                        <input type="file" accept="image/*,.heic,.heif,image/heic,image/heif" onChange={handlePortada} className="hidden" id="noticia-portada-upload" />
                                         <label htmlFor="noticia-portada-upload" className="px-4.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl border border-slate-200 transition cursor-pointer select-none">
                                             {portadaFile ? 'Cambiar Portada' : 'Seleccionar Portada'}
                                         </label>

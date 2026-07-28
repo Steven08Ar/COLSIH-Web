@@ -23,13 +23,15 @@ class TestimonioController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'nombre'    => 'required|string|max:120',
-            'cargo'     => 'nullable|string|max:120',
-            'texto'     => 'required|string|max:600',
-            'imagen'    => 'required|image|max:4096',
-            'video_url' => 'nullable|url|max:300',
-            'activo'    => 'boolean',
-            'orden'     => 'integer|min:0',
+            'nombre'        => 'required|string|max:120',
+            'cargo'         => 'nullable|string|max:120',
+            'texto'         => 'required|string|max:600',
+            'imagen'        => 'required|file|mimes:jpeg,png,jpg,gif,svg,webp,heic,heif,HEIC,HEIF|max:20480',
+            'foto_posicion' => 'nullable|numeric|min:0|max:100',
+            'video_url'     => 'nullable|max:300',
+            'video_activo'  => 'boolean',
+            'activo'        => 'boolean',
+            'orden'         => 'integer|min:0',
         ]);
 
         $data['imagen'] = $request->file('imagen')->store('testimonios', 'public');
@@ -41,13 +43,15 @@ class TestimonioController extends Controller
     public function update(Request $request, Testimonio $testimonio)
     {
         $data = $request->validate([
-            'nombre'    => 'required|string|max:120',
-            'cargo'     => 'nullable|string|max:120',
-            'texto'     => 'required|string|max:600',
-            'imagen'    => 'nullable|image|max:4096',
-            'video_url' => 'nullable|url|max:300',
-            'activo'    => 'boolean',
-            'orden'     => 'integer|min:0',
+            'nombre'        => 'required|string|max:120',
+            'cargo'         => 'nullable|string|max:120',
+            'texto'         => 'required|string|max:600',
+            'imagen'        => 'nullable|file|mimes:jpeg,png,jpg,gif,svg,webp,heic,heif,HEIC,HEIF|max:20480',
+            'foto_posicion' => 'nullable|numeric|min:0|max:100',
+            'video_url'     => 'nullable|max:300',
+            'video_activo'  => 'boolean',
+            'activo'        => 'boolean',
+            'orden'         => 'integer|min:0',
         ]);
 
         if ($request->hasFile('imagen')) {

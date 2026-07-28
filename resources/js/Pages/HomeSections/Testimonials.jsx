@@ -16,6 +16,8 @@ export default function Testimonials({ testimonios }) {
         nombre: t.nombre,
         cargo: t.cargo ?? '',
         image: t.imagen ? `/storage/${t.imagen}` : null,
+        fotoPos: Number(t.foto_posicion ?? 50),
+        videoActivo: !!t.video_activo,
         videoUrl: toEmbedUrl(t.video_url || t.videoUrl) || null,
     }));
 
@@ -182,36 +184,41 @@ export default function Testimonials({ testimonios }) {
                                     <div
                                         key={idx}
                                         style={getCardStyle(idx)}
-                                        onClick={() => isCenter && setActiveVideoUrl(item.videoUrl)}
+                                        onClick={() => isCenter && item.videoActivo && setActiveVideoUrl(item.videoUrl)}
                                         className="absolute top-1/2 -translate-y-1/2 flex flex-col justify-between min-h-[420px] rounded-3xl overflow-hidden shadow-lg border border-slate-800/80 bg-slate-900/50 cursor-pointer group"
                                     >
                                         {/* Background Image */}
-                                        <img 
-                                            src={item.image} 
-                                            alt={item.nombre} 
+                                        <img
+                                            src={item.image}
+                                            alt={item.nombre}
                                             className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 select-none pointer-events-none z-0"
+                                            style={{ objectPosition: `center ${item.fotoPos}%` }}
                                         />
                                         
                                         {/* Dark overlay mask - z-10 to stay on top of the image */}
                                         <div className="absolute inset-0 bg-slate-950/75 group-hover:bg-slate-950/80 transition-colors duration-500 z-10"></div>
 
-                                        {/* Absolute Play Button Overlay (appears on hover) - z-40 to stay on top of the text */}
-                                        <div className="absolute inset-0 z-40 flex items-center justify-center bg-black/25 opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none">
-                                            <div className="w-16 h-16 rounded-full bg-white/20 text-white border border-white/30 backdrop-blur-md flex items-center justify-center transform scale-90 group-hover:scale-105 transition-all duration-500 shadow-xl">
-                                                <svg className="w-6 h-6 fill-current ml-0.5" viewBox="0 0 24 24">
-                                                    <path d="M8 5v14l11-7z" />
-                                                </svg>
+                                        {/* Play Button Overlay — solo si video_activo */}
+                                        {item.videoActivo && (
+                                            <div className="absolute inset-0 z-40 flex items-center justify-center bg-black/25 opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none">
+                                                <div className="w-16 h-16 rounded-full bg-white/20 text-white border border-white/30 backdrop-blur-md flex items-center justify-center transform scale-90 group-hover:scale-105 transition-all duration-500 shadow-xl">
+                                                    <svg className="w-6 h-6 fill-current ml-0.5" viewBox="0 0 24 24">
+                                                        <path d="M8 5v14l11-7z" />
+                                                    </svg>
+                                                </div>
                                             </div>
-                                        </div>
+                                        )}
 
                                         {/* Content layer - z-30 to stay on top of all masks */}
                                         <div className="relative z-30 flex flex-col justify-between h-full p-8 flex-1">
                                             <div className="flex justify-between items-start">
                                                 <span className="text-7xl font-serif text-white/25 select-none pointer-events-none leading-none">“</span>
+                                                {item.videoActivo && (
                                                 <div className="bg-[#800A15] text-white text-[10px] font-bold tracking-wider uppercase px-2.5 py-1 rounded-full shadow-md flex items-center gap-1 select-none">
                                                     <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>
                                                     Video
                                                 </div>
+                                            )}
                                             </div>
 
                                             {/* Spacing */}

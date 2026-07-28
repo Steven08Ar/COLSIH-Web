@@ -2,38 +2,9 @@ import { Link } from '@inertiajs/react';
 import ScrollReveal from './ScrollReveal';
 
 export default function News({ noticias }) {
-    // Elegant fallback news items if the DB is empty
-    const fallbackNews = [
-        {
-            id: 1,
-            titulo: "Inauguración de los nuevos laboratorios de robótica y tecnología",
-            resumen: "COLSIH estrena modernas instalaciones diseñadas para fomentar las competencias STEM en programación y diseño 3D desde grados de primaria.",
-            slug: "inauguracion-laboratorios-robotica",
-            imagen: null,
-            categoria: "Tecnología",
-            publicado_en: "2026-07-10"
-        },
-        {
-            id: 2,
-            titulo: "Excelente desempeño de la promoción 2025 en las Pruebas Saber 11",
-            resumen: "Nuestros estudiantes se posicionan nuevamente en el nivel Muy Superior, destacando el liderazgo académico integral que nos caracteriza.",
-            slug: "excelente-desempeno-pruebas-saber",
-            imagen: null,
-            categoria: "Académico",
-            publicado_en: "2026-06-25"
-        },
-        {
-            id: 3,
-            titulo: "Olimpiadas Deportivas Salesianas y convivencia COLSIH 2026",
-            resumen: "Una semana dedicada al deporte, la sana recreación y el fortalecimiento de los valores de solidaridad y paz de toda la comunidad educativa.",
-            slug: "olimpiadas-deportivas-salesianas",
-            imagen: null,
-            categoria: "Comunidad",
-            publicado_en: "2026-06-18"
-        }
-    ];
+    if (!noticias || noticias.length === 0) return null;
 
-    const activeNews = noticias && noticias.length > 0 ? noticias.slice(0, 3) : fallbackNews;
+    const activeNews = noticias.slice(0, 3);
 
     const formatDate = (dateStr) => {
         try {

@@ -18,7 +18,7 @@ export default function Testimonials({ testimonios }) {
         image: t.imagen ? `/storage/${t.imagen}` : null,
         fotoPos: Number(t.foto_posicion ?? 50),
         videoActivo: !!t.video_activo,
-        videoUrl: toEmbedUrl(t.video_url || t.videoUrl) || null,
+        videoUrl: t.video_activo ? (toEmbedUrl(t.video_url || t.videoUrl) || null) : null,
     }));
 
     const [activeIndex, setActiveIndex] = useState(0);
@@ -184,8 +184,8 @@ export default function Testimonials({ testimonios }) {
                                     <div
                                         key={idx}
                                         style={getCardStyle(idx)}
-                                        onClick={() => isCenter && item.videoActivo && setActiveVideoUrl(item.videoUrl)}
-                                        className="absolute top-1/2 -translate-y-1/2 flex flex-col justify-between min-h-[420px] rounded-3xl overflow-hidden shadow-lg border border-slate-800/80 bg-slate-900/50 cursor-pointer group"
+                                        onClick={() => isCenter && item.videoActivo && item.videoUrl && setActiveVideoUrl(item.videoUrl)}
+                                        className={`absolute top-1/2 -translate-y-1/2 flex flex-col justify-between min-h-[420px] rounded-3xl overflow-hidden shadow-lg border border-slate-800/80 bg-slate-900/50 group ${isCenter && item.videoActivo && item.videoUrl ? 'cursor-pointer' : 'cursor-default'}`}
                                     >
                                         {/* Background Image */}
                                         <img

@@ -2,6 +2,10 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Noticia;
+use App\Models\PreguntaFrecuente;
+use App\Models\Scene;
+use App\Models\Testimonio;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -38,6 +42,18 @@ class HandleInertiaRequests extends Middleware
         return [
             ...parent::share($request),
             'flash' => $request->session()->get('flash'),
+            'adminCounts' => function () use ($request) {
+                $adminPath = env('ADMIN_PATH', 'panel-admin');
+                if (! str_starts_with($request->path(), $adminPath)) {
+                    return null;
+                }
+                return [
+                    'testimonios' => Testimonio::count(),
+                    'noticias'    => Noticia::count(),
+                    'preguntas'   => PreguntaFrecuente::count(),
+                    'scenes'      => Scene::count(),
+                ];
+            },
         ];
     }
 }

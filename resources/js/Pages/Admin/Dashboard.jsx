@@ -1376,7 +1376,7 @@ const TABS = [
     { key: 'recorrido',   label: 'Recorrido 360°' },
 ];
 
-export default function AdminDashboard({ seccion, testimonios, noticias, preguntas, tour, scenes = [], flash }) {
+export default function AdminDashboard({ seccion, testimonios, noticias, preguntas, tour, scenes = [], flash, adminCounts }) {
     const basePath = window.location.pathname.replace(/\/[^/]+$/, '');
     const [darkMode, setDarkMode] = useState(() => localStorage.getItem('sih-dark-mode') === 'true');
     const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -1500,10 +1500,10 @@ export default function AdminDashboard({ seccion, testimonios, noticias, pregunt
                                         <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${
                                             isActive ? 'bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300' : 'bg-slate-100 dark:bg-slate-800 text-slate-500'
                                         }`}>
-                                            {tab.key === 'testimonios' && testimonios.length}
-                                            {tab.key === 'noticias' && noticias.length}
-                                            {tab.key === 'preguntas' && preguntas.length}
-                                            {tab.key === 'recorrido' && scenes.length}
+                                            {tab.key === 'testimonios' && (adminCounts?.testimonios ?? testimonios.length)}
+                                            {tab.key === 'noticias'    && (adminCounts?.noticias    ?? noticias.length)}
+                                            {tab.key === 'preguntas'   && (adminCounts?.preguntas   ?? preguntas.length)}
+                                            {tab.key === 'recorrido'   && (adminCounts?.scenes      ?? scenes.length)}
                                         </span>
                                     </Link>
                                 );

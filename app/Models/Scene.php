@@ -36,6 +36,15 @@ class Scene extends Model
 
     public function getImagenUrlAttribute(): string
     {
+        if (empty($this->imagen_path)) {
+            return asset('recorrido_virtual/1.entrada.jpg');
+        }
+        if (str_starts_with($this->imagen_path, 'http://') || str_starts_with($this->imagen_path, 'https://') || str_starts_with($this->imagen_path, '/')) {
+            return $this->imagen_path;
+        }
+        if (str_starts_with($this->imagen_path, 'recorrido_virtual/')) {
+            return asset($this->imagen_path);
+        }
         return asset('storage/' . $this->imagen_path);
     }
 }

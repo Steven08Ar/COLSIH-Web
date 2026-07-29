@@ -4,14 +4,12 @@ import 'pannellum/src/css/pannellum.css';
 import 'pannellum/src/js/libpannellum.js';
 import 'pannellum/src/js/pannellum.js';
 import { 
-    ChevronLeft, Compass, Eye, Save, Trash2, Plus, 
-    Link as LinkIcon, Info, RefreshCw, X, MapPin 
+    Menu, Plus, Eye, Save, Trash2, Link as LinkIcon, Info, 
+    MousePointer, MapPin, Image as ImageIcon, Settings, 
+    RotateCcw, RotateCw, ZoomIn, ZoomOut, MoreVertical, X, Check
 } from 'lucide-react';
 
 export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = [], flash }) {
-    // Extrae la base del panel admin (/sih-panel-308) sin depender de Ziggy
-    const adminBase = '/' + window.location.pathname.split('/')[1];
-
     const containerRef = useRef(null);
     const viewerRef = useRef(null);
 
@@ -19,9 +17,8 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
     const [localHotspots, setLocalHotspots] = useState(hotspots);
     const [activeModal, setActiveModal] = useState(false);
     const [selectedHotspot, setSelectedHotspot] = useState(null); // null = nuevo, object = editando
-
-    // Coordenadas capturadas del clic
-    const [clickCoords, setClickCoords] = useState({ yaw: 0, pitch: 0 });
+    const [showImageList, setShowImageList] = useState(true);
+    const [activeTool, setActiveTool] = useState('select'); // 'select' | 'enlace' | 'info'
 
     const form = useForm({
         scene_id: scene.id,
@@ -36,7 +33,7 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
         setLocalHotspots(hotspots);
     }, [hotspots]);
 
-    // Cargar y configurar Pannellum en modo Editor
+    // Configurar e inicializar Pannellum en modo Editor
     useEffect(() => {
         if (!containerRef.current) return;
 
@@ -47,7 +44,7 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
             viewerRef.current = null;
         }
 
-        // Construir hotspots para Pannellum
+        // Formatear hotspots para Pannellum
         const pannellumHotspots = localHotspots.map((hs) => {
             const isEnlace = hs.tipo === 'enlace';
             const targetScene = allScenes.find((s) => s.id === hs.scene_destino_id);
@@ -61,7 +58,12 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
                 yaw: Number(hs.yaw),
                 type: isEnlace ? 'scene' : 'info',
                 text: labelText,
-                cssClass: isEnlace ? 'custom-hotspot-link' : 'custom-hotspot-info',
+                cssClass: isEnlace ? 'custom-hotspot-link-editor' : 'custom-hotspot-info-editor',
+                createTooltipFunc: (hotSpotDiv) => {
+                    hotSpotDiv.innerHTML = isEnlace
+                        ? `<div class="hotspot-link-inner"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg></div>`
+                        : `<div class="hotspot-info-inner">i</div>`;
+                },
                 clickHandlerFunc: () => {
                     abrirEditarHotspot(hs);
                 }
@@ -79,7 +81,7 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
                     yaw: Number(scene.yaw_inicial || 0),
                     pitch: Number(scene.pitch_inicial || 0),
                     hfov: Number(scene.hfov_inicial || 100),
-                    showControls: true,
+                    showControls: false,
                     compass: true,
                     hotSpots: pannellumHotspots
                 });
@@ -90,22 +92,18 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
                     setIsLoading(false);
                 });
 
-                // Escuchar el clic sobre la imagen 360° para capturar [pitch, yaw]
+                // Escuchar clics sobre el panorama para ubicar automáticamente las coordenadas [pitch, yaw]
                 const containerEl = containerRef.current;
                 const handleCanvasClick = (e) => {
-                    // Evitar disparar si el clic fue en un elemento de hotspot existente
-                    if (e.target.closest('.pnm-hotspot') || e.target.closest('.custom-hotspot-link') || e.target.closest('.custom-hotspot-info')) {
+                    if (e.target.closest('.pnm-hotspot') || e.target.closest('.custom-hotspot-link-editor') || e.target.closest('.custom-hotspot-info-editor')) {
                         return;
                     }
 
                     if (viewerRef.current) {
-                        // Pannellum API para traducir coordenadas del puntero a [pitch, yaw]
                         const coords = viewerRef.current.mouseEventToCoords(e);
                         if (coords && Array.isArray(coords) && coords.length >= 2) {
                             const [pitch, yaw] = coords;
-                            // Validar que las coordenadas sean números reales
                             if (!isNaN(pitch) && !isNaN(yaw)) {
-                                setClickCoords({ pitch, yaw });
                                 abrirCrearHotspot(pitch, yaw);
                             }
                         }
@@ -123,17 +121,17 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
                 };
             }
         } catch (err) {
-            console.error('Error al iniciar editor Pannellum:', err);
+            console.error('Error al iniciar visor Pannellum:', err);
             setIsLoading(false);
         }
     }, [scene, localHotspots]);
 
-    // Abrir modal para crear hotspot en coordenadas de clic
-    const abrirCrearHotspot = (pitch, yaw) => {
+    // Abrir modal para crear un hotspot
+    const abrirCrearHotspot = (pitch, yaw, defaultTipo = activeTool !== 'select' ? activeTool : 'enlace') => {
         setSelectedHotspot(null);
         form.setData({
             scene_id: scene.id,
-            tipo: 'enlace',
+            tipo: defaultTipo,
             yaw: Number(yaw.toFixed(4)),
             pitch: Number(pitch.toFixed(4)),
             texto: '',
@@ -156,18 +154,38 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
         setActiveModal(true);
     };
 
-    // Guardar o actualizar hotspot
+    // Botón de Header "+ Agregar click de recorrido"
+    const handleAddRouteClick = () => {
+        setActiveTool('enlace');
+        if (viewerRef.current) {
+            const pitch = viewerRef.current.getPitch();
+            const yaw = viewerRef.current.getYaw();
+            abrirCrearHotspot(pitch, yaw, 'enlace');
+        }
+    };
+
+    // Botón de Header "+ Añadir click o botón de información"
+    const handleAddInfoClick = () => {
+        setActiveTool('info');
+        if (viewerRef.current) {
+            const pitch = viewerRef.current.getPitch();
+            const yaw = viewerRef.current.getYaw();
+            abrirCrearHotspot(pitch, yaw, 'info');
+        }
+    };
+
+    // Guardar / Actualizar
     const guardarHotspot = (e) => {
         e.preventDefault();
 
         if (selectedHotspot) {
-            form.put(`${adminBase}/hotspots/${selectedHotspot.id}`, {
+            form.put(route('admin.hotspots.update', selectedHotspot.id), {
                 onSuccess: () => {
                     setActiveModal(false);
                 }
             });
         } else {
-            form.post(`${adminBase}/hotspots`, {
+            form.post(route('admin.hotspots.store'), {
                 onSuccess: () => {
                     setActiveModal(false);
                 }
@@ -175,11 +193,11 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
         }
     };
 
-    // Eliminar hotspot
+    // Eliminar
     const eliminarHotspot = () => {
         if (!selectedHotspot) return;
-        if (confirm('¿Estás seguro de eliminar este punto interactivo?')) {
-            router.delete(`${adminBase}/hotspots/${selectedHotspot.id}`, {
+        if (confirm('¿Eliminar este punto interactivo?')) {
+            router.delete(route('admin.hotspots.destroy', selectedHotspot.id), {
                 onSuccess: () => {
                     setActiveModal(false);
                 }
@@ -191,110 +209,291 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
 
     return (
         <>
-            <Head title={`Editor 360° | ${scene.nombre}`} />
+            <Head title={`Editor de Recorrido 360° | ${scene.nombre}`} />
 
-            <div className="h-screen w-screen flex flex-col bg-slate-950 text-white font-sans overflow-hidden select-none">
-                
-                {/* ── HEADER SUPERIOR COMPLETO DE EDICIÓN ── */}
-                <header className="h-20 bg-slate-900/90 border-b border-slate-800 px-6 flex items-center justify-between z-30 backdrop-blur-md shrink-0">
+            {/* Estilos CSS Inyectados para los Puntos de la Referencia exacta */}
+            <style>{`
+                .custom-hotspot-link-editor {
+                    width: 44px;
+                    height: 44px;
+                    border-radius: 50%;
+                    background: #0284c7;
+                    border: 3px solid #ffffff;
+                    box-shadow: 0 0 20px rgba(2, 132, 199, 0.8), 0 4px 10px rgba(0,0,0,0.5);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: white;
+                    cursor: pointer;
+                    transition: transform 0.2s ease, background-color 0.2s ease;
+                }
+                .custom-hotspot-link-editor:hover {
+                    transform: scale(1.25);
+                    background: #0369a1;
+                }
+                .hotspot-link-inner {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+
+                .custom-hotspot-info-editor {
+                    width: 40px;
+                    height: 40px;
+                    border-radius: 50%;
+                    background: rgba(15, 23, 42, 0.75);
+                    border: 2px solid #ffffff;
+                    backdrop-filter: blur(6px);
+                    box-shadow: 0 0 15px rgba(255, 255, 255, 0.4), 0 4px 10px rgba(0,0,0,0.5);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: white;
+                    font-family: ui-sans-serif, system-ui, sans-serif;
+                    font-weight: 800;
+                    font-size: 18px;
+                    cursor: pointer;
+                    transition: transform 0.2s ease, background-color 0.2s ease;
+                }
+                .custom-hotspot-info-editor:hover {
+                    transform: scale(1.25);
+                    background: rgba(2, 132, 199, 0.9);
+                }
+                .hotspot-info-inner {
+                    line-height: 1;
+                }
+            `}</style>
+
+            <div className="h-screen w-screen flex flex-col bg-[#0b0f19] text-white font-sans overflow-hidden select-none">
+
+                {/* ── HEADER DE ACCIONES (Replicado de la Referencia Exacta) ── */}
+                <header className="h-16 bg-[#0f172a] border-b border-slate-800/80 px-6 flex items-center justify-between z-30 shrink-0 shadow-lg">
                     
-                    {/* LADO IZQUIERDO: Navegación & Desplegable de Escenas */}
+                    {/* Izquierda: Menú Título */}
                     <div className="flex items-center gap-4">
                         <Link
-                            href={`${adminBase}/recorrido`}
-                            className="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition cursor-pointer border border-slate-700"
-                            title="Volver al Panel Administrativo"
+                            href={route('admin.recorrido')}
+                            className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition cursor-pointer"
                         >
-                            <ChevronLeft className="w-5 h-5" />
+                            <Menu className="w-5 h-5" />
                         </Link>
-
-                        <div className="h-8 w-px bg-slate-800"></div>
-
-                        {/* Desplegable Selector de Imagen / Escena */}
-                        <div className="flex flex-col">
-                            <span className="text-[10px] font-extrabold uppercase tracking-widest text-blue-400">
-                                Escena Activa ({allScenes.findIndex(s => s.id === scene.id) + 1}/{allScenes.length})
-                            </span>
-                            <select
-                                value={scene.id}
-                                onChange={(e) => {
-                                    const nextId = e.target.value;
-                                    const nextScene = allScenes.find(s => s.id == nextId);
-                                    if (nextScene) {
-                                        router.get(`${adminBase}/recorrido/scenes/${nextScene.id}/editor`);
-                                    }
-                                }}
-                                className="bg-slate-800 border border-slate-700 text-white font-bold text-sm rounded-xl px-3 py-1.5 focus:outline-none focus:border-blue-500 transition cursor-pointer mt-0.5"
-                            >
-                                {allScenes.map((s) => (
-                                    <option key={s.id} value={s.id}>
-                                        {s.nombre} {s.es_escena_inicial ? '⭐ (Inicial)' : ''}
-                                    </option>
-                                ))}
-                            </select>
+                        
+                        <div className="flex items-center gap-2.5">
+                            <Compass className="w-5 h-5 text-blue-500" />
+                            <h1 className="font-extrabold text-sm tracking-tight text-white font-sans">
+                                Editor de Recorrido 360°
+                            </h1>
                         </div>
                     </div>
 
-                    {/* CENTRO: Instrucción / Herramienta */}
-                    <div className="hidden md:flex items-center gap-3 bg-slate-800/80 border border-slate-700/80 px-4 py-2 rounded-2xl text-xs font-semibold text-slate-300">
-                        <MapPin className="w-4 h-4 text-blue-400 animate-bounce" />
-                        <span>Haz clic sobre cualquier lugar de la imagen 360° para colocar o editar un punto.</span>
+                    {/* Centro: Botones de Agregar Puntos (Exactos como en la foto) */}
+                    <div className="flex items-center gap-3">
+                        <button
+                            onClick={handleAddRouteClick}
+                            className="bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs px-4 py-2.5 rounded-xl shadow-lg shadow-blue-600/20 transition cursor-pointer flex items-center gap-2 active:scale-95"
+                        >
+                            <Plus className="w-4 h-4" />
+                            <span>Agregar click de recorrido</span>
+                        </button>
+
+                        <button
+                            onClick={handleAddInfoClick}
+                            className="bg-slate-800 hover:bg-slate-700 border border-slate-700/80 text-slate-200 font-extrabold text-xs px-4 py-2.5 rounded-xl transition cursor-pointer flex items-center gap-2 active:scale-95"
+                        >
+                            <Plus className="w-4 h-4 text-blue-400" />
+                            <span>Añadir click o botón de información</span>
+                        </button>
                     </div>
 
-                    {/* LADO DERECHO: Acciones & Vista Previa */}
+                    {/* Derecha: Vista Previa y Guardar Recorrido (Exactos como en la foto) */}
                     <div className="flex items-center gap-3">
                         <a
-                            href={`/recorrido-virtual/${tour.slug || 'colsih'}`}
+                            href={route('tour.show', { slug: tour.slug || 'colsih' })}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold px-4 py-2.5 rounded-xl transition cursor-pointer flex items-center gap-2"
+                            className="bg-slate-800/90 hover:bg-slate-700 border border-slate-700/80 text-slate-200 font-extrabold text-xs px-4 py-2.5 rounded-xl transition cursor-pointer flex items-center gap-2"
                         >
-                            <Eye className="w-4 h-4 text-emerald-400" />
-                            <span className="hidden sm:inline">Vista Previa</span>
+                            <Eye className="w-4 h-4 text-slate-400" />
+                            <span>Vista previa</span>
                         </a>
 
                         <Link
-                            href={`${adminBase}/recorrido`}
-                            className="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-5 py-2.5 rounded-xl shadow-lg shadow-blue-600/20 transition cursor-pointer flex items-center gap-2"
+                            href={route('admin.recorrido')}
+                            className="bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs px-5 py-2.5 rounded-xl shadow-lg shadow-blue-600/20 transition cursor-pointer active:scale-95"
                         >
-                            <Save className="w-4 h-4" />
-                            <span>Guardar y Salir</span>
+                            Guardar recorrido
                         </Link>
                     </div>
                 </header>
 
-                {/* ── ÁREA PRINCIPAL CENTRAL Y ABAJO: Visor 360° en Tamaño Total ── */}
-                <main className="relative flex-1 w-full h-full bg-slate-950 overflow-hidden">
-                    
-                    {/* Contenedor Pannellum */}
-                    <div ref={containerRef} className="w-full h-full" />
+                {/* ── CUERPO PRINCIPAL (Barra Lateral de Herramientas + Visor Central) ── */}
+                <div className="flex-1 flex overflow-hidden relative">
 
-                    {/* Skeleton / Loader de Carga */}
-                    {isLoading && (
-                        <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-slate-950/80 backdrop-blur-sm">
-                            <div className="w-16 h-16 rounded-full border-4 border-blue-500/20 border-t-blue-500 animate-spin mb-4"></div>
-                            <span className="text-xs font-bold uppercase tracking-widest text-slate-300">
-                                Cargando Imagen 360°...
-                            </span>
+                    {/* Barra Izquierda de Herramientas Estilo Iconos (Exacta como en la foto) */}
+                    <aside className="w-14 bg-[#090d16] border-r border-slate-800/80 flex flex-col items-center py-4 space-y-4 z-20 shrink-0">
+                        <button
+                            onClick={() => setActiveTool('select')}
+                            className={`p-2.5 rounded-xl transition cursor-pointer ${
+                                activeTool === 'select' ? 'bg-blue-600 text-white shadow-md' : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                            }`}
+                            title="Herramienta Selección"
+                        >
+                            <MousePointer className="w-5 h-5" />
+                        </button>
+
+                        <button
+                            onClick={() => setActiveTool('enlace')}
+                            className={`p-2.5 rounded-xl transition cursor-pointer ${
+                                activeTool === 'enlace' ? 'bg-blue-600 text-white shadow-md' : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                            }`}
+                            title="Colocar Punto de Recorrido"
+                        >
+                            <MapPin className="w-5 h-5" />
+                        </button>
+
+                        <button
+                            onClick={() => setShowImageList(!showImageList)}
+                            className={`p-2.5 rounded-xl transition cursor-pointer ${
+                                showImageList ? 'bg-blue-600 text-white shadow-md' : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                            }`}
+                            title="Alternar Lista de Imágenes"
+                        >
+                            <ImageIcon className="w-5 h-5" />
+                        </button>
+
+                        <div className="w-6 h-px bg-slate-800 my-2" />
+
+                        <button
+                            className="p-2.5 rounded-xl text-slate-500 hover:text-slate-300 transition cursor-pointer"
+                            title="Configuración del Visor"
+                        >
+                            <Settings className="w-5 h-5" />
+                        </button>
+                    </aside>
+
+                    {/* Visor 360 Panorama en Tamaño Total */}
+                    <main className="flex-1 relative w-full h-full bg-[#050811] overflow-hidden">
+                        
+                        {/* Contenedor DOM Pannellum */}
+                        <div ref={containerRef} className="w-full h-full" />
+
+                        {/* Skeleton / Loader de Carga */}
+                        {isLoading && (
+                            <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-slate-950/85 backdrop-blur-md">
+                                <div className="w-16 h-16 rounded-full border-4 border-blue-500/20 border-t-blue-600 animate-spin mb-4"></div>
+                                <span className="text-xs font-black uppercase tracking-[3px] text-blue-400">
+                                    Cargando Escena 360°...
+                                </span>
+                            </div>
+                        )}
+
+                        {/* Controles Flotantes Inferiores Izquierda (Deshacer, Rehacer, Zoom In, Zoom Out) */}
+                        <div className="absolute bottom-6 left-6 z-20 flex items-center bg-slate-900/90 border border-slate-800 backdrop-blur-md rounded-2xl shadow-2xl overflow-hidden p-1">
+                            <button
+                                onClick={() => viewerRef.current?.setYaw(viewerRef.current.getYaw() - 15)}
+                                className="p-2.5 text-slate-300 hover:text-white hover:bg-slate-800 rounded-xl transition"
+                                title="Girar Izquierda"
+                            >
+                                <RotateCcw className="w-4 h-4" />
+                            </button>
+                            <button
+                                onClick={() => viewerRef.current?.setYaw(viewerRef.current.getYaw() + 15)}
+                                className="p-2.5 text-slate-300 hover:text-white hover:bg-slate-800 rounded-xl transition"
+                                title="Girar Derecha"
+                            >
+                                <RotateCw className="w-4 h-4" />
+                            </button>
+                            <div className="w-px h-5 bg-slate-800 mx-1" />
+                            <button
+                                onClick={() => viewerRef.current?.setHfov(Math.min(120, viewerRef.current.getHfov() + 15))}
+                                className="p-2.5 text-slate-300 hover:text-white hover:bg-slate-800 rounded-xl transition font-extrabold text-sm"
+                                title="Alejar (-)"
+                            >
+                                －
+                            </button>
+                            <button
+                                onClick={() => viewerRef.current?.setHfov(Math.max(30, viewerRef.current.getHfov() - 15))}
+                                className="p-2.5 text-slate-300 hover:text-white hover:bg-slate-800 rounded-xl transition font-extrabold text-sm"
+                                title="Acercar (+)"
+                            >
+                                ＋
+                            </button>
                         </div>
-                    )}
 
-                    {/* Notificación Flash */}
-                    {flash && (
-                        <div className="absolute top-6 left-1/2 -translate-x-1/2 z-30 bg-emerald-600 text-white font-bold text-xs px-5 py-2.5 rounded-2xl shadow-2xl animate-fadeIn">
-                            {flash}
-                        </div>
-                    )}
-                </main>
+                        {/* Floating Toggle Icon Button for Image List */}
+                        {!showImageList && (
+                            <button
+                                onClick={() => setShowImageList(true)}
+                                className="absolute bottom-6 right-6 z-20 w-12 h-12 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-2xl hover:scale-105 transition cursor-pointer"
+                                title="Ver Lista de Imágenes"
+                            >
+                                <ImageIcon className="w-6 h-6" />
+                            </button>
+                        )}
 
-                {/* ── MODAL / POPOVER FLOTANTE DE CONFIGURACIÓN DE HOTSPOT ── */}
+                        {/* Floating Image List Drawer (Lista de imágenes) en la Esquina Inferior Derecha (Exacta a la Foto 2) */}
+                        {showImageList && (
+                            <div className="absolute bottom-6 right-6 z-20 w-80 bg-[#111827]/95 border border-slate-800 backdrop-blur-xl rounded-2xl p-4 shadow-[0_20px_50px_rgba(0,0,0,0.8)] flex flex-col max-h-[360px] animate-fadeIn">
+                                
+                                <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-800/80">
+                                    <span className="text-xs font-extrabold text-white tracking-tight">
+                                        Lista de imágenes
+                                    </span>
+                                    <button
+                                        onClick={() => setShowImageList(false)}
+                                        className="text-slate-400 hover:text-white p-1 rounded-lg"
+                                    >
+                                        <X className="w-4 h-4" />
+                                    </button>
+                                </div>
+
+                                <div className="flex-1 overflow-y-auto space-y-2.5 pr-1 custom-scrollbar">
+                                    {allScenes.map((s) => {
+                                        const isActive = s.id === scene.id;
+
+                                        return (
+                                            <div
+                                                key={s.id}
+                                                onClick={() => router.get(route('admin.recorrido.editor', s.id))}
+                                                className={`group relative rounded-xl overflow-hidden border transition-all cursor-pointer ${
+                                                    isActive
+                                                        ? 'border-blue-500 ring-2 ring-blue-500/40 shadow-lg'
+                                                        : 'border-slate-800 hover:border-slate-600'
+                                                }`}
+                                            >
+                                                <div className="relative h-20 w-full bg-slate-900">
+                                                    <img
+                                                        src={s.imagen_url || `/storage/${s.imagen_path}`}
+                                                        alt={s.nombre}
+                                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                                    />
+                                                    
+                                                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent p-2.5 flex items-end justify-between">
+                                                        <span className="text-xs font-bold text-white truncate max-w-[200px]">
+                                                            {s.nombre}
+                                                        </span>
+                                                        <div className="p-1 rounded bg-black/40 text-slate-300 hover:text-white">
+                                                            <MoreVertical className="w-3.5 h-3.5" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        )}
+                    </main>
+                </div>
+
+                {/* ── MODAL / POPOVER FLOTANTE PARA CREAR / EDITAR HOTSPOT ── */}
                 {activeModal && (
                     <div 
-                        className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 backdrop-blur-sm p-4 animate-fadeIn"
+                        className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm p-4 animate-fadeIn"
                         onClick={() => setActiveModal(false)}
                     >
                         <div 
-                            className="bg-slate-900 border border-slate-800 text-white rounded-3xl p-6 w-full max-w-lg shadow-2xl space-y-5"
+                            className="bg-[#111827] border border-slate-800 text-white rounded-3xl p-6 w-full max-w-md shadow-2xl space-y-5"
                             onClick={(e) => e.stopPropagation()}
                         >
                             <div className="flex items-center justify-between pb-3 border-b border-slate-800">
@@ -318,7 +517,7 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
                                 
                                 {/* Coordenadas capturadas */}
                                 <div className="bg-slate-950 p-3 rounded-2xl border border-slate-800 flex items-center justify-between text-xs text-slate-400">
-                                    <span>Coordenadas en Imagen:</span>
+                                    <span>Ubicación Exacta:</span>
                                     <span className="font-mono text-blue-400 font-bold">
                                         Pitch: {form.data.pitch}° | Yaw: {form.data.yaw}°
                                     </span>
@@ -340,7 +539,7 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
                                             }`}
                                         >
                                             <LinkIcon className="w-4 h-4" />
-                                            <span>Enlace a Escena</span>
+                                            <span>Punto de Ruta</span>
                                         </button>
                                         <button
                                             type="button"
@@ -361,7 +560,7 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
                                 {form.data.tipo === 'enlace' && (
                                     <div>
                                         <label className="text-[11px] font-extrabold uppercase tracking-wider text-slate-400 block mb-2">
-                                            Escena Destino al Hacer Clic *
+                                            Escena a la que salta este punto *
                                         </label>
                                         <select
                                             value={form.data.scene_destino_id}
@@ -382,14 +581,14 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
                                 {/* Texto o descripción del punto */}
                                 <div>
                                     <label className="text-[11px] font-extrabold uppercase tracking-wider text-slate-400 block mb-2">
-                                        {form.data.tipo === 'enlace' ? 'Texto del Botón / Tooltip' : 'Detalle Informativo *'}
+                                        {form.data.tipo === 'enlace' ? 'Texto Tooltip / Botón' : 'Descripción Informativa *'}
                                     </label>
                                     <textarea
                                         value={form.data.texto}
                                         onChange={(e) => form.setData('texto', e.target.value)}
                                         rows={3}
                                         required={form.data.tipo === 'info'}
-                                        placeholder={form.data.tipo === 'enlace' ? 'Ej: Ingresar a la Biblioteca' : 'Escribe la descripción de este espacio...'}
+                                        placeholder={form.data.tipo === 'enlace' ? 'Ej: Ir al Patio Central' : 'Escribe el detalle informativo...'}
                                         className="w-full bg-slate-950 border border-slate-700 text-white rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-blue-500 transition resize-none font-medium"
                                     />
                                 </div>
@@ -418,9 +617,10 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
                                         <button
                                             type="submit"
                                             disabled={form.processing}
-                                            className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs transition shadow-lg shadow-blue-600/20 disabled:opacity-50 cursor-pointer"
+                                            className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs transition shadow-lg shadow-blue-600/20 disabled:opacity-50 cursor-pointer flex items-center gap-1.5"
                                         >
-                                            {form.processing ? 'Guardando...' : 'Guardar Punto'}
+                                            <Check className="w-4 h-4" />
+                                            <span>{form.processing ? 'Guardando...' : 'Guardar Punto'}</span>
                                         </button>
                                     </div>
                                 </div>

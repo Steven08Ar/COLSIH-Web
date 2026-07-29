@@ -21,18 +21,21 @@ export function buildPannellumConfig(scenes = [], onSceneChange = null, initialS
         // Map hotspots to Pannellum format
         const hotSpots = (scene.hotspots || []).map((hs) => {
             if (hs.tipo === 'enlace') {
+                const targetScene = scenes.find(s => s.id === hs.scene_destino_id || s.slug === hs.scene_destino_slug);
+                const targetSlug = targetScene ? targetScene.slug : (hs.scene_destino_slug || '');
+
                 return {
                     pitch: Number(hs.pitch || 0),
                     yaw: Number(hs.yaw || 0),
                     type: 'scene',
-                    text: hs.texto || 'Ver siguiente espacio',
-                    sceneId: hs.scene_destino_slug,
+                    text: hs.texto || (targetScene ? `Ir a ${targetScene.nombre}` : 'Ver siguiente espacio'),
+                    sceneId: targetSlug,
                     clickHandlerFunc: (e, args) => {
                         if (onSceneChange && args && args.targetSlug) {
                             onSceneChange(args.targetSlug);
                         }
                     },
-                    clickHandlerArgs: { targetSlug: hs.scene_destino_slug }
+                    clickHandlerArgs: { targetSlug: targetSlug }
                 };
             }
 
@@ -49,7 +52,7 @@ export function buildPannellumConfig(scenes = [], onSceneChange = null, initialS
         pannellumScenes[key] = {
             title: scene.nombre || '',
             type: 'equirectangular',
-            panorama: scene.imagen_url || scene.imagen_path || '',
+            panorama: scene.imagen_url || (scene.imagen_path ? `/storage/${scene.imagen_path}` : ''),
             yaw: Number(scene.yaw_inicial || 0),
             pitch: Number(scene.pitch_inicial || 0),
             hfov: Number(scene.hfov_inicial || 100),

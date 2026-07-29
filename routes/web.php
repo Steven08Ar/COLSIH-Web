@@ -63,6 +63,9 @@ Route::prefix('contacto')->name('contacto.')->group(function () {
 // Panel administrativo — URL oculta definida en .env (ADMIN_PATH)
 $adminPath = env('ADMIN_PATH', 'panel-admin');
 
+use App\Http\Controllers\Admin\HotspotController;
+use App\Http\Controllers\Admin\TourAdminController;
+
 Route::prefix($adminPath)->name('admin.')->group(function () {
     // Acceso público: solo login
     Route::get('/login',  [AdminAuthController::class, 'showLogin'])->name('login');
@@ -71,6 +74,17 @@ Route::prefix($adminPath)->name('admin.')->group(function () {
     // Rutas protegidas
     Route::middleware('admin.auth')->group(function () {
         Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
+
+        // Recorrido Virtual 360°
+        Route::get('/recorrido',                      [TourAdminController::class, 'index'])->name('recorrido');
+        Route::post('/recorrido/scenes',             [TourAdminController::class, 'storeScene'])->name('recorrido.scenes.store');
+        Route::delete('/recorrido/scenes/{scene}',    [TourAdminController::class, 'destroyScene'])->name('recorrido.scenes.destroy');
+        Route::get('/recorrido/scenes/{scene}/editor', [TourAdminController::class, 'editor'])->name('recorrido.editor');
+
+        // Hotspots (puntos de ruta e información)
+        Route::post('/hotspots',                      [HotspotController::class, 'store'])->name('hotspots.store');
+        Route::put('/hotspots/{hotspot}',             [HotspotController::class, 'update'])->name('hotspots.update');
+        Route::delete('/hotspots/{hotspot}',          [HotspotController::class, 'destroy'])->name('hotspots.destroy');
 
         // Testimonios
         Route::get('/testimonios',                    [TestimonioController::class, 'index'])->name('testimonios');

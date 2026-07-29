@@ -1207,14 +1207,175 @@ function PreguntasTab({ preguntas, flash }) {
     );
 }
 
+/* ── Recorrido Virtual 360° ── */
+function RecorridoTab({ tour, scenes = [], flash }) {
+    const [creando, setCreando] = useState(false);
+    const form = useForm({
+        nombre: '',
+        imagen_url_manual: '',
+        imagen: null,
+    });
+
+    const guardarEscena = (e) => {
+        e.preventDefault();
+        form.post(route('admin.recorrido.scenes.store'), {
+            onSuccess: () => {
+                setCreando(false);
+                form.reset();
+            }
+        });
+    };
+
+    const eliminarEscena = (id) => {
+        if (confirm('¿Eliminar esta escena 360° del recorrido?')) {
+            router.delete(route('admin.recorrido.scenes.destroy', id));
+        }
+    };
+
+    return (
+        <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800/80 rounded-2xl sm:rounded-[24px] p-4 sm:p-6 lg:p-8 shadow-sm">
+            <Flash message={flash} />
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-slate-100 dark:border-slate-800/80">
+                <div>
+                    <h2 className="text-slate-800 dark:text-slate-100 font-extrabold text-base sm:text-lg tracking-tight">
+                        Recorrido Virtual 360° ({scenes.length} Espacios)
+                    </h2>
+                    <p className="text-slate-400 text-xs mt-0.5">
+                        Administra las escenas e imágenes 360° y configura los puntos interactivos de ruta e información.
+                    </p>
+                </div>
+                <div className="flex items-center gap-3 w-full sm:w-auto">
+                    <a
+                        href={route('tour.show', { slug: tour?.slug || 'colsih' })}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-full sm:w-auto bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold px-4 py-2.5 rounded-xl transition duration-200 cursor-pointer flex items-center justify-center gap-1.5 border border-slate-200 dark:border-slate-700"
+                    >
+                        <svg className="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        </svg>
+                        Ver Vista Previa
+                    </a>
+                    <button
+                        onClick={() => setCreando(true)}
+                        className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-md shadow-blue-500/10 transition duration-200 cursor-pointer active:scale-95 flex items-center justify-center gap-1.5"
+                    >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                        </svg>
+                        Agregar Nueva Escena 360°
+                    </button>
+                </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                {scenes.map((s) => (
+                    <div
+                        key={s.id}
+                        className="bg-slate-50/50 dark:bg-slate-800/20 hover:bg-slate-50 dark:hover:bg-slate-800/40 border border-slate-200/60 dark:border-slate-800/60 hover:border-slate-300/80 rounded-2xl p-4 flex flex-col justify-between transition duration-200 group"
+                    >
+                        <div>
+                            {/* Thumbnail Preview */}
+                            <div className="relative w-full h-40 rounded-xl overflow-hidden mb-3 border border-slate-200 dark:border-slate-700 bg-slate-900">
+                                <img
+                                    src={s.imagen_url || `/storage/${s.imagen_path}`}
+                                    alt={s.nombre}
+                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                />
+                                {s.es_escena_inicial && (
+                                    <span className="absolute top-2 left-2 bg-blue-600 text-white text-[10px] font-extrabold px-2 py-0.5 rounded-md shadow-md">
+                                        Escena Inicial
+                                    </span>
+                                )}
+                                <span className="absolute bottom-2 right-2 bg-slate-900/80 backdrop-blur-md text-slate-200 text-[10px] font-bold px-2 py-0.5 rounded-md border border-white/20">
+                                    {s.hotspots?.length || 0} puntos
+                                </span>
+                            </div>
+
+                            <h3 className="font-bold text-slate-800 dark:text-slate-100 text-sm">{s.nombre}</h3>
+                            <p className="text-slate-400 text-xs mt-0.5 font-mono">Slug: {s.slug}</p>
+                        </div>
+
+                        <div className="flex items-center gap-2 mt-4 pt-3 border-t border-slate-200/60 dark:border-slate-800/60">
+                            <Link
+                                href={route('admin.recorrido.editor', s.id)}
+                                className="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-2 rounded-xl text-center shadow-md shadow-blue-500/10 transition cursor-pointer flex items-center justify-center gap-1.5"
+                            >
+                                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                </svg>
+                                Abrir Editor 360°
+                            </Link>
+
+                            <button
+                                onClick={() => eliminarEscena(s.id)}
+                                className="px-3 py-2 text-xs font-bold text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-900/20 rounded-xl transition cursor-pointer"
+                                title="Eliminar Escena"
+                            >
+                                Eliminar
+                            </button>
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+            {creando && (
+                <Modal title="Agregar Nueva Escena 360°" onClose={() => setCreando(false)}>
+                    <form onSubmit={guardarEscena} className="space-y-4">
+                        <div>
+                            <label className="text-slate-500 text-[11px] font-bold uppercase tracking-wider block mb-2">Nombre del Espacio / Escena *</label>
+                            <input
+                                value={form.data.nombre}
+                                onChange={(e) => form.setData('nombre', e.target.value)}
+                                required
+                                placeholder="Ej: Laboratorio de Biología"
+                                className="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-blue-600 transition font-medium"
+                            />
+                        </div>
+
+                        <div>
+                            <label className="text-slate-500 text-[11px] font-bold uppercase tracking-wider block mb-2">Ruta de Imagen en Servidor (Opcional)</label>
+                            <input
+                                value={form.data.imagen_url_manual}
+                                onChange={(e) => form.setData('imagen_url_manual', e.target.value)}
+                                placeholder="Ej: recorrido_virtual/12.informatica_a.jpg"
+                                className="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-blue-600 transition font-medium font-mono"
+                            />
+                        </div>
+
+                        <div>
+                            <label className="text-slate-500 text-[11px] font-bold uppercase tracking-wider block mb-2">O Subir archivo de Imagen Equirrectangular 360°</label>
+                            <input
+                                type="file"
+                                accept="image/jpeg,image/png,image/jpg"
+                                onChange={(e) => form.setData('imagen', e.target.files[0])}
+                                className="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                            />
+                        </div>
+
+                        <div className="flex gap-3 pt-4 border-t border-slate-100">
+                            <button type="submit" disabled={form.processing} className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl py-3 text-sm transition cursor-pointer">
+                                {form.processing ? 'Guardando...' : 'Guardar Escena 360°'}
+                            </button>
+                            <button type="button" onClick={() => setCreando(false)} className="px-5 bg-slate-100 text-slate-600 rounded-xl py-3 text-sm font-bold">Cancelar</button>
+                        </div>
+                    </form>
+                </Modal>
+            )}
+        </div>
+    );
+}
+
 /* ── Dashboard principal ── */
 const TABS = [
     { key: 'testimonios', label: 'Testimonios' },
     { key: 'noticias',    label: 'Noticias y Eventos' },
     { key: 'preguntas',   label: 'Preguntas Frecuentes' },
+    { key: 'recorrido',   label: 'Recorrido 360°' },
 ];
 
-export default function AdminDashboard({ seccion, testimonios, noticias, preguntas, flash }) {
+export default function AdminDashboard({ seccion, testimonios, noticias, preguntas, tour, scenes = [], flash }) {
     const basePath = window.location.pathname.replace(/\/[^/]+$/, '');
     const [darkMode, setDarkMode] = useState(() => localStorage.getItem('sih-dark-mode') === 'true');
     const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -1326,6 +1487,11 @@ export default function AdminDashboard({ seccion, testimonios, noticias, pregunt
                                                     <path strokeLinecap="round" strokeLinejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                                 </svg>
                                             )}
+                                            {tab.key === 'recorrido' && (
+                                                <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                                </svg>
+                                            )}
                                             {tab.label}
                                         </div>
                                         
@@ -1336,6 +1502,7 @@ export default function AdminDashboard({ seccion, testimonios, noticias, pregunt
                                             {tab.key === 'testimonios' && testimonios.length}
                                             {tab.key === 'noticias' && noticias.length}
                                             {tab.key === 'preguntas' && preguntas.length}
+                                            {tab.key === 'recorrido' && scenes.length}
                                         </span>
                                     </Link>
                                 );
@@ -1427,6 +1594,7 @@ export default function AdminDashboard({ seccion, testimonios, noticias, pregunt
                             {seccion === 'testimonios' && <TestimoniosTab testimonios={testimonios} flash={flash} />}
                             {seccion === 'noticias'    && <NoticiasTab    noticias={noticias}       flash={flash} />}
                             {seccion === 'preguntas'   && <PreguntasTab   preguntas={preguntas}     flash={flash} />}
+                            {seccion === 'recorrido'   && <RecorridoTab   tour={tour} scenes={scenes} flash={flash} />}
                         </div>
 
                     </main>

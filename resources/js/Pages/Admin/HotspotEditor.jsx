@@ -6,7 +6,7 @@ import 'pannellum/src/js/pannellum.js';
 import { 
     Menu, Plus, Eye, Save, Trash2, Link as LinkIcon, Info, 
     MousePointer, MapPin, Image as ImageIcon, Settings, 
-    RotateCcw, RotateCw, ZoomIn, ZoomOut, MoreVertical, X, Check
+    RotateCcw, RotateCw, ZoomIn, ZoomOut, MoreVertical, X, Check, Compass
 } from 'lucide-react';
 
 const safeRoute = (name, params) => {

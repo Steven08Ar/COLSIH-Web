@@ -29,14 +29,14 @@ class TourController extends Controller
      *   }
      * }
      */
-    public function show(string $slug): Response
+    public function show(?string $slug = 'colsih'): Response
     {
         $tour = Tour::with([
             'scenes' => fn ($q) => $q->with('hotspots'),
         ])
         ->where('slug', $slug)
         ->where('activo', true)
-        ->firstOrFail();
+        ->first();
 
         return Inertia::render('Tours/Show', [
             'tour' => $tour,

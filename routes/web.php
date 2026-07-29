@@ -52,7 +52,7 @@ Route::prefix('noticias')->name('noticias.')->group(function () {
 });
 
 // Recorrido virtual 360
-Route::get('/recorrido-virtual/{slug}', [TourController::class, 'show'])->name('tour.show');
+Route::get('/recorrido-virtual/{slug?}', [TourController::class, 'show'])->name('tour.show');
 
 // Contacto
 Route::prefix('contacto')->name('contacto.')->group(function () {

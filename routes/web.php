@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\PreguntaController;
 use App\Http\Controllers\Admin\TestimonioController;
 use App\Http\Controllers\ContactoController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\TourController;
 use App\Http\Controllers\InscripcionController;
 use App\Http\Controllers\NoticiasController;
 use App\Http\Controllers\NosotrosController;
@@ -49,6 +50,9 @@ Route::prefix('noticias')->name('noticias.')->group(function () {
     Route::get('/', [NoticiasController::class, 'index'])->name('index');
     Route::get('/{noticia:slug}', [NoticiasController::class, 'show'])->name('show');
 });
+
+// Recorrido virtual 360
+Route::get('/recorrido-virtual/{slug}', [TourController::class, 'show'])->name('tour.show');
 
 // Contacto
 Route::prefix('contacto')->name('contacto.')->group(function () {

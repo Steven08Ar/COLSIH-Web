@@ -9,6 +9,29 @@ import {
     RotateCcw, RotateCw, ZoomIn, ZoomOut, MoreVertical, X, Check
 } from 'lucide-react';
 
+const safeRoute = (name, params) => {
+    if (typeof window !== 'undefined' && typeof window.route === 'function') {
+        try {
+            return window.route(name, params);
+        } catch (e) {}
+    }
+    const adminPrefix = (typeof window !== 'undefined' && window.location.pathname.includes('/sih-panel-308'))
+        ? '/sih-panel-308'
+        : '/panel-admin';
+
+    switch (name) {
+        case 'admin.recorrido': return `${adminPrefix}/recorrido`;
+        case 'admin.recorrido.editor': return `${adminPrefix}/recorrido/scenes/${params}/editor`;
+        case 'admin.recorrido.scenes.store': return `${adminPrefix}/recorrido/scenes`;
+        case 'admin.recorrido.scenes.destroy': return `${adminPrefix}/recorrido/scenes/${params}`;
+        case 'admin.hotspots.store': return `${adminPrefix}/hotspots`;
+        case 'admin.hotspots.update': return `${adminPrefix}/hotspots/${params}`;
+        case 'admin.hotspots.destroy': return `${adminPrefix}/hotspots/${params}`;
+        case 'tour.show': return '/recorrido-virtual';
+        default: return '#';
+    }
+};
+
 export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = [], flash }) {
     const containerRef = useRef(null);
     const viewerRef = useRef(null);
@@ -179,13 +202,13 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
         e.preventDefault();
 
         if (selectedHotspot) {
-            form.put(route('admin.hotspots.update', selectedHotspot.id), {
+            form.put(safeRoute('admin.hotspots.update', selectedHotspot.id), {
                 onSuccess: () => {
                     setActiveModal(false);
                 }
             });
         } else {
-            form.post(route('admin.hotspots.store'), {
+            form.post(safeRoute('admin.hotspots.store'), {
                 onSuccess: () => {
                     setActiveModal(false);
                 }
@@ -197,7 +220,7 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
     const eliminarHotspot = () => {
         if (!selectedHotspot) return;
         if (confirm('¿Eliminar este punto interactivo?')) {
-            router.delete(route('admin.hotspots.destroy', selectedHotspot.id), {
+            router.delete(safeRoute('admin.hotspots.destroy', selectedHotspot.id), {
                 onSuccess: () => {
                     setActiveModal(false);
                 }
@@ -272,7 +295,7 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
                     {/* Izquierda: Menú Título */}
                     <div className="flex items-center gap-4">
                         <Link
-                            href={route('admin.recorrido')}
+                            href={safeRoute('admin.recorrido')}
                             className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition cursor-pointer"
                         >
                             <Menu className="w-5 h-5" />
@@ -308,7 +331,7 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
                     {/* Derecha: Vista Previa y Guardar Recorrido (Exactos como en la foto) */}
                     <div className="flex items-center gap-3">
                         <a
-                            href={route('tour.show', { slug: tour.slug || 'colsih' })}
+                            href={safeRoute('tour.show')}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="bg-slate-800/90 hover:bg-slate-700 border border-slate-700/80 text-slate-200 font-extrabold text-xs px-4 py-2.5 rounded-xl transition cursor-pointer flex items-center gap-2"
@@ -318,7 +341,7 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
                         </a>
 
                         <Link
-                            href={route('admin.recorrido')}
+                            href={safeRoute('admin.recorrido')}
                             className="bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs px-5 py-2.5 rounded-xl shadow-lg shadow-blue-600/20 transition cursor-pointer active:scale-95"
                         >
                             Guardar recorrido
@@ -454,7 +477,7 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
                                         return (
                                             <div
                                                 key={s.id}
-                                                onClick={() => router.get(route('admin.recorrido.editor', s.id))}
+                                                onClick={() => router.get(safeRoute('admin.recorrido.editor', s.id))}
                                                 className={`group relative rounded-xl overflow-hidden border transition-all cursor-pointer ${
                                                     isActive
                                                         ? 'border-blue-500 ring-2 ring-blue-500/40 shadow-lg'

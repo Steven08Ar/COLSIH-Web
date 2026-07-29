@@ -1210,6 +1210,8 @@ function PreguntasTab({ preguntas, flash }) {
 /* ── Recorrido Virtual 360° ── */
 function RecorridoTab({ tour, scenes = [], flash, basePath }) {
     const [creando, setCreando] = useState(false);
+    const [vistaModo, setVistaModo] = useState('lista'); // 'lista' por defecto, 'recuadro' opción
+
     const form = useForm({
         nombre: '',
         imagen_url_manual: '',
@@ -1236,7 +1238,7 @@ function RecorridoTab({ tour, scenes = [], flash, basePath }) {
     return (
         <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800/80 rounded-2xl sm:rounded-[24px] p-4 sm:p-6 lg:p-8 shadow-sm">
             <Flash message={flash} />
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-slate-100 dark:border-slate-800/80">
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6 pb-4 border-b border-slate-100 dark:border-slate-800/80">
                 <div>
                     <h2 className="text-slate-800 dark:text-slate-100 font-extrabold text-base sm:text-lg tracking-tight">
                         Recorrido Virtual 360° ({scenes.length} Espacios)
@@ -1245,12 +1247,47 @@ function RecorridoTab({ tour, scenes = [], flash, basePath }) {
                         Administra las escenas e imágenes 360° y configura los puntos interactivos de ruta e información.
                     </p>
                 </div>
-                <div className="flex items-center gap-3 w-full sm:w-auto">
+
+                <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
+                    {/* Selector de Modo de Visualización (Lista por defecto vs Recuadro) */}
+                    <div className="flex items-center bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/80 p-1 rounded-xl">
+                        <button
+                            type="button"
+                            onClick={() => setVistaModo('lista')}
+                            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
+                                vistaModo === 'lista'
+                                    ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 shadow-sm'
+                                    : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
+                            }`}
+                            title="Ver en Lista (Por Defecto)"
+                        >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                            </svg>
+                            <span>Lista</span>
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => setVistaModo('recuadro')}
+                            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
+                                vistaModo === 'recuadro'
+                                    ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 shadow-sm'
+                                    : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
+                            }`}
+                            title="Ver en Recuadro / Grilla"
+                        >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                            </svg>
+                            <span>Recuadro</span>
+                        </button>
+                    </div>
+
                     <a
                         href={`/recorrido-virtual/${tour?.slug || 'colsih'}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="w-full sm:w-auto bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold px-4 py-2.5 rounded-xl transition duration-200 cursor-pointer flex items-center justify-center gap-1.5 border border-slate-200 dark:border-slate-700"
+                        className="bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold px-4 py-2.5 rounded-xl transition duration-200 cursor-pointer flex items-center justify-center gap-1.5 border border-slate-200 dark:border-slate-700"
                     >
                         <svg className="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -1260,7 +1297,7 @@ function RecorridoTab({ tour, scenes = [], flash, basePath }) {
                     </a>
                     <button
                         onClick={() => setCreando(true)}
-                        className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-md shadow-blue-500/10 transition duration-200 cursor-pointer active:scale-95 flex items-center justify-center gap-1.5"
+                        className="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-md shadow-blue-500/10 transition duration-200 cursor-pointer active:scale-95 flex items-center justify-center gap-1.5"
                     >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
@@ -1270,56 +1307,117 @@ function RecorridoTab({ tour, scenes = [], flash, basePath }) {
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                {scenes.map((s) => (
-                    <div
-                        key={s.id}
-                        className="bg-slate-50/50 dark:bg-slate-800/20 hover:bg-slate-50 dark:hover:bg-slate-800/40 border border-slate-200/60 dark:border-slate-800/60 hover:border-slate-300/80 rounded-2xl p-4 flex flex-col justify-between transition duration-200 group"
-                    >
-                        <div>
-                            {/* Thumbnail Preview */}
-                            <div className="relative w-full h-40 rounded-xl overflow-hidden mb-3 border border-slate-200 dark:border-slate-700 bg-slate-900">
-                                <img
-                                    src={s.imagen_url || `/storage/${s.imagen_path}`}
-                                    alt={s.nombre}
-                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                                />
-                                {s.es_escena_inicial && (
-                                    <span className="absolute top-2 left-2 bg-blue-600 text-white text-[10px] font-extrabold px-2 py-0.5 rounded-md shadow-md">
-                                        Escena Inicial
-                                    </span>
-                                )}
-                                <span className="absolute bottom-2 right-2 bg-slate-900/80 backdrop-blur-md text-slate-200 text-[10px] font-bold px-2 py-0.5 rounded-md border border-white/20">
-                                    {s.hotspots?.length || 0} puntos
-                                </span>
+            {/* ── MODO 1: LISTA (POR DEFECTO) ── */}
+            {vistaModo === 'lista' && (
+                <div className="space-y-3">
+                    {scenes.map((s) => (
+                        <div
+                            key={s.id}
+                            className="bg-slate-50/60 dark:bg-slate-800/30 hover:bg-slate-100/60 dark:hover:bg-slate-800/60 border border-slate-200/60 dark:border-slate-800/80 rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 transition duration-200 group"
+                        >
+                            <div className="flex items-center gap-4 min-w-0">
+                                {/* Thumbnail */}
+                                <div className="relative w-28 h-20 rounded-xl overflow-hidden shrink-0 border border-slate-200 dark:border-slate-700 bg-slate-900 shadow-sm">
+                                    <img
+                                        src={s.imagen_url || `/storage/${s.imagen_path}`}
+                                        alt={s.nombre}
+                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                    />
+                                    {s.es_escena_inicial && (
+                                        <span className="absolute top-1 left-1 bg-blue-600 text-white text-[9px] font-extrabold px-1.5 py-0.5 rounded shadow">
+                                            Inicial
+                                        </span>
+                                    )}
+                                </div>
+
+                                <div className="min-w-0">
+                                    <div className="flex items-center gap-2">
+                                        <h3 className="font-extrabold text-slate-800 dark:text-slate-100 text-sm truncate">{s.nombre}</h3>
+                                        <span className="bg-slate-200/80 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[10px] font-bold px-2 py-0.5 rounded-md shrink-0">
+                                            {s.hotspots?.length || 0} puntos
+                                        </span>
+                                    </div>
+                                    <p className="text-slate-400 text-xs mt-1 font-mono truncate">Slug: {s.slug}</p>
+                                </div>
                             </div>
 
-                            <h3 className="font-bold text-slate-800 dark:text-slate-100 text-sm">{s.nombre}</h3>
-                            <p className="text-slate-400 text-xs mt-0.5 font-mono">Slug: {s.slug}</p>
-                        </div>
+                            <div className="flex items-center gap-2.5 w-full sm:w-auto shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-200/60 dark:border-slate-800/60">
+                                <Link
+                                    href={`${basePath}/recorrido/scenes/${s.id}/editor`}
+                                    className="flex-1 sm:flex-initial bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-md shadow-blue-500/10 transition cursor-pointer flex items-center justify-center gap-1.5"
+                                >
+                                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                    </svg>
+                                    Abrir Editor 360°
+                                </Link>
 
-                        <div className="flex items-center gap-2 mt-4 pt-3 border-t border-slate-200/60 dark:border-slate-800/60">
-                            <Link
-                                href={`${basePath}/recorrido/scenes/${s.id}/editor`}
-                                className="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-2 rounded-xl text-center shadow-md shadow-blue-500/10 transition cursor-pointer flex items-center justify-center gap-1.5"
-                            >
-                                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                                </svg>
-                                Abrir Editor 360°
-                            </Link>
-
-                            <button
-                                onClick={() => eliminarEscena(s.id)}
-                                className="px-3 py-2 text-xs font-bold text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-900/20 rounded-xl transition cursor-pointer"
-                                title="Eliminar Escena"
-                            >
-                                Eliminar
-                            </button>
+                                <button
+                                    onClick={() => eliminarEscena(s.id)}
+                                    className="px-3.5 py-2.5 text-xs font-bold text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-900/20 rounded-xl transition cursor-pointer border border-rose-200/50 dark:border-rose-900/30"
+                                    title="Eliminar Escena"
+                                >
+                                    Eliminar
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                ))}
-            </div>
+                    ))}
+                </div>
+            )}
+
+            {/* ── MODO 2: RECUADRO / GRILLA ── */}
+            {vistaModo === 'recuadro' && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                    {scenes.map((s) => (
+                        <div
+                            key={s.id}
+                            className="bg-slate-50/50 dark:bg-slate-800/20 hover:bg-slate-50 dark:hover:bg-slate-800/40 border border-slate-200/60 dark:border-slate-800/60 hover:border-slate-300/80 rounded-2xl p-4 flex flex-col justify-between transition duration-200 group"
+                        >
+                            <div>
+                                {/* Thumbnail Preview */}
+                                <div className="relative w-full h-40 rounded-xl overflow-hidden mb-3 border border-slate-200 dark:border-slate-700 bg-slate-900">
+                                    <img
+                                        src={s.imagen_url || `/storage/${s.imagen_path}`}
+                                        alt={s.nombre}
+                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                    />
+                                    {s.es_escena_inicial && (
+                                        <span className="absolute top-2 left-2 bg-blue-600 text-white text-[10px] font-extrabold px-2 py-0.5 rounded-md shadow-md">
+                                            Escena Inicial
+                                        </span>
+                                    )}
+                                    <span className="absolute bottom-2 right-2 bg-slate-900/80 backdrop-blur-md text-slate-200 text-[10px] font-bold px-2 py-0.5 rounded-md border border-white/20">
+                                        {s.hotspots?.length || 0} puntos
+                                    </span>
+                                </div>
+
+                                <h3 className="font-bold text-slate-800 dark:text-slate-100 text-sm">{s.nombre}</h3>
+                                <p className="text-slate-400 text-xs mt-0.5 font-mono">Slug: {s.slug}</p>
+                            </div>
+
+                            <div className="flex items-center gap-2 mt-4 pt-3 border-t border-slate-200/60 dark:border-slate-800/60">
+                                <Link
+                                    href={`${basePath}/recorrido/scenes/${s.id}/editor`}
+                                    className="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-2 rounded-xl text-center shadow-md shadow-blue-500/10 transition cursor-pointer flex items-center justify-center gap-1.5"
+                                >
+                                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                    </svg>
+                                    Abrir Editor 360°
+                                </Link>
+
+                                <button
+                                    onClick={() => eliminarEscena(s.id)}
+                                    className="px-3 py-2 text-xs font-bold text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-900/20 rounded-xl transition cursor-pointer"
+                                    title="Eliminar Escena"
+                                >
+                                    Eliminar
+                                </button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
 
             {creando && (
                 <Modal title="Agregar Nueva Escena 360°" onClose={() => setCreando(false)}>
@@ -1527,8 +1625,8 @@ export default function AdminDashboard({ seccion, testimonios, noticias, pregunt
                 {/* ── Right Content Container ── */}
                 <div className="flex-1 pl-0 lg:pl-72 flex flex-col min-h-screen w-full">
                     
-                    {/* Header Top Navbar */}
-                    <header className="h-16 sm:h-20 bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800/80 fixed top-0 left-0 lg:left-72 right-0 z-30 flex items-center justify-between px-4 sm:px-8 shadow-[0_1px_3px_rgba(0,0,0,0.01)]">
+                    {/* Header Top Navbar (Sticky Normal Flow to Never Overlap Main Content) */}
+                    <header className="h-16 sm:h-20 bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800/80 sticky top-0 z-30 flex items-center justify-between px-4 sm:px-8 shadow-[0_1px_3px_rgba(0,0,0,0.01)] shrink-0">
                         
                         <div className="flex items-center gap-3">
                             {/* Mobile drawer hamburger menu button */}
@@ -1588,7 +1686,7 @@ export default function AdminDashboard({ seccion, testimonios, noticias, pregunt
                     </header>
 
                     {/* Main Scrollable Area */}
-                    <main className="flex-1 p-3 sm:p-6 lg:p-8 pt-20 sm:pt-28 bg-[#F4F7FA] dark:bg-slate-950 overflow-y-auto">
+                    <main className="flex-1 p-4 sm:p-6 lg:p-8 bg-[#F4F7FA] dark:bg-slate-950 overflow-y-auto">
                         
                         {/* ── Active Module Content Card ── */}
                         <div className="transition-all duration-300">

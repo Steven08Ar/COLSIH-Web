@@ -141,10 +141,12 @@ const VIRTUAL_TOUR_SCENES = [
     }
 ];
 
-export default function VideoExperience() {
+export default function VideoExperience({ scenes = [], tour = null }) {
     const bgRef = useRef(null);
     const [tour360Open, setTour360Open] = useState(false);
     const [activeSceneSlug, setActiveSceneSlug] = useState('entrada');
+
+    const activeScenes = scenes && scenes.length > 0 ? scenes : VIRTUAL_TOUR_SCENES;
 
     // Handle ESC key to exit 360 viewer modal
     useEffect(() => {
@@ -176,69 +178,38 @@ export default function VideoExperience() {
         const x = (e.clientX - rect.left) / rect.width - 0.5;
         const y = (e.clientY - rect.top) / rect.height - 0.5;
 
-        bgRef.current.style.transform = `scale(1.08) translate(${x * 20}px, ${y * 20}px)`;
+        bgRef.current.style.transform = `scale(1.1) translate(${x * 20}px, ${y * 20}px)`;
         bgRef.current.style.transition = 'transform 0.1s ease-out';
     };
 
-    const handleMouseLeave = () => {
-        if (!bgRef.current) return;
-        bgRef.current.style.transform = 'scale(1.08) translate(0px, 0px)';
-        bgRef.current.style.transition = 'transform 0.8s cubic-bezier(0.25, 1, 0.5, 1)';
-    };
-
     return (
-        <section
-            onMouseMove={handleMouseMove}
-            onMouseLeave={handleMouseLeave}
-            className="relative h-[580px] lg:h-[680px] w-full bg-[#08111F] overflow-hidden flex items-center justify-center select-none"
-        >
-            {/* Cinematic Background Image with Parallax */}
-            <div
-                ref={bgRef}
-                style={{
-                    transform: 'scale(1.08) translate(0px, 0px)',
-                    transition: 'transform 0.8s cubic-bezier(0.25, 1, 0.5, 1)'
-                }}
-                className="absolute inset-0 w-full h-full z-0 pointer-events-none select-none"
-            >
-                <img
-                    src="/recorrido_virtual/1.entrada.jpg"
-                    alt="Panorámica 360° Colegio"
-                    className="w-full h-full object-cover brightness-[0.45] contrast-110"
+        <section className="relative w-full py-28 md:py-36 bg-slate-950 overflow-hidden select-none">
+            {/* Background Image Container */}
+            <div className="absolute inset-0 z-0 opacity-40 overflow-hidden">
+                <div
+                    ref={bgRef}
+                    className="w-full h-full bg-cover bg-center transition-transform duration-700 ease-out scale-105"
+                    style={{ backgroundImage: `url('/recorrido_virtual/1.entrada.jpg')` }}
+                    onMouseMove={handleMouseMove}
                 />
             </div>
 
-            {/* Dark Cinematic Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#08111F] via-[#08111F]/60 to-[#08111F] z-10 pointer-events-none"></div>
+            <div className="absolute inset-0 z-10 bg-gradient-to-t from-slate-950 via-slate-950/70 to-slate-950/90 pointer-events-none" />
 
-            {/* Floating Light Particles */}
-            <div className="absolute inset-0 z-15 overflow-hidden pointer-events-none opacity-30">
-                <div className="absolute top-[20%] left-[15%] w-3 h-3 bg-blue-400 rounded-full blur-[2px] animate-pulse [animation-duration:3s]"></div>
-                <div className="absolute top-[60%] left-[30%] w-4.5 h-4.5 bg-white rounded-full blur-[3px] animate-pulse [animation-duration:5s] [animation-delay:1.5s]"></div>
-                <div className="absolute top-[15%] left-[75%] w-2.5 h-2.5 bg-blue-400 rounded-full blur-[1px] animate-pulse [animation-duration:4s] [animation-delay:0.5s]"></div>
-                <div className="absolute top-[75%] left-[80%] w-5 h-5 bg-white rounded-full blur-[4px] animate-pulse [animation-duration:6s] [animation-delay:2s]"></div>
-            </div>
-
-            {/* Content & Interactive 360 Play Button (z-20) */}
-            <div className="relative z-20 text-center space-y-8 max-w-2xl px-6">
-                <ScrollReveal distance="translate-y-8">
-                    <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-600/25 border border-blue-400/40 text-blue-300 text-[12px] font-black tracking-widest uppercase backdrop-blur-md shadow-lg">
-                        <Compass className="w-4 h-4 text-blue-400 animate-spin [animation-duration:12s]" />
-                        RECORRIDO VIRTUAL INTERACTIVO 360°
-                    </span>
+            <div className="relative z-20 max-w-5xl mx-auto px-6 text-center">
+                <ScrollReveal distance="translate-y-6" className="inline-flex items-center gap-2.5 px-5 py-2 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 font-extrabold text-xs tracking-wider uppercase mb-8 backdrop-blur-md shadow-lg shadow-blue-500/10">
+                    <Compass className="w-4 h-4 text-blue-400 animate-spin" style={{ animationDuration: '10s' }} />
+                    <span>Experiencia Virtual Interactiva</span>
                 </ScrollReveal>
 
-                {/* Minimalist Central Play Button for 360° Tour */}
-                <ScrollReveal distance="scale-95" delay={150} className="flex justify-center">
+                <ScrollReveal distance="translate-y-8" delay={150} className="mb-10 flex justify-center">
                     <button
                         onClick={() => setTour360Open(true)}
-                        className="relative w-20 h-20 md:w-24 md:h-24 flex items-center justify-center rounded-full border border-white/25 bg-white/10 hover:bg-white/20 backdrop-blur-md text-white shadow-2xl hover:scale-105 hover:border-white/50 active:scale-95 transition-all duration-300 group cursor-pointer"
-                        aria-label="Abrir Recorrido Virtual 360 en Pantalla Completa"
+                        className="group relative w-20 h-20 md:w-24 md:h-24 rounded-full bg-blue-600/90 hover:bg-blue-600 text-white flex items-center justify-center transition-all duration-300 shadow-[0_0_50px_rgba(37,99,235,0.5)] hover:shadow-[0_0_70px_rgba(37,99,235,0.8)] hover:scale-105 active:scale-95 cursor-pointer backdrop-blur-md border border-white/20"
+                        aria-label="Abrir Recorrido Virtual 360"
                     >
-                        {/* Minimalist Subtle Pulse Ring */}
-                        <div className="absolute -inset-2.5 rounded-full border border-white/30 animate-ping opacity-25 [animation-duration:3.5s] pointer-events-none"></div>
+                        <span className="absolute inset-0 rounded-full bg-blue-500/30 animate-ping opacity-25" style={{ animationDuration: '3.5s' }}></span>
 
-                        {/* Minimalist Play Icon */}
                         <Play className="w-7 h-7 md:w-8 md:h-8 fill-white ml-1 transition-transform duration-300 group-hover:scale-110" />
                     </button>
                 </ScrollReveal>
@@ -247,8 +218,8 @@ export default function VideoExperience() {
                     <h3 className="text-3xl md:text-5xl font-black text-white tracking-tight leading-tight">
                         Explora el campus en 360° interactivo
                     </h3>
-                    <p className="text-slate-300 font-semibold text-[15px] md:text-[17px] max-w-lg mx-auto leading-relaxed">
-                        Navega de forma inmersiva por las aulas, laboratorios, capilla y campos deportivos del Colegio Santa Isabel de Hungría.
+                    <p className="text-slate-400 font-semibold text-[15px] md:text-[17px] max-w-lg mx-auto leading-relaxed">
+                        Navega de forma inmersiva por las instalaciones del colegio y descubre cada rincón de nuestra institución.
                     </p>
                 </ScrollReveal>
             </div>
@@ -272,8 +243,8 @@ export default function VideoExperience() {
                     {/* Pannellum 360 Tour Viewer Component */}
                     <div className="w-full h-full flex-1 relative">
                         <TourViewer
-                            scenes={VIRTUAL_TOUR_SCENES}
-                            initialSceneSlug="entrada"
+                            scenes={activeScenes}
+                            initialSceneSlug={activeScenes[0]?.slug || 'entrada'}
                             activeSceneSlug={activeSceneSlug}
                             onSceneChange={(slug) => setActiveSceneSlug(slug)}
                             className="rounded-none border-none shadow-none min-h-screen"
@@ -282,7 +253,7 @@ export default function VideoExperience() {
 
                     {/* Interactive Floor Map Overlay */}
                     <TourMap
-                        scenes={VIRTUAL_TOUR_SCENES}
+                        scenes={activeScenes}
                         activeSceneSlug={activeSceneSlug}
                         onSelectScene={(slug) => setActiveSceneSlug(slug)}
                     />

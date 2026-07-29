@@ -15,7 +15,7 @@ import Admissions from './HomeSections/Admissions';
 import FAQ from './HomeSections/FAQ';
 import Footer from './HomeSections/Footer';
 
-export default function Home({ noticias, testimonios, preguntas }) {
+export default function Home({ noticias, testimonios, preguntas, tour, scenes = [] }) {
     const [videoOpen, setVideoOpen] = useState(false);
 
     return (
@@ -35,7 +35,7 @@ export default function Home({ noticias, testimonios, preguntas }) {
             <Programs />
 
             {/* Section 5: Video Experience */}
-            <VideoExperience setVideoOpen={setVideoOpen} />
+            <VideoExperience scenes={scenes} tour={tour} setVideoOpen={setVideoOpen} />
 
             {/* Section 6: Statistics */}
             <Stats />

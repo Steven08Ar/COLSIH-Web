@@ -1208,7 +1208,7 @@ function PreguntasTab({ preguntas, flash }) {
 }
 
 /* ── Recorrido Virtual 360° ── */
-function RecorridoTab({ tour, scenes = [], flash }) {
+function RecorridoTab({ tour, scenes = [], flash, basePath }) {
     const [creando, setCreando] = useState(false);
     const form = useForm({
         nombre: '',
@@ -1218,7 +1218,8 @@ function RecorridoTab({ tour, scenes = [], flash }) {
 
     const guardarEscena = (e) => {
         e.preventDefault();
-        form.post(route('admin.recorrido.scenes.store'), {
+        form.post(`${basePath}/recorrido/scenes`, {
+            forceFormData: true,
             onSuccess: () => {
                 setCreando(false);
                 form.reset();
@@ -1228,7 +1229,7 @@ function RecorridoTab({ tour, scenes = [], flash }) {
 
     const eliminarEscena = (id) => {
         if (confirm('¿Eliminar esta escena 360° del recorrido?')) {
-            router.delete(route('admin.recorrido.scenes.destroy', id));
+            router.delete(`${basePath}/recorrido/scenes/${id}`);
         }
     };
 
@@ -1246,7 +1247,7 @@ function RecorridoTab({ tour, scenes = [], flash }) {
                 </div>
                 <div className="flex items-center gap-3 w-full sm:w-auto">
                     <a
-                        href={route('tour.show', { slug: tour?.slug || 'colsih' })}
+                        href={`/recorrido-virtual/${tour?.slug || 'colsih'}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="w-full sm:w-auto bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold px-4 py-2.5 rounded-xl transition duration-200 cursor-pointer flex items-center justify-center gap-1.5 border border-slate-200 dark:border-slate-700"
@@ -1299,7 +1300,7 @@ function RecorridoTab({ tour, scenes = [], flash }) {
 
                         <div className="flex items-center gap-2 mt-4 pt-3 border-t border-slate-200/60 dark:border-slate-800/60">
                             <Link
-                                href={route('admin.recorrido.editor', s.id)}
+                                href={`${basePath}/recorrido/scenes/${s.id}/editor`}
                                 className="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-2 rounded-xl text-center shadow-md shadow-blue-500/10 transition cursor-pointer flex items-center justify-center gap-1.5"
                             >
                                 <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
@@ -1594,7 +1595,7 @@ export default function AdminDashboard({ seccion, testimonios, noticias, pregunt
                             {seccion === 'testimonios' && <TestimoniosTab testimonios={testimonios} flash={flash} />}
                             {seccion === 'noticias'    && <NoticiasTab    noticias={noticias}       flash={flash} />}
                             {seccion === 'preguntas'   && <PreguntasTab   preguntas={preguntas}     flash={flash} />}
-                            {seccion === 'recorrido'   && <RecorridoTab   tour={tour} scenes={scenes} flash={flash} />}
+                            {seccion === 'recorrido'   && <RecorridoTab   tour={tour} scenes={scenes} flash={flash} basePath={basePath} />}
                         </div>
 
                     </main>

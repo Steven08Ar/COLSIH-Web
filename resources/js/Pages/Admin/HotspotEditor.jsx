@@ -9,6 +9,9 @@ import {
 } from 'lucide-react';
 
 export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = [], flash }) {
+    // Extrae la base del panel admin (/sih-panel-308) sin depender de Ziggy
+    const adminBase = '/' + window.location.pathname.split('/')[1];
+
     const containerRef = useRef(null);
     const viewerRef = useRef(null);
 
@@ -158,13 +161,13 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
         e.preventDefault();
 
         if (selectedHotspot) {
-            form.put(route('admin.hotspots.update', selectedHotspot.id), {
+            form.put(`${adminBase}/hotspots/${selectedHotspot.id}`, {
                 onSuccess: () => {
                     setActiveModal(false);
                 }
             });
         } else {
-            form.post(route('admin.hotspots.store'), {
+            form.post(`${adminBase}/hotspots`, {
                 onSuccess: () => {
                     setActiveModal(false);
                 }
@@ -176,7 +179,7 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
     const eliminarHotspot = () => {
         if (!selectedHotspot) return;
         if (confirm('¿Estás seguro de eliminar este punto interactivo?')) {
-            router.delete(route('admin.hotspots.destroy', selectedHotspot.id), {
+            router.delete(`${adminBase}/hotspots/${selectedHotspot.id}`, {
                 onSuccess: () => {
                     setActiveModal(false);
                 }
@@ -198,7 +201,7 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
                     {/* LADO IZQUIERDO: Navegación & Desplegable de Escenas */}
                     <div className="flex items-center gap-4">
                         <Link
-                            href={route('admin.recorrido')}
+                            href={`${adminBase}/recorrido`}
                             className="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition cursor-pointer border border-slate-700"
                             title="Volver al Panel Administrativo"
                         >
@@ -218,7 +221,7 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
                                     const nextId = e.target.value;
                                     const nextScene = allScenes.find(s => s.id == nextId);
                                     if (nextScene) {
-                                        router.get(route('admin.recorrido.editor', nextScene.id));
+                                        router.get(`${adminBase}/recorrido/scenes/${nextScene.id}/editor`);
                                     }
                                 }}
                                 className="bg-slate-800 border border-slate-700 text-white font-bold text-sm rounded-xl px-3 py-1.5 focus:outline-none focus:border-blue-500 transition cursor-pointer mt-0.5"
@@ -241,7 +244,7 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
                     {/* LADO DERECHO: Acciones & Vista Previa */}
                     <div className="flex items-center gap-3">
                         <a
-                            href={route('tour.show', { slug: tour.slug || 'colsih' })}
+                            href={`/recorrido-virtual/${tour.slug || 'colsih'}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold px-4 py-2.5 rounded-xl transition cursor-pointer flex items-center gap-2"
@@ -251,7 +254,7 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
                         </a>
 
                         <Link
-                            href={route('admin.recorrido')}
+                            href={`${adminBase}/recorrido`}
                             className="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-5 py-2.5 rounded-xl shadow-lg shadow-blue-600/20 transition cursor-pointer flex items-center gap-2"
                         >
                             <Save className="w-4 h-4" />

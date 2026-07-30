@@ -109,16 +109,16 @@ body {
 }
 
 /* =========================================================
-   360° ANIMATED INTERACTIVE HOTSPOTS (PURE WHITE SCREENSHOT STYLE)
+   360° INTERACTIVE HOTSPOTS (100% STATIC ANCHORED TO SCENE)
    ========================================================= */
 
-/* 1. CAMINO / RECORRIDO (Route Hotspot - Exact White Target Ring) */
+/* 1. CAMINO / RECORRIDO (Route Hotspot - Static White Target Disc) */
 .custom-hotspot-link-editor,
 .custom-hotspot-link-public {
     width: 38px;
     height: 38px;
     border-radius: 50%;
-    background: rgba(0, 0, 0, 0.35);
+    background: rgba(0, 0, 0, 0.4);
     border: 3.5px solid #ffffff;
     box-shadow: 0 0 16px rgba(255, 255, 255, 0.7), 0 4px 12px rgba(0, 0, 0, 0.6);
     backdrop-filter: blur(4px);
@@ -128,18 +128,17 @@ body {
     color: #ffffff;
     cursor: pointer;
     position: relative;
-    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.2s ease, border-color 0.2s ease;
+    transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .custom-hotspot-link-editor:hover,
 .custom-hotspot-link-public:hover {
-    transform: scale(1.25) translateY(-3px);
-    background: rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.3);
     border-color: #ffffff;
     box-shadow: 0 0 25px rgba(255, 255, 255, 1), 0 6px 16px rgba(0, 0, 0, 0.7);
 }
 
-/* White Pulsing target ring around Route hotspot */
+/* Static Pulsing Ring (Expands without moving element position) */
 .custom-hotspot-link-editor::before,
 .custom-hotspot-link-public::before {
     content: '';
@@ -158,7 +157,7 @@ body {
     inset: -10px;
     border-radius: 50%;
     border: 1.5px dashed rgba(255, 255, 255, 0.5);
-    animation: routeSpinRing 10s linear infinite;
+    animation: routeSpinRing 12s linear infinite;
     pointer-events: none;
 }
 
@@ -166,16 +165,15 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    animation: arrowBounce 1.8s ease-in-out infinite;
 }
 
-/* 2. INFORMACIÓN (Info Hotspot - Smaller Pure White Theme) */
+/* 2. INFORMACIÓN (Info Hotspot - Static Pure White Theme) */
 .custom-hotspot-info-editor,
 .custom-hotspot-info-public {
     width: 34px;
     height: 34px;
     border-radius: 50%;
-    background: rgba(15, 23, 42, 0.75);
+    background: rgba(15, 23, 42, 0.8);
     border: 2.5px solid #ffffff;
     backdrop-filter: blur(6px);
     box-shadow: 0 0 14px rgba(255, 255, 255, 0.6), 0 4px 10px rgba(0, 0, 0, 0.5);
@@ -188,25 +186,24 @@ body {
     font-size: 15px;
     cursor: pointer;
     position: relative;
-    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.2s ease;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .custom-hotspot-info-editor:hover,
 .custom-hotspot-info-public:hover {
-    transform: scale(1.25) translateY(-2px);
-    background: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.35);
     border-color: #ffffff;
     box-shadow: 0 0 24px rgba(255, 255, 255, 0.95), 0 6px 14px rgba(0, 0, 0, 0.6);
 }
 
-/* White Breathing beacon glow around Info hotspot */
+/* Static Beacon Glow (Pulsing opacity only, no movement) */
 .custom-hotspot-info-editor::before,
 .custom-hotspot-info-public::before {
     content: '';
     position: absolute;
     inset: -7px;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0) 70%);
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0) 70%);
     animation: infoBeaconPulse 2.5s ease-in-out infinite alternate;
     pointer-events: none;
 }
@@ -218,7 +215,7 @@ body {
     inset: -4px;
     border-radius: 50%;
     border: 1.5px dotted rgba(255, 255, 255, 0.65);
-    animation: infoDottedRotate 8s linear infinite;
+    animation: infoDottedRotate 10s linear infinite;
     pointer-events: none;
 }
 
@@ -227,10 +224,9 @@ body {
     align-items: center;
     justify-content: center;
     line-height: 1;
-    animation: infoLetterPulse 3s ease-in-out infinite;
 }
 
-/* Keyframes */
+/* Keyframes - Pure Radial/Opacity/Rotation (NO translateY / NO position shifts) */
 @keyframes routePulseRing {
     0% {
         transform: scale(0.85);
@@ -251,22 +247,11 @@ body {
     }
 }
 
-@keyframes arrowBounce {
-    0%, 100% {
-        transform: translateY(1px);
-    }
-    50% {
-        transform: translateY(-4px);
-    }
-}
-
 @keyframes infoBeaconPulse {
     0% {
-        transform: scale(0.9);
         opacity: 0.3;
     }
     100% {
-        transform: scale(1.35);
         opacity: 0.95;
     }
 }
@@ -277,14 +262,5 @@ body {
     }
     100% {
         transform: rotate(-360deg);
-    }
-}
-
-@keyframes infoLetterPulse {
-    0%, 100% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.15);
     }
 }

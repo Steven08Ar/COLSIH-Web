@@ -4,9 +4,9 @@ import 'pannellum/src/css/pannellum.css';
 import 'pannellum/src/js/libpannellum.js';
 import 'pannellum/src/js/pannellum.js';
 import { 
-    Plus, Eye, Save, Trash2, Link as LinkIcon, Info, 
-    MousePointer, MapPin, Image as ImageIcon, Settings, 
-    RotateCcw, RotateCw, MoreVertical, X, Check
+    Globe, Image as ImageIcon, MousePointer, MapPin, Sun, Moon, 
+    Eye, Save, Trash2, Link as LinkIcon, Info, RotateCcw, RotateCw, 
+    MoreVertical, X, Check, Settings, Compass, Layers, Sparkles
 } from 'lucide-react';
 
 const safeRoute = (name, params) => {
@@ -41,7 +41,20 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
     const [activeModal, setActiveModal] = useState(false);
     const [selectedHotspot, setSelectedHotspot] = useState(null); // null = nuevo, object = editando
     const [showImageList, setShowImageList] = useState(false); // CERRADO por defecto
-    const [activeTool, setActiveTool] = useState('select'); // 'select' (cursor por defecto) | 'hotspot' (location)
+    const [activeTool, setActiveTool] = useState('select'); // 'select' (cursor) | 'hotspot' (location)
+    const [viewMode, setViewMode] = useState('360'); // '360' (Pannellum 360) | '2d' (Plano 2:1)
+    const [darkMode, setDarkMode] = useState(() => localStorage.getItem('sih-dark-mode') === 'true');
+
+    // Sincronizar modo oscuro / claro
+    useEffect(() => {
+        if (darkMode) {
+            document.documentElement.classList.add('dark');
+            localStorage.setItem('sih-dark-mode', 'true');
+        } else {
+            document.documentElement.classList.remove('dark');
+            localStorage.setItem('sih-dark-mode', 'false');
+        }
+    }, [darkMode]);
 
     const activeToolRef = useRef(activeTool);
     useEffect(() => {
@@ -61,9 +74,9 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
         setLocalHotspots(hotspots);
     }, [hotspots]);
 
-    // Configurar e inicializar Pannellum en modo Editor
+    // Configurar e inicializar Pannellum en modo Editor 360°
     useEffect(() => {
-        if (!containerRef.current) return;
+        if (viewMode !== '360' || !containerRef.current) return;
 
         setIsLoading(true);
 
@@ -124,16 +137,12 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
                     setIsLoading(false);
                 });
 
-                // Escuchar clics sobre el panorama:
-                // Si la herramienta activa es 'select' (cursor), SOLO gira y mueve la imagen.
-                // Si la herramienta activa es 'hotspot' (location), abre el modal para colocar punto.
                 const containerEl = containerRef.current;
                 const handleCanvasClick = (e) => {
                     if (e.target.closest('.pnm-hotspot') || e.target.closest('.custom-hotspot-link-editor') || e.target.closest('.custom-hotspot-info-editor')) {
                         return;
                     }
 
-                    // SOLO SI ESTÁ ACTIVA LA HERRAMIENTA LOCATION (MAP PIN)
                     if (activeToolRef.current === 'hotspot') {
                         if (viewerRef.current) {
                             const coords = viewerRef.current.mouseEventToCoords(e);
@@ -161,7 +170,28 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
             console.error('Error al iniciar visor Pannellum:', err);
             setIsLoading(false);
         }
-    }, [scene, localHotspots]);
+    }, [scene, localHotspots, viewMode]);
+
+    // Clic en la imagen 2:1 para colocar hotspot en plano equirrectangular 2D
+    const handle2DCanvasClick = (e) => {
+        if (activeTool !== 'hotspot') return;
+        if (e.target.closest('.custom-hotspot-link-editor') || e.target.closest('.custom-hotspot-info-editor')) return;
+
+        const rect = e.currentTarget.getBoundingClientRect();
+        const clickX = e.clientX - rect.left;
+        const clickY = e.clientY - rect.top;
+
+        const width = rect.width;
+        const height = rect.height;
+
+        if (width <= 0 || height <= 0) return;
+
+        // Calcular Yaw (-180 a 180) y Pitch (-90 a 90)
+        const yaw = (clickX / width) * 360 - 180;
+        const pitch = 90 - (clickY / height) * 180;
+
+        abrirCrearHotspot(pitch, yaw);
+    };
 
     // Abrir modal para crear un hotspot
     const abrirCrearHotspot = (pitch, yaw, defaultTipo = 'enlace') => {
@@ -169,8 +199,8 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
         form.setData({
             scene_id: scene.id,
             tipo: defaultTipo,
-            yaw: Number(yaw.toFixed(4)),
-            pitch: Number(pitch.toFixed(4)),
+            yaw: Number(pitch ? yaw.toFixed(4) : 0),
+            pitch: Number(pitch ? pitch.toFixed(4) : 0),
             texto: '',
             scene_destino_id: allScenes.find((s) => s.id !== scene.id)?.id || '',
         });
@@ -223,88 +253,156 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
     };
 
     const otherScenes = allScenes.filter((s) => s.id !== scene.id);
+    const imageSrc = scene.imagen_url || `/storage/${scene.imagen_path}`;
 
     return (
         <>
             <Head title={`Editor de Recorrido 360° | ${scene.nombre}`} />
 
+            <div className="h-screen w-screen flex bg-slate-100 dark:bg-[#0b0f19] text-slate-800 dark:text-white font-sans overflow-hidden select-none relative transition-colors duration-200">
 
+                {/* ── BARRA LATERAL IZQUIERDA MINIMALISTA ── */}
+                <aside className="w-16 bg-white dark:bg-[#090d16] border-r border-slate-200 dark:border-slate-800/80 flex flex-col items-center justify-between py-6 z-30 shrink-0 h-full shadow-sm dark:shadow-none">
+                    
+                    {/* Top Group: Botón de Alternancia 360° vs Plano 2:1 */}
+                    <div className="flex flex-col items-center space-y-4">
+                        <button
+                            onClick={() => setViewMode(viewMode === '360' ? '2d' : '360')}
+                            className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#800A15] to-blue-700 text-white font-black text-xs flex items-center justify-center shadow-lg shadow-rose-950/30 border border-white/20 transition hover:scale-105 active:scale-95 cursor-pointer"
+                            title={viewMode === '360' ? 'Cambiar a Vista Plano 2:1' : 'Cambiar a Vista 360°'}
+                        >
+                            {viewMode === '360' ? <Compass className="w-5 h-5 animate-pulse" /> : <ImageIcon className="w-5 h-5" />}
+                        </button>
 
-            <div className="h-screen w-screen flex bg-[#0b0f19] text-white font-sans overflow-hidden select-none relative">
+                        <div className="w-8 h-px bg-slate-200 dark:bg-slate-800/80 my-1" />
 
-                {/* ── BARRA LATERAL IZQUIERDA (Centrada Verticalmente en la mitad del sidebar) ── */}
-                <aside className="w-16 bg-[#090d16] border-r border-slate-800/80 flex flex-col items-center justify-center space-y-5 z-20 shrink-0 h-full">
-                    {/* Top Logo Monogram Badge */}
-                    <div className="w-9 h-9 rounded-2xl bg-gradient-to-br from-[#800A15] to-blue-700 text-white font-black text-xs flex items-center justify-center shadow-lg shadow-rose-950/40 border border-white/20 mb-2 select-none">
-                        360
+                        {/* Herramienta 1: Modo Cursor / Selección */}
+                        <button
+                            onClick={() => setActiveTool('select')}
+                            className={`w-10 h-10 rounded-2xl transition flex items-center justify-center cursor-pointer ${
+                                activeTool === 'select'
+                                    ? 'bg-blue-600 text-white shadow-md shadow-blue-600/30 scale-105'
+                                    : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/80'
+                            }`}
+                            title="Modo Cursor (Navegación normal)"
+                        >
+                            <MousePointer className="w-4 h-4" />
+                        </button>
+
+                        {/* Herramienta 2: Modo Ubicación / Agregar Puntos */}
+                        <button
+                            onClick={() => setActiveTool('hotspot')}
+                            className={`w-10 h-10 rounded-2xl transition flex items-center justify-center cursor-pointer relative ${
+                                activeTool === 'hotspot'
+                                    ? 'bg-[#800A15] text-white shadow-md shadow-rose-950/40 scale-105'
+                                    : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/80'
+                            }`}
+                            title="Modo Ubicación (Agregar puntos)"
+                        >
+                            <MapPin className="w-4 h-4" />
+                            {activeTool === 'hotspot' && (
+                                <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-emerald-400 rounded-full border-2 border-white dark:border-[#090d16] animate-ping" />
+                            )}
+                        </button>
+
+                        {/* Herramienta 3: Galería de Imágenes */}
+                        <button
+                            onClick={() => setShowImageList(!showImageList)}
+                            className={`w-10 h-10 rounded-2xl transition flex items-center justify-center cursor-pointer ${
+                                showImageList
+                                    ? 'bg-slate-800 text-white dark:bg-slate-700 shadow-md scale-105'
+                                    : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/80'
+                            }`}
+                            title="Lista de Imágenes"
+                        >
+                            <Layers className="w-4 h-4" />
+                        </button>
                     </div>
 
-                    {/* Opción 1: Cursor (Arrastrar/Mover imagen por defecto) */}
-                    <button
-                        onClick={() => setActiveTool('select')}
-                        className={`p-3 rounded-2xl transition cursor-pointer ${
-                            activeTool === 'select'
-                                ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/40 scale-105'
-                                : 'text-slate-400 hover:text-white hover:bg-slate-800/80'
-                        }`}
-                        title="Modo Cursor (Movimiento de imagen por defecto)"
-                    >
-                        <MousePointer className="w-5 h-5" />
-                    </button>
-
-                    {/* Opción 2: Location (Habilita dar clic en la imagen para colocar punto) */}
-                    <button
-                        onClick={() => setActiveTool('hotspot')}
-                        className={`p-3 rounded-2xl transition cursor-pointer relative ${
-                            activeTool === 'hotspot'
-                                ? 'bg-[#800A15] text-white shadow-lg shadow-rose-950/50 scale-105'
-                                : 'text-slate-400 hover:text-white hover:bg-slate-800/80'
-                        }`}
-                        title="Modo Ubicación / Agregar Puntos (Haz clic en la imagen 360°)"
-                    >
-                        <MapPin className="w-5 h-5" />
-                        {activeTool === 'hotspot' && (
-                            <span className="absolute -top-1 -right-1 w-3 h-3 bg-emerald-400 rounded-full border-2 border-[#090d16] animate-ping" />
-                        )}
-                    </button>
-
-                    {/* Opción 3: Galería (Ver / Ocultar Lista de Imágenes) */}
-                    <button
-                        onClick={() => setShowImageList(!showImageList)}
-                        className={`p-3 rounded-2xl transition cursor-pointer ${
-                            showImageList
-                                ? 'bg-gradient-to-r from-[#800A15] to-blue-700 text-white shadow-lg shadow-blue-900/40 scale-105'
-                                : 'text-slate-400 hover:text-white hover:bg-slate-800/80'
-                        }`}
-                        title="Alternar Lista de Imágenes"
-                    >
-                        <ImageIcon className="w-5 h-5" />
-                    </button>
-
-                    <div className="w-6 h-px bg-slate-800/80 my-1" />
-
-                    {/* Opción 4: Ajustes */}
-                    <button
-                        className="p-3 rounded-2xl text-slate-500 hover:text-slate-300 transition cursor-pointer"
-                        title="Configuración"
-                    >
-                        <Settings className="w-5 h-5" />
-                    </button>
+                    {/* Bottom Group: Modo Claro / Oscuro */}
+                    <div className="flex flex-col items-center space-y-3">
+                        <button
+                            onClick={() => setDarkMode(!darkMode)}
+                            className="w-10 h-10 rounded-2xl bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/80 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition flex items-center justify-center cursor-pointer"
+                            title={darkMode ? 'Modo Luz' : 'Modo Nocturno'}
+                        >
+                            {darkMode ? <Sun className="w-4.5 h-4.5" /> : <Moon className="w-4.5 h-4.5" />}
+                        </button>
+                    </div>
                 </aside>
 
-                {/* ── ÁREA DE VISOR 360° PANORAMA EN TAMAÑO TOTAL ── */}
-                <main className="flex-1 relative w-full h-full bg-[#050811] overflow-hidden">
+                {/* ── ÁREA PRINCIPAL DE VISUALIZACIÓN ── */}
+                <main className="flex-1 relative w-full h-full bg-slate-200 dark:bg-[#050811] overflow-hidden flex items-center justify-center">
                     
-                    {/* Contenedor DOM Pannellum */}
-                    <div ref={containerRef} className="w-full h-full" />
+                    {/* ── VISTA 1: MODO 360° INTERACTIVO (PANNELLUM) ── */}
+                    {viewMode === '360' && (
+                        <div ref={containerRef} className="w-full h-full" />
+                    )}
 
-                    {/* ── BOTONES FLOTANTES ESQUINA SUPERIOR DERECHA (Sin Header) ── */}
+                    {/* ── VISTA 2: MODO PLANO 2:1 EQUIRECTANGULAR ── */}
+                    {viewMode === '2d' && (
+                        <div className="relative w-full h-full flex items-center justify-center p-4 sm:p-8 overflow-auto">
+                            <div 
+                                className="relative max-w-6xl w-full aspect-[2/1] rounded-2xl overflow-hidden border border-slate-300 dark:border-slate-700/80 shadow-2xl bg-slate-900 select-none group/canvas"
+                                onClick={handle2DCanvasClick}
+                                style={{ cursor: activeTool === 'hotspot' ? 'crosshair' : 'default' }}
+                            >
+                                <img 
+                                    src={imageSrc} 
+                                    alt={scene.nombre}
+                                    className="w-full h-full object-cover pointer-events-none"
+                                />
+
+                                {/* Renderizar Puntos Interactivos Superpuestos sobre el Plano 2:1 */}
+                                {localHotspots.map((hs) => {
+                                    const isEnlace = hs.tipo === 'enlace';
+                                    const leftPct = ((Number(hs.yaw) + 180) / 360) * 100;
+                                    const topPct = ((90 - Number(hs.pitch)) / 180) * 100;
+
+                                    const targetScene = allScenes.find((s) => s.id === hs.scene_destino_id);
+                                    const previewText = !isEnlace && hs.texto
+                                        ? (hs.texto.length > 25 ? hs.texto.substring(0, 25) + '...' : hs.texto)
+                                        : (isEnlace ? `Ir a: ${targetScene?.nombre || hs.texto}` : 'Información');
+
+                                    return (
+                                        <div
+                                            key={`2d-hs-${hs.id}`}
+                                            style={{ left: `${leftPct}%`, top: `${topPct}%` }}
+                                            className={`absolute -translate-x-1/2 -translate-y-1/2 z-20 transition-transform hover:scale-125 cursor-pointer ${
+                                                isEnlace ? 'custom-hotspot-link-editor' : 'custom-hotspot-info-editor'
+                                            }`}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                abrirEditarHotspot(hs);
+                                            }}
+                                            title={hs.texto || (isEnlace ? 'Punto de Ruta' : 'Información')}
+                                        >
+                                            {isEnlace ? (
+                                                <div className="hotspot-link-inner">
+                                                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="3.8" strokeLinecap="round" strokeLinejoin="round">
+                                                        <polyline points="18 15 12 9 6 15"></polyline>
+                                                    </svg>
+                                                </div>
+                                            ) : (
+                                                <>
+                                                    <div className="hotspot-info-inner">i</div>
+                                                    <div className="hotspot-tooltip-preview">{previewText}</div>
+                                                </>
+                                            )}
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* ── BOTONES FLOTANTES SUPERIOR DERECHO MINIMALISTAS ── */}
                     <div className="absolute top-6 right-6 z-30 flex items-center gap-3">
                         <a
                             href={safeRoute('tour.show')}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="bg-[#800A15] hover:bg-[#600710] border border-rose-400/30 text-white font-extrabold text-xs px-4 py-2.5 rounded-xl transition backdrop-blur-md shadow-lg shadow-rose-950/40 flex items-center gap-2 cursor-pointer active:scale-95"
+                            className="bg-[#800A15] hover:bg-[#600710] border border-rose-400/30 text-white font-bold text-xs px-4 py-2.5 rounded-xl transition backdrop-blur-md shadow-lg flex items-center gap-2 cursor-pointer active:scale-95"
                         >
                             <Eye className="w-4 h-4 text-rose-200" />
                             <span>Vista previa</span>
@@ -312,97 +410,92 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
 
                         <Link
                             href={safeRoute('admin.recorrido')}
-                            className="bg-blue-600 hover:bg-blue-700 border border-blue-400/30 text-white font-extrabold text-xs px-5 py-2.5 rounded-xl shadow-lg shadow-blue-600/40 transition backdrop-blur-md cursor-pointer active:scale-95 flex items-center gap-2"
+                            className="bg-blue-600 hover:bg-blue-700 border border-blue-400/30 text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow-lg shadow-blue-600/30 transition backdrop-blur-md cursor-pointer active:scale-95 flex items-center gap-2"
                         >
                             <Save className="w-4 h-4" />
-                            <span>Guardar recorrido</span>
+                            <span>Guardar</span>
                         </Link>
                     </div>
 
-                    {/* Indicador de modo activo en pantalla si está en modo Location */}
+                    {/* MENSAJE FLOTANTE MINIMALISTA DE ESTADO (Sin texto robótico IA) */}
                     {activeTool === 'hotspot' && (
-                        <div className="absolute top-6 left-6 z-30 bg-gradient-to-r from-[#800A15] to-blue-700 text-white font-extrabold text-xs px-4 py-2 rounded-xl backdrop-blur-md shadow-2xl border border-white/20 flex items-center gap-2 animate-bounce">
-                            <MapPin className="w-4 h-4" />
-                            <span>Modo Ubicación Activo: Haz clic donde quieras colocar el punto.</span>
+                        <div className="absolute top-6 left-6 z-30 flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#800A15] text-white text-xs font-bold shadow-lg animate-pulse">
+                            <MapPin className="w-3.5 h-3.5" />
+                            <span>Modo Ubicación</span>
                         </div>
                     )}
 
-                    {/* Skeleton / Loader de Carga */}
-                    {isLoading && (
-                        <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-slate-950/85 backdrop-blur-md">
-                            <div className="w-16 h-16 rounded-full border-4 border-blue-500/20 border-t-[#800A15] animate-spin mb-4"></div>
-                            <span className="text-xs font-black uppercase tracking-[3px] text-blue-400">
-                                Cargando Escena 360°...
+                    {/* Indicador de Vista Plano 2:1 */}
+                    {viewMode === '2d' && (
+                        <div className="absolute top-6 left-24 z-30 flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900/80 dark:bg-slate-800/80 border border-slate-700 text-white text-xs font-bold shadow-lg backdrop-blur-md">
+                            <ImageIcon className="w-3.5 h-3.5 text-blue-400" />
+                            <span>Plano 2:1</span>
+                        </div>
+                    )}
+
+                    {/* Loader de Carga */}
+                    {isLoading && viewMode === '360' && (
+                        <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-slate-950/80 backdrop-blur-md">
+                            <div className="w-12 h-12 rounded-full border-4 border-blue-500/20 border-t-[#800A15] animate-spin mb-3"></div>
+                            <span className="text-[11px] font-bold uppercase tracking-widest text-slate-300">
+                                Cargando...
                             </span>
                         </div>
                     )}
 
-                    {/* Controles Flotantes Inferiores Izquierda (Girar y Zoom) */}
-                    <div className="absolute bottom-6 left-6 z-20 flex items-center bg-[#111827]/90 border border-slate-800 backdrop-blur-md rounded-2xl shadow-2xl overflow-hidden p-1">
-                        <button
-                            onClick={() => viewerRef.current?.setYaw(viewerRef.current.getYaw() - 15)}
-                            className="p-2.5 text-slate-300 hover:text-white hover:bg-slate-800 rounded-xl transition"
-                            title="Girar Izquierda"
-                        >
-                            <RotateCcw className="w-4 h-4" />
-                        </button>
-                        <button
-                            onClick={() => viewerRef.current?.setYaw(viewerRef.current.getYaw() + 15)}
-                            className="p-2.5 text-slate-300 hover:text-white hover:bg-slate-800 rounded-xl transition"
-                            title="Girar Derecha"
-                        >
-                            <RotateCw className="w-4 h-4" />
-                        </button>
-                        <div className="w-px h-5 bg-slate-800 mx-1" />
-                        <button
-                            onClick={() => viewerRef.current?.setHfov(Math.min(120, viewerRef.current.getHfov() + 15))}
-                            className="p-2.5 text-slate-300 hover:text-white hover:bg-slate-800 rounded-xl transition font-extrabold text-sm"
-                            title="Alejar (-)"
-                        >
-                            －
-                        </button>
-                        <button
-                            onClick={() => viewerRef.current?.setHfov(Math.max(30, viewerRef.current.getHfov() - 15))}
-                            className="p-2.5 text-slate-300 hover:text-white hover:bg-slate-800 rounded-xl transition font-extrabold text-sm"
-                            title="Acercar (+)"
-                        >
-                            ＋
-                        </button>
-                    </div>
-
-                    {/* Botón flotante para abrir la Lista de Imágenes si está cerrada */}
-                    {!showImageList && (
-                        <button
-                            onClick={() => setShowImageList(true)}
-                            className="absolute bottom-6 right-6 z-20 w-12 h-12 rounded-2xl bg-gradient-to-br from-[#800A15] to-blue-700 text-white flex items-center justify-center shadow-2xl hover:scale-105 transition cursor-pointer"
-                            title="Ver Lista de Imágenes"
-                        >
-                            <ImageIcon className="w-6 h-6" />
-                        </button>
+                    {/* Controles Flotantes Inferiores Izquierda (Sólo en 360°) */}
+                    {viewMode === '360' && (
+                        <div className="absolute bottom-6 left-6 z-20 flex items-center bg-white/90 dark:bg-[#111827]/90 border border-slate-200 dark:border-slate-800 backdrop-blur-md rounded-2xl shadow-xl overflow-hidden p-1">
+                            <button
+                                onClick={() => viewerRef.current?.setYaw(viewerRef.current.getYaw() - 15)}
+                                className="p-2.5 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition"
+                                title="Girar Izquierda"
+                            >
+                                <RotateCcw className="w-4 h-4" />
+                            </button>
+                            <button
+                                onClick={() => viewerRef.current?.setYaw(viewerRef.current.getYaw() + 15)}
+                                className="p-2.5 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition"
+                                title="Girar Derecha"
+                            >
+                                <RotateCw className="w-4 h-4" />
+                            </button>
+                            <div className="w-px h-5 bg-slate-200 dark:bg-slate-800 mx-1" />
+                            <button
+                                onClick={() => viewerRef.current?.setHfov(Math.min(120, viewerRef.current.getHfov() + 15))}
+                                className="p-2.5 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition font-extrabold text-sm"
+                                title="Alejar (-)"
+                            >
+                                －
+                            </button>
+                            <button
+                                onClick={() => viewerRef.current?.setHfov(Math.max(30, viewerRef.current.getHfov() - 15))}
+                                className="p-2.5 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition font-extrabold text-sm"
+                                title="Acercar (+)"
+                            >
+                                ＋
+                            </button>
+                        </div>
                     )}
 
-                    {/* Lista de Imágenes Flotante (CERRADA POR DEFECTO, desplegable al dar clic) */}
+                    {/* Lista de Imágenes Flotante Desplegable */}
                     {showImageList && (
-                        <div className="absolute bottom-6 right-6 z-20 w-80 bg-[#111827]/95 border border-slate-800 backdrop-blur-xl rounded-2xl p-4 shadow-[0_20px_50px_rgba(0,0,0,0.8)] flex flex-col max-h-[360px] animate-fadeIn">
-                            
-                            <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-800/80">
+                        <div className="absolute bottom-6 right-6 z-30 w-80 bg-white/95 dark:bg-[#111827]/95 border border-slate-200 dark:border-slate-800 backdrop-blur-xl rounded-2xl p-4 shadow-2xl flex flex-col max-h-[360px] animate-fadeIn">
+                            <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-200 dark:border-slate-800">
                                 <div className="flex items-center gap-2">
-                                    <span className="text-xs font-extrabold text-white tracking-tight">
-                                        Lista de imágenes
-                                    </span>
-                                    <span className="bg-[#800A15] text-white text-[10px] font-black px-2 py-0.5 rounded-full">
-                                        {allScenes.length}
+                                    <span className="text-xs font-bold text-slate-800 dark:text-white">
+                                        Escenas ({allScenes.length})
                                     </span>
                                 </div>
                                 <button
                                     onClick={() => setShowImageList(false)}
-                                    className="text-slate-400 hover:text-white p-1 rounded-lg"
+                                    className="text-slate-400 hover:text-slate-600 dark:hover:text-white p-1 rounded-lg"
                                 >
                                     <X className="w-4 h-4" />
                                 </button>
                             </div>
 
-                            <div className="flex-1 overflow-y-auto space-y-2.5 pr-1 custom-scrollbar">
+                            <div className="flex-1 overflow-y-auto space-y-2 pr-1 custom-scrollbar">
                                 {allScenes.map((s) => {
                                     const isActive = s.id === scene.id;
 
@@ -412,24 +505,20 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
                                             onClick={() => router.get(safeRoute('admin.recorrido.editor', s.id))}
                                             className={`group relative rounded-xl overflow-hidden border transition-all cursor-pointer ${
                                                 isActive
-                                                    ? 'border-[#800A15] ring-2 ring-[#800A15]/60 shadow-lg'
-                                                    : 'border-slate-800 hover:border-slate-600'
+                                                    ? 'border-[#800A15] ring-2 ring-[#800A15]/40 shadow-md'
+                                                    : 'border-slate-200 dark:border-slate-800 hover:border-slate-400 dark:hover:border-slate-600'
                                             }`}
                                         >
-                                            <div className="relative h-20 w-full bg-slate-900">
+                                            <div className="relative h-16 w-full bg-slate-900">
                                                 <img
                                                     src={s.imagen_url || `/storage/${s.imagen_path}`}
                                                     alt={s.nombre}
                                                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                                                 />
-                                                
-                                                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent p-2.5 flex items-end justify-between">
+                                                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent p-2 flex items-end justify-between">
                                                     <span className="text-xs font-bold text-white truncate max-w-[200px]">
                                                         {s.nombre}
                                                     </span>
-                                                    <div className="p-1 rounded bg-black/40 text-slate-300 hover:text-white">
-                                                        <MoreVertical className="w-3.5 h-3.5" />
-                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -440,28 +529,28 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
                     )}
                 </main>
 
-                {/* ── MODAL / POPOVER FLOTANTE PARA CREAR / EDITAR HOTSPOT ── */}
+                {/* ── MODAL FLOTANTE CREAR / EDITAR HOTSPOT ── */}
                 {activeModal && (
                     <div 
-                        className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm p-4 animate-fadeIn"
+                        className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 backdrop-blur-sm p-4 animate-fadeIn"
                         onClick={() => setActiveModal(false)}
                     >
                         <div 
-                            className="bg-[#111827] border border-slate-800 text-white rounded-3xl p-6 w-full max-w-md shadow-2xl space-y-5"
+                            className="bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-white rounded-3xl p-6 w-full max-w-md shadow-2xl space-y-5"
                             onClick={(e) => e.stopPropagation()}
                         >
-                            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+                            <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
                                 <div className="flex items-center gap-2.5">
-                                    <div className="w-9 h-9 rounded-2xl bg-[#800A15]/20 border border-[#800A15]/40 text-rose-400 flex items-center justify-center font-bold text-sm">
+                                    <div className="w-8 h-8 rounded-xl bg-[#800A15]/20 text-[#800A15] dark:text-rose-400 flex items-center justify-center font-bold text-sm">
                                         {selectedHotspot ? '✎' : '+'}
                                     </div>
-                                    <h4 className="text-base font-extrabold tracking-tight">
-                                        {selectedHotspot ? 'Editar Punto Interactivo' : 'Nuevo Punto Interactivo'}
+                                    <h4 className="text-base font-bold tracking-tight">
+                                        {selectedHotspot ? 'Editar Punto' : 'Nuevo Punto'}
                                     </h4>
                                 </div>
                                 <button 
                                     onClick={() => setActiveModal(false)}
-                                    className="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center text-sm transition"
+                                    className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-400 hover:text-slate-600 dark:hover:text-white flex items-center justify-center text-sm transition"
                                 >
                                     ✕
                                 </button>
@@ -469,58 +558,58 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
 
                             <form onSubmit={guardarHotspot} className="space-y-4">
                                 
-                                {/* Coordenadas capturadas */}
-                                <div className="bg-slate-950 p-3 rounded-2xl border border-slate-800 flex items-center justify-between text-xs text-slate-400">
-                                    <span>Ubicación Exacta:</span>
-                                    <span className="font-mono text-blue-400 font-bold">
+                                {/* Coordenadas */}
+                                <div className="bg-slate-50 dark:bg-slate-950 p-3 rounded-xl border border-slate-200 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+                                    <span>Coordenadas:</span>
+                                    <span className="font-mono text-blue-600 dark:text-blue-400 font-bold">
                                         Pitch: {form.data.pitch}° | Yaw: {form.data.yaw}°
                                     </span>
                                 </div>
 
                                 {/* Selección de Tipo */}
                                 <div>
-                                    <label className="text-[11px] font-extrabold uppercase tracking-wider text-slate-400 block mb-2">
-                                        Tipo de Punto *
+                                    <label className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 block mb-2">
+                                        Tipo *
                                     </label>
                                     <div className="grid grid-cols-2 gap-3">
                                         <button
                                             type="button"
                                             onClick={() => form.setData('tipo', 'enlace')}
-                                            className={`p-3 rounded-2xl border text-xs font-bold flex items-center gap-2.5 transition cursor-pointer ${
+                                            className={`p-3 rounded-xl border text-xs font-bold flex items-center gap-2 transition cursor-pointer ${
                                                 form.data.tipo === 'enlace'
-                                                    ? 'bg-blue-600/25 border-blue-500 text-blue-300 ring-2 ring-blue-500/30'
-                                                    : 'bg-slate-800/50 border-slate-700 text-slate-400 hover:bg-slate-800'
+                                                    ? 'bg-blue-50 dark:bg-blue-600/25 border-blue-500 text-blue-600 dark:text-blue-300 ring-2 ring-blue-500/20'
+                                                    : 'bg-slate-50 dark:bg-slate-800/50 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400'
                                             }`}
                                         >
-                                            <LinkIcon className="w-4 h-4 text-blue-400" />
-                                            <span>Punto de Ruta</span>
+                                            <LinkIcon className="w-4 h-4 text-blue-500" />
+                                            <span>Ruta</span>
                                         </button>
                                         <button
                                             type="button"
                                             onClick={() => form.setData('tipo', 'info')}
-                                            className={`p-3 rounded-2xl border text-xs font-bold flex items-center gap-2.5 transition cursor-pointer ${
+                                            className={`p-3 rounded-xl border text-xs font-bold flex items-center gap-2 transition cursor-pointer ${
                                                 form.data.tipo === 'info'
-                                                    ? 'bg-[#800A15]/30 border-[#800A15] text-rose-300 ring-2 ring-rose-600/30'
-                                                    : 'bg-slate-800/50 border-slate-700 text-slate-400 hover:bg-slate-800'
+                                                    ? 'bg-rose-50 dark:bg-[#800A15]/30 border-[#800A15] text-[#800A15] dark:text-rose-300 ring-2 ring-rose-600/20'
+                                                    : 'bg-slate-50 dark:bg-slate-800/50 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400'
                                             }`}
                                         >
-                                            <Info className="w-4 h-4 text-rose-400" />
+                                            <Info className="w-4 h-4 text-rose-500" />
                                             <span>Información</span>
                                         </button>
                                     </div>
                                 </div>
 
-                                {/* Si es Enlace: Selección de escena destino */}
+                                {/* Selección de escena destino */}
                                 {form.data.tipo === 'enlace' && (
                                     <div>
-                                        <label className="text-[11px] font-extrabold uppercase tracking-wider text-slate-400 block mb-2">
-                                            Escena a la que salta este punto *
+                                        <label className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 block mb-2">
+                                            Escena Destino *
                                         </label>
                                         <select
                                             value={form.data.scene_destino_id}
                                             onChange={(e) => form.setData('scene_destino_id', e.target.value)}
                                             required
-                                            className="w-full bg-slate-950 border border-slate-700 text-white rounded-xl px-4 py-2.5 text-sm font-bold focus:outline-none focus:border-blue-500 transition"
+                                            className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white rounded-xl px-4 py-2.5 text-sm font-bold focus:outline-none focus:border-blue-500 transition"
                                         >
                                             <option value="">-- Seleccionar Escena --</option>
                                             {otherScenes.map((s) => (
@@ -532,49 +621,49 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
                                     </div>
                                 )}
 
-                                {/* Texto o descripción del punto */}
+                                {/* Texto */}
                                 <div>
-                                    <label className="text-[11px] font-extrabold uppercase tracking-wider text-slate-400 block mb-2">
-                                        {form.data.tipo === 'enlace' ? 'Texto Tooltip / Botón' : 'Descripción Informativa *'}
+                                    <label className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 block mb-2">
+                                        {form.data.tipo === 'enlace' ? 'Texto Tooltip' : 'Descripción *'}
                                     </label>
                                     <textarea
                                         value={form.data.texto}
                                         onChange={(e) => form.setData('texto', e.target.value)}
                                         rows={3}
                                         required={form.data.tipo === 'info'}
-                                        placeholder={form.data.tipo === 'enlace' ? 'Ej: Ir al Patio Central' : 'Escribe el detalle informativo...'}
-                                        className="w-full bg-slate-950 border border-slate-700 text-white rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-blue-500 transition resize-none font-medium"
+                                        placeholder={form.data.tipo === 'enlace' ? 'Ej: Ir al Patio Central' : 'Detalle informativo...'}
+                                        className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-blue-500 transition resize-none font-medium"
                                     />
                                 </div>
 
-                                {/* Botones del Formulario */}
-                                <div className="flex items-center justify-between pt-3 border-t border-slate-800 gap-3">
+                                {/* Botones */}
+                                <div className="flex items-center justify-between pt-3 border-t border-slate-100 dark:border-slate-800 gap-3">
                                     {selectedHotspot && (
                                         <button
                                             type="button"
                                             onClick={eliminarHotspot}
-                                            className="px-4 py-2.5 bg-rose-600/20 border border-rose-500/40 text-rose-400 hover:bg-rose-600 hover:text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer"
+                                            className="px-4 py-2.5 bg-rose-50 dark:bg-rose-900/20 border border-rose-200 dark:border-rose-800 text-rose-600 dark:text-rose-400 hover:bg-rose-100 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer"
                                         >
                                             <Trash2 className="w-4 h-4" />
                                             <span>Eliminar</span>
                                         </button>
                                     )}
 
-                                    <div className="flex items-center gap-3 ml-auto">
+                                    <div className="flex items-center gap-2 ml-auto">
                                         <button
                                             type="button"
                                             onClick={() => setActiveModal(false)}
-                                            className="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-bold transition cursor-pointer"
+                                            className="px-4 py-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-xl text-xs font-bold transition cursor-pointer"
                                         >
                                             Cancelar
                                         </button>
                                         <button
                                             type="submit"
                                             disabled={form.processing}
-                                            className="px-5 py-2.5 bg-gradient-to-r from-[#800A15] via-blue-600 to-blue-700 hover:opacity-95 text-white font-extrabold rounded-xl text-xs transition shadow-lg shadow-blue-900/40 disabled:opacity-50 cursor-pointer flex items-center gap-1.5"
+                                            className="px-5 py-2.5 bg-gradient-to-r from-[#800A15] via-blue-600 to-blue-700 hover:opacity-95 text-white font-bold rounded-xl text-xs transition shadow-md shadow-blue-600/30 disabled:opacity-50 cursor-pointer flex items-center gap-1.5"
                                         >
                                             <Check className="w-4 h-4" />
-                                            <span>{form.processing ? 'Guardando...' : 'Guardar Punto'}</span>
+                                            <span>{form.processing ? 'Guardando...' : 'Guardar'}</span>
                                         </button>
                                     </div>
                                 </div>

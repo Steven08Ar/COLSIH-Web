@@ -1249,6 +1249,10 @@ function RecorridoTab({ tour, scenes = [], flash, basePath }) {
     const [deletingId, setDeletingId] = useState(null);
     const [localScenes, setLocalScenes] = useState(scenes);
 
+    const [modoCargaModal, setModoCargaModal] = useState('individual'); // 'individual' | 'masa'
+    const [batchItems, setBatchItems] = useState([]);
+    const [batchUploading, setBatchUploading] = useState(false);
+
     useEffect(() => { setLocalScenes(scenes); }, [scenes]);
 
     const cambiarVista = (modo) => {
@@ -1262,6 +1266,47 @@ function RecorridoTab({ tour, scenes = [], flash, basePath }) {
         imagen: null,
     });
 
+    const handleBatchFilesSelect = (e) => {
+        const files = Array.from(e.target.files || []);
+        if (files.length === 0) return;
+
+        if (files.length > 50) {
+            alert('Has seleccionado más de 50 imágenes. Se procesarán las primeras 50.');
+        }
+
+        const validFiles = files.slice(0, 50);
+
+        const newItems = validFiles.map((file, idx) => {
+            const cleanName = file.name
+                .replace(/\.[^/.]+$/, "")
+                .replace(/[-_]/g, " ")
+                .replace(/^\d+[\s.-]*/, "")
+                .trim();
+            const formattedName = cleanName
+                ? cleanName.charAt(0).toUpperCase() + cleanName.slice(1)
+                : `Espacio ${batchItems.length + idx + 1}`;
+
+            return {
+                id: `batch-${Date.now()}-${idx}-${Math.random().toString(36).substr(2, 4)}`,
+                file: file,
+                previewUrl: URL.createObjectURL(file),
+                nombre: formattedName,
+            };
+        });
+
+        setBatchItems((prev) => [...prev, ...newItems].slice(0, 50));
+    };
+
+    const updateBatchItemName = (id, newName) => {
+        setBatchItems((prev) =>
+            prev.map((item) => (item.id === id ? { ...item, nombre: newName } : item))
+        );
+    };
+
+    const removeBatchItem = (id) => {
+        setBatchItems((prev) => prev.filter((item) => item.id !== id));
+    };
+
     const guardarEscena = (e) => {
         e.preventDefault();
         form.post(`${basePath}/recorrido/scenes`, {
@@ -1269,6 +1314,31 @@ function RecorridoTab({ tour, scenes = [], flash, basePath }) {
             onSuccess: () => {
                 setCreando(false);
                 form.reset();
+            }
+        });
+    };
+
+    const guardarEscenasMasa = (e) => {
+        e.preventDefault();
+        if (batchItems.length === 0) return;
+
+        setBatchUploading(true);
+
+        const formData = new FormData();
+        batchItems.forEach((item, idx) => {
+            formData.append(`escenas[${idx}][nombre]`, item.nombre);
+            formData.append(`escenas[${idx}][imagen]`, item.file);
+        });
+
+        router.post(`${basePath}/recorrido/scenes/batch`, formData, {
+            forceFormData: true,
+            onSuccess: () => {
+                setBatchUploading(false);
+                setCreando(false);
+                setBatchItems([]);
+            },
+            onError: () => {
+                setBatchUploading(false);
             }
         });
     };
@@ -1480,46 +1550,197 @@ function RecorridoTab({ tour, scenes = [], flash, basePath }) {
             )}
 
             {creando && (
-                <Modal title="Agregar Nueva Escena 360°" onClose={() => setCreando(false)}>
-                    <form onSubmit={guardarEscena} className="space-y-4">
-                        <div>
-                            <label className="text-slate-500 text-[11px] font-bold uppercase tracking-wider block mb-2">Nombre del Espacio / Escena *</label>
-                            <input
-                                value={form.data.nombre}
-                                onChange={(e) => form.setData('nombre', e.target.value)}
-                                required
-                                placeholder="Ej: Laboratorio de Biología"
-                                className="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-blue-600 transition font-medium"
-                            />
-                        </div>
+                <Modal title="Agregar Escenas 360°" onClose={() => setCreando(false)}>
+                    {/* Selector de Modo: Individual vs Carga en Masa */}
+                    <div className="flex items-center gap-2 p-1 bg-slate-100 dark:bg-slate-800/80 rounded-xl mb-4">
+                        <button
+                            type="button"
+                            onClick={() => setModoCargaModal('individual')}
+                            className={`flex-1 py-2 text-xs font-bold rounded-lg transition cursor-pointer ${
+                                modoCargaModal === 'individual'
+                                    ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 shadow-sm'
+                                    : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
+                            }`}
+                        >
+                            Carga Individual
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => setModoCargaModal('masa')}
+                            className={`flex-1 py-2 text-xs font-bold rounded-lg transition cursor-pointer flex items-center justify-center gap-1.5 ${
+                                modoCargaModal === 'masa'
+                                    ? 'bg-[#800A15] text-white shadow-sm'
+                                    : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
+                            }`}
+                        >
+                            <span>Carga en Masa (Máx. 50)</span>
+                            {batchItems.length > 0 && (
+                                <span className="bg-white text-[#800A15] text-[10px] font-black px-1.5 py-0.5 rounded-full">
+                                    {batchItems.length}
+                                </span>
+                            )}
+                        </button>
+                    </div>
 
-                        <div>
-                            <label className="text-slate-500 text-[11px] font-bold uppercase tracking-wider block mb-2">Ruta de Imagen en Servidor (Opcional)</label>
-                            <input
-                                value={form.data.imagen_url_manual}
-                                onChange={(e) => form.setData('imagen_url_manual', e.target.value)}
-                                placeholder="Ej: recorrido_virtual/12.informatica_a.jpg"
-                                className="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-blue-600 transition font-medium font-mono"
-                            />
-                        </div>
+                    {modoCargaModal === 'individual' ? (
+                        /* Formulario Carga Individual */
+                        <form onSubmit={guardarEscena} className="space-y-4">
+                            <div>
+                                <label className="text-slate-500 text-[11px] font-bold uppercase tracking-wider block mb-2">Nombre del Espacio / Escena *</label>
+                                <input
+                                    value={form.data.nombre}
+                                    onChange={(e) => form.setData('nombre', e.target.value)}
+                                    required
+                                    placeholder="Ej: Laboratorio de Biología"
+                                    className="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-blue-600 transition font-medium"
+                                />
+                            </div>
 
-                        <div>
-                            <label className="text-slate-500 text-[11px] font-bold uppercase tracking-wider block mb-2">O Subir archivo de Imagen Equirrectangular 360°</label>
-                            <input
-                                type="file"
-                                accept="image/jpeg,image/png,image/jpg"
-                                onChange={(e) => form.setData('imagen', e.target.files[0])}
-                                className="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-                            />
-                        </div>
+                            <div>
+                                <label className="text-slate-500 text-[11px] font-bold uppercase tracking-wider block mb-2">Ruta de Imagen en Servidor (Opcional)</label>
+                                <input
+                                    value={form.data.imagen_url_manual}
+                                    onChange={(e) => form.setData('imagen_url_manual', e.target.value)}
+                                    placeholder="Ej: recorrido_virtual/12.informatica_a.jpg"
+                                    className="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-blue-600 transition font-medium font-mono"
+                                />
+                            </div>
 
-                        <div className="flex gap-3 pt-4 border-t border-slate-100">
-                            <button type="submit" disabled={form.processing} className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl py-3 text-sm transition cursor-pointer">
-                                {form.processing ? 'Guardando...' : 'Guardar Escena 360°'}
-                            </button>
-                            <button type="button" onClick={() => setCreando(false)} className="px-5 bg-slate-100 text-slate-600 rounded-xl py-3 text-sm font-bold">Cancelar</button>
-                        </div>
-                    </form>
+                            <div>
+                                <label className="text-slate-500 text-[11px] font-bold uppercase tracking-wider block mb-2">O Subir archivo de Imagen Equirrectangular 360°</label>
+                                <input
+                                    type="file"
+                                    accept="image/jpeg,image/png,image/jpg"
+                                    onChange={(e) => form.setData('imagen', e.target.files[0])}
+                                    className="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                                />
+                            </div>
+
+                            <div className="flex gap-3 pt-4 border-t border-slate-100 dark:border-slate-800">
+                                <button type="submit" disabled={form.processing} className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl py-3 text-sm transition cursor-pointer">
+                                    {form.processing ? 'Guardando...' : 'Guardar Escena 360°'}
+                                </button>
+                                <button type="button" onClick={() => setCreando(false)} className="px-5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-xl py-3 text-sm font-bold">Cancelar</button>
+                            </div>
+                        </form>
+                    ) : (
+                        /* Formulario Carga en Masa (Hasta 50 imágenes) */
+                        <form onSubmit={guardarEscenasMasa} className="space-y-4">
+                            <div className="space-y-2">
+                                <label className="text-slate-500 text-[11px] font-bold uppercase tracking-wider block">
+                                    Seleccionar Archivos de Imagen 360° (Hasta 50 imágenes)
+                                </label>
+                                
+                                <input
+                                    type="file"
+                                    multiple
+                                    id="batch-files-input"
+                                    accept="image/jpeg,image/png,image/jpg"
+                                    onChange={handleBatchFilesSelect}
+                                    className="hidden"
+                                />
+
+                                <label
+                                    htmlFor="batch-files-input"
+                                    className="w-full py-5 border-2 border-dashed border-blue-400 dark:border-blue-600/60 rounded-2xl bg-blue-50/50 dark:bg-blue-950/20 hover:bg-blue-100/50 dark:hover:bg-blue-900/30 transition flex flex-col items-center justify-center cursor-pointer text-center group"
+                                >
+                                    <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
+                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+                                        </svg>
+                                    </div>
+                                    <span className="text-xs font-extrabold text-blue-700 dark:text-blue-300">
+                                        Haz clic aquí para seleccionar imágenes 360° en masa (Máximo 50)
+                                    </span>
+                                    <span className="text-[10px] text-slate-400 mt-1">
+                                        Formatos soportados: JPG, JPEG, PNG • Genera vista previa y títulos automáticamente
+                                    </span>
+                                </label>
+                            </div>
+
+                            {/* Lista de Imágenes Seleccionadas con Vista Previa e Inputs para Nombre */}
+                            {batchItems.length > 0 && (
+                                <div className="space-y-3">
+                                    <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
+                                        <span className="text-xs font-bold text-slate-700 dark:text-slate-300">
+                                            Lista de imágenes a guardar ({batchItems.length} / 50):
+                                        </span>
+                                        <button
+                                            type="button"
+                                            onClick={() => setBatchItems([])}
+                                            className="text-[10px] font-bold text-rose-500 hover:text-rose-700"
+                                        >
+                                            Limpiar lista
+                                        </button>
+                                    </div>
+
+                                    <div className="max-h-72 overflow-y-auto space-y-2.5 pr-1 custom-scrollbar">
+                                        {batchItems.map((item, index) => (
+                                            <div
+                                                key={item.id}
+                                                className="flex items-center gap-3 p-2.5 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/80 rounded-xl"
+                                            >
+                                                {/* Vista Previa de Imagen */}
+                                                <div className="relative w-16 h-12 rounded-lg overflow-hidden shrink-0 bg-slate-900 border border-slate-200 dark:border-slate-700">
+                                                    <img
+                                                        src={item.previewUrl}
+                                                        alt={item.nombre}
+                                                        className="w-full h-full object-cover"
+                                                    />
+                                                    <span className="absolute bottom-0 right-0 bg-slate-900/80 text-white text-[8px] font-mono px-1">
+                                                        #{index + 1}
+                                                    </span>
+                                                </div>
+
+                                                {/* Input para Editar Nombre de la Escena */}
+                                                <div className="flex-1 min-w-0">
+                                                    <input
+                                                        type="text"
+                                                        value={item.nombre}
+                                                        onChange={(e) => updateBatchItemName(item.id, e.target.value)}
+                                                        placeholder="Nombre del Espacio / Escena"
+                                                        className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white rounded-lg px-3 py-1.5 text-xs font-bold focus:outline-none focus:border-blue-600"
+                                                    />
+                                                    <span className="text-[9px] text-slate-400 truncate block mt-0.5">
+                                                        {item.file.name} ({(item.file.size / (1024 * 1024)).toFixed(2)} MB)
+                                                    </span>
+                                                </div>
+
+                                                {/* Botón Quitar */}
+                                                <button
+                                                    type="button"
+                                                    onClick={() => removeBatchItem(item.id)}
+                                                    className="p-1.5 text-slate-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-900/20 rounded-lg transition cursor-pointer"
+                                                    title="Quitar de la lista"
+                                                >
+                                                    ✕
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            <div className="flex gap-3 pt-4 border-t border-slate-100 dark:border-slate-800">
+                                <button
+                                    type="submit"
+                                    disabled={batchItems.length === 0 || batchUploading}
+                                    className="flex-1 bg-[#800A15] hover:bg-[#600710] text-white font-bold rounded-xl py-3 text-sm transition cursor-pointer disabled:opacity-50"
+                                >
+                                    {batchUploading
+                                        ? 'Guardando imágenes...'
+                                        : `Guardar ${batchItems.length} Escenas 360° en Masa`}
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => setCreando(false)}
+                                    className="px-5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-xl py-3 text-sm font-bold cursor-pointer"
+                                >
+                                    Cancelar
+                                </button>
+                            </div>
+                        </form>
+                    )}
                 </Modal>
             )}
         </div>

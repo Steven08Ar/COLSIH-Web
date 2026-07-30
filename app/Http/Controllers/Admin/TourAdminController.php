@@ -104,6 +104,44 @@ class TourAdminController extends Controller
     }
 
     /**
+     * Carga en masa de escenas 360° (Hasta 50 imágenes a la vez).
+     */
+    public function storeBatchScenes(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'escenas' => ['required', 'array', 'min:1', 'max:50'],
+            'escenas.*.nombre' => ['required', 'string', 'max:255'],
+            'escenas.*.imagen' => ['required', 'image', 'mimes:jpeg,jpg,png', 'max:20480'],
+        ]);
+
+        $tour = Tour::firstOrCreate(['slug' => 'colsih'], ['nombre' => 'Recorrido Virtual 360°']);
+        $currentCount = $tour->scenes()->count();
+        $savedCount = 0;
+
+        foreach ($request->file('escenas') as $index => $item) {
+            if (isset($item['imagen']) && $item['imagen']->isValid()) {
+                $nombre = $request->input("escenas.{$index}.nombre") ?: ('Espacio ' . ($currentCount + $savedCount + 1));
+                $imagenPath = $item['imagen']->store('recorrido_virtual', 'public');
+                $slug = Str::slug($nombre) . '-' . Str::random(4);
+
+                $tour->scenes()->create([
+                    'nombre' => $nombre,
+                    'slug' => $slug,
+                    'imagen_path' => $imagenPath,
+                    'yaw_inicial' => 0,
+                    'pitch_inicial' => 0,
+                    'hfov_inicial' => 100,
+                    'orden' => $currentCount + $savedCount + 1,
+                ]);
+
+                $savedCount++;
+            }
+        }
+
+        return back()->with('flash', "¡Se agregaron {$savedCount} escenas 360° en masa exitosamente!");
+    }
+
+    /**
      * Actualiza la escena (por ejemplo, vista y zoom iniciales de cámara).
      */
     public function updateScene(Request $request, Scene $scene): RedirectResponse

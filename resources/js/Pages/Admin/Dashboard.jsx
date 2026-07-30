@@ -113,6 +113,7 @@ function TestimoniosTab({ testimonios, flash }) {
     const [editando, setEditando] = useState(null);
     const [creando, setCreando] = useState(false);
     const [previewImage, setPreviewImage] = useState(null);
+    const [deletingId, setDeletingId] = useState(null);
 
     const form = useForm({
         nombre: '',
@@ -192,8 +193,10 @@ function TestimoniosTab({ testimonios, flash }) {
     }
 
     function eliminar(id) {
-        if (!confirm('¿Eliminar este testimonio?')) return;
-        router.delete(`${window.location.pathname.replace(/\/[^/]+$/, '')}/testimonios/${id}`);
+        setDeletingId(null);
+        router.delete(`${window.location.pathname.replace(/\/[^/]+$/, '')}/testimonios/${id}`, {
+            preserveState: true, preserveScroll: true,
+        });
     }
 
     return (
@@ -242,7 +245,15 @@ function TestimoniosTab({ testimonios, flash }) {
                         </div>
                         <div className="flex gap-2 shrink-0 w-full sm:w-auto justify-end border-t sm:border-t-0 pt-3 sm:pt-0 border-slate-200/60 dark:border-slate-800/60">
                             <button onClick={() => abrirEditar(t)} className="text-xs font-bold text-blue-600 dark:text-blue-400 hover:text-blue-800 hover:bg-blue-50 dark:hover:bg-slate-800 px-3 py-1.5 rounded-lg transition cursor-pointer">Editar</button>
-                            <button onClick={() => eliminar(t.id)} className="text-xs font-bold text-rose-600 dark:text-rose-400 hover:text-rose-800 hover:bg-rose-50 dark:hover:bg-slate-800 px-3 py-1.5 rounded-lg transition cursor-pointer">Eliminar</button>
+                            {deletingId === t.id ? (
+                                <div className="flex items-center gap-1.5">
+                                    <span className="text-xs font-bold text-rose-600 dark:text-rose-400">¿Seguro?</span>
+                                    <button onClick={() => eliminar(t.id)} className="text-[11px] font-extrabold bg-rose-600 hover:bg-rose-700 text-white px-2.5 py-1 rounded-lg transition cursor-pointer">Sí</button>
+                                    <button onClick={() => setDeletingId(null)} className="text-[11px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-2.5 py-1 rounded-lg transition cursor-pointer">No</button>
+                                </div>
+                            ) : (
+                                <button onClick={() => setDeletingId(t.id)} className="text-xs font-bold text-rose-600 dark:text-rose-400 hover:text-rose-800 hover:bg-rose-50 dark:hover:bg-slate-800 px-3 py-1.5 rounded-lg transition cursor-pointer">Eliminar</button>
+                            )}
                         </div>
                     </div>
                 ))}
@@ -699,6 +710,7 @@ function NoticiasTab({ noticias, flash }) {
     const [creando, setCreando] = useState(false);
     const [submitting, setSubmitting] = useState(false);
     const [paso, setPaso] = useState(1);
+    const [deletingId, setDeletingId] = useState(null);
 
     const [titulo, setTitulo] = useState('');
     const [resumen, setResumen] = useState('');
@@ -863,8 +875,10 @@ function NoticiasTab({ noticias, flash }) {
     }
 
     function eliminar(id) {
-        if (!confirm('¿Eliminar permanentemente este registro?')) return;
-        router.delete(`${basePath}/noticias/${id}`);
+        setDeletingId(null);
+        router.delete(`${basePath}/noticias/${id}`, {
+            preserveState: true, preserveScroll: true,
+        });
     }
 
     return (
@@ -924,7 +938,15 @@ function NoticiasTab({ noticias, flash }) {
                         </div>
                         <div className="flex gap-2 shrink-0 w-full sm:w-auto justify-end border-t sm:border-t-0 pt-3 sm:pt-0 border-slate-200/60 dark:border-slate-800/60">
                             <button onClick={() => abrirEditar(n)} className="text-xs font-bold text-blue-600 dark:text-blue-400 hover:text-blue-800 hover:bg-blue-50 dark:hover:bg-slate-800 px-3 py-1.5 rounded-lg transition cursor-pointer">Editar</button>
-                            <button onClick={() => eliminar(n.id)} className="text-xs font-bold text-rose-600 dark:text-rose-400 hover:text-rose-800 hover:bg-rose-50 dark:hover:bg-slate-800 px-3 py-1.5 rounded-lg transition cursor-pointer">Eliminar</button>
+                            {deletingId === n.id ? (
+                                <div className="flex items-center gap-1.5">
+                                    <span className="text-xs font-bold text-rose-600 dark:text-rose-400">¿Seguro?</span>
+                                    <button onClick={() => eliminar(n.id)} className="text-[11px] font-extrabold bg-rose-600 hover:bg-rose-700 text-white px-2.5 py-1 rounded-lg transition cursor-pointer">Sí</button>
+                                    <button onClick={() => setDeletingId(null)} className="text-[11px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-2.5 py-1 rounded-lg transition cursor-pointer">No</button>
+                                </div>
+                            ) : (
+                                <button onClick={() => setDeletingId(n.id)} className="text-xs font-bold text-rose-600 dark:text-rose-400 hover:text-rose-800 hover:bg-rose-50 dark:hover:bg-slate-800 px-3 py-1.5 rounded-lg transition cursor-pointer">Eliminar</button>
+                            )}
                         </div>
                     </div>
                 ))}
@@ -1071,6 +1093,7 @@ function NoticiasTab({ noticias, flash }) {
 function PreguntasTab({ preguntas, flash }) {
     const [editando, setEditando] = useState(null);
     const [creando, setCreando] = useState(false);
+    const [deletingId, setDeletingId] = useState(null);
 
     const form = useForm({ pregunta: '', respuesta: '', activo: true, orden: 0 });
 
@@ -1096,8 +1119,10 @@ function PreguntasTab({ preguntas, flash }) {
     }
 
     function eliminar(id) {
-        if (!confirm('¿Eliminar esta pregunta?')) return;
-        router.delete(`${basePath}/preguntas/${id}`);
+        setDeletingId(null);
+        router.delete(`${basePath}/preguntas/${id}`, {
+            preserveState: true, preserveScroll: true,
+        });
     }
 
     return (
@@ -1139,7 +1164,15 @@ function PreguntasTab({ preguntas, flash }) {
                         </div>
                         <div className="flex gap-2 shrink-0 w-full sm:w-auto justify-end border-t sm:border-t-0 pt-3 sm:pt-0 border-slate-200/60 dark:border-slate-800/60">
                             <button onClick={() => abrirEditar(p)} className="text-xs font-bold text-blue-600 dark:text-blue-400 hover:text-blue-800 hover:bg-blue-50 dark:hover:bg-slate-800 px-3 py-1.5 rounded-lg transition cursor-pointer">Editar</button>
-                            <button onClick={() => eliminar(p.id)} className="text-xs font-bold text-rose-600 dark:text-rose-400 hover:text-rose-800 hover:bg-rose-50 dark:hover:bg-slate-800 px-3 py-1.5 rounded-lg transition cursor-pointer">Eliminar</button>
+                            {deletingId === p.id ? (
+                                <div className="flex items-center gap-1.5">
+                                    <span className="text-xs font-bold text-rose-600 dark:text-rose-400">¿Seguro?</span>
+                                    <button onClick={() => eliminar(p.id)} className="text-[11px] font-extrabold bg-rose-600 hover:bg-rose-700 text-white px-2.5 py-1 rounded-lg transition cursor-pointer">Sí</button>
+                                    <button onClick={() => setDeletingId(null)} className="text-[11px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-2.5 py-1 rounded-lg transition cursor-pointer">No</button>
+                                </div>
+                            ) : (
+                                <button onClick={() => setDeletingId(p.id)} className="text-xs font-bold text-rose-600 dark:text-rose-400 hover:text-rose-800 hover:bg-rose-50 dark:hover:bg-slate-800 px-3 py-1.5 rounded-lg transition cursor-pointer">Eliminar</button>
+                            )}
                         </div>
                     </div>
                 ))}
@@ -1210,7 +1243,18 @@ function PreguntasTab({ preguntas, flash }) {
 /* ── Recorrido Virtual 360° ── */
 function RecorridoTab({ tour, scenes = [], flash, basePath }) {
     const [creando, setCreando] = useState(false);
-    const [vistaModo, setVistaModo] = useState('lista'); // 'lista' por defecto, 'recuadro' opción
+    const [vistaModo, setVistaModo] = useState(
+        () => localStorage.getItem('admin-recorrido-vista') || 'lista'
+    );
+    const [deletingId, setDeletingId] = useState(null);
+    const [localScenes, setLocalScenes] = useState(scenes);
+
+    useEffect(() => { setLocalScenes(scenes); }, [scenes]);
+
+    const cambiarVista = (modo) => {
+        setVistaModo(modo);
+        localStorage.setItem('admin-recorrido-vista', modo);
+    };
 
     const form = useForm({
         nombre: '',
@@ -1230,9 +1274,11 @@ function RecorridoTab({ tour, scenes = [], flash, basePath }) {
     };
 
     const eliminarEscena = (id) => {
-        if (confirm('¿Eliminar esta escena 360° del recorrido?')) {
-            router.delete(`${basePath}/recorrido/scenes/${id}`);
-        }
+        setDeletingId(null);
+        setLocalScenes(prev => prev.filter(s => s.id !== id));
+        router.delete(`${basePath}/recorrido/scenes/${id}`, {
+            preserveState: true, preserveScroll: true,
+        });
     };
 
     return (
@@ -1241,7 +1287,7 @@ function RecorridoTab({ tour, scenes = [], flash, basePath }) {
             <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6 pb-4 border-b border-slate-100 dark:border-slate-800/80">
                 <div>
                     <h2 className="text-slate-800 dark:text-slate-100 font-extrabold text-base sm:text-lg tracking-tight">
-                        Recorrido Virtual 360° ({scenes.length} Espacios)
+                        Recorrido Virtual 360° ({localScenes.length} Espacios)
                     </h2>
                     <p className="text-slate-400 text-xs mt-0.5">
                         Administra las escenas e imágenes 360° y configura los puntos interactivos de ruta e información.
@@ -1253,7 +1299,7 @@ function RecorridoTab({ tour, scenes = [], flash, basePath }) {
                     <div className="flex items-center bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/80 p-1 rounded-xl">
                         <button
                             type="button"
-                            onClick={() => setVistaModo('lista')}
+                            onClick={() => cambiarVista('lista')}
                             className={`px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
                                 vistaModo === 'lista'
                                     ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 shadow-sm'
@@ -1268,7 +1314,7 @@ function RecorridoTab({ tour, scenes = [], flash, basePath }) {
                         </button>
                         <button
                             type="button"
-                            onClick={() => setVistaModo('recuadro')}
+                            onClick={() => cambiarVista('recuadro')}
                             className={`px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
                                 vistaModo === 'recuadro'
                                     ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 shadow-sm'
@@ -1310,7 +1356,7 @@ function RecorridoTab({ tour, scenes = [], flash, basePath }) {
             {/* ── MODO 1: LISTA (POR DEFECTO) ── */}
             {vistaModo === 'lista' && (
                 <div className="space-y-3">
-                    {scenes.map((s) => (
+                    {localScenes.map((s) => (
                         <div
                             key={s.id}
                             className="bg-slate-50/60 dark:bg-slate-800/30 hover:bg-slate-100/60 dark:hover:bg-slate-800/60 border border-slate-200/60 dark:border-slate-800/80 rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 transition duration-200 group"
@@ -1352,13 +1398,20 @@ function RecorridoTab({ tour, scenes = [], flash, basePath }) {
                                     Abrir Editor 360°
                                 </Link>
 
-                                <button
-                                    onClick={() => eliminarEscena(s.id)}
-                                    className="px-3.5 py-2.5 text-xs font-bold text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-900/20 rounded-xl transition cursor-pointer border border-rose-200/50 dark:border-rose-900/30"
-                                    title="Eliminar Escena"
-                                >
-                                    Eliminar
-                                </button>
+                                {deletingId === s.id ? (
+                                    <div className="flex items-center gap-1.5">
+                                        <span className="text-xs font-bold text-rose-600 dark:text-rose-400">¿Seguro?</span>
+                                        <button onClick={() => eliminarEscena(s.id)} className="text-[11px] font-extrabold bg-rose-600 hover:bg-rose-700 text-white px-2.5 py-1.5 rounded-lg transition cursor-pointer">Sí</button>
+                                        <button onClick={() => setDeletingId(null)} className="text-[11px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-2.5 py-1.5 rounded-lg transition cursor-pointer">No</button>
+                                    </div>
+                                ) : (
+                                    <button
+                                        onClick={() => setDeletingId(s.id)}
+                                        className="px-3.5 py-2.5 text-xs font-bold text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-900/20 rounded-xl transition cursor-pointer border border-rose-200/50 dark:border-rose-900/30"
+                                    >
+                                        Eliminar
+                                    </button>
+                                )}
                             </div>
                         </div>
                     ))}
@@ -1368,7 +1421,7 @@ function RecorridoTab({ tour, scenes = [], flash, basePath }) {
             {/* ── MODO 2: RECUADRO / GRILLA ── */}
             {vistaModo === 'recuadro' && (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                    {scenes.map((s) => (
+                    {localScenes.map((s) => (
                         <div
                             key={s.id}
                             className="bg-slate-50/50 dark:bg-slate-800/20 hover:bg-slate-50 dark:hover:bg-slate-800/40 border border-slate-200/60 dark:border-slate-800/60 hover:border-slate-300/80 rounded-2xl p-4 flex flex-col justify-between transition duration-200 group"
@@ -1406,13 +1459,20 @@ function RecorridoTab({ tour, scenes = [], flash, basePath }) {
                                     Abrir Editor 360°
                                 </Link>
 
-                                <button
-                                    onClick={() => eliminarEscena(s.id)}
-                                    className="px-3 py-2 text-xs font-bold text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-900/20 rounded-xl transition cursor-pointer"
-                                    title="Eliminar Escena"
-                                >
-                                    Eliminar
-                                </button>
+                                {deletingId === s.id ? (
+                                    <div className="flex items-center gap-1">
+                                        <span className="text-[10px] font-bold text-rose-600 dark:text-rose-400">¿Seguro?</span>
+                                        <button onClick={() => eliminarEscena(s.id)} className="text-[10px] font-extrabold bg-rose-600 hover:bg-rose-700 text-white px-2 py-1 rounded-lg transition cursor-pointer">Sí</button>
+                                        <button onClick={() => setDeletingId(null)} className="text-[10px] font-bold bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-lg transition cursor-pointer">No</button>
+                                    </div>
+                                ) : (
+                                    <button
+                                        onClick={() => setDeletingId(s.id)}
+                                        className="px-3 py-2 text-xs font-bold text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-900/20 rounded-xl transition cursor-pointer"
+                                    >
+                                        Eliminar
+                                    </button>
+                                )}
                             </div>
                         </div>
                     ))}

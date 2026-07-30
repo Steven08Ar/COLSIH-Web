@@ -3,7 +3,13 @@
  * into Pannellum's multiScene configuration object.
  */
 
-export function buildPannellumConfig(scenes = [], onSceneChange = null, initialSceneSlug = null, onInfoClick = null) {
+export function buildPannellumConfig(
+    scenes = [], 
+    onSceneChange = null, 
+    initialSceneSlug = null, 
+    onInfoClick = null,
+    getViewer = null
+) {
     if (!scenes || !Array.isArray(scenes) || scenes.length === 0) {
         return { default: {}, scenes: {} };
     }
@@ -34,12 +40,50 @@ export function buildPannellumConfig(scenes = [], onSceneChange = null, initialS
                     createTooltipFunc: (hotSpotDiv) => {
                         hotSpotDiv.innerHTML = `<div class="hotspot-link-inner"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="3.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg></div>`;
                     },
-                    clickHandlerFunc: (e, args) => {
-                        if (onSceneChange && args && args.targetSlug) {
-                            onSceneChange(args.targetSlug);
+                    clickHandlerFunc: function(e, args) {
+                        const viewer = (getViewer ? getViewer() : null) || this;
+                        const targetPitch = Number(args.pitch || 0);
+                        const targetYaw = Number(args.yaw || 0);
+
+                        // Animación Zoom In Estilo Google Maps Street View hacia la coordenada
+                        if (viewer && typeof viewer.getHfov === 'function') {
+                            let currentHfov = viewer.getHfov();
+                            let startPitch = viewer.getPitch();
+                            let startYaw = viewer.getYaw();
+                            
+                            let targetHfov = 35; // Zoom profundo hacia la coordenada de destino
+                            let steps = 14;
+                            let stepCount = 0;
+
+                            let animInterval = setInterval(() => {
+                                stepCount++;
+                                let progress = stepCount / steps;
+                                let easeProgress = progress * progress; // Curva acelerada hacia el frente
+
+                                let nextPitch = startPitch + (targetPitch - startPitch) * easeProgress;
+                                let nextYaw = startYaw + (targetYaw - startYaw) * easeProgress;
+                                let nextHfov = currentHfov + (targetHfov - currentHfov) * easeProgress;
+
+                                try {
+                                    viewer.setPitch(nextPitch);
+                                    viewer.setYaw(nextYaw);
+                                    viewer.setHfov(nextHfov);
+                                } catch (err) {}
+
+                                if (stepCount >= steps) {
+                                    clearInterval(animInterval);
+                                    if (onSceneChange && args && args.targetSlug) {
+                                        onSceneChange(args.targetSlug);
+                                    }
+                                }
+                            }, 18);
+                        } else {
+                            if (onSceneChange && args && args.targetSlug) {
+                                onSceneChange(args.targetSlug);
+                            }
                         }
                     },
-                    clickHandlerArgs: { targetSlug: targetSlug }
+                    clickHandlerArgs: { targetSlug: targetSlug, pitch: hs.pitch, yaw: hs.yaw }
                 };
             }
 
@@ -85,7 +129,7 @@ export function buildPannellumConfig(scenes = [], onSceneChange = null, initialS
         default: {
             firstScene: firstSceneSlug,
             author: 'Colegio Santa Isabel de Hungría',
-            sceneFadeDuration: 800,
+            sceneFadeDuration: 750,
             autoLoad: true,
             compass: true,
             showControls: true,

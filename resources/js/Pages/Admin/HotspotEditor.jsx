@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { Head, Link, useForm, router } from '@inertiajs/react';
 import 'pannellum/src/css/pannellum.css';
 import 'pannellum/src/js/libpannellum.js';
@@ -49,6 +49,17 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
     const [savingCameraView, setSavingCameraView] = useState(false);
     const [cameraFlashMessage, setCameraFlashMessage] = useState(null);
     const [sceneSearchQuery, setSceneSearchQuery] = useState('');
+
+    // Memorizar listas para evitar congelamientos al abrir modal
+    const otherScenesList = useMemo(() => {
+        return allScenes.filter((s) => s.id !== scene.id);
+    }, [allScenes, scene.id]);
+
+    const filteredScenes = useMemo(() => {
+        if (!sceneSearchQuery.trim()) return otherScenesList;
+        const q = sceneSearchQuery.toLowerCase();
+        return otherScenesList.filter((s) => (s.nombre || '').toLowerCase().includes(q));
+    }, [otherScenesList, sceneSearchQuery]);
 
     // Sincronizar modo oscuro / claro
     useEffect(() => {
@@ -580,6 +591,8 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
                                                 <img
                                                     src={s.imagen_url || `/storage/${s.imagen_path}`}
                                                     alt={s.nombre}
+                                                    loading="lazy"
+                                                    decoding="async"
                                                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                                                 />
                                                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent p-2 flex items-end justify-between">
@@ -671,95 +684,90 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
                                 </div>
 
                                 {/* Selección de escena destino con buscador por nombre */}
-                                {form.data.tipo === 'enlace' && (() => {
-                                    const otherScenesList = allScenes.filter((s) => s.id !== scene.id);
-                                    const filteredScenes = otherScenesList.filter((s) =>
-                                        s.nombre.toLowerCase().includes(sceneSearchQuery.toLowerCase())
-                                    );
-
-                                    return (
-                                        <div className="space-y-2.5 pt-1">
-                                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5">
-                                                <label className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                                                    Escena Destino *
-                                                </label>
-                                                <span className="text-[10px] font-bold text-slate-400">
-                                                    {filteredScenes.length} de {otherScenesList.length} escenas disponibles
-                                                </span>
-                                            </div>
-
-                                            {/* Buscador de Escenas por Nombre */}
-                                            {otherScenesList.length > 0 && (
-                                                <div className="relative">
-                                                    <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                                                    <input
-                                                        type="text"
-                                                        value={sceneSearchQuery}
-                                                        onChange={(e) => setSceneSearchQuery(e.target.value)}
-                                                        placeholder="Buscar escena por nombre..."
-                                                        className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-white rounded-xl pl-10 pr-9 py-2.5 text-xs font-bold focus:outline-none focus:border-blue-500 transition"
-                                                    />
-                                                    {sceneSearchQuery && (
-                                                        <button
-                                                            type="button"
-                                                            onClick={() => setSceneSearchQuery('')}
-                                                            className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-white text-xs font-bold"
-                                                        >
-                                                            ✕
-                                                        </button>
-                                                    )}
-                                                </div>
-                                            )}
-
-                                            {otherScenesList.length === 0 ? (
-                                                <div className="p-3.5 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 text-amber-700 dark:text-amber-300 rounded-xl text-xs font-medium">
-                                                    No hay otras escenas disponibles. Agrega más escenas 360° para enlazar.
-                                                </div>
-                                            ) : filteredScenes.length === 0 ? (
-                                                <div className="p-5 text-center bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 rounded-2xl text-xs text-slate-400 font-bold">
-                                                    No se encontró ninguna escena que coincida con "{sceneSearchQuery}".
-                                                </div>
-                                            ) : (
-                                                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 max-h-64 overflow-y-auto pr-1 custom-scrollbar p-0.5">
-                                                    {filteredScenes.map((s) => {
-                                                        const isSelected = String(form.data.scene_destino_id) === String(s.id);
-                                                        const sImg = s.imagen_url || `/storage/${s.imagen_path}`;
-
-                                                        return (
-                                                            <div
-                                                                key={s.id}
-                                                                onClick={() => form.setData('scene_destino_id', s.id)}
-                                                                className={`group relative rounded-xl overflow-hidden border cursor-pointer transition-all flex flex-col ${
-                                                                    isSelected
-                                                                        ? 'border-[#800A15] dark:border-rose-500 ring-2 ring-[#800A15]/40 shadow-md scale-[1.02]'
-                                                                        : 'border-slate-200 dark:border-slate-800 hover:border-slate-400 dark:hover:border-slate-600 bg-slate-50 dark:bg-slate-900'
-                                                                }`}
-                                                            >
-                                                                <div className="relative h-24 w-full bg-slate-900 overflow-hidden">
-                                                                    <img
-                                                                        src={sImg}
-                                                                        alt={s.nombre}
-                                                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                                                                    />
-                                                                    {isSelected && (
-                                                                        <div className="absolute top-2 right-2 w-6 h-6 rounded-full bg-[#800A15] text-white flex items-center justify-center text-xs font-black shadow-lg border border-white/40">
-                                                                            ✓
-                                                                        </div>
-                                                                    )}
-                                                                </div>
-                                                                <div className="p-2.5 bg-white dark:bg-slate-900 flex items-center justify-between">
-                                                                    <span className={`text-xs font-bold truncate ${isSelected ? 'text-[#800A15] dark:text-rose-400' : 'text-slate-700 dark:text-slate-300'}`}>
-                                                                        {s.nombre}
-                                                                    </span>
-                                                                </div>
-                                                            </div>
-                                                        );
-                                                    })}
-                                                </div>
-                                            )}
+                                {form.data.tipo === 'enlace' && (
+                                    <div className="space-y-2.5 pt-1">
+                                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5">
+                                            <label className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                                                Escena Destino *
+                                            </label>
+                                            <span className="text-[10px] font-bold text-slate-400">
+                                                {filteredScenes.length} de {otherScenesList.length} escenas disponibles
+                                            </span>
                                         </div>
-                                    );
-                                })()}
+
+                                        {/* Buscador de Escenas por Nombre */}
+                                        {otherScenesList.length > 0 && (
+                                            <div className="relative">
+                                                <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                                                <input
+                                                    type="text"
+                                                    value={sceneSearchQuery}
+                                                    onChange={(e) => setSceneSearchQuery(e.target.value)}
+                                                    placeholder="Buscar escena por nombre..."
+                                                    className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-white rounded-xl pl-10 pr-9 py-2.5 text-xs font-bold focus:outline-none focus:border-blue-500 transition"
+                                                />
+                                                {sceneSearchQuery && (
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => setSceneSearchQuery('')}
+                                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-white text-xs font-bold"
+                                                    >
+                                                        ✕
+                                                    </button>
+                                                )}
+                                            </div>
+                                        )}
+
+                                        {otherScenesList.length === 0 ? (
+                                            <div className="p-3.5 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 text-amber-700 dark:text-amber-300 rounded-xl text-xs font-medium">
+                                                No hay otras escenas disponibles. Agrega más escenas 360° para enlazar.
+                                            </div>
+                                        ) : filteredScenes.length === 0 ? (
+                                            <div className="p-5 text-center bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 rounded-2xl text-xs text-slate-400 font-bold">
+                                                No se encontró ninguna escena que coincida con "{sceneSearchQuery}".
+                                            </div>
+                                        ) : (
+                                            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 max-h-64 overflow-y-auto pr-1 custom-scrollbar p-0.5">
+                                                {filteredScenes.map((s) => {
+                                                    const isSelected = String(form.data.scene_destino_id) === String(s.id);
+                                                    const sImg = s.imagen_url || `/storage/${s.imagen_path}`;
+
+                                                    return (
+                                                        <div
+                                                            key={s.id}
+                                                            onClick={() => form.setData('scene_destino_id', s.id)}
+                                                            className={`group relative rounded-xl overflow-hidden border cursor-pointer transition-all flex flex-col ${
+                                                                isSelected
+                                                                    ? 'border-[#800A15] dark:border-rose-500 ring-2 ring-[#800A15]/40 shadow-md scale-[1.02]'
+                                                                    : 'border-slate-200 dark:border-slate-800 hover:border-slate-400 dark:hover:border-slate-600 bg-slate-50 dark:bg-slate-900'
+                                                            }`}
+                                                        >
+                                                            <div className="relative h-24 w-full bg-slate-900 overflow-hidden">
+                                                                <img
+                                                                    src={sImg}
+                                                                    alt={s.nombre}
+                                                                    loading="lazy"
+                                                                    decoding="async"
+                                                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                                                />
+                                                                {isSelected && (
+                                                                    <div className="absolute top-2 right-2 w-6 h-6 rounded-full bg-[#800A15] text-white flex items-center justify-center text-xs font-black shadow-lg border border-white/40">
+                                                                        ✓
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                            <div className="p-2.5 bg-white dark:bg-slate-900 flex items-center justify-between">
+                                                                <span className={`text-xs font-bold truncate ${isSelected ? 'text-[#800A15] dark:text-rose-400' : 'text-slate-700 dark:text-slate-300'}`}>
+                                                                    {s.nombre}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    );
+                                                })}
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
 
                                 {/* Texto */}
                                 <div>

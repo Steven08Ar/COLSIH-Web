@@ -49,7 +49,8 @@ export default function TourViewer({
             initialSlug,
             (hs) => {
                 setSelectedInfoHotspot(hs);
-            }
+            },
+            () => viewerRef.current
         );
 
         try {
@@ -61,6 +62,35 @@ export default function TourViewer({
                 viewer.on('load', () => {
                     setIsLoading(false);
                     setLoadError(null);
+
+                    // Animación Zoom Out Estilo Google Maps al llegar al nuevo destino
+                    try {
+                        const currentSlug = viewer.getScene();
+                        const targetSceneObj = scenes.find((s) => s.slug === currentSlug);
+                        const defaultHfov = Number(targetSceneObj?.hfov_inicial || 100);
+
+                        viewer.setHfov(45); // Empezar acercado al entrar al nuevo espacio
+
+                        let steps = 18;
+                        let stepCount = 0;
+                        let startHfov = 45;
+
+                        let animInterval = setInterval(() => {
+                            stepCount++;
+                            let progress = stepCount / steps;
+                            let easeProgress = 1 - Math.pow(1 - progress, 2); // Curva suavizada de expansión
+
+                            let nextHfov = startHfov + (defaultHfov - startHfov) * easeProgress;
+
+                            try {
+                                viewer.setHfov(nextHfov);
+                            } catch (err) {}
+
+                            if (stepCount >= steps) {
+                                clearInterval(animInterval);
+                            }
+                        }, 20);
+                    } catch (err) {}
                 });
 
                 viewer.on('error', (errMsg) => {

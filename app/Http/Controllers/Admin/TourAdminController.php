@@ -85,9 +85,6 @@ class TourAdminController extends Controller
         }
 
         if (!$imagenPath) {
-            if ($request->expectsJson() || $request->ajax()) {
-                return response()->json(['error' => 'Debe adjuntar una imagen 360°.'], 422);
-            }
             return back()->with('flash', 'Debe adjuntar una imagen 360° o especificar la ruta del archivo.');
         }
 
@@ -107,21 +104,13 @@ class TourAdminController extends Controller
             'orden' => $tour->scenes()->count() + 1,
         ]);
 
-        if ($request->expectsJson() || $request->ajax()) {
-            return response()->json([
-                'success' => true,
-                'scene' => $scene,
-                'message' => 'Escena agregada exitosamente.'
-            ]);
-        }
-
         return back()->with('flash', 'Escena 360° agregada exitosamente.');
     }
 
     /**
      * Carga en masa de escenas 360° (Hasta 50 imágenes a la vez).
      */
-    public function storeBatchScenes(Request $request)
+    public function storeBatchScenes(Request $request): RedirectResponse
     {
         $request->validate([
             'escenas' => ['required', 'array', 'min:1', 'max:50'],
@@ -156,14 +145,6 @@ class TourAdminController extends Controller
 
                 $savedCount++;
             }
-        }
-
-        if ($request->expectsJson() || $request->ajax()) {
-            return response()->json([
-                'success' => true,
-                'saved_count' => $savedCount,
-                'message' => "¡Se agregaron {$savedCount} escenas 360° en masa exitosamente!"
-            ]);
         }
 
         return back()->with('flash', "¡Se agregaron {$savedCount} escenas 360° en masa exitosamente!");

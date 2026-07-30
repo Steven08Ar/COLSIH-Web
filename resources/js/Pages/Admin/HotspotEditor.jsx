@@ -6,7 +6,7 @@ import 'pannellum/src/js/pannellum.js';
 import { 
     Globe, Image as ImageIcon, MousePointer, MapPin, Sun, Moon, 
     Eye, Save, Trash2, Link as LinkIcon, Info, RotateCcw, RotateCw, 
-    MoreVertical, X, Check, Settings, Compass, Layers, Sparkles, Camera
+    MoreVertical, X, Check, Settings, Compass, Layers, Sparkles, Camera, Search
 } from 'lucide-react';
 
 const safeRoute = (name, params) => {
@@ -48,6 +48,7 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
     
     const [savingCameraView, setSavingCameraView] = useState(false);
     const [cameraFlashMessage, setCameraFlashMessage] = useState(null);
+    const [sceneSearchQuery, setSceneSearchQuery] = useState('');
 
     // Sincronizar modo oscuro / claro
     useEffect(() => {
@@ -227,6 +228,7 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
     // Abrir modal para crear un hotspot
     const abrirCrearHotspot = (pitch, yaw, defaultTipo = 'enlace') => {
         setSelectedHotspot(null);
+        setSceneSearchQuery('');
         form.setData({
             scene_id: scene.id,
             tipo: defaultTipo,
@@ -241,6 +243,7 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
     // Abrir modal para editar hotspot existente
     const abrirEditarHotspot = (hs) => {
         setSelectedHotspot(hs);
+        setSceneSearchQuery('');
         form.setData({
             scene_id: scene.id,
             tipo: hs.tipo,
@@ -592,29 +595,33 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
                         </div>
                     )}
                 </main>
-
                 {/* ── MODAL FLOTANTE CREAR / EDITAR HOTSPOT ── */}
                 {activeModal && (
                     <div 
-                        className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 backdrop-blur-sm p-4 animate-fadeIn"
+                        className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 backdrop-blur-sm p-4 animate-fadeIn overflow-y-auto"
                         onClick={() => setActiveModal(false)}
                     >
                         <div 
-                            className="bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-white rounded-3xl p-6 w-full max-w-md shadow-2xl space-y-5"
+                            className="bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-white rounded-3xl p-6 sm:p-7 w-full max-w-2xl lg:max-w-3xl shadow-2xl space-y-5 my-auto"
                             onClick={(e) => e.stopPropagation()}
                         >
                             <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
                                 <div className="flex items-center gap-2.5">
-                                    <div className="w-8 h-8 rounded-xl bg-[#800A15]/20 text-[#800A15] dark:text-rose-400 flex items-center justify-center font-bold text-sm">
+                                    <div className="w-9 h-9 rounded-xl bg-[#800A15]/20 text-[#800A15] dark:text-rose-400 flex items-center justify-center font-bold text-base">
                                         {selectedHotspot ? '✎' : '+'}
                                     </div>
-                                    <h4 className="text-base font-bold tracking-tight">
-                                        {selectedHotspot ? 'Editar Punto' : 'Nuevo Punto'}
-                                    </h4>
+                                    <div>
+                                        <h4 className="text-base font-extrabold tracking-tight">
+                                            {selectedHotspot ? 'Editar Punto Interactivo' : 'Nuevo Punto Interactivo'}
+                                        </h4>
+                                        <span className="text-[11px] text-slate-400">
+                                            Configura el tipo, destino o información del punto
+                                        </span>
+                                    </div>
                                 </div>
                                 <button 
                                     onClick={() => setActiveModal(false)}
-                                    className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-400 hover:text-slate-600 dark:hover:text-white flex items-center justify-center text-sm transition"
+                                    className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-400 hover:text-slate-600 dark:hover:text-white flex items-center justify-center text-sm transition cursor-pointer"
                                 >
                                     ✕
                                 </button>
@@ -624,7 +631,7 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
                                 
                                 {/* Coordenadas */}
                                 <div className="bg-slate-50 dark:bg-slate-950 p-3 rounded-xl border border-slate-200 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
-                                    <span>Coordenadas:</span>
+                                    <span>Coordenadas en la escena 360°:</span>
                                     <span className="font-mono text-blue-600 dark:text-blue-400 font-bold">
                                         Pitch: {form.data.pitch}° | Yaw: {form.data.yaw}°
                                     </span>
@@ -633,92 +640,126 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
                                 {/* Selección de Tipo */}
                                 <div>
                                     <label className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 block mb-2">
-                                        Tipo *
+                                        Tipo de Punto *
                                     </label>
                                     <div className="grid grid-cols-2 gap-3">
                                         <button
                                             type="button"
                                             onClick={() => form.setData('tipo', 'enlace')}
-                                            className={`p-3 rounded-xl border text-xs font-bold flex items-center gap-2 transition cursor-pointer ${
+                                            className={`p-3.5 rounded-xl border text-xs font-bold flex items-center justify-center gap-2 transition cursor-pointer ${
                                                 form.data.tipo === 'enlace'
                                                     ? 'bg-blue-50 dark:bg-blue-600/25 border-blue-500 text-blue-600 dark:text-blue-300 ring-2 ring-blue-500/20'
                                                     : 'bg-slate-50 dark:bg-slate-800/50 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400'
                                             }`}
                                         >
                                             <LinkIcon className="w-4 h-4 text-blue-500" />
-                                            <span>Ruta</span>
+                                            <span>Ruta (Navegación 360°)</span>
                                         </button>
                                         <button
                                             type="button"
                                             onClick={() => form.setData('tipo', 'info')}
-                                            className={`p-3 rounded-xl border text-xs font-bold flex items-center gap-2 transition cursor-pointer ${
+                                            className={`p-3.5 rounded-xl border text-xs font-bold flex items-center justify-center gap-2 transition cursor-pointer ${
                                                 form.data.tipo === 'info'
                                                     ? 'bg-rose-50 dark:bg-[#800A15]/30 border-[#800A15] text-[#800A15] dark:text-rose-300 ring-2 ring-rose-600/20'
                                                     : 'bg-slate-50 dark:bg-slate-800/50 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400'
                                             }`}
                                         >
                                             <Info className="w-4 h-4 text-rose-500" />
-                                            <span>Información</span>
+                                            <span>Información (Ventana flotante)</span>
                                         </button>
                                     </div>
                                 </div>
 
-                                {/* Selección de escena destino con imágenes y nombres */}
-                                {form.data.tipo === 'enlace' && (
-                                    <div>
-                                        <div className="flex items-center justify-between mb-2">
-                                            <label className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                                                Escena Destino *
-                                            </label>
-                                            <span className="text-[10px] text-slate-400">
-                                                Haz clic en una escena
-                                            </span>
-                                        </div>
+                                {/* Selección de escena destino con buscador por nombre */}
+                                {form.data.tipo === 'enlace' && (() => {
+                                    const otherScenesList = allScenes.filter((s) => s.id !== scene.id);
+                                    const filteredScenes = otherScenesList.filter((s) =>
+                                        s.nombre.toLowerCase().includes(sceneSearchQuery.toLowerCase())
+                                    );
 
-                                        {otherScenes.length === 0 ? (
-                                            <div className="p-3 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 text-amber-700 dark:text-amber-300 rounded-xl text-xs font-medium">
-                                                No hay otras escenas disponibles. Agrega más escenas 360° para enlazar.
+                                    return (
+                                        <div className="space-y-2.5 pt-1">
+                                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5">
+                                                <label className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                                                    Escena Destino *
+                                                </label>
+                                                <span className="text-[10px] font-bold text-slate-400">
+                                                    {filteredScenes.length} de {otherScenesList.length} escenas disponibles
+                                                </span>
                                             </div>
-                                        ) : (
-                                            <div className="grid grid-cols-2 gap-2.5 max-h-52 overflow-y-auto pr-1 custom-scrollbar p-0.5">
-                                                {otherScenes.map((s) => {
-                                                    const isSelected = String(form.data.scene_destino_id) === String(s.id);
-                                                    const sImg = s.imagen_url || `/storage/${s.imagen_path}`;
 
-                                                    return (
-                                                        <div
-                                                            key={s.id}
-                                                            onClick={() => form.setData('scene_destino_id', s.id)}
-                                                            className={`group relative rounded-xl overflow-hidden border cursor-pointer transition-all flex flex-col ${
-                                                                isSelected
-                                                                    ? 'border-[#800A15] dark:border-rose-500 ring-2 ring-[#800A15]/40 shadow-md scale-[1.02]'
-                                                                    : 'border-slate-200 dark:border-slate-800 hover:border-slate-400 dark:hover:border-slate-600 bg-slate-50 dark:bg-slate-900'
-                                                            }`}
+                                            {/* Buscador de Escenas por Nombre */}
+                                            {otherScenesList.length > 0 && (
+                                                <div className="relative">
+                                                    <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                                                    <input
+                                                        type="text"
+                                                        value={sceneSearchQuery}
+                                                        onChange={(e) => setSceneSearchQuery(e.target.value)}
+                                                        placeholder="Buscar escena por nombre..."
+                                                        className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-white rounded-xl pl-10 pr-9 py-2.5 text-xs font-bold focus:outline-none focus:border-blue-500 transition"
+                                                    />
+                                                    {sceneSearchQuery && (
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => setSceneSearchQuery('')}
+                                                            className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-white text-xs font-bold"
                                                         >
-                                                            <div className="relative h-20 w-full bg-slate-900 overflow-hidden">
-                                                                <img
-                                                                    src={sImg}
-                                                                    alt={s.nombre}
-                                                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                                                                />
-                                                                {isSelected && (
-                                                                    <div className="absolute top-1.5 right-1.5 w-5 h-5 rounded-full bg-[#800A15] text-white flex items-center justify-center text-[10px] font-black shadow-lg border border-white/40">
-                                                                        ✓
-                                                                    </div>
-                                                                )}
+                                                            ✕
+                                                        </button>
+                                                    )}
+                                                </div>
+                                            )}
+
+                                            {otherScenesList.length === 0 ? (
+                                                <div className="p-3.5 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 text-amber-700 dark:text-amber-300 rounded-xl text-xs font-medium">
+                                                    No hay otras escenas disponibles. Agrega más escenas 360° para enlazar.
+                                                </div>
+                                            ) : filteredScenes.length === 0 ? (
+                                                <div className="p-5 text-center bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 rounded-2xl text-xs text-slate-400 font-bold">
+                                                    No se encontró ninguna escena que coincida con "{sceneSearchQuery}".
+                                                </div>
+                                            ) : (
+                                                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 max-h-64 overflow-y-auto pr-1 custom-scrollbar p-0.5">
+                                                    {filteredScenes.map((s) => {
+                                                        const isSelected = String(form.data.scene_destino_id) === String(s.id);
+                                                        const sImg = s.imagen_url || `/storage/${s.imagen_path}`;
+
+                                                        return (
+                                                            <div
+                                                                key={s.id}
+                                                                onClick={() => form.setData('scene_destino_id', s.id)}
+                                                                className={`group relative rounded-xl overflow-hidden border cursor-pointer transition-all flex flex-col ${
+                                                                    isSelected
+                                                                        ? 'border-[#800A15] dark:border-rose-500 ring-2 ring-[#800A15]/40 shadow-md scale-[1.02]'
+                                                                        : 'border-slate-200 dark:border-slate-800 hover:border-slate-400 dark:hover:border-slate-600 bg-slate-50 dark:bg-slate-900'
+                                                                }`}
+                                                            >
+                                                                <div className="relative h-24 w-full bg-slate-900 overflow-hidden">
+                                                                    <img
+                                                                        src={sImg}
+                                                                        alt={s.nombre}
+                                                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                                                    />
+                                                                    {isSelected && (
+                                                                        <div className="absolute top-2 right-2 w-6 h-6 rounded-full bg-[#800A15] text-white flex items-center justify-center text-xs font-black shadow-lg border border-white/40">
+                                                                            ✓
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+                                                                <div className="p-2.5 bg-white dark:bg-slate-900 flex items-center justify-between">
+                                                                    <span className={`text-xs font-bold truncate ${isSelected ? 'text-[#800A15] dark:text-rose-400' : 'text-slate-700 dark:text-slate-300'}`}>
+                                                                        {s.nombre}
+                                                                    </span>
+                                                                </div>
                                                             </div>
-                                                            <div className="p-2 bg-white dark:bg-slate-900 flex items-center justify-between">
-                                                                <span className={`text-xs font-bold truncate ${isSelected ? 'text-[#800A15] dark:text-rose-400' : 'text-slate-700 dark:text-slate-300'}`}>
-                                                                    {s.nombre}
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    );
-                                                })}
-                                            </div>
-                                        )}
-                                    </div>
-                                )}
+                                                        );
+                                                    })}
+                                                </div>
+                                            )}
+                                        </div>
+                                    );
+                                })()}
 
                                 {/* Texto */}
                                 <div>

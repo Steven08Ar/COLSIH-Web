@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Head, Link } from '@inertiajs/react';
 import TourViewer from '@/Components/Tour360/TourViewer';
-import TourMap from '@/Components/Tour360/TourMap';
 import { ChevronLeft, Grid, Compass, Info, MapPin } from 'lucide-react';
 
 // Default fallback 360° scenes built from public/recorrido_virtual images
@@ -221,13 +220,6 @@ export default function Show({ tour = null }) {
                         className="rounded-none border-none shadow-none min-h-screen"
                     />
                 </main>
-
-                {/* Floating Interactive Aerial Map */}
-                <TourMap
-                    scenes={rawScenes}
-                    activeSceneSlug={activeSceneSlug}
-                    onSelectScene={handleSceneChange}
-                />
 
                 {/* Drawer / Sidebar List of Scenes */}
                 {showSceneList && (

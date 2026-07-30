@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import TourViewer from '@/Components/Tour360/TourViewer';
-import TourMap from '@/Components/Tour360/TourMap';
 import ScrollReveal from './ScrollReveal';
 import { Compass, X, Sparkles, ExternalLink, Play } from 'lucide-react';
 
@@ -250,13 +249,6 @@ export default function VideoExperience({ scenes = [], tour = null }) {
                             className="rounded-none border-none shadow-none min-h-screen"
                         />
                     </div>
-
-                    {/* Interactive Floor Map Overlay */}
-                    <TourMap
-                        scenes={activeScenes}
-                        activeSceneSlug={activeSceneSlug}
-                        onSelectScene={(slug) => setActiveSceneSlug(slug)}
-                    />
                 </div>,
                 document.body
             )}

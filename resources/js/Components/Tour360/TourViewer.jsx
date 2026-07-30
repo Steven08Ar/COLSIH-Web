@@ -3,7 +3,7 @@ import 'pannellum/src/css/pannellum.css';
 import 'pannellum/src/js/libpannellum.js';
 import 'pannellum/src/js/pannellum.js';
 import { buildPannellumConfig } from '@/utils/pannellumAdapter';
-import { Maximize2, Minimize2, ZoomIn, ZoomOut, RotateCw, RefreshCw, Compass, X } from 'lucide-react';
+import { Maximize2, Minimize2, ZoomIn, ZoomOut, RotateCw, RefreshCw, Compass, X, MapPin } from 'lucide-react';
 
 export default function TourViewer({
     scenes = [],
@@ -170,16 +170,28 @@ export default function TourViewer({
             {/* Pannellum Container */}
             <div ref={containerRef} className="w-full h-full min-h-[450px]" />
 
-            {/* Custom Loader */}
+            {/* Custom Minimalist COLSIH Loader */}
             {isLoading && (
-                <div className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-slate-950/80 backdrop-blur-md transition-opacity duration-300">
-                    <div className="relative w-16 h-16 flex items-center justify-center">
-                        <div className="absolute inset-0 rounded-full border-4 border-blue-500/20 border-t-blue-600 animate-spin"></div>
-                        <Compass className="w-6 h-6 text-blue-500 animate-pulse" />
+                <div className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-slate-950/85 backdrop-blur-xl transition-opacity duration-300">
+                    <div className="relative w-20 h-20 flex items-center justify-center">
+                        {/* Anillo giratorio de marca: Vinotinto a Azul Rey */}
+                        <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-[#800A15] border-r-[#003c8f] border-b-blue-500 animate-spin"></div>
+                        {/* Pulso traslúcido */}
+                        <div className="absolute inset-2 rounded-full border-2 border-white/20 animate-ping opacity-25"></div>
+                        {/* Badge Central con Icono de Mapa */}
+                        <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#800A15] to-[#003c8f] flex items-center justify-center shadow-lg border border-white/30">
+                            <MapPin className="w-5 h-5 text-white animate-pulse" />
+                        </div>
                     </div>
-                    <span className="mt-4 text-xs font-bold tracking-widest text-slate-300 uppercase font-sans">
-                        Cargando Panorama 360°...
-                    </span>
+                    
+                    <div className="mt-5 text-center space-y-1">
+                        <span className="block text-[11px] font-extrabold tracking-[2px] text-white uppercase font-sans">
+                            Colegio Santa Isabel de Hungría
+                        </span>
+                        <span className="block text-[10px] font-bold tracking-wider text-blue-400 font-sans">
+                            Cargando Recorrido 360°...
+                        </span>
+                    </div>
                 </div>
             )}
 

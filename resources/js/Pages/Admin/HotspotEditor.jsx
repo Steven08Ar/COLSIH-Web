@@ -234,12 +234,17 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
 
                 {/* ── BARRA LATERAL IZQUIERDA (Centrada Verticalmente en la mitad del sidebar) ── */}
                 <aside className="w-16 bg-[#090d16] border-r border-slate-800/80 flex flex-col items-center justify-center space-y-5 z-20 shrink-0 h-full">
+                    {/* Top Logo Monogram Badge */}
+                    <div className="w-9 h-9 rounded-2xl bg-gradient-to-br from-[#800A15] to-blue-700 text-white font-black text-xs flex items-center justify-center shadow-lg shadow-rose-950/40 border border-white/20 mb-2 select-none">
+                        360
+                    </div>
+
                     {/* Opción 1: Cursor (Arrastrar/Mover imagen por defecto) */}
                     <button
                         onClick={() => setActiveTool('select')}
                         className={`p-3 rounded-2xl transition cursor-pointer ${
                             activeTool === 'select'
-                                ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30 scale-105'
+                                ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/40 scale-105'
                                 : 'text-slate-400 hover:text-white hover:bg-slate-800/80'
                         }`}
                         title="Modo Cursor (Movimiento de imagen por defecto)"
@@ -252,7 +257,7 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
                         onClick={() => setActiveTool('hotspot')}
                         className={`p-3 rounded-2xl transition cursor-pointer relative ${
                             activeTool === 'hotspot'
-                                ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30 scale-105'
+                                ? 'bg-[#800A15] text-white shadow-lg shadow-rose-950/50 scale-105'
                                 : 'text-slate-400 hover:text-white hover:bg-slate-800/80'
                         }`}
                         title="Modo Ubicación / Agregar Puntos (Haz clic en la imagen 360°)"
@@ -268,7 +273,7 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
                         onClick={() => setShowImageList(!showImageList)}
                         className={`p-3 rounded-2xl transition cursor-pointer ${
                             showImageList
-                                ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30 scale-105'
+                                ? 'bg-gradient-to-r from-[#800A15] to-blue-700 text-white shadow-lg shadow-blue-900/40 scale-105'
                                 : 'text-slate-400 hover:text-white hover:bg-slate-800/80'
                         }`}
                         title="Alternar Lista de Imágenes"
@@ -299,15 +304,15 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
                             href={safeRoute('tour.show')}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="bg-[#111827]/90 hover:bg-slate-800 border border-slate-700/80 text-slate-200 font-extrabold text-xs px-4 py-2.5 rounded-xl transition backdrop-blur-md shadow-2xl flex items-center gap-2 cursor-pointer"
+                            className="bg-[#800A15] hover:bg-[#600710] border border-rose-400/30 text-white font-extrabold text-xs px-4 py-2.5 rounded-xl transition backdrop-blur-md shadow-lg shadow-rose-950/40 flex items-center gap-2 cursor-pointer active:scale-95"
                         >
-                            <Eye className="w-4 h-4 text-slate-400" />
+                            <Eye className="w-4 h-4 text-rose-200" />
                             <span>Vista previa</span>
                         </a>
 
                         <Link
                             href={safeRoute('admin.recorrido')}
-                            className="bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs px-5 py-2.5 rounded-xl shadow-lg shadow-blue-600/30 transition backdrop-blur-md cursor-pointer active:scale-95 flex items-center gap-2"
+                            className="bg-blue-600 hover:bg-blue-700 border border-blue-400/30 text-white font-extrabold text-xs px-5 py-2.5 rounded-xl shadow-lg shadow-blue-600/40 transition backdrop-blur-md cursor-pointer active:scale-95 flex items-center gap-2"
                         >
                             <Save className="w-4 h-4" />
                             <span>Guardar recorrido</span>
@@ -316,7 +321,7 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
 
                     {/* Indicador de modo activo en pantalla si está en modo Location */}
                     {activeTool === 'hotspot' && (
-                        <div className="absolute top-6 left-6 z-30 bg-blue-600/90 text-white font-extrabold text-xs px-4 py-2 rounded-xl backdrop-blur-md shadow-2xl border border-blue-400/40 flex items-center gap-2 animate-bounce">
+                        <div className="absolute top-6 left-6 z-30 bg-gradient-to-r from-[#800A15] to-blue-700 text-white font-extrabold text-xs px-4 py-2 rounded-xl backdrop-blur-md shadow-2xl border border-white/20 flex items-center gap-2 animate-bounce">
                             <MapPin className="w-4 h-4" />
                             <span>Modo Ubicación Activo: Haz clic donde quieras colocar el punto.</span>
                         </div>
@@ -325,7 +330,7 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
                     {/* Skeleton / Loader de Carga */}
                     {isLoading && (
                         <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-slate-950/85 backdrop-blur-md">
-                            <div className="w-16 h-16 rounded-full border-4 border-blue-500/20 border-t-blue-600 animate-spin mb-4"></div>
+                            <div className="w-16 h-16 rounded-full border-4 border-blue-500/20 border-t-[#800A15] animate-spin mb-4"></div>
                             <span className="text-xs font-black uppercase tracking-[3px] text-blue-400">
                                 Cargando Escena 360°...
                             </span>
@@ -369,7 +374,7 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
                     {!showImageList && (
                         <button
                             onClick={() => setShowImageList(true)}
-                            className="absolute bottom-6 right-6 z-20 w-12 h-12 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-2xl hover:scale-105 transition cursor-pointer"
+                            className="absolute bottom-6 right-6 z-20 w-12 h-12 rounded-2xl bg-gradient-to-br from-[#800A15] to-blue-700 text-white flex items-center justify-center shadow-2xl hover:scale-105 transition cursor-pointer"
                             title="Ver Lista de Imágenes"
                         >
                             <ImageIcon className="w-6 h-6" />
@@ -381,9 +386,14 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
                         <div className="absolute bottom-6 right-6 z-20 w-80 bg-[#111827]/95 border border-slate-800 backdrop-blur-xl rounded-2xl p-4 shadow-[0_20px_50px_rgba(0,0,0,0.8)] flex flex-col max-h-[360px] animate-fadeIn">
                             
                             <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-800/80">
-                                <span className="text-xs font-extrabold text-white tracking-tight">
-                                    Lista de imágenes ({allScenes.length})
-                                </span>
+                                <div className="flex items-center gap-2">
+                                    <span className="text-xs font-extrabold text-white tracking-tight">
+                                        Lista de imágenes
+                                    </span>
+                                    <span className="bg-[#800A15] text-white text-[10px] font-black px-2 py-0.5 rounded-full">
+                                        {allScenes.length}
+                                    </span>
+                                </div>
                                 <button
                                     onClick={() => setShowImageList(false)}
                                     className="text-slate-400 hover:text-white p-1 rounded-lg"
@@ -402,7 +412,7 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
                                             onClick={() => router.get(safeRoute('admin.recorrido.editor', s.id))}
                                             className={`group relative rounded-xl overflow-hidden border transition-all cursor-pointer ${
                                                 isActive
-                                                    ? 'border-blue-500 ring-2 ring-blue-500/40 shadow-lg'
+                                                    ? 'border-[#800A15] ring-2 ring-[#800A15]/60 shadow-lg'
                                                     : 'border-slate-800 hover:border-slate-600'
                                             }`}
                                         >
@@ -441,8 +451,8 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
                             onClick={(e) => e.stopPropagation()}
                         >
                             <div className="flex items-center justify-between pb-3 border-b border-slate-800">
-                                <div className="flex items-center gap-2">
-                                    <div className="w-8 h-8 rounded-xl bg-blue-600/20 border border-blue-500/30 text-blue-400 flex items-center justify-center font-bold text-sm">
+                                <div className="flex items-center gap-2.5">
+                                    <div className="w-9 h-9 rounded-2xl bg-[#800A15]/20 border border-[#800A15]/40 text-rose-400 flex items-center justify-center font-bold text-sm">
                                         {selectedHotspot ? '✎' : '+'}
                                     </div>
                                     <h4 className="text-base font-extrabold tracking-tight">
@@ -478,11 +488,11 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
                                             onClick={() => form.setData('tipo', 'enlace')}
                                             className={`p-3 rounded-2xl border text-xs font-bold flex items-center gap-2.5 transition cursor-pointer ${
                                                 form.data.tipo === 'enlace'
-                                                    ? 'bg-blue-600/20 border-blue-500 text-blue-400'
+                                                    ? 'bg-blue-600/25 border-blue-500 text-blue-300 ring-2 ring-blue-500/30'
                                                     : 'bg-slate-800/50 border-slate-700 text-slate-400 hover:bg-slate-800'
                                             }`}
                                         >
-                                            <LinkIcon className="w-4 h-4" />
+                                            <LinkIcon className="w-4 h-4 text-blue-400" />
                                             <span>Punto de Ruta</span>
                                         </button>
                                         <button
@@ -490,11 +500,11 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
                                             onClick={() => form.setData('tipo', 'info')}
                                             className={`p-3 rounded-2xl border text-xs font-bold flex items-center gap-2.5 transition cursor-pointer ${
                                                 form.data.tipo === 'info'
-                                                    ? 'bg-amber-600/20 border-amber-500 text-amber-400'
+                                                    ? 'bg-[#800A15]/30 border-[#800A15] text-rose-300 ring-2 ring-rose-600/30'
                                                     : 'bg-slate-800/50 border-slate-700 text-slate-400 hover:bg-slate-800'
                                             }`}
                                         >
-                                            <Info className="w-4 h-4" />
+                                            <Info className="w-4 h-4 text-rose-400" />
                                             <span>Información</span>
                                         </button>
                                     </div>
@@ -561,7 +571,7 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
                                         <button
                                             type="submit"
                                             disabled={form.processing}
-                                            className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs transition shadow-lg shadow-blue-600/20 disabled:opacity-50 cursor-pointer flex items-center gap-1.5"
+                                            className="px-5 py-2.5 bg-gradient-to-r from-[#800A15] via-blue-600 to-blue-700 hover:opacity-95 text-white font-extrabold rounded-xl text-xs transition shadow-lg shadow-blue-900/40 disabled:opacity-50 cursor-pointer flex items-center gap-1.5"
                                         >
                                             <Check className="w-4 h-4" />
                                             <span>{form.processing ? 'Guardando...' : 'Guardar Punto'}</span>

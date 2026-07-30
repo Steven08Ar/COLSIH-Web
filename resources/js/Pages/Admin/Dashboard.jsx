@@ -1333,9 +1333,9 @@ function RecorridoTab({ tour, scenes = [], flash, basePath }) {
                         href={`/recorrido-virtual/${tour?.slug || 'colsih'}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold px-4 py-2.5 rounded-xl transition duration-200 cursor-pointer flex items-center justify-center gap-1.5 border border-slate-200 dark:border-slate-700"
+                        className="bg-[#800A15] hover:bg-[#600710] text-white text-xs font-bold px-4 py-2.5 rounded-xl transition duration-200 cursor-pointer flex items-center justify-center gap-1.5 shadow-md shadow-rose-950/20"
                     >
-                        <svg className="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
+                        <svg className="w-4 h-4 text-rose-200" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                             <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                         </svg>
@@ -1343,7 +1343,7 @@ function RecorridoTab({ tour, scenes = [], flash, basePath }) {
                     </a>
                     <button
                         onClick={() => setCreando(true)}
-                        className="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-md shadow-blue-500/10 transition duration-200 cursor-pointer active:scale-95 flex items-center justify-center gap-1.5"
+                        className="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-md shadow-blue-500/20 transition duration-200 cursor-pointer active:scale-95 flex items-center justify-center gap-1.5"
                     >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
@@ -1370,7 +1370,7 @@ function RecorridoTab({ tour, scenes = [], flash, basePath }) {
                                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                                     />
                                     {s.es_escena_inicial && (
-                                        <span className="absolute top-1 left-1 bg-blue-600 text-white text-[9px] font-extrabold px-1.5 py-0.5 rounded shadow">
+                                        <span className="absolute top-1 left-1 bg-[#800A15] text-white text-[9px] font-extrabold px-1.5 py-0.5 rounded shadow">
                                             Inicial
                                         </span>
                                     )}

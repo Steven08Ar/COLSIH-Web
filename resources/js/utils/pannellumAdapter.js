@@ -30,6 +30,10 @@ export function buildPannellumConfig(scenes = [], onSceneChange = null, initialS
                     type: 'scene',
                     text: hs.texto || (targetScene ? `Ir a ${targetScene.nombre}` : 'Ver siguiente espacio'),
                     sceneId: targetSlug,
+                    cssClass: 'custom-hotspot-link-public',
+                    createTooltipFunc: (hotSpotDiv) => {
+                        hotSpotDiv.innerHTML = `<div class="hotspot-link-inner"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg></div>`;
+                    },
                     clickHandlerFunc: (e, args) => {
                         if (onSceneChange && args && args.targetSlug) {
                             onSceneChange(args.targetSlug);
@@ -45,7 +49,11 @@ export function buildPannellumConfig(scenes = [], onSceneChange = null, initialS
                 yaw: Number(hs.yaw || 0),
                 type: 'info',
                 text: hs.texto || '',
-                URL: hs.url || undefined
+                URL: hs.url || undefined,
+                cssClass: 'custom-hotspot-info-public',
+                createTooltipFunc: (hotSpotDiv) => {
+                    hotSpotDiv.innerHTML = `<div class="hotspot-info-inner">i</div>`;
+                }
             };
         });
 

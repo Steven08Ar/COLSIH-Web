@@ -224,58 +224,7 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
         <>
             <Head title={`Editor de Recorrido 360° | ${scene.nombre}`} />
 
-            {/* Estilos CSS Inyectados para los Puntos de la Referencia exacta */}
-            <style>{`
-                .custom-hotspot-link-editor {
-                    width: 44px;
-                    height: 44px;
-                    border-radius: 50%;
-                    background: #0284c7;
-                    border: 3px solid #ffffff;
-                    box-shadow: 0 0 20px rgba(2, 132, 199, 0.8), 0 4px 10px rgba(0,0,0,0.5);
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    color: white;
-                    cursor: pointer;
-                    transition: transform 0.2s ease, background-color 0.2s ease;
-                }
-                .custom-hotspot-link-editor:hover {
-                    transform: scale(1.25);
-                    background: #0369a1;
-                }
-                .hotspot-link-inner {
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                }
 
-                .custom-hotspot-info-editor {
-                    width: 40px;
-                    height: 40px;
-                    border-radius: 50%;
-                    background: rgba(15, 23, 42, 0.75);
-                    border: 2px solid #ffffff;
-                    backdrop-filter: blur(6px);
-                    box-shadow: 0 0 15px rgba(255, 255, 255, 0.4), 0 4px 10px rgba(0,0,0,0.5);
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    color: white;
-                    font-family: ui-sans-serif, system-ui, sans-serif;
-                    font-weight: 800;
-                    font-size: 18px;
-                    cursor: pointer;
-                    transition: transform 0.2s ease, background-color 0.2s ease;
-                }
-                .custom-hotspot-info-editor:hover {
-                    transform: scale(1.25);
-                    background: rgba(2, 132, 199, 0.9);
-                }
-                .hotspot-info-inner {
-                    line-height: 1;
-                }
-            `}</style>
 
             <div className="h-screen w-screen flex bg-[#0b0f19] text-white font-sans overflow-hidden select-none relative">
 

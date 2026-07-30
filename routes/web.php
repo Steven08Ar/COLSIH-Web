@@ -78,6 +78,7 @@ Route::prefix($adminPath)->name('admin.')->group(function () {
         // Recorrido Virtual 360°
         Route::get('/recorrido',                      [TourAdminController::class, 'index'])->name('recorrido');
         Route::post('/recorrido/scenes',             [TourAdminController::class, 'storeScene'])->name('recorrido.scenes.store');
+        Route::put('/recorrido/scenes/{scene}',       [TourAdminController::class, 'updateScene'])->name('recorrido.scenes.update');
         Route::delete('/recorrido/scenes/{scene}',    [TourAdminController::class, 'destroyScene'])->name('recorrido.scenes.destroy');
         Route::get('/recorrido/scenes/{scene}/editor', [TourAdminController::class, 'editor'])->name('recorrido.editor');
 

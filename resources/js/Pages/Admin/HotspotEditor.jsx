@@ -6,7 +6,7 @@ import 'pannellum/src/js/pannellum.js';
 import { 
     Globe, Image as ImageIcon, MousePointer, MapPin, Sun, Moon, 
     Eye, Save, Trash2, Link as LinkIcon, Info, RotateCcw, RotateCw, 
-    MoreVertical, X, Check, Settings, Compass, Layers, Sparkles
+    MoreVertical, X, Check, Settings, Compass, Layers, Sparkles, Camera
 } from 'lucide-react';
 
 const safeRoute = (name, params) => {
@@ -23,6 +23,7 @@ const safeRoute = (name, params) => {
         case 'admin.recorrido': return `${adminPrefix}/recorrido`;
         case 'admin.recorrido.editor': return `${adminPrefix}/recorrido/scenes/${params}/editor`;
         case 'admin.recorrido.scenes.store': return `${adminPrefix}/recorrido/scenes`;
+        case 'admin.recorrido.scenes.update': return `${adminPrefix}/recorrido/scenes/${params}`;
         case 'admin.recorrido.scenes.destroy': return `${adminPrefix}/recorrido/scenes/${params}`;
         case 'admin.hotspots.store': return `${adminPrefix}/hotspots`;
         case 'admin.hotspots.update': return `${adminPrefix}/hotspots/${params}`;
@@ -44,6 +45,9 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
     const [activeTool, setActiveTool] = useState('select'); // 'select' (cursor) | 'hotspot' (location)
     const [viewMode, setViewMode] = useState('360'); // '360' (Pannellum 360) | '2d' (Plano 2:1)
     const [darkMode, setDarkMode] = useState(() => localStorage.getItem('sih-dark-mode') === 'true');
+    
+    const [savingCameraView, setSavingCameraView] = useState(false);
+    const [cameraFlashMessage, setCameraFlashMessage] = useState(null);
 
     // Sincronizar modo oscuro / claro
     useEffect(() => {
@@ -55,6 +59,33 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
             localStorage.setItem('sih-dark-mode', 'false');
         }
     }, [darkMode]);
+
+    // Guardar Encuadre y Zoom Inicial de la Cámara 360°
+    const fijarVistaInicial = () => {
+        if (!viewerRef.current) return;
+        setSavingCameraView(true);
+
+        const currentYaw = Math.round(viewerRef.current.getYaw() * 100) / 100;
+        const currentPitch = Math.round(viewerRef.current.getPitch() * 100) / 100;
+        const currentHfov = Math.round(viewerRef.current.getHfov() * 100) / 100;
+
+        router.put(safeRoute('admin.recorrido.scenes.update', scene.id), {
+            yaw_inicial: currentYaw,
+            pitch_inicial: currentPitch,
+            hfov_inicial: currentHfov,
+        }, {
+            preserveScroll: true,
+            preserveState: true,
+            onSuccess: () => {
+                setSavingCameraView(false);
+                setCameraFlashMessage('¡Encuadre inicial guardado! Los usuarios verán este ángulo y zoom por defecto.');
+                setTimeout(() => setCameraFlashMessage(null), 4000);
+            },
+            onError: () => {
+                setSavingCameraView(false);
+            }
+        });
+    };
 
     const activeToolRef = useRef(activeTool);
     useEffect(() => {
@@ -202,7 +233,7 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
             yaw: Number(pitch ? yaw.toFixed(4) : 0),
             pitch: Number(pitch ? pitch.toFixed(4) : 0),
             texto: '',
-            scene_destino_id: allScenes.find((s) => s.id !== scene.id)?.id || '',
+            scene_destino_id: '', // NO preseleccionar entrada principal por defecto
         });
         setActiveModal(true);
     };
@@ -305,7 +336,19 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
                             )}
                         </button>
 
-                        {/* Herramienta 3: Galería de Imágenes */}
+                        {/* Herramienta 3: Fijar Vista / Cámara 360° */}
+                        {viewMode === '360' && (
+                            <button
+                                onClick={fijarVistaInicial}
+                                disabled={savingCameraView}
+                                className="w-10 h-10 rounded-2xl bg-amber-500/15 border border-amber-500/30 text-amber-600 dark:text-amber-400 hover:bg-amber-500 hover:text-white transition flex items-center justify-center cursor-pointer active:scale-95 disabled:opacity-50"
+                                title="Fijar encuadre y zoom actual como vista por defecto para los usuarios"
+                            >
+                                <Camera className="w-4 h-4" />
+                            </button>
+                        )}
+
+                        {/* Herramienta 4: Galería de Imágenes */}
                         <button
                             onClick={() => setShowImageList(!showImageList)}
                             className={`w-10 h-10 rounded-2xl transition flex items-center justify-center cursor-pointer ${
@@ -398,6 +441,19 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
 
                     {/* ── BOTONES FLOTANTES SUPERIOR DERECHO MINIMALISTAS ── */}
                     <div className="absolute top-6 right-6 z-30 flex items-center gap-3">
+                        {/* Botón para Fijar Vista Inicial (Ángulo y Zoom por defecto) */}
+                        {viewMode === '360' && (
+                            <button
+                                onClick={fijarVistaInicial}
+                                disabled={savingCameraView}
+                                className="bg-amber-600 hover:bg-amber-700 border border-amber-400/30 text-white font-bold text-xs px-4 py-2.5 rounded-xl transition backdrop-blur-md shadow-lg flex items-center gap-2 cursor-pointer active:scale-95 disabled:opacity-50"
+                                title="Establece la vista y zoom actual como los que verán los usuarios por defecto"
+                            >
+                                <Camera className="w-4 h-4 text-amber-200" />
+                                <span>{savingCameraView ? 'Guardando...' : 'Fijar Vista Inicial'}</span>
+                            </button>
+                        )}
+
                         <a
                             href={safeRoute('tour.show')}
                             target="_blank"
@@ -417,7 +473,15 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
                         </Link>
                     </div>
 
-                    {/* MENSAJE FLOTANTE MINIMALISTA DE ESTADO (Sin texto robótico IA) */}
+                    {/* NOTIFICACIÓN TOAST CUANDO SE GUARDA LA VISTA INICIAL */}
+                    {cameraFlashMessage && (
+                        <div className="absolute top-20 right-6 z-40 bg-emerald-600 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-2xl flex items-center gap-2 animate-bounce border border-emerald-400/30">
+                            <Check className="w-4 h-4" />
+                            <span>{cameraFlashMessage}</span>
+                        </div>
+                    )}
+
+                    {/* MENSAJE FLOTANTE MINIMALISTA DE ESTADO */}
                     {activeTool === 'hotspot' && (
                         <div className="absolute top-6 left-6 z-30 flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#800A15] text-white text-xs font-bold shadow-lg animate-pulse">
                             <MapPin className="w-3.5 h-3.5" />

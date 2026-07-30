@@ -104,6 +104,24 @@ class TourAdminController extends Controller
     }
 
     /**
+     * Actualiza la escena (por ejemplo, vista y zoom iniciales de cámara).
+     */
+    public function updateScene(Request $request, Scene $scene): RedirectResponse
+    {
+        $validated = $request->validate([
+            'nombre' => ['nullable', 'string', 'max:255'],
+            'yaw_inicial' => ['nullable', 'numeric'],
+            'pitch_inicial' => ['nullable', 'numeric'],
+            'hfov_inicial' => ['nullable', 'numeric'],
+            'es_escena_inicial' => ['nullable', 'boolean'],
+        ]);
+
+        $scene->update(array_filter($validated, fn($val) => !is_null($val)));
+
+        return back()->with('flash', '¡Vista y encuadre inicial guardados exitosamente!');
+    }
+
+    /**
      * Elimina una escena.
      */
     public function destroyScene(Scene $scene): RedirectResponse

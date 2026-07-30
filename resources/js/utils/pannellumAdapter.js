@@ -3,7 +3,7 @@
  * into Pannellum's multiScene configuration object.
  */
 
-export function buildPannellumConfig(scenes = [], onSceneChange = null, initialSceneSlug = null) {
+export function buildPannellumConfig(scenes = [], onSceneChange = null, initialSceneSlug = null, onInfoClick = null) {
     if (!scenes || !Array.isArray(scenes) || scenes.length === 0) {
         return { default: {}, scenes: {} };
     }
@@ -44,16 +44,28 @@ export function buildPannellumConfig(scenes = [], onSceneChange = null, initialS
             }
 
             // Default 'info' type
+            const previewText = hs.texto
+                ? (hs.texto.length > 28 ? hs.texto.substring(0, 28) + '...' : hs.texto)
+                : 'Información';
+
             return {
                 pitch: Number(hs.pitch || 0),
                 yaw: Number(hs.yaw || 0),
                 type: 'info',
                 text: hs.texto || '',
-                URL: hs.url || undefined,
                 cssClass: 'custom-hotspot-info-public',
                 createTooltipFunc: (hotSpotDiv) => {
-                    hotSpotDiv.innerHTML = `<div class="hotspot-info-inner">i</div>`;
-                }
+                    hotSpotDiv.innerHTML = `
+                        <div class="hotspot-info-inner">i</div>
+                        <div class="hotspot-tooltip-preview">${previewText}</div>
+                    `;
+                },
+                clickHandlerFunc: (e, args) => {
+                    if (onInfoClick && args && args.hotspot) {
+                        onInfoClick(args.hotspot);
+                    }
+                },
+                clickHandlerArgs: { hotspot: hs }
             };
         });
 

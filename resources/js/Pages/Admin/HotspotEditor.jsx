@@ -80,6 +80,10 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
                 ? `Ir a: ${targetScene?.nombre || hs.texto || 'Escena'}`
                 : hs.texto || 'Información';
 
+            const previewText = !isEnlace && hs.texto
+                ? (hs.texto.length > 28 ? hs.texto.substring(0, 28) + '...' : hs.texto)
+                : 'Información';
+
             return {
                 id: `hs-${hs.id}`,
                 pitch: Number(hs.pitch),
@@ -90,7 +94,7 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
                 createTooltipFunc: (hotSpotDiv) => {
                     hotSpotDiv.innerHTML = isEnlace
                         ? `<div class="hotspot-link-inner"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="3.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg></div>`
-                        : `<div class="hotspot-info-inner">i</div>`;
+                        : `<div class="hotspot-info-inner">i</div><div class="hotspot-tooltip-preview">${previewText}</div>`;
                 },
                 clickHandlerFunc: () => {
                     abrirEditarHotspot(hs);

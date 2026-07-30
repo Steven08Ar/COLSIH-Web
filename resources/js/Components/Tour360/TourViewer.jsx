@@ -3,7 +3,7 @@ import 'pannellum/src/css/pannellum.css';
 import 'pannellum/src/js/libpannellum.js';
 import 'pannellum/src/js/pannellum.js';
 import { buildPannellumConfig } from '@/utils/pannellumAdapter';
-import { Maximize2, Minimize2, ZoomIn, ZoomOut, RotateCw, RefreshCw, Compass } from 'lucide-react';
+import { Maximize2, Minimize2, ZoomIn, ZoomOut, RotateCw, RefreshCw, Compass, X } from 'lucide-react';
 
 export default function TourViewer({
     scenes = [],
@@ -19,6 +19,7 @@ export default function TourViewer({
     const [isFullscreen, setIsFullscreen] = useState(false);
     const [isAutoRotating, setIsAutoRotating] = useState(false);
     const [loadError, setLoadError] = useState(null);
+    const [selectedInfoHotspot, setSelectedInfoHotspot] = useState(null);
 
     const activeSceneData = scenes.find((s) => s.slug === activeSceneSlug) || scenes[0];
 
@@ -40,9 +41,16 @@ export default function TourViewer({
         }
 
         const initialSlug = activeSceneSlug || initialSceneSlug || scenes[0]?.slug;
-        const config = buildPannellumConfig(scenes, (targetSlug) => {
-            if (onSceneChange) onSceneChange(targetSlug);
-        }, initialSlug);
+        const config = buildPannellumConfig(
+            scenes,
+            (targetSlug) => {
+                if (onSceneChange) onSceneChange(targetSlug);
+            },
+            initialSlug,
+            (hs) => {
+                setSelectedInfoHotspot(hs);
+            }
+        );
 
         try {
             if (window.pannellum) {
@@ -119,84 +127,70 @@ export default function TourViewer({
     };
 
     const handleResetView = () => {
-        if (viewerRef.current && activeSceneData) {
-            viewerRef.current.setPitch(Number(activeSceneData.pitch_inicial || 0));
-            viewerRef.current.setYaw(Number(activeSceneData.yaw_inicial || 0));
-            viewerRef.current.setHfov(Number(activeSceneData.hfov_inicial || 100));
+        if (viewerRef.current) {
+            viewerRef.current.setPitch(0);
+            viewerRef.current.setYaw(0);
+            viewerRef.current.setHfov(100);
         }
     };
 
     const toggleAutoRotate = () => {
-        if (viewerRef.current) {
-            if (isAutoRotating) {
-                viewerRef.current.stopAutoRotate();
-                setIsAutoRotating(false);
-            } else {
-                viewerRef.current.startAutoRotate(-2);
-                setIsAutoRotating(true);
-            }
+        if (!viewerRef.current) return;
+
+        if (isAutoRotating) {
+            viewerRef.current.stopAutoRotate();
+            setIsAutoRotating(false);
+        } else {
+            viewerRef.current.startAutoRotate(-2);
+            setIsAutoRotating(true);
         }
     };
 
     const toggleFullscreen = () => {
-        if (viewerRef.current) {
-            try {
-                viewerRef.current.toggleFullWindow();
-                setIsFullscreen(!isFullscreen);
-            } catch {
-                if (!document.fullscreenElement) {
-                    containerRef.current?.requestFullscreen?.();
-                    setIsFullscreen(true);
-                } else {
-                    document.exitFullscreen?.();
-                    setIsFullscreen(false);
-                }
-            }
+        if (!containerRef.current) return;
+
+        if (!document.fullscreenElement) {
+            containerRef.current.requestFullscreen().then(() => {
+                setIsFullscreen(true);
+            }).catch(err => {
+                console.warn('Fullscreen request failed:', err);
+            });
+        } else {
+            document.exitFullscreen().then(() => {
+                setIsFullscreen(false);
+            }).catch(err => {
+                console.warn('Exit fullscreen failed:', err);
+            });
         }
     };
 
     return (
-        <div className={`relative w-full h-full min-h-[500px] bg-slate-950 overflow-hidden rounded-3xl border border-slate-800 shadow-2xl select-none group ${className}`}>
+        <div className={`relative w-full h-full min-h-[450px] bg-slate-950 overflow-hidden select-none group ${className}`}>
             
-            {/* Pannellum DOM Container */}
-            <div
-                ref={containerRef}
-                className="w-full h-full min-h-[500px] z-0"
-                style={{ width: '100%', height: '100%' }}
-            />
+            {/* Pannellum Container */}
+            <div ref={containerRef} className="w-full h-full min-h-[450px]" />
 
-            {/* Skeleton / Loader Overlay */}
+            {/* Custom Loader */}
             {isLoading && (
-                <div className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-slate-950/85 backdrop-blur-md transition-opacity duration-300">
-                    <div className="relative flex items-center justify-center mb-6">
-                        {/* Outer pulsing ring */}
-                        <div className="w-20 h-20 rounded-full border-4 border-blue-500/20 border-t-blue-600 animate-spin"></div>
-                        {/* Inner icon */}
-                        <Compass className="w-8 h-8 text-blue-500 absolute animate-pulse" />
+                <div className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-slate-950/80 backdrop-blur-md transition-opacity duration-300">
+                    <div className="relative w-16 h-16 flex items-center justify-center">
+                        <div className="absolute inset-0 rounded-full border-4 border-blue-500/20 border-t-blue-600 animate-spin"></div>
+                        <Compass className="w-6 h-6 text-blue-500 animate-pulse" />
                     </div>
-
-                    <div className="text-center space-y-2 px-6">
-                        <span className="text-xs font-black tracking-[3px] uppercase text-blue-400 block font-sans">
-                            RECORRIDO VIRTUAL 360°
-                        </span>
-                        <h4 className="text-xl font-extrabold text-white font-sans tracking-tight">
-                            Cargando {activeSceneData?.nombre || 'espacio'}...
-                        </h4>
-                        <p className="text-xs font-medium text-slate-400 max-w-sm">
-                            Procesando imagen equirrectangular de alta resolución. Por favor espera.
-                        </p>
-                    </div>
+                    <span className="mt-4 text-xs font-bold tracking-widest text-slate-300 uppercase font-sans">
+                        Cargando Panorama 360°...
+                    </span>
                 </div>
             )}
 
             {/* Error Overlay */}
-            {loadError && !isLoading && (
-                <div className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-slate-950/90 p-6 text-center">
-                    <div className="w-14 h-14 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/30 flex items-center justify-center mb-4">
+            {loadError && (
+                <div className="absolute inset-0 z-40 flex flex-col items-center justify-center bg-slate-950/90 backdrop-blur-md p-6 text-center">
+                    <div className="w-12 h-12 rounded-full bg-rose-500/20 text-rose-500 flex items-center justify-center mb-3">
                         !
                     </div>
-                    <h4 className="text-lg font-bold text-white mb-2">No se pudo cargar la vista 360°</h4>
-                    <p className="text-xs text-slate-400 max-w-md mb-6">{loadError}</p>
+                    <h4 className="text-base font-bold text-white mb-1">No se pudo cargar la escena</h4>
+                    <p className="text-xs text-slate-400 max-w-sm mb-4">{loadError}</p>
                     <button
                         onClick={() => {
                             setIsLoading(true);
@@ -213,22 +207,7 @@ export default function TourViewer({
                 </div>
             )}
 
-            {/* Floating Top Info Pill */}
-            <div className="absolute top-6 left-6 z-20 pointer-events-none">
-                <div className="bg-slate-900/80 border border-white/15 backdrop-blur-md px-5 py-2.5 rounded-2xl shadow-xl flex items-center gap-3">
-                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                    <div>
-                        <span className="block text-[10px] font-extrabold uppercase tracking-widest text-blue-400">
-                            {scenes.length > 0 ? `Vista 360° (${scenes.findIndex(s => s.slug === activeSceneSlug) + 1}/${scenes.length})` : 'Vista 360°'}
-                        </span>
-                        <span className="block text-sm font-black text-white leading-tight font-sans">
-                            {activeSceneData?.nombre || 'Espacio Escolar'}
-                        </span>
-                    </div>
-                </div>
-            </div>
-
-            {/* Custom Control Dock (Floating Bottom Bar) */}
+            {/* Custom Control Dock */}
             <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 bg-slate-900/80 border border-white/15 backdrop-blur-md px-4 py-2 rounded-2xl shadow-2xl transition-all duration-300 opacity-90 group-hover:opacity-100">
                 <button
                     onClick={handleZoomIn}
@@ -270,6 +249,47 @@ export default function TourViewer({
                     {isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
                 </button>
             </div>
+
+            {/* FLOATING INFO CARD MODAL IN 360 MODE */}
+            {selectedInfoHotspot && (
+                <div 
+                    className="absolute inset-0 z-50 flex items-center justify-center bg-slate-950/70 backdrop-blur-md p-4"
+                    onClick={() => setSelectedInfoHotspot(null)}
+                >
+                    <div 
+                        className="bg-[#0f172a]/95 border border-slate-700/80 text-white rounded-3xl p-6 md:p-8 w-full max-w-md shadow-2xl space-y-4 relative"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <button
+                            onClick={() => setSelectedInfoHotspot(null)}
+                            className="absolute top-4 right-4 p-2 rounded-full bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white transition cursor-pointer"
+                        >
+                            <X className="w-5 h-5" />
+                        </button>
+
+                        <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-2xl bg-blue-600/20 border border-blue-500/30 text-blue-400 flex items-center justify-center font-extrabold text-base">
+                                i
+                            </div>
+                            <div>
+                                <span className="text-[10px] font-black uppercase tracking-widest text-blue-400 block">Punto Informativo</span>
+                                <h4 className="text-base font-extrabold text-white tracking-tight">Información del Espacio</h4>
+                            </div>
+                        </div>
+
+                        <div className="bg-slate-900/80 border border-slate-800 p-4 rounded-2xl text-slate-200 text-sm font-medium leading-relaxed max-h-60 overflow-y-auto">
+                            {selectedInfoHotspot.texto || 'No hay descripción detallada para este punto.'}
+                        </div>
+
+                        <button
+                            onClick={() => setSelectedInfoHotspot(null)}
+                            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-extrabold rounded-xl py-3 text-xs transition shadow-lg shadow-blue-600/30 cursor-pointer"
+                        >
+                            Entendido
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

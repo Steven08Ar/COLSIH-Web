@@ -100,7 +100,6 @@ export default function TourViewer({
                 });
 
                 viewer.on('scenechange', () => {
-                    setIsLoading(true);
                     const currentSlug = viewer.getScene();
                     if (onSceneChange && currentSlug && currentSlug !== activeSceneSlug) {
                         onSceneChange(currentSlug);
@@ -133,7 +132,6 @@ export default function TourViewer({
         try {
             const currentScene = viewerRef.current.getScene();
             if (currentScene && currentScene !== activeSceneSlug) {
-                setIsLoading(true);
                 viewerRef.current.loadScene(activeSceneSlug);
             }
         } catch (err) {

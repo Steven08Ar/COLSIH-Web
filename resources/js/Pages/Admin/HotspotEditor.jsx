@@ -599,25 +599,60 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
                                     </div>
                                 </div>
 
-                                {/* Selección de escena destino */}
+                                {/* Selección de escena destino con imágenes y nombres */}
                                 {form.data.tipo === 'enlace' && (
                                     <div>
-                                        <label className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 block mb-2">
-                                            Escena Destino *
-                                        </label>
-                                        <select
-                                            value={form.data.scene_destino_id}
-                                            onChange={(e) => form.setData('scene_destino_id', e.target.value)}
-                                            required
-                                            className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white rounded-xl px-4 py-2.5 text-sm font-bold focus:outline-none focus:border-blue-500 transition"
-                                        >
-                                            <option value="">-- Seleccionar Escena --</option>
-                                            {otherScenes.map((s) => (
-                                                <option key={s.id} value={s.id}>
-                                                    {s.nombre}
-                                                </option>
-                                            ))}
-                                        </select>
+                                        <div className="flex items-center justify-between mb-2">
+                                            <label className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                                                Escena Destino *
+                                            </label>
+                                            <span className="text-[10px] text-slate-400">
+                                                Haz clic en una escena
+                                            </span>
+                                        </div>
+
+                                        {otherScenes.length === 0 ? (
+                                            <div className="p-3 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 text-amber-700 dark:text-amber-300 rounded-xl text-xs font-medium">
+                                                No hay otras escenas disponibles. Agrega más escenas 360° para enlazar.
+                                            </div>
+                                        ) : (
+                                            <div className="grid grid-cols-2 gap-2.5 max-h-52 overflow-y-auto pr-1 custom-scrollbar p-0.5">
+                                                {otherScenes.map((s) => {
+                                                    const isSelected = String(form.data.scene_destino_id) === String(s.id);
+                                                    const sImg = s.imagen_url || `/storage/${s.imagen_path}`;
+
+                                                    return (
+                                                        <div
+                                                            key={s.id}
+                                                            onClick={() => form.setData('scene_destino_id', s.id)}
+                                                            className={`group relative rounded-xl overflow-hidden border cursor-pointer transition-all flex flex-col ${
+                                                                isSelected
+                                                                    ? 'border-[#800A15] dark:border-rose-500 ring-2 ring-[#800A15]/40 shadow-md scale-[1.02]'
+                                                                    : 'border-slate-200 dark:border-slate-800 hover:border-slate-400 dark:hover:border-slate-600 bg-slate-50 dark:bg-slate-900'
+                                                            }`}
+                                                        >
+                                                            <div className="relative h-20 w-full bg-slate-900 overflow-hidden">
+                                                                <img
+                                                                    src={sImg}
+                                                                    alt={s.nombre}
+                                                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                                                />
+                                                                {isSelected && (
+                                                                    <div className="absolute top-1.5 right-1.5 w-5 h-5 rounded-full bg-[#800A15] text-white flex items-center justify-center text-[10px] font-black shadow-lg border border-white/40">
+                                                                        ✓
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                            <div className="p-2 bg-white dark:bg-slate-900 flex items-center justify-between">
+                                                                <span className={`text-xs font-bold truncate ${isSelected ? 'text-[#800A15] dark:text-rose-400' : 'text-slate-700 dark:text-slate-300'}`}>
+                                                                    {s.nombre}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    );
+                                                })}
+                                            </div>
+                                        )}
                                     </div>
                                 )}
 

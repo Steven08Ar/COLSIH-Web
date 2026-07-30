@@ -1249,9 +1249,11 @@ function RecorridoTab({ tour, scenes = [], flash, basePath }) {
     const [deletingId, setDeletingId] = useState(null);
     const [localScenes, setLocalScenes] = useState(scenes);
 
-    const [modoCargaModal, setModoCargaModal] = useState('individual'); // 'individual' | 'masa'
+    const [modoCargaModal, setModoCargaModal] = useState('masa'); // 'individual' | 'masa'
     const [batchItems, setBatchItems] = useState([]);
     const [batchUploading, setBatchUploading] = useState(false);
+    const [batchProgress, setBatchProgress] = useState(0);
+    const [uploadSummary, setUploadSummary] = useState(null);
 
     useEffect(() => { setLocalScenes(scenes); }, [scenes]);
 
@@ -1291,6 +1293,7 @@ function RecorridoTab({ tour, scenes = [], flash, basePath }) {
                 file: file,
                 previewUrl: URL.createObjectURL(file),
                 nombre: formattedName,
+                status: 'pending', // 'pending' | 'uploading' | 'done' | 'error'
             };
         });
 
@@ -1318,29 +1321,80 @@ function RecorridoTab({ tour, scenes = [], flash, basePath }) {
         });
     };
 
-    const guardarEscenasMasa = (e) => {
+    // Carga Secuencial Ultrarrápida y Estable para Evitar Timeouts de PHP / Limites de POST
+    const guardarEscenasMasa = async (e) => {
         e.preventDefault();
-        if (batchItems.length === 0) return;
+        if (batchItems.length === 0 || batchUploading) return;
 
         setBatchUploading(true);
+        setBatchProgress(0);
+        setUploadSummary({ done: 0, total: batchItems.length });
 
-        const formData = new FormData();
-        batchItems.forEach((item, idx) => {
-            formData.append(`escenas[${idx}][nombre]`, item.nombre);
-            formData.append(`escenas[${idx}][imagen]`, item.file);
-        });
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+        let successCount = 0;
 
-        router.post(`${basePath}/recorrido/scenes/batch`, formData, {
-            forceFormData: true,
-            onSuccess: () => {
-                setBatchUploading(false);
+        for (let i = 0; i < batchItems.length; i++) {
+            const item = batchItems[i];
+
+            // Si ya está guardado con éxito, saltar
+            if (item.status === 'done') {
+                successCount++;
+                continue;
+            }
+
+            // Marcar como subiendo
+            setBatchItems((prev) =>
+                prev.map((it) => (it.id === item.id ? { ...it, status: 'uploading' } : it))
+            );
+
+            const formData = new FormData();
+            formData.append('nombre', item.nombre || `Espacio ${i + 1}`);
+            formData.append('imagen', item.file);
+
+            try {
+                const response = await fetch(`${basePath}/recorrido/scenes`, {
+                    method: 'POST',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRF-TOKEN': csrfToken,
+                        'Accept': 'application/json',
+                    },
+                    body: formData,
+                });
+
+                if (response.ok) {
+                    successCount++;
+                    setBatchItems((prev) =>
+                        prev.map((it) => (it.id === item.id ? { ...it, status: 'done' } : it))
+                    );
+                } else {
+                    setBatchItems((prev) =>
+                        prev.map((it) => (it.id === item.id ? { ...it, status: 'error' } : it))
+                    );
+                }
+            } catch (err) {
+                console.error(`Error al subir escena ${item.nombre}:`, err);
+                setBatchItems((prev) =>
+                    prev.map((it) => (it.id === item.id ? { ...it, status: 'error' } : it))
+                );
+            }
+
+            const currentPct = Math.round(((i + 1) / batchItems.length) * 100);
+            setBatchProgress(currentPct);
+            setUploadSummary({ done: i + 1, total: batchItems.length });
+        }
+
+        setBatchUploading(false);
+
+        if (successCount > 0) {
+            setTimeout(() => {
                 setCreando(false);
                 setBatchItems([]);
-            },
-            onError: () => {
-                setBatchUploading(false);
-            }
-        });
+                setBatchProgress(0);
+                setUploadSummary(null);
+                router.reload({ preserveScroll: true, preserveState: false });
+            }, 1200);
+        }
     };
 
     const eliminarEscena = (id) => {
@@ -1658,6 +1712,22 @@ function RecorridoTab({ tour, scenes = [], flash, basePath }) {
                                 </label>
                             </div>
 
+                            {/* Barra de Progreso de Carga en Masa */}
+                            {batchUploading && uploadSummary && (
+                                <div className="p-3 bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800/60 rounded-xl space-y-2 animate-fadeIn">
+                                    <div className="flex items-center justify-between text-xs font-bold text-blue-900 dark:text-blue-200">
+                                        <span>Subiendo imágenes secuencialmente ({uploadSummary.done} de {uploadSummary.total})...</span>
+                                        <span>{batchProgress}%</span>
+                                    </div>
+                                    <div className="w-full h-2.5 bg-blue-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                                        <div
+                                            className="h-full bg-gradient-to-r from-[#800A15] to-blue-600 transition-all duration-300 rounded-full"
+                                            style={{ width: `${batchProgress}%` }}
+                                        />
+                                    </div>
+                                </div>
+                            )}
+
                             {/* Lista de Imágenes Seleccionadas con Vista Previa e Inputs para Nombre */}
                             {batchItems.length > 0 && (
                                 <div className="space-y-3">
@@ -1665,26 +1735,36 @@ function RecorridoTab({ tour, scenes = [], flash, basePath }) {
                                         <span className="text-xs font-bold text-slate-700 dark:text-slate-300">
                                             Lista de imágenes a guardar ({batchItems.length} / 50):
                                         </span>
-                                        <button
-                                            type="button"
-                                            onClick={() => setBatchItems([])}
-                                            className="text-[10px] font-bold text-rose-500 hover:text-rose-700"
-                                        >
-                                            Limpiar lista
-                                        </button>
+                                        {!batchUploading && (
+                                            <button
+                                                type="button"
+                                                onClick={() => setBatchItems([])}
+                                                className="text-[10px] font-bold text-rose-500 hover:text-rose-700"
+                                            >
+                                                Limpiar lista
+                                            </button>
+                                        )}
                                     </div>
 
                                     <div className="max-h-72 overflow-y-auto space-y-2.5 pr-1 custom-scrollbar">
                                         {batchItems.map((item, index) => (
                                             <div
                                                 key={item.id}
-                                                className="flex items-center gap-3 p-2.5 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/80 rounded-xl"
+                                                className={`flex items-center gap-3 p-2.5 rounded-xl border transition-colors ${
+                                                    item.status === 'done'
+                                                        ? 'bg-emerald-50/60 dark:bg-emerald-950/20 border-emerald-300/80 dark:border-emerald-800/60'
+                                                        : item.status === 'error'
+                                                        ? 'bg-rose-50/60 dark:bg-rose-950/20 border-rose-300/80 dark:border-rose-800/60'
+                                                        : item.status === 'uploading'
+                                                        ? 'bg-blue-50/60 dark:bg-blue-950/30 border-blue-400 dark:border-blue-700 animate-pulse'
+                                                        : 'bg-slate-50 dark:bg-slate-800/50 border-slate-200 dark:border-slate-700/80'
+                                                }`}
                                             >
                                                 {/* Vista Previa de Imagen */}
                                                 <div className="relative w-16 h-12 rounded-lg overflow-hidden shrink-0 bg-slate-900 border border-slate-200 dark:border-slate-700">
                                                     <img
                                                         src={item.previewUrl}
-                                                        alt={item.nombre}
+                                                        alt={item.nombre || ''}
                                                         className="w-full h-full object-cover"
                                                     />
                                                     <span className="absolute bottom-0 right-0 bg-slate-900/80 text-white text-[8px] font-mono px-1">
@@ -1696,25 +1776,45 @@ function RecorridoTab({ tour, scenes = [], flash, basePath }) {
                                                 <div className="flex-1 min-w-0">
                                                     <input
                                                         type="text"
-                                                        value={item.nombre}
+                                                        value={item.nombre || ''}
+                                                        disabled={batchUploading}
                                                         onChange={(e) => updateBatchItemName(item.id, e.target.value)}
                                                         placeholder="Nombre del Espacio / Escena"
-                                                        className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white rounded-lg px-3 py-1.5 text-xs font-bold focus:outline-none focus:border-blue-600"
+                                                        className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white rounded-lg px-3 py-1.5 text-xs font-bold focus:outline-none focus:border-blue-600 disabled:opacity-75"
                                                     />
-                                                    <span className="text-[9px] text-slate-400 truncate block mt-0.5">
-                                                        {item.file.name} ({(item.file.size / (1024 * 1024)).toFixed(2)} MB)
-                                                    </span>
+                                                    <div className="flex items-center justify-between mt-0.5">
+                                                        <span className="text-[9px] text-slate-400 truncate">
+                                                            {item.file.name} ({(item.file.size / (1024 * 1024)).toFixed(2)} MB)
+                                                        </span>
+                                                        {item.status === 'done' && (
+                                                            <span className="text-[9px] font-extrabold text-emerald-600 dark:text-emerald-400 flex items-center gap-0.5">
+                                                                ✓ Guardado
+                                                            </span>
+                                                        )}
+                                                        {item.status === 'uploading' && (
+                                                            <span className="text-[9px] font-bold text-blue-600 dark:text-blue-400 animate-pulse">
+                                                                Subiendo...
+                                                            </span>
+                                                        )}
+                                                        {item.status === 'error' && (
+                                                            <span className="text-[9px] font-bold text-rose-600 dark:text-rose-400">
+                                                                ✕ Error
+                                                            </span>
+                                                        )}
+                                                    </div>
                                                 </div>
 
                                                 {/* Botón Quitar */}
-                                                <button
-                                                    type="button"
-                                                    onClick={() => removeBatchItem(item.id)}
-                                                    className="p-1.5 text-slate-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-900/20 rounded-lg transition cursor-pointer"
-                                                    title="Quitar de la lista"
-                                                >
-                                                    ✕
-                                                </button>
+                                                {!batchUploading && item.status !== 'done' && (
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => removeBatchItem(item.id)}
+                                                        className="p-1.5 text-slate-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-900/20 rounded-lg transition cursor-pointer"
+                                                        title="Quitar de la lista"
+                                                    >
+                                                        ✕
+                                                    </button>
+                                                )}
                                             </div>
                                         ))}
                                     </div>
@@ -1725,16 +1825,22 @@ function RecorridoTab({ tour, scenes = [], flash, basePath }) {
                                 <button
                                     type="submit"
                                     disabled={batchItems.length === 0 || batchUploading}
-                                    className="flex-1 bg-[#800A15] hover:bg-[#600710] text-white font-bold rounded-xl py-3 text-sm transition cursor-pointer disabled:opacity-50"
+                                    className="flex-1 bg-[#800A15] hover:bg-[#600710] text-white font-bold rounded-xl py-3 text-sm transition cursor-pointer disabled:opacity-50 flex items-center justify-center gap-2"
                                 >
-                                    {batchUploading
-                                        ? 'Guardando imágenes...'
-                                        : `Guardar ${batchItems.length} Escenas 360° en Masa`}
+                                    {batchUploading ? (
+                                        <>
+                                            <div className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
+                                            <span>Guardando {uploadSummary?.done || 0} de {uploadSummary?.total || batchItems.length}... ({batchProgress}%)</span>
+                                        </>
+                                    ) : (
+                                        <span>Guardar {batchItems.length} Escenas 360° en Masa</span>
+                                    )}
                                 </button>
                                 <button
                                     type="button"
+                                    disabled={batchUploading}
                                     onClick={() => setCreando(false)}
-                                    className="px-5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-xl py-3 text-sm font-bold cursor-pointer"
+                                    className="px-5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-xl py-3 text-sm font-bold cursor-pointer disabled:opacity-50"
                                 >
                                     Cancelar
                                 </button>

@@ -64,13 +64,13 @@ class TourAdminController extends Controller
     }
 
     /**
-     * Agrega una nueva imagen/escena 360° al tour.
+     * Agrega una nueva imagen/escena 360° al tour
      */
-    public function storeScene(Request $request): RedirectResponse
+    public function storeScene(Request $request)
     {
         $request->validate([
             'nombre' => ['required', 'string', 'max:255'],
-            'imagen' => ['required_without:imagen_url_manual', 'nullable', 'image', 'mimes:jpeg,jpg,png', 'max:20480'],
+            'imagen' => ['required_without:imagen_url_manual', 'nullable', 'image', 'mimes:jpeg,jpg,png', 'max:51200'],
             'imagen_url_manual' => ['nullable', 'string'],
         ]);
 
@@ -85,12 +85,19 @@ class TourAdminController extends Controller
         }
 
         if (!$imagenPath) {
+            if ($request->expectsJson() || $request->ajax()) {
+                return response()->json(['error' => 'Debe adjuntar una imagen 360°.'], 422);
+            }
             return back()->with('flash', 'Debe adjuntar una imagen 360° o especificar la ruta del archivo.');
         }
 
-        $slug = Str::slug($request->nombre);
+        $baseSlug = Str::slug($request->nombre);
+        $slug = $baseSlug;
+        if (Scene::where('slug', $slug)->exists()) {
+            $slug = $baseSlug . '-' . Str::random(4);
+        }
 
-        $tour->scenes()->create([
+        $scene = $tour->scenes()->create([
             'nombre' => $request->nombre,
             'slug' => $slug,
             'imagen_path' => $imagenPath,
@@ -100,18 +107,26 @@ class TourAdminController extends Controller
             'orden' => $tour->scenes()->count() + 1,
         ]);
 
+        if ($request->expectsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'scene' => $scene,
+                'message' => 'Escena agregada exitosamente.'
+            ]);
+        }
+
         return back()->with('flash', 'Escena 360° agregada exitosamente.');
     }
 
     /**
      * Carga en masa de escenas 360° (Hasta 50 imágenes a la vez).
      */
-    public function storeBatchScenes(Request $request): RedirectResponse
+    public function storeBatchScenes(Request $request)
     {
         $request->validate([
             'escenas' => ['required', 'array', 'min:1', 'max:50'],
             'escenas.*.nombre' => ['required', 'string', 'max:255'],
-            'escenas.*.imagen' => ['required', 'image', 'mimes:jpeg,jpg,png', 'max:20480'],
+            'escenas.*.imagen' => ['required', 'image', 'mimes:jpeg,jpg,png', 'max:51200'],
         ]);
 
         $tour = Tour::firstOrCreate(['slug' => 'colsih'], ['nombre' => 'Recorrido Virtual 360°']);
@@ -122,7 +137,12 @@ class TourAdminController extends Controller
             if (isset($item['imagen']) && $item['imagen']->isValid()) {
                 $nombre = $request->input("escenas.{$index}.nombre") ?: ('Espacio ' . ($currentCount + $savedCount + 1));
                 $imagenPath = $item['imagen']->store('recorrido_virtual', 'public');
-                $slug = Str::slug($nombre) . '-' . Str::random(4);
+                
+                $baseSlug = Str::slug($nombre);
+                $slug = $baseSlug;
+                if (Scene::where('slug', $slug)->exists()) {
+                    $slug = $baseSlug . '-' . Str::random(4);
+                }
 
                 $tour->scenes()->create([
                     'nombre' => $nombre,
@@ -136,6 +156,14 @@ class TourAdminController extends Controller
 
                 $savedCount++;
             }
+        }
+
+        if ($request->expectsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'saved_count' => $savedCount,
+                'message' => "¡Se agregaron {$savedCount} escenas 360° en masa exitosamente!"
+            ]);
         }
 
         return back()->with('flash', "¡Se agregaron {$savedCount} escenas 360° en masa exitosamente!");

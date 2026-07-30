@@ -1321,80 +1321,78 @@ function RecorridoTab({ tour, scenes = [], flash, basePath }) {
         });
     };
 
-    // Carga Secuencial Ultrarrápida y Estable para Evitar Timeouts de PHP / Limites de POST
-    const guardarEscenasMasa = async (e) => {
-        e.preventDefault();
+    // Carga Secuencial 1 a 1 usando Inertia Router (Evita errores 419 CSRF y Timeouts de PHP)
+    const guardarEscenasMasa = (e) => {
+        if (e) e.preventDefault();
         if (batchItems.length === 0 || batchUploading) return;
 
         setBatchUploading(true);
         setBatchProgress(0);
         setUploadSummary({ done: 0, total: batchItems.length });
 
-        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
-        let successCount = 0;
+        const itemsToUpload = [...batchItems];
 
-        for (let i = 0; i < batchItems.length; i++) {
-            const item = batchItems[i];
-
-            // Si ya está guardado con éxito, saltar
-            if (item.status === 'done') {
-                successCount++;
-                continue;
+        const procesarSiguiente = (index) => {
+            if (index >= itemsToUpload.length) {
+                setBatchUploading(false);
+                setTimeout(() => {
+                    setCreando(false);
+                    setBatchItems([]);
+                    setBatchProgress(0);
+                    setUploadSummary(null);
+                }, 1000);
+                return;
             }
 
-            // Marcar como subiendo
+            const item = itemsToUpload[index];
+
+            // Si ya fue guardado previamente con éxito, pasar al siguiente
+            if (item.status === 'done') {
+                setBatchProgress(Math.round(((index + 1) / itemsToUpload.length) * 100));
+                setUploadSummary({ done: index + 1, total: itemsToUpload.length });
+                procesarSiguiente(index + 1);
+                return;
+            }
+
+            // Marcar elemento actual como 'uploading'
             setBatchItems((prev) =>
                 prev.map((it) => (it.id === item.id ? { ...it, status: 'uploading' } : it))
             );
 
             const formData = new FormData();
-            formData.append('nombre', item.nombre || `Espacio ${i + 1}`);
+            formData.append('nombre', item.nombre || `Espacio ${index + 1}`);
             formData.append('imagen', item.file);
 
-            try {
-                const response = await fetch(`${basePath}/recorrido/scenes`, {
-                    method: 'POST',
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'X-CSRF-TOKEN': csrfToken,
-                        'Accept': 'application/json',
-                    },
-                    body: formData,
-                });
-
-                if (response.ok) {
-                    successCount++;
+            router.post(`${basePath}/recorrido/scenes`, formData, {
+                forceFormData: true,
+                preserveScroll: true,
+                preserveState: true,
+                onSuccess: () => {
                     setBatchItems((prev) =>
                         prev.map((it) => (it.id === item.id ? { ...it, status: 'done' } : it))
                     );
-                } else {
+                    setBatchProgress(Math.round(((index + 1) / itemsToUpload.length) * 100));
+                    setUploadSummary({ done: index + 1, total: itemsToUpload.length });
+                    
+                    // Procesar la siguiente imagen inmediatamente
+                    procesarSiguiente(index + 1);
+                },
+                onError: (errors) => {
+                    console.error(`Error al guardar escena ${item.nombre}:`, errors);
                     setBatchItems((prev) =>
                         prev.map((it) => (it.id === item.id ? { ...it, status: 'error' } : it))
                     );
+                    setBatchProgress(Math.round(((index + 1) / itemsToUpload.length) * 100));
+                    setUploadSummary({ done: index + 1, total: itemsToUpload.length });
+                    
+                    // Continuar con la siguiente imagen incluso si una falla
+                    procesarSiguiente(index + 1);
                 }
-            } catch (err) {
-                console.error(`Error al subir escena ${item.nombre}:`, err);
-                setBatchItems((prev) =>
-                    prev.map((it) => (it.id === item.id ? { ...it, status: 'error' } : it))
-                );
-            }
+            });
+        };
 
-            const currentPct = Math.round(((i + 1) / batchItems.length) * 100);
-            setBatchProgress(currentPct);
-            setUploadSummary({ done: i + 1, total: batchItems.length });
-        }
-
-        setBatchUploading(false);
-
-        if (successCount > 0) {
-            setTimeout(() => {
-                setCreando(false);
-                setBatchItems([]);
-                setBatchProgress(0);
-                setUploadSummary(null);
-                router.reload({ preserveScroll: true, preserveState: false });
-            }, 1200);
-        }
+        // Iniciar la secuencia en el índice 0
+        procesarSiguiente(0);
     };
 
     const eliminarEscena = (id) => {

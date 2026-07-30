@@ -46,19 +46,30 @@ class Scene extends Model
             return $path;
         }
 
-        $cleanPath = ltrim(str_replace('recorrido_virtual/', '', $path), '/');
+        $ltrimPath = ltrim($path, '/');
 
-        // Check exact match in public/recorrido_virtual/
+        // 1. Check in public/storage/ (Direct upload path e.g. storage/recorrido_virtual/xyz.jpg)
+        if (file_exists(public_path('storage/' . $ltrimPath))) {
+            return asset('storage/' . $ltrimPath);
+        }
+
+        // 2. Check directly in public folder (e.g. recorrido_virtual/1.entrada.jpg)
+        if (file_exists(public_path($ltrimPath))) {
+            return asset($ltrimPath);
+        }
+
+        // 3. Clean path check in public/recorrido_virtual/
+        $cleanPath = ltrim(str_replace('recorrido_virtual/', '', $ltrimPath), '/');
+
         if (file_exists(public_path('recorrido_virtual/' . $cleanPath))) {
             return asset('recorrido_virtual/' . $cleanPath);
         }
 
-        // Check in public/storage/
         if (file_exists(public_path('storage/' . $cleanPath))) {
             return asset('storage/' . $cleanPath);
         }
 
-        // Fuzzy match in public/recorrido_virtual/ by keyword (e.g. "entrada", "patio", "biblioteca")
+        // 4. Fuzzy match in public/recorrido_virtual/ by keyword (e.g. "entrada", "patio", "biblioteca")
         $baseName = pathinfo($cleanPath, PATHINFO_FILENAME);
         $parts = array_filter(explode('.', $baseName));
         $searchKey = end($parts) ?: $baseName;

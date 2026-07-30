@@ -84,12 +84,16 @@ class TourAdminController extends Controller
             $imagenPath = ltrim($request->imagen_url_manual, '/storage/');
         }
 
+        if (!$imagenPath) {
+            return back()->with('flash', 'Debe adjuntar una imagen 360° o especificar la ruta del archivo.');
+        }
+
         $slug = Str::slug($request->nombre);
 
         $tour->scenes()->create([
             'nombre' => $request->nombre,
             'slug' => $slug,
-            'imagen_path' => $imagenPath ?: 'recorrido_virtual/1.entrada.jpg',
+            'imagen_path' => $imagenPath,
             'yaw_inicial' => 0,
             'pitch_inicial' => 0,
             'hfov_inicial' => 100,

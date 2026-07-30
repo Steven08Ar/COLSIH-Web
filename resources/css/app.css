@@ -109,42 +109,44 @@ body {
 }
 
 /* =========================================================
-   360° ANIMATED INTERACTIVE HOTSPOTS (CAMINO & INFORMACIÓN)
+   360° ANIMATED INTERACTIVE HOTSPOTS (PURE WHITE SCREENSHOT STYLE)
    ========================================================= */
 
-/* 1. CAMINO / RECORRIDO (Route Hotspot) */
+/* 1. CAMINO / RECORRIDO (Route Hotspot - Exact White Target Ring) */
 .custom-hotspot-link-editor,
 .custom-hotspot-link-public {
-    width: 48px;
-    height: 48px;
+    width: 38px;
+    height: 38px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #0284c7 0%, #2563eb 100%);
-    border: 3px solid #ffffff;
-    box-shadow: 0 0 22px rgba(37, 99, 235, 0.85), 0 4px 12px rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.35);
+    border: 3.5px solid #ffffff;
+    box-shadow: 0 0 16px rgba(255, 255, 255, 0.7), 0 4px 12px rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
     display: flex;
     align-items: center;
     justify-content: center;
     color: #ffffff;
     cursor: pointer;
     position: relative;
-    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.2s ease;
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.2s ease, border-color 0.2s ease;
 }
 
 .custom-hotspot-link-editor:hover,
 .custom-hotspot-link-public:hover {
-    transform: scale(1.3) translateY(-4px);
-    background: linear-gradient(135deg, #0369a1 0%, #1d4ed8 100%);
-    box-shadow: 0 0 32px rgba(37, 99, 235, 1), 0 8px 20px rgba(0, 0, 0, 0.6);
+    transform: scale(1.25) translateY(-3px);
+    background: rgba(255, 255, 255, 0.25);
+    border-color: #ffffff;
+    box-shadow: 0 0 25px rgba(255, 255, 255, 1), 0 6px 16px rgba(0, 0, 0, 0.7);
 }
 
-/* Pulsing radar ring around Route hotspot */
+/* White Pulsing target ring around Route hotspot */
 .custom-hotspot-link-editor::before,
 .custom-hotspot-link-public::before {
     content: '';
     position: absolute;
-    inset: -7px;
+    inset: -6px;
     border-radius: 50%;
-    border: 2.5px solid rgba(56, 189, 248, 0.85);
+    border: 2px solid rgba(255, 255, 255, 0.85);
     animation: routePulseRing 2.2s infinite cubic-bezier(0.215, 0.61, 0.355, 1);
     pointer-events: none;
 }
@@ -153,9 +155,9 @@ body {
 .custom-hotspot-link-public::after {
     content: '';
     position: absolute;
-    inset: -13px;
+    inset: -10px;
     border-radius: 50%;
-    border: 2px dashed rgba(37, 99, 235, 0.6);
+    border: 1.5px dashed rgba(255, 255, 255, 0.5);
     animation: routeSpinRing 10s linear infinite;
     pointer-events: none;
 }
@@ -167,44 +169,44 @@ body {
     animation: arrowBounce 1.8s ease-in-out infinite;
 }
 
-/* 2. INFORMACIÓN (Info Hotspot) */
+/* 2. INFORMACIÓN (Info Hotspot - Smaller Pure White Theme) */
 .custom-hotspot-info-editor,
 .custom-hotspot-info-public {
-    width: 44px;
-    height: 44px;
+    width: 34px;
+    height: 34px;
     border-radius: 50%;
-    background: rgba(15, 23, 42, 0.85);
-    border: 2.5px solid #38bdf8;
-    backdrop-filter: blur(8px);
-    box-shadow: 0 0 16px rgba(56, 189, 248, 0.7), 0 4px 10px rgba(0, 0, 0, 0.5);
+    background: rgba(15, 23, 42, 0.75);
+    border: 2.5px solid #ffffff;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 0 14px rgba(255, 255, 255, 0.6), 0 4px 10px rgba(0, 0, 0, 0.5);
     display: flex;
     align-items: center;
     justify-content: center;
     color: #ffffff;
     font-family: ui-sans-serif, system-ui, sans-serif;
     font-weight: 900;
-    font-size: 18px;
+    font-size: 15px;
     cursor: pointer;
     position: relative;
-    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.2s ease;
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.2s ease;
 }
 
 .custom-hotspot-info-editor:hover,
 .custom-hotspot-info-public:hover {
-    transform: scale(1.3) translateY(-3px);
+    transform: scale(1.25) translateY(-2px);
+    background: rgba(255, 255, 255, 0.3);
     border-color: #ffffff;
-    background: rgba(2, 132, 199, 0.95);
-    box-shadow: 0 0 32px rgba(56, 189, 248, 1), 0 6px 16px rgba(0, 0, 0, 0.6);
+    box-shadow: 0 0 24px rgba(255, 255, 255, 0.95), 0 6px 14px rgba(0, 0, 0, 0.6);
 }
 
-/* Breathing glow beacon around Info hotspot */
+/* White Breathing beacon glow around Info hotspot */
 .custom-hotspot-info-editor::before,
 .custom-hotspot-info-public::before {
     content: '';
     position: absolute;
-    inset: -9px;
+    inset: -7px;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(56, 189, 248, 0.45) 0%, rgba(56, 189, 248, 0) 70%);
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0) 70%);
     animation: infoBeaconPulse 2.5s ease-in-out infinite alternate;
     pointer-events: none;
 }
@@ -213,9 +215,9 @@ body {
 .custom-hotspot-info-public::after {
     content: '';
     position: absolute;
-    inset: -5px;
+    inset: -4px;
     border-radius: 50%;
-    border: 1.5px dotted rgba(255, 255, 255, 0.7);
+    border: 1.5px dotted rgba(255, 255, 255, 0.65);
     animation: infoDottedRotate 8s linear infinite;
     pointer-events: none;
 }

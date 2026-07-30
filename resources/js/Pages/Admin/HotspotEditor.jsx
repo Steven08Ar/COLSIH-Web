@@ -89,7 +89,7 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
                 cssClass: isEnlace ? 'custom-hotspot-link-editor' : 'custom-hotspot-info-editor',
                 createTooltipFunc: (hotSpotDiv) => {
                     hotSpotDiv.innerHTML = isEnlace
-                        ? `<div class="hotspot-link-inner"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg></div>`
+                        ? `<div class="hotspot-link-inner"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="3.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg></div>`
                         : `<div class="hotspot-info-inner">i</div>`;
                 },
                 clickHandlerFunc: () => {

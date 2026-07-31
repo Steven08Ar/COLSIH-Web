@@ -9,6 +9,14 @@ const nosotrosLinks = [
     { label: 'Equipo', href: '/nosotros/equipo' },
 ];
 
+const ofertaLinks = [
+    { label: 'Visión General', href: '/oferta-academica' },
+    { label: 'Preescolar', href: '/oferta-academica/preescolar' },
+    { label: 'Básica Primaria', href: '/oferta-academica/primaria' },
+    { label: 'Bachillerato', href: '/oferta-academica/bachillerato' },
+    { label: 'Convenio SENA', href: '/oferta-academica/sena' },
+];
+
 export default function Hero({ setVideoOpen }) {
     const { url } = usePage();
     const [scrolled, setScrolled] = useState(false);
@@ -19,6 +27,12 @@ export default function Hero({ setVideoOpen }) {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const closeDelayTimer = useRef(null);
     const unmountTimer = useRef(null);
+
+    // Oferta Dropdown
+    const [ofertaVisible, setOfertaVisible] = useState(false);
+    const [ofertaOpenState, setOfertaOpenState] = useState(false);
+    const ofertaCloseTimer = useRef(null);
+    const ofertaUnmountTimer = useRef(null);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -33,6 +47,8 @@ export default function Hero({ setVideoOpen }) {
         return () => {
             clearTimeout(closeDelayTimer.current);
             clearTimeout(unmountTimer.current);
+            clearTimeout(ofertaCloseTimer.current);
+            clearTimeout(ofertaUnmountTimer.current);
         };
     }, []);
 
@@ -48,6 +64,22 @@ export default function Hero({ setVideoOpen }) {
             setDropdownOpen(false);
             unmountTimer.current = setTimeout(() => {
                 setDropdownVisible(false);
+            }, 150);
+        }, 100);
+    }
+
+    function handleOfertaEnter() {
+        clearTimeout(ofertaCloseTimer.current);
+        clearTimeout(ofertaUnmountTimer.current);
+        setOfertaVisible(true);
+        requestAnimationFrame(() => setOfertaOpenState(true));
+    }
+
+    function handleOfertaLeave() {
+        ofertaCloseTimer.current = setTimeout(() => {
+            setOfertaOpenState(false);
+            ofertaUnmountTimer.current = setTimeout(() => {
+                setOfertaVisible(false);
             }, 150);
         }, 100);
     }
@@ -117,7 +149,48 @@ export default function Hero({ setVideoOpen }) {
                             )}
                         </div>
 
-                        <Link href="/oferta-academica" className="hover:text-white transition-colors">Oferta Académica</Link>
+                        {/* Oferta Académica Dropdown */}
+                        <div
+                            className="relative py-2"
+                            onMouseEnter={handleOfertaEnter}
+                            onMouseLeave={handleOfertaLeave}
+                        >
+                            <Link
+                                href="/oferta-academica"
+                                className="flex items-center gap-1 hover:text-white transition-colors focus:outline-none cursor-pointer"
+                            >
+                                Oferta Académica
+                                <svg
+                                    className={`w-3.5 h-3.5 transition-transform duration-300 ${ofertaOpenState ? 'rotate-180' : ''}`}
+                                    fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                >
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </Link>
+
+                            {ofertaVisible && (
+                                <div
+                                    className={`absolute left-1/2 -translate-x-1/2 top-full mt-1.5 w-56 bg-gradient-to-b from-[#08111F]/95 to-[#08111F]/85 backdrop-blur-xl border border-white/10 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.4)] py-2.5 z-50 origin-top
+                                        transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]
+                                        ${ofertaOpenState
+                                            ? 'opacity-100 translate-y-0 scale-100'
+                                            : 'opacity-0 -translate-y-2 scale-[0.98]'
+                                        }`}
+                                >
+                                    {ofertaLinks.map((item) => (
+                                        <Link
+                                            key={item.href}
+                                            href={item.href}
+                                            className={`block px-4 py-2.5 mx-1.5 text-[14px] font-semibold rounded-xl transition-all duration-200 hover:bg-white/[0.08] hover:text-white ${url === item.href ? 'text-white bg-white/[0.06]' : 'text-white/70'
+                                                }`}
+                                        >
+                                            {item.label}
+                                        </Link>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+
                         <Link href="/admisiones" className="hover:text-white transition-colors">Admisiones</Link>
                         <Link href="/noticias" className="hover:text-white transition-colors">Noticias</Link>
                         <Link href="/contacto" className="hover:text-white transition-colors">Contacto</Link>

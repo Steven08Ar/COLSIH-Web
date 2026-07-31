@@ -32,7 +32,14 @@ Route::prefix('nosotros')->name('nosotros.')->group(function () {
 });
 
 // Oferta académica
-Route::get('/oferta-academica', OfertaAcademicaController::class)->name('oferta-academica');
+Route::prefix('oferta-academica')->name('oferta-academica.')->group(function () {
+    Route::get('/', [OfertaAcademicaController::class, 'index'])->name('index');
+    Route::get('/preescolar', [OfertaAcademicaController::class, 'preescolar'])->name('preescolar');
+    Route::get('/primaria', [OfertaAcademicaController::class, 'primaria'])->name('primaria');
+    Route::get('/bachillerato', [OfertaAcademicaController::class, 'bachillerato'])->name('bachillerato');
+    Route::get('/sena', [OfertaAcademicaController::class, 'sena'])->name('sena');
+});
+Route::get('/oferta-academica', [OfertaAcademicaController::class, 'index'])->name('oferta-academica');
 
 // Admisiones
 Route::get('/admisiones', AdmisionesController::class)->name('admisiones');

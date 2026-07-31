@@ -8,28 +8,44 @@ const niveles = [
         edad: '3 a 6 años',
         grados: ['Prejardín', 'Jardín', 'Transición'],
         descripcion: 'Estimulación temprana, desarrollo psicomotriz y socialización con bases en la alegría salesiana.',
-        destacados: ['Iniciación al inglés', 'Proyectos lúdicos', 'Valores básicos']
+        destacados: ['Iniciación al inglés', 'Proyectos lúdicos', 'Valores básicos'],
+        href: '/oferta-academica/preescolar',
+        badge: 'Educación Inicial',
+        btnBg: 'bg-amber-500 hover:bg-amber-600 text-white',
+        borderAccent: 'hover:border-amber-300'
     },
     {
         nombre: 'Básica Primaria',
         edad: '6 a 11 años',
         grados: ['Primero', 'Segundo', 'Tercero', 'Cuarto', 'Quinto'],
         descripcion: 'Consolidación de la lectoescritura, razonamiento matemático inicial y fomento de la curiosidad científica.',
-        destacados: ['Pensamiento lógico', 'Comprensión lectora', 'Inglés intensivo']
+        destacados: ['Pensamiento lógico', 'Comprensión lectora', 'Inglés intensivo'],
+        href: '/oferta-academica/primaria',
+        badge: 'Grados 1° a 5°',
+        btnBg: 'bg-emerald-600 hover:bg-emerald-700 text-white',
+        borderAccent: 'hover:border-emerald-300'
     },
     {
-        nombre: 'Básica Secundaria',
-        edad: '11 a 15 años',
-        grados: ['Sexto', 'Séptimo', 'Octavo', 'Noveno'],
-        descripcion: 'Desarrollo de habilidades de investigación, informática aplicada y formación en liderazgo social y ético.',
-        destacados: ['Ciencia experimental', 'Robótica básica', 'Ciudadanía crítica']
+        nombre: 'Bachillerato',
+        edad: '11 a 17 años',
+        grados: ['Sexto', 'Séptimo', 'Octavo', 'Noveno', 'Décimo', 'Undécimo'],
+        descripcion: 'Desarrollo de habilidades de investigación, laboratorio experimental, informática y liderazgo social y ético.',
+        destacados: ['Pre-ICFES especializado', 'Laboratorios STEM', 'Ciudadanía crítica'],
+        href: '/oferta-academica/bachillerato',
+        badge: 'Grados 6° a 11°',
+        btnBg: 'bg-[#003C8F] hover:bg-blue-800 text-white',
+        borderAccent: 'hover:border-blue-300'
     },
     {
-        nombre: 'Educación Media',
-        edad: '15 a 17 años',
-        grados: ['Décimo', 'Undécimo'],
-        descripcion: 'Preparación de excelencia enfocada en el ingreso a la educación superior y desarrollo de proyectos de vida sólidos.',
-        destacados: ['Preicfes especializado', 'Proyectos de grado', 'Orientación profesional']
+        nombre: 'Articulación SENA',
+        edad: 'Grados 10° y 11°',
+        grados: ['Técnico Financiero', 'Técnico en Sistemas'],
+        descripcion: 'Formación técnica profesional acreditada oficialmente por el SENA en contabilidad empresarial y sistemas de información.',
+        destacados: ['Doble titulación oficial', 'Prácticas reales', 'Homologación universitaria'],
+        href: '/oferta-academica/sena',
+        badge: 'Convenio SENA',
+        btnBg: 'bg-orange-600 hover:bg-orange-700 text-white',
+        borderAccent: 'hover:border-orange-300'
     }
 ];
 
@@ -146,7 +162,7 @@ export default function OfertaAcademica() {
                                         </div>
                                     </div>
 
-                                    <div className="border-t border-slate-100 pt-6 mt-6">
+                                    <div className="border-t border-slate-100 pt-6 mt-6 space-y-4">
                                         <div className="flex flex-wrap gap-3">
                                             {nivel.destacados.map((item, dIdx) => (
                                                 <span key={dIdx} className="flex items-center gap-1.5 text-xs font-extrabold text-[#003C8F] font-sans">
@@ -154,6 +170,18 @@ export default function OfertaAcademica() {
                                                     {item}
                                                 </span>
                                             ))}
+                                        </div>
+
+                                        <div className="pt-2">
+                                            <Link
+                                                href={nivel.href}
+                                                className={`inline-flex items-center justify-between w-full px-5 py-3 rounded-2xl font-extrabold text-xs sm:text-sm transition-all duration-300 shadow-sm hover:shadow-md hover:scale-[1.02] ${nivel.btnBg}`}
+                                            >
+                                                <span>Ver Plan Completo de {nivel.nombre}</span>
+                                                <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                                </svg>
+                                            </Link>
                                         </div>
                                     </div>
                                 </div>

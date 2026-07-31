@@ -125,18 +125,18 @@ export default function Footer() {
                                     </div>
                                 </div>
 
-                                {/* Academics */}
+                                {/* Oferta Académica */}
                                 <div className="space-y-4 text-left">
                                     <h4 className="text-sm font-extrabold uppercase tracking-wider relative pb-2.5 text-white font-sans">
-                                        Procesos
+                                        Oferta Académica
                                         <span className="absolute bottom-0 left-0 w-8 h-[2px] bg-[#003C8F] rounded-full" />
                                     </h4>
-                                    <div className="flex flex-col gap-3 text-sm font-semibold text-slate-400">
-                                        <Link href="/oferta-academica" className="hover:text-white transition-colors">Oferta Académica</Link>
-                                        <Link href="/admisiones" className="hover:text-white transition-colors">Admisiones</Link>
-                                        <Link href="/inscripcion" className="hover:text-white transition-colors">Matrículas</Link>
-                                        <Link href="/noticias" className="hover:text-white transition-colors">Noticias</Link>
-                                        <Link href="/contacto" className="hover:text-white transition-colors">Contacto</Link>
+                                    <div className="flex flex-col gap-2.5 text-sm font-semibold text-slate-400">
+                                        <Link href="/oferta-academica/preescolar" className="hover:text-white transition-colors">Preescolar</Link>
+                                        <Link href="/oferta-academica/primaria" className="hover:text-white transition-colors">Básica Primaria</Link>
+                                        <Link href="/oferta-academica/bachillerato" className="hover:text-white transition-colors">Bachillerato</Link>
+                                        <Link href="/oferta-academica/sena" className="hover:text-white transition-colors">Convenio SENA</Link>
+                                        <Link href="/admisiones" className="hover:text-white transition-colors pt-1 border-t border-white/5">Admisiones</Link>
                                     </div>
                                 </div>
                             </>

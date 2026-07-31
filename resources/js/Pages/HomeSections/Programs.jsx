@@ -56,7 +56,7 @@ export default function Programs() {
             duration: "3 Años (Prejardín a Transición)",
             image: "/galeria/preescolar.JPG",
             imagePos: "object-[center_55%]",
-            ctaLink: "/oferta-academica",
+            ctaLink: "/oferta-academica/preescolar",
             ctaText: "Explorar Preescolar"
         },
         {
@@ -67,7 +67,7 @@ export default function Programs() {
             duration: "5 Años (Primero a Quinto)",
             image: "/galeria/primaria.JPG",
             imagePos: "object-[center_80%]",
-            ctaLink: "/oferta-academica",
+            ctaLink: "/oferta-academica/primaria",
             ctaText: "Explorar Primaria"
         },
         {
@@ -78,7 +78,7 @@ export default function Programs() {
             duration: "6 Años (Sexto a Undécimo)",
             image: "/galeria/bachillerato.JPG",
             imagePos: "object-center",
-            ctaLink: "/oferta-academica",
+            ctaLink: "/oferta-academica/bachillerato",
             ctaText: "Explorar Bachillerato"
         },
         {
@@ -89,7 +89,7 @@ export default function Programs() {
             duration: "Grados 10° y 11° (Titulación Nacional)",
             image: "/galeria/SENA.JPG",
             imagePos: "object-center",
-            ctaLink: "/oferta-academica",
+            ctaLink: "/oferta-academica/sena",
             ctaText: "Explorar SENA"
         }
     ];

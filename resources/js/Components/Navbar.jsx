@@ -9,15 +9,30 @@ const nosotrosLinks = [
     { label: 'Equipo', href: '/nosotros/equipo' },
 ];
 
+const ofertaLinks = [
+    { label: 'Visión General', href: '/oferta-academica' },
+    { label: 'Preescolar', href: '/oferta-academica/preescolar' },
+    { label: 'Básica Primaria', href: '/oferta-academica/primaria' },
+    { label: 'Bachillerato', href: '/oferta-academica/bachillerato' },
+    { label: 'Convenio SENA', href: '/oferta-academica/sena' },
+];
+
 export default function Navbar() {
     const { url } = usePage();
     const [scrolled, setScrolled] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
 
+    // Nosotros Dropdown
     const [dropdownVisible, setDropdownVisible] = useState(false);
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const closeDelayTimer = useRef(null);
     const unmountTimer = useRef(null);
+
+    // Oferta Dropdown
+    const [ofertaVisible, setOfertaVisible] = useState(false);
+    const [ofertaOpenState, setOfertaOpenState] = useState(false);
+    const ofertaCloseTimer = useRef(null);
+    const ofertaUnmountTimer = useRef(null);
 
     useEffect(() => {
         const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -29,6 +44,8 @@ export default function Navbar() {
         return () => {
             clearTimeout(closeDelayTimer.current);
             clearTimeout(unmountTimer.current);
+            clearTimeout(ofertaCloseTimer.current);
+            clearTimeout(ofertaUnmountTimer.current);
         };
     }, []);
 
@@ -48,7 +65,24 @@ export default function Navbar() {
         }, 100);
     }
 
+    function handleOfertaEnter() {
+        clearTimeout(ofertaCloseTimer.current);
+        clearTimeout(ofertaUnmountTimer.current);
+        setOfertaVisible(true);
+        requestAnimationFrame(() => setOfertaOpenState(true));
+    }
+
+    function handleOfertaLeave() {
+        ofertaCloseTimer.current = setTimeout(() => {
+            setOfertaOpenState(false);
+            ofertaUnmountTimer.current = setTimeout(() => {
+                setOfertaVisible(false);
+            }, 150);
+        }, 100);
+    }
+
     const nosotrosActive = nosotrosLinks.some(l => url === l.href || url.startsWith(l.href + '/'));
+    const ofertaActive = ofertaLinks.some(l => url === l.href || url.startsWith(l.href));
 
     return (
         <header className={`fixed top-0 left-0 w-full z-50 py-4 transition-all duration-300 bg-gradient-to-b from-[#08111F]/60 to-transparent ${
@@ -56,7 +90,7 @@ export default function Navbar() {
         }`}>
             <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] flex items-center justify-between">
 
-                {/* Logo — mismo layout que Hero, colores para fondo oscuro */}
+                {/* Logo */}
                 <Link href={url === '/mjs' ? '/mjs' : '/'} className="flex items-center gap-3 group focus:outline-none shrink-0">
                     <img
                         src={url === '/mjs' ? '/marca/logo-mjs.svg' : '/marca/logo-colsih.svg'}
@@ -78,13 +112,13 @@ export default function Navbar() {
                     )}
                 </Link>
 
-                {/* Desktop nav — misma estructura y gaps que Hero */}
+                {/* Desktop nav */}
                 <div className="hidden lg:flex items-center gap-10 text-[15px] font-semibold text-white/80">
                     <Link href="/" className={`transition-colors ${url === '/' ? 'text-white font-extrabold' : 'hover:text-white'}`}>
                         Inicio
                     </Link>
 
-                    {/* Nuestro Colegio — mismo dropdown animado que Hero */}
+                    {/* Nuestro Colegio */}
                     <div
                         className="relative py-2"
                         onMouseEnter={handleDropdownEnter}
@@ -131,7 +165,53 @@ export default function Navbar() {
                         )}
                     </div>
 
-                    <Link href="/oferta-academica" className={`transition-colors ${url === '/oferta-academica' ? 'text-white font-extrabold' : 'hover:text-white'}`}>Oferta Académica</Link>
+                    {/* Oferta Académica Dropdown */}
+                    <div
+                        className="relative py-2"
+                        onMouseEnter={handleOfertaEnter}
+                        onMouseLeave={handleOfertaLeave}
+                    >
+                        <Link
+                            href="/oferta-academica"
+                            className={`flex items-center gap-1 transition-colors focus:outline-none cursor-pointer ${
+                                ofertaActive ? 'text-white font-extrabold' : 'hover:text-white'
+                            }`}
+                        >
+                            Oferta Académica
+                            <svg
+                                className={`w-3.5 h-3.5 transition-transform duration-300 ${ofertaOpenState ? 'rotate-180' : ''}`}
+                                fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            >
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </Link>
+
+                        {ofertaVisible && (
+                            <div
+                                className={`absolute left-1/2 -translate-x-1/2 top-full mt-1.5 w-56 bg-gradient-to-b from-[#08111F]/95 to-[#08111F]/85 backdrop-blur-xl border border-white/10 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.4)] py-2.5 z-50 origin-top
+                                    transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]
+                                    ${ofertaOpenState
+                                        ? 'opacity-100 translate-y-0 scale-100'
+                                        : 'opacity-0 -translate-y-2 scale-[0.98]'
+                                    }`}
+                            >
+                                <div className="relative">
+                                    {ofertaLinks.map((item) => (
+                                        <Link
+                                            key={item.href}
+                                            href={item.href}
+                                            className={`block px-4 py-2.5 mx-1.5 text-[14px] font-semibold rounded-xl transition-all duration-200 hover:bg-white/[0.08] hover:text-white ${
+                                                url === item.href ? 'text-white bg-white/[0.06]' : 'text-white/70'
+                                            }`}
+                                        >
+                                            {item.label}
+                                        </Link>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
                     <Link href="/admisiones" className={`transition-colors ${url === '/admisiones' ? 'text-white font-extrabold' : 'hover:text-white'}`}>Admisiones</Link>
                     <Link href="/noticias" className={`transition-colors ${url.startsWith('/noticias') ? 'text-white font-extrabold' : 'hover:text-white'}`}>Noticias</Link>
                     <Link href="/contacto" className={`transition-colors ${url === '/contacto' ? 'text-white font-extrabold' : 'hover:text-white'}`}>Contacto</Link>
@@ -184,19 +264,38 @@ export default function Navbar() {
                 </div>
             </div>
 
+            {/* Mobile panel */}
             {mobileOpen && (
-                <div className="lg:hidden mt-2 mx-6 md:mx-12 bg-[#08111F]/95 backdrop-blur-md border border-white/15 rounded-2xl shadow-2xl overflow-hidden">
+                <div className="lg:hidden mt-2 mx-6 md:mx-12 bg-[#08111F]/95 backdrop-blur-md border border-white/15 rounded-2xl shadow-2xl overflow-hidden max-h-[85vh] overflow-y-auto">
                     <div className="px-4 py-4 space-y-1">
-                        {mainNavLinks.map((link) => (
-                            <Link
-                                key={link.href}
-                                href={link.href}
-                                onClick={() => setMobileOpen(false)}
-                                className={`block px-3 py-2.5 text-sm font-semibold rounded-lg transition-colors ${url === link.href ? 'text-white bg-white/10' : 'text-white/85 hover:text-white hover:bg-white/5'}`}
-                            >
-                                {link.label}
-                            </Link>
-                        ))}
+                        <Link href="/" onClick={() => setMobileOpen(false)} className={`block px-3 py-2 text-sm font-semibold rounded-lg ${url === '/' ? 'text-white bg-white/10' : 'text-white/85'}`}>Inicio</Link>
+                        
+                        <div>
+                            <span className="block px-3 py-2 text-xs font-bold text-white/40 uppercase tracking-wider">Nuestro Colegio</span>
+                            <div className="ml-3 border-l border-white/20 pl-3 space-y-1">
+                                {nosotrosLinks.map((item) => (
+                                    <Link key={item.href} href={item.href} onClick={() => setMobileOpen(false)} className={`block px-3 py-1.5 text-sm font-medium rounded-lg ${url === item.href ? 'text-white bg-white/10' : 'text-white/75'}`}>
+                                        {item.label}
+                                    </Link>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div>
+                            <span className="block px-3 py-2 text-xs font-bold text-white/40 uppercase tracking-wider">Oferta Académica</span>
+                            <div className="ml-3 border-l border-white/20 pl-3 space-y-1">
+                                {ofertaLinks.map((item) => (
+                                    <Link key={item.href} href={item.href} onClick={() => setMobileOpen(false)} className={`block px-3 py-1.5 text-sm font-medium rounded-lg ${url === item.href ? 'text-white bg-white/10' : 'text-white/75'}`}>
+                                        {item.label}
+                                    </Link>
+                                ))}
+                            </div>
+                        </div>
+
+                        <Link href="/admisiones" onClick={() => setMobileOpen(false)} className={`block px-3 py-2 text-sm font-semibold rounded-lg ${url === '/admisiones' ? 'text-white bg-white/10' : 'text-white/85'}`}>Admisiones</Link>
+                        <Link href="/noticias" onClick={() => setMobileOpen(false)} className={`block px-3 py-2 text-sm font-semibold rounded-lg ${url.startsWith('/noticias') ? 'text-white bg-white/10' : 'text-white/85'}`}>Noticias</Link>
+                        <Link href="/contacto" onClick={() => setMobileOpen(false)} className={`block px-3 py-2 text-sm font-semibold rounded-lg ${url === '/contacto' ? 'text-white bg-white/10' : 'text-white/85'}`}>Contacto</Link>
+
                         {url !== '/mjs' ? (
                             <div className="pt-2 border-t border-white/10">
                                 <a

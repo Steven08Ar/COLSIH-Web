@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Head } from '@inertiajs/react';
+import WhatsAppButton from '@/Components/WhatsAppButton';
 
 // Import Modular Sections
 import Hero from './HomeSections/Hero';
@@ -85,6 +86,9 @@ export default function Home({ noticias, testimonios, preguntas, tour, scenes = 
                     </div>
                 </div>
             )}
+
+            {/* Botón Flotante Global de WhatsApp */}
+            <WhatsAppButton />
         </div>
     );
 }

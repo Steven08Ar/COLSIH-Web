@@ -79,12 +79,12 @@ export default function Preescolar() {
             {/* 1. HERO TEMÁTICO PREESCOLAR */}
             <section className="relative min-h-[680px] md:min-h-[760px] pt-36 pb-32 md:pt-44 md:pb-40 bg-[#1C1002] overflow-hidden select-none flex items-center">
                 
-                {/* Imagen vertical de fondo enfocada a los niños (niño y niña completos) en la derecha */}
+                {/* Imagen vertical de fondo en los columpios con ambos niños en la derecha */}
                 <div className="absolute inset-0 w-full h-full z-0 overflow-hidden pointer-events-none">
                     <img
-                        src="/galeria/preescolar.JPG"
-                        alt="Niños de Preescolar COLSIH"
-                        className="absolute top-0 right-0 w-full md:w-[65%] lg:w-[58%] h-full object-cover object-[center_bottom] md:object-[center_85%] contrast-[1.05] brightness-90 md:brightness-95"
+                        src="/galeria/preescolar_dos.JPG"
+                        alt="Niños de Preescolar COLSIH en columpios"
+                        className="absolute top-0 right-0 w-full md:w-[65%] lg:w-[58%] h-full object-cover object-[center_45%] contrast-[1.05] brightness-90 md:brightness-95 scale-105"
                     />
                 </div>
 

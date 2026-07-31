@@ -48,7 +48,7 @@ export default function AboutHero() {
 
     return (
         <section className="relative w-full min-h-screen bg-white overflow-hidden pt-[140px] pb-[80px] md:pb-[140px] lg:pb-0 flex items-center justify-center">
-            
+
             {/* Invisible SVG definition for the ObjectBoundingBox responsive mask */}
             <svg className="absolute w-0 h-0" width="0" height="0">
                 <defs>
@@ -65,27 +65,27 @@ export default function AboutHero() {
             <OrganicBackground mouseX={springX} mouseY={springY} />
 
             {/* Main Content Grid (Expanded to max-w-[1680px] and left-aligned) */}
-            <motion.div 
+            <motion.div
                 variants={containerVariants}
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true, margin: "-100px" }}
                 className="w-full max-w-[1680px] mx-auto px-6 md:px-12 xl:px-24 grid grid-cols-1 lg:grid-cols-2 gap-20 items-center relative z-20 lg:min-h-[calc(100vh-140px)]"
             >
-                
+
                 {/* Left Column (45% width) - Vertically Centered */}
                 <div className="w-full lg:max-w-[580px] text-left space-y-7 z-10 lg:py-20 flex flex-col justify-center h-full">
-                    
+
                     {/* Text pequeño: QUIÉNES SOMOS */}
-                    <motion.span 
+                    <motion.span
                         variants={itemVariants}
                         className="text-[#800A15] text-[15px] font-bold tracking-[3px] uppercase block font-sans"
                     >
                         QUIÉNES SOMOS
                     </motion.span>
- 
+
                     {/* Título grande (Tres líneas exactamente) */}
-                    <motion.h1 
+                    <motion.h1
                         variants={itemVariants}
                         className="text-4xl sm:text-5xl md:text-[60px] lg:text-[72px] font-black text-[#0B1F3A] leading-[0.95] tracking-tight font-sans"
                     >
@@ -99,17 +99,17 @@ export default function AboutHero() {
                             </svg>
                         </span>
                     </motion.h1>
- 
+
                     {/* Descripción (Máximo 3 líneas) */}
-                    <motion.p 
+                    <motion.p
                         variants={itemVariants}
                         className="text-slate-500 text-[18px] md:text-[20px] leading-[1.8] max-w-[560px] font-medium"
                     >
                         Somos una institución educativa católica que forma personas íntegras, líderes con propósito y comprometidos con la construcción de un mundo más justo.
                     </motion.p>
- 
+
                     {/* Botones (Removed Video Button) */}
-                    <motion.div 
+                    <motion.div
                         variants={itemVariants}
                         className="flex flex-row flex-wrap items-center gap-5 pt-3"
                     >
@@ -118,32 +118,32 @@ export default function AboutHero() {
                         </PrimaryButton>
                     </motion.div>
                 </div>
- 
+
                 {/* Right Column Spacer for Desktop / Stacking Inline Container on Mobile & Tablet */}
                 <div className="relative flex justify-center mt-12 lg:mt-0 w-full max-w-[549px] aspect-[549/568] pointer-events-none select-none translate-y-[60px] md:translate-y-[120px] lg:hidden">
                     {/* Mobile/Tablet inline copy (rendered inside the grid) */}
                     <div className="relative w-full h-full flex items-end justify-center">
                         {/* Layer 1: Background School Mask */}
-                        <div 
+                        <div
                             style={{ clipPath: 'url(#school-mask)', WebkitClipPath: 'url(#school-mask)' }}
                             className="absolute inset-0 w-full h-full bg-[#08111F] overflow-hidden"
                         >
-                            <img 
-                                src="/galeria/colegio-afuera.webp" 
-                                alt="Colegio Santa Isabel de Hungría" 
-                                className="w-full h-full object-cover scale-105" 
+                            <img
+                                src="/galeria/colegio-afuera.JPG"
+                                alt="Colegio Santa Isabel de Hungría"
+                                className="w-full h-full object-cover scale-105"
                             />
                         </div>
- 
+
                         {/* Layer 2: Foreground Transparent Cutout Students walking away */}
-                        <img 
-                            src="/galeria/estudiantes-espaldas.png" 
-                            alt="Estudiantes COLSIH" 
-                            className="absolute bottom-[-10px] left-[-2%] w-[100%] max-w-none z-20 pointer-events-none object-contain drop-shadow-[0_20px_40px_rgba(8,17,31,0.3)]" 
+                        <img
+                            src="/galeria/estudiantes-espaldas.png"
+                            alt="Estudiantes COLSIH"
+                            className="absolute bottom-[-10px] left-[-2%] w-[100%] max-w-none z-20 pointer-events-none object-contain drop-shadow-[0_20px_40px_rgba(8,17,31,0.3)]"
                         />
                     </div>
                 </div>
- 
+
                 {/* Desktop Empty Spacer block inside the grid row */}
                 <div className="hidden lg:block pointer-events-none select-none"></div>
 
@@ -151,22 +151,22 @@ export default function AboutHero() {
 
             {/* Desktop Full-Viewport Image Layer (Stretched wider: 56%) */}
             <div className="hidden lg:block absolute right-0 top-0 bottom-0 w-[56%] h-full z-10 pointer-events-none select-none">
-                
+
                 {/* Parallax Blobs and Blurs Behind the Photograph */}
                 <div className="absolute inset-0 z-0 pointer-events-none scale-110">
                     {/* Blob azul enorme */}
-                    <AnimatedBlob 
-                        className="w-80 h-80 bg-[#003C8F]/15 -top-12 -left-12 blur-2xl" 
-                        mouseX={springX} 
-                        mouseY={springY} 
-                        speed={1.3} 
+                    <AnimatedBlob
+                        className="w-80 h-80 bg-[#003C8F]/15 -top-12 -left-12 blur-2xl"
+                        mouseX={springX}
+                        mouseY={springY}
+                        speed={1.3}
                     />
                     {/* Blob rojo */}
-                    <AnimatedBlob 
-                        className="w-[360px] h-[360px] bg-[#800A15]/10 -bottom-16 -right-16 blur-3xl" 
-                        mouseX={springX} 
-                        mouseY={springY} 
-                        speed={0.9} 
+                    <AnimatedBlob
+                        className="w-[360px] h-[360px] bg-[#800A15]/10 -bottom-16 -right-16 blur-3xl"
+                        mouseX={springX}
+                        mouseY={springY}
+                        speed={0.9}
                     />
                     {/* Blur spots */}
                     <div className="absolute top-1/3 left-1/4 w-32 h-32 bg-[#003C8F]/15 rounded-full blur-3xl"></div>
@@ -179,22 +179,22 @@ export default function AboutHero() {
                 {/* 3D Pop-out Container */}
                 <div className="relative w-full h-full flex items-end justify-end">
                     {/* Layer 1: Background School Mask */}
-                    <div 
+                    <div
                         style={{ clipPath: 'url(#school-mask)', WebkitClipPath: 'url(#school-mask)' }}
                         className="absolute inset-0 w-full h-full bg-[#08111F] overflow-hidden"
                     >
-                        <img 
-                            src="/galeria/colegio-afuera.webp" 
-                            alt="Colegio Santa Isabel de Hungría" 
-                            className="w-full h-full object-cover scale-105" 
+                        <img
+                            src="/galeria/colegio-afuera.JPG"
+                            alt="Colegio Santa Isabel de Hungría"
+                            className="w-full h-full object-cover scale-105"
                         />
                     </div>
 
                     {/* Layer 2: Foreground Transparent Cutout Students walking away */}
-                    <img 
-                        src="/galeria/estudiantes-espaldas.png" 
-                        alt="Estudiantes COLSIH" 
-                        className="absolute bottom-[-10px] left-[-2%] w-[100%] max-w-none z-20 pointer-events-none object-contain drop-shadow-[0_20px_40px_rgba(8,17,31,0.3)] hover:scale-[1.01] transition-transform duration-500" 
+                    <img
+                        src="/galeria/estudiantes-espaldas.png"
+                        alt="Estudiantes COLSIH"
+                        className="absolute bottom-[-10px] left-[-2%] w-[100%] max-w-none z-20 pointer-events-none object-contain drop-shadow-[0_20px_40px_rgba(8,17,31,0.3)] hover:scale-[1.01] transition-transform duration-500"
                     />
                 </div>
             </div>
@@ -203,14 +203,14 @@ export default function AboutHero() {
             <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-none z-30 pointer-events-none select-none">
                 <svg className="relative block w-full h-[80px] md:h-[160px]" viewBox="0 0 1440 160" preserveAspectRatio="none">
                     {/* Red Wave on the left */}
-                    <path 
-                        d="M0,160 C200,70 400,140 600,135 C750,130 900,145 1050,160 L1050,160 L0,160 Z" 
-                        fill="#800A15" 
+                    <path
+                        d="M0,160 C200,70 400,140 600,135 C750,130 900,145 1050,160 L1050,160 L0,160 Z"
+                        fill="#800A15"
                     />
                     {/* Dark Blue Wave on the right */}
-                    <path 
-                        d="M400,160 C600,130 800,45 1050,90 C1220,115 1330,80 1440,40 L1440,160 L400,160 Z" 
-                        fill="#08111F" 
+                    <path
+                        d="M400,160 C600,130 800,45 1050,90 C1220,115 1330,80 1440,40 L1440,160 L400,160 Z"
+                        fill="#08111F"
                     />
                 </svg>
             </div>

@@ -15,7 +15,7 @@ export const valoresData = [
         subtitulo: "Trascendencia y Alegría Salesiana",
         descripcion: "Vivir la trascendencia y la búsqueda de la felicidad auténtica inspirados en la fe, la esperanza y el amor que Don Bosco enseñó a la juventud.",
         iconName: "Sun",
-        portada: "/galeria/colegio-afuera.webp",
+        portada: "/galeria/colegio-afuera.JPG",
         galeria: [
             "/nosotros_assets/historia/historia-1983.png",
             "/nosotros_assets/historia/historia-1995.png",
@@ -60,7 +60,7 @@ export const valoresData = [
         subtitulo: "Rectitud e Integridad Personal",
         descripcion: "Reconocimiento de la dignidad del otro y de su importancia a través de la rectitud, la verdad y la transparencia en cada una de nuestras acciones.",
         iconName: "ShieldCheck",
-        portada: "/galeria/colegio-afuera.webp",
+        portada: "/galeria/colegio-afuera.JPG",
         galeria: [
             "/testimonios/egresada.png",
             "/testimonios/estudiante.png",
@@ -105,7 +105,7 @@ export const valoresData = [
         subtitulo: "Creatividad y Transformación Social",
         descripcion: "Capacidad de transformar la realidad social humanizándola mediante soluciones creativas, pensamiento crítico y ciencia al servicio de la vida.",
         iconName: "Lightbulb",
-        portada: "/galeria/colegio-afuera.webp",
+        portada: "/galeria/colegio-afuera.JPG",
         galeria: [
             "/testimonios/egresada.png",
             "/testimonios/estudiante.png",

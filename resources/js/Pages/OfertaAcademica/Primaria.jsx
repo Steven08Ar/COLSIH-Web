@@ -55,12 +55,29 @@ export default function Primaria() {
             <Head title="Básica Primaria | Oferta Académica COLSIH" />
 
             {/* 1. HERO TEMÁTICO PRIMARIA */}
-            <section className="relative pt-36 pb-32 md:pt-44 md:pb-40 bg-gradient-to-b from-[#022C22] via-[#0F172A] to-[#08111F] overflow-hidden select-none">
-                {/* Blobs luminosos esmeralda */}
-                <div className="absolute top-1/3 left-1/4 -translate-y-1/2 w-[450px] h-[450px] bg-emerald-500/15 rounded-full blur-[130px] pointer-events-none z-0"></div>
-                <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-[400px] h-[400px] bg-teal-500/10 rounded-full blur-[120px] pointer-events-none z-0"></div>
+            <section className="relative min-h-[680px] md:min-h-[760px] pt-36 pb-32 md:pt-44 md:pb-40 bg-[#022C22] overflow-hidden select-none flex items-center">
+                
+                {/* Imagen vertical de fondo enfocada a los estudiantes de primaria en la derecha */}
+                <div className="absolute inset-0 w-full h-full z-0 overflow-hidden pointer-events-none">
+                    <img
+                        src="/galeria/primaria.JPG"
+                        alt="Estudiantes de Primaria COLSIH"
+                        className="absolute top-0 right-0 w-full md:w-[65%] lg:w-[58%] h-full object-cover object-[center_60%] contrast-[1.05] brightness-90 md:brightness-95 scale-105"
+                    />
+                </div>
 
-                <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] relative z-10">
+                {/* Sombra gradiente completa para móvil */}
+                <div className="absolute inset-0 bg-gradient-to-r from-[#022C22] via-[#022C22]/90 to-[#022C22]/60 md:hidden z-10 pointer-events-none"></div>
+
+                {/* Sombra gradiente de izquierda a derecha para escritorio */}
+                <div className="absolute inset-y-0 left-0 w-full md:w-[70%] lg:w-[60%] z-10 hidden md:block pointer-events-none">
+                    <div className="w-full h-full bg-gradient-to-r from-[#022C22] via-[#022C22] via-75% to-transparent"></div>
+                </div>
+
+                {/* Blobs luminosos esmeralda */}
+                <div className="absolute top-1/3 left-1/4 -translate-y-1/2 w-[450px] h-[450px] bg-emerald-500/15 rounded-full blur-[130px] pointer-events-none z-10"></div>
+
+                <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] relative z-20 w-full">
                     <div className="max-w-3xl space-y-6">
                         <ScrollReveal distance="translate-y-6">
                             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 backdrop-blur-md">

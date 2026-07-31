@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Head } from '@inertiajs/react';
 import WhatsAppButton from '@/Components/WhatsAppButton';
+import MJSButton from '@/Components/MJSButton';
 
 // Import Modular Sections
 import Hero from './HomeSections/Hero';
@@ -87,7 +88,10 @@ export default function Home({ noticias, testimonios, preguntas, tour, scenes = 
                 </div>
             )}
 
-            {/* Botón Flotante Global de WhatsApp */}
+            {/* Botón Flotante de MJS (Abajo Izquierda) */}
+            <MJSButton />
+
+            {/* Botón Flotante Global de WhatsApp (Abajo Derecha) */}
             <WhatsAppButton />
         </div>
     );

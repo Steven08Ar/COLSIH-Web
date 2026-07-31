@@ -2,6 +2,7 @@ import { usePage } from '@inertiajs/react';
 import Navbar from '@/Components/Navbar';
 import Footer from '@/Pages/HomeSections/Footer';
 import WhatsAppButton from '@/Components/WhatsAppButton';
+import MJSButton from '@/Components/MJSButton';
 
 export default function AppLayout({ children }) {
     const { props } = usePage();
@@ -30,7 +31,10 @@ export default function AppLayout({ children }) {
                 <Footer />
             </div>
 
-            {/* Botón Flotante Global de WhatsApp */}
+            {/* Botón Flotante de MJS (Abajo Izquierda) */}
+            <MJSButton />
+
+            {/* Botón Flotante Global de WhatsApp (Abajo Derecha) */}
             <WhatsAppButton />
         </>
     );

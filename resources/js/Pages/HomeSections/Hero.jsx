@@ -130,7 +130,7 @@ export default function Hero({ setVideoOpen }) {
                                 href="https://e.plataformaintegra.net/sihungria/"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="hidden sm:inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-[#800A15] hover:bg-[#9e0d1c] text-white text-xs font-extrabold shadow-md hover:shadow-lg shadow-[#800A15]/30 hover:scale-105 transition-all duration-300 border border-white/20"
+                                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#800A15] hover:bg-[#9e0d1c] text-white text-xs sm:text-sm font-extrabold shadow-md hover:shadow-lg shadow-[#800A15]/30 hover:scale-105 transition-all duration-300 border border-white/20"
                                 title="Ingreso a Plataforma Integra"
                             >
                                 <svg className="w-4 h-4 text-white shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -140,18 +140,6 @@ export default function Hero({ setVideoOpen }) {
                                 <span>Plataforma</span>
                             </a>
                         )}
-
-                        <Link
-                            href="/mjs"
-                            className="hidden lg:inline-flex items-center justify-center focus:outline-none cursor-pointer"
-                            title="Movimiento Juvenil Salesiano"
-                        >
-                            <img
-                                src="/marca/logo-mjs.svg"
-                                alt="Logo MJS Colombia"
-                                className="h-12 w-auto object-contain hover:scale-105 transition-all duration-300"
-                            />
-                        </Link>
 
                         {/* Mobile toggle */}
                         <button
@@ -208,20 +196,6 @@ export default function Hero({ setVideoOpen }) {
                                     </a>
                                 </div>
                             )}
-                            <div className="pt-2 border-t border-white/10 flex justify-center">
-                                <Link
-                                    href="/mjs"
-                                    onClick={() => setMobileOpen(false)}
-                                    className="py-2 focus:outline-none cursor-pointer"
-                                    title="Movimiento Juvenil Salesiano"
-                                >
-                                    <img
-                                        src="/marca/logo-mjs.svg"
-                                        alt="Logo MJS Colombia"
-                                        className="h-10 w-auto object-contain hover:scale-105 transition-all duration-300"
-                                    />
-                                </Link>
-                            </div>
                         </div>
                     </div>
                 )}

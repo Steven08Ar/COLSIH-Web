@@ -7,49 +7,49 @@ const hitos = [
         año: '1980', 
         titulo: 'Fundación de FUNDAVILLABEL', 
         texto: 'El 28 de febrero se constituye la Fundación Centro Parroquial Villabel (FUNDAVILLABEL) bajo el decreto diocesano No. 633. Este hito sentó las bases comunitarias y eclesiásticas fundamentales para gestar el sueño de una educación salesiana en Floridablanca.',
-        imagen: '/nosotros/historia/historia-1983.png',
+        imagen: '/nosotros_assets/historia/historia-1983.png',
         caption: 'Primeras reuniones comunitarias en Villabel, 1980'
     },
     { 
         año: '1988', 
         titulo: 'Creación del Centro Educativo', 
         texto: 'Ante el ferviente anhelo de la comunidad, el párroco Ramiro Parra Mantilla gestiona la creación de un centro educativo ante la Arquidiócesis de Bucaramanga. El 25 de noviembre de 1988 queda formalmente fundado el plantel de enseñanza.',
-        imagen: '/nosotros/historia/historia-1983.png',
+        imagen: '/nosotros_assets/historia/historia-1983.png',
         caption: 'Plano y acta de fundación de la sede parroquial, 1988'
     },
     { 
         año: '1989', 
         titulo: 'Inicio de Labores Académicas', 
         texto: 'El 6 de febrero inician oficialmente las clases, abriendo las puertas a cientos de niños y jóvenes del sector, bajo la dirección inicial del Lic. Orlando Becerra y la recordada Lic. Nubia Carrillo Rodríguez.',
-        imagen: '/nosotros/historia/historia-1995.png',
+        imagen: '/nosotros_assets/historia/historia-1995.png',
         caption: 'Primer grupo escolar en las instalaciones iniciales, 1989'
     },
     { 
         año: '1991', 
         titulo: 'Nombre Oficial: Santa Isabel de Hungría', 
         texto: 'El 25 de octubre, mediante resolución 033, se aprueba la denominación oficial de la institución en honor a Santa Isabel de Hungría, patrona del servicio y la caridad salesiana, dotando al colegio de su propia identidad independiente.',
-        imagen: '/nosotros/historia/historia-1995.png',
+        imagen: '/nosotros_assets/historia/historia-1995.png',
         caption: 'Consagración a nuestra patrona, 1991'
     },
     { 
         año: '1993', 
         titulo: 'Primera Promoción de Bachilleres', 
         texto: 'Se conmemora la graduación y proclamación de la primera promoción oficial de Bachilleres Académicos del colegio, marcando un precedente de excelencia académica para la región.',
-        imagen: '/nosotros/historia/historia-1995.png',
+        imagen: '/nosotros_assets/historia/historia-1995.png',
         caption: 'Ceremonia de graduación, Promoción de Bachilleres, 1993'
     },
     { 
         año: '1998', 
         titulo: 'Convenio de Articulación con el SENA', 
         texto: 'Inicia el convenio de articulación SENA-MEN, permitiendo que los estudiantes de la media técnica accedan a una formación técnica comercial y de negocios, ampliando su proyección laboral.',
-        imagen: '/nosotros/historia/historia-2010.png',
+        imagen: '/nosotros_assets/historia/historia-2010.png',
         caption: 'Prácticas de contabilidad y comercio de los estudiantes, 1998'
     },
     { 
         año: '2016', 
         titulo: 'Administración de las Hijas de María Auxiliadora', 
         texto: 'La dirección y pastoral del plantel es asumida con orgullo por la Comunidad de las Hijas de María Auxiliadora (Hermanas Salesianas). Bajo la rectoría de Sor Gloria María Arbeláez Hoyos, se implanta el Sistema Preventivo de Don Bosco.',
-        imagen: '/nosotros/historia/historia-hoy.png',
+        imagen: '/nosotros_assets/historia/historia-hoy.png',
         caption: 'Sor Gloria María junto a la comunidad educativa, 2016'
     },
 ];

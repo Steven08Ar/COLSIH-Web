@@ -17,9 +17,9 @@ export const valoresData = [
         iconName: "Sun",
         portada: "/galeria/colegio-afuera.webp",
         galeria: [
-            "/nosotros/historia/historia-1983.png",
-            "/nosotros/historia/historia-1995.png",
-            "/nosotros/historia/historia-2010.png"
+            "/nosotros_assets/historia/historia-1983.png",
+            "/nosotros_assets/historia/historia-1995.png",
+            "/nosotros_assets/historia/historia-2010.png"
         ]
     },
     {
@@ -47,9 +47,9 @@ export const valoresData = [
         iconName: "Heart",
         portada: "/galeria/estudiantes-espaldas.png",
         galeria: [
-            "/nosotros/historia/historia-hoy.png",
-            "/nosotros/historia/historia-1995.png",
-            "/nosotros/historia/historia-2010.png"
+            "/nosotros_assets/historia/historia-hoy.png",
+            "/nosotros_assets/historia/historia-1995.png",
+            "/nosotros_assets/historia/historia-2010.png"
         ]
     },
     {
@@ -77,9 +77,9 @@ export const valoresData = [
         iconName: "Smile",
         portada: "/galeria/estudiantes-colsih.png",
         galeria: [
-            "/nosotros/historia/historia-1983.png",
-            "/nosotros/historia/historia-1995.png",
-            "/nosotros/historia/historia-2010.png"
+            "/nosotros_assets/historia/historia-1983.png",
+            "/nosotros_assets/historia/historia-1995.png",
+            "/nosotros_assets/historia/historia-2010.png"
         ]
     },
     {
@@ -92,9 +92,9 @@ export const valoresData = [
         iconName: "Users",
         portada: "/galeria/estudiantes-espaldas.png",
         galeria: [
-            "/nosotros/historia/historia-hoy.png",
-            "/nosotros/historia/historia-1995.png",
-            "/nosotros/historia/historia-2010.png"
+            "/nosotros_assets/historia/historia-hoy.png",
+            "/nosotros_assets/historia/historia-1995.png",
+            "/nosotros_assets/historia/historia-2010.png"
         ]
     },
     {
@@ -122,9 +122,9 @@ export const valoresData = [
         iconName: "HeartHandshake",
         portada: "/galeria/estudiantes-colsih.png",
         galeria: [
-            "/nosotros/historia/historia-1983.png",
-            "/nosotros/historia/historia-1995.png",
-            "/nosotros/historia/historia-2010.png"
+            "/nosotros_assets/historia/historia-1983.png",
+            "/nosotros_assets/historia/historia-1995.png",
+            "/nosotros_assets/historia/historia-2010.png"
         ]
     },
     {
@@ -137,9 +137,9 @@ export const valoresData = [
         iconName: "Star",
         portada: "/galeria/estudiantes-espaldas.png",
         galeria: [
-            "/nosotros/historia/historia-hoy.png",
-            "/nosotros/historia/historia-1995.png",
-            "/nosotros/historia/historia-2010.png"
+            "/nosotros_assets/historia/historia-hoy.png",
+            "/nosotros_assets/historia/historia-1995.png",
+            "/nosotros_assets/historia/historia-2010.png"
         ]
     }
 ];

@@ -33,6 +33,16 @@ const niveles = [
     }
 ];
 
+const ofrecemos = [
+    { titulo: 'Educación en Valores', descripcion: 'Formación integral basada en principios éticos, morales y espirituales de la tradición salesiana.' },
+    { titulo: 'Escuela de Padres', descripcion: 'Espacios de formación y acompañamiento para las familias como aliadas del proceso educativo.' },
+    { titulo: 'Comunicación Permanente', descripcion: 'Canal directo y continuo entre padres de familia y el colegio para el seguimiento del estudiante.' },
+    { titulo: 'Orientación Psicológica', descripcion: 'Servicio de apoyo psicoemocional para estudiantes y familias, disponible durante el año escolar.' },
+    { titulo: 'Calidad Académica y Formativa', descripcion: 'Propuesta pedagógica de alto nivel que combina exigencia académica con desarrollo humano integral.' },
+    { titulo: 'Servicio de Capellanía', descripcion: 'Acompañamiento espiritual y pastoral salesiano que nutre la fe y los valores de toda la comunidad.' },
+    { titulo: 'Ambiente Alegre y Seguro', descripcion: 'Un entorno escolar donde cada estudiante se siente bienvenido, protegido y motivado a crecer.' }
+];
+
 const areas = [
     { titulo: 'Pensamiento Lógico y Matemáticas', desc: 'Resolución de problemas, álgebra y razonamiento lógico aplicado.' },
     { titulo: 'Humanidades y Bilingüismo', desc: 'Dominio de la lengua castellana y desarrollo del idioma inglés.' },
@@ -153,10 +163,52 @@ export default function OfertaAcademica() {
                 </div>
             </section>
 
-            {/* 3. JORNADAS Y HORARIOS (Minimalist block) */}
-            <section className="relative py-20 bg-slate-50 border-y border-slate-100 overflow-hidden select-none">
+            {/* 3. LO QUE OFRECEMOS */}
+            <section className="relative py-24 md:py-32 bg-slate-50 border-y border-slate-100 overflow-hidden select-none">
+                <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] space-y-20">
+
+                    <div className="max-w-2xl mx-auto lg:mx-0 text-center lg:text-left space-y-4 flex flex-col items-center lg:items-start">
+                        <ScrollReveal distance="translate-y-6">
+                            <span className="text-[#800A15] text-xs font-bold tracking-[3px] uppercase block font-sans">
+                                PROPUESTA INSTITUCIONAL
+                            </span>
+                        </ScrollReveal>
+                        <ScrollReveal distance="translate-y-6" delay={150}>
+                            <h2 className="text-3xl sm:text-4xl lg:text-[50px] font-black text-[#08111F] leading-[1.1] tracking-tight font-sans">
+                                Lo que Ofrecemos
+                            </h2>
+                        </ScrollReveal>
+                        <ScrollReveal distance="translate-y-6" delay={300}>
+                            <p className="text-[15px] font-semibold text-slate-500 leading-relaxed font-sans">
+                                Más allá del aula, COLSIH brinda una experiencia educativa completa que acompaña a estudiantes y familias en cada etapa.
+                            </p>
+                        </ScrollReveal>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                        {ofrecemos.map((item, idx) => (
+                            <ScrollReveal key={idx} distance="translate-y-6" delay={idx * 80} className="h-full">
+                                <div className="p-7 border border-slate-200/60 rounded-2xl bg-white hover:border-slate-300 hover:shadow-[0_12px_40px_rgba(8,17,31,0.05)] transition-all duration-300 text-left space-y-3 h-full flex flex-col">
+                                    <div className="w-8 h-8 rounded-lg bg-[#003C8F]/8 flex items-center justify-center">
+                                        <span className="w-2 h-2 rounded-full bg-[#800A15]" />
+                                    </div>
+                                    <h3 className="text-[15px] font-extrabold text-[#08111F] font-sans leading-snug">
+                                        {item.titulo}
+                                    </h3>
+                                    <p className="text-xs font-semibold text-slate-500 leading-relaxed font-sans flex-1">
+                                        {item.descripcion}
+                                    </p>
+                                </div>
+                            </ScrollReveal>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* 4. JORNADA ÚNICA — HORARIOS POR NIVEL */}
+            <section className="relative py-20 bg-white border-b border-slate-100 overflow-hidden select-none">
                 <div className="max-w-[1680px] mx-auto px-4 sm:px-6 md:px-12 lg:px-[120px] grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
-                    
+
                     <div className="col-span-full lg:col-span-4 text-center lg:text-left space-y-4 flex flex-col items-center lg:items-start">
                         <ScrollReveal distance="translate-y-6">
                             <span className="text-[#800A15] text-xs font-bold tracking-[3px] uppercase block font-sans">
@@ -165,42 +217,35 @@ export default function OfertaAcademica() {
                         </ScrollReveal>
                         <ScrollReveal distance="translate-y-6" delay={150}>
                             <h2 className="text-3xl sm:text-4xl font-black text-[#08111F] leading-[1.1] tracking-tight font-sans">
-                                Horarios y Jornadas
+                                Jornada Única por Nivel
                             </h2>
                         </ScrollReveal>
                         <ScrollReveal distance="translate-y-6" delay={300}>
                             <p className="text-[15px] font-semibold text-slate-500 leading-relaxed font-sans">
-                                Disponemos de distribución horaria planificada para el óptimo aprovechamiento y rendimiento cognitivo escolar.
+                                Calendario A · Floridablanca, Santander. La institución opera en jornada única adaptada a cada etapa formativa.
                             </p>
                         </ScrollReveal>
                     </div>
 
-                    <div className="col-span-full lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-6">
-                        <ScrollReveal distance="translate-x-6" className="h-full">
-                            <div className="p-8 bg-white border border-slate-200/50 rounded-2xl text-left space-y-4 flex flex-col justify-between">
-                                <div className="space-y-2">
-                                    <span className="text-[#003C8F] text-xs font-bold uppercase tracking-wider font-sans">JORNADA</span>
-                                    <h3 className="text-xl font-extrabold text-[#08111F] font-sans">Mañana</h3>
+                    <div className="col-span-full lg:col-span-8 grid grid-cols-1 sm:grid-cols-3 gap-6">
+                        {[
+                            { nivel: 'Preescolar', grados: 'Jardín y Transición', horario: '7:00 a.m.', fin: '12:30 p.m.' },
+                            { nivel: 'Primaria', grados: '1° a 5°', horario: '6:30 a.m.', fin: '1:00 p.m.' },
+                            { nivel: 'Bachillerato', grados: '6° a 11°', horario: '6:30 a.m.', fin: '2:00 p.m.' }
+                        ].map((h, idx) => (
+                            <ScrollReveal key={idx} distance="translate-x-6" delay={idx * 120} className="h-full">
+                                <div className="p-8 bg-slate-50 border border-slate-100 rounded-2xl text-left space-y-4 flex flex-col justify-between h-full">
+                                    <div className="space-y-1">
+                                        <span className="text-[#003C8F] text-xs font-bold uppercase tracking-wider font-sans">{h.nivel}</span>
+                                        <h3 className="text-lg font-extrabold text-[#08111F] font-sans">{h.grados}</h3>
+                                    </div>
+                                    <div className="p-4 bg-white border border-slate-100 rounded-xl">
+                                        <span className="block text-2xl font-black text-[#08111F] font-sans">{h.horario}</span>
+                                        <span className="block text-xs font-bold text-slate-400 mt-1 uppercase font-sans">a {h.fin}</span>
+                                    </div>
                                 </div>
-                                <div className="p-4 bg-slate-50 border border-slate-100 rounded-xl">
-                                    <span className="block text-2xl font-black text-[#08111F] font-sans">6:15 a.m.</span>
-                                    <span className="block text-xs font-bold text-slate-400 mt-1 uppercase font-sans">a 12:45 p.m.</span>
-                                </div>
-                            </div>
-                        </ScrollReveal>
-
-                        <ScrollReveal distance="translate-x-6" delay={150} className="h-full">
-                            <div className="p-8 bg-white border border-slate-200/50 rounded-2xl text-left space-y-4 flex flex-col justify-between">
-                                <div className="space-y-2">
-                                    <span className="text-[#800A15] text-xs font-bold uppercase tracking-wider font-sans">JORNADA</span>
-                                    <h3 className="text-xl font-extrabold text-[#08111F] font-sans">Tarde</h3>
-                                </div>
-                                <div className="p-4 bg-slate-50 border border-slate-100 rounded-xl">
-                                    <span className="block text-2xl font-black text-[#08111F] font-sans">12:45 p.m.</span>
-                                    <span className="block text-xs font-bold text-slate-400 mt-1 uppercase font-sans">a 6:15 p.m.</span>
-                                </div>
-                            </div>
-                        </ScrollReveal>
+                            </ScrollReveal>
+                        ))}
                     </div>
                 </div>
             </section>

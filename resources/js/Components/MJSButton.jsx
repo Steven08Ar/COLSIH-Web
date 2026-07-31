@@ -9,6 +9,20 @@ export default function MJSButton() {
 
     return (
         <div className="fixed bottom-6 left-6 sm:bottom-8 sm:left-8 z-[99999] flex items-center gap-3 select-none pointer-events-auto">
+            {/* Definición de Keyframes de Animación Levitación Suave */}
+            <style>{`
+                @keyframes mjsFloatAnim {
+                    0%, 100% {
+                        transform: translateY(0px) rotate(0deg);
+                        filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.55));
+                    }
+                    50% {
+                        transform: translateY(-7px) rotate(2deg);
+                        filter: drop-shadow(0 16px 26px rgba(0, 0, 0, 0.75));
+                    }
+                }
+            `}</style>
+
             {/* Logo MJS o COLSIH Flotante sin Círculo */}
             <Link
                 href={isMjsPage ? '/' : '/mjs'}
@@ -17,11 +31,12 @@ export default function MJSButton() {
                 onMouseLeave={() => setIsHovered(false)}
                 className="group relative flex items-center justify-center focus:outline-none transition-transform duration-300 hover:scale-110 active:scale-95 cursor-pointer"
             >
-                {/* Logo Flotante con Sombra Realzada */}
+                {/* Logo Flotante con Animación de Levitación Orgánica y Sombra Realzada */}
                 <img
                     src={isMjsPage ? '/marca/logo-colsih.svg' : '/marca/logo-mjs.svg'}
                     alt={isMjsPage ? 'Logo COLSIH' : 'Logo MJS'}
-                    className="h-14 sm:h-16 w-auto object-contain drop-shadow-[0_8px_18px_rgba(0,0,0,0.55)] hover:drop-shadow-[0_12px_25px_rgba(0,0,0,0.8)] transition-all duration-300"
+                    style={{ animation: 'mjsFloatAnim 3.8s ease-in-out infinite' }}
+                    className="h-14 sm:h-16 w-auto object-contain transition-all duration-300 group-hover:pause"
                 />
             </Link>
 

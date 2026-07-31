@@ -125,7 +125,19 @@ export default function Hero({ setVideoOpen }) {
 
                     {/* CTA + Mobile toggle */}
                     <div className="flex items-center gap-3 shrink-0">
-                        {url !== '/mjs' && (
+                        {url === '/mjs' ? (
+                            <Link
+                                href="/"
+                                className="inline-flex items-center justify-center focus:outline-none cursor-pointer"
+                                title="Ir al Colegio Santa Isabel de Hungría"
+                            >
+                                <img
+                                    src="/marca/logo-colsih.svg"
+                                    alt="Logo COLSIH"
+                                    className="h-10 sm:h-12 w-auto object-contain hover:scale-105 transition-all duration-300"
+                                />
+                            </Link>
+                        ) : (
                             <a
                                 href="https://e.plataformaintegra.net/sihungria/"
                                 target="_blank"

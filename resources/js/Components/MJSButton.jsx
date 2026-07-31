@@ -5,7 +5,8 @@ export default function MJSButton() {
     const { url } = usePage();
     const [isHovered, setIsHovered] = useState(false);
 
-    const isMjsPage = url === '/mjs';
+    // Solo se muestra en páginas de COLSIH (en /mjs el logo de COLSIH está en el header)
+    if (url === '/mjs') return null;
 
     return (
         <div className="fixed bottom-6 left-6 sm:bottom-8 sm:left-8 z-[99999] flex items-center gap-3 select-none pointer-events-auto">
@@ -23,18 +24,18 @@ export default function MJSButton() {
                 }
             `}</style>
 
-            {/* Logo MJS o COLSIH Flotante sin Círculo */}
+            {/* Logo MJS Flotante sin Círculo */}
             <Link
-                href={isMjsPage ? '/' : '/mjs'}
-                aria-label={isMjsPage ? 'Volver al Colegio COLSIH' : 'Ir al Movimiento Juvenil Salesiano (MJS)'}
+                href="/mjs"
+                aria-label="Ir al Movimiento Juvenil Salesiano (MJS)"
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
                 className="group relative flex items-center justify-center focus:outline-none transition-transform duration-300 hover:scale-110 active:scale-95 cursor-pointer"
             >
                 {/* Logo Flotante con Animación de Levitación Orgánica y Sombra Realzada */}
                 <img
-                    src={isMjsPage ? '/marca/logo-colsih.svg' : '/marca/logo-mjs.svg'}
-                    alt={isMjsPage ? 'Logo COLSIH' : 'Logo MJS'}
+                    src="/marca/logo-mjs.svg"
+                    alt="Logo MJS Colombia"
                     style={{ animation: 'mjsFloatAnim 3.8s ease-in-out infinite' }}
                     className="h-14 sm:h-16 w-auto object-contain transition-all duration-300 group-hover:pause"
                 />
@@ -47,7 +48,7 @@ export default function MJSButton() {
                 }`}
             >
                 <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
-                <span>{isMjsPage ? 'Ir a Colegio COLSIH' : 'Movimiento Juvenil Salesiano (MJS)'}</span>
+                <span>Movimiento Juvenil Salesiano (MJS)</span>
             </div>
         </div>
     );

@@ -137,9 +137,20 @@ export default function Navbar() {
                     <Link href="/contacto" className={`transition-colors ${url === '/contacto' ? 'text-white font-extrabold' : 'hover:text-white'}`}>Contacto</Link>
                 </div>
 
-                {/* CTA + mobile toggle — solo botón de Plataforma */}
                 <div className="flex items-center gap-3 shrink-0">
-                    {url !== '/mjs' && (
+                    {url === '/mjs' ? (
+                        <Link
+                            href="/"
+                            className="inline-flex items-center justify-center focus:outline-none cursor-pointer"
+                            title="Ir al Colegio Santa Isabel de Hungría"
+                        >
+                            <img
+                                src="/marca/logo-colsih.svg"
+                                alt="Logo COLSIH"
+                                className="h-10 sm:h-12 w-auto object-contain hover:scale-105 transition-all duration-300"
+                            />
+                        </Link>
+                    ) : (
                         <a
                             href="https://e.plataformaintegra.net/sihungria/"
                             target="_blank"
@@ -173,40 +184,20 @@ export default function Navbar() {
                 </div>
             </div>
 
-            {/* Mobile panel — mismo estilo que Hero */}
             {mobileOpen && (
-                <div className="lg:hidden mt-2 mx-6 md:mx-12 bg-[#08111F]/90 backdrop-blur-md border border-white/10 rounded-2xl shadow-2xl overflow-hidden">
+                <div className="lg:hidden mt-2 mx-6 md:mx-12 bg-[#08111F]/95 backdrop-blur-md border border-white/15 rounded-2xl shadow-2xl overflow-hidden">
                     <div className="px-4 py-4 space-y-1">
-                        <Link href="/" onClick={() => setMobileOpen(false)}
-                            className={`block px-3 py-2.5 text-sm font-semibold rounded-lg transition-colors ${url === '/' ? 'text-white bg-white/10' : 'text-white/85 hover:text-white hover:bg-white/5'}`}
-                        >
-                            Inicio
-                        </Link>
-                        <div>
-                            <span className="block px-3 py-2 text-xs font-bold text-white/40 uppercase tracking-wider">Nuestro Colegio</span>
-                            <div className="ml-3 border-l border-white/20 pl-3 space-y-1">
-                                {nosotrosLinks.map((item) => (
-                                    <Link key={item.href} href={item.href} onClick={() => setMobileOpen(false)}
-                                        className={`block px-3 py-2 text-sm font-medium rounded-lg transition-colors ${url === item.href ? 'text-white bg-white/10' : 'text-white/75 hover:text-white hover:bg-white/5'}`}
-                                    >
-                                        {item.label}
-                                    </Link>
-                                ))}
-                            </div>
-                        </div>
-                        {[
-                            { label: 'Oferta Académica', href: '/oferta-academica' },
-                            { label: 'Admisiones', href: '/admisiones' },
-                            { label: 'Noticias', href: '/noticias' },
-                            { label: 'Contacto', href: '/contacto' },
-                        ].map((link) => (
-                            <Link key={link.href} href={link.href} onClick={() => setMobileOpen(false)}
+                        {mainNavLinks.map((link) => (
+                            <Link
+                                key={link.href}
+                                href={link.href}
+                                onClick={() => setMobileOpen(false)}
                                 className={`block px-3 py-2.5 text-sm font-semibold rounded-lg transition-colors ${url === link.href ? 'text-white bg-white/10' : 'text-white/85 hover:text-white hover:bg-white/5'}`}
                             >
                                 {link.label}
                             </Link>
                         ))}
-                        {url !== '/mjs' && (
+                        {url !== '/mjs' ? (
                             <div className="pt-2 border-t border-white/10">
                                 <a
                                     href="https://e.plataformaintegra.net/sihungria/"
@@ -222,9 +213,8 @@ export default function Navbar() {
                                     <span>Ingreso a Plataforma</span>
                                 </a>
                             </div>
-                        )}
-                        <div className="pt-2 border-t border-white/10 flex justify-center">
-                            {url === '/mjs' ? (
+                        ) : (
+                            <div className="pt-2 border-t border-white/10 flex justify-center">
                                 <Link
                                     href="/"
                                     onClick={() => setMobileOpen(false)}
@@ -237,21 +227,8 @@ export default function Navbar() {
                                         className="h-10 w-auto object-contain hover:scale-105 transition-all duration-300"
                                     />
                                 </Link>
-                            ) : (
-                                <Link
-                                    href="/mjs"
-                                    onClick={() => setMobileOpen(false)}
-                                    className="py-2 focus:outline-none cursor-pointer"
-                                    title="Movimiento Juvenil Salesiano"
-                                >
-                                    <img
-                                        src="/marca/logo-mjs.svg"
-                                        alt="Logo MJS Colombia"
-                                        className="h-10 w-auto object-contain hover:scale-105 transition-all duration-300"
-                                    />
-                                </Link>
-                            )}
-                        </div>
+                            </div>
+                        )}
                     </div>
                 </div>
             )}

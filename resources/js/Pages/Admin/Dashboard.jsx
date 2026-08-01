@@ -1293,7 +1293,7 @@ function RecorridoTab({ tour, scenes = [], flash, basePath }) {
         imagen: null,
     });
 
-    const handleBatchFilesSelect = (e) => {
+    const handleBatchFilesSelect = async (e) => {
         const files = Array.from(e.target.files || []);
         if (files.length === 0) return;
 
@@ -1303,7 +1303,8 @@ function RecorridoTab({ tour, scenes = [], flash, basePath }) {
 
         const validFiles = files.slice(0, 50);
 
-        const newItems = validFiles.map((file, idx) => {
+        const processedItems = await Promise.all(validFiles.map(async (file, idx) => {
+            const processedFile = await processImageFile(file, { maxWidth: 3840, quality: 0.85 });
             const cleanName = file.name
                 .replace(/\.[^/.]+$/, "")
                 .replace(/[-_]/g, " ")
@@ -1315,14 +1316,14 @@ function RecorridoTab({ tour, scenes = [], flash, basePath }) {
 
             return {
                 id: `batch-${Date.now()}-${idx}-${Math.random().toString(36).substr(2, 4)}`,
-                file: file,
-                previewUrl: URL.createObjectURL(file),
+                file: processedFile,
+                previewUrl: URL.createObjectURL(processedFile),
                 nombre: formattedName,
-                status: 'pending', // 'pending' | 'uploading' | 'done' | 'error'
+                status: 'pending',
             };
-        });
+        }));
 
-        setBatchItems((prev) => [...prev, ...newItems].slice(0, 50));
+        setBatchItems((prev) => [...prev, ...processedItems].slice(0, 50));
     };
 
     const updateBatchItemName = (id, newName) => {
@@ -1725,9 +1726,14 @@ function RecorridoTab({ tour, scenes = [], flash, basePath }) {
                                 <label className="text-slate-500 text-[11px] font-bold uppercase tracking-wider block mb-2">O Subir archivo de Imagen Equirrectangular 360°</label>
                                 <input
                                     type="file"
-                                    accept="image/jpeg,image/png,image/jpg"
-                                    onChange={(e) => form.setData('imagen', e.target.files[0])}
-                                    className="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                                    accept="image/*,.heic,.heif,image/heic,image/heif"
+                                    onChange={async (e) => {
+                                        const f = e.target.files[0];
+                                        if (!f) return;
+                                        const processed = await processImageFile(f, { maxWidth: 3840, quality: 0.85 });
+                                        form.setData('imagen', processed);
+                                    }}
+                                    className="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer"
                                 />
                             </div>
 

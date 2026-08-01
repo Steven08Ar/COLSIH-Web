@@ -17,7 +17,8 @@ function toEmbedUrl(url) {
 export default function Testimonials({ testimonios }) {
     if (!testimonios || testimonios.length === 0) return null;
 
-    const list = testimonios.slice(0, 3).map((t) => ({
+    // Cargar todos los testimonios activos configurados por el administrador
+    const list = testimonios.map((t) => ({
         texto: t.texto,
         nombre: t.nombre,
         cargo: t.cargo ?? '',
@@ -51,10 +52,10 @@ export default function Testimonials({ testimonios }) {
 
     // Auto rotate every 7 seconds (paused when video modal is open)
     useEffect(() => {
-        if (activeVideoUrl) return;
+        if (activeVideoUrl || list.length <= 1) return;
         const interval = setInterval(handleNext, 7000);
         return () => clearInterval(interval);
-    }, [activeIndex, activeVideoUrl]);
+    }, [activeIndex, activeVideoUrl, list.length]);
 
     // Escape key listener to close modal
     useEffect(() => {
@@ -82,9 +83,10 @@ export default function Testimonials({ testimonios }) {
         };
     }, [activeVideoUrl]);
 
-    // Absolute positioned style configurations for smooth slide transitions
+    // Absolute positioned style configurations for smooth infinite 3D slide transitions
     const getCardStyle = (index) => {
-        const offset = (index - activeIndex + list.length) % list.length;
+        const total = list.length;
+        const offset = (index - activeIndex + total) % total;
 
         let style = {
             transition: 'all 700ms cubic-bezier(0.4, 0, 0.2, 1)',
@@ -116,9 +118,9 @@ export default function Testimonials({ testimonios }) {
                 };
             }
         } else {
-            // Desktop 3D layout
+            // Desktop 3D layout: Muestra 3 tarjetas a la vez en pantalla y hace correr las demás infinitamente
             if (offset === 0) {
-                // Center
+                // Center (Activa)
                 return {
                     ...style,
                     transform: 'translateX(-50%) scale(1.05)',
@@ -128,8 +130,8 @@ export default function Testimonials({ testimonios }) {
                     boxShadow: '0 25px 45px -10px rgba(0, 0, 0, 0.9), 0 0 30px rgba(0, 0, 0, 0.7)',
                     pointerEvents: 'auto',
                 };
-            } else if (offset === 1) {
-                // Right
+            } else if (offset === 1 || (total === 2 && offset === 1)) {
+                // Right (Siguiente)
                 return {
                     ...style,
                     transform: 'translateX(-50%) scale(0.88)',
@@ -138,14 +140,24 @@ export default function Testimonials({ testimonios }) {
                     zIndex: 10,
                     pointerEvents: 'none',
                 };
-            } else {
-                // Left (offset === 2)
+            } else if (offset === total - 1) {
+                // Left (Anterior)
                 return {
                     ...style,
                     transform: 'translateX(-50%) scale(0.88)',
                     left: '20%',
                     opacity: 0.5,
                     zIndex: 10,
+                    pointerEvents: 'none',
+                };
+            } else {
+                // Ocultas en cola de carrusel rotativo
+                return {
+                    ...style,
+                    transform: 'translateX(-50%) scale(0.7)',
+                    left: '50%',
+                    opacity: 0,
+                    zIndex: 0,
                     pointerEvents: 'none',
                 };
             }
@@ -187,7 +199,8 @@ export default function Testimonials({ testimonios }) {
                         {/* Slide Track Container with relative height */}
                         <div className="relative w-full h-[480px] md:h-[500px] overflow-visible py-8">
                             {list.map((item, idx) => {
-                                const offset = (idx - activeIndex + list.length) % list.length;
+                                const total = list.length;
+                                const offset = (idx - activeIndex + total) % total;
                                 const isCenter = offset === 0;
 
                                 return (
@@ -224,11 +237,11 @@ export default function Testimonials({ testimonios }) {
                                             <div className="flex justify-between items-start">
                                                 <span className="text-7xl font-serif text-white/25 select-none pointer-events-none leading-none">“</span>
                                                 {item.videoActivo && (
-                                                <div className="bg-[#800A15] text-white text-[10px] font-bold tracking-wider uppercase px-2.5 py-1 rounded-full shadow-md flex items-center gap-1 select-none">
-                                                    <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>
-                                                    Video
-                                                </div>
-                                            )}
+                                                    <div className="bg-[#800A15] text-white text-[10px] font-bold tracking-wider uppercase px-2.5 py-1 rounded-full shadow-md flex items-center gap-1 select-none">
+                                                        <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>
+                                                        Video
+                                                    </div>
+                                                )}
                                             </div>
 
                                             {/* Spacing */}
@@ -262,27 +275,49 @@ export default function Testimonials({ testimonios }) {
                             })}
                         </div>
 
+                        {/* Dot Indicators */}
+                        {list.length > 1 && (
+                            <div className="flex items-center justify-center gap-2 mt-2 z-30 relative">
+                                {list.map((_, dotIdx) => (
+                                    <button
+                                        key={dotIdx}
+                                        onClick={() => setActiveIndex(dotIdx)}
+                                        className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
+                                            dotIdx === activeIndex
+                                                ? 'w-8 bg-blue-500 shadow-md shadow-blue-500/50'
+                                                : 'w-2 bg-white/30 hover:bg-white/50'
+                                        }`}
+                                        aria-label={`Ir al testimonio ${dotIdx + 1}`}
+                                    />
+                                ))}
+                            </div>
+                        )}
+
                         {/* Transparent Left Arrow Button */}
-                        <button
-                            onClick={handlePrev}
-                            className="absolute left-2 md:-left-12 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 text-white border border-white/20 flex items-center justify-center transition-all cursor-pointer backdrop-blur-sm shadow-md"
-                            aria-label="Testimonio anterior"
-                        >
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-                            </svg>
-                        </button>
+                        {list.length > 1 && (
+                            <button
+                                onClick={handlePrev}
+                                className="absolute left-2 md:-left-12 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 text-white border border-white/20 flex items-center justify-center transition-all cursor-pointer backdrop-blur-sm shadow-md"
+                                aria-label="Testimonio anterior"
+                            >
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                                </svg>
+                            </button>
+                        )}
 
                         {/* Transparent Right Arrow Button */}
-                        <button
-                            onClick={handleNext}
-                            className="absolute right-2 md:-right-12 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 text-white border border-white/20 flex items-center justify-center transition-all cursor-pointer backdrop-blur-sm shadow-md"
-                            aria-label="Siguiente testimonio"
-                        >
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-                            </svg>
-                        </button>
+                        {list.length > 1 && (
+                            <button
+                                onClick={handleNext}
+                                className="absolute right-2 md:-right-12 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 text-white border border-white/20 flex items-center justify-center transition-all cursor-pointer backdrop-blur-sm shadow-md"
+                                aria-label="Siguiente testimonio"
+                            >
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                                </svg>
+                            </button>
+                        )}
                     </div>
                 </ScrollReveal>
 

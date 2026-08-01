@@ -361,3 +361,16 @@ body {
     content-visibility: auto;
     contain-intrinsic-size: 1px 700px;
 }
+
+/* ── OCULTAR CAJA DE CARGA NEGRA POR DEFECTO DE PANNELLUM (Loading... MB) ── */
+.pnm-lbox,
+.pnm-lbar,
+.pnm-lmsg,
+.pannellum-load-box,
+.pannellum-load-bar,
+.pannellum-load-msg {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}

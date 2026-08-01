@@ -21,6 +21,18 @@ export default function TourViewer({
     const [loadError, setLoadError] = useState(null);
     const [selectedInfoHotspot, setSelectedInfoHotspot] = useState(null);
 
+    // Precarga automática de todas las imágenes 360° en la caché del navegador
+    useEffect(() => {
+        if (!scenes || !Array.isArray(scenes) || scenes.length === 0) return;
+        scenes.forEach((scene) => {
+            const url = scene.imagen_url || (scene.imagen_path ? `/storage/${scene.imagen_path}` : null);
+            if (url) {
+                const img = new Image();
+                img.src = url;
+            }
+        });
+    }, [scenes]);
+
     // Initialize & cleanup Pannellum
     useEffect(() => {
         if (!containerRef.current || !scenes || scenes.length === 0) return;

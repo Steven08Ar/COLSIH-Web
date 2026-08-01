@@ -15,7 +15,6 @@ export default function AboutHero() {
 
     useEffect(() => {
         const handleMouseMove = (e) => {
-            // Normalize mouse position relative to center of screen (-1 to 1)
             const x = (e.clientX - window.innerWidth / 2) / (window.innerWidth / 2);
             const y = (e.clientY - window.innerHeight / 2) / (window.innerHeight / 2);
             mouseX.set(x);
@@ -41,7 +40,7 @@ export default function AboutHero() {
             y: 0,
             transition: {
                 duration: 0.8,
-                ease: [0.16, 1, 0.3, 1] // smooth easeOut
+                ease: [0.16, 1, 0.3, 1]
             }
         }
     };
@@ -49,31 +48,36 @@ export default function AboutHero() {
     return (
         <section className="relative w-full min-h-screen bg-white overflow-hidden pt-[140px] pb-[80px] md:pb-[140px] lg:pb-0 flex items-center justify-center">
 
-            {/* Invisible SVG definition for the ObjectBoundingBox responsive mask */}
+            {/* Invisible SVG definition for the Organic Wave School Mask */}
             <svg className="absolute w-0 h-0" width="0" height="0">
                 <defs>
                     <clipPath id="school-mask" clipPathUnits="objectBoundingBox">
-                        <path d="M 0.5,0 
-                                 C 0.15,0.02 0,0.15 0,0.35 
-                                 C 0,0.6 0.15,0.85 0.5,1 
-                                 L 1,1 L 1,0 Z" />
+                        <path d="M 0.12,0.06 
+                                 C 0.35,-0.03 0.65,-0.03 0.88,0.06 
+                                 C 0.97,0.11 1,0.22 1,0.35 
+                                 L 1,0.85 
+                                 C 1,0.94 0.94,1 0.85,1 
+                                 L 0.15,1 
+                                 C 0.06,1 0,0.94 0,0.85 
+                                 L 0,0.35 
+                                 C 0,0.22 0.03,0.11 0.12,0.06 Z" />
                     </clipPath>
                 </defs>
             </svg>
 
-            {/* Subtle background blurs and curved outline circles */}
+            {/* Background blurs and curved outline circles */}
             <OrganicBackground mouseX={springX} mouseY={springY} />
 
-            {/* Main Content Grid (Expanded to max-w-[1680px] and left-aligned) */}
+            {/* Main Content Grid */}
             <motion.div
                 variants={containerVariants}
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true, margin: "-100px" }}
-                className="w-full max-w-[1680px] mx-auto px-6 md:px-12 xl:px-24 grid grid-cols-1 lg:grid-cols-2 gap-20 items-center relative z-20 lg:min-h-[calc(100vh-140px)]"
+                className="w-full max-w-[1680px] mx-auto px-6 md:px-12 xl:px-24 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center relative z-20 lg:min-h-[calc(100vh-140px)]"
             >
 
-                {/* Left Column (45% width) - Vertically Centered */}
+                {/* Left Column (Text & Action) */}
                 <div className="w-full lg:max-w-[580px] text-left space-y-7 z-10 lg:py-20 flex flex-col justify-center h-full">
 
                     {/* Text pequeño: QUIÉNES SOMOS */}
@@ -84,7 +88,7 @@ export default function AboutHero() {
                         QUIÉNES SOMOS
                     </motion.span>
 
-                    {/* Título grande (Tres líneas exactamente) */}
+                    {/* Título grande */}
                     <motion.h1
                         variants={itemVariants}
                         className="text-4xl sm:text-5xl md:text-[60px] lg:text-[72px] font-black text-[#0B1F3A] leading-[0.95] tracking-tight font-sans"
@@ -93,14 +97,13 @@ export default function AboutHero() {
                         educación y<br />
                         <span className="relative inline-block text-[#003C8F]" style={{ fontFamily: "'Caveat', cursive" }}>
                             transformación
-                            {/* Drawn red underline SVG */}
                             <svg className="absolute -bottom-3.5 left-0 w-full h-2.5 text-[#800A15] opacity-80" viewBox="0 0 100 10" preserveAspectRatio="none">
                                 <path d="M0,5 Q50,10 100,5" stroke="currentColor" strokeWidth="4" fill="none" strokeLinecap="round" />
                             </svg>
                         </span>
                     </motion.h1>
 
-                    {/* Descripción (Máximo 3 líneas) */}
+                    {/* Descripción */}
                     <motion.p
                         variants={itemVariants}
                         className="text-slate-500 text-[18px] md:text-[20px] leading-[1.8] max-w-[560px] font-medium"
@@ -108,7 +111,7 @@ export default function AboutHero() {
                         Somos una institución educativa católica que forma personas íntegras, líderes con propósito y comprometidos con la construcción de un mundo más justo.
                     </motion.p>
 
-                    {/* Botones (Removed Video Button) */}
+                    {/* Botones */}
                     <motion.div
                         variants={itemVariants}
                         className="flex flex-row flex-wrap items-center gap-5 pt-3"
@@ -119,95 +122,60 @@ export default function AboutHero() {
                     </motion.div>
                 </div>
 
-                {/* Right Column Spacer for Desktop / Stacking Inline Container on Mobile & Tablet */}
-                <div className="relative flex justify-center mt-8 lg:mt-0 w-full max-w-[460px] aspect-[549/568] pointer-events-none select-none lg:hidden mx-auto">
-                    {/* Mobile/Tablet inline copy (rendered inside the grid) */}
-                    <div className="relative w-full h-full flex items-end justify-center">
+                {/* Right Column / Image & Cutout composition */}
+                <div className="relative flex justify-center items-center w-full max-w-[620px] mx-auto lg:max-w-none my-6 lg:my-0">
+                    
+                    {/* Parallax Blobs Behind Photograph */}
+                    <div className="absolute inset-0 z-0 pointer-events-none">
+                        <AnimatedBlob
+                            className="w-72 h-72 bg-[#003C8F]/15 -top-6 -left-6 blur-2xl"
+                            mouseX={springX}
+                            mouseY={springY}
+                            speed={1.3}
+                        />
+                        <AnimatedBlob
+                            className="w-[320px] h-[320px] bg-[#800A15]/10 -bottom-8 -right-8 blur-3xl"
+                            mouseX={springX}
+                            mouseY={springY}
+                            speed={0.9}
+                        />
+                        <div className="absolute top-1/3 left-1/4 w-32 h-32 bg-[#003C8F]/15 rounded-full blur-3xl"></div>
+                        <div className="absolute bottom-1/3 right-1/4 w-40 h-40 bg-[#800A15]/12 rounded-full blur-3xl"></div>
+                    </div>
+
+                    {/* 3D Pop-out Container (Aspect Ratio matching photo 1.38/1) */}
+                    <div className="relative w-full max-w-[580px] xl:max-w-[640px] aspect-[1.38/1] flex items-end justify-center pointer-events-none select-none z-10">
+                        
                         {/* Layer 1: Background School Mask */}
                         <div
                             style={{ clipPath: 'url(#school-mask)', WebkitClipPath: 'url(#school-mask)' }}
-                            className="absolute inset-0 w-full h-full bg-[#08111F] overflow-hidden"
+                            className="absolute inset-0 w-full h-full bg-[#08111F] overflow-hidden shadow-2xl"
                         >
                             <img
                                 src="/galeria/colegio-afuera.JPG"
                                 alt="Colegio Santa Isabel de Hungría"
-                                className="w-full h-full object-cover object-[center_35%] scale-100"
+                                className="w-full h-full object-cover object-[center_40%] scale-100"
                             />
                         </div>
 
-                        {/* Layer 2: Foreground Transparent Cutout Students walking away */}
+                        {/* Layer 2: Foreground Cutout Students */}
                         <img
                             src="/galeria/estudiantes-espaldas.png"
                             alt="Estudiantes COLSIH"
-                            className="absolute bottom-[-10px] left-[5%] w-[84%] max-w-none z-20 pointer-events-none object-contain drop-shadow-[0_20px_40px_rgba(8,17,31,0.3)]"
+                            className="absolute bottom-[-15px] left-[8%] w-[76%] max-w-none z-20 pointer-events-none object-contain drop-shadow-[0_20px_40px_rgba(8,17,31,0.4)] transition-transform duration-500 hover:scale-[1.01]"
                         />
                     </div>
                 </div>
-
-                {/* Desktop Empty Spacer block inside the grid row */}
-                <div className="hidden lg:block pointer-events-none select-none"></div>
 
             </motion.div>
 
-            {/* Desktop Full-Viewport Image Layer (Proporcionado y centrado verticalmente) */}
-            <div className="hidden lg:flex items-center justify-center absolute right-6 xl:right-16 top-[110px] bottom-[50px] w-[46%] xl:w-[44%] max-w-[580px] h-[calc(100%-160px)] z-10 pointer-events-none select-none">
-
-                {/* Parallax Blobs and Blurs Behind the Photograph */}
-                <div className="absolute inset-0 z-0 pointer-events-none scale-100">
-                    {/* Blob azul enorme */}
-                    <AnimatedBlob
-                        className="w-72 h-72 bg-[#003C8F]/15 -top-8 -left-8 blur-2xl"
-                        mouseX={springX}
-                        mouseY={springY}
-                        speed={1.3}
-                    />
-                    {/* Blob rojo */}
-                    <AnimatedBlob
-                        className="w-[320px] h-[320px] bg-[#800A15]/10 -bottom-12 -right-12 blur-3xl"
-                        mouseX={springX}
-                        mouseY={springY}
-                        speed={0.9}
-                    />
-                    {/* Blur spots */}
-                    <div className="absolute top-1/3 left-1/4 w-32 h-32 bg-[#003C8F]/15 rounded-full blur-3xl"></div>
-                    <div className="absolute bottom-1/3 right-1/4 w-40 h-40 bg-[#800A15]/12 rounded-full blur-3xl"></div>
-                    {/* Giant outline circles */}
-                    <div className="absolute w-[400px] h-[400px] border border-slate-200/30 rounded-full top-4 left-4 opacity-40"></div>
-                    <div className="absolute w-[300px] h-[300px] border border-slate-200/30 rounded-full bottom-4 right-4 opacity-40"></div>
-                </div>
-
-                {/* 3D Pop-out Container */}
-                <div className="relative w-full h-full max-w-[500px] xl:max-w-[540px] max-h-[560px] flex items-end justify-center">
-                    {/* Layer 1: Background School Mask */}
-                    <div
-                        style={{ clipPath: 'url(#school-mask)', WebkitClipPath: 'url(#school-mask)' }}
-                        className="absolute inset-0 w-full h-full bg-[#08111F] overflow-hidden"
-                    >
-                        <img
-                            src="/galeria/colegio-afuera.JPG"
-                            alt="Colegio Santa Isabel de Hungría"
-                            className="w-full h-full object-cover object-[center_35%] scale-100"
-                        />
-                    </div>
-
-                    {/* Layer 2: Foreground Transparent Cutout Students walking away */}
-                    <img
-                        src="/galeria/estudiantes-espaldas.png"
-                        alt="Estudiantes COLSIH"
-                        className="absolute bottom-[-10px] left-[5%] w-[84%] max-w-none z-20 pointer-events-none object-contain drop-shadow-[0_20px_40px_rgba(8,17,31,0.3)] hover:scale-[1.01] transition-transform duration-500"
-                    />
-                </div>
-            </div>
-
-            {/* Bottom Wavy Separators (Pixel-Perfect identical to Figma/Mockup) */}
+            {/* Bottom Wavy Separators */}
             <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-none z-30 pointer-events-none select-none">
                 <svg className="relative block w-full h-[80px] md:h-[160px]" viewBox="0 0 1440 160" preserveAspectRatio="none">
-                    {/* Red Wave on the left */}
                     <path
                         d="M0,160 C200,70 400,140 600,135 C750,130 900,145 1050,160 L1050,160 L0,160 Z"
                         fill="#800A15"
                     />
-                    {/* Dark Blue Wave on the right */}
                     <path
                         d="M400,160 C600,130 800,45 1050,90 C1220,115 1330,80 1440,40 L1440,160 L400,160 Z"
                         fill="#08111F"

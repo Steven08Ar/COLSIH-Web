@@ -391,29 +391,7 @@ export default function Hero({ setVideoOpen }) {
                             </span>
                         </h1>
 
-                        {/* Buttons */}
-                        <div className="flex flex-col sm:flex-row sm:items-center gap-6 pt-4">
-                            {/* Primary CTA */}
-                            <Link
-                                href="/inscripcion"
-                                className="inline-flex items-center justify-center bg-[#800A15] hover:bg-[#c4181e] text-white font-extrabold text-sm px-8 py-4.5 rounded-full shadow-lg shadow-red-700/10 active:scale-[0.98] transition-all cursor-pointer"
-                            >
-                                Iniciar Proceso Online
-                            </Link>
 
-                            {/* Secondary Play Button */}
-                            <button
-                                onClick={() => setVideoOpen(true)}
-                                className="inline-flex items-center gap-3 text-sm font-extrabold text-white/90 hover:text-white group cursor-pointer focus:outline-none py-2"
-                            >
-                                <span className="w-9 h-9 rounded-full border border-white/20 bg-white/5 flex items-center justify-center group-hover:bg-white/20 transition-all shadow-md group-hover:scale-105 active:scale-95">
-                                    <svg className="w-3.5 h-3.5 fill-current ml-0.5" viewBox="0 0 24 24">
-                                        <path d="M8 5v14l11-7z" />
-                                    </svg>
-                                </span>
-                                Conoce más
-                            </button>
-                        </div>
                     </div>
 
                 </div>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Scene;
 use App\Models\Tour;
+use App\Services\ImageOptimizer;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -74,7 +75,7 @@ class TourAdminController extends Controller
         $imagenPath = null;
 
         if ($request->hasFile('imagen')) {
-            $imagenPath = $request->file('imagen')->store('recorrido_virtual', 'public');
+            $imagenPath = ImageOptimizer::guardar($request->file('imagen'), 'recorrido_virtual', ImageOptimizer::LADO_360);
         } elseif ($request->filled('imagen_url_manual')) {
             $imagenPath = ltrim($request->imagen_url_manual, '/storage/');
         }
@@ -123,7 +124,7 @@ class TourAdminController extends Controller
         foreach ($request->file('escenas') as $index => $item) {
             if (isset($item['imagen']) && $item['imagen']->isValid()) {
                 $nombre = $request->input("escenas.{$index}.nombre") ?: ('Espacio ' . ($currentCount + $savedCount + 1));
-                $imagenPath = $item['imagen']->store('recorrido_virtual', 'public');
+                $imagenPath = ImageOptimizer::guardar($item['imagen'], 'recorrido_virtual', ImageOptimizer::LADO_360);
                 
                 $baseSlug = Str::slug($nombre);
                 $slug = $baseSlug;

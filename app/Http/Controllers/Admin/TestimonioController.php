@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Testimonio;
+use App\Services\ImageOptimizer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
@@ -34,7 +35,7 @@ class TestimonioController extends Controller
             'orden'         => 'integer|min:0',
         ]);
 
-        $data['imagen'] = $request->file('imagen')->store('testimonios', 'public');
+        $data['imagen'] = ImageOptimizer::guardar($request->file('imagen'), 'testimonios');
 
         Testimonio::create($data);
         return back()->with('flash', 'Testimonio creado.');
@@ -58,7 +59,7 @@ class TestimonioController extends Controller
             if ($testimonio->imagen) {
                 Storage::disk('public')->delete($testimonio->imagen);
             }
-            $data['imagen'] = $request->file('imagen')->store('testimonios', 'public');
+            $data['imagen'] = ImageOptimizer::guardar($request->file('imagen'), 'testimonios');
         } else {
             unset($data['imagen']);
         }

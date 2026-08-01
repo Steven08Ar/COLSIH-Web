@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Noticia;
+use App\Services\ImageOptimizer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -39,7 +40,7 @@ class NoticiaAdminController extends Controller
         $data['slug']         = $this->uniqueSlug(Str::slug($data['titulo']));
 
         if ($request->hasFile('portada')) {
-            $data['imagen'] = $request->file('portada')->store('noticias/portadas', 'public');
+            $data['imagen'] = ImageOptimizer::guardar($request->file('portada'), 'noticias/portadas');
         }
 
         $data['bloques'] = $this->procesarBloques($request, []);
@@ -68,7 +69,7 @@ class NoticiaAdminController extends Controller
             if ($noticia->imagen) {
                 Storage::disk('public')->delete($noticia->imagen);
             }
-            $data['imagen'] = $request->file('portada')->store('noticias/portadas', 'public');
+            $data['imagen'] = ImageOptimizer::guardar($request->file('portada'), 'noticias/portadas');
         }
 
         $data['bloques'] = $this->procesarBloques($request, $noticia->bloques ?? []);
@@ -211,7 +212,7 @@ class NoticiaAdminController extends Controller
                     if (!empty($bloque['imagen']) && !str_starts_with($bloque['imagen'], 'http')) {
                         Storage::disk('public')->delete($bloque['imagen']);
                     }
-                    $bloque['imagen'] = $request->file($fileKey)->store('noticias/bloques', 'public');
+                    $bloque['imagen'] = ImageOptimizer::guardar($request->file($fileKey), 'noticias/bloques');
                 } elseif (empty($bloque['imagen']) && !empty($bloque['_key']) && isset($existentes[$bloque['_key']])) {
                     $bloque['imagen'] = $existentes[$bloque['_key']];
                 }

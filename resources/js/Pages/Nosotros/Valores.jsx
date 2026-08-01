@@ -1,8 +1,8 @@
 import { Head, Link } from '@inertiajs/react';
 import AppLayout from '@/Layouts/AppLayout';
-import { useState, useMemo, useRef } from 'react';
+import { useState, useMemo, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Filter, Layers, ArrowRight, ArrowLeft, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Filter, Layers, ArrowRight, ArrowLeft, ChevronDown, Check, Compass } from 'lucide-react';
 import ValuesHero from './components/ValuesSection/ValuesHero';
 import InstitutionalMotto from './components/ValuesSection/InstitutionalMotto';
 import ValueCard from './components/ValuesSection/ValueCard';
@@ -12,28 +12,37 @@ import { valoresData, valoresCategories } from './components/ValuesSection/data/
 
 export default function Valores() {
     const [selectedCategory, setSelectedCategory] = useState('todos');
+    const [filterMenuOpen, setFilterMenuOpen] = useState(false);
+    const [jumpMenuOpen, setJumpMenuOpen] = useState(false);
+    
     const [lightboxOpen, setLightboxOpen] = useState(false);
     const [activeImages, setActiveImages] = useState([]);
     const [activeImgIdx, setActiveImgIdx] = useState(0);
 
-    const categoriesScrollRef = useRef(null);
-    const jumpScrollRef = useRef(null);
+    const filterMenuRef = useRef(null);
+    const jumpMenuRef = useRef(null);
 
-    const scrollCategories = (direction) => {
-        if (!categoriesScrollRef.current) return;
-        const scrollAmount = direction === 'left' ? -260 : 260;
-        categoriesScrollRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-    };
-
-    const scrollJump = (direction) => {
-        if (!jumpScrollRef.current) return;
-        const scrollAmount = direction === 'left' ? -240 : 240;
-        jumpScrollRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-    };
+    // Cerrar menús desplegables al hacer clic fuera
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (filterMenuRef.current && !filterMenuRef.current.contains(e.target)) {
+                setFilterMenuOpen(false);
+            }
+            if (jumpMenuRef.current && !jumpMenuRef.current.contains(e.target)) {
+                setJumpMenuOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
 
     const filteredValores = useMemo(() => {
         if (selectedCategory === 'todos') return valoresData;
         return valoresData.filter(v => v.categoria === selectedCategory);
+    }, [selectedCategory]);
+
+    const activeCatObj = useMemo(() => {
+        return valoresCategories.find(c => c.id === selectedCategory) || valoresCategories[0];
     }, [selectedCategory]);
 
     const handleOpenGallery = (value, startIndex) => {
@@ -87,100 +96,136 @@ export default function Valores() {
                 {/* Institutional Motto Section */}
                 <InstitutionalMotto />
 
-                {/* Interactive Category Filter & Quick-Jump Carousel */}
-                <section className="relative z-20 max-w-[1140px] mx-auto px-4 md:px-6 pt-6 pb-8 space-y-5">
+                {/* Interactive Category Filter & Quick-Jump Dropdown Buttons */}
+                <section className="relative z-20 max-w-[1140px] mx-auto px-4 md:px-6 pt-6 pb-8 space-y-4">
                     
-                    {/* 1. Category Tabs Row with Left & Right Arrow Buttons */}
-                    <div className="relative flex items-center justify-center gap-2 max-w-4xl mx-auto">
-                        <button
-                            type="button"
-                            onClick={() => scrollCategories('left')}
-                            className="w-9 h-9 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-md flex items-center justify-center text-slate-700 dark:text-slate-200 hover:bg-[#800A15] hover:text-white dark:hover:bg-[#800A15] transition-all cursor-pointer shrink-0 z-10"
-                            title="Desplazar izquierda"
-                        >
-                            <ChevronLeft className="w-5 h-5" />
-                        </button>
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-2xl mx-auto">
+                        
+                        {/* 1. BOTÓN DESPLEGABLE ÚNICO DE FILTRADO */}
+                        <div className="relative w-full sm:w-auto flex-1" ref={filterMenuRef}>
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    setFilterMenuOpen(!filterMenuOpen);
+                                    setJumpMenuOpen(false);
+                                }}
+                                className="w-full px-5 py-3.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-md flex items-center justify-between gap-3 text-slate-800 dark:text-slate-100 hover:border-[#800A15] transition-all cursor-pointer select-none"
+                            >
+                                <div className="flex items-center gap-2.5">
+                                    <div className="w-8 h-8 rounded-xl bg-[#800A15]/10 text-[#800A15] dark:text-rose-400 flex items-center justify-center">
+                                        <Filter className="w-4 h-4" />
+                                    </div>
+                                    <div className="text-left">
+                                        <span className="block text-[10px] font-extrabold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                                            Filtrar por Dimensión
+                                        </span>
+                                        <span className="block text-sm font-black text-slate-800 dark:text-white">
+                                            {activeCatObj.label}
+                                        </span>
+                                    </div>
+                                </div>
+                                <ChevronDown className={`w-5 h-5 text-slate-400 transition-transform duration-300 ${filterMenuOpen ? 'rotate-180 text-[#800A15]' : ''}`} />
+                            </button>
 
-                        <div 
-                            ref={categoriesScrollRef}
-                            className="flex items-center gap-2.5 overflow-x-auto no-scrollbar scroll-smooth py-2 px-1 flex-nowrap w-full"
-                        >
-                            {valoresCategories.map((cat) => {
-                                const isActive = selectedCategory === cat.id;
-                                return (
-                                    <button
-                                        key={cat.id}
-                                        onClick={() => setSelectedCategory(cat.id)}
-                                        className={`px-4 py-2 rounded-full text-xs font-black transition-all duration-300 select-none cursor-pointer flex items-center gap-2 shrink-0 whitespace-nowrap ${
-                                            isActive
-                                                ? 'bg-[#800A15] text-white shadow-md shadow-red-950/20 scale-105'
-                                                : 'bg-white/90 dark:bg-slate-900/90 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800'
-                                        }`}
+                            {/* Lista Desplegable de Categorías */}
+                            <AnimatePresence>
+                                {filterMenuOpen && (
+                                    <motion.div
+                                        initial={{ opacity: 0, y: -10, scale: 0.98 }}
+                                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                                        exit={{ opacity: 0, y: -10, scale: 0.98 }}
+                                        transition={{ duration: 0.15 }}
+                                        className="absolute top-full left-0 right-0 mt-2 z-50 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl py-2 overflow-hidden"
                                     >
-                                        {cat.id === 'todos' ? <Layers className="w-3.5 h-3.5" /> : <Filter className="w-3.5 h-3.5" />}
-                                        <span>{cat.label}</span>
-                                    </button>
-                                );
-                            })}
+                                        {valoresCategories.map((cat) => {
+                                            const isSelected = selectedCategory === cat.id;
+                                            return (
+                                                <button
+                                                    key={cat.id}
+                                                    type="button"
+                                                    onClick={() => {
+                                                        setSelectedCategory(cat.id);
+                                                        setFilterMenuOpen(false);
+                                                    }}
+                                                    className={`w-full px-4 py-3 text-left text-xs font-bold transition-colors flex items-center justify-between cursor-pointer ${
+                                                        isSelected
+                                                            ? 'bg-[#800A15]/10 text-[#800A15] dark:text-rose-400 font-black'
+                                                            : 'text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800'
+                                                    }`}
+                                                >
+                                                    <div className="flex items-center gap-2">
+                                                        {cat.id === 'todos' ? <Layers className="w-4 h-4" /> : <Filter className="w-4 h-4" />}
+                                                        <span>{cat.label}</span>
+                                                    </div>
+                                                    {isSelected && <Check className="w-4 h-4 text-[#800A15] dark:text-rose-400" />}
+                                                </button>
+                                            );
+                                        })}
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
                         </div>
 
-                        <button
-                            type="button"
-                            onClick={() => scrollCategories('right')}
-                            className="w-9 h-9 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-md flex items-center justify-center text-slate-700 dark:text-slate-200 hover:bg-[#800A15] hover:text-white dark:hover:bg-[#800A15] transition-all cursor-pointer shrink-0 z-10"
-                            title="Desplazar derecha"
-                        >
-                            <ChevronRight className="w-5 h-5" />
-                        </button>
-                    </div>
+                        {/* 2. BOTÓN DESPLEGABLE ÚNICO DE IR A VALOR */}
+                        <div className="relative w-full sm:w-auto flex-1" ref={jumpMenuRef}>
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    setJumpMenuOpen(!jumpMenuOpen);
+                                    setFilterMenuOpen(false);
+                                }}
+                                className="w-full px-5 py-3.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-md flex items-center justify-between gap-3 text-slate-800 dark:text-slate-100 hover:border-[#003C8F] transition-all cursor-pointer select-none"
+                            >
+                                <div className="flex items-center gap-2.5">
+                                    <div className="w-8 h-8 rounded-xl bg-[#003C8F]/10 text-[#003C8F] dark:text-blue-400 flex items-center justify-center">
+                                        <Compass className="w-4 h-4" />
+                                    </div>
+                                    <div className="text-left">
+                                        <span className="block text-[10px] font-extrabold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                                            Ir al Valor...
+                                        </span>
+                                        <span className="block text-sm font-black text-slate-800 dark:text-white">
+                                            Seleccionar de la lista
+                                        </span>
+                                    </div>
+                                </div>
+                                <ChevronDown className={`w-5 h-5 text-slate-400 transition-transform duration-300 ${jumpMenuOpen ? 'rotate-180 text-[#003C8F]' : ''}`} />
+                            </button>
 
-                    {/* 2. Quick Jump Badges Row with Left & Right Arrow Buttons */}
-                    <div className="relative flex items-center justify-center gap-2 max-w-4xl mx-auto pt-1">
-                        <button
-                            type="button"
-                            onClick={() => scrollJump('left')}
-                            className="w-7 h-7 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-[#003C8F] hover:text-white transition-all cursor-pointer shrink-0 z-10"
-                            title="Anterior"
-                        >
-                            <ChevronLeft className="w-4 h-4" />
-                        </button>
-
-                        <div className="flex items-center gap-1.5 shrink-0 pl-1">
-                            <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 whitespace-nowrap">
-                                IR A:
-                            </span>
+                            {/* Lista Desplegable de Valores */}
+                            <AnimatePresence>
+                                {jumpMenuOpen && (
+                                    <motion.div
+                                        initial={{ opacity: 0, y: -10, scale: 0.98 }}
+                                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                                        exit={{ opacity: 0, y: -10, scale: 0.98 }}
+                                        transition={{ duration: 0.15 }}
+                                        className="absolute top-full left-0 right-0 mt-2 z-50 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl py-2 max-h-64 overflow-y-auto no-scrollbar"
+                                    >
+                                        {valoresData.map((val) => (
+                                            <button
+                                                key={val.id}
+                                                type="button"
+                                                onClick={() => {
+                                                    setJumpMenuOpen(false);
+                                                    if (selectedCategory !== 'todos' && val.categoria !== selectedCategory) {
+                                                        setSelectedCategory('todos');
+                                                        setTimeout(() => scrollToValue(val.id), 100);
+                                                    } else {
+                                                        scrollToValue(val.id);
+                                                    }
+                                                }}
+                                                className="w-full px-4 py-2.5 text-left text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-blue-50 dark:hover:bg-slate-800 hover:text-[#003C8F] transition-colors flex items-center gap-2 cursor-pointer"
+                                            >
+                                                <span className="w-6 text-slate-400 text-[11px] font-mono">{val.numero}.</span>
+                                                <span>{val.titulo}</span>
+                                            </button>
+                                        ))}
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
                         </div>
 
-                        <div 
-                            ref={jumpScrollRef}
-                            className="flex items-center gap-2 overflow-x-auto no-scrollbar scroll-smooth py-1 px-1 flex-nowrap w-full"
-                        >
-                            {valoresData.map((val) => (
-                                <button
-                                    key={val.id}
-                                    onClick={() => {
-                                        if (selectedCategory !== 'todos' && val.categoria !== selectedCategory) {
-                                            setSelectedCategory('todos');
-                                            setTimeout(() => scrollToValue(val.id), 100);
-                                        } else {
-                                            scrollToValue(val.id);
-                                        }
-                                    }}
-                                    className="px-3 py-1 rounded-xl bg-white/90 dark:bg-slate-900/90 hover:bg-[#003C8F] hover:text-white text-slate-700 dark:text-slate-300 text-[11px] font-bold transition-all duration-200 cursor-pointer border border-slate-200 dark:border-slate-800 whitespace-nowrap shrink-0 shadow-sm"
-                                >
-                                    {val.numero}. {val.titulo}
-                                </button>
-                            ))}
-                        </div>
-
-                        <button
-                            type="button"
-                            onClick={() => scrollJump('right')}
-                            className="w-7 h-7 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-[#003C8F] hover:text-white transition-all cursor-pointer shrink-0 z-10"
-                            title="Siguiente"
-                        >
-                            <ChevronRight className="w-4 h-4" />
-                        </button>
                     </div>
 
                     {/* Count Indicator */}

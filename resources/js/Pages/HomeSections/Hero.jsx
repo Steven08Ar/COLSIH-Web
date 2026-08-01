@@ -286,17 +286,20 @@ export default function Hero({ setVideoOpen }) {
                 )}
             </header>
 
-            {/* Background Video (60% right side / Immersive) */}
-            <div className="absolute inset-0 w-full h-full z-0 select-none overflow-hidden">
-                <iframe
-                    className="absolute top-1/2 left-1/2 w-[100vw] h-[56.25vw] min-h-[100vh] min-w-[177.77vh] -translate-x-1/2 -translate-y-1/2 pointer-events-none contrast-[1.05] brightness-75 md:brightness-[0.85] scale-105"
-                    src="https://www.youtube-nocookie.com/embed/7hO_uWb8aLs?autoplay=1&mute=1&loop=1&playlist=7hO_uWb8aLs&controls=0&rel=0&playsinline=1&fs=0"
-                    title="Background Video"
-                    style={{ border: 0 }}
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                ></iframe>
-                {/* Transparent cover overlay to shield iframe from any touch, focus or clicks */}
-                <div className="absolute inset-0 z-10 w-full h-full bg-transparent pointer-events-auto"></div>
+            {/* Background Video ("Video Home.MOV" sin controles, autoproducido, reproducción en bucle sin interactividad) */}
+            <div className="absolute inset-0 w-full h-full z-0 select-none overflow-hidden pointer-events-none">
+                <video
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    controls={false}
+                    disablePictureInPicture
+                    className="absolute top-1/2 left-1/2 w-[100vw] h-[56.25vw] min-h-[100vh] min-w-[177.77vh] -translate-x-1/2 -translate-y-1/2 object-cover contrast-[1.05] brightness-75 md:brightness-[0.85] scale-105 pointer-events-none"
+                >
+                    <source src="/Video Home.MOV" type="video/quicktime" />
+                    <source src="/Video Home.MOV" type="video/mp4" />
+                </video>
             </div>
 
             {/* Dark Gradient Overlay for Mobile (full overlay) */}
@@ -328,8 +331,6 @@ export default function Hero({ setVideoOpen }) {
                     />
                 </svg>
             </div>
-
-            {/* TOP LEFT wave removed */}
 
             {/* BOTTOM organic layered waves (Red, Blue, and White) */}
             <div className="absolute bottom-0 left-0 w-full h-[120px] sm:h-[150px] md:h-[220px] z-20 pointer-events-none select-none">
@@ -387,8 +388,6 @@ export default function Hero({ setVideoOpen }) {
                             </button>
                         </div>
                     </div>
-
-
 
                 </div>
             </div>

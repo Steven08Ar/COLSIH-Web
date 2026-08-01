@@ -60,7 +60,7 @@ export default function Home({ noticias, testimonios, preguntas, tour, scenes = 
             {/* Footer */}
             <Footer />
 
-            {/* CENTRALIZED VIDEO MODAL */}
+            {/* CENTRALIZED VIDEO MODAL USING NATIVE Video Home.MOV WITHOUT CONTROLS */}
             {videoOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-4 transition-all duration-300">
                     <div className="relative w-full max-w-4xl bg-slate-950 rounded-3xl overflow-hidden border border-slate-800 shadow-2xl">
@@ -76,13 +76,18 @@ export default function Home({ noticias, testimonios, preguntas, tour, scenes = 
                         </button>
                         {/* Video Container */}
                         <div className="aspect-video w-full">
-                            <iframe 
-                                className="w-full h-full"
-                                src="https://www.youtube-nocookie.com/embed/9yc15O2qTus?autoplay=1"
-                                title="Video institucional COLSIH"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                                allowFullScreen
-                            ></iframe>
+                            <video
+                                autoPlay
+                                loop
+                                muted
+                                playsInline
+                                controls={false}
+                                disablePictureInPicture
+                                className="w-full h-full object-cover pointer-events-none"
+                            >
+                                <source src="/Video Home.MOV" type="video/quicktime" />
+                                <source src="/Video Home.MOV" type="video/mp4" />
+                            </video>
                         </div>
                     </div>
                 </div>

@@ -1,12 +1,59 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Images, Eye } from 'lucide-react';
 import FloatingValueIcon from './FloatingValueIcon';
 
+/**
+ * ValueImage
+ * Renderiza la imagen del valor o un recuadro gris elegante con la leyenda
+ * "Imagen en espera de subida" / "Proceso de carga".
+ */
+function ValueImage({ src, alt, className = '', isThumbnail = false }) {
+    const [hasError, setHasError] = useState(false);
+
+    // Si no hay src o falla la carga, muestra el recuadro gris neutro institucional
+    if (!src || hasError) {
+        if (isThumbnail) {
+            return (
+                <div className="w-full h-full bg-slate-200/90 dark:bg-slate-800/90 flex flex-col items-center justify-center p-1 text-center select-none border border-slate-300/40 dark:border-slate-700/50">
+                    <Images className="w-4 h-4 text-slate-400 dark:text-slate-500 mb-0.5" />
+                    <span className="text-[8px] font-black text-slate-500 dark:text-slate-400 tracking-tighter uppercase leading-tight">
+                        En espera
+                    </span>
+                </div>
+            );
+        }
+
+        return (
+            <div className="w-full h-full bg-slate-200/90 dark:bg-slate-800/90 flex flex-col items-center justify-center p-6 text-center select-none border border-slate-300/60 dark:border-slate-700/60 rounded-2xl group-hover:bg-slate-300/70 transition-colors">
+                <div className="w-12 h-12 rounded-2xl bg-white/80 dark:bg-slate-700/80 flex items-center justify-center mb-2.5 text-slate-500 dark:text-slate-400 shadow-sm group-hover:scale-110 transition-transform">
+                    <Images className="w-6 h-6 text-slate-500 dark:text-slate-300" />
+                </div>
+                <span className="text-xs font-black text-slate-600 dark:text-slate-300 tracking-wider uppercase">
+                    Imagen en espera de subida
+                </span>
+                <span className="text-[10px] font-extrabold text-slate-400 dark:text-slate-500 mt-1 uppercase tracking-widest bg-slate-300/50 dark:bg-slate-700/50 px-2.5 py-0.5 rounded-full">
+                    Proceso de Carga
+                </span>
+            </div>
+        );
+    }
+
+    return (
+        <img
+            src={src}
+            alt={alt}
+            loading="lazy"
+            decoding="async"
+            onError={() => setHasError(true)}
+            className={className}
+        />
+    );
+}
+
 export default function ValueCard({ value, index, onOpenGallery }) {
     const isEven = index % 2 === 0;
 
-    // Outer card container entrance reveal animation properties
     const cardVariants = {
         hidden: { opacity: 0, y: 50, scale: 0.98 },
         visible: { 
@@ -43,11 +90,9 @@ export default function ValueCard({ value, index, onOpenGallery }) {
                     }`}
                     onClick={() => onOpenGallery(0)}
                 >
-                    <img 
+                    <ValueImage
                         src={value.portada} 
                         alt={`Portada de ${value.titulo}`} 
-                        loading="lazy"
-                        decoding="async"
                         className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
@@ -109,11 +154,10 @@ export default function ValueCard({ value, index, onOpenGallery }) {
                                 onClick={() => onOpenGallery(thumbIdx + 1)}
                                 className="aspect-square rounded-xl overflow-hidden border border-slate-100/80 dark:border-slate-800 shadow-sm cursor-zoom-in group relative"
                             >
-                                <img 
+                                <ValueImage
                                     src={imgUrl} 
                                     alt={`Miniatura ${thumbIdx + 1} de ${value.titulo}`} 
-                                    loading="lazy"
-                                    decoding="async"
+                                    isThumbnail={true}
                                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                                 />
                                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">

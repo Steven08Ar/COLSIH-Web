@@ -1,8 +1,8 @@
 import { Head, Link } from '@inertiajs/react';
 import AppLayout from '@/Layouts/AppLayout';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Filter, Layers, ArrowRight, ArrowLeft } from 'lucide-react';
+import { Filter, Layers, ArrowRight, ArrowLeft, ChevronLeft, ChevronRight } from 'lucide-react';
 import ValuesHero from './components/ValuesSection/ValuesHero';
 import InstitutionalMotto from './components/ValuesSection/InstitutionalMotto';
 import ValueCard from './components/ValuesSection/ValueCard';
@@ -16,13 +16,27 @@ export default function Valores() {
     const [activeImages, setActiveImages] = useState([]);
     const [activeImgIdx, setActiveImgIdx] = useState(0);
 
+    const categoriesScrollRef = useRef(null);
+    const jumpScrollRef = useRef(null);
+
+    const scrollCategories = (direction) => {
+        if (!categoriesScrollRef.current) return;
+        const scrollAmount = direction === 'left' ? -260 : 260;
+        categoriesScrollRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    };
+
+    const scrollJump = (direction) => {
+        if (!jumpScrollRef.current) return;
+        const scrollAmount = direction === 'left' ? -240 : 240;
+        jumpScrollRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    };
+
     const filteredValores = useMemo(() => {
         if (selectedCategory === 'todos') return valoresData;
         return valoresData.filter(v => v.categoria === selectedCategory);
     }, [selectedCategory]);
 
     const handleOpenGallery = (value, startIndex) => {
-        // Combines main cover and the 3 mini gallery images
         const allImages = [value.portada, ...value.galeria];
         setActiveImages(allImages);
         setActiveImgIdx(startIndex);
@@ -73,55 +87,104 @@ export default function Valores() {
                 {/* Institutional Motto Section */}
                 <InstitutionalMotto />
 
-                {/* Interactive Category Filter & Quick-Jump Chips */}
-                <section className="relative z-20 max-w-[1140px] mx-auto px-6 pt-6 pb-8 space-y-6">
+                {/* Interactive Category Filter & Quick-Jump Carousel */}
+                <section className="relative z-20 max-w-[1140px] mx-auto px-4 md:px-6 pt-6 pb-8 space-y-5">
                     
-                    {/* Category Tabs */}
-                    <div className="flex items-center justify-center gap-2 flex-wrap">
-                        {valoresCategories.map((cat) => {
-                            const isActive = selectedCategory === cat.id;
-                            return (
-                                <button
-                                    key={cat.id}
-                                    onClick={() => setSelectedCategory(cat.id)}
-                                    className={`px-4 py-2 rounded-full text-xs font-bold transition-all duration-300 select-none cursor-pointer flex items-center gap-1.5 ${
-                                        isActive
-                                            ? 'bg-[#800A15] text-white shadow-md shadow-red-900/20 scale-105'
-                                            : 'bg-white/80 dark:bg-slate-900/80 text-slate-600 dark:text-slate-300 border border-slate-200/80 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800'
-                                    }`}
-                                >
-                                    {cat.id === 'todos' ? <Layers className="w-3.5 h-3.5" /> : <Filter className="w-3.5 h-3.5" />}
-                                    <span>{cat.label}</span>
-                                </button>
-                            );
-                        })}
+                    {/* 1. Category Tabs Row with Left & Right Arrow Buttons */}
+                    <div className="relative flex items-center justify-center gap-2 max-w-4xl mx-auto">
+                        <button
+                            type="button"
+                            onClick={() => scrollCategories('left')}
+                            className="w-9 h-9 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-md flex items-center justify-center text-slate-700 dark:text-slate-200 hover:bg-[#800A15] hover:text-white dark:hover:bg-[#800A15] transition-all cursor-pointer shrink-0 z-10"
+                            title="Desplazar izquierda"
+                        >
+                            <ChevronLeft className="w-5 h-5" />
+                        </button>
+
+                        <div 
+                            ref={categoriesScrollRef}
+                            className="flex items-center gap-2.5 overflow-x-auto no-scrollbar scroll-smooth py-2 px-1 flex-nowrap w-full"
+                        >
+                            {valoresCategories.map((cat) => {
+                                const isActive = selectedCategory === cat.id;
+                                return (
+                                    <button
+                                        key={cat.id}
+                                        onClick={() => setSelectedCategory(cat.id)}
+                                        className={`px-4 py-2 rounded-full text-xs font-black transition-all duration-300 select-none cursor-pointer flex items-center gap-2 shrink-0 whitespace-nowrap ${
+                                            isActive
+                                                ? 'bg-[#800A15] text-white shadow-md shadow-red-950/20 scale-105'
+                                                : 'bg-white/90 dark:bg-slate-900/90 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800'
+                                        }`}
+                                    >
+                                        {cat.id === 'todos' ? <Layers className="w-3.5 h-3.5" /> : <Filter className="w-3.5 h-3.5" />}
+                                        <span>{cat.label}</span>
+                                    </button>
+                                );
+                            })}
+                        </div>
+
+                        <button
+                            type="button"
+                            onClick={() => scrollCategories('right')}
+                            className="w-9 h-9 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-md flex items-center justify-center text-slate-700 dark:text-slate-200 hover:bg-[#800A15] hover:text-white dark:hover:bg-[#800A15] transition-all cursor-pointer shrink-0 z-10"
+                            title="Desplazar derecha"
+                        >
+                            <ChevronRight className="w-5 h-5" />
+                        </button>
                     </div>
 
-                    {/* Quick Jump Badges */}
-                    <div className="flex items-center justify-center gap-2 flex-wrap max-w-3xl mx-auto pt-2">
-                        <span className="text-[11px] font-extrabold uppercase tracking-widest text-slate-400 dark:text-slate-500 mr-2">
-                            Ir a:
-                        </span>
-                        {valoresData.map((val) => (
-                            <button
-                                key={val.id}
-                                onClick={() => {
-                                    if (selectedCategory !== 'todos' && val.categoria !== selectedCategory) {
-                                        setSelectedCategory('todos');
-                                        setTimeout(() => scrollToValue(val.id), 100);
-                                    } else {
-                                        scrollToValue(val.id);
-                                    }
-                                }}
-                                className="px-3 py-1 rounded-lg bg-slate-100/80 dark:bg-slate-900/80 hover:bg-[#003C8F] hover:text-white dark:hover:bg-[#003C8F] text-slate-600 dark:text-slate-400 text-[11px] font-bold transition-all duration-200 cursor-pointer border border-slate-200/50 dark:border-slate-800"
-                            >
-                                {val.numero}. {val.titulo}
-                            </button>
-                        ))}
+                    {/* 2. Quick Jump Badges Row with Left & Right Arrow Buttons */}
+                    <div className="relative flex items-center justify-center gap-2 max-w-4xl mx-auto pt-1">
+                        <button
+                            type="button"
+                            onClick={() => scrollJump('left')}
+                            className="w-7 h-7 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-[#003C8F] hover:text-white transition-all cursor-pointer shrink-0 z-10"
+                            title="Anterior"
+                        >
+                            <ChevronLeft className="w-4 h-4" />
+                        </button>
+
+                        <div className="flex items-center gap-1.5 shrink-0 pl-1">
+                            <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 whitespace-nowrap">
+                                IR A:
+                            </span>
+                        </div>
+
+                        <div 
+                            ref={jumpScrollRef}
+                            className="flex items-center gap-2 overflow-x-auto no-scrollbar scroll-smooth py-1 px-1 flex-nowrap w-full"
+                        >
+                            {valoresData.map((val) => (
+                                <button
+                                    key={val.id}
+                                    onClick={() => {
+                                        if (selectedCategory !== 'todos' && val.categoria !== selectedCategory) {
+                                            setSelectedCategory('todos');
+                                            setTimeout(() => scrollToValue(val.id), 100);
+                                        } else {
+                                            scrollToValue(val.id);
+                                        }
+                                    }}
+                                    className="px-3 py-1 rounded-xl bg-white/90 dark:bg-slate-900/90 hover:bg-[#003C8F] hover:text-white text-slate-700 dark:text-slate-300 text-[11px] font-bold transition-all duration-200 cursor-pointer border border-slate-200 dark:border-slate-800 whitespace-nowrap shrink-0 shadow-sm"
+                                >
+                                    {val.numero}. {val.titulo}
+                                </button>
+                            ))}
+                        </div>
+
+                        <button
+                            type="button"
+                            onClick={() => scrollJump('right')}
+                            className="w-7 h-7 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-[#003C8F] hover:text-white transition-all cursor-pointer shrink-0 z-10"
+                            title="Siguiente"
+                        >
+                            <ChevronRight className="w-4 h-4" />
+                        </button>
                     </div>
 
                     {/* Count Indicator */}
-                    <div className="text-center pt-2">
+                    <div className="text-center pt-1">
                         <span className="text-xs font-bold text-slate-400 dark:text-slate-500">
                             Mostrando {filteredValores.length} de {valoresData.length} valores corporativos
                         </span>

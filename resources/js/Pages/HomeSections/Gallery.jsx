@@ -3,28 +3,28 @@ import ScrollReveal from './ScrollReveal';
 export default function Gallery() {
     const items = [
         {
-            title: "Aulas de Innovación",
-            category: "Instalaciones",
-            size: "col-span-12 md:col-span-8 h-[350px]",
-            image: "/galeria/estudiantes-colsih.png"
+            title: "Aulas de Tecnología e Informática",
+            category: "Instalaciones de Vanguardia",
+            size: "col-span-12 md:col-span-8 h-[350px] md:h-[400px]",
+            image: "/espacios_academicos/informatica_A.JPG"
         },
         {
             title: "Biblioteca Escolar",
             category: "Espacios de Lectura",
-            size: "col-span-12 md:col-span-4 h-[350px]",
-            image: "/galeria/estudiantes-colsih.png"
+            size: "col-span-12 md:col-span-4 h-[350px] md:h-[400px]",
+            image: "/espacios_academicos/biblioteca.JPG"
         },
         {
-            title: "Zonas Deportivas",
+            title: "Cancha Múltiple y Zonas Deportivas",
             category: "Deportes y Convivencia",
-            size: "col-span-12 md:col-span-4 h-[300px]",
-            image: "/galeria/estudiantes-colsih.png"
+            size: "col-span-12 md:col-span-4 h-[320px] md:h-[360px]",
+            image: "/espacios_academicos/cancha.JPG"
         },
         {
-            title: "Laboratorio de Ciencias",
-            category: "Investigación",
-            size: "col-span-12 md:col-span-8 h-[300px]",
-            image: "/galeria/estudiantes-colsih.png"
+            title: "Parque e Instalaciones de Preescolar",
+            category: "Recreación e Infancia",
+            size: "col-span-12 md:col-span-8 h-[320px] md:h-[360px]",
+            image: "/espacios_academicos/jardin.JPG"
         }
     ];
 
@@ -37,9 +37,9 @@ export default function Gallery() {
                 
                 {/* Section Header */}
                 <div className="max-w-2xl text-left space-y-4">
-                    <ScrollReveal distance="translate-y-8" className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#800A15]/10 text-[#800A15] text-[13px] font-bold tracking-widest uppercase">
+                    <ScrollReveal distance="translate-y-8" className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#800A15]/10 text-[#800A15] text-[13px] font-extrabold tracking-widest uppercase">
                         <span className="w-1.5 h-1.5 rounded-full bg-[#800A15]"></span>
-                        Galería
+                        Nuestra Infraestructura
                     </ScrollReveal>
                     <ScrollReveal distance="translate-y-8" delay={150}>
                         <h2 className="text-3xl sm:text-4xl lg:text-[56px] font-black text-[#08111F] leading-[1.1] tracking-tight font-sans">
@@ -57,24 +57,24 @@ export default function Gallery() {
                             delay={index * 150}
                             className={item.size}
                         >
-                            <div className="w-full h-full relative overflow-hidden rounded-3xl group cursor-pointer shadow-sm border border-slate-100/50">
-                                {/* Gradient dark overlay */}
-                                <div className="absolute inset-0 bg-gradient-to-t from-[#08111F]/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 z-10 transition-opacity duration-500 pointer-events-none" />
+                            <div className="w-full h-full relative overflow-hidden rounded-3xl group cursor-pointer shadow-lg border border-slate-100/80">
+                                {/* Gradient dark overlay on hover */}
+                                <div className="absolute inset-0 bg-gradient-to-t from-[#08111F]/90 via-[#08111F]/30 to-transparent opacity-80 group-hover:opacity-95 z-10 transition-opacity duration-500 pointer-events-none" />
                                 
                                 {/* Image */}
                                 <img 
                                     src={item.image} 
                                     alt={item.title} 
                                     loading="lazy"
-                                    className="w-full h-full object-cover grayscale transition-all duration-[1200ms] group-hover:scale-105 group-hover:grayscale-0"
+                                    className="w-full h-full object-cover transition-all duration-[1000ms] group-hover:scale-105"
                                 />
 
                                 {/* Floating info (Overlay title) */}
-                                <div className="absolute bottom-6 left-6 z-20 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 text-left">
-                                    <span className="block text-[11px] font-extrabold uppercase tracking-widest text-[#800A15]">
+                                <div className="absolute bottom-6 left-6 right-6 z-20 transition-all duration-500 text-left">
+                                    <span className="inline-block px-3 py-1 rounded-full bg-[#800A15] text-[11px] font-extrabold uppercase tracking-widest text-white shadow-md mb-2">
                                         {item.category}
                                     </span>
-                                    <h3 className="text-[20px] font-black text-white mt-1 leading-tight tracking-tight">
+                                    <h3 className="text-[22px] md:text-[26px] font-black text-white leading-tight tracking-tight drop-shadow-md">
                                         {item.title}
                                     </h3>
                                 </div>

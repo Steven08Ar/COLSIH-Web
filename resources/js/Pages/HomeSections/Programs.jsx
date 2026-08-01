@@ -126,8 +126,8 @@ export default function Programs() {
                                 onClick={() => handleClick(index)}
                                 className={`relative rounded-3xl overflow-hidden cursor-pointer transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] flex flex-col justify-between transform-gpu will-change-[flex-grow] ${
                                     isExpanded 
-                                        ? 'flex-[2.5] h-[330px] sm:h-[360px] lg:h-full bg-slate-900 shadow-2xl ring-1 ring-white/10' 
-                                        : 'flex-[1] h-[125px] sm:h-[140px] lg:h-full bg-slate-950 border border-slate-200/20'
+                                        ? 'flex-[2.5] h-[460px] sm:h-[500px] lg:h-full bg-slate-900 shadow-2xl ring-1 ring-white/10' 
+                                        : 'flex-[1] h-[165px] sm:h-[180px] lg:h-full bg-slate-950 border border-slate-200/20'
                                 }`}
                             >
                                 {/* Layer 1: Background Image with depth zoom */}

@@ -85,7 +85,7 @@ export default function Programs() {
             num: "04",
             title: "Técnico SENA",
             tagline: "Articulación con la Media Técnica",
-            description: "Convenio institucional de doble titulación con el SENA. Formación técnica laboral en contabilidad, sistemas y comercio que prepara a nuestros bachilleres para el mundo profesional y universitario.",
+            description: "Convenio institucional con el SENA. Formación como Técnico en Contabilización de Operaciones Comerciales y Financieras, con doble titulación oficial que prepara a nuestros bachilleres para el mundo profesional y universitario.",
             duration: "Grados 10° y 11° (Titulación Nacional)",
             image: "/galeria/SENA.JPG",
             imagePos: "object-center",

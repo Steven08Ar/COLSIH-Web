@@ -39,8 +39,8 @@ const niveles = [
     {
         nombre: 'Articulación SENA',
         edad: 'Grados 10° y 11°',
-        grados: ['Técnico Financiero', 'Técnico en Sistemas'],
-        descripcion: 'Formación técnica profesional acreditada oficialmente por el SENA en contabilidad empresarial y sistemas de información.',
+        grados: ['Técnico en Contabilización de Operaciones Comerciales y Financieras'],
+        descripcion: 'Formación técnica oficial acreditada por el SENA con doble titulación. Nuestros egresados obtienen el título de Bachiller Técnico con competencias laborales en contabilización de operaciones comerciales y financieras.',
         destacados: ['Doble titulación oficial', 'Prácticas reales', 'Homologación universitaria'],
         href: '/oferta-academica/sena',
         badge: 'Convenio SENA',

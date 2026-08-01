@@ -1,72 +1,59 @@
 import { Head, Link } from '@inertiajs/react';
 import AppLayout from '@/Layouts/AppLayout';
 import ScrollReveal from '../HomeSections/ScrollReveal';
+import { GraduationCap, Atom, Target, Users, Building2, CheckCircle2, ArrowRight, Sparkles, BookMarked, Award, Search, Check } from 'lucide-react';
 
 const ciclosBachillerato = [
     {
         titulo: 'Básica Secundaria (6° a 9°)',
         edad: '11 a 15 Años',
-        badgeColor: 'bg-blue-100 text-blue-900',
+        badgeColor: 'bg-blue-100 text-blue-900 border-blue-300',
         borderColor: 'border-blue-200',
-        headerGradient: 'from-blue-600 to-indigo-700',
-        descripcion: 'Fortalecimiento de la autonomía, pensamiento abstracto, ciencia experimental e informática aplicada.',
+        headerGradient: 'from-[#003C8F] via-blue-700 to-indigo-800',
+        icon: Atom,
+        descripcion: 'Fortalecimiento de la autonomía, pensamiento abstracto, ciencia experimental e informática avanzada.',
         destacados: [
-            'Robótica básica e informática avanzada',
-            'Laboratorios prácticos de Física y Química',
-            'Formación en ciudadanía crítica y ciencias sociales',
-            'Inglés con enfoque de proyectos'
+            'Robótica aplicada e informática avanzada',
+            'Laboratorios prácticos de Física, Química y Biología',
+            'Formación en ciudadanía crítica y pensamiento social',
+            'Inglés intensivo con enfoque de proyectos'
         ]
     },
     {
         titulo: 'Educación Media (10° y 11°)',
         edad: '15 a 17 Años',
-        badgeColor: 'bg-red-100 text-red-900',
-        borderColor: 'border-red-200',
-        headerGradient: 'from-[#800A15] to-rose-800',
-        descripcion: 'Preparación de excelencia enfocada en las pruebas ICFES Saber 11, vinculación universitaria e ingreso laboral.',
+        badgeColor: 'bg-rose-100 text-[#800A15] border-rose-300',
+        borderColor: 'border-rose-200',
+        headerGradient: 'from-[#800A15] via-rose-700 to-[#003C8F]',
+        icon: GraduationCap,
+        descripcion: 'Preparación de excelencia enfocada en las pruebas Saber 11, orientación vocacional e ingreso a la universidad.',
         destacados: [
-            'Simulacros y preparación intensiva Pre-ICFES',
-            'Articulación Técnica Profesional con el SENA',
-            'Proyecto de vida y orientación vocacional',
-            'Proyectos de investigación y emprendimiento'
+            'Simulacros y preparación intensiva Pre-ICFES Saber 11',
+            'Doble Titulación Técnica Profesional con el SENA',
+            'Proyecto de vida y orientación universitaria',
+            'Proyectos de investigación y emprendimiento juvenil'
         ]
     }
 ];
 
 const fortalezasBachillerato = [
     {
-        icon: (
-            <svg className="w-8 h-8 text-[#003C8F]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
-            </svg>
-        ),
+        icon: Atom,
         titulo: 'Laboratorios de Ciencias y Tecnología',
-        desc: 'Espacios de experimentación real equipados para química, biología, física e informática con lógica de programación.'
+        desc: 'Espacios de experimentación real equipados para química, biología, física e informática con programación.'
     },
     {
-        icon: (
-            <svg className="w-8 h-8 text-[#003C8F]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
-            </svg>
-        ),
-        titulo: 'Pre-ICFES Continuo',
-        desc: 'Acompañamiento especializado con entrenamiento por competencias para asegurar puntajes destacados en Saber 11.'
+        icon: Target,
+        titulo: 'Entrenamiento Pre-ICFES Saber 11',
+        desc: 'Acompañamiento especializado con entrenamiento intensivo por competencias para asegurar puntajes destacados en Saber 11.'
     },
     {
-        icon: (
-            <svg className="w-8 h-8 text-[#003C8F]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-            </svg>
-        ),
+        icon: Users,
         titulo: 'Liderazgo Juvenil Salesiano',
-        desc: 'Gobierno escolar activo, grupos pastorales y voluntariado social que forman ciudadanos éticos y comprometidos.'
+        desc: 'Gobierno escolar activo, grupos pastorales MJS y voluntariado social que forman ciudadanos éticos y comprometidos.'
     },
     {
-        icon: (
-            <svg className="w-8 h-8 text-[#003C8F]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-            </svg>
-        ),
+        icon: Building2,
         titulo: 'Orientación Vocacional y Universitaria',
         desc: 'Ferias de universidades, talleres de proyecto de vida y convenios institucionales para la transición a la educación superior.'
     }
@@ -77,10 +64,10 @@ export default function Bachillerato() {
         <AppLayout>
             <Head title="Bachillerato | Oferta Académica COLSIH" />
 
-            {/* 1. HERO TEMÁTICO BACHILLERATO */}
+            {/* 1. HERO TEMÁTICO BACHILLERATO (Institucional Elevado) */}
             <section className="relative min-h-[680px] md:min-h-[760px] pt-36 pb-32 md:pt-44 md:pb-40 bg-[#08111F] overflow-hidden select-none flex items-center">
                 
-                {/* Imagen vertical de fondo enfocada a los jóvenes de bachillerato en la derecha */}
+                {/* Imagen vertical de fondo enfocada a los jóvenes de bachillerato */}
                 <div className="absolute inset-0 w-full h-full z-0 overflow-hidden pointer-events-none">
                     <img
                         src="/galeria/bachillerato.JPG"
@@ -89,7 +76,7 @@ export default function Bachillerato() {
                     />
                 </div>
 
-                {/* Sombra gradiente completa para móvil */}
+                {/* Sombra gradiente para móvil */}
                 <div className="absolute inset-0 bg-gradient-to-r from-[#08111F] via-[#08111F]/90 to-[#08111F]/60 md:hidden z-10 pointer-events-none"></div>
 
                 {/* Sombra gradiente de izquierda a derecha para escritorio */}
@@ -98,14 +85,15 @@ export default function Bachillerato() {
                 </div>
 
                 {/* Blobs luminosos azul institucional y vinotinto */}
-                <div className="absolute top-1/3 left-1/4 -translate-y-1/2 w-[450px] h-[450px] bg-[#003C8F]/20 rounded-full blur-[130px] pointer-events-none z-10"></div>
+                <div className="absolute top-1/3 left-1/4 -translate-y-1/2 w-[450px] h-[450px] bg-[#003C8F]/25 rounded-full blur-[130px] pointer-events-none z-10 animate-pulse"></div>
+                <div className="absolute bottom-1/4 left-1/3 w-[400px] h-[400px] bg-[#800A15]/20 rounded-full blur-[120px] pointer-events-none z-10"></div>
 
                 <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] relative z-20 w-full">
                     <div className="max-w-3xl space-y-6">
                         <ScrollReveal distance="translate-y-6">
-                            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/30 backdrop-blur-md">
-                                <span className="w-2.5 h-2.5 rounded-full bg-blue-400 animate-pulse"></span>
-                                <span className="text-blue-300 text-xs md:text-sm font-bold tracking-wider uppercase">
+                            <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-gradient-to-r from-[#003C8F]/30 via-blue-500/20 to-[#800A15]/30 border border-blue-400/40 backdrop-blur-md shadow-lg shadow-blue-500/10">
+                                <Award className="w-4 h-4 text-blue-300" />
+                                <span className="bg-gradient-to-r from-blue-300 via-sky-200 to-rose-300 bg-clip-text text-transparent text-xs md:text-sm font-black tracking-wider uppercase font-sans">
                                     Básica Secundaria y Media • Grados 6° a 11°
                                 </span>
                             </div>
@@ -113,7 +101,10 @@ export default function Bachillerato() {
 
                         <ScrollReveal distance="translate-y-6" delay={150}>
                             <h1 className="text-4xl sm:text-5xl lg:text-[62px] font-black text-white leading-[1.08] tracking-tight font-sans">
-                                Rigor académico, <span className="bg-gradient-to-r from-blue-400 via-sky-300 to-rose-400 bg-clip-text text-transparent">liderazgo ético y proyección laboral</span>
+                                Rigor académico, <br className="hidden sm:block" />
+                                <span className="bg-gradient-to-r from-blue-400 via-sky-300 to-rose-400 bg-clip-text text-transparent drop-shadow-md">
+                                    liderazgo ético y proyección laboral
+                                </span>
                             </h1>
                         </ScrollReveal>
 
@@ -127,15 +118,17 @@ export default function Bachillerato() {
                             <div className="flex flex-wrap gap-4 pt-4">
                                 <Link
                                     href="/admisiones"
-                                    className="px-7 py-3.5 rounded-2xl bg-gradient-to-r from-[#003C8F] to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-extrabold text-sm shadow-xl shadow-blue-500/20 hover:scale-105 transition-all duration-300 border border-blue-400/30"
+                                    className="px-8 py-4 rounded-2xl bg-gradient-to-r from-[#003C8F] via-blue-700 to-indigo-800 hover:from-blue-700 hover:to-indigo-900 text-white font-black text-sm md:text-base shadow-xl shadow-blue-500/25 hover:scale-105 transition-all duration-300 border border-blue-400/40 flex items-center gap-2"
                                 >
-                                    Iniciar Admisión Bachillerato
+                                    <span>Iniciar Admisión Bachillerato</span>
+                                    <ArrowRight className="w-5 h-5" />
                                 </Link>
                                 <a
                                     href="#ciclos"
-                                    className="px-7 py-3.5 rounded-2xl bg-white/10 hover:bg-white/15 text-white font-bold text-sm backdrop-blur-md border border-white/20 hover:scale-105 transition-all duration-300"
+                                    className="px-7 py-4 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold text-sm backdrop-blur-md border border-white/25 hover:scale-105 transition-all duration-300 flex items-center gap-2"
                                 >
-                                    Ver Ciclos Formativos
+                                    <span>Ver Ciclos Formativos</span>
+                                    <Search className="w-4 h-4 text-blue-300" />
                                 </a>
                             </div>
                         </ScrollReveal>
@@ -150,99 +143,111 @@ export default function Bachillerato() {
                 </div>
             </section>
 
-            {/* 2. CICLOS FORMATIVOS */}
+            {/* 2. CICLOS FORMATIVOS PERFECCIONADOS */}
             <section id="ciclos" className="py-20 md:py-28 bg-[#F8FAFC] relative z-10">
                 <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px]">
                     <div className="text-center max-w-3xl mx-auto mb-16">
-                        <span className="text-[#003C8F] text-xs md:text-sm font-bold tracking-[3px] uppercase block mb-3">
-                            ETAPAS DE APRENDIZAJE
+                        <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-100 text-[#003C8F] font-extrabold text-xs tracking-[3px] uppercase mb-4 border border-blue-200">
+                            <GraduationCap className="w-4 h-4 text-[#003C8F]" />
+                            ETAPAS DE APRENDIZAJE SECTORIAL
                         </span>
                         <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight">
-                            Ciclos de la Educación Secundaria y Media
+                            Ciclos Formativos del Bachillerato
                         </h2>
+                        <p className="text-slate-600 text-base md:text-lg mt-4 font-medium">
+                            Una formación secundaria exigente dividida en dos ciclos que potencian la ciencia, la ética y el proyecto de vida.
+                        </p>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        {ciclosBachillerato.map((ciclo, idx) => (
-                            <ScrollReveal key={ciclo.titulo} delay={idx * 150} distance="translate-y-8">
-                                <div className={`bg-white rounded-3xl p-8 shadow-xl border ${ciclo.borderColor} hover:shadow-2xl transition-all duration-300 flex flex-col justify-between h-full`}>
-                                    <div>
-                                        <div className="flex justify-between items-center mb-4">
-                                            <h3 className="text-2xl font-black text-slate-900">{ciclo.titulo}</h3>
-                                            <span className={`px-3 py-1 rounded-full text-xs font-black ${ciclo.badgeColor}`}>
+                        {ciclosBachillerato.map((ciclo, idx) => {
+                            const IconComponent = ciclo.icon;
+                            return (
+                                <ScrollReveal key={ciclo.titulo} delay={idx * 150} distance="translate-y-8">
+                                    <div className={`bg-white rounded-3xl overflow-hidden shadow-xl border ${ciclo.borderColor} hover:shadow-2xl transition-all duration-300 flex flex-col h-full group hover:-translate-y-1`}>
+                                        <div className={`p-8 bg-gradient-to-r ${ciclo.headerGradient} text-white flex justify-between items-center`}>
+                                            <div className="flex items-center gap-3">
+                                                <div className="p-2.5 rounded-xl bg-white/10 backdrop-blur-md border border-white/20">
+                                                    <IconComponent className="w-6 h-6 text-white" />
+                                                </div>
+                                                <h3 className="text-2xl font-black">{ciclo.titulo}</h3>
+                                            </div>
+                                            <span className={`px-3.5 py-1.5 rounded-full text-xs font-black tracking-wider ${ciclo.badgeColor}`}>
                                                 {ciclo.edad}
                                             </span>
                                         </div>
-                                        <p className="text-slate-600 text-sm font-medium leading-relaxed mb-6">
-                                            {ciclo.descripcion}
-                                        </p>
-                                        <div className="space-y-3 pt-4 border-t border-slate-100">
-                                            <span className="text-xs font-bold text-slate-800 uppercase tracking-wider block">Componentes Clave:</span>
-                                            {ciclo.destacados.map((item) => (
-                                                <div key={item} className="flex items-center gap-3 text-xs font-semibold text-slate-700">
-                                                    <svg className="w-4 h-4 text-[#003C8F] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7" />
-                                                    </svg>
-                                                    <span>{item}</span>
-                                                </div>
-                                            ))}
+                                        <div className="p-8 flex flex-col justify-between flex-grow">
+                                            <p className="text-slate-600 font-medium text-base leading-relaxed mb-6">
+                                                {ciclo.descripcion}
+                                            </p>
+                                            <div className="space-y-3 pt-6 border-t border-slate-100">
+                                                <span className="text-xs font-black text-slate-400 uppercase tracking-wider block mb-2">Componentes Clave:</span>
+                                                {ciclo.destacados.map((item) => (
+                                                    <div key={item} className="flex items-center gap-3 text-sm font-semibold text-slate-700">
+                                                        <Check className="w-4 h-4 text-[#003C8F] shrink-0" />
+                                                        <span>{item}</span>
+                                                    </div>
+                                                ))}
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </ScrollReveal>
-                        ))}
+                                </ScrollReveal>
+                            );
+                        })}
                     </div>
                 </div>
             </section>
 
-            {/* 3. FORTALEZAS DEL BACHILLERATO */}
+            {/* 3. FORTALEZAS Y PROPUESTA DE VALOR */}
             <section className="py-20 md:py-28 bg-white relative z-10">
                 <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px]">
                     <div className="text-center max-w-3xl mx-auto mb-16">
-                        <span className="text-[#003C8F] text-xs md:text-sm font-bold tracking-[3px] uppercase block mb-3">
-                            EXCELENCIA PEDAGÓGICA
+                        <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-rose-100 text-[#800A15] font-extrabold text-xs tracking-[3px] uppercase mb-4 border border-rose-200">
+                            <Building2 className="w-4 h-4 text-[#800A15]" />
+                            EXCELENCIA INSTITUCIONAL
                         </span>
                         <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight">
-                            Fortalezas de Nuestro Bachillerato
+                            Fortalezas de Nuestra Educación Media
                         </h2>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        {fortalezasBachillerato.map((f, idx) => (
-                            <ScrollReveal key={f.titulo} delay={idx * 120} distance="translate-y-6">
-                                <div className="p-8 rounded-3xl bg-slate-50 border border-slate-200 hover:border-blue-300 transition-all duration-300 flex items-start gap-5 group">
-                                    <div className="p-4 rounded-2xl bg-blue-100/70 text-[#003C8F] group-hover:scale-110 transition-transform duration-300 shrink-0">
-                                        {f.icon}
+                        {fortalezasBachillerato.map((item, idx) => {
+                            const IconComponent = item.icon;
+                            return (
+                                <ScrollReveal key={item.titulo} delay={idx * 120} distance="translate-y-6">
+                                    <div className="p-8 rounded-3xl bg-gradient-to-br from-slate-50 via-blue-50/20 to-slate-50 border border-slate-200/80 hover:border-blue-300 transition-all duration-300 flex items-start gap-5 group hover:-translate-y-1 shadow-lg shadow-slate-900/5">
+                                        <div className="p-4 rounded-2xl bg-blue-100/80 text-[#003C8F] group-hover:scale-110 transition-transform duration-300 shrink-0 border border-blue-200">
+                                            <IconComponent className="w-7 h-7" />
+                                        </div>
+                                        <div>
+                                            <h3 className="text-xl font-bold text-slate-900 mb-2">{item.titulo}</h3>
+                                            <p className="text-slate-600 text-sm font-medium leading-relaxed">{item.desc}</p>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <h3 className="text-xl font-bold text-slate-900 mb-2">{f.titulo}</h3>
-                                        <p className="text-slate-600 text-sm font-medium leading-relaxed">{f.desc}</p>
-                                    </div>
-                                </div>
-                            </ScrollReveal>
-                        ))}
+                                </ScrollReveal>
+                            );
+                        })}
                     </div>
                 </div>
             </section>
 
-            {/* 4. BANNER ADMISIONES BACHILLERATO */}
-            <section className="py-20 bg-gradient-to-r from-[#003C8F] via-[#0F172A] to-[#800A15] text-white relative overflow-hidden">
+            {/* 4. BANNER FINAL ADMISIONES BACHILLERATO */}
+            <section className="py-20 bg-gradient-to-r from-[#003C8F] via-blue-800 to-[#800A15] text-white relative overflow-hidden">
                 <div className="max-w-5xl mx-auto px-6 text-center relative z-10 space-y-6">
-                    <h2 className="text-3xl md:text-5xl font-black tracking-tight">
-                        ¡Prepara a tu hijo para destacar en las Pruebas Saber y la Universidad!
+                    <h2 className="text-3xl md:text-5xl font-black tracking-tight drop-shadow-md">
+                        ¡Proyecta el futuro universitario y profesional de tus hijos!
                     </h2>
-                    <p className="text-slate-200 text-base md:text-xl font-medium max-w-2xl mx-auto">
-                        Abre las puertas a una formación secundaria de excelencia salesiana.
+                    <p className="text-blue-100 text-base md:text-xl font-medium max-w-2xl mx-auto">
+                        Inscripciones abiertas para Básica Secundaria y Media Técnica. Forma parte de la comunidad salesiana COLSIH.
                     </p>
                     <div className="pt-4">
                         <Link
                             href="/admisiones"
-                            className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl bg-white text-slate-950 font-extrabold text-sm md:text-base shadow-2xl hover:scale-105 transition-all duration-300"
+                            className="inline-flex items-center gap-3 px-9 py-4 rounded-2xl bg-white text-slate-900 font-black text-sm md:text-base shadow-2xl hover:scale-105 transition-all duration-300 hover:bg-blue-50"
                         >
                             <span>Solicitar Admisión a Bachillerato</span>
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                            </svg>
+                            <ArrowRight className="w-5 h-5 text-[#003C8F]" />
                         </Link>
                     </div>
                 </div>

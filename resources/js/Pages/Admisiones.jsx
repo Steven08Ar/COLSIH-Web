@@ -66,7 +66,7 @@ const horarios = [
 const destacados = [
     { titulo: 'Inglés desde Jardín', descripcion: 'Aprendizaje del idioma inglés desde los primeros niveles de formación.' },
     { titulo: 'Becas UPB 90%', descripcion: 'Los mejores bachilleres acceden a becas del 90% en la Universidad Pontificia Bolivariana.' },
-    { titulo: 'Título Técnico en Comercio', descripcion: 'Egresa como Bachiller Técnico con especialidad en Comercio, habilitado para el mundo laboral.' }
+    { titulo: 'Técnico en Contabilización SENA', descripcion: 'Egresa como Bachiller Técnico con el título de Técnico en Contabilización de Operaciones Comerciales y Financieras, habilitado para el mundo laboral.' }
 ];
 
 export default function Admisiones() {

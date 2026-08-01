@@ -14,16 +14,21 @@ import {
     User
 } from 'lucide-react';
 
-export default function Equipo() {
+export default function Equipo({ equipo = [] }) {
     const [selectedArea, setSelectedArea] = useState('Todos');
 
-    // Equipo Directivo Oficial con fotos reales
-    const directivos = [
-        { nombre: 'Sor Beatriz Cortés Jerez', cargo: 'Rectora', foto: '/docentes/Sor%20Betty.JPG' },
-        { nombre: 'Jaime Manuel Ardila Parra', cargo: 'Coordinador Académico', foto: '/docentes/Jaime%20Manuel.JPG' },
-        { nombre: 'Margarita María Valle Manrique', cargo: 'Coordinadora de Convivencia', foto: '/docentes/Margara.JPG' },
-        { nombre: 'Erika Tatiana Delgadillo Avella', cargo: 'Coordinadora de Pastoral', foto: '/docentes/Erika.JPG' }
+    // Separar equipo directivo y docente desde la base de datos (o usar fallback estatico)
+    const directivosFromDb = equipo.filter(m => m.tipo === 'directivo');
+    const docentesFromDb = equipo.filter(m => m.tipo === 'docente');
+
+    const defaultDirectivos = [
+        { nombre: 'Sor Beatriz Cortés Jerez', cargo: 'Rectora', foto: '/docentes/Sor%20Betty.JPG', foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Jaime Manuel Ardila Parra', cargo: 'Coordinador Académico', foto: '/docentes/Jaime%20Manuel.JPG', foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Margarita María Valle Manrique', cargo: 'Coordinadora de Convivencia', foto: '/docentes/Margara.JPG', foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Erika Tatiana Delgadillo Avella', cargo: 'Coordinadora de Pastoral', foto: '/docentes/Erika.JPG', foto_posicion: 20, foto_zoom: 100 }
     ];
+
+    const directivos = directivosFromDb.length > 0 ? directivosFromDb : defaultDirectivos;
 
     // Áreas de Administración
     const administracion = [
@@ -33,42 +38,45 @@ export default function Equipo() {
         { area: 'Coordinación Pastoral', encargado: 'Erika Tatiana Delgadillo Avella', cargo: 'Coordinadora de Pastoral', tel: '(607) 637 1237', email: 'pastoral@colsih.edu.co' }
     ];
 
-    // Listado Oficial de Docentes asignando fotos de /docentes/ y gris para los que no tengan
-    const todosLosProfesores = [
-        { nombre: 'Adriana María Jaimes Ruiz', asignatura: 'Ed. Religiosa', area: 'Ed. Religiosa y Ética', foto: '/docentes/Adriana.JPG' },
-        { nombre: 'Bruna Mercedes Peña Solano', asignatura: 'Lengua Castellana', area: 'Lengua Castellana', foto: '/docentes/Bruna.JPG' },
-        { nombre: 'Clara Inés Joya Herrera', asignatura: 'Matemáticas', area: 'Matemáticas', foto: '/docentes/Clara.JPG' },
-        { nombre: 'Daniela Villamizar Villamizar', asignatura: 'Todas las Dimensiones', area: 'Preescolar y Primaria', foto: '/docentes/Daniela.JPG' },
-        { nombre: 'Diana Soidé Villamizar Bautista', asignatura: 'Lengua Castellana (Primaria)', area: 'Lengua Castellana', foto: null },
-        { nombre: 'Edgar Javier García Estupiñán', asignatura: 'Ciencias Sociales', area: 'Ciencias Sociales', foto: '/docentes/Edgar.JPG' },
-        { nombre: 'Erika Tatiana Delgadillo Avella', asignatura: 'Ciencias Sociales', area: 'Ciencias Sociales', foto: '/docentes/Erika.JPG' },
-        { nombre: 'Fredy Neira Roa', asignatura: 'Matemáticas y Física', area: 'Matemáticas', foto: '/docentes/Fredy.JPG' },
-        { nombre: 'Gloria Mercedes Serrano Salazar', asignatura: 'Ed. Religiosa', area: 'Ed. Religiosa y Ética', foto: '/docentes/Gloria.JPG' },
-        { nombre: 'Héctor Manuel Garzón Gómez', asignatura: 'Ética y Ed. Religiosa', area: 'Ed. Religiosa y Ética', foto: '/docentes/Hector.JPG' },
-        { nombre: 'Irma Sánchez Espinosa', asignatura: 'Ciencias Naturales', area: 'Ciencias Naturales', foto: null },
-        { nombre: 'Iván Martínez Peña', asignatura: 'Tecnología e Informática', area: 'Tecnología e Informática', foto: '/docentes/Ivan.JPG' },
-        { nombre: 'Jenny Marcela Pérez Medina', asignatura: 'Química', area: 'Ciencias Naturales', foto: null },
-        { nombre: 'Jesús David Arias Estupiñán', asignatura: 'Tecnología y Estadística', area: 'Tecnología e Informática', foto: '/docentes/Jes%C3%BAs.JPG' },
-        { nombre: 'Jeyson Eduardo Suárez Ardila', asignatura: 'Matemáticas', area: 'Matemáticas', foto: '/docentes/Jeison.JPG' },
-        { nombre: 'Jeyson Mauricio Ávila Triana', asignatura: 'Ed. Física y Deportes', area: 'Ed. Física y Expresión', foto: '/docentes/Jeyson.JPG' },
-        { nombre: 'Karen Navarro Pisciotti', asignatura: 'Lengua Castellana', area: 'Lengua Castellana', foto: '/docentes/Karen%20Piziote.JPG' },
-        { nombre: 'Karen Tatiana Linares Gelvez', asignatura: 'Lengua Castellana', area: 'Lengua Castellana', foto: '/docentes/Karen%20Linares.JPG' },
-        { nombre: 'Katerin Johanna Delgado Ruda', asignatura: 'Ciencias Sociales', area: 'Ciencias Sociales', foto: '/docentes/Katerin.JPG' },
-        { nombre: 'Lady Diana Osorio Fonseca', asignatura: 'Todas las Asignaturas', area: 'Preescolar y Primaria', foto: '/docentes/Ladi.JPG' },
-        { nombre: 'Leidy Andrea Portilla Gelvez', asignatura: 'Matemáticas', area: 'Matemáticas', foto: '/docentes/Leidy%20Portilla.JPG' },
-        { nombre: 'Leidy Paola Basto Ramírez', asignatura: 'Inglés', area: 'Inglés', foto: '/docentes/Leidy%20Bastos.JPG' },
-        { nombre: 'Ludwin Fernando Caballero Espinosa', asignatura: 'Ed. Física y Deportes', area: 'Ed. Física y Expresión', foto: '/docentes/Ludwin.JPG' },
-        { nombre: 'Luz Adriana García Villamizar', asignatura: 'Artes y Ética', area: 'Ed. Física y Expresión', foto: null },
-        { nombre: 'Mayra Jisseth Sierra Lombana', asignatura: 'Inglés', area: 'Inglés', foto: '/docentes/Mayra.JPG' },
-        { nombre: 'Miguel Oswaldo Lizarazo Latorre', asignatura: 'Contabilidad SENA', area: 'Contabilidad SENA', foto: '/docentes/Miguel.JPG' },
-        { nombre: 'Paula Lorena Cuadros Ballesteros', asignatura: 'Todas las Dimensiones', area: 'Preescolar y Primaria', foto: null },
-        { nombre: 'Robin Javier Aparicio Aparicio', asignatura: 'Filosofía y Ed. Religiosa', area: 'Ciencias Sociales', foto: '/docentes/Robin.JPG' },
-        { nombre: 'Sandra Patricia Parada Leal', asignatura: 'Música', area: 'Ed. Física y Expresión', foto: '/docentes/Sandra.JPG' },
-        { nombre: 'Sergio Andrés Mendoza Gómez', asignatura: 'Inglés', area: 'Inglés', foto: '/docentes/Sergio.JPG' },
-        { nombre: 'Yesica Zoraya Badillo Corredor', asignatura: 'Ciencias Naturales', area: 'Ciencias Naturales', foto: '/docentes/Yesica%20Zoraya.JPG' },
-        { nombre: 'Yoleida Patricia Camacho Corzo', asignatura: 'Inglés', area: 'Inglés', foto: null },
-        { nombre: 'Yoni Amparo Méndez Álvarez', asignatura: 'Matemáticas e Informática', area: 'Matemáticas', foto: null }
+    const defaultDocentes = [
+        { nombre: 'Adriana María Jaimes Ruiz', asignatura: 'Ed. Religiosa', area: 'Ed. Religiosa y Ética', foto: '/docentes/Adriana.JPG', foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Bruna Mercedes Peña Solano', asignatura: 'Lengua Castellana', area: 'Lengua Castellana', foto: '/docentes/Bruna.JPG', foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Clara Inés Joya Herrera', asignatura: 'Matemáticas', area: 'Matemáticas', foto: '/docentes/Clara.JPG', foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Daniela Villamizar Villamizar', asignatura: 'Todas las Dimensiones', area: 'Preescolar y Primaria', foto: '/docentes/Daniela.JPG', foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Diana Soidé Villamizar Bautista', asignatura: 'Lengua Castellana (Primaria)', area: 'Lengua Castellana', foto: null, foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Edgar Javier García Estupiñán', asignatura: 'Ciencias Sociales', area: 'Ciencias Sociales', foto: '/docentes/Edgar.JPG', foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Erika Tatiana Delgadillo Avella', asignatura: 'Ciencias Sociales', area: 'Ciencias Sociales', foto: '/docentes/Erika.JPG', foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Fredy Neira Roa', asignatura: 'Matemáticas y Física', area: 'Matemáticas', foto: '/docentes/Fredy.JPG', foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Gloria Mercedes Serrano Salazar', asignatura: 'Ed. Religiosa', area: 'Ed. Religiosa y Ética', foto: '/docentes/Gloria.JPG', foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Héctor Manuel Garzón Gómez', asignatura: 'Ética y Ed. Religiosa', area: 'Ed. Religiosa y Ética', foto: '/docentes/Hector.JPG', foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Irma Sánchez Espinosa', asignatura: 'Ciencias Naturales', area: 'Ciencias Naturales', foto: null, foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Iván Martínez Peña', asignatura: 'Tecnología e Informática', area: 'Tecnología e Informática', foto: '/docentes/Ivan.JPG', foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Jenny Marcela Pérez Medina', asignatura: 'Química', area: 'Ciencias Naturales', foto: null, foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Jesús David Arias Estupiñán', asignatura: 'Tecnología y Estadística', area: 'Tecnología e Informática', foto: '/docentes/Jes%C3%BAs.JPG', foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Jeyson Eduardo Suárez Ardila', asignatura: 'Matemáticas', area: 'Matemáticas', foto: '/docentes/Jeison.JPG', foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Jeyson Mauricio Ávila Triana', asignatura: 'Ed. Física y Deportes', area: 'Ed. Física y Expresión', foto: '/docentes/Jeyson.JPG', foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Karen Navarro Pisciotti', asignatura: 'Lengua Castellana', area: 'Lengua Castellana', foto: '/docentes/Karen%20Piziote.JPG', foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Karen Tatiana Linares Gelvez', asignatura: 'Lengua Castellana', area: 'Lengua Castellana', foto: '/docentes/Karen%20Linares.JPG', foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Katerin Johanna Delgado Ruda', asignatura: 'Ciencias Sociales', area: 'Ciencias Sociales', foto: '/docentes/Katerin.JPG', foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Lady Diana Osorio Fonseca', asignatura: 'Todas las Asignaturas', area: 'Preescolar y Primaria', foto: '/docentes/Ladi.JPG', foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Leidy Andrea Portilla Gelvez', asignatura: 'Matemáticas', area: 'Matemáticas', foto: '/docentes/Leidy%20Portilla.JPG', foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Leidy Paola Basto Ramírez', asignatura: 'Inglés', area: 'Inglés', foto: '/docentes/Leidy%20Bastos.JPG', foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Ludwin Fernando Caballero Espinosa', asignatura: 'Ed. Física y Deportes', area: 'Ed. Física y Expresión', foto: '/docentes/Ludwin.JPG', foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Luz Adriana García Villamizar', asignatura: 'Artes y Ética', area: 'Ed. Física y Expresión', foto: null, foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Mayra Jisseth Sierra Lombana', asignatura: 'Inglés', area: 'Inglés', foto: '/docentes/Mayra.JPG', foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Miguel Oswaldo Lizarazo Latorre', asignatura: 'Contabilidad SENA', area: 'Contabilidad SENA', foto: '/docentes/Miguel.JPG', foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Paula Lorena Cuadros Ballesteros', asignatura: 'Todas las Dimensiones', area: 'Preescolar y Primaria', foto: null, foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Robin Javier Aparicio Aparicio', asignatura: 'Filosofía y Ed. Religiosa', area: 'Ciencias Sociales', foto: '/docentes/Robin.JPG', foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Sandra Patricia Parada Leal', asignatura: 'Música', area: 'Ed. Física y Expresión', foto: '/docentes/Sandra.JPG', foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Sergio Andrés Mendoza Gómez', asignatura: 'Inglés', area: 'Inglés', foto: '/docentes/Sergio.JPG', foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Yesica Zoraya Badillo Corredor', asignatura: 'Ciencias Naturales', area: 'Ciencias Naturales', foto: '/docentes/Yesica%20Zoraya.JPG', foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Yoleida Patricia Camacho Corzo', asignatura: 'Inglés', area: 'Inglés', foto: null, foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Yoni Amparo Méndez Álvarez', asignatura: 'Matemáticas e Informática', area: 'Matemáticas', foto: null, foto_posicion: 20, foto_zoom: 100 }
     ];
+
+    const todosLosProfesores = docentesFromDb.length > 0
+        ? docentesFromDb.map(d => ({ ...d, asignatura: d.cargo }))
+        : defaultDocentes;
 
     const areasList = [
         'Todos',
@@ -186,7 +194,11 @@ export default function Equipo() {
                                             <img 
                                                 src={p.foto} 
                                                 alt={p.nombre} 
-                                                className="w-full h-full object-cover object-[center_20%]"
+                                                className="w-full h-full object-cover transition-all duration-300"
+                                                style={{
+                                                    objectPosition: `center ${p.foto_posicion ?? 20}%`,
+                                                    transform: `scale(${(p.foto_zoom ?? 100) / 100})`
+                                                }}
                                             />
                                         ) : (
                                             <div className="w-full h-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-400 dark:text-slate-600">
@@ -323,7 +335,11 @@ export default function Equipo() {
                                         <img 
                                             src={prof.foto} 
                                             alt={prof.nombre} 
-                                            className="w-full h-full object-cover object-[center_20%] group-hover:scale-105 transition-transform duration-500" 
+                                            className="w-full h-full object-cover transition-all duration-300" 
+                                            style={{
+                                                objectPosition: `center ${prof.foto_posicion ?? 20}%`,
+                                                transform: `scale(${(prof.foto_zoom ?? 100) / 100})`
+                                            }}
                                         />
                                     ) : (
                                         <div className="w-full h-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-400 dark:text-slate-600">

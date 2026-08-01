@@ -170,7 +170,7 @@ export default function Footer() {
                         </div>
                         <div>
                             <span className="block text-white font-semibold">Dirección Sede Principal</span>
-                            <span>Calle 6 # 10-23 Barrio Villabel, Floridablanca</span>
+                            <span>Calle 13 # 13-30 Barrio Villabel, Floridablanca</span>
                         </div>
                     </div>
 
@@ -182,7 +182,7 @@ export default function Footer() {
                         </div>
                         <div>
                             <span className="block text-white font-semibold">Teléfonos de Atención</span>
-                            <span>+57 (607) 675 2046 · +57 315 145 8309</span>
+                            <span>+57 607 684 9810</span>
                         </div>
                     </div>
 
@@ -194,7 +194,7 @@ export default function Footer() {
                         </div>
                         <div>
                             <span className="block text-white font-semibold">Correo Electrónico</span>
-                            <span>contacto@colsih.edu.co</span>
+                            <span>colsantaisabeldehungria.fblanca@gmail.com</span>
                         </div>
                     </div>
                 </div>

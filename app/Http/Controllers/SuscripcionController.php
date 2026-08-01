@@ -19,7 +19,7 @@ class SuscripcionController extends Controller
         $correo = $request->input('correo');
 
         Mail::to($correo)->send(new SuscripcionConfirmada($correo));
-        Mail::to('contacto@colsih.edu.co')->send(new SuscripcionNotificacion($correo));
+        Mail::to('colsantaisabeldehungria.fblanca@gmail.com')->send(new SuscripcionNotificacion($correo));
 
         return back()->with('suscripcion_ok', true);
     }

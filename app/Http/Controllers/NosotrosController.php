@@ -29,7 +29,14 @@ class NosotrosController extends Controller
 
     public function equipo(): Response
     {
-        return Inertia::render('Nosotros/Equipo');
+        $equipo = \App\Models\EquipoMember::where('activo', true)
+            ->orderBy('orden')
+            ->orderBy('nombre')
+            ->get();
+
+        return Inertia::render('Nosotros/Equipo', [
+            'equipo' => $equipo
+        ]);
     }
 }
 

@@ -60,7 +60,7 @@ export default function Contact() {
                                     </div>
                                     <div>
                                         <span className="block text-xs font-bold text-slate-400 uppercase tracking-wider">Dirección</span>
-                                        <span className="block text-base font-extrabold text-[#08111F] mt-0.5">Cl. 39a Sur #3-28, Bogotá, Colombia</span>
+                                        <span className="block text-base font-extrabold text-[#08111F] mt-0.5">Calle 13 # 13-30 Barrio Villabel, Floridablanca</span>
                                     </div>
                                 </div>
 
@@ -73,7 +73,7 @@ export default function Contact() {
                                     </div>
                                     <div>
                                         <span className="block text-xs font-bold text-slate-400 uppercase tracking-wider">Teléfono</span>
-                                        <span className="block text-base font-extrabold text-[#08111F] mt-0.5">+57 (601) 203-8555</span>
+                                        <span className="block text-base font-extrabold text-[#08111F] mt-0.5">+57 607 684 9810</span>
                                     </div>
                                 </div>
 
@@ -86,7 +86,7 @@ export default function Contact() {
                                     </div>
                                     <div>
                                         <span className="block text-xs font-bold text-slate-400 uppercase tracking-wider">Correo Electrónico</span>
-                                        <span className="block text-base font-extrabold text-[#08111F] mt-0.5">contacto@colsih.edu.co</span>
+                                        <span className="block text-base font-extrabold text-[#08111F] mt-0.5">colsantaisabeldehungria.fblanca@gmail.com</span>
                                     </div>
                                 </div>
                             </div>

@@ -1920,15 +1920,487 @@ function RecorridoTab({ tour, scenes = [], flash, basePath }) {
     );
 }
 
+/* ── Equipo Institucional Tab ── */
+const AREAS_EQUIPO = [
+    'Todos',
+    'Equipo Directivo',
+    'Preescolar y Primaria',
+    'Matemáticas',
+    'Lengua Castellana',
+    'Ciencias Naturales',
+    'Ciencias Sociales',
+    'Inglés',
+    'Tecnología e Informática',
+    'Ed. Física y Expresión',
+    'Ed. Religiosa y Ética',
+    'Contabilidad SENA'
+];
+
+const INITIAL_MEMBER = {
+    nombre: '',
+    cargo: '',
+    area: 'Matemáticas',
+    tipo: 'docente',
+    foto: null,
+    foto_posicion: 20,
+    foto_zoom: 100,
+    orden: 0,
+    activo: true,
+};
+
+function EquipoTab({ equipo = [], flash }) {
+    const [selectedArea, setSelectedArea] = useState('Todos');
+    const [editando, setEditando] = useState(null);
+    const [creando, setCreando] = useState(false);
+    const [previewImage, setPreviewImage] = useState(null);
+    const [deletingId, setDeletingId] = useState(null);
+
+    const form = useForm(INITIAL_MEMBER);
+
+    function abrirCrear() {
+        form.setData(INITIAL_MEMBER);
+        setPreviewImage(null);
+        setEditando(null);
+        form.clearErrors();
+        setCreando(true);
+    }
+
+    function abrirEditar(m) {
+        form.setData({
+            nombre: m.nombre || '',
+            cargo: m.cargo || '',
+            area: m.area || 'Matemáticas',
+            tipo: m.tipo || 'docente',
+            foto: null,
+            foto_posicion: Number(m.foto_posicion ?? 20),
+            foto_zoom: Number(m.foto_zoom ?? 100),
+            orden: Number(m.orden ?? 0),
+            activo: !!m.activo,
+        });
+        setEditando(m);
+        setCreando(false);
+    }
+
+    function cerrar() {
+        setCreando(false);
+        setEditando(null);
+        setPreviewImage(null);
+        form.clearErrors();
+        form.setData(INITIAL_MEMBER);
+    }
+
+    useEffect(() => {
+        if (form.data.foto instanceof File) {
+            const objectUrl = URL.createObjectURL(form.data.foto);
+            setPreviewImage(objectUrl);
+            return () => URL.revokeObjectURL(objectUrl);
+        } else if (editando && editando.foto) {
+            setPreviewImage(editando.foto.startsWith('/') || editando.foto.startsWith('http') ? editando.foto : `/storage/${editando.foto}`);
+        } else {
+            setPreviewImage(null);
+        }
+    }, [form.data.foto, editando, creando]);
+
+    function guardar(e) {
+        e.preventDefault();
+        const basePath = window.location.pathname.replace(/\/[^/]+$/, '');
+        if (editando) {
+            router.post(`${basePath}/equipo/${editando.id}`, {
+                _method: 'PUT',
+                ...form.data
+            }, {
+                onSuccess: cerrar,
+                onError: (errs) => {
+                    Object.keys(errs).forEach(key => form.setError(key, errs[key]));
+                }
+            });
+        } else {
+            form.post(`${basePath}/equipo`, { onSuccess: cerrar });
+        }
+    }
+
+    function eliminar(id) {
+        setDeletingId(null);
+        const basePath = window.location.pathname.replace(/\/[^/]+$/, '');
+        router.delete(`${basePath}/equipo/${id}`);
+    }
+
+    const directivosList = equipo.filter(m => m.tipo === 'directivo');
+    const docentesList = equipo.filter(m => m.tipo === 'docente');
+
+    const docentesFiltrados = selectedArea === 'Todos'
+        ? docentesList
+        : selectedArea === 'Equipo Directivo'
+            ? []
+            : docentesList.filter(m => m.area === selectedArea);
+
+    const mostrarDirectivos = selectedArea === 'Todos' || selectedArea === 'Equipo Directivo';
+
+    return (
+        <div className="space-y-8 animate-fadeIn">
+            <Flash message={flash} />
+
+            {/* Encabezado */}
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800/80 p-6 rounded-3xl shadow-sm">
+                <div>
+                    <h2 className="text-xl font-black text-slate-900 dark:text-white leading-tight flex items-center gap-2">
+                        <span>Gestión del Equipo Institucional</span>
+                    </h2>
+                    <p className="text-xs font-medium text-slate-500 dark:text-slate-400 mt-1">
+                        Haz clic en cualquier tarjeta para acomodar el encuadre (posición Y) y zoom de la foto en vivo, o editar los datos.
+                    </p>
+                </div>
+                <button
+                    onClick={abrirCrear}
+                    className="px-5 py-2.5 bg-[#800A15] hover:bg-[#600710] text-white text-xs font-extrabold rounded-2xl shadow-md transition-all duration-300 hover:scale-105 shrink-0 cursor-pointer flex items-center gap-2"
+                >
+                    <span>+ Nuevo Integrante</span>
+                </button>
+            </div>
+
+            {/* Barra de Filtros */}
+            <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-2.5 w-full select-none">
+                {AREAS_EQUIPO.map((areaName) => (
+                    <button
+                        key={areaName}
+                        onClick={() => setSelectedArea(areaName)}
+                        className={`px-4 py-2 sm:px-4.5 sm:py-2.5 rounded-full font-extrabold text-[11px] sm:text-xs uppercase tracking-wider transition-all duration-300 cursor-pointer ${
+                            selectedArea === areaName
+                                ? 'bg-[#800A15] text-white shadow-md shadow-[#800A15]/20 scale-105'
+                                : 'bg-white hover:bg-slate-100 dark:bg-slate-900 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:text-[#800A15]'
+                        }`}
+                    >
+                        {areaName}
+                    </button>
+                ))}
+            </div>
+
+            {/* ── 1. Equipo Directivo (Admin View) ── */}
+            {mostrarDirectivos && (
+                <div className="space-y-4">
+                    <div className="border-b border-slate-200 dark:border-slate-800 pb-2">
+                        <h3 className="text-lg font-black text-slate-800 dark:text-white">Equipo Directivo ({directivosList.length})</h3>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                        {directivosList.map((p, idx) => {
+                            const isVino = idx % 2 === 0;
+                            const borderClass = isVino ? 'border-t-4 border-t-[#800A15]' : 'border-t-4 border-t-[#003C8F]';
+                            const roleClass = isVino ? 'text-[#800A15] dark:text-rose-400' : 'text-[#003C8F] dark:text-blue-400';
+
+                            return (
+                                <div
+                                    key={p.id}
+                                    onClick={() => abrirEditar(p)}
+                                    className={`group relative bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800/80 rounded-[28px] overflow-hidden shadow-sm hover:shadow-xl hover:scale-[1.02] transition-all duration-300 cursor-pointer ${borderClass}`}
+                                >
+                                    <div className="aspect-[4/5] bg-slate-100 dark:bg-slate-800 overflow-hidden relative flex items-center justify-center">
+                                        {p.foto ? (
+                                            <img
+                                                src={p.foto.startsWith('/') || p.foto.startsWith('http') ? p.foto : `/storage/${p.foto}`}
+                                                alt={p.nombre}
+                                                className="w-full h-full object-cover transition-all duration-300 pointer-events-none"
+                                                style={{
+                                                    objectPosition: `center ${p.foto_posicion ?? 20}%`,
+                                                    transform: `scale(${(p.foto_zoom ?? 100) / 100})`
+                                                }}
+                                            />
+                                        ) : (
+                                            <div className="w-full h-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-400 dark:text-slate-600">
+                                                <svg className="w-20 h-20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                                            </div>
+                                        )}
+                                        {/* Overlay de Ajustar Foto */}
+                                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                                            <span className="bg-white/90 dark:bg-slate-900/90 text-slate-900 dark:text-white text-xs font-black px-4 py-2 rounded-full shadow-lg backdrop-blur-sm flex items-center gap-1.5 transform group-hover:scale-105 transition-transform">
+                                                📷 Ajustar Foto / Zoom
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div className="p-5 text-center bg-white dark:bg-slate-900">
+                                        <h4 className="font-extrabold text-slate-800 dark:text-slate-200 text-base leading-snug">
+                                            {p.nombre}
+                                        </h4>
+                                        <span className={`text-[11px] font-black uppercase tracking-widest block mt-1.5 ${roleClass}`}>
+                                            {p.cargo}
+                                        </span>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+            )}
+
+            {/* ── 2. Cuerpo Docente (Admin View) ── */}
+            {selectedArea !== 'Equipo Directivo' && (
+                <div className="space-y-4 pt-4">
+                    <div className="border-b border-slate-200 dark:border-slate-800 pb-2 flex items-center justify-between">
+                        <h3 className="text-lg font-black text-slate-800 dark:text-white">Cuerpo Docente ({docentesFiltrados.length})</h3>
+                        <span className="text-xs font-bold text-slate-400">Área: {selectedArea}</span>
+                    </div>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
+                        {docentesFiltrados.map((prof) => (
+                            <div
+                                key={prof.id}
+                                onClick={() => abrirEditar(prof)}
+                                className="group relative bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800/80 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between cursor-pointer"
+                            >
+                                <div className="w-full aspect-[4/5] bg-slate-100 dark:bg-slate-800 overflow-hidden relative flex items-center justify-center">
+                                    {prof.foto ? (
+                                        <img
+                                            src={prof.foto.startsWith('/') || prof.foto.startsWith('http') ? prof.foto : `/storage/${prof.foto}`}
+                                            alt={prof.nombre}
+                                            className="w-full h-full object-cover transition-all duration-300 pointer-events-none"
+                                            style={{
+                                                objectPosition: `center ${prof.foto_posicion ?? 20}%`,
+                                                transform: `scale(${(prof.foto_zoom ?? 100) / 100})`
+                                            }}
+                                        />
+                                    ) : (
+                                        <div className="w-full h-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-400 dark:text-slate-600">
+                                            <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                                        </div>
+                                    )}
+                                    {/* Overlay de Ajustar Foto */}
+                                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-2">
+                                        <span className="bg-white/90 dark:bg-slate-900/90 text-slate-900 dark:text-white text-[10px] sm:text-xs font-black px-3 py-1.5 rounded-full shadow-lg backdrop-blur-sm text-center">
+                                            📷 Ajustar Foto / Zoom
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div className="p-4 text-center flex-1 flex flex-col justify-between bg-white dark:bg-slate-900">
+                                    <h4 className="font-extrabold text-slate-900 dark:text-slate-100 text-xs sm:text-sm leading-snug">
+                                        {prof.nombre}
+                                    </h4>
+                                    <span className="text-[11px] font-bold text-[#003C8F] dark:text-blue-400 mt-2 block">
+                                        {prof.cargo}
+                                    </span>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
+
+            {/* ── Modal de Edición & Ajuste de Foto / Zoom ── */}
+            {(creando || editando) && (
+                <Modal title={editando ? `Ajustar Foto y Datos de ${editando.nombre}` : 'Nuevo Integrante del Equipo'} onClose={cerrar}>
+                    <form onSubmit={guardar} className="space-y-5">
+                        
+                        {/* Previsualizador e Editor Interactivo de Encuadre */}
+                        <div className="space-y-2">
+                            <label className="text-slate-700 dark:text-slate-200 text-xs font-extrabold uppercase tracking-wider block">
+                                Ajuste de Foto (Vista Previa en Vivo)
+                            </label>
+                            
+                            <div className="flex flex-col sm:flex-row items-center gap-4 bg-slate-50 dark:bg-slate-800/40 p-4 rounded-2xl border border-slate-200 dark:border-slate-700/80">
+                                {/* Simulación de la Card Retrato */}
+                                <div className="w-40 aspect-[4/5] bg-slate-900 rounded-2xl overflow-hidden relative border-2 border-blue-500 shadow-xl shrink-0">
+                                    {previewImage ? (
+                                        <img
+                                            src={previewImage}
+                                            alt="Previsualización"
+                                            className="w-full h-full object-cover pointer-events-none transition-all duration-150"
+                                            style={{
+                                                objectPosition: `center ${form.data.foto_posicion}%`,
+                                                transform: `scale(${form.data.foto_zoom / 100})`
+                                            }}
+                                        />
+                                    ) : (
+                                        <div className="w-full h-full bg-slate-800 flex items-center justify-center text-slate-500 text-xs">
+                                            Sin Foto
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* Controles de Posición y Zoom */}
+                                <div className="flex-1 w-full space-y-4">
+                                    {/* Slider Posición Vertical (Y) */}
+                                    <div className="space-y-1">
+                                        <div className="flex justify-between items-center text-xs font-bold">
+                                            <span className="text-slate-600 dark:text-slate-300">Posición Vertical (Encuadre Rostro)</span>
+                                            <span className="text-blue-600 dark:text-blue-400 font-mono">{form.data.foto_posicion}%</span>
+                                        </div>
+                                        <input
+                                            type="range"
+                                            min="0"
+                                            max="100"
+                                            value={form.data.foto_posicion}
+                                            onChange={(e) => form.setData('foto_posicion', Number(e.target.value))}
+                                            className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-600"
+                                        />
+                                        <div className="flex justify-between text-[10px] text-slate-400 font-semibold">
+                                            <span>↑ Arriba (0%)</span>
+                                            <span>Centro (50%)</span>
+                                            <span>↓ Abajo (100%)</span>
+                                        </div>
+                                    </div>
+
+                                    {/* Slider Zoom Escala */}
+                                    <div className="space-y-1">
+                                        <div className="flex justify-between items-center text-xs font-bold">
+                                            <span className="text-slate-600 dark:text-slate-300">Zoom / Escala Imagen</span>
+                                            <span className="text-blue-600 dark:text-blue-400 font-mono">{form.data.foto_zoom}%</span>
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <button
+                                                type="button"
+                                                onClick={() => form.setData('foto_zoom', Math.max(100, form.data.foto_zoom - 10))}
+                                                className="w-8 h-8 rounded-lg bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-white font-extrabold hover:bg-slate-300 transition flex items-center justify-center shrink-0 cursor-pointer"
+                                            >
+                                                -
+                                            </button>
+                                            <input
+                                                type="range"
+                                                min="100"
+                                                max="250"
+                                                step="5"
+                                                value={form.data.foto_zoom}
+                                                onChange={(e) => form.setData('foto_zoom', Number(e.target.value))}
+                                                className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-600"
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={() => form.setData('foto_zoom', Math.min(250, form.data.foto_zoom + 10))}
+                                                className="w-8 h-8 rounded-lg bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-white font-extrabold hover:bg-slate-300 transition flex items-center justify-center shrink-0 cursor-pointer"
+                                            >
+                                                +
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    {/* Subir Nueva Foto */}
+                                    <div>
+                                        <label className="text-[11px] font-bold text-slate-500 block mb-1">Cambiar Fotografía</label>
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            onChange={(e) => form.setData('foto', e.target.files[0])}
+                                            className="block w-full text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-extrabold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Datos del Integrante */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label className="text-xs font-extrabold text-slate-700 dark:text-slate-200 block mb-1">Nombre Completo</label>
+                                <input
+                                    type="text"
+                                    required
+                                    value={form.data.nombre}
+                                    onChange={(e) => form.setData('nombre', e.target.value)}
+                                    className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white text-xs font-bold rounded-xl px-3 py-2.5 focus:outline-none focus:border-blue-600"
+                                />
+                            </div>
+
+                            <div>
+                                <label className="text-xs font-extrabold text-slate-700 dark:text-slate-200 block mb-1">Cargo o Asignatura</label>
+                                <input
+                                    type="text"
+                                    required
+                                    value={form.data.cargo}
+                                    onChange={(e) => form.setData('cargo', e.target.value)}
+                                    placeholder="Ej: Rectora, Matemáticas, Inglés"
+                                    className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white text-xs font-bold rounded-xl px-3 py-2.5 focus:outline-none focus:border-blue-600"
+                                />
+                            </div>
+
+                            <div>
+                                <label className="text-xs font-extrabold text-slate-700 dark:text-slate-200 block mb-1">Tipo de Integrante</label>
+                                <select
+                                    value={form.data.tipo}
+                                    onChange={(e) => form.setData('tipo', e.target.value)}
+                                    className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white text-xs font-bold rounded-xl px-3 py-2.5 focus:outline-none focus:border-blue-600"
+                                >
+                                    <option value="docente">Docente</option>
+                                    <option value="directivo">Equipo Directivo</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label className="text-xs font-extrabold text-slate-700 dark:text-slate-200 block mb-1">Área Académica</label>
+                                <select
+                                    value={form.data.area}
+                                    onChange={(e) => form.setData('area', e.target.value)}
+                                    className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white text-xs font-bold rounded-xl px-3 py-2.5 focus:outline-none focus:border-blue-600"
+                                >
+                                    {AREAS_EQUIPO.filter(a => a !== 'Todos').map(area => (
+                                        <option key={area} value={area}>{area}</option>
+                                    ))}
+                                </select>
+                            </div>
+                        </div>
+
+                        {/* Botones del Modal */}
+                        <div className="flex items-center justify-between gap-3 pt-4 border-t border-slate-100 dark:border-slate-800">
+                            {editando ? (
+                                <button
+                                    type="button"
+                                    onClick={() => setDeletingId(editando.id)}
+                                    className="px-4 py-2 bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-bold rounded-xl transition cursor-pointer"
+                                >
+                                    Eliminar
+                                </button>
+                            ) : <div />}
+
+                            <div className="flex gap-2">
+                                <button
+                                    type="button"
+                                    onClick={cerrar}
+                                    className="px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-bold rounded-xl cursor-pointer"
+                                >
+                                    Cancelar
+                                </button>
+                                <button
+                                    type="submit"
+                                    disabled={form.processing}
+                                    className="px-5 py-2 bg-[#800A15] hover:bg-[#600710] text-white text-xs font-black rounded-xl cursor-pointer shadow-md disabled:opacity-50"
+                                >
+                                    {form.processing ? 'Guardando...' : 'Guardar Cambios'}
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </Modal>
+            )}
+
+            {/* Modal Confirmación Eliminar */}
+            {deletingId && (
+                <Modal title="Confirmar Eliminación" onClose={() => setDeletingId(null)}>
+                    <div className="space-y-4">
+                        <p className="text-xs text-slate-600 dark:text-slate-300 font-medium">
+                            ¿Estás seguro de que deseas eliminar este integrante del equipo? Esta acción no se puede deshacer.
+                        </p>
+                        <div className="flex justify-end gap-3">
+                            <button onClick={() => setDeletingId(null)} className="px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-bold rounded-xl">
+                                Cancelar
+                            </button>
+                            <button onClick={() => eliminar(deletingId)} className="px-4 py-2 bg-rose-600 text-white text-xs font-bold rounded-xl">
+                                Eliminar Definitivamente
+                            </button>
+                        </div>
+                    </div>
+                </Modal>
+            )}
+        </div>
+    );
+}
+
 /* ── Dashboard principal ── */
 const TABS = [
+    { key: 'equipo',      label: 'Equipo Institucional' },
     { key: 'testimonios', label: 'Testimonios' },
     { key: 'noticias',    label: 'Noticias y Eventos' },
     { key: 'preguntas',   label: 'Preguntas Frecuentes' },
     { key: 'recorrido',   label: 'Recorrido 360°' },
 ];
 
-export default function AdminDashboard({ seccion, testimonios, noticias, preguntas, tour, scenes = [], flash, adminCounts }) {
+export default function AdminDashboard({ seccion, equipo = [], testimonios = [], noticias = [], preguntas = [], tour, scenes = [], flash, adminCounts }) {
     const basePath = window.location.pathname.replace(/\/[^/]+$/, '');
     const [darkMode, setDarkMode] = useState(() => localStorage.getItem('sih-dark-mode') === 'true');
     const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -2025,6 +2497,11 @@ export default function AdminDashboard({ seccion, testimonios, noticias, pregunt
                                         }`}
                                     >
                                         <div className="flex items-center gap-3">
+                                            {tab.key === 'equipo' && (
+                                                <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                                                </svg>
+                                            )}
                                             {tab.key === 'testimonios' && (
                                                 <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
                                                     <path strokeLinecap="round" strokeLinejoin="round" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
@@ -2052,6 +2529,7 @@ export default function AdminDashboard({ seccion, testimonios, noticias, pregunt
                                         <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${
                                             isActive ? 'bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300' : 'bg-slate-100 dark:bg-slate-800 text-slate-500'
                                         }`}>
+                                            {tab.key === 'equipo'      && (adminCounts?.equipo      ?? equipo.length)}
                                             {tab.key === 'testimonios' && (adminCounts?.testimonios ?? testimonios.length)}
                                             {tab.key === 'noticias'    && (adminCounts?.noticias    ?? noticias.length)}
                                             {tab.key === 'preguntas'   && (adminCounts?.preguntas   ?? preguntas.length)}
@@ -2144,6 +2622,7 @@ export default function AdminDashboard({ seccion, testimonios, noticias, pregunt
                         
                         {/* ── Active Module Content Card ── */}
                         <div className="transition-all duration-300">
+                            {seccion === 'equipo'      && <EquipoTab      equipo={equipo}           flash={flash} />}
                             {seccion === 'testimonios' && <TestimoniosTab testimonios={testimonios} flash={flash} />}
                             {seccion === 'noticias'    && <NoticiasTab    noticias={noticias}       flash={flash} />}
                             {seccion === 'preguntas'   && <PreguntasTab   preguntas={preguntas}     flash={flash} />}

@@ -118,6 +118,12 @@ Route::prefix($adminPath)->name('admin.')->group(function () {
         Route::put('/preguntas/{pregunta}',           [PreguntaController::class, 'update'])->name('preguntas.update');
         Route::delete('/preguntas/{pregunta}',        [PreguntaController::class, 'destroy'])->name('preguntas.destroy');
 
+        // Equipo Institucional
+        Route::get('/equipo',                         [App\Http\Controllers\Admin\EquipoAdminController::class, 'index'])->name('equipo');
+        Route::post('/equipo',                        [App\Http\Controllers\Admin\EquipoAdminController::class, 'store'])->name('equipo.store');
+        Route::put('/equipo/{member}',                [App\Http\Controllers\Admin\EquipoAdminController::class, 'update'])->name('equipo.update');
+        Route::delete('/equipo/{member}',             [App\Http\Controllers\Admin\EquipoAdminController::class, 'destroy'])->name('equipo.destroy');
+
         // Redirect raíz → testimonios
         Route::get('/', fn() => redirect()->route('admin.testimonios'))->name('dashboard');
     });

@@ -21,7 +21,7 @@ class ContactoController extends Controller
     {
         $mensaje = MensajeContacto::create($request->validated());
 
-        Mail::to('contacto@colsih.edu.co')->send(new ContactoRecibido($mensaje));
+        Mail::to('colsantaisabeldehungria.fblanca@gmail.com')->send(new ContactoRecibido($mensaje));
 
         return redirect()->route('contacto.index')
             ->with('success', 'Tu mensaje fue enviado. Te responderemos pronto.');

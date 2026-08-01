@@ -3,7 +3,7 @@ import 'pannellum/src/css/pannellum.css';
 import 'pannellum/src/js/libpannellum.js';
 import 'pannellum/src/js/pannellum.js';
 import { buildPannellumConfig } from '@/utils/pannellumAdapter';
-import { Maximize2, Minimize2, ZoomIn, ZoomOut, RotateCw, RefreshCw, Compass, X, MapPin } from 'lucide-react';
+import { Maximize2, Minimize2, ZoomIn, ZoomOut, RotateCw, RefreshCw, X } from 'lucide-react';
 
 export default function TourViewer({
     scenes = [],
@@ -20,8 +20,6 @@ export default function TourViewer({
     const [isAutoRotating, setIsAutoRotating] = useState(false);
     const [loadError, setLoadError] = useState(null);
     const [selectedInfoHotspot, setSelectedInfoHotspot] = useState(null);
-
-    const activeSceneData = scenes.find((s) => s.slug === activeSceneSlug) || scenes[0];
 
     // Initialize & cleanup Pannellum
     useEffect(() => {
@@ -40,7 +38,7 @@ export default function TourViewer({
             viewerRef.current = null;
         }
 
-        const initialSlug = activeSceneSlug || initialSceneSlug || scenes[0]?.slug;
+        const initialSlug = activeSceneSlug || initialSceneSlug || scenes.find(s => s.es_escena_inicial)?.slug || scenes[0]?.slug;
         const config = buildPannellumConfig(
             scenes,
             (targetSlug) => {
@@ -63,33 +61,19 @@ export default function TourViewer({
                     setIsLoading(false);
                     setLoadError(null);
 
-                    // Animación Zoom Out Estilo Google Maps al llegar al nuevo destino
+                    // Respetar estrictamente la posición, ángulo y zoom fijados por el administrador
                     try {
                         const currentSlug = viewer.getScene();
                         const targetSceneObj = scenes.find((s) => s.slug === currentSlug);
-                        const defaultHfov = Number(targetSceneObj?.hfov_inicial || 100);
+                        if (targetSceneObj) {
+                            const p = targetSceneObj.pitch_inicial != null ? Number(targetSceneObj.pitch_inicial) : 0;
+                            const y = targetSceneObj.yaw_inicial != null ? Number(targetSceneObj.yaw_inicial) : 0;
+                            const h = targetSceneObj.hfov_inicial != null ? Number(targetSceneObj.hfov_inicial) : 100;
 
-                        viewer.setHfov(45); // Empezar acercado al entrar al nuevo espacio
-
-                        let steps = 18;
-                        let stepCount = 0;
-                        let startHfov = 45;
-
-                        let animInterval = setInterval(() => {
-                            stepCount++;
-                            let progress = stepCount / steps;
-                            let easeProgress = 1 - Math.pow(1 - progress, 2); // Curva suavizada de expansión
-
-                            let nextHfov = startHfov + (defaultHfov - startHfov) * easeProgress;
-
-                            try {
-                                viewer.setHfov(nextHfov);
-                            } catch (err) {}
-
-                            if (stepCount >= steps) {
-                                clearInterval(animInterval);
-                            }
-                        }, 20);
+                            viewer.setPitch(p);
+                            viewer.setYaw(y);
+                            viewer.setHfov(h);
+                        }
                     } catch (err) {}
                 });
 
@@ -132,7 +116,15 @@ export default function TourViewer({
         try {
             const currentScene = viewerRef.current.getScene();
             if (currentScene && currentScene !== activeSceneSlug) {
-                viewerRef.current.loadScene(activeSceneSlug);
+                const targetSceneObj = scenes.find((s) => s.slug === activeSceneSlug);
+                const p = targetSceneObj && targetSceneObj.pitch_inicial != null ? Number(targetSceneObj.pitch_inicial) : 0;
+                const y = targetSceneObj && targetSceneObj.yaw_inicial != null ? Number(targetSceneObj.yaw_inicial) : 0;
+                const h = targetSceneObj && targetSceneObj.hfov_inicial != null ? Number(targetSceneObj.hfov_inicial) : 100;
+
+                viewerRef.current.loadScene(activeSceneSlug, p, y, h);
+                viewerRef.current.setPitch(p);
+                viewerRef.current.setYaw(y);
+                viewerRef.current.setHfov(h);
             }
         } catch (err) {
             console.warn('Error loading scene in Pannellum:', err);
@@ -156,9 +148,15 @@ export default function TourViewer({
 
     const handleResetView = () => {
         if (viewerRef.current) {
-            viewerRef.current.setPitch(0);
-            viewerRef.current.setYaw(0);
-            viewerRef.current.setHfov(100);
+            const currentSlug = viewerRef.current.getScene();
+            const targetSceneObj = scenes.find((s) => s.slug === currentSlug);
+            const p = targetSceneObj && targetSceneObj.pitch_inicial != null ? Number(targetSceneObj.pitch_inicial) : 0;
+            const y = targetSceneObj && targetSceneObj.yaw_inicial != null ? Number(targetSceneObj.yaw_inicial) : 0;
+            const h = targetSceneObj && targetSceneObj.hfov_inicial != null ? Number(targetSceneObj.hfov_inicial) : 100;
+
+            viewerRef.current.setPitch(p);
+            viewerRef.current.setYaw(y);
+            viewerRef.current.setHfov(h);
         }
     };
 
@@ -193,33 +191,15 @@ export default function TourViewer({
     };
 
     return (
-        <div className={`relative w-full h-full min-h-[450px] bg-slate-950 overflow-hidden select-none group ${className}`}>
+        <div className={`relative w-full h-full min-h-[450px] bg-[#003C8F] overflow-hidden select-none group ${className}`}>
             
             {/* Pannellum Container */}
             <div ref={containerRef} className="w-full h-full min-h-[450px]" />
 
-            {/* Custom Minimalist COLSIH Loader */}
+            {/* Custom Loader: Pantalla Azul Rey y círculo de carga Blanco y Vinotinto */}
             {isLoading && (
-                <div className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-slate-950/85 backdrop-blur-xl transition-opacity duration-300">
-                    <div className="relative w-20 h-20 flex items-center justify-center">
-                        {/* Anillo giratorio de marca: Vinotinto a Azul Rey */}
-                        <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-[#800A15] border-r-[#003c8f] border-b-blue-500 animate-spin"></div>
-                        {/* Pulso traslúcido */}
-                        <div className="absolute inset-2 rounded-full border-2 border-white/20 animate-ping opacity-25"></div>
-                        {/* Badge Central con Icono de Mapa */}
-                        <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#800A15] to-[#003c8f] flex items-center justify-center shadow-lg border border-white/30">
-                            <MapPin className="w-5 h-5 text-white animate-pulse" />
-                        </div>
-                    </div>
-                    
-                    <div className="mt-5 text-center space-y-1">
-                        <span className="block text-[11px] font-extrabold tracking-[2px] text-white uppercase font-sans">
-                            Colegio Santa Isabel de Hungría
-                        </span>
-                        <span className="block text-[10px] font-bold tracking-wider text-blue-400 font-sans">
-                            Cargando Recorrido 360°...
-                        </span>
-                    </div>
+                <div className="absolute inset-0 z-30 flex items-center justify-center bg-[#003C8F] transition-opacity duration-300">
+                    <div className="w-16 h-16 rounded-full border-4 border-white/30 border-t-[#800A15] border-r-white animate-spin"></div>
                 </div>
             )}
 

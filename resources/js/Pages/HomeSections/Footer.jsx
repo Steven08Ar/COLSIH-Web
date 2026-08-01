@@ -244,6 +244,15 @@ export default function Footer() {
                     </div>
                 </div>
 
+                {/* Firma WEB Centrada al final */}
+                <div className="pt-8 border-t border-white/5 flex flex-col items-center justify-center text-center">
+                    <img 
+                        src="/Firma%20WEB%20-%20Santiago%20Arias.svg" 
+                        alt="Firma WEB Santiago Arias" 
+                        className="h-9 sm:h-11 w-auto object-contain brightness-0 invert opacity-85 hover:opacity-100 transition-opacity duration-300 pointer-events-none select-none"
+                    />
+                </div>
+
             </div>
         </footer>
     );

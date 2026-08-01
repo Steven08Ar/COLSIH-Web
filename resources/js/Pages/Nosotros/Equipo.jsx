@@ -62,10 +62,10 @@ export default function Equipo() {
         { nombre: 'Mayra Jisseth Sierra Lombana', asignatura: 'Inglés', area: 'Inglés', foto: '/docentes/Mayra.JPG' },
         { nombre: 'Miguel Oswaldo Lizarazo Latorre', asignatura: 'Contabilidad SENA', area: 'Contabilidad SENA', foto: '/docentes/Miguel.JPG' },
         { nombre: 'Paula Lorena Cuadros Ballesteros', asignatura: 'Todas las Dimensiones', area: 'Preescolar y Primaria', foto: null },
-        { nombre: 'Robin Javier Aparicio Aparicio', asignatura: 'Filosofía y Ed. Religiosa', area: 'Ciencias Sociales', foto: null },
-        { nombre: 'Sandra Patricia Parada Leal', asignatura: 'Música', area: 'Ed. Física y Expresión', foto: null },
-        { nombre: 'Sergio Andrés Mendoza Gómez', asignatura: 'Inglés', area: 'Inglés', foto: null },
-        { nombre: 'Yesica Zoraya Badillo Corredor', asignatura: 'Ciencias Naturales', area: 'Ciencias Naturales', foto: null },
+        { nombre: 'Robin Javier Aparicio Aparicio', asignatura: 'Filosofía y Ed. Religiosa', area: 'Ciencias Sociales', foto: '/docentes/Robin.JPG' },
+        { nombre: 'Sandra Patricia Parada Leal', asignatura: 'Música', area: 'Ed. Física y Expresión', foto: '/docentes/Sandra.JPG' },
+        { nombre: 'Sergio Andrés Mendoza Gómez', asignatura: 'Inglés', area: 'Inglés', foto: '/docentes/Sergio.JPG' },
+        { nombre: 'Yesica Zoraya Badillo Corredor', asignatura: 'Ciencias Naturales', area: 'Ciencias Naturales', foto: '/docentes/Yesica%20Zoraya.JPG' },
         { nombre: 'Yoleida Patricia Camacho Corzo', asignatura: 'Inglés', area: 'Inglés', foto: null },
         { nombre: 'Yoni Amparo Méndez Álvarez', asignatura: 'Matemáticas e Informática', area: 'Matemáticas', foto: null }
     ];
@@ -274,7 +274,7 @@ export default function Equipo() {
                     </div>
                 </section>
 
-                {/* ── 4. Docentes de la Institución (Con fotos asociadas e imagen gris para quienes no tengan) ── */}
+                {/* ── 4. Docentes de la Institución ── */}
                 <section className="relative z-10 py-12 px-6 max-w-[1240px] mx-auto">
                     <div className="flex items-center gap-3.5 mb-8 border-b border-slate-100 dark:border-slate-800 pb-4">
                         <div className="w-10 h-10 rounded-2xl bg-amber-50 dark:bg-amber-950/40 text-amber-500 dark:text-amber-400 flex items-center justify-center shrink-0 shadow-sm">
@@ -307,7 +307,7 @@ export default function Equipo() {
                         ))}
                     </div>
 
-                    {/* Compact & Organized Teachers Grid (5 Columns Desktop) */}
+                    {/* Compact & Organized Teachers Grid */}
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
                         {profesoresFiltrados.map((prof, idx) => (
                             <motion.div 

@@ -17,9 +17,9 @@ import {
 export default function Equipo() {
     const [selectedArea, setSelectedArea] = useState('Todos');
 
-    // Equipo Directivo Oficial con fotos reales (Sor Beatriz sin foto por ahora -> null)
+    // Equipo Directivo Oficial con fotos reales
     const directivos = [
-        { nombre: 'Sor Beatriz Cortés Jerez', cargo: 'Rectora', foto: null },
+        { nombre: 'Sor Beatriz Cortés Jerez', cargo: 'Rectora', foto: '/docentes/Sor%20Betty.JPG' },
         { nombre: 'Jaime Manuel Ardila Parra', cargo: 'Coordinador Académico', foto: '/docentes/Jaime%20Manuel.JPG' },
         { nombre: 'Margarita María Valle Manrique', cargo: 'Coordinadora de Convivencia', foto: '/docentes/Margara.JPG' },
         { nombre: 'Erika Tatiana Delgadillo Avella', cargo: 'Coordinadora de Pastoral', foto: '/docentes/Erika.JPG' }

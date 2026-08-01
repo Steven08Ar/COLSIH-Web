@@ -1955,7 +1955,53 @@ function EquipoTab({ equipo = [], flash }) {
     const [previewImage, setPreviewImage] = useState(null);
     const [deletingId, setDeletingId] = useState(null);
 
+    const cardRef = useRef(null);
+    const isDragging = useRef(false);
+    const startY = useRef(0);
+    const startPos = useRef(20);
+    const touchDist = useRef(null);
+
     const form = useForm(INITIAL_MEMBER);
+
+    function getClientY(e) {
+        return e.touches ? e.touches[0].clientY : e.clientY;
+    }
+
+    function handleStart(e) {
+        if (e.touches && e.touches.length === 2) {
+            const dx = e.touches[0].clientX - e.touches[1].clientX;
+            const dy = e.touches[0].clientY - e.touches[1].clientY;
+            touchDist.current = Math.hypot(dx, dy);
+            return;
+        }
+        isDragging.current = true;
+        startY.current = getClientY(e);
+        startPos.current = form.data.foto_posicion;
+    }
+
+    function handleMove(e) {
+        if (e.touches && e.touches.length === 2 && touchDist.current) {
+            const dx = e.touches[0].clientX - e.touches[1].clientX;
+            const dy = e.touches[0].clientY - e.touches[1].clientY;
+            const dist = Math.hypot(dx, dy);
+            const factor = dist / touchDist.current;
+            const newZoom = Math.round(Math.max(100, Math.min(250, form.data.foto_zoom * factor)));
+            form.setData('foto_zoom', newZoom);
+            touchDist.current = dist;
+            return;
+        }
+
+        if (!isDragging.current) return;
+        const dy = getClientY(e) - startY.current;
+        const height = cardRef.current?.offsetHeight || 1;
+        const nextPos = Math.round(Math.max(0, Math.min(100, startPos.current + (dy / height) * 100)));
+        form.setData('foto_posicion', nextPos);
+    }
+
+    function handleEnd() {
+        isDragging.current = false;
+        touchDist.current = null;
+    }
 
     function abrirCrear() {
         form.setData(INITIAL_MEMBER);
@@ -2184,189 +2230,263 @@ function EquipoTab({ equipo = [], flash }) {
                 </div>
             )}
 
-            {/* ── Modal de Edición & Ajuste de Foto / Zoom ── */}
+            {/* ── Modal / Overlay Dividido con Fondo Difuminado ── */}
             {(creando || editando) && (
-                <Modal title={editando ? `Ajustar Foto y Datos de ${editando.nombre}` : 'Nuevo Integrante del Equipo'} onClose={cerrar}>
-                    <form onSubmit={guardar} className="space-y-5">
-                        
-                        {/* Previsualizador e Editor Interactivo de Encuadre */}
-                        <div className="space-y-2">
-                            <label className="text-slate-700 dark:text-slate-200 text-xs font-extrabold uppercase tracking-wider block">
-                                Ajuste de Foto (Vista Previa en Vivo)
-                            </label>
-                            
-                            <div className="flex flex-col sm:flex-row items-center gap-4 bg-slate-50 dark:bg-slate-800/40 p-4 rounded-2xl border border-slate-200 dark:border-slate-700/80">
-                                {/* Simulación de la Card Retrato */}
-                                <div className="w-40 aspect-[4/5] bg-slate-900 rounded-2xl overflow-hidden relative border-2 border-blue-500 shadow-xl shrink-0">
-                                    {previewImage ? (
-                                        <img
-                                            src={previewImage}
-                                            alt="Previsualización"
-                                            className="w-full h-full object-cover pointer-events-none transition-all duration-150"
-                                            style={{
-                                                objectPosition: `center ${form.data.foto_posicion}%`,
-                                                transform: `scale(${form.data.foto_zoom / 100})`
-                                            }}
-                                        />
-                                    ) : (
-                                        <div className="w-full h-full bg-slate-800 flex items-center justify-center text-slate-500 text-xs">
-                                            Sin Foto
-                                        </div>
-                                    )}
+                <div 
+                    className="fixed inset-0 z-[100] bg-slate-950/75 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 overflow-y-auto animate-fadeIn"
+                    onClick={cerrar}
+                >
+                    <div 
+                        className="flex flex-col lg:flex-row items-center lg:items-stretch gap-6 lg:gap-8 max-w-5xl w-full my-auto transition-all duration-300"
+                        onClick={e => e.stopPropagation()}
+                    >
+                        {/* ── COLUMNA IZQUIERDA: Card Literal del Usuario (Perspectiva 1:1 + Drag & Pinch) ── */}
+                        <div className="flex flex-col items-center justify-center space-y-3 shrink-0 w-full sm:w-80">
+                            <div className="flex items-center gap-2 bg-blue-600 text-white text-[11px] font-extrabold px-3 py-1 rounded-full shadow-md uppercase tracking-wider">
+                                <span>👁️ Perspectiva Literal del Usuario</span>
+                            </div>
+
+                            <div 
+                                ref={cardRef}
+                                className="w-full aspect-[4/5] bg-white dark:bg-slate-900 border-4 border-blue-500 rounded-2xl overflow-hidden shadow-2xl relative select-none cursor-ns-resize touch-none group"
+                                onMouseDown={handleStart}
+                                onMouseMove={handleMove}
+                                onMouseUp={handleEnd}
+                                onMouseLeave={handleEnd}
+                                onTouchStart={handleStart}
+                                onTouchMove={handleMove}
+                                onTouchEnd={handleEnd}
+                            >
+                                {previewImage ? (
+                                    <img
+                                        src={previewImage}
+                                        alt="Foto"
+                                        draggable={false}
+                                        className="w-full h-full object-cover pointer-events-none transition-transform duration-75"
+                                        style={{
+                                            objectPosition: `center ${form.data.foto_posicion}%`,
+                                            transform: `scale(${form.data.foto_zoom / 100})`
+                                        }}
+                                    />
+                                ) : (
+                                    <div className="w-full h-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-400 dark:text-slate-600">
+                                        <svg className="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                                    </div>
+                                )}
+
+                                {/* Overlay de instrucción para arrastrar */}
+                                <div className="absolute inset-x-0 bottom-3 flex justify-center pointer-events-none px-2">
+                                    <span className="bg-black/70 backdrop-blur-md text-white text-[10px] font-extrabold px-3 py-1.5 rounded-full shadow-lg border border-white/20 text-center flex items-center gap-1.5">
+                                        <span>🖐️</span>
+                                        <span>Arrastra verticalmente para mover rostro</span>
+                                    </span>
                                 </div>
+                            </div>
 
-                                {/* Controles de Posición y Zoom */}
-                                <div className="flex-1 w-full space-y-4">
-                                    {/* Slider Posición Vertical (Y) */}
-                                    <div className="space-y-1">
-                                        <div className="flex justify-between items-center text-xs font-bold">
-                                            <span className="text-slate-600 dark:text-slate-300">Posición Vertical (Encuadre Rostro)</span>
-                                            <span className="text-blue-600 dark:text-blue-400 font-mono">{form.data.foto_posicion}%</span>
-                                        </div>
-                                        <input
-                                            type="range"
-                                            min="0"
-                                            max="100"
-                                            value={form.data.foto_posicion}
-                                            onChange={(e) => form.setData('foto_posicion', Number(e.target.value))}
-                                            className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-600"
-                                        />
-                                        <div className="flex justify-between text-[10px] text-slate-400 font-semibold">
-                                            <span>↑ Arriba (0%)</span>
-                                            <span>Centro (50%)</span>
-                                            <span>↓ Abajo (100%)</span>
-                                        </div>
-                                    </div>
+                            {/* Info de nombre abajo de la card preview */}
+                            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3 w-full text-center shadow-md">
+                                <h4 className="font-extrabold text-slate-900 dark:text-slate-100 text-sm leading-snug">
+                                    {form.data.nombre || 'Nombre del Integrante'}
+                                </h4>
+                                <span className="text-xs font-bold text-[#003C8F] dark:text-blue-400 block mt-0.5">
+                                    {form.data.cargo || 'Cargo / Asignatura'}
+                                </span>
+                            </div>
+                        </div>
 
-                                    {/* Slider Zoom Escala */}
-                                    <div className="space-y-1">
-                                        <div className="flex justify-between items-center text-xs font-bold">
-                                            <span className="text-slate-600 dark:text-slate-300">Zoom / Escala Imagen</span>
-                                            <span className="text-blue-600 dark:text-blue-400 font-mono">{form.data.foto_zoom}%</span>
-                                        </div>
-                                        <div className="flex items-center gap-2">
-                                            <button
-                                                type="button"
-                                                onClick={() => form.setData('foto_zoom', Math.max(100, form.data.foto_zoom - 10))}
-                                                className="w-8 h-8 rounded-lg bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-white font-extrabold hover:bg-slate-300 transition flex items-center justify-center shrink-0 cursor-pointer"
-                                            >
-                                                -
-                                            </button>
-                                            <input
-                                                type="range"
-                                                min="100"
-                                                max="250"
-                                                step="5"
-                                                value={form.data.foto_zoom}
-                                                onChange={(e) => form.setData('foto_zoom', Number(e.target.value))}
-                                                className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-600"
-                                            />
-                                            <button
-                                                type="button"
-                                                onClick={() => form.setData('foto_zoom', Math.min(250, form.data.foto_zoom + 10))}
-                                                className="w-8 h-8 rounded-lg bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-white font-extrabold hover:bg-slate-300 transition flex items-center justify-center shrink-0 cursor-pointer"
-                                            >
-                                                +
-                                            </button>
-                                        </div>
-                                    </div>
+                        {/* ── COLUMNA DERECHA: Card de Opciones de Edición ── */}
+                        <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl flex-1 w-full space-y-5 flex flex-col justify-between">
+                            <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+                                <h3 className="text-lg font-black text-slate-800 dark:text-white">
+                                    {editando ? 'Editar Datos y Encuadre' : 'Nuevo Integrante del Equipo'}
+                                </h3>
+                                <button 
+                                    onClick={cerrar}
+                                    className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-400 hover:text-slate-600 transition flex items-center justify-center font-bold text-sm cursor-pointer"
+                                >
+                                    ✕
+                                </button>
+                            </div>
 
-                                    {/* Subir Nueva Foto */}
+                            <form onSubmit={guardar} className="space-y-4 flex-1 flex flex-col justify-between">
+                                <div className="space-y-4">
+                                    {/* 1. Nombre Completo */}
                                     <div>
-                                        <label className="text-[11px] font-bold text-slate-500 block mb-1">Cambiar Fotografía</label>
+                                        <label className="text-xs font-extrabold text-slate-700 dark:text-slate-200 block mb-1">
+                                            Nombre Completo
+                                        </label>
+                                        <input
+                                            type="text"
+                                            required
+                                            value={form.data.nombre}
+                                            onChange={(e) => form.setData('nombre', e.target.value)}
+                                            placeholder="Ej: Sor Beatriz Cortés Jerez"
+                                            className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white text-xs font-bold rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-blue-600"
+                                        />
+                                    </div>
+
+                                    {/* 2. Cargo o Asignatura */}
+                                    <div>
+                                        <label className="text-xs font-extrabold text-slate-700 dark:text-slate-200 block mb-1">
+                                            Cargo o Asignatura
+                                        </label>
+                                        <input
+                                            type="text"
+                                            required
+                                            value={form.data.cargo}
+                                            onChange={(e) => form.setData('cargo', e.target.value)}
+                                            placeholder="Ej: Rectora, Matemáticas, Inglés"
+                                            className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white text-xs font-bold rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-blue-600"
+                                        />
+                                    </div>
+
+                                    {/* 3. Tipo y Área Académica */}
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                        <div>
+                                            <label className="text-xs font-extrabold text-slate-700 dark:text-slate-200 block mb-1">
+                                                Tipo de Integrante
+                                            </label>
+                                            <select
+                                                value={form.data.tipo}
+                                                onChange={(e) => form.setData('tipo', e.target.value)}
+                                                className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white text-xs font-bold rounded-xl px-3 py-2.5 focus:outline-none focus:border-blue-600 cursor-pointer"
+                                            >
+                                                <option value="docente">Docente</option>
+                                                <option value="directivo">Equipo Directivo</option>
+                                            </select>
+                                        </div>
+
+                                        <div>
+                                            <label className="text-xs font-extrabold text-slate-700 dark:text-slate-200 block mb-1">
+                                                Área Académica
+                                            </label>
+                                            <select
+                                                value={form.data.area}
+                                                onChange={(e) => form.setData('area', e.target.value)}
+                                                className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white text-xs font-bold rounded-xl px-3 py-2.5 focus:outline-none focus:border-blue-600 cursor-pointer"
+                                            >
+                                                {AREAS_EQUIPO.filter(a => a !== 'Todos').map(area => (
+                                                    <option key={area} value={area}>{area}</option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    {/* 4. Cambiar Fotografía */}
+                                    <div className="pt-1">
+                                        <label className="text-xs font-extrabold text-slate-700 dark:text-slate-200 block mb-1">
+                                            Subir / Cambiar Fotografía
+                                        </label>
                                         <input
                                             type="file"
                                             accept="image/*"
                                             onChange={(e) => form.setData('foto', e.target.files[0])}
-                                            className="block w-full text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-extrabold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer"
+                                            className="block w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-extrabold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer border border-slate-200 dark:border-slate-700 rounded-xl p-1"
                                         />
                                     </div>
+
+                                    {/* 5. Sliders de Posición y Zoom */}
+                                    <div className="bg-slate-50 dark:bg-slate-800/50 p-3.5 rounded-2xl border border-slate-200 dark:border-slate-700/80 space-y-3">
+                                        {/* Slider Posición Y */}
+                                        <div className="space-y-1">
+                                            <div className="flex justify-between items-center text-xs font-bold">
+                                                <span className="text-slate-600 dark:text-slate-300">Posición Vertical (Encuadre Rostro)</span>
+                                                <span className="text-blue-600 dark:text-blue-400 font-mono">{form.data.foto_posicion}%</span>
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <button
+                                                    type="button"
+                                                    onClick={() => form.setData('foto_posicion', Math.max(0, form.data.foto_posicion - 5))}
+                                                    className="px-2 py-1 bg-slate-200 dark:bg-slate-700 text-xs font-bold rounded-lg text-slate-700 dark:text-white shrink-0 cursor-pointer"
+                                                >
+                                                    ↑ Arriba
+                                                </button>
+                                                <input
+                                                    type="range"
+                                                    min="0"
+                                                    max="100"
+                                                    value={form.data.foto_posicion}
+                                                    onChange={(e) => form.setData('foto_posicion', Number(e.target.value))}
+                                                    className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-600"
+                                                />
+                                                <button
+                                                    type="button"
+                                                    onClick={() => form.setData('foto_posicion', Math.min(100, form.data.foto_posicion + 5))}
+                                                    className="px-2 py-1 bg-slate-200 dark:bg-slate-700 text-xs font-bold rounded-lg text-slate-700 dark:text-white shrink-0 cursor-pointer"
+                                                >
+                                                    ↓ Abajo
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        {/* Slider Zoom Escala */}
+                                        <div className="space-y-1">
+                                            <div className="flex justify-between items-center text-xs font-bold">
+                                                <span className="text-slate-600 dark:text-slate-300">Zoom / Escala Imagen</span>
+                                                <span className="text-blue-600 dark:text-blue-400 font-mono">{form.data.foto_zoom}%</span>
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <button
+                                                    type="button"
+                                                    onClick={() => form.setData('foto_zoom', Math.max(100, form.data.foto_zoom - 10))}
+                                                    className="w-8 h-8 rounded-lg bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-white font-extrabold hover:bg-slate-300 transition flex items-center justify-center shrink-0 cursor-pointer"
+                                                >
+                                                    -
+                                                </button>
+                                                <input
+                                                    type="range"
+                                                    min="100"
+                                                    max="250"
+                                                    step="5"
+                                                    value={form.data.foto_zoom}
+                                                    onChange={(e) => form.setData('foto_zoom', Number(e.target.value))}
+                                                    className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-600"
+                                                />
+                                                <button
+                                                    type="button"
+                                                    onClick={() => form.setData('foto_zoom', Math.min(250, form.data.foto_zoom + 10))}
+                                                    className="w-8 h-8 rounded-lg bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-white font-extrabold hover:bg-slate-300 transition flex items-center justify-center shrink-0 cursor-pointer"
+                                                >
+                                                    +
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
+
+                                {/* Botones del Formulario */}
+                                <div className="flex items-center justify-between gap-3 pt-4 border-t border-slate-100 dark:border-slate-800">
+                                    {editando ? (
+                                        <button
+                                            type="button"
+                                            onClick={() => setDeletingId(editando.id)}
+                                            className="px-4 py-2 bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-bold rounded-xl transition cursor-pointer"
+                                        >
+                                            Eliminar
+                                        </button>
+                                    ) : <div />}
+
+                                    <div className="flex gap-2">
+                                        <button
+                                            type="button"
+                                            onClick={cerrar}
+                                            className="px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-bold rounded-xl cursor-pointer"
+                                        >
+                                            Cancelar
+                                        </button>
+                                        <button
+                                            type="submit"
+                                            disabled={form.processing}
+                                            className="px-5 py-2 bg-[#800A15] hover:bg-[#600710] text-white text-xs font-black rounded-xl cursor-pointer shadow-md disabled:opacity-50"
+                                        >
+                                            {form.processing ? 'Guardando...' : 'Guardar Cambios'}
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
-
-                        {/* Datos del Integrante */}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div>
-                                <label className="text-xs font-extrabold text-slate-700 dark:text-slate-200 block mb-1">Nombre Completo</label>
-                                <input
-                                    type="text"
-                                    required
-                                    value={form.data.nombre}
-                                    onChange={(e) => form.setData('nombre', e.target.value)}
-                                    className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white text-xs font-bold rounded-xl px-3 py-2.5 focus:outline-none focus:border-blue-600"
-                                />
-                            </div>
-
-                            <div>
-                                <label className="text-xs font-extrabold text-slate-700 dark:text-slate-200 block mb-1">Cargo o Asignatura</label>
-                                <input
-                                    type="text"
-                                    required
-                                    value={form.data.cargo}
-                                    onChange={(e) => form.setData('cargo', e.target.value)}
-                                    placeholder="Ej: Rectora, Matemáticas, Inglés"
-                                    className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white text-xs font-bold rounded-xl px-3 py-2.5 focus:outline-none focus:border-blue-600"
-                                />
-                            </div>
-
-                            <div>
-                                <label className="text-xs font-extrabold text-slate-700 dark:text-slate-200 block mb-1">Tipo de Integrante</label>
-                                <select
-                                    value={form.data.tipo}
-                                    onChange={(e) => form.setData('tipo', e.target.value)}
-                                    className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white text-xs font-bold rounded-xl px-3 py-2.5 focus:outline-none focus:border-blue-600"
-                                >
-                                    <option value="docente">Docente</option>
-                                    <option value="directivo">Equipo Directivo</option>
-                                </select>
-                            </div>
-
-                            <div>
-                                <label className="text-xs font-extrabold text-slate-700 dark:text-slate-200 block mb-1">Área Académica</label>
-                                <select
-                                    value={form.data.area}
-                                    onChange={(e) => form.setData('area', e.target.value)}
-                                    className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white text-xs font-bold rounded-xl px-3 py-2.5 focus:outline-none focus:border-blue-600"
-                                >
-                                    {AREAS_EQUIPO.filter(a => a !== 'Todos').map(area => (
-                                        <option key={area} value={area}>{area}</option>
-                                    ))}
-                                </select>
-                            </div>
-                        </div>
-
-                        {/* Botones del Modal */}
-                        <div className="flex items-center justify-between gap-3 pt-4 border-t border-slate-100 dark:border-slate-800">
-                            {editando ? (
-                                <button
-                                    type="button"
-                                    onClick={() => setDeletingId(editando.id)}
-                                    className="px-4 py-2 bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-bold rounded-xl transition cursor-pointer"
-                                >
-                                    Eliminar
-                                </button>
-                            ) : <div />}
-
-                            <div className="flex gap-2">
-                                <button
-                                    type="button"
-                                    onClick={cerrar}
-                                    className="px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-bold rounded-xl cursor-pointer"
-                                >
-                                    Cancelar
-                                </button>
-                                <button
-                                    type="submit"
-                                    disabled={form.processing}
-                                    className="px-5 py-2 bg-[#800A15] hover:bg-[#600710] text-white text-xs font-black rounded-xl cursor-pointer shadow-md disabled:opacity-50"
-                                >
-                                    {form.processing ? 'Guardando...' : 'Guardar Cambios'}
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </Modal>
+                    </div>
+                </div>
             )}
 
             {/* Modal Confirmación Eliminar */}

@@ -183,7 +183,7 @@ export default function Footer() {
                         </div>
                         <div>
                             <span className="block text-white font-semibold">Teléfonos de Atención</span>
-                            <CopiarTexto texto="+57 607 684 9810">607 684 9810</CopiarTexto>
+                            <CopiarTexto texto="607 684 9810">607 684 9810</CopiarTexto>
                         </div>
                     </div>
 

@@ -74,7 +74,7 @@ export default function Contact() {
                                     </div>
                                     <div>
                                         <span className="block text-xs font-bold text-slate-400 uppercase tracking-wider">Teléfono</span>
-                                        <CopiarTexto texto="+57 607 684 9810" className="block text-base font-extrabold text-[#08111F] mt-0.5">+57 607 684 9810</CopiarTexto>
+                                        <CopiarTexto texto="607 684 9810" className="block text-base font-extrabold text-[#08111F] mt-0.5">+57 607 684 9810</CopiarTexto>
                                     </div>
                                 </div>
 

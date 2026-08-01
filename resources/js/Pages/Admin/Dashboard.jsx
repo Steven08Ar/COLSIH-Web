@@ -109,38 +109,39 @@ function FotoPositionEditor({ previewImage, posicion, onChange }) {
     );
 }
 
+const INITIAL_TESTIMONIO = {
+    nombre: '',
+    cargo: 'Estudiante',
+    texto: '',
+    imagen: null,
+    foto_posicion: 50,
+    video_url: '',
+    video_activo: false,
+    activo: true,
+    orden: 0
+};
+
 function TestimoniosTab({ testimonios, flash }) {
     const [editando, setEditando] = useState(null);
     const [creando, setCreando] = useState(false);
     const [previewImage, setPreviewImage] = useState(null);
     const [deletingId, setDeletingId] = useState(null);
 
-    const form = useForm({
-        nombre: '',
-        cargo: 'Estudiante',
-        texto: '',
-        imagen: null,
-        foto_posicion: 50,
-        video_url: '',
-        video_activo: false,
-        activo: true,
-        orden: 0
-    });
+    const form = useForm(INITIAL_TESTIMONIO);
 
     function abrirCrear() {
-        form.reset();
-        form.setData('cargo', 'Estudiante');
-        form.setData('foto_posicion', 50);
-        form.setData('video_activo', false);
+        form.setData(INITIAL_TESTIMONIO);
+        setPreviewImage(null);
         setEditando(null);
+        form.clearErrors();
         setCreando(true);
     }
 
     function abrirEditar(t) {
         form.setData({
-            nombre: t.nombre,
+            nombre: t.nombre || '',
             cargo: t.cargo ?? 'Estudiante',
-            texto: t.texto,
+            texto: t.texto || '',
             imagen: null,
             foto_posicion: Number(t.foto_posicion ?? 50),
             video_url: t.video_url ?? '',
@@ -155,7 +156,9 @@ function TestimoniosTab({ testimonios, flash }) {
     function cerrar() {
         setCreando(false);
         setEditando(null);
+        setPreviewImage(null);
         form.clearErrors();
+        form.setData(INITIAL_TESTIMONIO);
     }
 
     useEffect(() => {
@@ -1089,23 +1092,45 @@ function NoticiasTab({ noticias, flash }) {
     );
 }
 
+const INITIAL_PREGUNTA = {
+    pregunta: '',
+    respuesta: '',
+    activo: true,
+    orden: 0
+};
+
 /* ── Preguntas Frecuentes ── */
 function PreguntasTab({ preguntas, flash }) {
     const [editando, setEditando] = useState(null);
     const [creando, setCreando] = useState(false);
     const [deletingId, setDeletingId] = useState(null);
 
-    const form = useForm({ pregunta: '', respuesta: '', activo: true, orden: 0 });
+    const form = useForm(INITIAL_PREGUNTA);
 
-    function abrirCrear() { form.reset(); form.setData('activo', true); setEditando(null); setCreando(true); }
+    function abrirCrear() {
+        form.setData(INITIAL_PREGUNTA);
+        setEditando(null);
+        form.clearErrors();
+        setCreando(true);
+    }
 
     function abrirEditar(p) {
-        form.setData({ pregunta: p.pregunta, respuesta: p.respuesta, activo: p.activo, orden: p.orden });
+        form.setData({
+            pregunta: p.pregunta || '',
+            respuesta: p.respuesta || '',
+            activo: !!p.activo,
+            orden: p.orden ?? 0
+        });
         setEditando(p);
         setCreando(false);
     }
 
-    function cerrar() { setCreando(false); setEditando(null); form.clearErrors(); }
+    function cerrar() {
+        setCreando(false);
+        setEditando(null);
+        form.clearErrors();
+        form.setData(INITIAL_PREGUNTA);
+    }
 
     const basePath = window.location.pathname.replace(/\/[^/]+$/, '');
 

@@ -1,5 +1,6 @@
 import { Link } from '@inertiajs/react';
 import ScrollReveal from './ScrollReveal';
+import { Sparkles, Lock } from 'lucide-react';
 
 export default function Admissions() {
     const steps = [
@@ -7,39 +8,31 @@ export default function Admissions() {
             num: "01",
             title: "Inscripción Online",
             description: "Diligencia el formulario digital de admisión y carga los documentos del estudiante de forma rápida.",
-            tip: "Ten a la mano el Registro Civil del aspirante y los certificados de notas previos en formato PDF.",
             color: "border-t-[#003C8F]",
-            glowColor: "hover:border-[#003C8F]/20 hover:shadow-[0_20px_50px_rgba(0, 60, 143,0.03)]"
         },
         {
             num: "02",
             title: "Entrevista y Pruebas",
             description: "Presenta las pruebas básicas y asiste a la entrevista psicológica virtual o presencial.",
-            tip: "Las pruebas evalúan lógica y comprensión lectora básica. La entrevista se realiza junto a los padres.",
             color: "border-t-[#800A15]",
-            glowColor: "hover:border-[#800A15]/20 hover:shadow-[0_20px_50px_rgba(128, 10, 21,0.03)]"
         },
         {
             num: "03",
             title: "Resultados",
             description: "Revisa el estado de la postulación en nuestra plataforma y recibe la confirmación vía correo.",
-            tip: "Los resultados se notifican formalmente en un plazo de 3 a 5 días hábiles tras concluir las pruebas.",
             color: "border-t-[#003C8F]",
-            glowColor: "hover:border-[#003C8F]/20 hover:shadow-[0_20px_50px_rgba(0, 60, 143,0.03)]"
         },
         {
             num: "04",
             title: "Matrícula Financiera",
             description: "Efectúa el pago del cupo y firma el contrato de matrícula digitalmente para asegurar la vacante.",
-            tip: "Puedes realizar el pago de matrícula cómodamente por PSE o descargar el recibo para pago en ventanilla bancaria.",
             color: "border-t-[#800A15]",
-            glowColor: "hover:border-[#800A15]/20 hover:shadow-[0_20px_50px_rgba(128, 10, 21,0.03)]"
         }
     ];
 
     return (
         <section className="relative py-24 lg:py-32 bg-[#F8F9FB] overflow-hidden select-none border-b border-slate-100">
-            <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] space-y-20">
+            <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] space-y-16">
                 
                 {/* Section Header */}
                 <div className="max-w-2xl text-left space-y-4">
@@ -55,22 +48,22 @@ export default function Admissions() {
                     </ScrollReveal>
                 </div>
 
-                {/* Horizontal Step Cards Deck */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                    {steps.map((step, index) => (
-                        <ScrollReveal 
-                            key={index}
-                            distance="translate-y-8"
-                            delay={index * 100}
-                            className="h-full"
-                        >
-                            <div className={`h-full border border-slate-100/80 border-t-[3px] ${step.color} p-8 rounded-3xl bg-white transition-all duration-500 relative flex flex-col justify-between hover:-translate-y-2 group overflow-hidden ${step.glowColor}`}>
-                                <div className="space-y-6 text-left">
-                                    <span className="block text-4xl font-light text-slate-200 group-hover:text-[#003C8F] transition-colors duration-300 font-sans tracking-tighter">
+                {/* Contenedor relativo con los pasos y la capa gris transparente "PRÓXIMAMENTE INSCRIPCIONES ONLINE" */}
+                <div className="relative rounded-3xl">
+                    
+                    {/* Tarjetas de pasos al fondo */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                        {steps.map((step, index) => (
+                            <div 
+                                key={index}
+                                className={`h-full border border-slate-200/60 border-t-[3px] ${step.color} p-8 rounded-3xl bg-white shadow-xs opacity-75 flex flex-col justify-between text-left`}
+                            >
+                                <div className="space-y-6">
+                                    <span className="block text-4xl font-light text-slate-300 font-sans tracking-tighter">
                                         {step.num}
                                     </span>
                                     <div className="space-y-2">
-                                        <h3 className="font-extrabold text-[18px] text-[#08111F] group-hover:text-[#003C8F] transition-colors duration-300">
+                                        <h3 className="font-extrabold text-[18px] text-[#08111F]">
                                             {step.title}
                                         </h3>
                                         <p className="text-sm font-semibold text-slate-500 leading-relaxed">
@@ -78,41 +71,47 @@ export default function Admissions() {
                                         </p>
                                     </div>
                                 </div>
-
-                                {/* Expanding Tip Drawer on Hover */}
-                                <div className="h-0 opacity-0 group-hover:h-auto group-hover:opacity-100 group-hover:pt-4 transition-all duration-[600ms] ease-in-out overflow-hidden border-t border-slate-50 mt-0 group-hover:mt-4 text-left">
-                                    <span className="block text-[10px] font-extrabold text-slate-400 uppercase tracking-widest mb-1.5 font-sans">
-                                        CONSEJO DE ADMISIÓN
-                                    </span>
-                                    <p className="text-[13px] font-semibold text-[#800A15] leading-relaxed">
-                                        {step.tip}
-                                    </p>
-                                </div>
                             </div>
-                        </ScrollReveal>
-                    ))}
-                </div>
+                        ))}
+                    </div>
 
-                {/* Bottom CTA block */}
-                <ScrollReveal distance="translate-y-6" delay={300} className="pt-8 text-left">
-                    <div className="inline-flex flex-col sm:flex-row items-center gap-6">
-                        <Link
-                            href="/inscripcion"
-                            className="inline-flex items-center justify-center bg-[#800A15] hover:bg-[#c4181e] text-white font-extrabold text-xs sm:text-sm w-full sm:w-auto px-6 sm:px-8 py-4.5 rounded-xl shadow-sm active:scale-[0.98] transition-all cursor-pointer"
+                    {/* Botones al fondo */}
+                    <div className="pt-8 text-left opacity-60 flex flex-col sm:flex-row items-center gap-6">
+                        <span
+                            className="inline-flex items-center justify-center bg-[#800A15] text-white font-extrabold text-xs sm:text-sm px-8 py-4.5 rounded-xl shadow-sm cursor-not-allowed"
                         >
                             Iniciar inscripción online
-                        </Link>
-                        <Link 
-                            href="/admisiones" 
-                            className="inline-flex items-center gap-1.5 text-xs font-extrabold text-[#08111F] hover:text-[#800A15] uppercase tracking-wider transition-colors"
-                        >
-                            Ver costos y requisitos
-                            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                            </svg>
-                        </Link>
+                        </span>
+                        <span className="inline-flex items-center gap-1.5 text-xs font-extrabold text-[#08111F] uppercase tracking-wider">
+                            Ver costos y requisitos →
+                        </span>
                     </div>
-                </ScrollReveal>
+
+                    {/* CAPA GRIS TRANSPARENTE ENCIMA CON EL LETRERO DESTACADO */}
+                    <div className="absolute inset-0 -m-3 bg-slate-900/65 backdrop-blur-md rounded-3xl z-30 flex flex-col items-center justify-center p-6 text-center shadow-2xl border border-white/10">
+                        <div className="bg-[#08111F]/90 border-2 border-amber-400/60 p-8 sm:p-10 rounded-3xl shadow-2xl max-w-xl space-y-4 backdrop-blur-lg transform hover:scale-[1.01] transition-transform">
+                            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-400/20 text-amber-300 text-xs font-black tracking-widest uppercase border border-amber-400/30 animate-pulse">
+                                <Sparkles className="w-4 h-4 text-amber-300" />
+                                PRÓXIMAMENTE INSCRIPCIONES ONLINE
+                            </div>
+                            <h3 className="text-2xl sm:text-3xl font-black text-white leading-tight font-sans">
+                                Proceso de Inscripción 2027
+                            </h3>
+                            <p className="text-xs sm:text-sm font-semibold text-slate-300 leading-relaxed font-sans max-w-md mx-auto">
+                                La plataforma digital de admisiones se habilitará próximamente para la recepción de solicitudes. Revisa los requisitos de inscripción institucionales.
+                            </p>
+                            <div className="pt-3">
+                                <Link 
+                                    href="/admisiones" 
+                                    className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs uppercase tracking-wider transition-all duration-300 shadow-xl"
+                                >
+                                    Ver Requisitos de Admisión
+                                </Link>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
 
             </div>
         </section>

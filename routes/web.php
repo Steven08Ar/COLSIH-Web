@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\PreguntaController;
 use App\Http\Controllers\Admin\TestimonioController;
 use App\Http\Controllers\ContactoController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\SuscripcionController;
 use App\Http\Controllers\TourController;
 use App\Http\Controllers\InscripcionController;
 use App\Http\Controllers\NoticiasController;
@@ -66,6 +67,9 @@ Route::prefix('contacto')->name('contacto.')->group(function () {
     Route::get('/', [ContactoController::class, 'index'])->name('index');
     Route::post('/', [ContactoController::class, 'store'])->name('store');
 });
+
+// Suscripción al boletín
+Route::post('/suscripcion', [SuscripcionController::class, 'store'])->name('suscripcion.store');
 
 // Panel administrativo — URL oculta definida en .env (ADMIN_PATH)
 $adminPath = env('ADMIN_PATH', 'panel-admin');

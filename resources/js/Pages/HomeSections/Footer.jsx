@@ -1,8 +1,16 @@
-import { Link, usePage } from '@inertiajs/react';
+import { Link, useForm, usePage } from '@inertiajs/react';
 import ScrollReveal from './ScrollReveal';
 
 export default function Footer() {
-    const { url } = usePage();
+    const { url, props } = usePage();
+    const suscripcionOk = props.flash?.suscripcion_ok ?? false;
+
+    const { data, setData, post, processing, errors, reset } = useForm({ correo: '' });
+
+    function handleSuscripcion(e) {
+        e.preventDefault();
+        post('/suscripcion', { onSuccess: () => reset('correo') });
+    }
     const isMjs = url === '/mjs';
 
     return (
@@ -181,16 +189,32 @@ export default function Footer() {
                         </p>
                         
                         {/* Signup Form */}
-                        <div className="flex flex-col gap-2 pt-2">
-                            <input 
-                                type="email" 
-                                className="w-full px-5 py-3 border border-white/10 bg-white/5 rounded-full text-xs font-semibold focus:outline-none focus:border-[#003C8F] transition-all"
-                                placeholder="tu@correo.com"
-                            />
-                            <button className="w-full bg-white/10 hover:bg-white text-[#08111F] hover:text-slate-900 font-extrabold text-xs py-3 rounded-full transition-all cursor-pointer">
-                                {isMjs ? "Participar" : "Suscribirme"}
-                            </button>
-                        </div>
+                        {suscripcionOk ? (
+                            <p className="text-sm font-bold text-emerald-400 pt-2">
+                                ¡Listo! Revisa tu correo para confirmar.
+                            </p>
+                        ) : (
+                            <form onSubmit={handleSuscripcion} className="flex flex-col gap-2 pt-2">
+                                <input
+                                    type="email"
+                                    value={data.correo}
+                                    onChange={e => setData('correo', e.target.value)}
+                                    className="w-full px-5 py-3 border border-white/10 bg-white/5 rounded-full text-xs font-semibold focus:outline-none focus:border-[#003C8F] transition-all"
+                                    placeholder="tu@correo.com"
+                                    required
+                                />
+                                {errors.correo && (
+                                    <p className="text-xs text-red-400 px-2">{errors.correo}</p>
+                                )}
+                                <button
+                                    type="submit"
+                                    disabled={processing}
+                                    className="w-full bg-white/10 hover:bg-white text-white hover:text-slate-900 font-extrabold text-xs py-3 rounded-full transition-all cursor-pointer disabled:opacity-50"
+                                >
+                                    {processing ? 'Enviando...' : (isMjs ? 'Participar' : 'Suscribirme')}
+                                </button>
+                            </form>
+                        )}
                     </div>
 
                 </div>

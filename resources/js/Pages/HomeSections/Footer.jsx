@@ -1,4 +1,5 @@
 import { Link, useForm, usePage } from '@inertiajs/react';
+import CopiarTexto from '@/Components/CopiarTexto';
 import ScrollReveal from './ScrollReveal';
 
 export default function Footer() {
@@ -182,7 +183,7 @@ export default function Footer() {
                         </div>
                         <div>
                             <span className="block text-white font-semibold">Teléfonos de Atención</span>
-                            <span>+57 607 684 9810</span>
+                            <CopiarTexto texto="+57 607 684 9810">607 684 9810</CopiarTexto>
                         </div>
                     </div>
 

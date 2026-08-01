@@ -2,157 +2,19 @@ import { useState, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import TourViewer from '@/Components/Tour360/TourViewer';
 import ScrollReveal from './ScrollReveal';
-import { Compass, X, Sparkles, ExternalLink, Play } from 'lucide-react';
+import { Compass, X, Play } from 'lucide-react';
 
-const VIRTUAL_TOUR_SCENES = [
-    {
-        id: 1,
-        slug: 'entrada',
-        nombre: 'Entrada Principal',
-        imagen_url: '/recorrido_virtual/1.entrada.jpg',
-        yaw_inicial: 0,
-        pitch_inicial: 0,
-        hfov_inicial: 100,
-        es_escena_inicial: true,
-        x_porcentaje: 12,
-        y_porcentaje: 82,
-        hotspots: [
-            { tipo: 'enlace', yaw: 0, pitch: -2, texto: 'Ingresar al Lobby', scene_destino_slug: 'lobby' },
-            { tipo: 'info', yaw: -25, pitch: 8, texto: 'Acceso Peatonal y Portería Principal COLSIH' }
-        ]
-    },
-    {
-        id: 2,
-        slug: 'lobby',
-        nombre: 'Lobby de Bienvenida',
-        imagen_url: '/recorrido_virtual/2.lobby.jpg',
-        yaw_inicial: 0,
-        pitch_inicial: 0,
-        hfov_inicial: 100,
-        es_escena_inicial: false,
-        x_porcentaje: 22,
-        y_porcentaje: 72,
-        hotspots: [
-            { tipo: 'enlace', yaw: 40, pitch: 0, texto: 'Ir a la Capilla', scene_destino_slug: 'capilla' },
-            { tipo: 'enlace', yaw: -45, pitch: 0, texto: 'Volver a la Entrada', scene_destino_slug: 'entrada' },
-            { tipo: 'enlace', yaw: 110, pitch: -3, texto: 'Pasillo a Cafetería', scene_destino_slug: 'cafeteria' },
-            { tipo: 'info', yaw: 0, pitch: 10, texto: 'Recepción General y Atención al Público' }
-        ]
-    },
-    {
-        id: 3,
-        slug: 'capilla',
-        nombre: 'Capilla Institucional',
-        imagen_url: '/recorrido_virtual/5.capilla.jpg',
-        yaw_inicial: 0,
-        pitch_inicial: 0,
-        hfov_inicial: 100,
-        es_escena_inicial: false,
-        x_porcentaje: 32,
-        y_porcentaje: 60,
-        hotspots: [
-            { tipo: 'enlace', yaw: 180, pitch: 0, texto: 'Regresar al Lobby', scene_destino_slug: 'lobby' },
-            { tipo: 'info', yaw: 0, pitch: 15, texto: 'Espacio de Formación Espiritual y Eucarística' }
-        ]
-    },
-    {
-        id: 4,
-        slug: 'cafeteria',
-        nombre: 'Parque y Cafetería',
-        imagen_url: '/recorrido_virtual/4.parque_cafeteria.jpg',
-        yaw_inicial: 0,
-        pitch_inicial: 0,
-        hfov_inicial: 100,
-        es_escena_inicial: false,
-        x_porcentaje: 42,
-        y_porcentaje: 52,
-        hotspots: [
-            { tipo: 'enlace', yaw: -70, pitch: 0, texto: 'Ir al Coliseo Deportivo', scene_destino_slug: 'cancha_grande' },
-            { tipo: 'enlace', yaw: 130, pitch: 0, texto: 'Volver al Lobby', scene_destino_slug: 'lobby' },
-            { tipo: 'info', yaw: 0, pitch: 10, texto: 'Zona de Recreación y Alimentación Saludable' }
-        ]
-    },
-    {
-        id: 5,
-        slug: 'cancha_grande',
-        nombre: 'Coliseo Deportivo Principal',
-        imagen_url: '/recorrido_virtual/19.cancha_grande.jpg',
-        yaw_inicial: 0,
-        pitch_inicial: 0,
-        hfov_inicial: 100,
-        es_escena_inicial: false,
-        x_porcentaje: 62,
-        y_porcentaje: 42,
-        hotspots: [
-            { tipo: 'enlace', yaw: 85, pitch: -2, texto: 'Ir a Sala de Informática', scene_destino_slug: 'informatica' },
-            { tipo: 'enlace', yaw: -110, pitch: 0, texto: 'Ir al Gimnasio', scene_destino_slug: 'gimnasio' },
-            { tipo: 'info', yaw: 0, pitch: 15, texto: 'Cancha Polideportiva Reglamentaria' }
-        ]
-    },
-    {
-        id: 6,
-        slug: 'informatica',
-        nombre: 'Sala de Informática',
-        imagen_url: '/recorrido_virtual/12.informatica_a.jpg',
-        yaw_inicial: 0,
-        pitch_inicial: 0,
-        hfov_inicial: 100,
-        es_escena_inicial: false,
-        x_porcentaje: 76,
-        y_porcentaje: 32,
-        hotspots: [
-            { tipo: 'enlace', yaw: -130, pitch: 0, texto: 'Ir a la Biblioteca', scene_destino_slug: 'biblioteca' },
-            { tipo: 'enlace', yaw: 50, pitch: 0, texto: 'Volver a Canchas', scene_destino_slug: 'cancha_grande' },
-            { tipo: 'info', yaw: 0, pitch: 10, texto: 'Laboratorio de Computación e Investigación' }
-        ]
-    },
-    {
-        id: 7,
-        slug: 'gimnasio',
-        nombre: 'Gimnasio Deportivo',
-        imagen_url: '/recorrido_virtual/34.gimnasio.jpg',
-        yaw_inicial: 0,
-        pitch_inicial: 0,
-        hfov_inicial: 100,
-        es_escena_inicial: false,
-        x_porcentaje: 84,
-        y_porcentaje: 48,
-        hotspots: [
-            { tipo: 'enlace', yaw: 160, pitch: 0, texto: 'Volver a Canchas', scene_destino_slug: 'cancha_grande' },
-            { tipo: 'info', yaw: 0, pitch: 8, texto: 'Área para Acondicionamiento Físico' }
-        ]
-    },
-    {
-        id: 8,
-        slug: 'biblioteca',
-        nombre: 'Biblioteca Institucional',
-        imagen_url: '/recorrido_virtual/38.biblioteca.jpg',
-        yaw_inicial: 0,
-        pitch_inicial: 0,
-        hfov_inicial: 100,
-        es_escena_inicial: false,
-        x_porcentaje: 88,
-        y_porcentaje: 18,
-        hotspots: [
-            { tipo: 'enlace', yaw: 180, pitch: 0, texto: 'Ir a Informática', scene_destino_slug: 'informatica' },
-            { tipo: 'info', yaw: 0, pitch: 12, texto: 'Biblioteca General y Sala de Lectura' }
-        ]
-    }
-];
-
-export default function VideoExperience({ scenes = [], tour = null }) {
+export default function VideoExperience({ scenes = [] }) {
     const bgRef = useRef(null);
     const [tour360Open, setTour360Open] = useState(false);
-    const [activeSceneSlug, setActiveSceneSlug] = useState('entrada');
 
-    const activeScenes = scenes && scenes.length > 0 ? scenes : VIRTUAL_TOUR_SCENES;
+    const activeScenes = Array.isArray(scenes) && scenes.length > 0 ? scenes : [];
+    const initialScene = activeScenes.find(s => s.es_escena_inicial) || activeScenes[0] || null;
+    const [activeSceneSlug, setActiveSceneSlug] = useState(initialScene?.slug ?? null);
 
-    // Handle ESC key to exit 360 viewer modal
     useEffect(() => {
         const handleKeyDown = (e) => {
-            if (e.key === 'Escape' && tour360Open) {
-                setTour360Open(false);
-            }
+            if (e.key === 'Escape' && tour360Open) setTour360Open(false);
         };
         window.addEventListener('keydown', handleKeyDown);
 
@@ -171,24 +33,27 @@ export default function VideoExperience({ scenes = [], tour = null }) {
         };
     }, [tour360Open]);
 
+    if (!activeScenes.length) return null;
+
+    const bgImage = initialScene?.imagen_url ?? null;
+
     const handleMouseMove = (e) => {
         if (!bgRef.current) return;
         const rect = e.currentTarget.getBoundingClientRect();
         const x = (e.clientX - rect.left) / rect.width - 0.5;
         const y = (e.clientY - rect.top) / rect.height - 0.5;
-
         bgRef.current.style.transform = `scale(1.1) translate(${x * 20}px, ${y * 20}px)`;
         bgRef.current.style.transition = 'transform 0.1s ease-out';
     };
 
     return (
         <section className="relative w-full py-28 md:py-36 bg-slate-950 overflow-hidden select-none">
-            {/* Background Image Container */}
+            {/* Background Image from DB */}
             <div className="absolute inset-0 z-0 opacity-40 overflow-hidden">
                 <div
                     ref={bgRef}
                     className="w-full h-full bg-cover bg-center transition-transform duration-700 ease-out scale-105"
-                    style={{ backgroundImage: `url('/recorrido_virtual/1.entrada.jpg')` }}
+                    style={bgImage ? { backgroundImage: `url('${bgImage}')` } : {}}
                     onMouseMove={handleMouseMove}
                 />
             </div>
@@ -208,7 +73,6 @@ export default function VideoExperience({ scenes = [], tour = null }) {
                         aria-label="Abrir Recorrido Virtual 360"
                     >
                         <span className="absolute inset-0 rounded-full bg-blue-500/30 animate-ping opacity-25" style={{ animationDuration: '3.5s' }}></span>
-
                         <Play className="w-7 h-7 md:w-8 md:h-8 fill-white ml-1 transition-transform duration-300 group-hover:scale-110" />
                     </button>
                 </ScrollReveal>
@@ -226,8 +90,6 @@ export default function VideoExperience({ scenes = [], tour = null }) {
             {/* FULLSCREEN 360° INTERACTIVE LIGHTBOX PORTAL */}
             {tour360Open && createPortal(
                 <div className="fixed inset-0 z-[999999] bg-slate-950 flex flex-col overflow-hidden animate-fadeIn">
-                    
-                    {/* Top Right Corner Floating Exit Button */}
                     <div className="absolute top-6 right-6 z-[999999] flex items-center gap-3">
                         <button
                             onClick={() => setTour360Open(false)}
@@ -239,11 +101,10 @@ export default function VideoExperience({ scenes = [], tour = null }) {
                         </button>
                     </div>
 
-                    {/* Pannellum 360 Tour Viewer Component */}
                     <div className="w-full h-full flex-1 relative">
                         <TourViewer
                             scenes={activeScenes}
-                            initialSceneSlug={activeScenes[0]?.slug || 'entrada'}
+                            initialSceneSlug={initialScene?.slug}
                             activeSceneSlug={activeSceneSlug}
                             onSceneChange={(slug) => setActiveSceneSlug(slug)}
                             className="rounded-none border-none shadow-none min-h-screen"

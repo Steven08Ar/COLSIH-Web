@@ -120,7 +120,7 @@ export default function AboutHero() {
                 </div>
 
                 {/* Right Column Spacer for Desktop / Stacking Inline Container on Mobile & Tablet */}
-                <div className="relative flex justify-center mt-12 lg:mt-0 w-full max-w-[549px] aspect-[549/568] pointer-events-none select-none translate-y-[60px] md:translate-y-[120px] lg:hidden">
+                <div className="relative flex justify-center mt-8 lg:mt-0 w-full max-w-[460px] aspect-[549/568] pointer-events-none select-none lg:hidden mx-auto">
                     {/* Mobile/Tablet inline copy (rendered inside the grid) */}
                     <div className="relative w-full h-full flex items-end justify-center">
                         {/* Layer 1: Background School Mask */}
@@ -131,7 +131,7 @@ export default function AboutHero() {
                             <img
                                 src="/galeria/colegio-afuera.JPG"
                                 alt="Colegio Santa Isabel de Hungría"
-                                className="w-full h-full object-cover scale-105"
+                                className="w-full h-full object-cover object-[center_35%] scale-100"
                             />
                         </div>
 
@@ -139,7 +139,7 @@ export default function AboutHero() {
                         <img
                             src="/galeria/estudiantes-espaldas.png"
                             alt="Estudiantes COLSIH"
-                            className="absolute bottom-[-10px] left-[-2%] w-[100%] max-w-none z-20 pointer-events-none object-contain drop-shadow-[0_20px_40px_rgba(8,17,31,0.3)]"
+                            className="absolute bottom-[-10px] left-[5%] w-[84%] max-w-none z-20 pointer-events-none object-contain drop-shadow-[0_20px_40px_rgba(8,17,31,0.3)]"
                         />
                     </div>
                 </div>
@@ -149,21 +149,21 @@ export default function AboutHero() {
 
             </motion.div>
 
-            {/* Desktop Full-Viewport Image Layer (Stretched wider: 56%) */}
-            <div className="hidden lg:block absolute right-0 top-0 bottom-0 w-[56%] h-full z-10 pointer-events-none select-none">
+            {/* Desktop Full-Viewport Image Layer (Proporcionado y centrado verticalmente) */}
+            <div className="hidden lg:flex items-center justify-center absolute right-6 xl:right-16 top-[110px] bottom-[50px] w-[46%] xl:w-[44%] max-w-[580px] h-[calc(100%-160px)] z-10 pointer-events-none select-none">
 
                 {/* Parallax Blobs and Blurs Behind the Photograph */}
-                <div className="absolute inset-0 z-0 pointer-events-none scale-110">
+                <div className="absolute inset-0 z-0 pointer-events-none scale-100">
                     {/* Blob azul enorme */}
                     <AnimatedBlob
-                        className="w-80 h-80 bg-[#003C8F]/15 -top-12 -left-12 blur-2xl"
+                        className="w-72 h-72 bg-[#003C8F]/15 -top-8 -left-8 blur-2xl"
                         mouseX={springX}
                         mouseY={springY}
                         speed={1.3}
                     />
                     {/* Blob rojo */}
                     <AnimatedBlob
-                        className="w-[360px] h-[360px] bg-[#800A15]/10 -bottom-16 -right-16 blur-3xl"
+                        className="w-[320px] h-[320px] bg-[#800A15]/10 -bottom-12 -right-12 blur-3xl"
                         mouseX={springX}
                         mouseY={springY}
                         speed={0.9}
@@ -172,12 +172,12 @@ export default function AboutHero() {
                     <div className="absolute top-1/3 left-1/4 w-32 h-32 bg-[#003C8F]/15 rounded-full blur-3xl"></div>
                     <div className="absolute bottom-1/3 right-1/4 w-40 h-40 bg-[#800A15]/12 rounded-full blur-3xl"></div>
                     {/* Giant outline circles */}
-                    <div className="absolute w-[440px] h-[440px] border border-slate-200/30 rounded-full top-4 left-4 opacity-40"></div>
-                    <div className="absolute w-[320px] h-[320px] border border-slate-200/30 rounded-full bottom-4 right-4 opacity-40"></div>
+                    <div className="absolute w-[400px] h-[400px] border border-slate-200/30 rounded-full top-4 left-4 opacity-40"></div>
+                    <div className="absolute w-[300px] h-[300px] border border-slate-200/30 rounded-full bottom-4 right-4 opacity-40"></div>
                 </div>
 
                 {/* 3D Pop-out Container */}
-                <div className="relative w-full h-full flex items-end justify-end">
+                <div className="relative w-full h-full max-w-[500px] xl:max-w-[540px] max-h-[560px] flex items-end justify-center">
                     {/* Layer 1: Background School Mask */}
                     <div
                         style={{ clipPath: 'url(#school-mask)', WebkitClipPath: 'url(#school-mask)' }}
@@ -186,7 +186,7 @@ export default function AboutHero() {
                         <img
                             src="/galeria/colegio-afuera.JPG"
                             alt="Colegio Santa Isabel de Hungría"
-                            className="w-full h-full object-cover scale-105"
+                            className="w-full h-full object-cover object-[center_35%] scale-100"
                         />
                     </div>
 
@@ -194,7 +194,7 @@ export default function AboutHero() {
                     <img
                         src="/galeria/estudiantes-espaldas.png"
                         alt="Estudiantes COLSIH"
-                        className="absolute bottom-[-10px] left-[-2%] w-[100%] max-w-none z-20 pointer-events-none object-contain drop-shadow-[0_20px_40px_rgba(8,17,31,0.3)] hover:scale-[1.01] transition-transform duration-500"
+                        className="absolute bottom-[-10px] left-[5%] w-[84%] max-w-none z-20 pointer-events-none object-contain drop-shadow-[0_20px_40px_rgba(8,17,31,0.3)] hover:scale-[1.01] transition-transform duration-500"
                     />
                 </div>
             </div>

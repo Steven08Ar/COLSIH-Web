@@ -37,7 +37,7 @@ export default function Home({ noticias, testimonios, preguntas, tour, scenes = 
             <Programs />
 
             {/* Section 5: Video Experience */}
-            <VideoExperience scenes={scenes} tour={tour} setVideoOpen={setVideoOpen} />
+            <VideoExperience scenes={scenes} />
 
             {/* Section 6: Statistics */}
             <Stats />

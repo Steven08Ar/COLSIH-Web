@@ -13,11 +13,16 @@ class HomeController extends Controller
 {
     public function __invoke(): Response
     {
-        $tour = Tour::with(['scenes' => function ($q) {
-            $q->orderBy('orden')->with('hotspots');
-        }])->where('slug', 'colsih')->first();
+        $tour = Tour::firstOrCreate(
+            ['slug' => 'colsih'],
+            ['nombre' => 'Recorrido Virtual 360° COLSIH', 'activo' => true]
+        );
 
-        $scenes = $tour ? $tour->scenes : [];
+        $tour->load(['scenes' => function ($q) {
+            $q->orderBy('orden')->with('hotspots');
+        }]);
+
+        $scenes = $tour->scenes;
 
         return Inertia::render('Home', [
             'tour'        => $tour,

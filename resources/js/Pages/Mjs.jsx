@@ -64,10 +64,10 @@ export default function Mjs() {
                     
                     <div className="col-span-full lg:col-span-8 space-y-6 text-center lg:text-left flex flex-col items-center lg:items-start">
                         
-                        {/* Letrero "SECCIÓN EN DESARROLLO" */}
+                        {/* Letrero minimalista en Vinotinto "SECCIÓN EN DESARROLLO" */}
                         <ScrollReveal distance="translate-y-6">
-                            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/20 border border-amber-400/40 text-amber-300 text-xs font-black tracking-widest uppercase mb-1 shadow-lg backdrop-blur-md animate-pulse">
-                                <Construction className="w-4 h-4 text-amber-400" />
+                            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#800A15] text-white text-xs font-black tracking-widest uppercase mb-1 shadow-lg">
+                                <Construction className="w-4 h-4 text-white" />
                                 SECCIÓN EN DESARROLLO · PRÓXIMAMENTE
                             </div>
                         </ScrollReveal>
@@ -104,11 +104,11 @@ export default function Mjs() {
                 </div>
             </section>
 
-            {/* Aviso Destacado de Desarrollo */}
-            <section className="bg-amber-500/10 border-b border-amber-500/20 py-4 px-6">
+            {/* Aviso Destacado de Desarrollo en Vinotinto Minimalista */}
+            <section className="bg-[#800A15]/10 border-b border-[#800A15]/20 py-4 px-6">
                 <div className="max-w-[1680px] mx-auto px-4 sm:px-6 md:px-12 lg:px-[120px] flex items-center justify-center gap-3 text-center">
-                    <Sparkles className="w-5 h-5 text-amber-500 shrink-0" />
-                    <p className="text-xs sm:text-sm font-bold text-amber-700 dark:text-amber-300">
+                    <Sparkles className="w-5 h-5 text-[#800A15] shrink-0" />
+                    <p className="text-xs sm:text-sm font-bold text-[#800A15]">
                         Esta plataforma interactiva del Movimiento Juvenil Salesiano se encuentra en fase de desarrollo activo. Pronto podrás registrarte en grupos asociativos y acceder a galerías de eventos.
                     </p>
                 </div>

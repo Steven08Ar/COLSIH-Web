@@ -84,10 +84,10 @@ export default function Admisiones() {
                 <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] relative z-10 text-center lg:text-left">
                     <div className="max-w-3xl mx-auto lg:mx-0 space-y-6 flex flex-col items-center lg:items-start">
                         
-                        {/* Letrero "PRÓXIMAMENTE 2027..." justo encima de "Tu camino a COLSIH" */}
+                        {/* Letrero minimalista "PRÓXIMAMENTE 2027..." en Vinotinto justo encima de "Tu camino a COLSIH" */}
                         <ScrollReveal distance="translate-y-6">
-                            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-400/20 border border-amber-400/40 text-amber-300 text-xs font-black tracking-widest uppercase mb-1 shadow-lg backdrop-blur-md animate-pulse">
-                                <Sparkles className="w-4 h-4 text-amber-300" />
+                            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#800A15] text-white text-xs font-black tracking-widest uppercase mb-1 shadow-lg">
+                                <Sparkles className="w-3.5 h-3.5 text-white" />
                                 PRÓXIMAMENTE 2027...
                             </div>
                         </ScrollReveal>
@@ -297,7 +297,7 @@ export default function Admisiones() {
                 <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] space-y-16">
                     <div className="max-w-2xl mx-auto lg:mx-0 text-center lg:text-left space-y-4 flex flex-col items-center lg:items-start">
                         <ScrollReveal distance="translate-y-6">
-                            <span className="text-amber-400 text-xs font-bold tracking-[3px] uppercase block font-sans">
+                            <span className="text-[#800A15] bg-white px-3 py-1 rounded-full text-xs font-bold tracking-[3px] uppercase block font-sans">
                                 BENEFICIOS INSTITUCIONALES
                             </span>
                         </ScrollReveal>
@@ -312,7 +312,7 @@ export default function Admisiones() {
                         {destacados.map((item, idx) => (
                             <ScrollReveal key={idx} distance="translate-y-8" delay={idx * 150} className="h-full">
                                 <div className="p-8 border border-white/10 bg-white/5 rounded-3xl space-y-4 backdrop-blur-md h-full text-left">
-                                    <h3 className="text-xl font-black text-amber-300 font-sans">
+                                    <h3 className="text-xl font-black text-white font-sans">
                                         {item.titulo}
                                     </h3>
                                     <p className="text-sm font-medium text-slate-200 leading-relaxed font-sans">
@@ -326,7 +326,7 @@ export default function Admisiones() {
                     <div className="text-center pt-8">
                         <Link
                             href="/contacto"
-                            className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-white text-[#003C8F] font-extrabold text-sm uppercase tracking-wider hover:bg-amber-300 hover:text-slate-900 transition-all duration-300 shadow-xl cursor-pointer"
+                            className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-white text-[#003C8F] font-extrabold text-sm uppercase tracking-wider hover:bg-slate-100 transition-all duration-300 shadow-xl cursor-pointer"
                         >
                             Solicitar Asesoría de Admisiones
                         </Link>

@@ -1,6 +1,6 @@
 import { Link } from '@inertiajs/react';
 import ScrollReveal from './ScrollReveal';
-import { Sparkles, Lock } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 
 export default function Admissions() {
     const steps = [
@@ -87,11 +87,11 @@ export default function Admissions() {
                         </span>
                     </div>
 
-                    {/* CAPA GRIS TRANSPARENTE ENCIMA CON EL LETRERO DESTACADO */}
+                    {/* CAPA GRIS TRANSPARENTE ENCIMA CON EL LETRERO MINIMALISTA EN VINOTINTO */}
                     <div className="absolute inset-0 -m-3 bg-slate-900/65 backdrop-blur-md rounded-3xl z-30 flex flex-col items-center justify-center p-6 text-center shadow-2xl border border-white/10">
-                        <div className="bg-[#08111F]/90 border-2 border-amber-400/60 p-8 sm:p-10 rounded-3xl shadow-2xl max-w-xl space-y-4 backdrop-blur-lg transform hover:scale-[1.01] transition-transform">
-                            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-400/20 text-amber-300 text-xs font-black tracking-widest uppercase border border-amber-400/30 animate-pulse">
-                                <Sparkles className="w-4 h-4 text-amber-300" />
+                        <div className="bg-[#08111F]/90 border border-[#800A15]/40 p-8 sm:p-10 rounded-3xl shadow-2xl max-w-xl space-y-5 backdrop-blur-lg transform hover:scale-[1.01] transition-transform">
+                            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#800A15] text-white text-xs font-black tracking-widest uppercase shadow-md">
+                                <Sparkles className="w-3.5 h-3.5 text-white" />
                                 PRÓXIMAMENTE INSCRIPCIONES ONLINE
                             </div>
                             <h3 className="text-2xl sm:text-3xl font-black text-white leading-tight font-sans">
@@ -100,10 +100,10 @@ export default function Admissions() {
                             <p className="text-xs sm:text-sm font-semibold text-slate-300 leading-relaxed font-sans max-w-md mx-auto">
                                 La plataforma digital de admisiones se habilitará próximamente para la recepción de solicitudes. Revisa los requisitos de inscripción institucionales.
                             </p>
-                            <div className="pt-3">
+                            <div className="pt-2">
                                 <Link 
                                     href="/admisiones" 
-                                    className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs uppercase tracking-wider transition-all duration-300 shadow-xl"
+                                    className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-[#800A15] hover:bg-[#9c0d1b] text-white font-black text-xs uppercase tracking-wider transition-all duration-300 shadow-xl"
                                 >
                                     Ver Requisitos de Admisión
                                 </Link>

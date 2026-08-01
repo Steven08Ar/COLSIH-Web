@@ -1,55 +1,49 @@
 import { useState } from 'react';
 import { Head, Link } from '@inertiajs/react';
 import AppLayout from '@/Layouts/AppLayout';
+import { Camera, ImageOff, Search } from 'lucide-react';
 
 const hitos = [
     { 
         año: '1980', 
         titulo: 'Fundación de FUNDAVILLABEL', 
         texto: 'El 28 de febrero se constituye la Fundación Centro Parroquial Villabel (FUNDAVILLABEL) bajo el decreto diocesano No. 633. Este hito sentó las bases comunitarias y eclesiásticas fundamentales para gestar el sueño de una educación salesiana en Floridablanca.',
-        imagen: '/nosotros_assets/historia/historia-1983.png',
         caption: 'Primeras reuniones comunitarias en Villabel, 1980'
     },
     { 
         año: '1988', 
         titulo: 'Creación del Centro Educativo', 
         texto: 'Ante el ferviente anhelo de la comunidad, el párroco Ramiro Parra Mantilla gestiona la creación de un centro educativo ante la Arquidiócesis de Bucaramanga. El 25 de noviembre de 1988 queda formalmente fundado el plantel de enseñanza.',
-        imagen: '/nosotros_assets/historia/historia-1983.png',
         caption: 'Plano y acta de fundación de la sede parroquial, 1988'
     },
     { 
         año: '1989', 
         titulo: 'Inicio de Labores Académicas', 
         texto: 'El 6 de febrero inician oficialmente las clases, abriendo las puertas a cientos de niños y jóvenes del sector, bajo la dirección inicial del Lic. Orlando Becerra y la recordada Lic. Nubia Carrillo Rodríguez.',
-        imagen: '/nosotros_assets/historia/historia-1995.png',
         caption: 'Primer grupo escolar en las instalaciones iniciales, 1989'
     },
     { 
         año: '1991', 
         titulo: 'Nombre Oficial: Santa Isabel de Hungría', 
         texto: 'El 25 de octubre, mediante resolución 033, se aprueba la denominación oficial de la institución en honor a Santa Isabel de Hungría, patrona del servicio y la caridad salesiana, dotando al colegio de su propia identidad independiente.',
-        imagen: '/nosotros_assets/historia/historia-1995.png',
         caption: 'Consagración a nuestra patrona, 1991'
     },
     { 
         año: '1993', 
         titulo: 'Primera Promoción de Bachilleres', 
         texto: 'Se conmemora la graduación y proclamación de la primera promoción oficial de Bachilleres Académicos del colegio, marcando un precedente de excelencia académica para la región.',
-        imagen: '/nosotros_assets/historia/historia-1995.png',
         caption: 'Ceremonia de graduación, Promoción de Bachilleres, 1993'
     },
     { 
         año: '1998', 
         titulo: 'Convenio de Articulación con el SENA', 
         texto: 'Inicia el convenio de articulación SENA-MEN, permitiendo que los estudiantes de la media técnica accedan a una formación técnica comercial y de negocios, ampliando su proyección laboral.',
-        imagen: '/nosotros_assets/historia/historia-2010.png',
         caption: 'Prácticas de contabilidad y comercio de los estudiantes, 1998'
     },
     { 
         año: '2016', 
         titulo: 'Administración de las Hijas de María Auxiliadora', 
         texto: 'La dirección y pastoral del plantel es asumida con orgullo por la Comunidad de las Hijas de María Auxiliadora (Hermanas Salesianas). Bajo la rectoría de Sor Gloria María Arbeláez Hoyos, se implanta el Sistema Preventivo de Don Bosco.',
-        imagen: '/nosotros_assets/historia/historia-hoy.png',
         caption: 'Sor Gloria María junto a la comunidad educativa, 2016'
     },
 ];
@@ -250,21 +244,28 @@ export default function Historia() {
                                                 </div>
                                             </div>
 
-                                            {/* Right Side (Polaroid Frame Picture) */}
+                                            {/* Right Side (Polaroid Frame Picture con Imagen Gris de Búsqueda) */}
                                             <div className={`flex justify-center ${
                                                 isEven ? 'lg:order-2' : 'lg:order-1'
                                             }`}>
                                                 {/* Photo Frame Container styled like Polaroid */}
-                                                <div className="bg-white p-4 pb-6 rounded-lg border border-[#e8dfcf] shadow-lg hover:shadow-xl transition-transform duration-500 hover:scale-102 hover:-rotate-1 max-w-[340px] w-full transform rotate-1">
-                                                    <div className="relative overflow-hidden aspect-video bg-slate-900 rounded border border-slate-100 group">
-                                                        <img 
-                                                            src={hito.imagen} 
-                                                            alt={hito.titulo} 
-                                                            className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                                                        />
+                                                <div className="bg-white p-4 pb-5 rounded-lg border border-[#e8dfcf] shadow-lg hover:shadow-xl transition-transform duration-500 hover:scale-102 hover:-rotate-1 max-w-[340px] w-full transform rotate-1">
+                                                    
+                                                    {/* Tarjeta Gris de En Búsqueda de Imagen */}
+                                                    <div className="relative overflow-hidden aspect-video bg-slate-200/90 rounded border border-slate-300/70 flex flex-col items-center justify-center p-4 text-center select-none group">
+                                                        <div className="w-11 h-11 rounded-full bg-slate-300/80 flex items-center justify-center text-slate-500 mb-2 group-hover:scale-110 transition-transform">
+                                                            <Camera className="w-5 h-5" />
+                                                        </div>
+                                                        <span className="text-[11px] font-black uppercase tracking-wider text-slate-600 font-sans">
+                                                            En búsqueda de la imagen...
+                                                        </span>
+                                                        <p className="text-[10px] font-bold text-slate-400 mt-0.5">
+                                                            Archivo histórico en proceso de búsqueda y digitalización
+                                                        </p>
                                                     </div>
-                                                    <div className="mt-4 text-center">
-                                                        <span className="text-[10px] md:text-xs font-bold text-slate-500 font-serif italic">
+
+                                                    <div className="mt-3 text-center">
+                                                        <span className="text-[10px] md:text-xs font-bold text-slate-400 font-serif italic">
                                                             "{hito.caption}"
                                                         </span>
                                                     </div>

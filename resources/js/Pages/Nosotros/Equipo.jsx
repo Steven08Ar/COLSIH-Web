@@ -17,10 +17,10 @@ import {
 export default function Equipo() {
     const [selectedArea, setSelectedArea] = useState('Todos');
 
-    // Equipo Directivo Oficial con fotos reales de la carpeta /docentes/
+    // Equipo Directivo Oficial con fotos reales (Sor Beatriz sin foto por ahora -> null)
     const directivos = [
-        { nombre: 'Sor Beatriz Cortés Jerez', cargo: 'Rectora', foto: '/docentes/Hermana%20de%20coso.JPG' },
-        { nombre: 'Jaime Manuel Ardila Parra', cargo: 'Coordinador Académico', foto: '/docentes/Jaime.JPG' },
+        { nombre: 'Sor Beatriz Cortés Jerez', cargo: 'Rectora', foto: null },
+        { nombre: 'Jaime Manuel Ardila Parra', cargo: 'Coordinador Académico', foto: '/docentes/Jaime%20Manuel.JPG' },
         { nombre: 'Margarita María Valle Manrique', cargo: 'Coordinadora de Convivencia', foto: '/docentes/Margara.JPG' },
         { nombre: 'Erika Tatiana Delgadillo Avella', cargo: 'Coordinadora de Pastoral', foto: '/docentes/Erika.JPG' }
     ];
@@ -181,12 +181,18 @@ export default function Equipo() {
                                     transition={{ duration: 0.5, delay: idx * 0.1 }}
                                     className={`bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800/80 rounded-[28px] overflow-hidden shadow-sm hover:shadow-md hover:scale-[1.02] transition-all duration-300 ${borderClass}`}
                                 >
-                                    <div className="aspect-[4/5] bg-slate-50 dark:bg-slate-950 overflow-hidden relative">
-                                        <img 
-                                            src={p.foto} 
-                                            alt={p.nombre} 
-                                            className="w-full h-full object-cover object-[center_20%]"
-                                        />
+                                    <div className="aspect-[4/5] bg-slate-100 dark:bg-slate-800 overflow-hidden relative flex items-center justify-center">
+                                        {p.foto ? (
+                                            <img 
+                                                src={p.foto} 
+                                                alt={p.nombre} 
+                                                className="w-full h-full object-cover object-[center_20%]"
+                                            />
+                                        ) : (
+                                            <div className="w-full h-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-400 dark:text-slate-600">
+                                                <User className="w-20 h-20" />
+                                            </div>
+                                        )}
                                     </div>
                                     <div className="p-5 text-center bg-white dark:bg-slate-900">
                                         <h4 className="font-extrabold text-slate-800 dark:text-slate-200 text-base leading-snug">

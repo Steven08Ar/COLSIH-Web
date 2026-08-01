@@ -363,11 +363,32 @@ export default function Hero({ setVideoOpen }) {
 
                     {/* Left Side Content (40% width / 5 columns) */}
                     <div className="col-span-12 md:col-span-6 lg:col-span-5 space-y-8 text-left">
-                        {/* Headline */}
-                        <h1 className="text-4xl sm:text-5xl lg:text-[68px] xl:text-[76px] font-black text-white leading-[1.05] tracking-tight font-sans animate-fadeIn">
-                            Formamos<br />
-                            buenos Cristianos<br />
-                            Honestos ciudadanos
+                        {/* Headline con tipografias y colores combinados */}
+                        <h1 className="text-4xl sm:text-5xl lg:text-[64px] xl:text-[72px] font-black text-white leading-[1.1] tracking-tight font-sans animate-fadeIn">
+                            {/* Linea 1: Formamos */}
+                            <span className="block text-white/90 text-2xl sm:text-3xl lg:text-[42px] font-extrabold tracking-widest uppercase font-sans mb-1 text-slate-200 drop-shadow-md">
+                                Formamos
+                            </span>
+
+                            {/* Linea 2: buenos Cristianos */}
+                            <span className="block leading-tight my-1">
+                                <span className="font-serif text-amber-300 text-4xl sm:text-5xl lg:text-[72px] xl:text-[82px] font-normal lowercase tracking-normal mr-3 inline-block transform -rotate-2 drop-shadow-[0_4px_20px_rgba(251,191,36,0.5)]">
+                                    buenos
+                                </span>
+                                <span className="bg-gradient-to-r from-amber-200 via-amber-400 to-yellow-300 bg-clip-text text-transparent font-black tracking-tight drop-shadow-[0_4px_25px_rgba(245,158,11,0.6)]">
+                                    Cristianos
+                                </span>
+                            </span>
+
+                            {/* Linea 3: Honestos ciudadanos */}
+                            <span className="block leading-tight mt-1">
+                                <span className="bg-gradient-to-r from-sky-300 via-blue-400 to-indigo-200 bg-clip-text text-transparent font-black tracking-tight drop-shadow-[0_4px_25px_rgba(56,189,248,0.6)]">
+                                    Honestos
+                                </span>{" "}
+                                <span className="text-white font-extrabold tracking-tight drop-shadow-lg">
+                                    ciudadanos
+                                </span>
+                            </span>
                         </h1>
 
                         {/* Buttons */}

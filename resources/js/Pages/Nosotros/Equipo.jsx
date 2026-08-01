@@ -10,8 +10,7 @@ import {
     Mail, 
     Phone, 
     Award,
-    BookOpen,
-    CheckCircle2
+    Sparkles
 } from 'lucide-react';
 
 export default function Equipo() {
@@ -22,7 +21,7 @@ export default function Equipo() {
         { nombre: 'Sor Beatriz Cortés Jerez', cargo: 'Rectora', foto: '/testimonios/egresada.png' },
         { nombre: 'Jaime Manuel Ardila Parra', cargo: 'Coordinador Académico', foto: '/testimonios/padre.png' },
         { nombre: 'Margarita María Valle Manrique', cargo: 'Coordinadora de Convivencia', foto: '/testimonios/egresada.png' },
-        { nombre: 'Erika Tatiana Delgadillo Avella', cargo: 'Coordinadora de Pastoral', foto: '/testimonios/padre.png' }
+        { nombre: 'Erika Tatiana Delgadillo Avella', cargo: 'Coordinadora de Pastoral', foto: '/testimonios/egresada.png' }
     ];
 
     // Áreas de Administración
@@ -33,41 +32,41 @@ export default function Equipo() {
         { area: 'Coordinación Pastoral', encargado: 'Erika Tatiana Delgadillo Avella', cargo: 'Coordinadora de Pastoral', tel: '(607) 637 1237', email: 'pastoral@colsih.edu.co' }
     ];
 
-    // Listado Oficial de 33 Docentes de la Institución
+    // Listado Oficial de Docentes (con foto, nombre y materia únicamente)
     const todosLosProfesores = [
-        { nombre: 'Adriana María Jaimes Ruiz', asignatura: 'Ed. Religiosa', dirGrupo: '2°', area: 'Ed. Religiosa y Ética' },
-        { nombre: 'Bruna Mercedes Peña Solano', asignatura: 'Lengua Castellana', dirGrupo: '11-2°', area: 'Lengua Castellana' },
-        { nombre: 'Clara Inés Joya Herrera', asignatura: 'Matemática', dirGrupo: '7-3°', area: 'Matemáticas' },
-        { nombre: 'Daniela Villamizar Villamizar', asignatura: 'Todas las Dimensiones', dirGrupo: 'Jardín', area: 'Preescolar y Primaria' },
-        { nombre: 'Diana Soidé Villamizar Bautista', asignatura: 'Lengua Castellana (Primaria)', dirGrupo: '3°', area: 'Lengua Castellana' },
-        { nombre: 'Edgar Javier García Estupiñán', asignatura: 'Ciencias Sociales', dirGrupo: '10-2°', area: 'Ciencias Sociales' },
-        { nombre: 'Erika Tatiana Delgadillo Avella', asignatura: 'Ciencias Sociales y Coord. Pastoral', dirGrupo: '6-3°', area: 'Ciencias Sociales' },
-        { nombre: 'Fredy Neira Roa', asignatura: 'Matemática y Física (10° y 11°)', dirGrupo: '9-3°', area: 'Matemáticas' },
-        { nombre: 'Gloria Mercedes Serrano Salazar', asignatura: 'Ed. Religiosa', dirGrupo: null, area: 'Ed. Religiosa y Ética' },
-        { nombre: 'Héctor Manuel Garzón Gómez', asignatura: 'Ética y Ed. Religiosa', dirGrupo: null, area: 'Ed. Religiosa y Ética' },
-        { nombre: 'Irma Sánchez Espinosa', asignatura: 'Ciencias Naturales y Ciencias', dirGrupo: '4°', area: 'Ciencias Naturales' },
-        { nombre: 'Iván Martínez Peña', asignatura: 'Tecnología e Informática', dirGrupo: '8-1°', area: 'Tecnología e Informática' },
-        { nombre: 'Jenny Marcela Pérez Medina', asignatura: 'Química', dirGrupo: '11-1°', area: 'Ciencias Naturales' },
-        { nombre: 'Jesús David Arias Estupiñán', asignatura: 'Tecnología e Informática y Estadística', dirGrupo: null, area: 'Tecnología e Informática' },
-        { nombre: 'Jeyson Eduardo Suárez Ardila', asignatura: 'Matemática', dirGrupo: '7-2°', area: 'Matemáticas' },
-        { nombre: 'Jeyson Mauricio Ávila Triana', asignatura: 'Ed. Física, Recreación y Deportes', dirGrupo: null, area: 'Educación Física y Expresión' },
-        { nombre: 'Karen Navarro Pisciotti', asignatura: 'Lengua Castellana', dirGrupo: '6-2°', area: 'Lengua Castellana' },
-        { nombre: 'Karen Tatiana Linares Gelvez', asignatura: 'Lengua Castellana', dirGrupo: '9-1°', area: 'Lengua Castellana' },
-        { nombre: 'Katerin Johanna Delgado Ruda', asignatura: 'Ciencias Sociales', dirGrupo: '8-3°', area: 'Ciencias Sociales' },
-        { nombre: 'Lady Diana Osorio Fonseca', asignatura: 'Todas las Asignaturas', dirGrupo: '1°', area: 'Preescolar y Primaria' },
-        { nombre: 'Leidy Andrea Portilla Gelvez', asignatura: 'Matemática', dirGrupo: '9-2°', area: 'Matemáticas' },
-        { nombre: 'Leidy Paola Basto Ramírez', asignatura: 'Inglés', dirGrupo: '8-2°', area: 'Inglés' },
-        { nombre: 'Ludwin Fernando Caballero Espinosa', asignatura: 'Ed. Física, Recreación y Deportes', dirGrupo: null, area: 'Educación Física y Expresión' },
-        { nombre: 'Luz Adriana García Villamizar', asignatura: 'Artes y Ética', dirGrupo: '10-3°', area: 'Educación Física y Expresión' },
-        { nombre: 'Mayra Jisseth Sierra Lombana', asignatura: 'Inglés', dirGrupo: '7-1°', area: 'Inglés' },
-        { nombre: 'Miguel Oswaldo Lizarazo Latorre', asignatura: 'Contabilidad (SENA)', dirGrupo: '11-3°', area: 'Contabilidad SENA' },
-        { nombre: 'Paula Lorena Cuadros Ballesteros', asignatura: 'Todas las Dimensiones', dirGrupo: 'Transición', area: 'Preescolar y Primaria' },
-        { nombre: 'Robin Javier Aparicio Aparicio', asignatura: 'Filosofía y Ed. Religiosa', dirGrupo: '10-1°', area: 'Ciencias Sociales' },
-        { nombre: 'Sandra Patricia Parada Leal', asignatura: 'Música', dirGrupo: null, area: 'Educación Física y Expresión' },
-        { nombre: 'Sergio Andrés Mendoza Gómez', asignatura: 'Inglés', dirGrupo: null, area: 'Inglés' },
-        { nombre: 'Yesica Zoraya Badillo Corredor', asignatura: 'Ciencias Naturales', dirGrupo: '6-1°', area: 'Ciencias Naturales' },
-        { nombre: 'Yoleida Patricia Camacho Corzo', asignatura: 'Inglés', dirGrupo: '5-1°', area: 'Inglés' },
-        { nombre: 'Yoni Amparo Méndez Álvarez', asignatura: 'Matemática y Tec. Informática', dirGrupo: '5-2°', area: 'Matemáticas' }
+        { nombre: 'Adriana María Jaimes Ruiz', asignatura: 'Ed. Religiosa', area: 'Ed. Religiosa y Ética', foto: '/testimonios/egresada.png' },
+        { nombre: 'Bruna Mercedes Peña Solano', asignatura: 'Lengua Castellana', area: 'Lengua Castellana', foto: '/testimonios/egresada.png' },
+        { nombre: 'Clara Inés Joya Herrera', asignatura: 'Matemáticas', area: 'Matemáticas', foto: '/testimonios/egresada.png' },
+        { nombre: 'Daniela Villamizar Villamizar', asignatura: 'Todas las Dimensiones', area: 'Preescolar y Primaria', foto: '/testimonios/egresada.png' },
+        { nombre: 'Diana Soidé Villamizar Bautista', asignatura: 'Lengua Castellana (Primaria)', area: 'Lengua Castellana', foto: '/testimonios/egresada.png' },
+        { nombre: 'Edgar Javier García Estupiñán', asignatura: 'Ciencias Sociales', area: 'Ciencias Sociales', foto: '/testimonios/padre.png' },
+        { nombre: 'Erika Tatiana Delgadillo Avella', asignatura: 'Ciencias Sociales', area: 'Ciencias Sociales', foto: '/testimonios/egresada.png' },
+        { nombre: 'Fredy Neira Roa', asignatura: 'Matemáticas y Física', area: 'Matemáticas', foto: '/testimonios/padre.png' },
+        { nombre: 'Gloria Mercedes Serrano Salazar', asignatura: 'Ed. Religiosa', area: 'Ed. Religiosa y Ética', foto: '/testimonios/egresada.png' },
+        { nombre: 'Héctor Manuel Garzón Gómez', asignatura: 'Ética y Ed. Religiosa', area: 'Ed. Religiosa y Ética', foto: '/testimonios/padre.png' },
+        { nombre: 'Irma Sánchez Espinosa', asignatura: 'Ciencias Naturales', area: 'Ciencias Naturales', foto: '/testimonios/egresada.png' },
+        { nombre: 'Iván Martínez Peña', asignatura: 'Tecnología e Informática', area: 'Tecnología e Informática', foto: '/testimonios/padre.png' },
+        { nombre: 'Jenny Marcela Pérez Medina', asignatura: 'Química', area: 'Ciencias Naturales', foto: '/testimonios/egresada.png' },
+        { nombre: 'Jesús David Arias Estupiñán', asignatura: 'Tecnología y Estadística', area: 'Tecnología e Informática', foto: '/testimonios/padre.png' },
+        { nombre: 'Jeyson Eduardo Suárez Ardila', asignatura: 'Matemáticas', area: 'Matemáticas', foto: '/testimonios/padre.png' },
+        { nombre: 'Jeyson Mauricio Ávila Triana', asignatura: 'Ed. Física y Deportes', area: 'Ed. Física y Expresión', foto: '/testimonios/padre.png' },
+        { nombre: 'Karen Navarro Pisciotti', asignatura: 'Lengua Castellana', area: 'Lengua Castellana', foto: '/testimonios/egresada.png' },
+        { nombre: 'Karen Tatiana Linares Gelvez', asignatura: 'Lengua Castellana', area: 'Lengua Castellana', foto: '/testimonios/egresada.png' },
+        { nombre: 'Katerin Johanna Delgado Ruda', asignatura: 'Ciencias Sociales', area: 'Ciencias Sociales', foto: '/testimonios/egresada.png' },
+        { nombre: 'Lady Diana Osorio Fonseca', asignatura: 'Todas las Asignaturas', area: 'Preescolar y Primaria', foto: '/testimonios/egresada.png' },
+        { nombre: 'Leidy Andrea Portilla Gelvez', asignatura: 'Matemáticas', area: 'Matemáticas', foto: '/testimonios/egresada.png' },
+        { nombre: 'Leidy Paola Basto Ramírez', asignatura: 'Inglés', area: 'Inglés', foto: '/testimonios/egresada.png' },
+        { nombre: 'Ludwin Fernando Caballero Espinosa', asignatura: 'Ed. Física y Deportes', area: 'Ed. Física y Expresión', foto: '/testimonios/padre.png' },
+        { nombre: 'Luz Adriana García Villamizar', asignatura: 'Artes y Ética', area: 'Ed. Física y Expresión', foto: '/testimonios/egresada.png' },
+        { nombre: 'Mayra Jisseth Sierra Lombana', asignatura: 'Inglés', area: 'Inglés', foto: '/testimonios/egresada.png' },
+        { nombre: 'Miguel Oswaldo Lizarazo Latorre', asignatura: 'Contabilidad SENA', area: 'Contabilidad SENA', foto: '/testimonios/padre.png' },
+        { nombre: 'Paula Lorena Cuadros Ballesteros', asignatura: 'Todas las Dimensiones', area: 'Preescolar y Primaria', foto: '/testimonios/egresada.png' },
+        { nombre: 'Robin Javier Aparicio Aparicio', asignatura: 'Filosofía y Ed. Religiosa', area: 'Ciencias Sociales', foto: '/testimonios/padre.png' },
+        { nombre: 'Sandra Patricia Parada Leal', asignatura: 'Música', area: 'Ed. Física y Expresión', foto: '/testimonios/egresada.png' },
+        { nombre: 'Sergio Andrés Mendoza Gómez', asignatura: 'Inglés', area: 'Inglés', foto: '/testimonios/padre.png' },
+        { nombre: 'Yesica Zoraya Badillo Corredor', asignatura: 'Ciencias Naturales', area: 'Ciencias Naturales', foto: '/testimonios/egresada.png' },
+        { nombre: 'Yoleida Patricia Camacho Corzo', asignatura: 'Inglés', area: 'Inglés', foto: '/testimonios/egresada.png' },
+        { nombre: 'Yoni Amparo Méndez Álvarez', asignatura: 'Matemáticas e Informática', area: 'Matemáticas', foto: '/testimonios/egresada.png' }
     ];
 
     const areasList = [
@@ -79,7 +78,7 @@ export default function Equipo() {
         'Ciencias Sociales',
         'Inglés',
         'Tecnología e Informática',
-        'Educación Física y Expresión',
+        'Ed. Física y Expresión',
         'Ed. Religiosa y Ética',
         'Contabilidad SENA'
     ];
@@ -202,8 +201,6 @@ export default function Equipo() {
                     </div>
                 </section>
 
-                {/* (Acta Directiva desactivada temporalmente por solicitud) */}
-
                 {/* ── 3. Administración ── */}
                 <section className="relative z-10 py-12 px-6 max-w-[1240px] mx-auto">
                     <div className="flex items-center gap-3.5 mb-8 border-b border-slate-100 dark:border-slate-800 pb-4">
@@ -270,7 +267,7 @@ export default function Equipo() {
                     </div>
                 </section>
 
-                {/* ── 4. Docentes de la Institución (Filtrables por área) ── */}
+                {/* ── 4. Docentes de la Institución (Diseño Elegante, Foto Circular Compacta) ── */}
                 <section className="relative z-10 py-12 px-6 max-w-[1240px] mx-auto">
                     <div className="flex items-center gap-3.5 mb-8 border-b border-slate-100 dark:border-slate-800 pb-4">
                         <div className="w-10 h-10 rounded-2xl bg-amber-50 dark:bg-amber-950/40 text-amber-500 dark:text-amber-400 flex items-center justify-center shrink-0 shadow-sm">
@@ -278,10 +275,10 @@ export default function Equipo() {
                         </div>
                         <div>
                             <h2 className="text-2xl font-black text-slate-800 dark:text-white leading-tight">
-                                Cuerpo Docente ({todosLosProfesores.length} Profesores)
+                                Cuerpo Docente
                             </h2>
                             <p className="text-xs text-slate-400 dark:text-slate-500 font-semibold mt-0.5">
-                                Listado completo de docentes por área del Colegio Santa Isabel de Hungría
+                                Profesores especializados por área de enseñanza
                             </p>
                         </div>
                     </div>
@@ -303,61 +300,45 @@ export default function Equipo() {
                         ))}
                     </div>
 
-                    {/* Teachers Grid */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                        {profesoresFiltrados.map((prof, idx) => {
-                            const isVino = idx % 2 === 0;
-                            const borderClass = isVino ? 'border-b-4 border-b-[#800A15]' : 'border-b-4 border-b-[#003C8F]';
-                            const badgeColor = isVino ? 'bg-rose-50 text-[#800A15] border-rose-200' : 'bg-blue-50 text-[#003C8F] border-blue-200';
-
-                            return (
-                                <motion.div 
-                                    key={prof.nombre}
-                                    initial={{ opacity: 0, y: 20 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ duration: 0.35, delay: (idx % 12) * 0.04 }}
-                                    className={`bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800/80 rounded-2xl p-5 shadow-sm hover:-translate-y-1 hover:shadow-md transition-all duration-300 flex flex-col justify-between ${borderClass}`}
-                                >
-                                    <div className="space-y-2">
-                                        <div className="flex items-start justify-between gap-2">
-                                            <h4 className="font-extrabold text-slate-900 dark:text-slate-100 text-sm leading-snug">
-                                                {prof.nombre}
-                                            </h4>
-                                        </div>
-
-                                        <p className="text-xs font-bold text-slate-600 dark:text-slate-400 flex items-center gap-1.5 pt-1">
-                                            <BookOpen className="w-3.5 h-3.5 text-amber-500 shrink-0" />
-                                            <span>{prof.asignatura}</span>
-                                        </p>
-                                    </div>
-
-                                    {prof.dirGrupo && (
-                                        <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
-                                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
-                                                Dirección de Grupo:
-                                            </span>
-                                            <span className={`px-2.5 py-0.5 rounded-full text-xs font-black border ${badgeColor}`}>
-                                                {prof.dirGrupo}
-                                            </span>
-                                        </div>
-                                    )}
-                                </motion.div>
-                            );
-                        })}
+                    {/* Compact & Organized Teachers Grid (5 Columns Desktop) */}
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
+                        {profesoresFiltrados.map((prof, idx) => (
+                            <motion.div 
+                                key={prof.nombre}
+                                initial={{ opacity: 0, scale: 0.95 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                transition={{ duration: 0.3, delay: (idx % 15) * 0.03 }}
+                                className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800/80 rounded-2xl p-5 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col items-center text-center group"
+                            >
+                                <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden mb-3.5 border-2 border-slate-100 dark:border-slate-800 group-hover:border-[#003C8F] transition-colors shadow-sm shrink-0">
+                                    <img 
+                                        src={prof.foto} 
+                                        alt={prof.nombre} 
+                                        className="w-full h-full object-cover" 
+                                    />
+                                </div>
+                                <h4 className="font-extrabold text-slate-900 dark:text-slate-100 text-xs sm:text-sm leading-snug min-h-[36px] flex items-center justify-center">
+                                    {prof.nombre}
+                                </h4>
+                                <span className="text-[11px] font-bold text-[#003C8F] dark:text-blue-400 mt-1.5 block">
+                                    {prof.asignatura}
+                                </span>
+                            </motion.div>
+                        ))}
                     </div>
 
                     {/* Banner inspiracional */}
                     <div className="mt-14 bg-gradient-to-r from-[#003C8F] via-blue-800 to-[#800A15] rounded-3xl p-8 text-white flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl">
                         <div className="space-y-2 text-center md:text-left">
                             <div className="flex items-center justify-center md:justify-start gap-2 text-amber-300 font-bold text-xs uppercase tracking-widest">
-                                <Lightbulb className="w-4 h-4 text-amber-300 animate-pulse" />
+                                <Sparkles className="w-4 h-4 text-amber-300 animate-spin" />
                                 Tradición Salesiana de Don Bosco
                             </div>
                             <h3 className="text-xl md:text-2xl font-black text-white">
                                 "Educación es cosa del corazón"
                             </h3>
                             <p className="text-blue-100 text-sm font-medium max-w-xl">
-                                Cada uno de nuestros 33 docentes acompaña con vocación, paciencia y alegría el proyecto de vida de nuestros estudiantes.
+                                Nuestros docentes inspiran, acompañan y guían con vocación y alegría el aprendizaje de los estudiantes.
                             </p>
                         </div>
                         <Link

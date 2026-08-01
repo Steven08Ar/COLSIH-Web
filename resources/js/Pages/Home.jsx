@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Head } from '@inertiajs/react';
 import WhatsAppButton from '@/Components/WhatsAppButton';
 import MJSButton from '@/Components/MJSButton';
+import PlataformaMobileButton from '@/Components/PlataformaMobileButton';
 
 // Import Modular Sections
 import Hero from './HomeSections/Hero';
@@ -101,6 +102,9 @@ export default function Home({ noticias, testimonios, preguntas, tour, scenes = 
 
             {/* Botón Flotante de MJS (Abajo Izquierda) */}
             <MJSButton />
+
+            {/* Botón Flotante de Plataforma en Móvil (Abajo Centro) */}
+            <PlataformaMobileButton />
 
             {/* Botón Flotante Global de WhatsApp (Abajo Derecha) */}
             <WhatsAppButton />

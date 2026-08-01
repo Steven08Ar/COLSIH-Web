@@ -215,7 +215,7 @@ export default function Hero({ setVideoOpen }) {
                                 href="https://e.plataformaintegra.net/sihungria/"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#800A15] hover:bg-[#9e0d1c] text-white text-xs sm:text-sm font-extrabold shadow-md hover:shadow-lg shadow-[#800A15]/30 hover:scale-105 transition-all duration-300 border border-white/20"
+                                className="hidden md:inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#800A15] hover:bg-[#9e0d1c] text-white text-xs sm:text-sm font-extrabold shadow-md hover:shadow-lg shadow-[#800A15]/30 hover:scale-105 transition-all duration-300 border border-white/20"
                                 title="Ingreso a Plataforma Integra"
                             >
                                 <svg className="w-4 h-4 text-white shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -286,7 +286,7 @@ export default function Hero({ setVideoOpen }) {
                 )}
             </header>
 
-            {/* Background Video ("Video Home.mp4" compatibilidad web universal H.264, autoproducido en bucle) */}
+            {/* Background Video ("Video Home.mp4" nativo HTML5, autoplay sin bloqueo, bucle perfecto e indetectable por Brave) */}
             <div className="absolute inset-0 w-full h-full z-0 select-none overflow-hidden pointer-events-none">
                 <video
                     ref={(videoEl) => {
@@ -299,8 +299,13 @@ export default function Hero({ setVideoOpen }) {
                     loop
                     muted
                     playsInline
+                    preload="auto"
                     controls={false}
                     disablePictureInPicture
+                    onEnded={(e) => {
+                        e.target.currentTime = 0;
+                        e.target.play().catch(() => {});
+                    }}
                     className="absolute top-1/2 left-1/2 w-[100vw] h-[56.25vw] min-h-[100vh] min-w-[177.77vh] -translate-x-1/2 -translate-y-1/2 object-cover contrast-[1.05] brightness-75 md:brightness-[0.85] scale-105 pointer-events-none"
                 >
                     <source src="/Video%20Home.mp4" type="video/mp4" />

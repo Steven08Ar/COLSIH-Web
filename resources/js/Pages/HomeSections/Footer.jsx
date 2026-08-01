@@ -14,7 +14,7 @@ export default function Footer() {
     const isMjs = url === '/mjs';
 
     return (
-        <footer className="relative bg-[#08111F] text-white overflow-hidden border-t border-white/5 select-none">
+        <footer id="site-footer" className="relative bg-[#08111F] text-white overflow-hidden border-t border-white/5 select-none">
             {/* Soft background glow circles */}
             <div className="absolute top-0 right-0 w-[400px] h-[400px] rounded-full bg-[#800A15]/5 blur-[120px] pointer-events-none"></div>
             <div className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full bg-[#003C8F]/5 blur-[120px] pointer-events-none"></div>
@@ -38,9 +38,7 @@ export default function Footer() {
                                 />
                                 <div className="flex flex-col leading-none text-white font-sans">
                                     <span className="text-[11px] tracking-widest uppercase opacity-60 font-semibold">Movimiento</span>
-                                    <span className="text-[20px] font-black tracking-tight text-white mt-0.5">
-                                        JUVENIL
-                                    </span>
+                                    <span className="text-[20px] font-black tracking-tight text-white mt-0.5">JUVENIL</span>
                                     <span className="text-[12px] tracking-wide font-medium opacity-80 mt-0.5">Salesiano</span>
                                 </div>
                             </Link>
@@ -49,185 +47,201 @@ export default function Footer() {
                                 <img 
                                     src="/marca/logo-colsih.svg"
                                     alt="Logo COLSIH"
-                                    className="h-14 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+                                    className="h-14 w-auto object-contain transition-transform duration-300 group-hover:scale-105" 
                                 />
                                 <div className="flex flex-col leading-none text-white font-sans">
                                     <span className="text-[11px] tracking-widest uppercase opacity-60 font-semibold">Colegio</span>
-                                    <span className="text-[20px] font-black tracking-tight text-white mt-0.5">
-                                        SANTA ISABEL
-                                    </span>
+                                    <span className="text-[20px] font-black tracking-tight text-white mt-0.5">SANTA ISABEL</span>
                                     <span className="text-[12px] tracking-wide font-medium opacity-80 mt-0.5">de Hungría</span>
                                 </div>
                             </Link>
                         )}
-                        <p className="text-sm font-semibold text-slate-400 leading-relaxed max-w-sm">
+
+                        <p className="text-sm font-medium text-slate-400 leading-relaxed font-sans max-w-sm">
                             {isMjs 
-                                ? "Espacio asociativo de fe, alegría y protagonismo juvenil que acompaña el crecimiento integral y el liderazgo de la juventud en COLSIH."
-                                : "Formando líderes integrales con fe, ciencia y justicia desde 1989, en Floridablanca, Santander, Colombia."
+                                ? 'Movimiento Juvenil Salesiano — Formando jóvenes alegres, santos y comprometidos con el servicio cristiano.' 
+                                : 'Educación católica salesiana de excelencia en Floridablanca, Santander. Formando buenos cristianos y honestos ciudadanos con el Sistema Preventivo de Don Bosco.'
                             }
                         </p>
-                        
-                        {/* Redes Sociales Oficiales */}
-                        <div className="flex items-center gap-3 pt-2">
-                            {/* Facebook */}
-                            <a 
-                                href="https://www.facebook.com/p/Colegio-Santa-Isabel-de-Hungr%C3%ADa-61556081612085/" 
-                                target="_blank" 
-                                rel="noopener noreferrer" 
-                                aria-label="Facebook Oficial COLSIH"
-                                className="w-10 h-10 rounded-full bg-white/5 hover:bg-[#1877F2] text-white flex items-center justify-center transition-all duration-300 hover:scale-110 shadow-sm"
-                            >
-                                <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
-                                    <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z" />
-                                </svg>
-                            </a>
-                            {/* Instagram */}
-                            <a 
-                                href="https://www.instagram.com/2025santaisabelhungria/" 
-                                target="_blank" 
-                                rel="noopener noreferrer" 
-                                aria-label="Instagram Oficial COLSIH"
-                                className="w-10 h-10 rounded-full bg-white/5 hover:bg-gradient-to-tr hover:from-amber-500 hover:via-rose-500 hover:to-purple-600 text-white flex items-center justify-center transition-all duration-300 hover:scale-110 shadow-sm"
-                            >
-                                <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
-                                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
-                                </svg>
-                            </a>
-                            {/* Youtube */}
-                            <a 
-                                href="https://www.youtube.com/@Colsih-multimedia" 
-                                target="_blank" 
-                                rel="noopener noreferrer" 
-                                aria-label="YouTube Oficial COLSIH"
-                                className="w-10 h-10 rounded-full bg-white/5 hover:bg-[#FF0000] text-white flex items-center justify-center transition-all duration-300 hover:scale-110 shadow-sm"
-                            >
-                                <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
-                                    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
-                                </svg>
-                            </a>
+
+                        <div className="pt-2">
+                            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-semibold text-slate-300 font-sans">
+                                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                                <span>Administración Salesiana HMA</span>
+                            </div>
                         </div>
                     </div>
 
-                    {/* Columns (4 columns for categories) */}
-                    <div className="lg:col-span-5 grid grid-cols-1 sm:grid-cols-2 gap-8">
-                        {isMjs ? (
-                            <>
-                                {/* MJS groups */}
-                                <div className="space-y-4 text-left">
-                                    <h4 className="text-sm font-extrabold uppercase tracking-wider relative pb-2.5 text-white font-sans">
-                                        Líneas MJS
-                                        <span className="absolute bottom-0 left-0 w-8 h-[2px] bg-[#800A15] rounded-full" />
-                                    </h4>
-                                    <div className="flex flex-col gap-3 text-sm font-semibold text-slate-400">
-                                        <a href="#" className="hover:text-white transition-colors">Líderes Salesianos</a>
-                                        <a href="#" className="hover:text-white transition-colors">Servidores del Altar</a>
-                                        <a href="#" className="hover:text-white transition-colors">Infancia Misionera</a>
-                                        <a href="#" className="hover:text-white transition-colors">Gestores Ambientales</a>
-                                    </div>
-                                </div>
+                    {/* Quick Links Columns (5 columns total) */}
+                    <div className="lg:col-span-5 grid grid-cols-2 sm:grid-cols-3 gap-8 text-left">
+                        {/* Col 1: Colegio */}
+                        <div className="space-y-4 font-sans">
+                            <h4 className="text-xs font-extrabold tracking-widest uppercase text-white/50">Institución</h4>
+                            <ul className="space-y-2.5 text-xs font-semibold text-slate-400">
+                                <li><Link href="/nosotros" className="hover:text-white transition-colors">Quiénes Somos</Link></li>
+                                <li><Link href="/nosotros/historia" className="hover:text-white transition-colors">Historia</Link></li>
+                                <li><Link href="/nosotros/mision-vision" className="hover:text-white transition-colors">Misión y Visión</Link></li>
+                                <li><Link href="/nosotros/valores" className="hover:text-white transition-colors">Valores</Link></li>
+                                <li><Link href="/nosotros/equipo" className="hover:text-white transition-colors">Equipo</Link></li>
+                            </ul>
+                        </div>
 
-                                {/* Institutional MJS */}
-                                <div className="space-y-4 text-left">
-                                    <h4 className="text-sm font-extrabold uppercase tracking-wider relative pb-2.5 text-white font-sans">
-                                        Navegación
-                                        <span className="absolute bottom-0 left-0 w-8 h-[2px] bg-[#003C8F] rounded-full" />
-                                    </h4>
-                                    <div className="flex flex-col gap-3 text-sm font-semibold text-slate-400">
-                                        <Link href="/" className="hover:text-white transition-colors">Volver al Colegio</Link>
-                                        <Link href="/oferta-academica" className="hover:text-white transition-colors">Oferta Académica</Link>
-                                        <Link href="/noticias" className="hover:text-white transition-colors">Noticias</Link>
-                                        <Link href="/contacto" className="hover:text-white transition-colors">Contacto</Link>
-                                    </div>
-                                </div>
-                            </>
-                        ) : (
-                            <>
-                                {/* Quick links */}
-                                <div className="space-y-4 text-left">
-                                    <h4 className="text-sm font-extrabold uppercase tracking-wider relative pb-2.5 text-white font-sans">
-                                        Institución
-                                        <span className="absolute bottom-0 left-0 w-8 h-[2px] bg-[#800A15] rounded-full" />
-                                    </h4>
-                                    <div className="flex flex-col gap-3 text-sm font-semibold text-slate-400">
-                                        <Link href="/nosotros" className="hover:text-white transition-colors">Quiénes Somos</Link>
-                                        <Link href="/nosotros/historia" className="hover:text-white transition-colors">Historia</Link>
-                                        <Link href="/nosotros/mision-vision" className="hover:text-white transition-colors">Misión y Visión</Link>
-                                        <Link href="/nosotros/valores" className="hover:text-white transition-colors">Valores</Link>
-                                        <Link href="/nosotros/equipo" className="hover:text-white transition-colors">Nuestro Equipo</Link>
-                                    </div>
-                                </div>
+                        {/* Col 2: Oferta */}
+                        <div className="space-y-4 font-sans">
+                            <h4 className="text-xs font-extrabold tracking-widest uppercase text-white/50">Académica</h4>
+                            <ul className="space-y-2.5 text-xs font-semibold text-slate-400">
+                                <li><Link href="/oferta-academica" className="hover:text-white transition-colors">Visión General</Link></li>
+                                <li><Link href="/oferta-academica/preescolar" className="hover:text-white transition-colors">Preescolar</Link></li>
+                                <li><Link href="/oferta-academica/primaria" className="hover:text-white transition-colors">Básica Primaria</Link></li>
+                                <li><Link href="/oferta-academica/bachillerato" className="hover:text-white transition-colors">Bachillerato</Link></li>
+                                <li><Link href="/oferta-academica/sena" className="hover:text-white transition-colors">Convenio SENA</Link></li>
+                            </ul>
+                        </div>
 
-                                {/* Oferta Académica */}
-                                <div className="space-y-4 text-left">
-                                    <h4 className="text-sm font-extrabold uppercase tracking-wider relative pb-2.5 text-white font-sans">
-                                        Oferta Académica
-                                        <span className="absolute bottom-0 left-0 w-8 h-[2px] bg-[#003C8F] rounded-full" />
-                                    </h4>
-                                    <div className="flex flex-col gap-2.5 text-sm font-semibold text-slate-400">
-                                        <Link href="/oferta-academica/preescolar" className="hover:text-white transition-colors">Preescolar</Link>
-                                        <Link href="/oferta-academica/primaria" className="hover:text-white transition-colors">Básica Primaria</Link>
-                                        <Link href="/oferta-academica/bachillerato" className="hover:text-white transition-colors">Bachillerato</Link>
-                                        <Link href="/oferta-academica/sena" className="hover:text-white transition-colors">Convenio SENA</Link>
-                                        <Link href="/admisiones" className="hover:text-white transition-colors pt-1 border-t border-white/5">Admisiones</Link>
-                                    </div>
-                                </div>
-                            </>
-                        )}
+                        {/* Col 3: Accesos */}
+                        <div className="space-y-4 font-sans">
+                            <h4 className="text-xs font-extrabold tracking-widest uppercase text-white/50">Comunidad</h4>
+                            <ul className="space-y-2.5 text-xs font-semibold text-slate-400">
+                                <li><Link href="/admisiones" className="hover:text-white transition-colors">Admisiones 2027</Link></li>
+                                <li><Link href="/noticias" className="hover:text-white transition-colors">Noticias</Link></li>
+                                <li><Link href="/contacto" className="hover:text-white transition-colors">Contacto</Link></li>
+                                <li><Link href="/mjs" className="hover:text-white transition-colors font-bold text-[#800A15]">MJS Colombia</Link></li>
+                                <li>
+                                    <a 
+                                        href="https://e.plataformaintegra.net/sihungria/" 
+                                        target="_blank" 
+                                        rel="noopener noreferrer"
+                                        className="text-amber-400 hover:text-amber-300 font-bold transition-colors"
+                                    >
+                                        Plataforma Integra →
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
 
-                    {/* Newsletter (3 columns) */}
-                    <div className="lg:col-span-3 space-y-4 text-left">
-                        <h4 className="text-sm font-extrabold uppercase tracking-wider relative pb-2.5 text-white font-sans">
-                            {isMjs ? "Únete al MJS" : "Boletín"}
-                            <span className="absolute bottom-0 left-0 w-8 h-[2px] bg-[#800A15] rounded-full" />
-                        </h4>
-                        <p className="text-sm font-semibold text-slate-400">
-                            {isMjs 
-                                ? "Suscríbete para recibir noticias de campamentos, retiros y servicio social."
-                                : "Suscríbete para recibir circulares, noticias y eventos escolares."
-                            }
+                    {/* Newsletter Subscription Column (3 columns) */}
+                    <div className="lg:col-span-3 space-y-4 text-left font-sans">
+                        <h4 className="text-xs font-extrabold tracking-widest uppercase text-white/50">Boletín Informativo</h4>
+                        <p className="text-xs font-medium text-slate-400 leading-relaxed">
+                            Recibe en tu correo las últimas novedades académicas, comunicados y eventos del colegio.
                         </p>
-                        
-                        {/* Signup Form */}
-                        {suscripcionOk ? (
-                            <p className="text-sm font-bold text-emerald-400 pt-2">
-                                ¡Listo! Revisa tu correo para confirmar.
-                            </p>
-                        ) : (
-                            <form onSubmit={handleSuscripcion} className="flex flex-col gap-2 pt-2">
+
+                        <form onSubmit={handleSuscripcion} className="space-y-3 pt-1">
+                            <div className="relative">
                                 <input
                                     type="email"
                                     value={data.correo}
                                     onChange={e => setData('correo', e.target.value)}
-                                    className="w-full px-5 py-3 border border-white/10 bg-white/5 rounded-full text-xs font-semibold focus:outline-none focus:border-[#003C8F] transition-all"
-                                    placeholder="tu@correo.com"
+                                    placeholder="tu.correo@ejemplo.com"
+                                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#003C8F] transition-colors"
                                     required
                                 />
-                                {errors.correo && (
-                                    <p className="text-xs text-red-400 px-2">{errors.correo}</p>
-                                )}
-                                <button
-                                    type="submit"
-                                    disabled={processing}
-                                    className="w-full bg-white/10 hover:bg-white text-white hover:text-slate-900 font-extrabold text-xs py-3 rounded-full transition-all cursor-pointer disabled:opacity-50"
-                                >
-                                    {processing ? 'Enviando...' : (isMjs ? 'Participar' : 'Suscribirme')}
-                                </button>
-                            </form>
-                        )}
+                            </div>
+
+                            {errors.correo && (
+                                <p className="text-red-400 text-[11px] font-semibold">{errors.correo}</p>
+                            )}
+
+                            {suscripcionOk && (
+                                <p className="text-emerald-400 text-[11px] font-semibold">¡Gracias por suscribirte al boletín!</p>
+                            )}
+
+                            <button
+                                type="submit"
+                                disabled={processing}
+                                className="w-full bg-[#800A15] hover:bg-[#a00d1b] disabled:opacity-50 text-white font-extrabold text-xs py-3 rounded-xl shadow-md transition-all cursor-pointer uppercase tracking-wider"
+                            >
+                                {processing ? 'Enviando...' : 'Suscribirme'}
+                            </button>
+                        </form>
                     </div>
 
                 </div>
 
-                {/* Lower Footer: Copyright */}
-                <div className="border-t border-white/5 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs font-semibold text-slate-500">
-                    <p>© {new Date().getFullYear()} {isMjs ? "MJS COLSIH" : "COLSIH"}. Todos los derechos reservados.</p>
-                    <p>
-                        {isMjs 
-                            ? "Formando buenos cristianos y honestos ciudadanos en la alegría salesiana."
-                            : "Diseñado para la excelencia escolar y el liderazgo del mañana."
-                        }
-                    </p>
+                {/* Middle Footer: Contact Info Bar */}
+                <div className="pt-8 border-t border-white/5 grid grid-cols-1 md:grid-cols-3 gap-6 text-left font-sans text-xs font-medium text-slate-400">
+                    <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-slate-300 shrink-0">
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <span className="block text-white font-semibold">Dirección Sede Principal</span>
+                            <span>Calle 6 # 10-23 Barrio Villabel, Floridablanca</span>
+                        </div>
+                    </div>
+
+                    <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-slate-300 shrink-0">
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <span className="block text-white font-semibold">Teléfonos de Atención</span>
+                            <span>+57 (607) 675 2046 · +57 315 145 8309</span>
+                        </div>
+                    </div>
+
+                    <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-slate-300 shrink-0">
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <span className="block text-white font-semibold">Correo Electrónico</span>
+                            <span>contacto@colsih.edu.co</span>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Bottom Footer: Copyright & Social Links */}
+                <div className="pt-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4 font-sans text-xs text-slate-400">
+                    <p>© {new Date().getFullYear()} Colegio Santa Isabel de Hungría · Todos los derechos reservados.</p>
+
+                    {/* Redes Sociales Oficiales */}
+                    <div className="flex items-center gap-4 text-white">
+                        <a 
+                            href="https://www.facebook.com/p/Colegio-Santa-Isabel-de-Hungr%C3%ADa-61556081612085/" 
+                            target="_blank" 
+                            rel="noopener noreferrer" 
+                            className="w-9 h-9 rounded-full bg-white/5 hover:bg-[#800A15] border border-white/10 flex items-center justify-center transition-all duration-300 hover:scale-110"
+                            aria-label="Facebook Oficial COLSIH"
+                            title="Facebook Oficial COLSIH"
+                        >
+                            <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                            </svg>
+                        </a>
+                        <a 
+                            href="https://www.instagram.com/2025santaisabelhungria/" 
+                            target="_blank" 
+                            rel="noopener noreferrer" 
+                            className="w-9 h-9 rounded-full bg-white/5 hover:bg-[#800A15] border border-white/10 flex items-center justify-center transition-all duration-300 hover:scale-110"
+                            aria-label="Instagram Oficial COLSIH"
+                            title="Instagram Oficial COLSIH"
+                        >
+                            <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                            </svg>
+                        </a>
+                        <a 
+                            href="https://www.youtube.com/@Colsih-multimedia" 
+                            target="_blank" 
+                            rel="noopener noreferrer" 
+                            className="w-9 h-9 rounded-full bg-white/5 hover:bg-[#800A15] border border-white/10 flex items-center justify-center transition-all duration-300 hover:scale-110"
+                            aria-label="YouTube Oficial COLSIH"
+                            title="YouTube Oficial COLSIH"
+                        >
+                            <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                            </svg>
+                        </a>
+                    </div>
                 </div>
 
             </div>

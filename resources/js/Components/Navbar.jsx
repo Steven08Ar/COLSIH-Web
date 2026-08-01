@@ -214,7 +214,7 @@ export default function Navbar() {
 
                     <Link href="/admisiones" className={`transition-colors ${url === '/admisiones' ? 'text-white font-extrabold' : 'hover:text-white'}`}>Admisiones</Link>
                     <Link href="/noticias" className={`transition-colors ${url.startsWith('/noticias') ? 'text-white font-extrabold' : 'hover:text-white'}`}>Noticias</Link>
-                    <Link href="/contacto" className={`transition-colors ${url === '/contacto' ? 'text-white font-extrabold' : 'hover:text-white'}`}>Contacto</Link>
+                    <Link href="/contacto" className={`transition-colors ${url === '/contacto' ? 'text-[#800A15] font-extrabold' : 'hover:text-white'}`}>Contacto</Link>
                 </div>
 
                 <div className="flex items-center gap-3 shrink-0">
@@ -235,7 +235,7 @@ export default function Navbar() {
                             href="https://e.plataformaintegra.net/sihungria/"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#800A15] hover:bg-[#9e0d1c] text-white text-xs sm:text-sm font-extrabold shadow-md hover:shadow-lg shadow-[#800A15]/30 hover:scale-105 transition-all duration-300 border border-white/20"
+                            className="hidden md:inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#800A15] hover:bg-[#9e0d1c] text-white text-xs sm:text-sm font-extrabold shadow-md hover:shadow-lg shadow-[#800A15]/30 hover:scale-105 transition-all duration-300 border border-white/20"
                             title="Ingreso a Plataforma Integra"
                         >
                             <svg className="w-4 h-4 text-white shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">

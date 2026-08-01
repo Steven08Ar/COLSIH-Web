@@ -1,13 +1,33 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const WA_NUMBER = '573151458309';
 const WA_MESSAGE = encodeURIComponent('Hola, me comunico desde el sitio web del Colegio Santa Isabel de Hungría. Quisiera obtener más información.');
 
 export default function WhatsAppButton() {
     const [isHovered, setIsHovered] = useState(false);
+    const [hideForFooter, setHideForFooter] = useState(false);
+
+    useEffect(() => {
+        const footer = document.getElementById('site-footer') || document.querySelector('footer');
+        if (!footer) return;
+
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                setHideForFooter(entry.isIntersecting);
+            },
+            { threshold: 0.05 }
+        );
+
+        observer.observe(footer);
+        return () => observer.disconnect();
+    }, []);
 
     return (
-        <div className="fixed bottom-6 right-6 sm:bottom-8 sm:right-8 z-[99999] flex items-center gap-3 select-none pointer-events-auto">
+        <div 
+            className={`fixed bottom-6 right-6 sm:bottom-8 sm:right-8 z-[99999] flex items-center gap-3 select-none pointer-events-auto transition-all duration-500 ${
+                hideForFooter ? 'opacity-0 pointer-events-none translate-y-10' : 'opacity-100 translate-y-0'
+            }`}
+        >
             {/* Tooltip informativo al pasar el mouse */}
             <div 
                 className={`hidden sm:flex items-center gap-2 px-3.5 py-2 bg-slate-900/90 dark:bg-slate-950/95 text-white text-xs font-bold rounded-2xl shadow-xl backdrop-blur-md border border-white/10 transition-all duration-300 transform origin-right ${

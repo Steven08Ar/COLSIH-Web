@@ -3,6 +3,7 @@ import Navbar from '@/Components/Navbar';
 import Footer from '@/Pages/HomeSections/Footer';
 import WhatsAppButton from '@/Components/WhatsAppButton';
 import MJSButton from '@/Components/MJSButton';
+import PlataformaMobileButton from '@/Components/PlataformaMobileButton';
 
 export default function AppLayout({ children }) {
     const { props } = usePage();
@@ -33,6 +34,9 @@ export default function AppLayout({ children }) {
 
             {/* Botón Flotante de MJS (Abajo Izquierda) */}
             <MJSButton />
+
+            {/* Botón Flotante de Plataforma en Móvil (Abajo Centro) */}
+            <PlataformaMobileButton />
 
             {/* Botón Flotante Global de WhatsApp (Abajo Derecha) */}
             <WhatsAppButton />

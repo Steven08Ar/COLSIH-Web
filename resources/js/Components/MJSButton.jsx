@@ -1,15 +1,35 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, usePage } from '@inertiajs/react';
 
 export default function MJSButton() {
     const { url } = usePage();
     const [isHovered, setIsHovered] = useState(false);
+    const [hideForFooter, setHideForFooter] = useState(false);
+
+    useEffect(() => {
+        const footer = document.getElementById('site-footer') || document.querySelector('footer');
+        if (!footer) return;
+
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                setHideForFooter(entry.isIntersecting);
+            },
+            { threshold: 0.05 }
+        );
+
+        observer.observe(footer);
+        return () => observer.disconnect();
+    }, []);
 
     // Solo se muestra en páginas de COLSIH (en /mjs el logo de COLSIH está en el header)
     if (url === '/mjs') return null;
 
     return (
-        <div className="fixed bottom-6 left-6 sm:bottom-8 sm:left-8 z-[99999] flex items-center gap-3 select-none pointer-events-auto">
+        <div 
+            className={`fixed bottom-6 left-6 sm:bottom-8 sm:left-8 z-[99999] flex items-center gap-3 select-none pointer-events-auto transition-all duration-500 ${
+                hideForFooter ? 'opacity-0 pointer-events-none translate-y-10' : 'opacity-100 translate-y-0'
+            }`}
+        >
             {/* Definición de Keyframes de Animación Levitación Suave */}
             <style>{`
                 @keyframes mjsFloatAnim {

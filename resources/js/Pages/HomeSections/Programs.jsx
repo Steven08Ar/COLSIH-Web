@@ -126,8 +126,8 @@ export default function Programs() {
                                 onClick={() => handleClick(index)}
                                 className={`relative rounded-3xl overflow-hidden cursor-pointer transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] flex flex-col justify-between transform-gpu will-change-[flex-grow] ${
                                     isExpanded 
-                                        ? 'flex-[2.5] h-[500px] lg:h-full bg-slate-900 shadow-2xl ring-1 ring-white/10' 
-                                        : 'flex-[1] h-[160px] lg:h-full bg-slate-950 border border-slate-200/20'
+                                        ? 'flex-[2.5] h-[330px] sm:h-[360px] lg:h-full bg-slate-900 shadow-2xl ring-1 ring-white/10' 
+                                        : 'flex-[1] h-[125px] sm:h-[140px] lg:h-full bg-slate-950 border border-slate-200/20'
                                 }`}
                             >
                                 {/* Layer 1: Background Image with depth zoom */}
@@ -146,15 +146,15 @@ export default function Programs() {
                                 {/* Layer 2: Vibrant Gradient Overlay */}
                                 <div className={`absolute inset-0 z-5 transition-opacity duration-500 pointer-events-none ${
                                     isExpanded 
-                                        ? 'bg-gradient-to-t from-[#08111F]/90 via-[#08111F]/35 to-transparent opacity-100' 
-                                        : 'bg-gradient-to-t from-slate-950/75 via-slate-950/30 to-transparent opacity-85'
+                                        ? 'bg-gradient-to-t from-[#08111F]/95 via-[#08111F]/50 to-transparent opacity-100' 
+                                        : 'bg-gradient-to-t from-slate-950/80 via-slate-950/35 to-transparent opacity-85'
                                 }`} />
 
                                 {/* Layer 3: Content Overlay */}
-                                <div className="relative z-10 w-full h-full p-6 sm:p-8 flex flex-col justify-between items-start text-left">
+                                <div className="relative z-10 w-full h-full p-5 sm:p-8 flex flex-col justify-between items-start text-left">
                                     
-                                    {/* Top row: Number badge in Azul Rey or Vinotinto */}
-                                    <div className="w-full flex justify-between items-start">
+                                    {/* Top row: Number badge & Mobile CTA button */}
+                                    <div className="w-full flex justify-between items-center">
                                         <span className={`text-3xl font-black font-sans tracking-tighter transition-colors duration-300 ${
                                             isExpanded 
                                                 ? (isEven ? 'text-[#800A15] dark:text-rose-400' : 'text-[#003C8F] dark:text-blue-400')
@@ -162,8 +162,30 @@ export default function Programs() {
                                         }`}>
                                             {item.num}
                                         </span>
+
+                                        {/* Mobile Only: CTA Button on Top Right when Expanded */}
+                                        <div className={`lg:hidden transition-all duration-500 ease-out transform-gpu ${
+                                            isExpanded ? 'opacity-100 scale-100 translate-y-0 pointer-events-auto' : 'opacity-0 scale-95 -translate-y-2 pointer-events-none'
+                                        }`}>
+                                            <Link
+                                                href={item.ctaLink}
+                                                onClick={(e) => e.stopPropagation()}
+                                                className={`inline-flex items-center gap-1.5 font-extrabold text-[10px] sm:text-xs uppercase tracking-wider px-3.5 py-2.5 rounded-xl shadow-lg active:scale-95 transition-all cursor-pointer text-white ${
+                                                    isEven 
+                                                        ? 'bg-[#800A15] hover:bg-rose-900' 
+                                                        : 'bg-[#003C8F] hover:bg-blue-900'
+                                                }`}
+                                            >
+                                                <span>{item.ctaText}</span>
+                                                <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                                                </svg>
+                                            </Link>
+                                        </div>
+
+                                        {/* Desktop Only: Duration label when contracted */}
                                         {!isExpanded && (
-                                            <span className="text-[10px] font-extrabold uppercase tracking-widest text-slate-300 lg:hidden">
+                                            <span className="hidden lg:inline-block text-[10px] font-extrabold uppercase tracking-widest text-slate-300">
                                                 {item.duration}
                                             </span>
                                         )}
@@ -173,7 +195,7 @@ export default function Programs() {
                                     <div className="w-full flex flex-col lg:flex-row justify-between items-end gap-6 mt-auto">
                                         
                                         {/* Left text column */}
-                                        <div className="space-y-2.5 max-w-xl">
+                                        <div className="space-y-1.5 sm:space-y-2.5 max-w-xl w-full">
                                             {/* Accordion title block */}
                                             <h3 className={`font-black tracking-tight transition-all duration-300 ${
                                                  isExpanded 
@@ -184,7 +206,7 @@ export default function Programs() {
                                             </h3>
 
                                             {/* Smooth reveal container */}
-                                            <div className={`transition-all duration-500 ease-out space-y-3 overflow-hidden transform-gpu will-change-[opacity,max-height] ${
+                                            <div className={`transition-all duration-500 ease-out space-y-2 lg:space-y-3 overflow-hidden transform-gpu will-change-[opacity,max-height] ${
                                                 isExpanded ? 'opacity-100 max-h-96 translate-y-0' : 'opacity-0 max-h-0 translate-y-2 pointer-events-none'
                                             }`}>
                                                 <p className={`text-xs font-extrabold tracking-widest uppercase ${
@@ -192,17 +214,21 @@ export default function Programs() {
                                                 }`}>
                                                     {item.tagline}
                                                 </p>
-                                                <p className="text-sm font-medium text-slate-200 leading-relaxed">
+
+                                                {/* Description Paragraph: Desktop Only */}
+                                                <p className="hidden lg:block text-sm font-medium text-slate-200 leading-relaxed">
                                                     {item.description}
                                                 </p>
-                                                <span className="inline-block px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-xs font-bold text-slate-200 border border-white/15">
+
+                                                {/* Duration Badge: Desktop Only */}
+                                                <span className="hidden lg:inline-block px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-xs font-bold text-slate-200 border border-white/15">
                                                     {item.duration}
                                                 </span>
                                             </div>
                                         </div>
 
-                                        {/* Right action button */}
-                                        <div className={`shrink-0 pt-2 lg:pt-0 transition-all duration-500 delay-75 transform-gpu ${
+                                        {/* Right action button: Desktop Only */}
+                                        <div className={`hidden lg:block shrink-0 pt-2 lg:pt-0 transition-all duration-500 delay-75 transform-gpu ${
                                             isExpanded ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 translate-y-3 pointer-events-none'
                                         }`}>
                                             <Link

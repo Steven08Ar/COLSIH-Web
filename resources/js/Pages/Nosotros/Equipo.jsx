@@ -4,106 +4,100 @@ import AppLayout from '@/Layouts/AppLayout';
 import { motion } from 'framer-motion';
 import { 
     Users, 
-    UserCheck, 
     Briefcase, 
     GraduationCap, 
     Lightbulb, 
     Mail, 
     Phone, 
-    Award
+    Award,
+    BookOpen,
+    CheckCircle2
 } from 'lucide-react';
 
 export default function Equipo() {
-    const [selectedArea, setSelectedArea] = useState('Matemáticas');
+    const [selectedArea, setSelectedArea] = useState('Todos');
 
-    // Custom Directivos Data
+    // Equipo Directivo Oficial
     const directivos = [
-        { nombre: 'Sor María Eugenia', cargo: 'Rectora', foto: '/testimonios/egresada.png' },
-        { nombre: 'Juan Camilo López', cargo: 'Coordinador Académico', foto: '/testimonios/padre.png' },
-        { nombre: 'Laura Pérez', cargo: 'Coordinadora de Convivencia', foto: '/testimonios/egresada.png' },
-        { nombre: 'Carlos Ramírez', cargo: 'Coordinador Pastoral', foto: '/testimonios/padre.png' }
+        { nombre: 'Sor Beatriz Cortés Jerez', cargo: 'Rectora', foto: '/testimonios/egresada.png' },
+        { nombre: 'Jaime Manuel Ardila Parra', cargo: 'Coordinador Académico', foto: '/testimonios/padre.png' },
+        { nombre: 'Margarita María Valle Manrique', cargo: 'Coordinadora de Convivencia', foto: '/testimonios/egresada.png' },
+        { nombre: 'Erika Tatiana Delgadillo Avella', cargo: 'Coordinadora de Pastoral', foto: '/testimonios/padre.png' }
     ];
 
-    // Custom Acta Directiva Data
-    const actaDirectiva = [
-        { nombre: 'P. Alberto Gómez', cargo: 'Presidente', foto: '/testimonios/padre.png' },
-        { nombre: 'María Claudia R.', cargo: 'Vicepresidente', foto: '/testimonios/egresada.png' },
-        { nombre: 'José Ignacio T.', cargo: 'Secretario', foto: '/testimonios/padre.png' },
-        { nombre: 'Ana Milena S.', cargo: 'Vocal', foto: '/testimonios/egresada.png' },
-        { nombre: 'Andrés Felipe B.', cargo: 'Vocal', foto: '/testimonios/padre.png' }
-    ];
-
-    // Administration area cards
+    // Áreas de Administración
     const administracion = [
-        { area: 'Rectoría', encargado: 'Sor María Eugenia', cargo: 'Rectora', tel: '(601) 123 4567', email: 'rectoria@santaisabel.edu.co' },
-        { area: 'Contabilidad', encargado: 'Paola Andrea Silva', cargo: 'Contadora', tel: '(601) 123 4568', email: 'contabilidad@santaisabel.edu.co' },
-        { area: 'Secretaría', encargado: 'Carolina Martínez', cargo: 'Secretaria', tel: '(601) 123 4569', email: 'secretaria@santaisabel.edu.co' }
+        { area: 'Rectoría', encargado: 'Sor Beatriz Cortés Jerez', cargo: 'Rectora', tel: '(607) 637 1234', email: 'rectoria@colsih.edu.co' },
+        { area: 'Coordinación Académica', encargado: 'Jaime Manuel Ardila Parra', cargo: 'Coordinador Académico', tel: '(607) 637 1235', email: 'academica@colsih.edu.co' },
+        { area: 'Coordinación de Convivencia', encargado: 'Margarita María Valle Manrique', cargo: 'Coordinadora de Convivencia', tel: '(607) 637 1236', email: 'convivencia@colsih.edu.co' },
+        { area: 'Coordinación Pastoral', encargado: 'Erika Tatiana Delgadillo Avella', cargo: 'Coordinadora de Pastoral', tel: '(607) 637 1237', email: 'pastoral@colsih.edu.co' }
     ];
 
-    // Teachers listed per school area category
-    const profesoresPorArea = {
-        'Matemáticas': [
-            { nombre: 'Natalia Gómez', cargo: 'Docente', foto: '/testimonios/egresada.png' },
-            { nombre: 'Diego Mora', cargo: 'Docente', foto: '/testimonios/padre.png' },
-            { nombre: 'Valentina Ruiz', cargo: 'Docente', foto: '/testimonios/egresada.png' },
-            { nombre: 'Santiago Diaz', cargo: 'Docente', foto: '/testimonios/padre.png' }
-        ],
-        'Ciencias Naturales': [
-            { nombre: 'Camilo Torres', cargo: 'Docente', foto: '/testimonios/padre.png' },
-            { nombre: 'Diana Reyes', cargo: 'Docente', foto: '/testimonios/egresada.png' },
-            { nombre: 'Andrés Mendoza', cargo: 'Docente', foto: '/testimonios/padre.png' },
-            { nombre: 'Laura Medina', cargo: 'Docente', foto: '/testimonios/egresada.png' }
-        ],
-        'Lengua Castellana': [
-            { nombre: 'María José Ortiz', cargo: 'Docente', foto: '/testimonios/egresada.png' },
-            { nombre: 'Felipe Rueda', cargo: 'Docente', foto: '/testimonios/padre.png' },
-            { nombre: 'Isabella Castro', cargo: 'Docente', foto: '/testimonios/egresada.png' },
-            { nombre: 'Mateo Gómez', cargo: 'Docente', foto: '/testimonios/padre.png' }
-        ],
-        'Inglés': [
-            { nombre: 'Daniela Vergara', cargo: 'Docente', foto: '/testimonios/egresada.png' },
-            { nombre: 'Ricardo Rojas', cargo: 'Docente', foto: '/testimonios/padre.png' },
-            { nombre: 'Sofía Londoño', cargo: 'Docente', foto: '/testimonios/egresada.png' },
-            { nombre: 'Lucas Villa', cargo: 'Docente', foto: '/testimonios/padre.png' }
-        ],
-        'Ciencias Sociales': [
-            { nombre: 'Alejandra Pérez', cargo: 'Docente', foto: '/testimonios/egresada.png' },
-            { nombre: 'Javier Restrepo', cargo: 'Docente', foto: '/testimonios/padre.png' },
-            { nombre: 'Clara Inés Silva', cargo: 'Docente', foto: '/testimonios/egresada.png' },
-            { nombre: 'Juan Pablo Marín', cargo: 'Docente', foto: '/testimonios/padre.png' }
-        ],
-        'Educación Artística': [
-            { nombre: 'Tatiana Suárez', cargo: 'Docente', foto: '/testimonios/egresada.png' },
-            { nombre: 'Carlos Mario Gil', cargo: 'Docente', foto: '/testimonios/padre.png' },
-            { nombre: 'Gabriela Muñoz', cargo: 'Docente', foto: '/testimonios/egresada.png' },
-            { nombre: 'Esteban Ortiz', cargo: 'Docente', foto: '/testimonios/padre.png' }
-        ],
-        'Educación Física': [
-            { nombre: 'Mauricio Henao', cargo: 'Docente', foto: '/testimonios/padre.png' },
-            { nombre: 'Andrea Guerrero', cargo: 'Docente', foto: '/testimonios/egresada.png' },
-            { nombre: 'Nelson Caicedo', cargo: 'Docente', foto: '/testimonios/padre.png' },
-            { nombre: 'Paola Andrea G.', cargo: 'Docente', foto: '/testimonios/egresada.png' }
-        ]
-    };
+    // Listado Oficial de 33 Docentes de la Institución
+    const todosLosProfesores = [
+        { nombre: 'Adriana María Jaimes Ruiz', asignatura: 'Ed. Religiosa', dirGrupo: '2°', area: 'Ed. Religiosa y Ética' },
+        { nombre: 'Bruna Mercedes Peña Solano', asignatura: 'Lengua Castellana', dirGrupo: '11-2°', area: 'Lengua Castellana' },
+        { nombre: 'Clara Inés Joya Herrera', asignatura: 'Matemática', dirGrupo: '7-3°', area: 'Matemáticas' },
+        { nombre: 'Daniela Villamizar Villamizar', asignatura: 'Todas las Dimensiones', dirGrupo: 'Jardín', area: 'Preescolar y Primaria' },
+        { nombre: 'Diana Soidé Villamizar Bautista', asignatura: 'Lengua Castellana (Primaria)', dirGrupo: '3°', area: 'Lengua Castellana' },
+        { nombre: 'Edgar Javier García Estupiñán', asignatura: 'Ciencias Sociales', dirGrupo: '10-2°', area: 'Ciencias Sociales' },
+        { nombre: 'Erika Tatiana Delgadillo Avella', asignatura: 'Ciencias Sociales y Coord. Pastoral', dirGrupo: '6-3°', area: 'Ciencias Sociales' },
+        { nombre: 'Fredy Neira Roa', asignatura: 'Matemática y Física (10° y 11°)', dirGrupo: '9-3°', area: 'Matemáticas' },
+        { nombre: 'Gloria Mercedes Serrano Salazar', asignatura: 'Ed. Religiosa', dirGrupo: null, area: 'Ed. Religiosa y Ética' },
+        { nombre: 'Héctor Manuel Garzón Gómez', asignatura: 'Ética y Ed. Religiosa', dirGrupo: null, area: 'Ed. Religiosa y Ética' },
+        { nombre: 'Irma Sánchez Espinosa', asignatura: 'Ciencias Naturales y Ciencias', dirGrupo: '4°', area: 'Ciencias Naturales' },
+        { nombre: 'Iván Martínez Peña', asignatura: 'Tecnología e Informática', dirGrupo: '8-1°', area: 'Tecnología e Informática' },
+        { nombre: 'Jenny Marcela Pérez Medina', asignatura: 'Química', dirGrupo: '11-1°', area: 'Ciencias Naturales' },
+        { nombre: 'Jesús David Arias Estupiñán', asignatura: 'Tecnología e Informática y Estadística', dirGrupo: null, area: 'Tecnología e Informática' },
+        { nombre: 'Jeyson Eduardo Suárez Ardila', asignatura: 'Matemática', dirGrupo: '7-2°', area: 'Matemáticas' },
+        { nombre: 'Jeyson Mauricio Ávila Triana', asignatura: 'Ed. Física, Recreación y Deportes', dirGrupo: null, area: 'Educación Física y Expresión' },
+        { nombre: 'Karen Navarro Pisciotti', asignatura: 'Lengua Castellana', dirGrupo: '6-2°', area: 'Lengua Castellana' },
+        { nombre: 'Karen Tatiana Linares Gelvez', asignatura: 'Lengua Castellana', dirGrupo: '9-1°', area: 'Lengua Castellana' },
+        { nombre: 'Katerin Johanna Delgado Ruda', asignatura: 'Ciencias Sociales', dirGrupo: '8-3°', area: 'Ciencias Sociales' },
+        { nombre: 'Lady Diana Osorio Fonseca', asignatura: 'Todas las Asignaturas', dirGrupo: '1°', area: 'Preescolar y Primaria' },
+        { nombre: 'Leidy Andrea Portilla Gelvez', asignatura: 'Matemática', dirGrupo: '9-2°', area: 'Matemáticas' },
+        { nombre: 'Leidy Paola Basto Ramírez', asignatura: 'Inglés', dirGrupo: '8-2°', area: 'Inglés' },
+        { nombre: 'Ludwin Fernando Caballero Espinosa', asignatura: 'Ed. Física, Recreación y Deportes', dirGrupo: null, area: 'Educación Física y Expresión' },
+        { nombre: 'Luz Adriana García Villamizar', asignatura: 'Artes y Ética', dirGrupo: '10-3°', area: 'Educación Física y Expresión' },
+        { nombre: 'Mayra Jisseth Sierra Lombana', asignatura: 'Inglés', dirGrupo: '7-1°', area: 'Inglés' },
+        { nombre: 'Miguel Oswaldo Lizarazo Latorre', asignatura: 'Contabilidad (SENA)', dirGrupo: '11-3°', area: 'Contabilidad SENA' },
+        { nombre: 'Paula Lorena Cuadros Ballesteros', asignatura: 'Todas las Dimensiones', dirGrupo: 'Transición', area: 'Preescolar y Primaria' },
+        { nombre: 'Robin Javier Aparicio Aparicio', asignatura: 'Filosofía y Ed. Religiosa', dirGrupo: '10-1°', area: 'Ciencias Sociales' },
+        { nombre: 'Sandra Patricia Parada Leal', asignatura: 'Música', dirGrupo: null, area: 'Educación Física y Expresión' },
+        { nombre: 'Sergio Andrés Mendoza Gómez', asignatura: 'Inglés', dirGrupo: null, area: 'Inglés' },
+        { nombre: 'Yesica Zoraya Badillo Corredor', asignatura: 'Ciencias Naturales', dirGrupo: '6-1°', area: 'Ciencias Naturales' },
+        { nombre: 'Yoleida Patricia Camacho Corzo', asignatura: 'Inglés', dirGrupo: '5-1°', area: 'Inglés' },
+        { nombre: 'Yoni Amparo Méndez Álvarez', asignatura: 'Matemática y Tec. Informática', dirGrupo: '5-2°', area: 'Matemáticas' }
+    ];
 
-    const areasKeys = Object.keys(profesoresPorArea);
+    const areasList = [
+        'Todos',
+        'Preescolar y Primaria',
+        'Matemáticas',
+        'Lengua Castellana',
+        'Ciencias Naturales',
+        'Ciencias Sociales',
+        'Inglés',
+        'Tecnología e Informática',
+        'Educación Física y Expresión',
+        'Ed. Religiosa y Ética',
+        'Contabilidad SENA'
+    ];
+
+    const profesoresFiltrados = selectedArea === 'Todos' 
+        ? todosLosProfesores 
+        : todosLosProfesores.filter(p => p.area === selectedArea);
 
     return (
         <AppLayout>
             <Head title="Equipo Institucional | COLSIH" />
 
-            {/* Custom CSS overrides to guarantee cross-browser scrollbar hiding */}
+            {/* Ocultar barra de scroll en solapas */}
             <style dangerouslySetInnerHTML={{__html: `
-                .no-scrollbar::-webkit-scrollbar {
-                    display: none !important;
-                }
-                .no-scrollbar {
-                    -ms-overflow-style: none !important;
-                    scrollbar-width: none !important;
-                }
+                .no-scrollbar::-webkit-scrollbar { display: none !important; }
+                .no-scrollbar { -ms-overflow-style: none !important; scrollbar-width: none !important; }
             `}} />
 
-            {/* Main Page Outer Container */}
             <div className="relative bg-[#FAFCFF] dark:bg-slate-950 text-slate-800 dark:text-slate-100 min-h-screen overflow-hidden pb-16 transition-colors duration-300">
                 
                 {/* Dotted Grid Backdrop Decoration */}
@@ -115,35 +109,31 @@ export default function Equipo() {
                     }} 
                 />
 
-                {/* ── 1. Hero Section (Full Screen Width, Azul Rey + Wave Bottom) ── */}
+                {/* ── 1. Hero Section ── */}
                 <section className="relative w-full bg-gradient-to-r from-[#003C8F] to-[#0D1B2E] text-white pt-36 pb-36 px-6 overflow-hidden">
-                    {/* Background image overlay */}
                     <div 
                         className="absolute inset-0 bg-cover bg-center opacity-10 brightness-[0.2] pointer-events-none"
                         style={{ backgroundImage: "url('/galeria/panoramica.png')" }}
                     />
-
-                    {/* Left & Right abstract curves */}
                     <div className="absolute right-0 bottom-0 top-0 w-[35%] opacity-15 border-l border-amber-400 rounded-l-[50%] bg-gradient-to-r from-transparent to-amber-400/5 pointer-events-none hidden lg:block" />
 
                     <div className="relative z-10 max-w-[1240px] mx-auto text-center lg:text-left">
-                        {/* Hero Left Info */}
                         <div className="max-w-2xl mx-auto lg:mx-0 space-y-4 flex flex-col items-center lg:items-start">
                             <div className="flex items-center justify-center lg:justify-start gap-2 text-amber-400 font-bold uppercase tracking-wider text-xs">
                                 <Users className="w-4 h-4 text-amber-400" />
-                                Conoce a quienes hacen posible
+                                Conoce a quienes hacen posible la excelencia
                             </div>
                             <h1 className="text-4xl md:text-6xl font-black tracking-tight leading-tight">
                                 Equipo Institucional
                             </h1>
                             <div className="w-20 h-1.5 bg-amber-400 rounded-full" />
                             <p className="text-slate-300 font-semibold text-sm md:text-base leading-relaxed pt-1">
-                                Un gran equipo comprometido con la formación integral de nuestros estudiantes, guiados por valores y excelencia.
+                                Nuestro cuerpo directivo y docente dedicado día a día a la formación integral, humana y académica de la juventud salesiana.
                             </p>
                         </div>
                     </div>
 
-                    {/* Wave SVG transition to body background (Pixel-perfect overlap check to fix bottom alignment line) */}
+                    {/* Divisor de ola */}
                     <div className="absolute bottom-0 left-0 right-0 w-full overflow-hidden leading-none z-10 pointer-events-none">
                         <svg 
                             className="relative block w-full h-[30px] md:h-[60px] translate-y-[2px] scale-y-105" 
@@ -159,9 +149,8 @@ export default function Equipo() {
                     </div>
                 </section>
 
-                {/* ── 2. Equipo Directivo (Cards styled with alternating Vino Tinto and Azul Rey top borders) ── */}
+                {/* ── 2. Equipo Directivo ── */}
                 <section className="relative z-10 py-12 px-6 max-w-[1240px] mx-auto">
-                    {/* Header */}
                     <div className="flex items-center gap-3.5 mb-8 border-b border-slate-100 dark:border-slate-800 pb-4">
                         <div className="w-10 h-10 rounded-2xl bg-[#003C8F]/10 dark:bg-blue-950/40 text-[#003C8F] dark:text-blue-400 flex items-center justify-center shrink-0 shadow-sm">
                             <Award className="w-5.5 h-5.5" />
@@ -171,26 +160,26 @@ export default function Equipo() {
                                 Equipo Directivo
                             </h2>
                             <p className="text-xs text-slate-400 dark:text-slate-500 font-semibold mt-0.5">
-                                Comunidad de religiosas y directores de formación
+                                Liderazgo y dirección académica de la institución
                             </p>
                         </div>
                     </div>
 
-                    {/* Cards Grid */}
+                    {/* Directivos Cards Grid */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                         {directivos.map((p, idx) => {
                             const isVino = idx % 2 === 0;
-                            const borderClass = isVino ? 'border-t-4 border-t-[#800A15] hover:border-[#800A15]/50' : 'border-t-4 border-t-[#003C8F] hover:border-[#003C8F]/50';
+                            const borderClass = isVino ? 'border-t-4 border-t-[#800A15]' : 'border-t-4 border-t-[#003C8F]';
                             const roleClass = isVino ? 'text-[#800A15] dark:text-rose-400' : 'text-[#003C8F] dark:text-blue-400';
 
                             return (
                                 <motion.div 
-                                    key={idx}
+                                    key={p.nombre}
                                     initial={{ opacity: 0, y: 30 }}
                                     whileInView={{ opacity: 1, y: 0 }}
                                     viewport={{ once: true }}
                                     transition={{ duration: 0.5, delay: idx * 0.1 }}
-                                    className={`bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800/80 rounded-[28px] overflow-hidden shadow-sm hover:shadow-md hover:scale-[1.03] transition-all duration-300 ${borderClass}`}
+                                    className={`bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800/80 rounded-[28px] overflow-hidden shadow-sm hover:shadow-md hover:scale-[1.02] transition-all duration-300 ${borderClass}`}
                                 >
                                     <div className="aspect-[4/5] bg-slate-50 dark:bg-slate-950 overflow-hidden relative">
                                         <img 
@@ -198,14 +187,12 @@ export default function Equipo() {
                                             alt={p.nombre} 
                                             className="w-full h-full object-cover"
                                         />
-                                        {/* Grid mesh on card background */}
-                                        <div className="absolute inset-0 opacity-[0.03] bg-radial-gradient from-black to-transparent pointer-events-none" />
                                     </div>
                                     <div className="p-5 text-center bg-white dark:bg-slate-900">
                                         <h4 className="font-extrabold text-slate-800 dark:text-slate-200 text-base leading-snug">
                                             {p.nombre}
                                         </h4>
-                                        <span className={`text-[10px] font-black uppercase tracking-widest block mt-1.5 ${roleClass}`}>
+                                        <span className={`text-[11px] font-black uppercase tracking-widest block mt-1.5 ${roleClass}`}>
                                             {p.cargo}
                                         </span>
                                     </div>
@@ -215,75 +202,25 @@ export default function Equipo() {
                     </div>
                 </section>
 
-                {/* ── 3. Acta Directiva ── */}
-                <section className="relative z-10 py-12 px-6 max-w-[1240px] mx-auto">
-                    {/* Header */}
-                    <div className="flex items-center gap-3.5 mb-10 border-b border-slate-100 dark:border-slate-800 pb-4">
-                        <div className="w-10 h-10 rounded-2xl bg-[#800A15]/10 dark:bg-rose-950/40 text-[#800A15] dark:text-rose-400 flex items-center justify-center shrink-0 shadow-sm">
-                            <UserCheck className="w-5.5 h-5.5" />
-                        </div>
-                        <div>
-                            <h2 className="text-2xl font-black text-slate-800 dark:text-white leading-tight">
-                                Acta Directiva
-                            </h2>
-                            <p className="text-xs text-slate-400 dark:text-slate-500 font-semibold mt-0.5">
-                                Consejeros de apoyo institucional
-                            </p>
-                        </div>
-                    </div>
+                {/* (Acta Directiva desactivada temporalmente por solicitud) */}
 
-                    {/* Circular items grid (Larger sizes with wide grid spacing gaps to prevent overlapping) */}
-                    <div className="grid grid-cols-2 sm:grid-cols-5 gap-8 sm:gap-10 lg:gap-14 justify-center">
-                        {actaDirectiva.map((p, idx) => (
-                            <motion.div 
-                                key={idx}
-                                initial={{ opacity: 0, scale: 0.9 }}
-                                whileInView={{ opacity: 1, scale: 1 }}
-                                viewport={{ once: true }}
-                                transition={{ duration: 0.4, delay: idx * 0.08 }}
-                                className="flex flex-col items-center text-center space-y-3.5"
-                            >
-                                <div className="w-28 h-28 sm:w-36 sm:h-36 lg:w-40 lg:h-40 rounded-full border-4 border-slate-100 dark:border-slate-800 overflow-hidden shadow-inner hover:border-amber-400 dark:hover:border-amber-400 transition-colors duration-300">
-                                    <img 
-                                        src={p.foto} 
-                                        alt={p.nombre} 
-                                        className="w-full h-full object-cover"
-                                    />
-                                </div>
-                                <div>
-                                    <h4 className="font-extrabold text-slate-800 dark:text-slate-200 text-[15px] leading-tight">
-                                        {p.nombre}
-                                    </h4>
-                                    <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 block mt-0.5">
-                                        {p.cargo}
-                                    </span>
-                                </div>
-                            </motion.div>
-                        ))}
-                    </div>
-                </section>
-
-                {/* ── 4. Administración (Cards with alternating left border colors of Vino Tinto and Azul Rey) ── */}
+                {/* ── 3. Administración ── */}
                 <section className="relative z-10 py-12 px-6 max-w-[1240px] mx-auto">
-                    {/* Header */}
                     <div className="flex items-center gap-3.5 mb-8 border-b border-slate-100 dark:border-slate-800 pb-4">
                         <div className="w-10 h-10 rounded-2xl bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0 shadow-sm">
                             <Briefcase className="w-5.5 h-5.5" />
                         </div>
                         <div>
                             <h2 className="text-2xl font-black text-slate-800 dark:text-white leading-tight">
-                                Administración
+                                Administración y Gestión
                             </h2>
                             <p className="text-xs text-slate-400 dark:text-slate-500 font-semibold mt-0.5">
-                                Canales de comunicación con el personal de oficina
+                                Canales oficiales de comunicación institucional
                             </p>
                         </div>
                     </div>
 
-                    {/* Admin Grid */}
                     <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 items-stretch">
-                        
-                        {/* Map administrative contact cards with always-visible details and alternating left border colors */}
                         {administracion.map((item, idx) => {
                             const isVino = idx % 2 === 0;
                             const borderClass = isVino ? 'border-l-4 border-l-[#800A15]' : 'border-l-4 border-l-[#003C8F]';
@@ -300,7 +237,7 @@ export default function Equipo() {
                                 >
                                     <div className="space-y-4">
                                         <div className="flex items-center justify-between">
-                                            <h4 className="text-lg font-black text-slate-800 dark:text-white">
+                                            <h4 className="text-base font-black text-slate-800 dark:text-white">
                                                 {item.area}
                                             </h4>
                                             <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${badgeBg}`}>
@@ -311,7 +248,7 @@ export default function Equipo() {
                                             <p className="text-sm font-bold text-slate-700 dark:text-slate-300 leading-tight">
                                                 {item.encargado}
                                             </p>
-                                            <span className="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest block">
+                                            <span className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest block">
                                                 {item.cargo}
                                             </span>
                                         </div>
@@ -330,51 +267,28 @@ export default function Equipo() {
                                 </motion.div>
                             );
                         })}
-
-                        {/* Elegant banner card (Column 4) */}
-                        <motion.div 
-                            initial={{ opacity: 0, scale: 0.96 }}
-                            whileInView={{ opacity: 1, scale: 1 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.6, delay: 0.3 }}
-                            className="bg-gradient-to-tr from-blue-500/10 to-indigo-500/5 dark:from-blue-950/20 dark:to-transparent border border-blue-100/50 dark:border-slate-800 rounded-3xl p-6 flex flex-col justify-center gap-4 relative overflow-hidden text-left"
-                        >
-                            {/* Shield background design vector */}
-                            <div className="absolute top-1/2 -right-8 -translate-y-1/2 opacity-25 text-blue-500 pointer-events-none">
-                                <Award className="w-32 h-32" />
-                            </div>
-
-                            <div className="space-y-3 relative z-10">
-                                <p className="text-slate-600 dark:text-slate-300 text-xs md:text-sm font-bold leading-relaxed">
-                                    Cada área trabaja con compromiso y dedicación para brindar una educación de calidad.
-                                </p>
-                                <div className="w-10 h-[3px] bg-[#800A15] rounded-full" />
-                            </div>
-                        </motion.div>
-
                     </div>
                 </section>
 
-                {/* ── 5. Profesores por área (Cards styled with alternating border accents) ── */}
+                {/* ── 4. Docentes de la Institución (Filtrables por área) ── */}
                 <section className="relative z-10 py-12 px-6 max-w-[1240px] mx-auto">
-                    {/* Header */}
                     <div className="flex items-center gap-3.5 mb-8 border-b border-slate-100 dark:border-slate-800 pb-4">
                         <div className="w-10 h-10 rounded-2xl bg-amber-50 dark:bg-amber-950/40 text-amber-500 dark:text-amber-400 flex items-center justify-center shrink-0 shadow-sm">
                             <GraduationCap className="w-5.5 h-5.5" />
                         </div>
                         <div>
                             <h2 className="text-2xl font-black text-slate-800 dark:text-white leading-tight">
-                                Profesores por área
+                                Cuerpo Docente ({todosLosProfesores.length} Profesores)
                             </h2>
                             <p className="text-xs text-slate-400 dark:text-slate-500 font-semibold mt-0.5">
-                                Cuerpo docente especializado y formador
+                                Listado completo de docentes por área del Colegio Santa Isabel de Hungría
                             </p>
                         </div>
                     </div>
 
                     {/* Area category sliding tabs */}
                     <div className="flex items-center gap-2.5 overflow-x-auto pb-4 mb-8 no-scrollbar w-full select-none snap-x">
-                        {areasKeys.map((areaName) => (
+                        {areasList.map((areaName) => (
                             <button
                                 key={areaName}
                                 onClick={() => setSelectedArea(areaName)}
@@ -389,73 +303,71 @@ export default function Equipo() {
                         ))}
                     </div>
 
-                    {/* Interactive Content Grid */}
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-                        
-                        {/* Teachers List Column (lg:col-span-8) */}
-                        <div className="col-span-full lg:col-span-8 grid grid-cols-2 sm:grid-cols-4 gap-4">
-                            {profesoresPorArea[selectedArea]?.map((prof, idx) => {
-                                const isVino = idx % 2 === 0;
-                                const borderClass = isVino ? 'border-b-4 border-b-[#800A15]' : 'border-b-4 border-b-[#003C8F]';
-                                const textClass = isVino ? 'text-[#800A15] dark:text-rose-400' : 'text-[#003C8F] dark:text-blue-400';
+                    {/* Teachers Grid */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                        {profesoresFiltrados.map((prof, idx) => {
+                            const isVino = idx % 2 === 0;
+                            const borderClass = isVino ? 'border-b-4 border-b-[#800A15]' : 'border-b-4 border-b-[#003C8F]';
+                            const badgeColor = isVino ? 'bg-rose-50 text-[#800A15] border-rose-200' : 'bg-blue-50 text-[#003C8F] border-blue-200';
 
-                                return (
-                                    <motion.div 
-                                        key={prof.nombre + selectedArea}
-                                        initial={{ opacity: 0, scale: 0.95 }}
-                                        animate={{ opacity: 1, scale: 1 }}
-                                        transition={{ duration: 0.35, delay: idx * 0.05 }}
-                                        className={`bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800/80 rounded-2xl overflow-hidden shadow-sm hover:-translate-y-1 hover:shadow-md transition-all duration-300 ${borderClass}`}
-                                    >
-                                        <div className="aspect-[4/5] bg-slate-50 dark:bg-slate-950 overflow-hidden">
-                                            <img 
-                                                src={prof.foto} 
-                                                alt={prof.nombre} 
-                                                className="w-full h-full object-cover"
-                                            />
-                                        </div>
-                                        <div className="p-3 text-center">
-                                            <h4 className="font-extrabold text-slate-800 dark:text-slate-200 text-xs sm:text-sm leading-tight">
+                            return (
+                                <motion.div 
+                                    key={prof.nombre}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.35, delay: (idx % 12) * 0.04 }}
+                                    className={`bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800/80 rounded-2xl p-5 shadow-sm hover:-translate-y-1 hover:shadow-md transition-all duration-300 flex flex-col justify-between ${borderClass}`}
+                                >
+                                    <div className="space-y-2">
+                                        <div className="flex items-start justify-between gap-2">
+                                            <h4 className="font-extrabold text-slate-900 dark:text-slate-100 text-sm leading-snug">
                                                 {prof.nombre}
                                             </h4>
-                                            <span className={`text-[9px] font-black block mt-1 ${textClass}`}>
-                                                {prof.cargo}
+                                        </div>
+
+                                        <p className="text-xs font-bold text-slate-600 dark:text-slate-400 flex items-center gap-1.5 pt-1">
+                                            <BookOpen className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+                                            <span>{prof.asignatura}</span>
+                                        </p>
+                                    </div>
+
+                                    {prof.dirGrupo && (
+                                        <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                                                Dirección de Grupo:
+                                            </span>
+                                            <span className={`px-2.5 py-0.5 rounded-full text-xs font-black border ${badgeColor}`}>
+                                                {prof.dirGrupo}
                                             </span>
                                         </div>
-                                    </motion.div>
-                                );
-                            })}
-                        </div>
+                                    )}
+                                </motion.div>
+                            );
+                        })}
+                    </div>
 
-                        {/* Vino Tinto callout banner (lg:col-span-4) */}
-                        <motion.div 
-                            initial={{ opacity: 0, y: 25 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            className="col-span-full lg:col-span-4 bg-[#800A15] border border-rose-950 rounded-3xl p-8 text-white flex flex-col justify-between space-y-8 relative overflow-hidden shadow-xl text-left"
-                        >
-                            {/* Abstract glowing background inside banner */}
-                            <div className="absolute -top-10 -right-10 w-36 h-36 rounded-full bg-white/5 blur-2xl pointer-events-none" />
-
-                            <div className="space-y-4 relative z-10">
-                                <div className="w-12 h-12 rounded-2xl bg-white/10 text-white flex items-center justify-center shadow-inner">
-                                    <Lightbulb className="w-6 h-6 text-amber-300 animate-pulse" />
-                                </div>
-                                <h3 className="text-xl md:text-2xl font-serif italic font-extrabold text-white leading-tight">
-                                    Formación que deja huella
-                                </h3>
-                                <p className="text-rose-100 text-xs md:text-sm leading-relaxed font-semibold">
-                                    Nuestros docentes inspiran, acompañan y guían cada paso del aprendizaje de los estudiantes.
-                                </p>
+                    {/* Banner inspiracional */}
+                    <div className="mt-14 bg-gradient-to-r from-[#003C8F] via-blue-800 to-[#800A15] rounded-3xl p-8 text-white flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl">
+                        <div className="space-y-2 text-center md:text-left">
+                            <div className="flex items-center justify-center md:justify-start gap-2 text-amber-300 font-bold text-xs uppercase tracking-widest">
+                                <Lightbulb className="w-4 h-4 text-amber-300 animate-pulse" />
+                                Tradición Salesiana de Don Bosco
                             </div>
-
-                            <div className="w-14 h-[3px] bg-amber-400 rounded-full relative z-10" />
-                        </motion.div>
-
+                            <h3 className="text-xl md:text-2xl font-black text-white">
+                                "Educación es cosa del corazón"
+                            </h3>
+                            <p className="text-blue-100 text-sm font-medium max-w-xl">
+                                Cada uno de nuestros 33 docentes acompaña con vocación, paciencia y alegría el proyecto de vida de nuestros estudiantes.
+                            </p>
+                        </div>
+                        <Link
+                            href="/contacto"
+                            className="px-6 py-3.5 rounded-2xl bg-white text-[#003C8F] font-extrabold text-sm hover:scale-105 transition-all duration-300 shadow-lg shrink-0"
+                        >
+                            Contactar con la Institución
+                        </Link>
                     </div>
                 </section>
-
-
 
             </div>
         </AppLayout>

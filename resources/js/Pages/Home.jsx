@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import { Head } from '@inertiajs/react';
-import WhatsAppButton from '@/Components/WhatsAppButton';
-import MJSButton from '@/Components/MJSButton';
-import PlataformaMobileButton from '@/Components/PlataformaMobileButton';
+import LazyViewportSection from '@/Components/LazyViewportSection';
 
 // Import Modular Sections
 import Hero from './HomeSections/Hero';
@@ -25,38 +23,58 @@ export default function Home({ noticias, testimonios, preguntas, tour, scenes = 
         <div className="relative min-h-screen bg-white overflow-hidden flex flex-col font-sans selection:bg-red-100 selection:text-red-900">
             <Head title="Colegio Santa Isabel de Hungría" />
 
-            {/* Section 1: Hero */}
+            {/* Section 1: Hero (Pantalla principal visible de entrada) */}
             <Hero setVideoOpen={setVideoOpen} />
 
-            {/* Section 2: About */}
-            <About />
+            {/* Section 2: About (Renderizado Bajo Demanda al acercarse en pantalla) */}
+            <LazyViewportSection minHeight="500px">
+                <About />
+            </LazyViewportSection>
 
             {/* Section 3: Why Choose Us */}
-            <WhyChooseUs />
+            <LazyViewportSection minHeight="500px">
+                <WhyChooseUs />
+            </LazyViewportSection>
 
             {/* Section 4: Programs */}
-            <Programs />
+            <LazyViewportSection minHeight="600px">
+                <Programs />
+            </LazyViewportSection>
 
-            {/* Section 5: Video Experience */}
-            <VideoExperience scenes={scenes} />
+            {/* Section 5: Video Experience 360 */}
+            <LazyViewportSection minHeight="500px">
+                <VideoExperience scenes={scenes} />
+            </LazyViewportSection>
 
             {/* Section 6: Statistics */}
-            <Stats />
+            <LazyViewportSection minHeight="300px">
+                <Stats />
+            </LazyViewportSection>
 
             {/* Section 7: Testimonials */}
-            <Testimonials testimonios={testimonios} />
+            <LazyViewportSection minHeight="600px">
+                <Testimonials testimonios={testimonios} />
+            </LazyViewportSection>
 
             {/* Section 8: Gallery */}
-            <Gallery />
+            <LazyViewportSection minHeight="600px">
+                <Gallery />
+            </LazyViewportSection>
 
             {/* Section 9: News */}
-            <News noticias={noticias} />
+            <LazyViewportSection minHeight="500px">
+                <News noticias={noticias} />
+            </LazyViewportSection>
 
             {/* Section 10: Admissions */}
-            <Admissions />
+            <LazyViewportSection minHeight="500px">
+                <Admissions />
+            </LazyViewportSection>
 
             {/* Section 11: FAQ */}
-            <FAQ preguntas={preguntas} />
+            <LazyViewportSection minHeight="500px">
+                <FAQ preguntas={preguntas} />
+            </LazyViewportSection>
 
             {/* Footer */}
             <Footer />
@@ -99,15 +117,6 @@ export default function Home({ noticias, testimonios, preguntas, tour, scenes = 
                     </div>
                 </div>
             )}
-
-            {/* Botón Flotante de MJS (Abajo Izquierda) */}
-            <MJSButton />
-
-            {/* Botón Flotante de Plataforma en Móvil (Abajo Centro) */}
-            <PlataformaMobileButton />
-
-            {/* Botón Flotante Global de WhatsApp (Abajo Derecha) */}
-            <WhatsAppButton />
         </div>
     );
 }

@@ -355,3 +355,9 @@ body {
     filter: drop-shadow(0 2px 5px rgba(0,0,0,0.8)) !important;
     z-index: 9 !important;
 }
+
+/* ── RENDERIZADO BAJO DEMANDA Y CULLING DE VIEWPORT (ESTILO JUEGOS) ── */
+.lazy-viewport-section {
+    content-visibility: auto;
+    contain-intrinsic-size: 1px 700px;
+}

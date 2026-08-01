@@ -122,14 +122,21 @@ export default function TourViewer({
                 const h = targetSceneObj && targetSceneObj.hfov_inicial != null ? Number(targetSceneObj.hfov_inicial) : 100;
 
                 viewerRef.current.loadScene(activeSceneSlug, p, y, h);
-                viewerRef.current.setPitch(p);
-                viewerRef.current.setYaw(y);
-                viewerRef.current.setHfov(h);
+
+                setTimeout(() => {
+                    try {
+                        if (viewerRef.current && viewerRef.current.getScene() === activeSceneSlug) {
+                            viewerRef.current.setPitch(p);
+                            viewerRef.current.setYaw(y);
+                            viewerRef.current.setHfov(h);
+                        }
+                    } catch (e) {}
+                }, 50);
             }
         } catch (err) {
             console.warn('Error loading scene in Pannellum:', err);
         }
-    }, [activeSceneSlug]);
+    }, [activeSceneSlug, scenes]);
 
     // Control Handlers
     const handleZoomIn = () => {
@@ -293,7 +300,7 @@ export default function TourViewer({
                             </div>
                             <div>
                                 <span className="text-[10px] font-black uppercase tracking-widest text-blue-400 block">Punto Informativo</span>
-                                <h4 className="text-base font-extrabold text-white tracking-tight">Información del Espacio</h4>
+                                <h4 className="text-base font-extrabold text-[#ffffff] tracking-tight">Información del Espacio</h4>
                             </div>
                         </div>
 

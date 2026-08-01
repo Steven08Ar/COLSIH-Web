@@ -60,7 +60,7 @@ export default function Home({ noticias, testimonios, preguntas, tour, scenes = 
             {/* Footer */}
             <Footer />
 
-            {/* CENTRALIZED VIDEO MODAL USING NATIVE Video Home.MOV WITHOUT CONTROLS */}
+            {/* CENTRALIZED VIDEO MODAL USING NATIVE Video Home.mp4 WITHOUT CONTROLS */}
             {videoOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-4 transition-all duration-300">
                     <div className="relative w-full max-w-4xl bg-slate-950 rounded-3xl overflow-hidden border border-slate-800 shadow-2xl">
@@ -77,6 +77,12 @@ export default function Home({ noticias, testimonios, preguntas, tour, scenes = 
                         {/* Video Container */}
                         <div className="aspect-video w-full">
                             <video
+                                ref={(videoEl) => {
+                                    if (videoEl) {
+                                        videoEl.muted = true;
+                                        videoEl.play().catch(() => {});
+                                    }
+                                }}
                                 autoPlay
                                 loop
                                 muted
@@ -85,8 +91,8 @@ export default function Home({ noticias, testimonios, preguntas, tour, scenes = 
                                 disablePictureInPicture
                                 className="w-full h-full object-cover pointer-events-none"
                             >
-                                <source src="/Video Home.MOV" type="video/quicktime" />
-                                <source src="/Video Home.MOV" type="video/mp4" />
+                                <source src="/Video%20Home.mp4" type="video/mp4" />
+                                <source src="/Video Home.mp4" type="video/mp4" />
                             </video>
                         </div>
                     </div>

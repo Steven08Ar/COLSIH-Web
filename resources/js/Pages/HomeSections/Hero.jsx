@@ -286,9 +286,15 @@ export default function Hero({ setVideoOpen }) {
                 )}
             </header>
 
-            {/* Background Video ("Video Home.MOV" sin controles, autoproducido, reproducción en bucle sin interactividad) */}
+            {/* Background Video ("Video Home.mp4" compatibilidad web universal H.264, autoproducido en bucle) */}
             <div className="absolute inset-0 w-full h-full z-0 select-none overflow-hidden pointer-events-none">
                 <video
+                    ref={(videoEl) => {
+                        if (videoEl) {
+                            videoEl.muted = true;
+                            videoEl.play().catch(() => {});
+                        }
+                    }}
                     autoPlay
                     loop
                     muted
@@ -297,8 +303,8 @@ export default function Hero({ setVideoOpen }) {
                     disablePictureInPicture
                     className="absolute top-1/2 left-1/2 w-[100vw] h-[56.25vw] min-h-[100vh] min-w-[177.77vh] -translate-x-1/2 -translate-y-1/2 object-cover contrast-[1.05] brightness-75 md:brightness-[0.85] scale-105 pointer-events-none"
                 >
-                    <source src="/Video Home.MOV" type="video/quicktime" />
-                    <source src="/Video Home.MOV" type="video/mp4" />
+                    <source src="/Video%20Home.mp4" type="video/mp4" />
+                    <source src="/Video Home.mp4" type="video/mp4" />
                 </video>
             </div>
 

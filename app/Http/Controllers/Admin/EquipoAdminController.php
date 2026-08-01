@@ -26,11 +26,13 @@ class EquipoAdminController extends Controller
             'cargo'         => 'required|string|max:150',
             'area'          => 'required|string|max:150',
             'tipo'          => 'required|string|in:directivo,docente',
-            'foto'          => 'nullable|file|mimes:jpeg,png,jpg,gif,svg,webp,heic,heif,HEIC,HEIF|max:20480',
-            'foto_posicion' => 'nullable|integer|min:0|max:100',
-            'foto_zoom'     => 'nullable|integer|min:50|max:300',
-            'orden'         => 'nullable|integer|min:0',
-            'activo'        => 'boolean',
+            'foto'            => 'nullable|file|mimes:jpeg,png,jpg,gif,svg,webp,heic,heif,HEIC,HEIF|max:20480',
+            'foto_posicion'   => 'nullable|integer|min:0|max:100',
+            'foto_posicion_x' => 'nullable|integer|min:0|max:100',
+            'foto_posicion_y' => 'nullable|integer|min:0|max:100',
+            'foto_zoom'       => 'nullable|integer|min:50|max:300',
+            'orden'           => 'nullable|integer|min:0',
+            'activo'          => 'boolean',
         ]);
 
         if ($request->hasFile('foto')) {
@@ -44,13 +46,15 @@ class EquipoAdminController extends Controller
     public function update(Request $request, EquipoMember $member)
     {
         $data = $request->validate([
-            'nombre'        => 'required|string|max:150',
-            'cargo'         => 'required|string|max:150',
-            'area'          => 'required|string|max:150',
-            'tipo'          => 'required|string|in:directivo,docente',
-            'foto'          => 'nullable',
-            'foto_posicion' => 'nullable|integer|min:0|max:100',
-            'foto_zoom'     => 'nullable|integer|min:50|max:300',
+            'nombre'          => 'required|string|max:150',
+            'cargo'           => 'required|string|max:150',
+            'area'            => 'required|string|max:150',
+            'tipo'            => 'required|string|in:directivo,docente',
+            'foto'            => 'nullable',
+            'foto_posicion'   => 'nullable|integer|min:0|max:100',
+            'foto_posicion_x' => 'nullable|integer|min:0|max:100',
+            'foto_posicion_y' => 'nullable|integer|min:0|max:100',
+            'foto_zoom'       => 'nullable|integer|min:50|max:300',
             'orden'         => 'nullable|integer|min:0',
             'activo'        => 'boolean',
         ]);

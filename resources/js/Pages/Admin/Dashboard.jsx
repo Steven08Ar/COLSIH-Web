@@ -1,7 +1,7 @@
 import { Head, Link, useForm, router } from '@inertiajs/react';
 import { useState, useEffect, useRef } from 'react';
 import PageBuilder from './PageBuilder/PageBuilder';
-import { Sun, Moon } from 'lucide-react';
+import { Sun, Moon, Eye, Move, ZoomIn, Camera, User, X, Check, Upload, ArrowUp, ArrowDown, ArrowLeft, ArrowRight, Plus, Minus, Trash2 } from 'lucide-react';
 import { processImageFile } from '@/utils/heicConverter';
 
 /* ── helpers ── */
@@ -1943,6 +1943,8 @@ const INITIAL_MEMBER = {
     tipo: 'docente',
     foto: null,
     foto_posicion: 20,
+    foto_posicion_x: 50,
+    foto_posicion_y: 20,
     foto_zoom: 100,
     orden: 0,
     activo: true,
@@ -1957,14 +1959,19 @@ function EquipoTab({ equipo = [], flash }) {
 
     const cardRef = useRef(null);
     const isDragging = useRef(false);
+    const startX = useRef(0);
     const startY = useRef(0);
-    const startPos = useRef(20);
+    const startPosX = useRef(50);
+    const startPosY = useRef(20);
     const touchDist = useRef(null);
 
     const form = useForm(INITIAL_MEMBER);
 
-    function getClientY(e) {
-        return e.touches ? e.touches[0].clientY : e.clientY;
+    function getClientCoords(e) {
+        if (e.touches && e.touches.length > 0) {
+            return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+        }
+        return { x: e.clientX, y: e.clientY };
     }
 
     function handleStart(e) {
@@ -1974,9 +1981,12 @@ function EquipoTab({ equipo = [], flash }) {
             touchDist.current = Math.hypot(dx, dy);
             return;
         }
+        const coords = getClientCoords(e);
         isDragging.current = true;
-        startY.current = getClientY(e);
-        startPos.current = form.data.foto_posicion;
+        startX.current = coords.x;
+        startY.current = coords.y;
+        startPosX.current = form.data.foto_posicion_x ?? 50;
+        startPosY.current = form.data.foto_posicion_y ?? form.data.foto_posicion ?? 20;
     }
 
     function handleMove(e) {
@@ -1992,10 +2002,21 @@ function EquipoTab({ equipo = [], flash }) {
         }
 
         if (!isDragging.current) return;
-        const dy = getClientY(e) - startY.current;
+        const coords = getClientCoords(e);
+        const dx = coords.x - startX.current;
+        const dy = coords.y - startY.current;
+        const width = cardRef.current?.offsetWidth || 1;
         const height = cardRef.current?.offsetHeight || 1;
-        const nextPos = Math.round(Math.max(0, Math.min(100, startPos.current + (dy / height) * 100)));
-        form.setData('foto_posicion', nextPos);
+
+        const nextPosX = Math.round(Math.max(0, Math.min(100, startPosX.current + (dx / width) * 100)));
+        const nextPosY = Math.round(Math.max(0, Math.min(100, startPosY.current + (dy / height) * 100)));
+
+        form.setData({
+            ...form.data,
+            foto_posicion_x: nextPosX,
+            foto_posicion_y: nextPosY,
+            foto_posicion: nextPosY,
+        });
     }
 
     function handleEnd() {
@@ -2018,7 +2039,9 @@ function EquipoTab({ equipo = [], flash }) {
             area: m.area || 'Matemáticas',
             tipo: m.tipo || 'docente',
             foto: null,
-            foto_posicion: Number(m.foto_posicion ?? 20),
+            foto_posicion: Number(m.foto_posicion_y ?? m.foto_posicion ?? 20),
+            foto_posicion_x: Number(m.foto_posicion_x ?? 50),
+            foto_posicion_y: Number(m.foto_posicion_y ?? m.foto_posicion ?? 20),
             foto_zoom: Number(m.foto_zoom ?? 100),
             orden: Number(m.orden ?? 0),
             activo: !!m.activo,
@@ -2090,17 +2113,19 @@ function EquipoTab({ equipo = [], flash }) {
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800/80 p-6 rounded-3xl shadow-sm">
                 <div>
                     <h2 className="text-xl font-black text-slate-900 dark:text-white leading-tight flex items-center gap-2">
+                        <User className="w-6 h-6 text-[#800A15]" />
                         <span>Gestión del Equipo Institucional</span>
                     </h2>
                     <p className="text-xs font-medium text-slate-500 dark:text-slate-400 mt-1">
-                        Haz clic en cualquier tarjeta para acomodar el encuadre (posición Y) y zoom de la foto en vivo, o editar los datos.
+                        Haz clic en cualquier tarjeta para encuadrar la imagen (arriba, abajo, izquierda, derecha) y zoom en vivo.
                     </p>
                 </div>
                 <button
                     onClick={abrirCrear}
                     className="px-5 py-2.5 bg-[#800A15] hover:bg-[#600710] text-white text-xs font-extrabold rounded-2xl shadow-md transition-all duration-300 hover:scale-105 shrink-0 cursor-pointer flex items-center gap-2"
                 >
-                    <span>+ Nuevo Integrante</span>
+                    <Plus className="w-4 h-4" />
+                    <span>Nuevo Integrante</span>
                 </button>
             </div>
 
@@ -2146,19 +2171,20 @@ function EquipoTab({ equipo = [], flash }) {
                                                 alt={p.nombre}
                                                 className="w-full h-full object-cover transition-all duration-300 pointer-events-none"
                                                 style={{
-                                                    objectPosition: `center ${p.foto_posicion ?? 20}%`,
+                                                    objectPosition: `${p.foto_posicion_x ?? 50}% ${p.foto_posicion_y ?? p.foto_posicion ?? 20}%`,
                                                     transform: `scale(${(p.foto_zoom ?? 100) / 100})`
                                                 }}
                                             />
                                         ) : (
                                             <div className="w-full h-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-400 dark:text-slate-600">
-                                                <svg className="w-20 h-20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                                                <User className="w-20 h-20" />
                                             </div>
                                         )}
                                         {/* Overlay de Ajustar Foto */}
                                         <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                                            <span className="bg-white/90 dark:bg-slate-900/90 text-slate-900 dark:text-white text-xs font-black px-4 py-2 rounded-full shadow-lg backdrop-blur-sm flex items-center gap-1.5 transform group-hover:scale-105 transition-transform">
-                                                📷 Ajustar Foto / Zoom
+                                            <span className="bg-white/90 dark:bg-slate-900/90 text-slate-900 dark:text-white text-xs font-black px-4 py-2 rounded-full shadow-lg backdrop-blur-sm flex items-center gap-2 transform group-hover:scale-105 transition-transform">
+                                                <Camera className="w-4 h-4 text-blue-600" />
+                                                <span>Ajustar Foto / Zoom</span>
                                             </span>
                                         </div>
                                     </div>
@@ -2199,19 +2225,20 @@ function EquipoTab({ equipo = [], flash }) {
                                             alt={prof.nombre}
                                             className="w-full h-full object-cover transition-all duration-300 pointer-events-none"
                                             style={{
-                                                objectPosition: `center ${prof.foto_posicion ?? 20}%`,
+                                                objectPosition: `${prof.foto_posicion_x ?? 50}% ${prof.foto_posicion_y ?? prof.foto_posicion ?? 20}%`,
                                                 transform: `scale(${(prof.foto_zoom ?? 100) / 100})`
                                             }}
                                         />
                                     ) : (
                                         <div className="w-full h-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-400 dark:text-slate-600">
-                                            <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                                            <User className="w-12 h-12" />
                                         </div>
                                     )}
                                     {/* Overlay de Ajustar Foto */}
                                     <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-2">
-                                        <span className="bg-white/90 dark:bg-slate-900/90 text-slate-900 dark:text-white text-[10px] sm:text-xs font-black px-3 py-1.5 rounded-full shadow-lg backdrop-blur-sm text-center">
-                                            📷 Ajustar Foto / Zoom
+                                        <span className="bg-white/90 dark:bg-slate-900/90 text-slate-900 dark:text-white text-[10px] sm:text-xs font-black px-3 py-1.5 rounded-full shadow-lg backdrop-blur-sm text-center flex items-center gap-1.5">
+                                            <Camera className="w-3.5 h-3.5 text-blue-600" />
+                                            <span>Ajustar Foto</span>
                                         </span>
                                     </div>
                                 </div>
@@ -2230,25 +2257,26 @@ function EquipoTab({ equipo = [], flash }) {
                 </div>
             )}
 
-            {/* ── Modal / Overlay Dividido con Fondo Difuminado ── */}
+            {/* ── Modal Overlay Fijo en Pantalla con Fondo Difuminado ── */}
             {(creando || editando) && (
                 <div 
-                    className="fixed inset-0 z-[100] bg-slate-950/75 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 overflow-y-auto animate-fadeIn"
+                    className="fixed inset-0 z-[100] bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 overflow-hidden animate-fadeIn"
                     onClick={cerrar}
                 >
                     <div 
-                        className="flex flex-col lg:flex-row items-center lg:items-stretch gap-6 lg:gap-8 max-w-5xl w-full my-auto transition-all duration-300"
+                        className="flex flex-col lg:flex-row items-center lg:items-stretch gap-6 lg:gap-8 max-w-5xl w-full max-h-[92vh] lg:max-h-[90vh] my-auto overflow-y-auto transition-all duration-300 pr-1"
                         onClick={e => e.stopPropagation()}
                     >
-                        {/* ── COLUMNA IZQUIERDA: Card Literal del Usuario (Perspectiva 1:1 + Drag & Pinch) ── */}
+                        {/* ── COLUMNA IZQUIERDA: Card Literal del Usuario (Perspectiva 1:1 + Drag 2D X/Y) ── */}
                         <div className="flex flex-col items-center justify-center space-y-3 shrink-0 w-full sm:w-80">
                             <div className="flex items-center gap-2 bg-blue-600 text-white text-[11px] font-extrabold px-3 py-1 rounded-full shadow-md uppercase tracking-wider">
-                                <span>👁️ Perspectiva Literal del Usuario</span>
+                                <Eye className="w-3.5 h-3.5" />
+                                <span>Perspectiva Literal del Usuario</span>
                             </div>
 
                             <div 
                                 ref={cardRef}
-                                className="w-full aspect-[4/5] bg-white dark:bg-slate-900 border-4 border-blue-500 rounded-2xl overflow-hidden shadow-2xl relative select-none cursor-ns-resize touch-none group"
+                                className="w-full aspect-[4/5] bg-white dark:bg-slate-900 border-4 border-blue-500 rounded-2xl overflow-hidden shadow-2xl relative select-none cursor-move touch-none group"
                                 onMouseDown={handleStart}
                                 onMouseMove={handleMove}
                                 onMouseUp={handleEnd}
@@ -2264,21 +2292,21 @@ function EquipoTab({ equipo = [], flash }) {
                                         draggable={false}
                                         className="w-full h-full object-cover pointer-events-none transition-transform duration-75"
                                         style={{
-                                            objectPosition: `center ${form.data.foto_posicion}%`,
+                                            objectPosition: `${form.data.foto_posicion_x ?? 50}% ${form.data.foto_posicion_y ?? form.data.foto_posicion ?? 20}%`,
                                             transform: `scale(${form.data.foto_zoom / 100})`
                                         }}
                                     />
                                 ) : (
                                     <div className="w-full h-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-400 dark:text-slate-600">
-                                        <svg className="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                                        <User className="w-16 h-16" />
                                     </div>
                                 )}
 
-                                {/* Overlay de instrucción para arrastrar */}
+                                {/* Overlay de instrucción para arrastrar en 2D */}
                                 <div className="absolute inset-x-0 bottom-3 flex justify-center pointer-events-none px-2">
-                                    <span className="bg-black/70 backdrop-blur-md text-white text-[10px] font-extrabold px-3 py-1.5 rounded-full shadow-lg border border-white/20 text-center flex items-center gap-1.5">
-                                        <span>🖐️</span>
-                                        <span>Arrastra verticalmente para mover rostro</span>
+                                    <span className="bg-black/80 backdrop-blur-md text-white text-[10px] font-extrabold px-3 py-1.5 rounded-full shadow-lg border border-white/20 text-center flex items-center gap-1.5">
+                                        <Move className="w-3.5 h-3.5 text-blue-400" />
+                                        <span>Arrastra (X / Y) para centrar imagen</span>
                                     </span>
                                 </div>
                             </div>
@@ -2297,14 +2325,15 @@ function EquipoTab({ equipo = [], flash }) {
                         {/* ── COLUMNA DERECHA: Card de Opciones de Edición ── */}
                         <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl flex-1 w-full space-y-5 flex flex-col justify-between">
                             <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
-                                <h3 className="text-lg font-black text-slate-800 dark:text-white">
-                                    {editando ? 'Editar Datos y Encuadre' : 'Nuevo Integrante del Equipo'}
+                                <h3 className="text-lg font-black text-slate-800 dark:text-white flex items-center gap-2">
+                                    <User className="w-5 h-5 text-[#800A15]" />
+                                    <span>{editando ? 'Editar Integrante' : 'Nuevo Integrante'}</span>
                                 </h3>
                                 <button 
                                     onClick={cerrar}
-                                    className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-400 hover:text-slate-600 transition flex items-center justify-center font-bold text-sm cursor-pointer"
+                                    className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-400 hover:text-slate-600 transition flex items-center justify-center font-bold text-sm cursor-pointer"
                                 >
-                                    ✕
+                                    <X className="w-4 h-4" />
                                 </button>
                             </div>
 
@@ -2374,8 +2403,9 @@ function EquipoTab({ equipo = [], flash }) {
 
                                     {/* 4. Cambiar Fotografía */}
                                     <div className="pt-1">
-                                        <label className="text-xs font-extrabold text-slate-700 dark:text-slate-200 block mb-1">
-                                            Subir / Cambiar Fotografía
+                                        <label className="text-xs font-extrabold text-slate-700 dark:text-slate-200 block mb-1 flex items-center gap-1.5">
+                                            <Upload className="w-3.5 h-3.5 text-blue-600" />
+                                            <span>Subir / Cambiar Fotografía</span>
                                         </label>
                                         <input
                                             type="file"
@@ -2385,36 +2415,81 @@ function EquipoTab({ equipo = [], flash }) {
                                         />
                                     </div>
 
-                                    {/* 5. Sliders de Posición y Zoom */}
+                                    {/* 5. Controles de Posición 2D (X e Y) & Zoom */}
                                     <div className="bg-slate-50 dark:bg-slate-800/50 p-3.5 rounded-2xl border border-slate-200 dark:border-slate-700/80 space-y-3">
-                                        {/* Slider Posición Y */}
+                                        {/* Slider Posición Horizontal (X) */}
                                         <div className="space-y-1">
                                             <div className="flex justify-between items-center text-xs font-bold">
-                                                <span className="text-slate-600 dark:text-slate-300">Posición Vertical (Encuadre Rostro)</span>
-                                                <span className="text-blue-600 dark:text-blue-400 font-mono">{form.data.foto_posicion}%</span>
+                                                <span className="text-slate-600 dark:text-slate-300">Eje Horizontal (X)</span>
+                                                <span className="text-blue-600 dark:text-blue-400 font-mono">{form.data.foto_posicion_x ?? 50}%</span>
                                             </div>
                                             <div className="flex items-center gap-2">
                                                 <button
                                                     type="button"
-                                                    onClick={() => form.setData('foto_posicion', Math.max(0, form.data.foto_posicion - 5))}
-                                                    className="px-2 py-1 bg-slate-200 dark:bg-slate-700 text-xs font-bold rounded-lg text-slate-700 dark:text-white shrink-0 cursor-pointer"
+                                                    onClick={() => form.setData('foto_posicion_x', Math.max(0, (form.data.foto_posicion_x ?? 50) - 5))}
+                                                    className="px-2 py-1 bg-slate-200 dark:bg-slate-700 text-xs font-bold rounded-lg text-slate-700 dark:text-white shrink-0 cursor-pointer flex items-center gap-1"
                                                 >
-                                                    ↑ Arriba
+                                                    <ArrowLeft className="w-3 h-3" />
+                                                    <span>Izquierda</span>
                                                 </button>
                                                 <input
                                                     type="range"
                                                     min="0"
                                                     max="100"
-                                                    value={form.data.foto_posicion}
-                                                    onChange={(e) => form.setData('foto_posicion', Number(e.target.value))}
+                                                    value={form.data.foto_posicion_x ?? 50}
+                                                    onChange={(e) => form.setData('foto_posicion_x', Number(e.target.value))}
                                                     className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-600"
                                                 />
                                                 <button
                                                     type="button"
-                                                    onClick={() => form.setData('foto_posicion', Math.min(100, form.data.foto_posicion + 5))}
-                                                    className="px-2 py-1 bg-slate-200 dark:bg-slate-700 text-xs font-bold rounded-lg text-slate-700 dark:text-white shrink-0 cursor-pointer"
+                                                    onClick={() => form.setData('foto_posicion_x', Math.min(100, (form.data.foto_posicion_x ?? 50) + 5))}
+                                                    className="px-2 py-1 bg-slate-200 dark:bg-slate-700 text-xs font-bold rounded-lg text-slate-700 dark:text-white shrink-0 cursor-pointer flex items-center gap-1"
                                                 >
-                                                    ↓ Abajo
+                                                    <span>Derecha</span>
+                                                    <ArrowRight className="w-3 h-3" />
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        {/* Slider Posición Vertical (Y) */}
+                                        <div className="space-y-1">
+                                            <div className="flex justify-between items-center text-xs font-bold">
+                                                <span className="text-slate-600 dark:text-slate-300">Eje Vertical (Y)</span>
+                                                <span className="text-blue-600 dark:text-blue-400 font-mono">{form.data.foto_posicion_y ?? form.data.foto_posicion ?? 20}%</span>
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                        const ny = Math.max(0, (form.data.foto_posicion_y ?? form.data.foto_posicion ?? 20) - 5);
+                                                        form.setData({ ...form.data, foto_posicion_y: ny, foto_posicion: ny });
+                                                    }}
+                                                    className="px-2 py-1 bg-slate-200 dark:bg-slate-700 text-xs font-bold rounded-lg text-slate-700 dark:text-white shrink-0 cursor-pointer flex items-center gap-1"
+                                                >
+                                                    <ArrowUp className="w-3 h-3" />
+                                                    <span>Arriba</span>
+                                                </button>
+                                                <input
+                                                    type="range"
+                                                    min="0"
+                                                    max="100"
+                                                    value={form.data.foto_posicion_y ?? form.data.foto_posicion ?? 20}
+                                                    onChange={(e) => {
+                                                        const ny = Number(e.target.value);
+                                                        form.setData({ ...form.data, foto_posicion_y: ny, foto_posicion: ny });
+                                                    }}
+                                                    className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-600"
+                                                />
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                        const ny = Math.min(100, (form.data.foto_posicion_y ?? form.data.foto_posicion ?? 20) + 5);
+                                                        form.setData({ ...form.data, foto_posicion_y: ny, foto_posicion: ny });
+                                                    }}
+                                                    className="px-2 py-1 bg-slate-200 dark:bg-slate-700 text-xs font-bold rounded-lg text-slate-700 dark:text-white shrink-0 cursor-pointer flex items-center gap-1"
+                                                >
+                                                    <span>Abajo</span>
+                                                    <ArrowDown className="w-3 h-3" />
                                                 </button>
                                             </div>
                                         </div>
@@ -2431,7 +2506,7 @@ function EquipoTab({ equipo = [], flash }) {
                                                     onClick={() => form.setData('foto_zoom', Math.max(100, form.data.foto_zoom - 10))}
                                                     className="w-8 h-8 rounded-lg bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-white font-extrabold hover:bg-slate-300 transition flex items-center justify-center shrink-0 cursor-pointer"
                                                 >
-                                                    -
+                                                    <Minus className="w-4 h-4" />
                                                 </button>
                                                 <input
                                                     type="range"
@@ -2447,7 +2522,7 @@ function EquipoTab({ equipo = [], flash }) {
                                                     onClick={() => form.setData('foto_zoom', Math.min(250, form.data.foto_zoom + 10))}
                                                     className="w-8 h-8 rounded-lg bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-white font-extrabold hover:bg-slate-300 transition flex items-center justify-center shrink-0 cursor-pointer"
                                                 >
-                                                    +
+                                                    <Plus className="w-4 h-4" />
                                                 </button>
                                             </div>
                                         </div>
@@ -2460,9 +2535,10 @@ function EquipoTab({ equipo = [], flash }) {
                                         <button
                                             type="button"
                                             onClick={() => setDeletingId(editando.id)}
-                                            className="px-4 py-2 bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-bold rounded-xl transition cursor-pointer"
+                                            className="px-4 py-2 bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-bold rounded-xl transition cursor-pointer flex items-center gap-1.5"
                                         >
-                                            Eliminar
+                                            <Trash2 className="w-3.5 h-3.5" />
+                                            <span>Eliminar</span>
                                         </button>
                                     ) : <div />}
 
@@ -2477,9 +2553,10 @@ function EquipoTab({ equipo = [], flash }) {
                                         <button
                                             type="submit"
                                             disabled={form.processing}
-                                            className="px-5 py-2 bg-[#800A15] hover:bg-[#600710] text-white text-xs font-black rounded-xl cursor-pointer shadow-md disabled:opacity-50"
+                                            className="px-5 py-2 bg-[#800A15] hover:bg-[#600710] text-white text-xs font-black rounded-xl cursor-pointer shadow-md disabled:opacity-50 flex items-center gap-1.5"
                                         >
-                                            {form.processing ? 'Guardando...' : 'Guardar Cambios'}
+                                            <Check className="w-4 h-4" />
+                                            <span>{form.processing ? 'Guardando...' : 'Guardar Cambios'}</span>
                                         </button>
                                     </div>
                                 </div>

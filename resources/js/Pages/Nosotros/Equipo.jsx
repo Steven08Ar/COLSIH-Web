@@ -196,7 +196,7 @@ export default function Equipo({ equipo = [] }) {
                                                 alt={p.nombre} 
                                                 className="w-full h-full object-cover transition-all duration-300"
                                                 style={{
-                                                    objectPosition: `center ${p.foto_posicion ?? 20}%`,
+                                                    objectPosition: `${p.foto_posicion_x ?? 50}% ${p.foto_posicion_y ?? p.foto_posicion ?? 20}%`,
                                                     transform: `scale(${(p.foto_zoom ?? 100) / 100})`
                                                 }}
                                             />
@@ -337,7 +337,7 @@ export default function Equipo({ equipo = [] }) {
                                             alt={prof.nombre} 
                                             className="w-full h-full object-cover transition-all duration-300" 
                                             style={{
-                                                objectPosition: `center ${prof.foto_posicion ?? 20}%`,
+                                                objectPosition: `${prof.foto_posicion_x ?? 50}% ${prof.foto_posicion_y ?? prof.foto_posicion ?? 20}%`,
                                                 transform: `scale(${(prof.foto_zoom ?? 100) / 100})`
                                             }}
                                         />

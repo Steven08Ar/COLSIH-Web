@@ -60,13 +60,12 @@ class EquipoAdminController extends Controller
         ]);
 
         if ($request->hasFile('foto')) {
-            if ($member->foto && str_starts_with($member->foto, 'storage/')) {
-                $oldPath = str_replace('storage/', '', $member->foto);
-                Storage::disk('public')->delete($oldPath);
+            if ($member->foto) {
+                Storage::disk('public')->delete($member->foto);
             }
             $data['foto'] = ImageOptimizer::guardar($request->file('foto'), 'docentes');
-        } else if (is_string($request->foto)) {
-            $data['foto'] = $request->foto;
+        } else {
+            unset($data['foto']);
         }
 
         $member->update($data);

@@ -363,17 +363,12 @@ export default function Hero({ setVideoOpen }) {
 
                     {/* Left Side Content (40% width / 5 columns) */}
                     <div className="col-span-12 md:col-span-6 lg:col-span-5 space-y-8 text-left">
-                        {/* Headline (72-80px on desktop) */}
-                        <h1 className="text-4xl sm:text-5xl lg:text-[72px] xl:text-[80px] font-black text-white leading-[1.03] tracking-tight font-sans animate-fadeIn">
-                            Formamos hoy<br />
-                            a los líderes<br />
-                            del mañana
+                        {/* Headline */}
+                        <h1 className="text-4xl sm:text-5xl lg:text-[68px] xl:text-[76px] font-black text-white leading-[1.05] tracking-tight font-sans animate-fadeIn">
+                            Formamos<br />
+                            buenos Cristianos<br />
+                            Honestos ciudadanos
                         </h1>
-
-                        {/* Subtitle (22px) */}
-                        <p className="text-[17px] md:text-[22px] text-slate-300/90 font-medium leading-relaxed font-sans max-w-md animate-fadeIn">
-                            Educación integral con excelencia académica, fe y valores para inspirar, transformar y liderar el futuro.
-                        </p>
 
                         {/* Buttons */}
                         <div className="flex flex-col sm:flex-row sm:items-center gap-6 pt-4">

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import ScrollReveal from './ScrollReveal';
 
@@ -32,6 +32,10 @@ export default function Testimonials({ testimonios }) {
     const [activeVideoUrl, setActiveVideoUrl] = useState(null);
     const [isMobile, setIsMobile] = useState(false);
 
+    // Touch swipe refs
+    const touchStartX = useRef(0);
+    const touchEndX = useRef(0);
+
     // Responsive listener
     useEffect(() => {
         const handleResize = () => {
@@ -48,6 +52,28 @@ export default function Testimonials({ testimonios }) {
 
     const handlePrev = () => {
         setActiveIndex((prev) => (prev - 1 + list.length) % list.length);
+    };
+
+    // Touch Swipe Handlers for mobile responsiveness
+    const handleTouchStart = (e) => {
+        touchStartX.current = e.targetTouches[0].clientX;
+        touchEndX.current = e.targetTouches[0].clientX;
+    };
+
+    const handleTouchMove = (e) => {
+        touchEndX.current = e.targetTouches[0].clientX;
+    };
+
+    const handleTouchEnd = () => {
+        if (!touchStartX.current || !touchEndX.current) return;
+        const distance = touchStartX.current - touchEndX.current;
+        if (distance > 35) {
+            handleNext(); // Deslizar izquierda -> Siguiente
+        } else if (distance < -35) {
+            handlePrev(); // Deslizar derecha -> Anterior
+        }
+        touchStartX.current = 0;
+        touchEndX.current = 0;
     };
 
     // Auto rotate every 7 seconds (paused when video modal is open)
@@ -91,7 +117,7 @@ export default function Testimonials({ testimonios }) {
         let style = {
             transition: 'all 700ms cubic-bezier(0.4, 0, 0.2, 1)',
             width: '100%',
-            maxWidth: isMobile ? '310px' : '340px',
+            maxWidth: isMobile ? 'calc(100vw - 90px)' : '340px',
         };
 
         if (isMobile) {
@@ -165,7 +191,7 @@ export default function Testimonials({ testimonios }) {
     };
 
     return (
-        <section className="relative py-32 lg:py-40 bg-[#030712] overflow-hidden select-none">
+        <section className="relative py-28 lg:py-36 bg-[#030712] overflow-hidden select-none">
             {/* Top Wave (White SVG transition) */}
             <div className="absolute top-0 left-0 w-full overflow-hidden leading-none z-20 pointer-events-none">
                 <svg className="relative block w-full h-[60px] md:h-[100px]" viewBox="0 0 1440 100" preserveAspectRatio="none">
@@ -182,22 +208,27 @@ export default function Testimonials({ testimonios }) {
                 </svg>
             </div>
 
-            <div className="relative z-10 max-w-[1440px] mx-auto px-6 md:px-12 lg:px-24 space-y-16">
+            <div className="relative z-10 max-w-[1440px] mx-auto px-4 md:px-12 lg:px-24 space-y-12 md:space-y-16">
                 {/* Section Header */}
-                <div className="max-w-2xl mx-auto text-center space-y-4">
+                <div className="max-w-2xl mx-auto text-center space-y-3">
                     <span className="text-[#3b82f6] text-[13px] font-bold tracking-[3px] uppercase block font-sans">
                         TESTIMONIOS
                     </span>
-                    <h2 className="text-4xl sm:text-5xl font-black text-white leading-tight tracking-tight font-sans">
+                    <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white leading-tight tracking-tight font-sans">
                         Nuestra voz comunitaria
                     </h2>
                 </div>
 
-                {/* 3D Highlight Carousel Container */}
+                {/* 3D Highlight Carousel Container with touch gestures & side buttons */}
                 <ScrollReveal distance="translate-y-8">
-                    <div className="relative max-w-6xl mx-auto px-12 md:px-4">
-                        {/* Slide Track Container with relative height */}
-                        <div className="relative w-full h-[480px] md:h-[500px] overflow-visible py-8">
+                    <div 
+                        className="relative max-w-6xl mx-auto px-10 sm:px-14 md:px-16 lg:px-20"
+                        onTouchStart={handleTouchStart}
+                        onTouchMove={handleTouchMove}
+                        onTouchEnd={handleTouchEnd}
+                    >
+                        {/* Slide Track Container */}
+                        <div className="relative w-full h-[460px] md:h-[500px] overflow-visible py-4">
                             {list.map((item, idx) => {
                                 const total = list.length;
                                 const offset = (idx - activeIndex + total) % total;
@@ -208,7 +239,7 @@ export default function Testimonials({ testimonios }) {
                                         key={idx}
                                         style={getCardStyle(idx)}
                                         onClick={() => isCenter && item.videoActivo && item.videoUrl && setActiveVideoUrl(item.videoUrl)}
-                                        className={`absolute top-1/2 -translate-y-1/2 flex flex-col justify-between min-h-[420px] rounded-3xl overflow-hidden shadow-lg border border-slate-800/80 bg-slate-900/50 group ${isCenter && item.videoActivo && item.videoUrl ? 'cursor-pointer' : 'cursor-default'}`}
+                                        className={`absolute top-1/2 -translate-y-1/2 flex flex-col justify-between min-h-[400px] md:min-h-[420px] rounded-3xl overflow-hidden shadow-lg border border-slate-800/80 bg-slate-900/50 group ${isCenter && item.videoActivo && item.videoUrl ? 'cursor-pointer' : 'cursor-default'}`}
                                     >
                                         {/* Background Image */}
                                         <img
@@ -218,7 +249,7 @@ export default function Testimonials({ testimonios }) {
                                             style={{ objectPosition: `center ${item.fotoPos}%` }}
                                         />
                                         
-                                        {/* Light gradient overlay mask - vibrant photo visibility with text readability */}
+                                        {/* Light gradient overlay mask */}
                                         <div className="absolute inset-0 bg-gradient-to-t from-[#08111F]/90 via-[#08111F]/35 to-transparent group-hover:from-[#08111F]/95 group-hover:via-[#08111F]/45 transition-all duration-500 z-10"></div>
 
                                         {/* Play Button Overlay — solo si video_activo */}
@@ -232,10 +263,10 @@ export default function Testimonials({ testimonios }) {
                                             </div>
                                         )}
 
-                                        {/* Content layer - z-30 to stay on top of all masks */}
-                                        <div className="relative z-30 flex flex-col justify-between h-full p-8 flex-1">
+                                        {/* Content layer */}
+                                        <div className="relative z-30 flex flex-col justify-between h-full p-6 sm:p-8 flex-1">
                                             <div className="flex justify-between items-start">
-                                                <span className="text-7xl font-serif text-white/25 select-none pointer-events-none leading-none">“</span>
+                                                <span className="text-6xl sm:text-7xl font-serif text-white/25 select-none pointer-events-none leading-none">“</span>
                                                 {item.videoActivo && (
                                                     <div className="bg-[#800A15] text-white text-[10px] font-bold tracking-wider uppercase px-2.5 py-1 rounded-full shadow-md flex items-center gap-1 select-none">
                                                         <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>
@@ -245,13 +276,13 @@ export default function Testimonials({ testimonios }) {
                                             </div>
 
                                             {/* Spacing */}
-                                            <div className="flex-1 min-h-[100px]"></div>
+                                            <div className="flex-1 min-h-[60px]"></div>
 
                                             {/* Bottom row */}
-                                            <div className="space-y-4 pt-4">
-                                                {/* Text Quote with layered dark shadows */}
+                                            <div className="space-y-3 pt-2">
+                                                {/* Text Quote */}
                                                 <p 
-                                                    className="text-white text-sm md:text-base font-bold italic leading-relaxed font-sans"
+                                                    className="text-white text-xs sm:text-sm md:text-base font-bold italic leading-relaxed font-sans"
                                                     style={{
                                                         textShadow: '0 2px 4px rgba(0,0,0,0.95), 0 4px 10px rgba(0,0,0,0.85), 0 0 15px rgba(0,0,0,0.5)'
                                                     }}
@@ -260,11 +291,10 @@ export default function Testimonials({ testimonios }) {
                                                 </p>
                                                 
                                                 <div>
-                                                    <span className="block text-base font-extrabold text-white font-sans drop-shadow-[0_1.5px_2px_rgba(0,0,0,0.9)]">
+                                                    <span className="block text-sm sm:text-base font-extrabold text-white font-sans drop-shadow-[0_1.5px_2px_rgba(0,0,0,0.9)]">
                                                         {item.nombre}
                                                     </span>
-                                                    {/* Role label directly on card background in Royal Blue */}
-                                                    <span className="block text-xs font-bold text-[#3b82f6] uppercase tracking-wider mt-2 font-sans drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
+                                                    <span className="block text-[11px] sm:text-xs font-bold text-[#3b82f6] uppercase tracking-wider mt-1 font-sans drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
                                                         {item.cargo}
                                                     </span>
                                                 </div>
@@ -277,7 +307,7 @@ export default function Testimonials({ testimonios }) {
 
                         {/* Dot Indicators */}
                         {list.length > 1 && (
-                            <div className="flex items-center justify-center gap-2 mt-2 z-30 relative">
+                            <div className="flex items-center justify-center gap-2 mt-4 z-30 relative">
                                 {list.map((_, dotIdx) => (
                                     <button
                                         key={dotIdx}
@@ -293,11 +323,15 @@ export default function Testimonials({ testimonios }) {
                             </div>
                         )}
 
-                        {/* Transparent Left Arrow Button */}
+                        {/* Outer Left Arrow Button (Pegado al lateral exterior) */}
                         {list.length > 1 && (
                             <button
-                                onClick={handlePrev}
-                                className="absolute left-2 md:-left-12 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 text-white border border-white/20 flex items-center justify-center transition-all cursor-pointer backdrop-blur-sm shadow-md"
+                                type="button"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    handlePrev();
+                                }}
+                                className="absolute -left-1 sm:-left-3 md:-left-10 lg:-left-14 top-1/2 -translate-y-1/2 z-40 w-10 h-10 md:w-12 md:h-12 rounded-full bg-slate-900/90 hover:bg-[#800A15] text-white border border-white/20 flex items-center justify-center transition-all duration-200 cursor-pointer backdrop-blur-md shadow-xl hover:scale-110 active:scale-95"
                                 aria-label="Testimonio anterior"
                             >
                                 <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
@@ -306,11 +340,15 @@ export default function Testimonials({ testimonios }) {
                             </button>
                         )}
 
-                        {/* Transparent Right Arrow Button */}
+                        {/* Outer Right Arrow Button (Pegado al lateral exterior) */}
                         {list.length > 1 && (
                             <button
-                                onClick={handleNext}
-                                className="absolute right-2 md:-right-12 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 text-white border border-white/20 flex items-center justify-center transition-all cursor-pointer backdrop-blur-sm shadow-md"
+                                type="button"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleNext();
+                                }}
+                                className="absolute -right-1 sm:-right-3 md:-right-10 lg:-right-14 top-1/2 -translate-y-1/2 z-40 w-10 h-10 md:w-12 md:h-12 rounded-full bg-slate-900/90 hover:bg-[#800A15] text-white border border-white/20 flex items-center justify-center transition-all duration-200 cursor-pointer backdrop-blur-md shadow-xl hover:scale-110 active:scale-95"
                                 aria-label="Siguiente testimonio"
                             >
                                 <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">

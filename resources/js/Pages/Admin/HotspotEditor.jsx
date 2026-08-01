@@ -24,6 +24,7 @@ const safeRoute = (name, params) => {
         case 'admin.recorrido.editor': return `${adminPrefix}/recorrido/scenes/${params}/editor`;
         case 'admin.recorrido.scenes.store': return `${adminPrefix}/recorrido/scenes`;
         case 'admin.recorrido.scenes.update': return `${adminPrefix}/recorrido/scenes/${params}`;
+        case 'admin.recorrido.scenes.principal': return `${adminPrefix}/recorrido/scenes/${params}/principal`;
         case 'admin.recorrido.scenes.destroy': return `${adminPrefix}/recorrido/scenes/${params}`;
         case 'admin.hotspots.store': return `${adminPrefix}/hotspots`;
         case 'admin.hotspots.update': return `${adminPrefix}/hotspots/${params}`;
@@ -95,6 +96,23 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
             },
             onError: () => {
                 setSavingCameraView(false);
+            }
+        });
+    };
+
+    const [savingInitialScene, setSavingInitialScene] = useState(false);
+    const marcarComoPrincipal = () => {
+        setSavingInitialScene(true);
+        router.post(safeRoute('admin.recorrido.scenes.principal', scene.id), {}, {
+            preserveScroll: true,
+            preserveState: true,
+            onSuccess: () => {
+                setSavingInitialScene(false);
+                setCameraFlashMessage('¡Esta escena fue configurada como la Escena Principal del Recorrido 360°!');
+                setTimeout(() => setCameraFlashMessage(null), 4000);
+            },
+            onError: () => {
+                setSavingInitialScene(false);
             }
         });
     };
@@ -455,6 +473,21 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
 
                     {/* ── BOTONES FLOTANTES SUPERIOR DERECHO MINIMALISTAS ── */}
                     <div className="absolute top-6 right-6 z-30 flex items-center gap-3">
+                        {/* Botón para Establecer como Escena Principal del Recorrido 360° */}
+                        <button
+                            onClick={marcarComoPrincipal}
+                            disabled={savingInitialScene || scene.es_escena_inicial}
+                            className={`font-bold text-xs px-4 py-2.5 rounded-xl transition backdrop-blur-md shadow-lg flex items-center gap-2 cursor-pointer active:scale-95 border ${
+                                scene.es_escena_inicial
+                                    ? 'bg-amber-500/20 text-amber-300 border-amber-500/50 cursor-default'
+                                    : 'bg-amber-500 hover:bg-amber-600 text-white border-amber-300/40'
+                            }`}
+                            title={scene.es_escena_inicial ? 'Esta es la imagen principal del recorrido 360°' : 'Establecer esta escena como la imagen principal del recorrido 360°'}
+                        >
+                            <Sparkles className="w-4 h-4 text-amber-200" />
+                            <span>{scene.es_escena_inicial ? '⭐ Escena Principal' : 'Marcar Escena Principal'}</span>
+                        </button>
+
                         {/* Botón para Fijar Vista Inicial (Ángulo y Zoom por defecto) */}
                         {viewMode === '360' && (
                             <button

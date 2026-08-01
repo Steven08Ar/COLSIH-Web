@@ -39,7 +39,7 @@ class Scene extends Model
         $path = $this->imagen_path;
 
         if (empty($path)) {
-            return asset('recorrido_virtual/1.entrada.jpg');
+            return '';
         }
 
         if (str_starts_with($path, 'http://') || str_starts_with($path, 'https://')) {
@@ -53,7 +53,7 @@ class Scene extends Model
             return asset('storage/' . $ltrimPath);
         }
 
-        // 2. Check directly in public folder (e.g. recorrido_virtual/1.entrada.jpg)
+        // 2. Check directly in public folder
         if (file_exists(public_path($ltrimPath))) {
             return asset($ltrimPath);
         }
@@ -69,19 +69,6 @@ class Scene extends Model
             return asset('storage/' . $cleanPath);
         }
 
-        // 4. Fuzzy match in public/recorrido_virtual/ by keyword (e.g. "entrada", "patio", "biblioteca")
-        $baseName = pathinfo($cleanPath, PATHINFO_FILENAME);
-        $parts = array_filter(explode('.', $baseName));
-        $searchKey = end($parts) ?: $baseName;
-
-        if (!empty($searchKey) && strlen($searchKey) >= 3) {
-            $matches = glob(public_path('recorrido_virtual/*' . $searchKey . '*'));
-            if (!empty($matches)) {
-                $foundFile = basename($matches[0]);
-                return asset('recorrido_virtual/' . $foundFile);
-            }
-        }
-
-        return asset('recorrido_virtual/1.entrada.jpg');
+        return asset('storage/' . $ltrimPath);
     }
 }

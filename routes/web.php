@@ -91,6 +91,7 @@ Route::prefix($adminPath)->name('admin.')->group(function () {
         Route::post('/recorrido/scenes',             [TourAdminController::class, 'storeScene'])->name('recorrido.scenes.store');
         Route::post('/recorrido/scenes/batch',       [TourAdminController::class, 'storeBatchScenes'])->name('recorrido.scenes.batch');
         Route::put('/recorrido/scenes/{scene}',       [TourAdminController::class, 'updateScene'])->name('recorrido.scenes.update');
+        Route::post('/recorrido/scenes/{scene}/principal', [TourAdminController::class, 'setInitialScene'])->name('recorrido.scenes.principal');
         Route::delete('/recorrido/scenes/{scene}',    [TourAdminController::class, 'destroyScene'])->name('recorrido.scenes.destroy');
         Route::get('/recorrido/scenes/{scene}/editor', [TourAdminController::class, 'editor'])->name('recorrido.editor');
 

@@ -1403,6 +1403,17 @@ function RecorridoTab({ tour, scenes = [], flash, basePath }) {
         });
     };
 
+    const marcarComoPrincipal = (sceneId) => {
+        setLocalScenes(prev => prev.map(s => ({
+            ...s,
+            es_escena_inicial: s.id === sceneId
+        })));
+        router.post(`${basePath}/recorrido/scenes/${sceneId}/principal`, {}, {
+            preserveState: true,
+            preserveScroll: true,
+        });
+    };
+
     return (
         <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800/80 rounded-2xl sm:rounded-[24px] p-4 sm:p-6 lg:p-8 shadow-sm">
             <Flash message={flash} />
@@ -1492,24 +1503,40 @@ function RecorridoTab({ tour, scenes = [], flash, basePath }) {
                                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                                     />
                                     {s.es_escena_inicial && (
-                                        <span className="absolute top-1 left-1 bg-[#800A15] text-white text-[9px] font-extrabold px-1.5 py-0.5 rounded shadow">
-                                            Inicial
+                                        <span className="absolute top-1 left-1 bg-amber-500 text-slate-950 text-[9px] font-extrabold px-1.5 py-0.5 rounded shadow flex items-center gap-0.5">
+                                            ⭐ Principal
                                         </span>
                                     )}
                                 </div>
 
                                 <div className="min-w-0">
-                                    <div className="flex items-center gap-2">
+                                    <div className="flex items-center gap-2 flex-wrap">
                                         <h3 className="font-extrabold text-slate-800 dark:text-slate-100 text-sm truncate">{s.nombre}</h3>
                                         <span className="bg-slate-200/80 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[10px] font-bold px-2 py-0.5 rounded-md shrink-0">
                                             {s.hotspots?.length || 0} puntos
                                         </span>
+                                        {s.es_escena_inicial && (
+                                            <span className="bg-amber-500/20 text-amber-600 dark:text-amber-400 border border-amber-400/30 text-[10px] font-extrabold px-2 py-0.5 rounded-md shrink-0 flex items-center gap-1">
+                                                ⭐ Escena Principal
+                                            </span>
+                                        )}
                                     </div>
                                     <p className="text-slate-400 text-xs mt-1 font-mono truncate">Slug: {s.slug}</p>
                                 </div>
                             </div>
 
-                            <div className="flex items-center gap-2.5 w-full sm:w-auto shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-200/60 dark:border-slate-800/60">
+                            <div className="flex flex-wrap items-center gap-2.5 w-full sm:w-auto shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-200/60 dark:border-slate-800/60">
+                                {!s.es_escena_inicial && (
+                                    <button
+                                        type="button"
+                                        onClick={() => marcarComoPrincipal(s.id)}
+                                        className="px-3 py-2 text-xs font-bold text-amber-600 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-900/20 rounded-xl transition cursor-pointer border border-amber-300/40 shrink-0 flex items-center gap-1"
+                                        title="Establecer como la imagen principal inicial del recorrido 360°"
+                                    >
+                                        ⭐ Marcar Principal
+                                    </button>
+                                )}
+
                                 <Link
                                     href={`${basePath}/recorrido/scenes/${s.id}/editor`}
                                     className="flex-1 sm:flex-initial bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-md shadow-blue-500/10 transition cursor-pointer flex items-center justify-center gap-1.5"
@@ -1557,8 +1584,8 @@ function RecorridoTab({ tour, scenes = [], flash, basePath }) {
                                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                                     />
                                     {s.es_escena_inicial && (
-                                        <span className="absolute top-2 left-2 bg-blue-600 text-white text-[10px] font-extrabold px-2 py-0.5 rounded-md shadow-md">
-                                            Escena Inicial
+                                        <span className="absolute top-2 left-2 bg-amber-500 text-slate-950 text-[10px] font-extrabold px-2 py-0.5 rounded-md shadow-md flex items-center gap-1">
+                                            ⭐ Escena Principal
                                         </span>
                                     )}
                                     <span className="absolute bottom-2 right-2 bg-slate-900/80 backdrop-blur-md text-slate-200 text-[10px] font-bold px-2 py-0.5 rounded-md border border-white/20">
@@ -1570,7 +1597,18 @@ function RecorridoTab({ tour, scenes = [], flash, basePath }) {
                                 <p className="text-slate-400 text-xs mt-0.5 font-mono">Slug: {s.slug}</p>
                             </div>
 
-                            <div className="flex items-center gap-2 mt-4 pt-3 border-t border-slate-200/60 dark:border-slate-800/60">
+                            <div className="flex flex-wrap items-center gap-2 mt-4 pt-3 border-t border-slate-200/60 dark:border-slate-800/60">
+                                {!s.es_escena_inicial && (
+                                    <button
+                                        type="button"
+                                        onClick={() => marcarComoPrincipal(s.id)}
+                                        className="px-2.5 py-2 text-xs font-bold text-amber-600 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-900/20 rounded-xl transition cursor-pointer border border-amber-300/40 flex items-center gap-1"
+                                        title="Establecer como la imagen principal del recorrido 360°"
+                                    >
+                                        ⭐ Principal
+                                    </button>
+                                )}
+
                                 <Link
                                     href={`${basePath}/recorrido/scenes/${s.id}/editor`}
                                     className="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-2 rounded-xl text-center shadow-md shadow-blue-500/10 transition cursor-pointer flex items-center justify-center gap-1.5"

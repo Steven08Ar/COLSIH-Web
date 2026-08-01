@@ -27,11 +27,6 @@ class TourAdminController extends Controller
             ]
         );
 
-        // Si el tour no tiene escenas guardadas aún, autogeneramos las escenas iniciales desde las imágenes disponibles
-        if ($tour->scenes()->count() === 0) {
-            $this->seedInitialScenes($tour);
-        }
-
         $scenes = $tour->scenes()->with('hotspots')->get();
 
         return Inertia::render('Admin/Dashboard', [
@@ -94,6 +89,8 @@ class TourAdminController extends Controller
             $slug = $baseSlug . '-' . Str::random(4);
         }
 
+        $esPrimera = $tour->scenes()->count() === 0;
+
         $scene = $tour->scenes()->create([
             'nombre' => $request->nombre,
             'slug' => $slug,
@@ -101,6 +98,7 @@ class TourAdminController extends Controller
             'yaw_inicial' => 0,
             'pitch_inicial' => 0,
             'hfov_inicial' => 100,
+            'es_escena_inicial' => $esPrimera,
             'orden' => $tour->scenes()->count() + 1,
         ]);
 
@@ -133,6 +131,8 @@ class TourAdminController extends Controller
                     $slug = $baseSlug . '-' . Str::random(4);
                 }
 
+                $esPrimera = ($currentCount + $savedCount) === 0;
+
                 $tour->scenes()->create([
                     'nombre' => $nombre,
                     'slug' => $slug,
@@ -140,6 +140,7 @@ class TourAdminController extends Controller
                     'yaw_inicial' => 0,
                     'pitch_inicial' => 0,
                     'hfov_inicial' => 100,
+                    'es_escena_inicial' => $esPrimera,
                     'orden' => $currentCount + $savedCount + 1,
                 ]);
 
@@ -148,6 +149,17 @@ class TourAdminController extends Controller
         }
 
         return back()->with('flash', "¡Se agregaron {$savedCount} escenas 360° en masa exitosamente!");
+    }
+
+    /**
+     * Establece una escena específica como la imagen principal del recorrido 360°.
+     */
+    public function setInitialScene(Scene $scene): RedirectResponse
+    {
+        Scene::where('tour_id', $scene->tour_id)->update(['es_escena_inicial' => false]);
+        $scene->update(['es_escena_inicial' => true]);
+
+        return back()->with('flash', "¡'{$scene->nombre}' fue configurada como la imagen principal del recorrido 360°!");
     }
 
     /**
@@ -163,9 +175,13 @@ class TourAdminController extends Controller
             'es_escena_inicial' => ['nullable', 'boolean'],
         ]);
 
+        if (!empty($validated['es_escena_inicial'])) {
+            Scene::where('tour_id', $scene->tour_id)->update(['es_escena_inicial' => false]);
+        }
+
         $scene->update(array_filter($validated, fn($val) => !is_null($val)));
 
-        return back()->with('flash', '¡Vista y encuadre inicial guardados exitosamente!');
+        return back()->with('flash', '¡Configuración de la escena guardada exitosamente!');
     }
 
     /**
@@ -176,36 +192,5 @@ class TourAdminController extends Controller
         $scene->delete();
 
         return back()->with('flash', 'Escena eliminada correctamente.');
-    }
-
-    /**
-     * Helper interno para sembrar escenas iniciales del proyecto si la BD está vacía.
-     */
-    private function seedInitialScenes(Tour $tour): void
-    {
-        $defaultScenes = [
-            ['nombre' => 'Entrada Principal', 'slug' => 'entrada', 'imagen_path' => 'recorrido_virtual/1.entrada.jpg', 'es_escena_inicial' => true],
-            ['nombre' => 'Lobby de Bienvenida', 'slug' => 'lobby', 'imagen_path' => 'recorrido_virtual/2.lobby.jpg'],
-            ['nombre' => 'Lobby Nivel Inferior', 'slug' => 'lobby-bajo', 'imagen_path' => 'recorrido_virtual/3.lobby_bajo.jpg'],
-            ['nombre' => 'Pasillo Cafetería', 'slug' => 'pasillo-cafeteria', 'imagen_path' => 'recorrido_virtual/3.pasillo_cafeteria.jpg'],
-            ['nombre' => 'Parque y Cafetería', 'slug' => 'cafeteria', 'imagen_path' => 'recorrido_virtual/4.parque_cafeteria.jpg'],
-            ['nombre' => 'Capilla Institucional', 'slug' => 'capilla', 'imagen_path' => 'recorrido_virtual/5.capilla.jpg'],
-            ['nombre' => 'Sala de Informática A', 'slug' => 'informatica-a', 'imagen_path' => 'recorrido_virtual/12.informatica_a.jpg'],
-            ['nombre' => 'Sala de Informática B', 'slug' => 'informatica-b', 'imagen_path' => 'recorrido_virtual/13.informatica_b.jpg'],
-            ['nombre' => 'Cancha Múltiple', 'slug' => 'cancha-pequena', 'imagen_path' => 'recorrido_virtual/18.cancha_pequeña.jpg'],
-            ['nombre' => 'Coliseo Deportivo', 'slug' => 'cancha-grande', 'imagen_path' => 'recorrido_virtual/19.cancha_grande.jpg'],
-            ['nombre' => 'Gimnasio Deportivo', 'slug' => 'gimnasio', 'imagen_path' => 'recorrido_virtual/34.gimnasio.jpg'],
-            ['nombre' => 'Biblioteca Institucional', 'slug' => 'biblioteca', 'imagen_path' => 'recorrido_virtual/38.biblioteca.jpg'],
-        ];
-
-        foreach ($defaultScenes as $idx => $s) {
-            $tour->scenes()->create([
-                'nombre' => $s['nombre'],
-                'slug' => $s['slug'],
-                'imagen_path' => $s['imagen_path'],
-                'es_escena_inicial' => $s['es_escena_inicial'] ?? false,
-                'orden' => $idx + 1,
-            ]);
-        }
     }
 }

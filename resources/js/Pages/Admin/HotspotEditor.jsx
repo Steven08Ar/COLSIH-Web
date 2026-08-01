@@ -15,8 +15,8 @@ const safeRoute = (name, params) => {
             return window.route(name, params);
         } catch (e) {}
     }
-    const adminPrefix = (typeof window !== 'undefined' && window.location.pathname.includes('/sih-panel-308'))
-        ? '/sih-panel-308'
+    const adminPrefix = (typeof window !== 'undefined')
+        ? '/' + window.location.pathname.split('/').filter(Boolean)[0]
         : '/panel-admin';
 
     switch (name) {

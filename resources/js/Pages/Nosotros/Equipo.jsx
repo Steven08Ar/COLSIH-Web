@@ -290,16 +290,16 @@ export default function Equipo() {
                         </div>
                     </div>
 
-                    {/* Area category sliding tabs */}
-                    <div className="flex items-center gap-2.5 overflow-x-auto pb-4 mb-8 no-scrollbar w-full select-none snap-x">
+                    {/* Barra de filtros envolvente para que no se recorte ninguna asignatura */}
+                    <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-2.5 mb-10 w-full select-none">
                         {areasList.map((areaName) => (
                             <button
                                 key={areaName}
                                 onClick={() => setSelectedArea(areaName)}
-                                className={`px-4.5 py-2.5 rounded-full font-bold text-xs uppercase tracking-wider shrink-0 snap-center transition-all duration-300 cursor-pointer ${
+                                className={`px-4 py-2 sm:px-4.5 sm:py-2.5 rounded-full font-extrabold text-[11px] sm:text-xs uppercase tracking-wider transition-all duration-300 cursor-pointer ${
                                     selectedArea === areaName
-                                        ? 'bg-[#800A15] text-white shadow-md'
-                                        : 'bg-white hover:bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800/80 text-slate-500 dark:text-slate-400'
+                                        ? 'bg-[#800A15] text-white shadow-md shadow-[#800A15]/20 scale-105'
+                                        : 'bg-white hover:bg-slate-100 dark:bg-slate-900 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:text-[#800A15]'
                                 }`}
                             >
                                 {areaName}
@@ -307,35 +307,40 @@ export default function Equipo() {
                         ))}
                     </div>
 
-                    {/* Compact & Organized Teachers Grid */}
+                    {/* Tarjetas de Docentes en Formato Retrato (Foto ocupa la mitad superior) */}
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
                         {profesoresFiltrados.map((prof, idx) => (
                             <motion.div 
                                 key={prof.nombre}
-                                initial={{ opacity: 0, scale: 0.95 }}
-                                animate={{ opacity: 1, scale: 1 }}
+                                initial={{ opacity: 0, y: 15 }}
+                                animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.3, delay: (idx % 15) * 0.03 }}
-                                className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800/80 rounded-2xl p-5 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col items-center text-center group"
+                                className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800/80 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between group"
                             >
-                                <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden mb-3.5 border-2 border-slate-100 dark:border-slate-800 group-hover:border-[#003C8F] transition-colors shadow-sm shrink-0 bg-slate-200 dark:bg-slate-800 flex items-center justify-center">
+                                {/* Foto de la mitad superior de la card */}
+                                <div className="w-full aspect-[4/5] bg-slate-100 dark:bg-slate-800 overflow-hidden relative flex items-center justify-center">
                                     {prof.foto ? (
                                         <img 
                                             src={prof.foto} 
                                             alt={prof.nombre} 
-                                            className="w-full h-full object-cover object-[center_20%]" 
+                                            className="w-full h-full object-cover object-[center_20%] group-hover:scale-105 transition-transform duration-500" 
                                         />
                                     ) : (
                                         <div className="w-full h-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-400 dark:text-slate-600">
-                                            <User className="w-9 h-9" />
+                                            <User className="w-12 h-12" />
                                         </div>
                                     )}
                                 </div>
-                                <h4 className="font-extrabold text-slate-900 dark:text-slate-100 text-xs sm:text-sm leading-snug min-h-[36px] flex items-center justify-center">
-                                    {prof.nombre}
-                                </h4>
-                                <span className="text-[11px] font-bold text-[#003C8F] dark:text-blue-400 mt-1.5 block">
-                                    {prof.asignatura}
-                                </span>
+
+                                {/* Informacion en la mitad inferior de la card */}
+                                <div className="p-4 text-center flex-1 flex flex-col justify-between bg-white dark:bg-slate-900">
+                                    <h4 className="font-extrabold text-slate-900 dark:text-slate-100 text-xs sm:text-sm leading-snug">
+                                        {prof.nombre}
+                                    </h4>
+                                    <span className="text-[11px] font-bold text-[#003C8F] dark:text-blue-400 mt-2 block">
+                                        {prof.asignatura}
+                                    </span>
+                                </div>
                             </motion.div>
                         ))}
                     </div>

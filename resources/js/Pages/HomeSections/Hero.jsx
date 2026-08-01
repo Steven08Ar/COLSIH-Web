@@ -358,11 +358,11 @@ export default function Hero({ setVideoOpen }) {
             </div>
 
             {/* Main Content Container (Figma grid aligned) */}
-            <div className="relative z-30 max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] w-full pt-24 pb-16">
+            <div className="relative z-30 max-w-[1680px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 w-full pt-24 pb-16">
                 <div className="grid grid-cols-12 gap-6 items-center">
 
-                    {/* Left Side Content (40% width / 5 columns) */}
-                    <div className="col-span-12 md:col-span-6 lg:col-span-5 space-y-8 text-left">
+                    {/* Left Side Content (shifted left) */}
+                    <div className="col-span-12 md:col-span-7 lg:col-span-6 space-y-8 text-left -ml-1 sm:-ml-2 lg:-ml-4">
                         {/* Headline con tipografias y colores combinados */}
                         <h1 className="text-4xl sm:text-5xl lg:text-[64px] xl:text-[72px] font-black text-white leading-[1.1] tracking-tight font-sans animate-fadeIn">
                             {/* Linea 1: Formamos */}

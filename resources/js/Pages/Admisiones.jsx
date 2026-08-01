@@ -1,6 +1,7 @@
 import { Head, Link } from '@inertiajs/react';
 import AppLayout from '@/Layouts/AppLayout';
 import ScrollReveal from './HomeSections/ScrollReveal';
+import { Sparkles } from 'lucide-react';
 
 const pasos = [
     {
@@ -82,7 +83,16 @@ export default function Admisiones() {
 
                 <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] relative z-10 text-center lg:text-left">
                     <div className="max-w-3xl mx-auto lg:mx-0 space-y-6 flex flex-col items-center lg:items-start">
+                        
+                        {/* Letrero "PRÓXIMAMENTE 2027..." justo encima de "Tu camino a COLSIH" */}
                         <ScrollReveal distance="translate-y-6">
+                            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-400/20 border border-amber-400/40 text-amber-300 text-xs font-black tracking-widest uppercase mb-1 shadow-lg backdrop-blur-md animate-pulse">
+                                <Sparkles className="w-4 h-4 text-amber-300" />
+                                PRÓXIMAMENTE 2027...
+                            </div>
+                        </ScrollReveal>
+
+                        <ScrollReveal distance="translate-y-6" delay={100}>
                             <span className="text-[#800A15] text-xs md:text-[13px] font-bold tracking-[3px] uppercase block font-sans">
                                 PROCESO DE MATRÍCULA
                             </span>
@@ -177,36 +187,31 @@ export default function Admisiones() {
                                     Cupos Disponibles
                                 </h2>
                             </ScrollReveal>
-                            <ScrollReveal distance="translate-y-6" delay={300}>
-                                <p className="text-[15px] font-semibold text-slate-500 leading-relaxed font-sans">
-                                    Las inscripciones para el año lectivo 2027 están abiertas desde Jardín hasta Sexto. El proceso cierra al completarse los cupos disponibles.
-                                </p>
-                            </ScrollReveal>
                         </div>
 
-                        <div className="lg:col-span-8 space-y-6">
-                            {fechas.map((etapa, idx) => (
-                                <ScrollReveal key={idx} distance="translate-x-6" delay={idx * 100}>
-                                    <div className="p-6 bg-white border border-slate-200/50 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-left hover:border-slate-300 transition-all duration-300">
-                                        <div className="space-y-1">
-                                            <h3 className="font-extrabold text-[15px] text-[#08111F] font-sans">
-                                                {etapa.etapa}
-                                            </h3>
-                                            <span className="block text-xl font-black text-[#003C8F] font-sans">
-                                                {etapa.fecha}
-                                            </span>
-                                        </div>
-                                        <span className="px-3.5 py-1.5 bg-slate-50 border border-slate-100 text-slate-500 rounded-full text-xs font-extrabold uppercase tracking-wider shrink-0 font-sans">
-                                            {etapa.estado}
+                        <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-3 gap-6 w-full">
+                            {fechas.map((item, idx) => (
+                                <ScrollReveal key={idx} distance="translate-y-8" delay={idx * 150} className="h-full">
+                                    <div className="p-6 border border-slate-200/80 bg-white rounded-3xl space-y-3 shadow-sm h-full flex flex-col justify-between text-left">
+                                        <span className="text-xs font-extrabold uppercase tracking-wider text-[#003C8F] font-sans">
+                                            {item.estado}
                                         </span>
+                                        <div className="space-y-1">
+                                            <h3 className="text-base font-extrabold text-[#08111F] font-sans">
+                                                {item.etapa}
+                                            </h3>
+                                            <p className="text-xs font-semibold text-slate-500 font-sans">
+                                                {item.fecha}
+                                            </p>
+                                        </div>
                                     </div>
                                 </ScrollReveal>
                             ))}
                         </div>
                     </div>
 
-                    {/* Horarios por nivel */}
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
+                    {/* Horarios */}
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start pt-8 border-t border-slate-200/60">
                         <div className="lg:col-span-4 text-center lg:text-left space-y-4 flex flex-col items-center lg:items-start">
                             <ScrollReveal distance="translate-y-6">
                                 <span className="text-[#003C8F] text-xs font-bold tracking-[3px] uppercase block font-sans">
@@ -215,67 +220,68 @@ export default function Admisiones() {
                             </ScrollReveal>
                             <ScrollReveal distance="translate-y-6" delay={150}>
                                 <h2 className="text-3xl sm:text-4xl font-black text-[#08111F] leading-[1.1] tracking-tight font-sans">
-                                    Horarios por Nivel
+                                    Horarios Escolares
                                 </h2>
                             </ScrollReveal>
                         </div>
-                        <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-3 gap-6">
-                            {horarios.map((h, idx) => (
-                                <ScrollReveal key={idx} distance="translate-y-6" delay={idx * 120}>
-                                    <div className="p-6 bg-white border border-slate-200/50 rounded-2xl text-left space-y-3 hover:border-slate-300 transition-all duration-300">
-                                        <div className="space-y-0.5">
-                                            <h3 className="font-black text-[#08111F] text-[15px] font-sans">{h.nivel}</h3>
-                                            <span className="block text-xs font-bold text-slate-400 uppercase tracking-wider font-sans">{h.grados}</span>
-                                        </div>
-                                        <div className="pt-2 border-t border-slate-100">
-                                            <span className="block text-[17px] font-black text-[#003C8F] font-sans">{h.horario}</span>
+
+                        <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-3 gap-6 w-full">
+                            {horarios.map((item, idx) => (
+                                <ScrollReveal key={idx} distance="translate-y-8" delay={idx * 150} className="h-full">
+                                    <div className="p-6 border border-slate-200/80 bg-white rounded-3xl space-y-3 shadow-sm h-full flex flex-col justify-between text-left">
+                                        <span className="text-xs font-extrabold uppercase tracking-wider text-[#800A15] font-sans">
+                                            {item.nivel}
+                                        </span>
+                                        <div className="space-y-1">
+                                            <h3 className="text-base font-extrabold text-[#08111F] font-sans">
+                                                {item.grados}
+                                            </h3>
+                                            <p className="text-xs font-semibold text-[#003C8F] font-sans">
+                                                {item.horario}
+                                            </p>
                                         </div>
                                     </div>
                                 </ScrollReveal>
                             ))}
                         </div>
                     </div>
+
                 </div>
             </section>
 
             {/* 4. DOCUMENTOS REQUERIDOS */}
             <section className="relative py-24 md:py-32 bg-white overflow-hidden select-none">
-                <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] space-y-20">
-
+                <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] space-y-16">
                     <div className="max-w-2xl mx-auto lg:mx-0 text-center lg:text-left space-y-4 flex flex-col items-center lg:items-start">
                         <ScrollReveal distance="translate-y-6">
-                            <span className="text-[#003C8F] text-xs font-bold tracking-[3px] uppercase block font-sans">
-                                DOCUMENTACIÓN
+                            <span className="text-[#800A15] text-xs font-bold tracking-[3px] uppercase block font-sans">
+                                REQUISITOS
                             </span>
                         </ScrollReveal>
                         <ScrollReveal distance="translate-y-6" delay={150}>
                             <h2 className="text-3xl sm:text-4xl lg:text-[50px] font-black text-[#08111F] leading-[1.1] tracking-tight font-sans">
-                                Documentos Requeridos
+                                Documentos según nivel
                             </h2>
-                        </ScrollReveal>
-                        <ScrollReveal distance="translate-y-6" delay={300}>
-                            <p className="text-[15px] font-semibold text-slate-500 leading-relaxed font-sans">
-                                Los requisitos varían según el nivel al que ingresa el estudiante. Prepara con anticipación los documentos de tu nivel.
-                            </p>
                         </ScrollReveal>
                     </div>
 
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                        {documentos.map((cat, idx) => (
-                            <ScrollReveal key={idx} distance="translate-y-6" delay={idx * 150} className="h-full">
-                                <div className="p-8 border border-slate-100 rounded-3xl bg-white space-y-6 h-full hover:border-slate-200 transition-colors duration-300 text-left flex flex-col">
-                                    <div className="space-y-1">
-                                        <h3 className="text-xl font-black text-[#08111F] flex items-center gap-2 font-sans">
-                                            <span className="w-1.5 h-6 rounded-full bg-[#800A15]" />
-                                            {cat.categoria}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        {documentos.map((doc, idx) => (
+                            <ScrollReveal key={idx} distance="translate-y-8" delay={idx * 150} className="h-full">
+                                <div className="border border-slate-100 p-8 rounded-3xl bg-slate-50/50 space-y-6 h-full text-left">
+                                    <div className="space-y-1 border-b border-slate-200/60 pb-4">
+                                        <span className="text-xs font-extrabold uppercase tracking-wider text-[#003C8F] font-sans">
+                                            {doc.categoria}
+                                        </span>
+                                        <h3 className="text-lg font-black text-[#08111F] font-sans">
+                                            {doc.nivel}
                                         </h3>
-                                        <span className="block text-xs font-bold text-slate-400 uppercase tracking-wider pl-4 font-sans">{cat.nivel}</span>
                                     </div>
-                                    <ul className="space-y-3 flex-1">
-                                        {cat.items.map((item, iIdx) => (
-                                            <li key={iIdx} className="text-[13px] font-semibold text-slate-500 leading-relaxed font-sans flex items-start gap-2">
-                                                <span className="text-[#003C8F] font-bold shrink-0 mt-0.5">•</span>
-                                                <span>{item}</span>
+                                    <ul className="space-y-3">
+                                        {doc.items.map((item, i) => (
+                                            <li key={i} className="flex items-start gap-3 text-xs font-semibold text-slate-600 leading-relaxed font-sans">
+                                                <span className="w-1.5 h-1.5 rounded-full bg-[#800A15] mt-1.5 shrink-0" />
+                                                {item}
                                             </li>
                                         ))}
                                     </ul>
@@ -283,72 +289,48 @@ export default function Admisiones() {
                             </ScrollReveal>
                         ))}
                     </div>
-
-                    <ScrollReveal distance="translate-y-6" className="p-6 bg-slate-50 border border-slate-100 rounded-2xl text-left">
-                        <p className="text-xs font-semibold text-slate-500 leading-relaxed font-sans">
-                            <strong className="text-[#08111F]">Nota:</strong> El recibo de pago y toda la información complementaria serán enviados al correo electrónico registrado en el formulario de inscripción.
-                        </p>
-                    </ScrollReveal>
                 </div>
             </section>
 
-            {/* 5. DESTACADOS (Inglés, Becas, Título Técnico) */}
-            <section className="relative py-20 bg-[#08111F] overflow-hidden select-none">
-                <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] space-y-12">
-                    <div className="text-center lg:text-left flex flex-col items-center lg:items-start space-y-3">
+            {/* 5. DESTACADOS COLSIH */}
+            <section className="relative py-24 bg-gradient-to-r from-[#003C8F] via-blue-900 to-[#800A15] text-white overflow-hidden select-none">
+                <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] space-y-16">
+                    <div className="max-w-2xl mx-auto lg:mx-0 text-center lg:text-left space-y-4 flex flex-col items-center lg:items-start">
                         <ScrollReveal distance="translate-y-6">
-                            <span className="text-[#800A15] text-xs font-bold tracking-[3px] uppercase block font-sans">
-                                ¿POR QUÉ COLSIH?
+                            <span className="text-amber-400 text-xs font-bold tracking-[3px] uppercase block font-sans">
+                                BENEFICIOS INSTITUCIONALES
                             </span>
                         </ScrollReveal>
                         <ScrollReveal distance="translate-y-6" delay={150}>
-                            <h2 className="text-3xl sm:text-4xl font-black text-white leading-[1.1] tracking-tight font-sans">
-                                Lo que distingue a nuestros egresados
+                            <h2 className="text-3xl sm:text-4xl lg:text-[48px] font-black text-white leading-[1.1] tracking-tight font-sans">
+                                ¿Por qué elegir COLSIH?
                             </h2>
                         </ScrollReveal>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        {destacados.map((d, idx) => (
-                            <ScrollReveal key={idx} distance="translate-y-6" delay={idx * 150}>
-                                <div className="p-8 border border-white/10 rounded-2xl bg-white/5 hover:bg-white/10 transition-all duration-300 text-left space-y-3">
-                                    <h3 className="text-[17px] font-black text-white font-sans">{d.titulo}</h3>
-                                    <p className="text-[13px] font-semibold text-slate-400 leading-relaxed font-sans">{d.descripcion}</p>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        {destacados.map((item, idx) => (
+                            <ScrollReveal key={idx} distance="translate-y-8" delay={idx * 150} className="h-full">
+                                <div className="p-8 border border-white/10 bg-white/5 rounded-3xl space-y-4 backdrop-blur-md h-full text-left">
+                                    <h3 className="text-xl font-black text-amber-300 font-sans">
+                                        {item.titulo}
+                                    </h3>
+                                    <p className="text-sm font-medium text-slate-200 leading-relaxed font-sans">
+                                        {item.descripcion}
+                                    </p>
                                 </div>
                             </ScrollReveal>
                         ))}
                     </div>
-                </div>
-            </section>
 
-            {/* 6. SECCIÓN FINAL CTA */}
-            <section className="relative py-24 bg-white overflow-hidden select-none border-t border-slate-100">
-                <div className="max-w-[1000px] mx-auto px-6 text-center space-y-10">
-                    <div className="space-y-4">
-                        <ScrollReveal distance="translate-y-6">
-                            <span className="text-[#003C8F] text-xs font-bold tracking-[3px] uppercase block font-sans">
-                                FORMULARIO EN LÍNEA
-                            </span>
-                        </ScrollReveal>
-                        <ScrollReveal distance="translate-y-6" delay={150}>
-                            <h2 className="text-3xl sm:text-4xl lg:text-[48px] font-black text-[#08111F] leading-[1.1] tracking-tight font-sans">
-                                Asegura el cupo de tu hijo en COLSIH
-                            </h2>
-                        </ScrollReveal>
-                        <ScrollReveal distance="translate-y-6" delay={300}>
-                            <p className="text-[15px] md:text-lg font-semibold text-slate-500 leading-relaxed font-sans max-w-2xl mx-auto">
-                                Los cupos son limitados. Inscríbete a través de nuestra página web y recibe toda la información directamente en tu correo.
-                            </p>
-                        </ScrollReveal>
-                    </div>
-
-                    <ScrollReveal distance="translate-y-6" delay={450} className="flex flex-col sm:flex-row justify-center items-center gap-4">
-                        <a href="https://colsih.edu.co" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto px-8 py-4 bg-[#003C8F] hover:bg-[#08111F] text-white font-extrabold text-xs tracking-wider uppercase rounded-full shadow-md hover:shadow-lg transition-all duration-300 font-sans cursor-pointer">
-                            Inscribirse en colsih.edu.co
-                        </a>
-                        <Link href="/contacto" className="w-full sm:w-auto px-8 py-4 bg-white border border-slate-200 hover:border-slate-400 text-[#08111F] font-extrabold text-xs tracking-wider uppercase rounded-full transition-all duration-300 font-sans cursor-pointer">
-                            Contactar al Colegio
+                    <div className="text-center pt-8">
+                        <Link
+                            href="/contacto"
+                            className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-white text-[#003C8F] font-extrabold text-sm uppercase tracking-wider hover:bg-amber-300 hover:text-slate-900 transition-all duration-300 shadow-xl cursor-pointer"
+                        >
+                            Solicitar Asesoría de Admisiones
                         </Link>
-                    </ScrollReveal>
+                    </div>
                 </div>
             </section>
         </AppLayout>

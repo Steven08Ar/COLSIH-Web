@@ -2,6 +2,7 @@ import { Head } from '@inertiajs/react';
 import { useEffect } from 'react';
 import AppLayout from '@/Layouts/AppLayout';
 import ScrollReveal from './HomeSections/ScrollReveal';
+import { Construction, Sparkles } from 'lucide-react';
 
 export default function Mjs() {
     useEffect(() => {
@@ -16,6 +17,7 @@ export default function Mjs() {
         setFavicon('/marca/logo-mjs.svg');
         return () => setFavicon('/marca/logo-colsih.svg');
     }, []);
+
     const groups = [
         {
             num: "01",
@@ -23,7 +25,7 @@ export default function Mjs() {
             tagline: "Protagonismo y animación",
             description: "Formación integral en liderazgo cristiano y salesiano. Nuestros jóvenes se capacitan para animar campamentos, dirigir dinámicas grupales y ser motores de cambio alegre en la institución.",
             color: "border-t-[#003C8F]",
-            glowColor: "hover:border-[#003C8F]/20 hover:shadow-[0_20px_50px_rgba(0, 60, 143,0.03)]"
+            glowColor: "hover:border-[#003C8F]/20 hover:shadow-[0_20px_50px_rgba(0,60,143,0.03)]"
         },
         {
             num: "02",
@@ -31,7 +33,7 @@ export default function Mjs() {
             tagline: "Liturgia y espiritualidad",
             description: "Jóvenes comprometidos con el servicio litúrgico del altar. Fomentan la oración comunitaria, la solemnidad en las celebraciones eucarísticas institucionales y el crecimiento espiritual.",
             color: "border-t-[#800A15]",
-            glowColor: "hover:border-[#800A15]/20 hover:shadow-[0_20px_50px_rgba(128, 10, 21,0.03)]"
+            glowColor: "hover:border-[#800A15]/20 hover:shadow-[0_20px_50px_rgba(128,10,21,0.03)]"
         },
         {
             num: "03",
@@ -39,7 +41,7 @@ export default function Mjs() {
             tagline: "Semillero de amor al prójimo",
             description: "Grupo asociativo para los más pequeños del colegio. Aprenden a compartir la fe, a ser solidarios con los más necesitados y a vivir el espíritu misionero salesiano.",
             color: "border-t-[#003C8F]",
-            glowColor: "hover:border-[#003C8F]/20 hover:shadow-[0_20px_50px_rgba(0, 60, 143,0.03)]"
+            glowColor: "hover:border-[#003C8F]/20 hover:shadow-[0_20px_50px_rgba(0,60,143,0.03)]"
         },
         {
             num: "04",
@@ -47,7 +49,7 @@ export default function Mjs() {
             tagline: "Constructores de paz (Laudato Si')",
             description: "Inspirados en la ecología integral y la cultura del encuentro, este grupo promueve la mediación escolar de conflictos, el cuidado de la casa común y campañas de reciclaje activo.",
             color: "border-t-[#800A15]",
-            glowColor: "hover:border-[#800A15]/20 hover:shadow-[0_20px_50px_rgba(128, 10, 21,0.03)]"
+            glowColor: "hover:border-[#800A15]/20 hover:shadow-[0_20px_50px_rgba(128,10,21,0.03)]"
         }
     ];
 
@@ -57,11 +59,20 @@ export default function Mjs() {
 
             {/* Hero MJS Header Block */}
             <section className="relative min-h-[500px] flex items-center pt-40 pb-20 bg-[#08111F] text-left select-none overflow-hidden border-b border-white/5">
-                <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_top_right,rgba(0, 60, 143,0.15)_0%,transparent_50%)]"></div>
+                <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_top_right,rgba(0,60,143,0.15)_0%,transparent_50%)]"></div>
                 <div className="max-w-[1680px] mx-auto px-4 sm:px-6 md:px-12 lg:px-[120px] relative z-10 w-full grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
                     
                     <div className="col-span-full lg:col-span-8 space-y-6 text-center lg:text-left flex flex-col items-center lg:items-start">
+                        
+                        {/* Letrero "SECCIÓN EN DESARROLLO" */}
                         <ScrollReveal distance="translate-y-6">
+                            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/20 border border-amber-400/40 text-amber-300 text-xs font-black tracking-widest uppercase mb-1 shadow-lg backdrop-blur-md animate-pulse">
+                                <Construction className="w-4 h-4 text-amber-400" />
+                                SECCIÓN EN DESARROLLO · PRÓXIMAMENTE
+                            </div>
+                        </ScrollReveal>
+
+                        <ScrollReveal distance="translate-y-6" delay={100}>
                             <span className="text-[#800A15] text-[13px] font-bold tracking-[3px] uppercase block font-sans">
                                 PASTORAL JUVENIL
                             </span>
@@ -80,9 +91,9 @@ export default function Mjs() {
 
                     <div className="col-span-full lg:col-span-4 flex justify-center lg:justify-end">
                         <ScrollReveal distance="scale-90" delay={450}>
-                            <div className="w-48 h-48 md:w-56 md:h-56 bg-white/5 rounded-full flex items-center justify-center p-6 border border-white/10 backdrop-blur-md">
+                            <div className="w-48 h-48 md:w-56 md:h-56 bg-white/5 rounded-full flex items-center justify-center p-6 border border-white/10 backdrop-blur-md relative">
                                 <img 
-                                    src="/Logo-MJS.svg" 
+                                    src="/marca/logo-mjs.svg" 
                                     alt="MJS Colombia Logo" 
                                     className="w-full h-full object-contain animate-fadeIn"
                                 />
@@ -93,47 +104,54 @@ export default function Mjs() {
                 </div>
             </section>
 
+            {/* Aviso Destacado de Desarrollo */}
+            <section className="bg-amber-500/10 border-b border-amber-500/20 py-4 px-6">
+                <div className="max-w-[1680px] mx-auto px-4 sm:px-6 md:px-12 lg:px-[120px] flex items-center justify-center gap-3 text-center">
+                    <Sparkles className="w-5 h-5 text-amber-500 shrink-0" />
+                    <p className="text-xs sm:text-sm font-bold text-amber-700 dark:text-amber-300">
+                        Esta plataforma interactiva del Movimiento Juvenil Salesiano se encuentra en fase de desarrollo activo. Pronto podrás registrarte en grupos asociativos y acceder a galerías de eventos.
+                    </p>
+                </div>
+            </section>
+
             {/* MJS Groups section */}
             <section className="relative py-24 lg:py-32 bg-white overflow-hidden select-none border-b border-slate-100">
                 <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] space-y-20">
                     
                     {/* Header */}
-                    <div className="max-w-2xl mx-auto lg:mx-0 text-center lg:text-left space-y-4 flex flex-col items-center lg:items-start">
+                    <div className="max-w-2xl text-left space-y-4">
                         <ScrollReveal distance="translate-y-6">
-                            <span className="text-[#003C8F] text-[13px] font-bold tracking-[3px] uppercase block font-sans">
+                            <span className="text-[#003C8F] text-xs font-bold tracking-[3px] uppercase block font-sans">
                                 GRUPOS ASOCIATIVOS
                             </span>
                         </ScrollReveal>
                         <ScrollReveal distance="translate-y-6" delay={150}>
-                            <h2 className="text-3xl sm:text-4xl lg:text-[46px] font-black text-[#08111F] leading-[1.1] tracking-tight font-sans">
-                                Nuestras experiencias de vida asociativa
+                            <h2 className="text-3xl sm:text-4xl lg:text-[48px] font-black text-[#08111F] leading-[1.1] tracking-tight font-sans">
+                                Líneas de acción y experiencia MJS
                             </h2>
                         </ScrollReveal>
                     </div>
 
-                    {/* Groups Grid */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                        {groups.map((group, index) => (
-                            <ScrollReveal 
-                                key={index}
-                                distance="translate-y-8"
-                                delay={index * 100}
-                                className="h-full"
-                            >
-                                <div className={`h-full border border-slate-100 border-t-[3px] ${group.color} p-8 rounded-3xl bg-[#FAFAFA] transition-all duration-500 relative flex flex-col justify-between hover:-translate-y-2 group overflow-hidden ${group.glowColor}`}>
-                                    <div className="space-y-6 text-left">
-                                        <span className="block text-4xl font-light text-slate-300 group-hover:text-[#003C8F] transition-colors duration-300 font-sans tracking-tighter">
-                                            {group.num}
-                                        </span>
-                                        <div className="space-y-2">
-                                            <h3 className="font-extrabold text-[19px] text-[#08111F] group-hover:text-[#003C8F] transition-colors duration-300">
-                                                {group.name}
+                    {/* Cards grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        {groups.map((item, idx) => (
+                            <ScrollReveal key={idx} distance="translate-y-8" delay={idx * 150} className="h-full">
+                                <div className={`group border border-slate-100 ${item.color} border-t-4 p-8 sm:p-10 rounded-3xl bg-slate-50/50 hover:bg-white ${item.glowColor} transition-all duration-500 flex flex-col justify-between h-full text-left`}>
+                                    <div className="space-y-6">
+                                        <div className="flex justify-between items-center">
+                                            <span className="text-3xl font-black text-[#08111F]/20 group-hover:text-[#08111F]/40 transition-colors font-sans">
+                                                {item.num}
+                                            </span>
+                                            <span className="text-[11px] font-extrabold uppercase tracking-widest text-[#800A15] bg-[#800A15]/10 px-3 py-1 rounded-full font-sans">
+                                                {item.tagline}
+                                            </span>
+                                        </div>
+                                        <div className="space-y-3">
+                                            <h3 className="text-xl sm:text-2xl font-black text-[#08111F] font-sans group-hover:text-[#003C8F] transition-colors">
+                                                {item.name}
                                             </h3>
-                                            <p className="text-xs font-extrabold text-[#800A15] tracking-widest uppercase">
-                                                {group.tagline}
-                                            </p>
-                                            <p className="text-sm font-semibold text-slate-500 leading-relaxed pt-2">
-                                                {group.description}
+                                            <p className="text-sm font-semibold text-slate-500 leading-relaxed font-sans">
+                                                {item.description}
                                             </p>
                                         </div>
                                     </div>

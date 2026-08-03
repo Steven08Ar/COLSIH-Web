@@ -124,6 +124,10 @@ Route::prefix($adminPath)->name('admin.')->group(function () {
         Route::put('/equipo/{member}',                [App\Http\Controllers\Admin\EquipoAdminController::class, 'update'])->name('equipo.update');
         Route::delete('/equipo/{member}',             [App\Http\Controllers\Admin\EquipoAdminController::class, 'destroy'])->name('equipo.destroy');
 
+        // Mantenimiento y Comandos del Sistema (Artisan / cPanel)
+        Route::get('/mantenimiento',                  [App\Http\Controllers\Admin\SystemAdminController::class, 'index'])->name('mantenimiento');
+        Route::post('/sistema/ejecutar-comando',      [App\Http\Controllers\Admin\SystemAdminController::class, 'runCommand'])->name('sistema.comando');
+
         // Redirect raíz → testimonios
         Route::get('/', fn() => redirect()->route('admin.testimonios'))->name('dashboard');
     });

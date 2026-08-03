@@ -1,7 +1,7 @@
-import { Head, Link, useForm, router } from '@inertiajs/react';
+import { Head, Link, useForm, router, usePage } from '@inertiajs/react';
 import { useState, useEffect, useRef } from 'react';
 import PageBuilder from './PageBuilder/PageBuilder';
-import { Sun, Moon, Eye, Move, ZoomIn, Camera, User, X, Check, Upload, ArrowUp, ArrowDown, ArrowLeft, ArrowRight, Plus, Minus, Trash2 } from 'lucide-react';
+import { Sun, Moon, Eye, Move, ZoomIn, Camera, User, X, Check, Upload, ArrowUp, ArrowDown, ArrowLeft, ArrowRight, Plus, Minus, Trash2, Terminal, Server, RefreshCw, Database, HardDrive, ShieldAlert, Cpu, Copy, Play } from 'lucide-react';
 import { processImageFile } from '@/utils/heicConverter';
 
 /* ── helpers ── */
@@ -2588,16 +2588,306 @@ function EquipoTab({ equipo = [], flash }) {
     );
 }
 
+/* ── 6. Mantenimiento y Comandos del Sistema (cPanel / Artisan) ── */
+function MantenimientoTab({ flash, flash_error, command_output, basePath }) {
+    const [executing, setExecuting] = useState(null);
+    const [copied, setCopied] = useState(false);
+    const [confirmModal, setConfirmModal] = useState(null);
+
+    const comandos = [
+        {
+            key: 'migrate',
+            title: 'php artisan migrate --force',
+            desc: 'Ejecuta todas las migraciones pendientes en la base de datos de producción.',
+            cat: 'Base de Datos',
+            badge: 'Acción Crítica',
+            icon: Database,
+            color: 'blue',
+            requiresConfirm: true,
+        },
+        {
+            key: 'cache_clear',
+            title: 'php artisan cache:clear',
+            desc: 'Elimina la caché general almacenada en la aplicación.',
+            cat: 'Caché',
+            badge: 'Seguro',
+            icon: RefreshCw,
+            color: 'emerald',
+            requiresConfirm: false,
+        },
+        {
+            key: 'view_clear',
+            title: 'php artisan view:clear',
+            desc: 'Limpia la caché de plantillas Blade e Inertia renderizadas.',
+            cat: 'Caché',
+            badge: 'Seguro',
+            icon: Eye,
+            color: 'amber',
+            requiresConfirm: false,
+        },
+        {
+            key: 'route_clear',
+            title: 'php artisan route:clear',
+            desc: 'Limpia la caché de rutas del sistema.',
+            cat: 'Caché',
+            badge: 'Seguro',
+            icon: Cpu,
+            color: 'indigo',
+            requiresConfirm: false,
+        },
+        {
+            key: 'config_clear',
+            title: 'php artisan config:clear',
+            desc: 'Elimina la caché de configuración para leer variables .env actualizadas.',
+            cat: 'Caché',
+            badge: 'Seguro',
+            icon: Server,
+            color: 'purple',
+            requiresConfirm: false,
+        },
+        {
+            key: 'optimize_clear',
+            title: 'php artisan optimize:clear',
+            desc: 'Limpia de un solo paso todas las cachés: vistas, rutas, eventos y configuración.',
+            cat: 'Caché Global',
+            badge: 'Recomendado al Actualizar',
+            icon: HardDrive,
+            color: 'rose',
+            requiresConfirm: false,
+        },
+        {
+            key: 'storage_link',
+            title: 'php artisan storage:link',
+            desc: 'Crea el enlace simbólico entre public/storage y storage/app/public en cPanel.',
+            cat: 'Almacenamiento',
+            badge: 'cPanel útil',
+            icon: Upload,
+            color: 'cyan',
+            requiresConfirm: false,
+        },
+        {
+            key: 'seed_equipo',
+            title: 'php artisan db:seed --class=EquipoSeeder',
+            desc: 'Re-pobla y restaura la información inicial del equipo institucional.',
+            cat: 'Base de Datos',
+            badge: 'Restauración',
+            icon: User,
+            color: 'orange',
+            requiresConfirm: true,
+        },
+    ];
+
+    function ejecutar(cmdKey) {
+        setExecuting(cmdKey);
+        setConfirmModal(null);
+        router.post(`${basePath}/sistema/ejecutar-comando`, { action: cmdKey }, {
+            onFinish: () => setExecuting(null),
+        });
+    }
+
+    function handleRequest(cmd) {
+        if (cmd.requiresConfirm) {
+            setConfirmModal(cmd);
+        } else {
+            ejecutar(cmd.key);
+        }
+    }
+
+    function copiarConsola(text) {
+        navigator.clipboard.writeText(text);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+    }
+
+    return (
+        <div className="space-y-8 animate-fadeIn">
+            <Flash message={flash} />
+            {flash_error && (
+                <div className="p-4 bg-rose-50 border border-rose-200 text-rose-700 text-xs font-bold rounded-2xl flex items-center gap-2 shadow-sm">
+                    <ShieldAlert className="w-5 h-5 text-rose-500 shrink-0" />
+                    <span>{flash_error}</span>
+                </div>
+            )}
+
+            {/* Header del Tab */}
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800/80 p-6 rounded-3xl shadow-sm">
+                <div>
+                    <h2 className="text-xl font-black text-slate-900 dark:text-white leading-tight flex items-center gap-2.5">
+                        <Terminal className="w-6 h-6 text-blue-600" />
+                        <span>Mantenimiento del Servidor y Comandos Artisan (cPanel)</span>
+                    </h2>
+                    <p className="text-xs font-medium text-slate-500 dark:text-slate-400 mt-1">
+                        Ejecuta funciones PHP de mantenimiento en un solo clic sin necesidad de acceso SSH ni terminal en el hosting cPanel.
+                    </p>
+                </div>
+                <button
+                    onClick={() => ejecutar('optimize_clear')}
+                    disabled={!!executing}
+                    className="px-5 py-2.5 bg-rose-600 hover:bg-rose-700 text-white text-xs font-extrabold rounded-2xl shadow-md transition-all duration-300 hover:scale-105 shrink-0 cursor-pointer flex items-center gap-2 disabled:opacity-50"
+                >
+                    <RefreshCw className={`w-4 h-4 ${executing === 'optimize_clear' ? 'animate-spin' : ''}`} />
+                    <span>Limpiar Toda la Caché</span>
+                </button>
+            </div>
+
+            {/* Consola interactiva de salida de Artisan */}
+            {command_output && (
+                <div className="bg-slate-950 border border-slate-800 rounded-3xl p-5 shadow-2xl space-y-3 font-mono text-xs animate-fadeIn">
+                    <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+                        <div className="flex items-center gap-2 text-slate-300 font-bold">
+                            <Terminal className="w-4 h-4 text-emerald-400" />
+                            <span>Consola de Salida Artisan</span>
+                            <span className="text-[10px] text-slate-500 font-normal">[{command_output.executed_at}]</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <button
+                                onClick={() => copiarConsola(command_output.output)}
+                                className="px-3 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 text-[11px] font-bold rounded-lg transition cursor-pointer flex items-center gap-1.5"
+                            >
+                                <Copy className="w-3.5 h-3.5 text-blue-400" />
+                                <span>{copied ? '¡Copiado!' : 'Copiar Salida'}</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div className="flex items-center gap-2 text-emerald-400 font-bold text-[11px]">
+                        <span>$ {command_output.label || command_output.command}</span>
+                        <span className={`px-2 py-0.5 rounded text-[10px] ${command_output.exitCode === 0 ? 'bg-emerald-950 text-emerald-300 border border-emerald-800' : 'bg-rose-950 text-rose-300 border border-rose-800'}`}>
+                            {command_output.exitCode === 0 ? 'EXIT 0 (Éxito)' : `EXIT ${command_output.exitCode} (Error)`}
+                        </span>
+                    </div>
+
+                    <pre className="p-4 bg-black/60 rounded-xl text-slate-200 overflow-x-auto max-h-80 overflow-y-auto text-[11px] leading-relaxed whitespace-pre-wrap border border-slate-800/80">
+                        {command_output.output}
+                    </pre>
+                </div>
+            )}
+
+            {/* Grid de Botones de Comandos */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+                {comandos.map((cmd) => {
+                    const Icon = cmd.icon;
+                    const isRunning = executing === cmd.key;
+
+                    return (
+                        <div
+                            key={cmd.key}
+                            className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800/80 rounded-3xl p-5 shadow-sm hover:shadow-xl hover:scale-[1.02] transition-all duration-300 flex flex-col justify-between space-y-4"
+                        >
+                            <div className="space-y-2.5">
+                                <div className="flex items-center justify-between">
+                                    <div className="w-10 h-10 rounded-2xl bg-blue-50 dark:bg-slate-800 text-blue-600 dark:text-blue-400 flex items-center justify-center">
+                                        <Icon className="w-5 h-5" />
+                                    </div>
+                                    <span className={`text-[10px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider ${
+                                        cmd.requiresConfirm 
+                                            ? 'bg-rose-50 text-rose-600 dark:bg-rose-950/40 dark:text-rose-400 border border-rose-200 dark:border-rose-800' 
+                                            : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300'
+                                    }`}>
+                                        {cmd.badge}
+                                    </span>
+                                </div>
+
+                                <div>
+                                    <h3 className="font-mono font-extrabold text-slate-900 dark:text-white text-xs leading-tight">
+                                        {cmd.title}
+                                    </h3>
+                                    <span className="text-[10px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-widest block mt-1">
+                                        {cmd.cat}
+                                    </span>
+                                </div>
+
+                                <p className="text-xs text-slate-500 dark:text-slate-400 font-medium leading-relaxed">
+                                    {cmd.desc}
+                                </p>
+                            </div>
+
+                            <button
+                                onClick={() => handleRequest(cmd)}
+                                disabled={!!executing}
+                                className={`w-full py-2.5 px-4 rounded-xl text-xs font-black transition-all duration-300 cursor-pointer shadow-md flex items-center justify-center gap-2 ${
+                                    cmd.requiresConfirm
+                                        ? 'bg-[#800A15] hover:bg-[#600710] text-white disabled:opacity-50'
+                                        : 'bg-slate-900 hover:bg-slate-800 dark:bg-blue-600 dark:hover:bg-blue-700 text-white disabled:opacity-50'
+                                }`}
+                            >
+                                {isRunning ? (
+                                    <>
+                                        <RefreshCw className="w-4 h-4 animate-spin" />
+                                        <span>Ejecutando...</span>
+                                    </>
+                                ) : (
+                                    <>
+                                        <Play className="w-3.5 h-3.5 fill-current" />
+                                        <span>Ejecutar Comando</span>
+                                    </>
+                                )}
+                            </button>
+                        </div>
+                    );
+                })}
+            </div>
+
+            {/* Modal de Confirmación para comandos sensibles */}
+            {confirmModal && (
+                <div 
+                    className="fixed inset-0 z-[100] bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 overflow-hidden animate-fadeIn"
+                    onClick={() => setConfirmModal(null)}
+                >
+                    <div 
+                        className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl space-y-5 animate-scaleIn"
+                        onClick={e => e.stopPropagation()}
+                    >
+                        <div className="flex items-center gap-3 text-rose-600">
+                            <ShieldAlert className="w-8 h-8 shrink-0" />
+                            <h3 className="text-lg font-black text-slate-900 dark:text-white">
+                                Confirmar Ejecución
+                            </h3>
+                        </div>
+
+                        <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
+                            ¿Estás seguro de que deseas ejecutar <strong className="font-mono text-blue-600">{confirmModal.title}</strong> en el servidor de producción?
+                        </p>
+
+                        <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-100 dark:border-slate-800">
+                            <button
+                                type="button"
+                                onClick={() => setConfirmModal(null)}
+                                className="px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-bold rounded-xl cursor-pointer"
+                            >
+                                Cancelar
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => ejecutar(confirmModal.key)}
+                                className="px-5 py-2 bg-rose-600 hover:bg-rose-700 text-white text-xs font-black rounded-xl cursor-pointer shadow-md flex items-center gap-1.5"
+                            >
+                                <Check className="w-4 h-4" />
+                                <span>Sí, Ejecutar Ahora</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+}
+
 /* ── Dashboard principal ── */
 const TABS = [
-    { key: 'equipo',      label: 'Equipo Institucional' },
-    { key: 'testimonios', label: 'Testimonios' },
-    { key: 'noticias',    label: 'Noticias y Eventos' },
-    { key: 'preguntas',   label: 'Preguntas Frecuentes' },
-    { key: 'recorrido',   label: 'Recorrido 360°' },
+    { key: 'equipo',        label: 'Equipo Institucional' },
+    { key: 'testimonios',   label: 'Testimonios' },
+    { key: 'noticias',      label: 'Noticias y Eventos' },
+    { key: 'preguntas',     label: 'Preguntas Frecuentes' },
+    { key: 'recorrido',     label: 'Recorrido 360°' },
+    { key: 'mantenimiento', label: 'Servidor / cPanel' },
 ];
 
 export default function AdminDashboard({ seccion, equipo = [], testimonios = [], noticias = [], preguntas = [], tour, scenes = [], flash, adminCounts }) {
+    const pageProps = usePage().props;
+    const flash_error = pageProps.flash_error;
+    const command_output = pageProps.command_output;
+
     const basePath = window.location.pathname.replace(/\/[^/]+$/, '');
     const [darkMode, setDarkMode] = useState(() => localStorage.getItem('sih-dark-mode') === 'true');
     const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -2719,6 +3009,9 @@ export default function AdminDashboard({ seccion, equipo = [], testimonios = [],
                                                     <path strokeLinecap="round" strokeLinejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
                                                 </svg>
                                             )}
+                                            {tab.key === 'mantenimiento' && (
+                                                <Terminal className="w-5 h-5 text-blue-500" />
+                                            )}
                                             {tab.label}
                                         </div>
                                         
@@ -2726,11 +3019,12 @@ export default function AdminDashboard({ seccion, equipo = [], testimonios = [],
                                         <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${
                                             isActive ? 'bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300' : 'bg-slate-100 dark:bg-slate-800 text-slate-500'
                                         }`}>
-                                            {tab.key === 'equipo'      && (adminCounts?.equipo      ?? equipo.length)}
-                                            {tab.key === 'testimonios' && (adminCounts?.testimonios ?? testimonios.length)}
-                                            {tab.key === 'noticias'    && (adminCounts?.noticias    ?? noticias.length)}
-                                            {tab.key === 'preguntas'   && (adminCounts?.preguntas   ?? preguntas.length)}
-                                            {tab.key === 'recorrido'   && (adminCounts?.scenes      ?? scenes.length)}
+                                            {tab.key === 'equipo'        && (adminCounts?.equipo      ?? equipo.length)}
+                                            {tab.key === 'testimonios'   && (adminCounts?.testimonios ?? testimonios.length)}
+                                            {tab.key === 'noticias'      && (adminCounts?.noticias    ?? noticias.length)}
+                                            {tab.key === 'preguntas'     && (adminCounts?.preguntas   ?? preguntas.length)}
+                                            {tab.key === 'recorrido'     && (adminCounts?.scenes      ?? scenes.length)}
+                                            {tab.key === 'mantenimiento' && 'PHP'}
                                         </span>
                                     </Link>
                                 );
@@ -2819,11 +3113,12 @@ export default function AdminDashboard({ seccion, equipo = [], testimonios = [],
                         
                         {/* ── Active Module Content Card ── */}
                         <div className="transition-all duration-300">
-                            {seccion === 'equipo'      && <EquipoTab      equipo={equipo}           flash={flash} />}
-                            {seccion === 'testimonios' && <TestimoniosTab testimonios={testimonios} flash={flash} />}
-                            {seccion === 'noticias'    && <NoticiasTab    noticias={noticias}       flash={flash} />}
-                            {seccion === 'preguntas'   && <PreguntasTab   preguntas={preguntas}     flash={flash} />}
-                            {seccion === 'recorrido'   && <RecorridoTab   tour={tour} scenes={scenes} flash={flash} basePath={basePath} />}
+                            {seccion === 'equipo'        && <EquipoTab        equipo={equipo}           flash={flash} />}
+                            {seccion === 'testimonios'   && <TestimoniosTab   testimonios={testimonios} flash={flash} />}
+                            {seccion === 'noticias'      && <NoticiasTab      noticias={noticias}       flash={flash} />}
+                            {seccion === 'preguntas'     && <PreguntasTab     preguntas={preguntas}     flash={flash} />}
+                            {seccion === 'recorrido'     && <RecorridoTab     tour={tour} scenes={scenes} flash={flash} basePath={basePath} />}
+                            {seccion === 'mantenimiento' && <MantenimientoTab flash={flash} flash_error={flash_error} command_output={command_output} basePath={basePath} />}
                         </div>
 
                     </main>

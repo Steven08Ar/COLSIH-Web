@@ -14,18 +14,24 @@ import {
     User
 } from 'lucide-react';
 
+const R2_DOCENTES_BASE = "https://pub-c4ddb3fb75904158bbda5fbc35d6963e.r2.dev/nuestro_colegio/equipo/docentes/";
+
+const getDocenteR2Url = (nombreCompleto) => {
+    return `${R2_DOCENTES_BASE}${encodeURIComponent(nombreCompleto)}.JPG`;
+};
+
 export default function Equipo({ equipo = [] }) {
     const [selectedArea, setSelectedArea] = useState('Todos');
 
-    // Separar equipo directivo y docente desde la base de datos (o usar fallback estatico)
+    // Separar equipo directivo y docente desde la base de datos (o usar fallback estático)
     const directivosFromDb = equipo.filter(m => m.tipo === 'directivo');
     const docentesFromDb = equipo.filter(m => m.tipo === 'docente');
 
     const defaultDirectivos = [
         { nombre: 'Sor Beatriz Cortés Jerez', cargo: 'Rectora', foto: '/docentes/Sor%20Betty.JPG', foto_posicion: 20, foto_zoom: 100 },
-        { nombre: 'Jaime Manuel Ardila Parra', cargo: 'Coordinador Académico', foto: '/docentes/Jaime%20Manuel.JPG', foto_posicion: 20, foto_zoom: 100 },
-        { nombre: 'Margarita María Valle Manrique', cargo: 'Coordinadora de Convivencia', foto: '/docentes/Margara.JPG', foto_posicion: 20, foto_zoom: 100 },
-        { nombre: 'Erika Tatiana Delgadillo Avella', cargo: 'Coordinadora de Pastoral', foto: '/docentes/Erika.JPG', foto_posicion: 20, foto_zoom: 100 }
+        { nombre: 'Jaime Manuel Ardila Parra', cargo: 'Coordinador Académico', foto: getDocenteR2Url('Jaime Manuel Ardila Parra'), foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Margarita María Valle Manrique', cargo: 'Coordinadora de Convivencia', foto: getDocenteR2Url('Margarita María Valle Manrique'), foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Erika Tatiana Delgadillo Avella', cargo: 'Coordinadora de Pastoral', foto: getDocenteR2Url('Erika Tatiana Delgadillo Avella'), foto_posicion: 20, foto_zoom: 100 }
     ];
 
     const directivos = directivosFromDb.length > 0 ? directivosFromDb : defaultDirectivos;
@@ -39,39 +45,39 @@ export default function Equipo({ equipo = [] }) {
     ];
 
     const defaultDocentes = [
-        { nombre: 'Adriana María Jaimes Ruiz', asignatura: 'Ed. Religiosa', area: 'Ed. Religiosa y Ética', foto: '/docentes/Adriana.JPG', foto_posicion: 20, foto_zoom: 100 },
-        { nombre: 'Bruna Mercedes Peña Solano', asignatura: 'Lengua Castellana', area: 'Lengua Castellana', foto: '/docentes/Bruna.JPG', foto_posicion: 20, foto_zoom: 100 },
-        { nombre: 'Clara Inés Joya Herrera', asignatura: 'Matemáticas', area: 'Matemáticas', foto: '/docentes/Clara.JPG', foto_posicion: 20, foto_zoom: 100 },
-        { nombre: 'Daniela Villamizar Villamizar', asignatura: 'Todas las Dimensiones', area: 'Preescolar y Primaria', foto: '/docentes/Daniela.JPG', foto_posicion: 20, foto_zoom: 100 },
-        { nombre: 'Diana Soidé Villamizar Bautista', asignatura: 'Lengua Castellana (Primaria)', area: 'Lengua Castellana', foto: null, foto_posicion: 20, foto_zoom: 100 },
-        { nombre: 'Edgar Javier García Estupiñán', asignatura: 'Ciencias Sociales', area: 'Ciencias Sociales', foto: '/docentes/Edgar.JPG', foto_posicion: 20, foto_zoom: 100 },
-        { nombre: 'Erika Tatiana Delgadillo Avella', asignatura: 'Ciencias Sociales', area: 'Ciencias Sociales', foto: '/docentes/Erika.JPG', foto_posicion: 20, foto_zoom: 100 },
-        { nombre: 'Fredy Neira Roa', asignatura: 'Matemáticas y Física', area: 'Matemáticas', foto: '/docentes/Fredy.JPG', foto_posicion: 20, foto_zoom: 100 },
-        { nombre: 'Gloria Mercedes Serrano Salazar', asignatura: 'Ed. Religiosa', area: 'Ed. Religiosa y Ética', foto: '/docentes/Gloria.JPG', foto_posicion: 20, foto_zoom: 100 },
-        { nombre: 'Héctor Manuel Garzón Gómez', asignatura: 'Ética y Ed. Religiosa', area: 'Ed. Religiosa y Ética', foto: '/docentes/Hector.JPG', foto_posicion: 20, foto_zoom: 100 },
-        { nombre: 'Irma Sánchez Espinosa', asignatura: 'Ciencias Naturales', area: 'Ciencias Naturales', foto: null, foto_posicion: 20, foto_zoom: 100 },
-        { nombre: 'Iván Martínez Peña', asignatura: 'Tecnología e Informática', area: 'Tecnología e Informática', foto: '/docentes/Ivan.JPG', foto_posicion: 20, foto_zoom: 100 },
-        { nombre: 'Jenny Marcela Pérez Medina', asignatura: 'Química', area: 'Ciencias Naturales', foto: null, foto_posicion: 20, foto_zoom: 100 },
-        { nombre: 'Jesús David Arias Estupiñán', asignatura: 'Tecnología y Estadística', area: 'Tecnología e Informática', foto: '/docentes/Jes%C3%BAs.JPG', foto_posicion: 20, foto_zoom: 100 },
-        { nombre: 'Jeyson Eduardo Suárez Ardila', asignatura: 'Matemáticas', area: 'Matemáticas', foto: '/docentes/Jeison.JPG', foto_posicion: 20, foto_zoom: 100 },
-        { nombre: 'Jeyson Mauricio Ávila Triana', asignatura: 'Ed. Física y Deportes', area: 'Ed. Física y Expresión', foto: '/docentes/Jeyson.JPG', foto_posicion: 20, foto_zoom: 100 },
-        { nombre: 'Karen Navarro Pisciotti', asignatura: 'Lengua Castellana', area: 'Lengua Castellana', foto: '/docentes/Karen%20Piziote.JPG', foto_posicion: 20, foto_zoom: 100 },
-        { nombre: 'Karen Tatiana Linares Gelvez', asignatura: 'Lengua Castellana', area: 'Lengua Castellana', foto: '/docentes/Karen%20Linares.JPG', foto_posicion: 20, foto_zoom: 100 },
-        { nombre: 'Katerin Johanna Delgado Ruda', asignatura: 'Ciencias Sociales', area: 'Ciencias Sociales', foto: '/docentes/Katerin.JPG', foto_posicion: 20, foto_zoom: 100 },
-        { nombre: 'Lady Diana Osorio Fonseca', asignatura: 'Todas las Asignaturas', area: 'Preescolar y Primaria', foto: '/docentes/Ladi.JPG', foto_posicion: 20, foto_zoom: 100 },
-        { nombre: 'Leidy Andrea Portilla Gelvez', asignatura: 'Matemáticas', area: 'Matemáticas', foto: '/docentes/Leidy%20Portilla.JPG', foto_posicion: 20, foto_zoom: 100 },
-        { nombre: 'Leidy Paola Basto Ramírez', asignatura: 'Inglés', area: 'Inglés', foto: '/docentes/Leidy%20Bastos.JPG', foto_posicion: 20, foto_zoom: 100 },
-        { nombre: 'Ludwin Fernando Caballero Espinosa', asignatura: 'Ed. Física y Deportes', area: 'Ed. Física y Expresión', foto: '/docentes/Ludwin.JPG', foto_posicion: 20, foto_zoom: 100 },
-        { nombre: 'Luz Adriana García Villamizar', asignatura: 'Artes y Ética', area: 'Ed. Física y Expresión', foto: null, foto_posicion: 20, foto_zoom: 100 },
-        { nombre: 'Mayra Jisseth Sierra Lombana', asignatura: 'Inglés', area: 'Inglés', foto: '/docentes/Mayra.JPG', foto_posicion: 20, foto_zoom: 100 },
-        { nombre: 'Miguel Oswaldo Lizarazo Latorre', asignatura: 'Contabilidad SENA', area: 'Contabilidad SENA', foto: '/docentes/Miguel.JPG', foto_posicion: 20, foto_zoom: 100 },
-        { nombre: 'Paula Lorena Cuadros Ballesteros', asignatura: 'Todas las Dimensiones', area: 'Preescolar y Primaria', foto: null, foto_posicion: 20, foto_zoom: 100 },
-        { nombre: 'Robin Javier Aparicio Aparicio', asignatura: 'Filosofía y Ed. Religiosa', area: 'Ciencias Sociales', foto: '/docentes/Robin.JPG', foto_posicion: 20, foto_zoom: 100 },
-        { nombre: 'Sandra Patricia Parada Leal', asignatura: 'Música', area: 'Ed. Física y Expresión', foto: '/docentes/Sandra.JPG', foto_posicion: 20, foto_zoom: 100 },
-        { nombre: 'Sergio Andrés Mendoza Gómez', asignatura: 'Inglés', area: 'Inglés', foto: '/docentes/Sergio.JPG', foto_posicion: 20, foto_zoom: 100 },
-        { nombre: 'Yesica Zoraya Badillo Corredor', asignatura: 'Ciencias Naturales', area: 'Ciencias Naturales', foto: '/docentes/Yesica%20Zoraya.JPG', foto_posicion: 20, foto_zoom: 100 },
-        { nombre: 'Yoleida Patricia Camacho Corzo', asignatura: 'Inglés', area: 'Inglés', foto: null, foto_posicion: 20, foto_zoom: 100 },
-        { nombre: 'Yoni Amparo Méndez Álvarez', asignatura: 'Matemáticas e Informática', area: 'Matemáticas', foto: null, foto_posicion: 20, foto_zoom: 100 }
+        { nombre: 'Adriana María Jaimes Ruiz', asignatura: 'Ed. Religiosa', area: 'Ed. Religiosa y Ética', foto: getDocenteR2Url('Adriana María Jaimes Ruiz'), foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Bruna Mercedes Peña Solano', asignatura: 'Lengua Castellana', area: 'Lengua Castellana', foto: getDocenteR2Url('Bruna Mercedes Peña Solano'), foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Clara Inés Joya Herrera', asignatura: 'Matemáticas', area: 'Matemáticas', foto: getDocenteR2Url('Clara Inés Joya Herrera'), foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Daniela Villamizar Villamizar', asignatura: 'Todas las Dimensiones', area: 'Preescolar y Primaria', foto: getDocenteR2Url('Daniela Villamizar Villamizar'), foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Diana Soidé Villamizar Bautista', asignatura: 'Lengua Castellana (Primaria)', area: 'Lengua Castellana', foto: getDocenteR2Url('Diana Soidé Villamizar Bautista'), foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Edgar Javier García Estupiñán', asignatura: 'Ciencias Sociales', area: 'Ciencias Sociales', foto: getDocenteR2Url('Edgar Javier García Estupiñán'), foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Erika Tatiana Delgadillo Avella', asignatura: 'Ciencias Sociales', area: 'Ciencias Sociales', foto: getDocenteR2Url('Erika Tatiana Delgadillo Avella'), foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Fredy Neira Roa', asignatura: 'Matemáticas y Física', area: 'Matemáticas', foto: getDocenteR2Url('Fredy Neira Roa'), foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Gloria Mercedes Serrano Salazar', asignatura: 'Ed. Religiosa', area: 'Ed. Religiosa y Ética', foto: getDocenteR2Url('Gloria Mercedes Serrano Salazar'), foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Héctor Manuel Garzón Gómez', asignatura: 'Ética y Ed. Religiosa', area: 'Ed. Religiosa y Ética', foto: getDocenteR2Url('Héctor Manuel Garzón Gómez'), foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Irma Sánchez Espinosa', asignatura: 'Ciencias Naturales', area: 'Ciencias Naturales', foto: getDocenteR2Url('Irma Sanchez Espinosa'), foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Iván Martínez Peña', asignatura: 'Tecnología e Informática', area: 'Tecnología e Informática', foto: getDocenteR2Url('Iván Martínez Peña'), foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Jenny Marcela Pérez Medina', asignatura: 'Química', area: 'Ciencias Naturales', foto: getDocenteR2Url('Jenny Marcela Pérez Medina'), foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Jesús David Arias Estupiñán', asignatura: 'Tecnología y Estadística', area: 'Tecnología e Informática', foto: getDocenteR2Url('Jesús David Arias Estupiñán'), foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Jeyson Eduardo Suárez Ardila', asignatura: 'Matemáticas', area: 'Matemáticas', foto: getDocenteR2Url('Jeyson Eduardo Suárez Ardila'), foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Jeyson Mauricio Ávila Triana', asignatura: 'Ed. Física y Deportes', area: 'Ed. Física y Expresión', foto: getDocenteR2Url('Jeyson Mauricio Ávila Triana'), foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Karen Navarro Pisciotti', asignatura: 'Lengua Castellana', area: 'Lengua Castellana', foto: getDocenteR2Url('Karen Navarro Pisciotti'), foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Karen Tatiana Linares Gelvez', asignatura: 'Lengua Castellana', area: 'Lengua Castellana', foto: getDocenteR2Url('Karen Tatiana Linares Gelvez'), foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Katerin Johanna Delgado Ruda', asignatura: 'Ciencias Sociales', area: 'Ciencias Sociales', foto: getDocenteR2Url('Katerin Johanna Delgado Ruda'), foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Lady Diana Osorio Fonseca', asignatura: 'Todas las Asignaturas', area: 'Preescolar y Primaria', foto: getDocenteR2Url('Lady Diana Osorio Fonseca'), foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Leidy Andrea Portilla Gelvez', asignatura: 'Matemáticas', area: 'Matemáticas', foto: getDocenteR2Url('Leidy Andrea Portilla Gelvez'), foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Leidy Paola Basto Ramírez', asignatura: 'Inglés', area: 'Inglés', foto: getDocenteR2Url('Leidy Paola Basto Ramírez'), foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Ludwin Fernando Caballero Espinosa', asignatura: 'Ed. Física y Deportes', area: 'Ed. Física y Expresión', foto: getDocenteR2Url('Ludwin Fernando Caballero Espinosa'), foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Luz Adriana García Villamizar', asignatura: 'Artes y Ética', area: 'Ed. Física y Expresión', foto: getDocenteR2Url('Luz Adriana García Villamizar'), foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Mayra Jisseth Sierra Lombana', asignatura: 'Inglés', area: 'Inglés', foto: getDocenteR2Url('Mayra Jisseth Sierra Lombana'), foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Miguel Oswaldo Lizarazo Latorre', asignatura: 'Contabilidad SENA', area: 'Contabilidad SENA', foto: getDocenteR2Url('Miguel Oswaldo Lizarazo Latorre'), foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Paula Lorena Cuadros Ballesteros', asignatura: 'Todas las Dimensiones', area: 'Preescolar y Primaria', foto: getDocenteR2Url('Paula Lorena Cuadros Ballesteros'), foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Robin Javier Aparicio Aparicio', asignatura: 'Filosofía y Ed. Religiosa', area: 'Ciencias Sociales', foto: getDocenteR2Url('Robin Javier Aparicio Aparicio'), foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Sandra Patricia Parada Leal', asignatura: 'Música', area: 'Ed. Física y Expresión', foto: getDocenteR2Url('Sandra Patricia Parada Leal'), foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Sergio Andrés Mendoza Gómez', asignatura: 'Inglés', area: 'Inglés', foto: getDocenteR2Url('Sergio Andrés Mendoza Gómez'), foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Yesica Zoraya Badillo Corredor', asignatura: 'Ciencias Naturales', area: 'Ciencias Naturales', foto: getDocenteR2Url('Yesica Zoraya Badillo Corredor'), foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Yoleida Patricia Camacho Corzo', asignatura: 'Inglés', area: 'Inglés', foto: getDocenteR2Url('Yoleida Patricia Camacho Corzo'), foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Yoni Amparo Méndez Álvarez', asignatura: 'Matemáticas e Informática', area: 'Matemáticas', foto: getDocenteR2Url('Yoni Amparo Méndez Álvarez'), foto_posicion: 20, foto_zoom: 100 }
     ];
 
     const todosLosProfesores = docentesFromDb.length > 0
@@ -98,289 +104,227 @@ export default function Equipo({ equipo = [] }) {
 
     return (
         <AppLayout>
-            <Head title="Equipo Institucional | COLSIH" />
+            <Head title="Equipo Docente y Directivo | COLSIH" />
 
-            {/* Ocultar barra de scroll en solapas */}
-            <style dangerouslySetInnerHTML={{__html: `
-                .no-scrollbar::-webkit-scrollbar { display: none !important; }
-                .no-scrollbar { -ms-overflow-style: none !important; scrollbar-width: none !important; }
-            `}} />
-
-            <div className="relative bg-[#FAFCFF] dark:bg-slate-950 text-slate-800 dark:text-slate-100 min-h-screen overflow-hidden pb-16 transition-colors duration-300">
+            <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-sans">
                 
-                {/* Dotted Grid Backdrop Decoration */}
-                <div 
-                    className="absolute inset-0 opacity-[0.05] dark:opacity-[0.01] pointer-events-none" 
-                    style={{
-                        backgroundImage: 'radial-gradient(#003C8F 1.2px, transparent 1.2px)',
-                        backgroundSize: '24px 24px'
-                    }} 
-                />
+                {/* Hero Banner */}
+                <section className="relative pt-32 pb-20 md:pt-40 md:pb-28 bg-[#800A15] text-white overflow-hidden shadow-2xl">
+                    <div className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full bg-white/5 blur-3xl pointer-events-none -translate-y-1/2 translate-x-1/3"></div>
+                    <div className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full bg-black/20 blur-2xl pointer-events-none translate-y-1/3 -translate-x-1/3"></div>
 
-                {/* ── 1. Hero Section ── */}
-                <section className="relative w-full bg-gradient-to-r from-[#003C8F] to-[#0D1B2E] text-white pt-36 pb-36 px-6 overflow-hidden">
-                    <div 
-                        className="absolute inset-0 bg-cover bg-center opacity-10 brightness-[0.2] pointer-events-none"
-                        style={{ backgroundImage: "url('/galeria/panoramica.png')" }}
-                    />
-                    <div className="absolute right-0 bottom-0 top-0 w-[35%] opacity-15 border-l border-amber-400 rounded-l-[50%] bg-gradient-to-r from-transparent to-amber-400/5 pointer-events-none hidden lg:block" />
-
-                    <div className="relative z-10 max-w-[1240px] mx-auto text-center lg:text-left">
-                        <div className="max-w-2xl mx-auto lg:mx-0 space-y-4 flex flex-col items-center lg:items-start">
-                            <div className="flex items-center justify-center lg:justify-start gap-2 text-amber-400 font-bold uppercase tracking-wider text-xs">
-                                <Users className="w-4 h-4 text-amber-400" />
-                                Conoce a quienes hacen posible la excelencia
-                            </div>
-                            <h1 className="text-4xl md:text-6xl font-black tracking-tight leading-tight">
-                                Equipo Institucional
-                            </h1>
-                            <div className="w-20 h-1.5 bg-amber-400 rounded-full" />
-                            <p className="text-slate-300 font-semibold text-sm md:text-base leading-relaxed pt-1">
-                                Nuestro cuerpo directivo y docente dedicado día a día a la formación integral, humana y académica de la juventud salesiana.
-                            </p>
-                        </div>
-                    </div>
-
-                    {/* Divisor de ola */}
-                    <div className="absolute bottom-0 left-0 right-0 w-full overflow-hidden leading-none z-10 pointer-events-none">
-                        <svg 
-                            className="relative block w-full h-[30px] md:h-[60px] translate-y-[2px] scale-y-105" 
-                            viewBox="0 0 1440 120" 
-                            preserveAspectRatio="none" 
-                            xmlns="http://www.w3.org/2000/svg"
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+                        <motion.div 
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.6 }}
+                            className="space-y-4 max-w-3xl mx-auto"
                         >
-                            <path 
-                                d="M0,32L120,42.7C240,53,480,75,720,74.7C960,75,1200,53,1320,42.7L1440,32L1440,120L1320,120C1200,120,960,120,720,120C480,120,240,120,120,120L0,120Z" 
-                                className="fill-[#FAFCFF] dark:fill-slate-950" 
-                            />
-                        </svg>
+                            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-wider text-amber-300">
+                                <Users className="w-4 h-4 text-amber-400" />
+                                <span>Comunidad Educativa Salesiana</span>
+                            </div>
+
+                            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight">
+                                Nuestro Equipo
+                            </h1>
+
+                            <p className="text-slate-100 text-sm sm:text-base leading-relaxed font-medium">
+                                Profesionales apasionados comprometidos con la formación integral de nuestros estudiantes en la fe, la ciencia y la justicia.
+                            </p>
+                        </motion.div>
                     </div>
                 </section>
 
-                {/* ── 2. Equipo Directivo ── */}
-                <section className="relative z-10 py-12 px-6 max-w-[1240px] mx-auto">
-                    <div className="flex items-center gap-3.5 mb-8 border-b border-slate-100 dark:border-slate-800 pb-4">
-                        <div className="w-10 h-10 rounded-2xl bg-[#003C8F]/10 dark:bg-blue-950/40 text-[#003C8F] dark:text-blue-400 flex items-center justify-center shrink-0 shadow-sm">
-                            <Award className="w-5.5 h-5.5" />
-                        </div>
-                        <div>
-                            <h2 className="text-2xl font-black text-slate-800 dark:text-white leading-tight">
-                                Equipo Directivo
-                            </h2>
-                            <p className="text-xs text-slate-400 dark:text-slate-500 font-semibold mt-0.5">
-                                Liderazgo y dirección académica de la institución
-                            </p>
-                        </div>
+                {/* Equipo Directivo */}
+                <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+                    <div className="text-center max-w-2xl mx-auto mb-12 space-y-3">
+                        <span className="text-xs font-black uppercase tracking-widest text-[#800A15] dark:text-rose-400">
+                            Liderazgo Institucional
+                        </span>
+                        <h2 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">
+                            Equipo Directivo
+                        </h2>
+                        <p className="text-slate-600 dark:text-slate-400 text-sm">
+                            Guiando a nuestra comunidad con la visión pedagógica salesiana.
+                        </p>
                     </div>
 
-                    {/* Directivos Cards Grid */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                        {directivos.map((p, idx) => {
-                            const isVino = idx % 2 === 0;
-                            const borderClass = isVino ? 'border-t-4 border-t-[#800A15]' : 'border-t-4 border-t-[#003C8F]';
-                            const roleClass = isVino ? 'text-[#800A15] dark:text-rose-400' : 'text-[#003C8F] dark:text-blue-400';
-
-                            return (
-                                <motion.div 
-                                    key={p.nombre}
-                                    initial={{ opacity: 0, y: 30 }}
-                                    whileInView={{ opacity: 1, y: 0 }}
-                                    viewport={{ once: true }}
-                                    transition={{ duration: 0.5, delay: idx * 0.1 }}
-                                    className={`bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800/80 rounded-[28px] overflow-hidden shadow-sm hover:shadow-md hover:scale-[1.02] transition-all duration-300 ${borderClass}`}
-                                >
-                                    <div className="aspect-[4/5] bg-slate-100 dark:bg-slate-800 overflow-hidden relative flex items-center justify-center">
-                                        {p.foto ? (
-                                            <img 
-                                                src={p.foto} 
-                                                alt={p.nombre} 
-                                                className="w-full h-full object-cover transition-all duration-300"
-                                                style={{
-                                                    objectPosition: `${p.foto_posicion_x ?? 50}% ${p.foto_posicion_y ?? p.foto_posicion ?? 20}%`,
-                                                    transform: `scale(${(p.foto_zoom ?? 100) / 100})`
-                                                }}
-                                            />
-                                        ) : (
-                                            <div className="w-full h-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-400 dark:text-slate-600">
-                                                <User className="w-20 h-20" />
-                                            </div>
-                                        )}
-                                    </div>
-                                    <div className="p-5 text-center bg-white dark:bg-slate-900">
-                                        <h4 className="font-extrabold text-slate-800 dark:text-slate-200 text-base leading-snug">
-                                            {p.nombre}
-                                        </h4>
-                                        <span className={`text-[11px] font-black uppercase tracking-widest block mt-1.5 ${roleClass}`}>
-                                            {p.cargo}
-                                        </span>
-                                    </div>
-                                </motion.div>
-                            );
-                        })}
-                    </div>
-                </section>
-
-                {/* ── 3. Administración ── */}
-                <section className="relative z-10 py-12 px-6 max-w-[1240px] mx-auto">
-                    <div className="flex items-center gap-3.5 mb-8 border-b border-slate-100 dark:border-slate-800 pb-4">
-                        <div className="w-10 h-10 rounded-2xl bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0 shadow-sm">
-                            <Briefcase className="w-5.5 h-5.5" />
-                        </div>
-                        <div>
-                            <h2 className="text-2xl font-black text-slate-800 dark:text-white leading-tight">
-                                Administración y Gestión
-                            </h2>
-                            <p className="text-xs text-slate-400 dark:text-slate-500 font-semibold mt-0.5">
-                                Canales oficiales de comunicación institucional
-                            </p>
-                        </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 items-stretch">
-                        {administracion.map((item, idx) => {
-                            const isVino = idx % 2 === 0;
-                            const borderClass = isVino ? 'border-l-4 border-l-[#800A15]' : 'border-l-4 border-l-[#003C8F]';
-                            const badgeBg = isVino ? 'bg-[#800A15]/10 text-[#800A15]' : 'bg-[#003C8F]/10 text-[#003C8F]';
-
-                            return (
-                                <motion.div 
-                                    key={idx}
-                                    initial={{ opacity: 0, y: 25 }}
-                                    whileInView={{ opacity: 1, y: 0 }}
-                                    viewport={{ once: true }}
-                                    transition={{ duration: 0.5, delay: idx * 0.1 }}
-                                    className={`bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800/80 rounded-3xl p-6 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow relative overflow-hidden ${borderClass}`}
-                                >
-                                    <div className="space-y-4">
-                                        <div className="flex items-center justify-between">
-                                            <h4 className="text-base font-black text-slate-800 dark:text-white">
-                                                {item.area}
-                                            </h4>
-                                            <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${badgeBg}`}>
-                                                <Briefcase className="w-4 h-4" />
-                                            </div>
-                                        </div>
-                                        <div className="space-y-1">
-                                            <p className="text-sm font-bold text-slate-700 dark:text-slate-300 leading-tight">
-                                                {item.encargado}
-                                            </p>
-                                            <span className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest block">
-                                                {item.cargo}
-                                            </span>
-                                        </div>
-                                    </div>
-
-                                    <div className="mt-5 pt-4 border-t border-slate-100 dark:border-slate-800/80 space-y-2 text-left">
-                                        <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 dark:text-slate-400">
-                                            <Phone className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                                            {item.tel}
-                                        </div>
-                                        <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 dark:text-slate-400 break-all">
-                                            <Mail className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                                            {item.email}
-                                        </div>
-                                    </div>
-                                </motion.div>
-                            );
-                        })}
-                    </div>
-                </section>
-
-                {/* ── 4. Docentes de la Institución ── */}
-                <section className="relative z-10 py-12 px-6 max-w-[1240px] mx-auto">
-                    <div className="flex items-center gap-3.5 mb-8 border-b border-slate-100 dark:border-slate-800 pb-4">
-                        <div className="w-10 h-10 rounded-2xl bg-amber-50 dark:bg-amber-950/40 text-amber-500 dark:text-amber-400 flex items-center justify-center shrink-0 shadow-sm">
-                            <GraduationCap className="w-5.5 h-5.5" />
-                        </div>
-                        <div>
-                            <h2 className="text-2xl font-black text-slate-800 dark:text-white leading-tight">
-                                Cuerpo Docente
-                            </h2>
-                            <p className="text-xs text-slate-400 dark:text-slate-500 font-semibold mt-0.5">
-                                Profesores especializados por área de enseñanza
-                            </p>
-                        </div>
-                    </div>
-
-                    {/* Barra de filtros envolvente para que no se recorte ninguna asignatura */}
-                    <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-2.5 mb-10 w-full select-none">
-                        {areasList.map((areaName) => (
-                            <button
-                                key={areaName}
-                                onClick={() => setSelectedArea(areaName)}
-                                className={`px-4 py-2 sm:px-4.5 sm:py-2.5 rounded-full font-extrabold text-[11px] sm:text-xs uppercase tracking-wider transition-all duration-300 cursor-pointer ${
-                                    selectedArea === areaName
-                                        ? 'bg-[#800A15] text-white shadow-md shadow-[#800A15]/20 scale-105'
-                                        : 'bg-white hover:bg-slate-100 dark:bg-slate-900 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:text-[#800A15]'
-                                }`}
+                        {directivos.map((persona, index) => (
+                            <motion.div
+                                key={index}
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.5, delay: index * 0.1 }}
+                                className="bg-white dark:bg-slate-900 rounded-3xl overflow-hidden border border-slate-200/80 dark:border-slate-800 shadow-md group hover:shadow-xl transition-all duration-300 flex flex-col justify-between"
                             >
-                                {areaName}
-                            </button>
-                        ))}
-                    </div>
-
-                    {/* Tarjetas de Docentes en Formato Retrato (Foto ocupa la mitad superior) */}
-                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
-                        {profesoresFiltrados.map((prof, idx) => (
-                            <motion.div 
-                                key={prof.nombre}
-                                initial={{ opacity: 0, y: 15 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.3, delay: (idx % 15) * 0.03 }}
-                                className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800/80 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between group"
-                            >
-                                {/* Foto de la mitad superior de la card */}
-                                <div className="w-full aspect-[4/5] bg-slate-100 dark:bg-slate-800 overflow-hidden relative flex items-center justify-center">
-                                    {prof.foto ? (
+                                <div className="relative aspect-[4/5] bg-slate-100 dark:bg-slate-800 overflow-hidden">
+                                    {persona.foto ? (
                                         <img 
-                                            src={prof.foto} 
-                                            alt={prof.nombre} 
-                                            className="w-full h-full object-cover transition-all duration-300" 
+                                            src={persona.foto} 
+                                            alt={persona.nombre}
+                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                                             style={{
-                                                objectPosition: `${prof.foto_posicion_x ?? 50}% ${prof.foto_posicion_y ?? prof.foto_posicion ?? 20}%`,
-                                                transform: `scale(${(prof.foto_zoom ?? 100) / 100})`
+                                                objectPosition: `${persona.foto_posicion_x ?? 50}% ${persona.foto_posicion_y ?? (persona.foto_posicion ?? 20)}%`,
+                                                transform: `scale(${(persona.foto_zoom ?? 100) / 100})`
+                                            }}
+                                            onError={(e) => {
+                                                e.target.onerror = null;
+                                                e.target.style.display = 'none';
+                                                e.target.nextSibling.style.display = 'flex';
                                             }}
                                         />
-                                    ) : (
-                                        <div className="w-full h-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-400 dark:text-slate-600">
-                                            <User className="w-12 h-12" />
-                                        </div>
-                                    )}
-                                </div>
-
-                                {/* Informacion en la mitad inferior de la card */}
-                                <div className="p-4 text-center flex-1 flex flex-col justify-between bg-white dark:bg-slate-900">
-                                    <h4 className="font-extrabold text-slate-900 dark:text-slate-100 text-xs sm:text-sm leading-snug">
-                                        {prof.nombre}
-                                    </h4>
-                                    <span className="text-[11px] font-bold text-[#003C8F] dark:text-blue-400 mt-2 block">
-                                        {prof.asignatura}
-                                    </span>
+                                    ) : null}
+                                    <div 
+                                        className="w-full h-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-400"
+                                        style={{ display: persona.foto ? 'none' : 'flex' }}
+                                    >
+                                        <User className="w-16 h-16 stroke-1" />
+                                    </div>
+                                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent"></div>
+                                    <div className="absolute bottom-3 left-3 right-3 text-white">
+                                        <span className="bg-[#800A15] text-white text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full inline-block mb-1 shadow-md">
+                                            {persona.cargo}
+                                        </span>
+                                        <h3 className="text-base font-black text-white leading-tight">
+                                            {persona.nombre}
+                                        </h3>
+                                    </div>
                                 </div>
                             </motion.div>
                         ))}
                     </div>
+                </section>
 
-                    {/* Banner inspiracional */}
-                    <div className="mt-14 bg-gradient-to-r from-[#003C8F] via-blue-800 to-[#800A15] rounded-3xl p-8 text-white flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl">
-                        <div className="space-y-2 text-center md:text-left">
-                            <div className="flex items-center justify-center md:justify-start gap-2 text-amber-300 font-bold text-xs uppercase tracking-widest">
-                                <Sparkles className="w-4 h-4 text-amber-300 animate-spin" />
-                                Tradición Salesiana de Don Bosco
-                            </div>
-                            <h3 className="text-xl md:text-2xl font-black text-white">
-                                "Educación es cosa del corazón"
-                            </h3>
-                            <p className="text-blue-100 text-sm font-medium max-w-xl">
-                                Nuestros docentes inspiran, acompañan y guían con vocación y alegría el aprendizaje de los estudiantes.
-                            </p>
+                {/* Cuerpo Docente */}
+                <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 border-t border-slate-200/80 dark:border-slate-800">
+                    <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6">
+                        <div>
+                            <span className="text-xs font-black uppercase tracking-widest text-[#003C8F] dark:text-blue-400">
+                                Excelencia Académica
+                            </span>
+                            <h2 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight mt-1">
+                                Cuerpo Docente ({profesoresFiltrados.length})
+                            </h2>
                         </div>
-                        <Link
-                            href="/contacto"
-                            className="px-6 py-3.5 rounded-2xl bg-white text-[#003C8F] font-extrabold text-sm hover:scale-105 transition-all duration-300 shadow-lg shrink-0"
-                        >
-                            Contactar con la Institución
-                        </Link>
+
+                        {/* Filtros por Área */}
+                        <div className="flex flex-wrap gap-2">
+                            {areasList.map((area) => (
+                                <button
+                                    key={area}
+                                    onClick={() => setSelectedArea(area)}
+                                    className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer ${
+                                        selectedArea === area
+                                            ? 'bg-[#800A15] text-white shadow-md'
+                                            : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
+                                    }`}
+                                >
+                                    {area}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                        {profesoresFiltrados.map((profesor, index) => (
+                            <motion.div
+                                key={index}
+                                initial={{ opacity: 0, y: 15 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.4, delay: (index % 8) * 0.05 }}
+                                className="bg-white dark:bg-slate-900 rounded-3xl overflow-hidden border border-slate-200/80 dark:border-slate-800 shadow-sm hover:shadow-xl transition-all duration-300 group flex flex-col justify-between"
+                            >
+                                <div className="relative aspect-[4/5] bg-slate-100 dark:bg-slate-800 overflow-hidden">
+                                    {profesor.foto ? (
+                                        <img 
+                                            src={profesor.foto} 
+                                            alt={profesor.nombre}
+                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                            style={{
+                                                objectPosition: `${profesor.foto_posicion_x ?? 50}% ${profesor.foto_posicion_y ?? (profesor.foto_posicion ?? 20)}%`,
+                                                transform: `scale(${(profesor.foto_zoom ?? 100) / 100})`
+                                            }}
+                                            onError={(e) => {
+                                                e.target.onerror = null;
+                                                e.target.style.display = 'none';
+                                                e.target.nextSibling.style.display = 'flex';
+                                            }}
+                                        />
+                                    ) : null}
+                                    <div 
+                                        className="w-full h-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-400"
+                                        style={{ display: profesor.foto ? 'none' : 'flex' }}
+                                    >
+                                        <User className="w-16 h-16 stroke-1" />
+                                    </div>
+                                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/20 to-transparent"></div>
+                                    <div className="absolute bottom-3 left-3 right-3 text-white">
+                                        <span className="bg-[#003C8F] text-white text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full inline-block mb-1 shadow-md">
+                                            {profesor.asignatura}
+                                        </span>
+                                        <h3 className="text-sm font-black text-white leading-snug">
+                                            {profesor.nombre}
+                                        </h3>
+                                        <span className="text-[11px] font-medium text-slate-300 block mt-0.5">
+                                            {profesor.area}
+                                        </span>
+                                    </div>
+                                </div>
+                            </motion.div>
+                        ))}
+                    </div>
+                </section>
+
+                {/* Directorio de Contacto por Área / Administración */}
+                <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 border-t border-slate-200/80 dark:border-slate-800">
+                    <div className="text-center max-w-2xl mx-auto mb-12 space-y-3">
+                        <span className="text-xs font-black uppercase tracking-widest text-[#800A15] dark:text-rose-400">
+                            Atención a la Comunidad
+                        </span>
+                        <h2 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">
+                            Directorio Administrativo
+                        </h2>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        {administracion.map((item, index) => (
+                            <div 
+                                key={index}
+                                className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-4 flex flex-col justify-between"
+                            >
+                                <div className="space-y-2">
+                                    <div className="w-10 h-10 rounded-2xl bg-rose-50 dark:bg-rose-950/40 flex items-center justify-center text-[#800A15] dark:text-rose-400 font-bold">
+                                        <Briefcase className="w-5 h-5" />
+                                    </div>
+                                    <h3 className="text-base font-black text-slate-900 dark:text-white">
+                                        {item.area}
+                                    </h3>
+                                    <p className="text-xs font-bold text-[#800A15] dark:text-rose-400">
+                                        {item.encargado}
+                                    </p>
+                                    <span className="text-xs text-slate-500 font-medium block">
+                                        {item.cargo}
+                                    </span>
+                                </div>
+
+                                <div className="space-y-2 pt-3 border-t border-slate-100 dark:border-slate-800 text-xs font-medium text-slate-600 dark:text-slate-400">
+                                    <div className="flex items-center gap-2">
+                                        <Phone className="w-4 h-4 text-slate-400 shrink-0" />
+                                        <span>{item.tel}</span>
+                                    </div>
+                                    <div className="flex items-center gap-2 truncate">
+                                        <Mail className="w-4 h-4 text-slate-400 shrink-0" />
+                                        <a href={`mailto:${item.email}`} className="hover:underline text-blue-600 dark:text-blue-400 truncate">
+                                            {item.email}
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 </section>
 

@@ -112,7 +112,7 @@ export default function Deportes() {
 
             <div className="min-h-screen bg-[#F4F7FA] dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-sans selection:bg-[#800A15] selection:text-white pb-20">
                 
-                {/* ── 1. HERO BANNER ZONA DEPORTIVA (COLORES INSTITUCIONALES PROFUNDOS + REFERENCIA) ── */}
+                {/* ── 1. HERO BANNER ZONA DEPORTIVA ── */}
                 <section className="relative pt-28 pb-16 md:pt-36 md:pb-24 bg-gradient-to-br from-[#800A15] via-[#600710] to-[#003C8F] text-white overflow-hidden shadow-2xl">
                     
                     {/* Formas curvadas orgánicas de fondo */}
@@ -182,22 +182,22 @@ export default function Deportes() {
                     </div>
                 </section>
 
-                {/* ── 2. GRID PRINCIPAL (IDÉNTICO A LA REFERENCIA) ── */}
+                {/* ── 2. GRID PRINCIPAL (AJUSTADO PARA AJUSTE PERFECTO DE ANCHO) ── */}
                 <section id="grid-deportes" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6">
                         
                         {/* ── COLUMNA 1: Destacados del Mes (3 cols en LG) ── */}
-                        <div className="lg:col-span-3 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-6 shadow-sm flex flex-col justify-between space-y-5">
+                        <div className="lg:col-span-3 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-5 shadow-sm flex flex-col justify-between space-y-4">
                             <div>
-                                <div className="flex items-center gap-2 mb-4 pb-3 border-b border-slate-100 dark:border-slate-800">
-                                    <Star className="w-5 h-5 text-amber-500" />
+                                <div className="flex items-center gap-2 mb-3 pb-3 border-b border-slate-100 dark:border-slate-800">
+                                    <Star className="w-5 h-5 text-amber-500 shrink-0" />
                                     <h2 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-wider">
                                         Destacados del Mes
                                     </h2>
                                 </div>
 
                                 {/* Tarjeta Atleta Actual */}
-                                <div className="space-y-4">
+                                <div className="space-y-3">
                                     <div className="relative aspect-[4/5] rounded-2xl overflow-hidden bg-slate-100 dark:bg-slate-800 shadow-md">
                                         <img 
                                             src={atletaActual.foto} 
@@ -208,19 +208,19 @@ export default function Deportes() {
                                                 e.target.src = '/galeria/estudiantes-colsih.png';
                                             }}
                                         />
-                                        <div className="absolute top-3 right-3 bg-[#800A15] text-white text-[11px] font-black uppercase px-3 py-1 rounded-full shadow-md">
+                                        <div className="absolute top-3 right-3 bg-[#800A15] text-white text-[10px] font-black uppercase px-2.5 py-1 rounded-full shadow-md">
                                             {atletaActual.disciplina}
                                         </div>
                                     </div>
 
                                     <div>
-                                        <h3 className="text-lg font-black text-slate-900 dark:text-white">
+                                        <h3 className="text-base font-black text-slate-900 dark:text-white leading-tight">
                                             {atletaActual.nombre}
                                         </h3>
                                         <span className="text-xs font-extrabold text-[#003C8F] dark:text-blue-400 block mt-0.5">
                                             {atletaActual.grado}
                                         </span>
-                                        <p className="text-slate-600 dark:text-slate-400 text-xs mt-2 font-medium leading-relaxed">
+                                        <p className="text-slate-600 dark:text-slate-400 text-xs mt-1.5 font-medium leading-relaxed">
                                             {atletaActual.resumen}
                                         </p>
                                     </div>
@@ -228,10 +228,10 @@ export default function Deportes() {
                             </div>
 
                             {/* Botón Ver Perfil & Puntos Paginación */}
-                            <div className="space-y-4 pt-2">
+                            <div className="space-y-3 pt-1">
                                 <button
                                     onClick={() => setModalPerfil(atletaActual)}
-                                    className="w-full py-3 px-4 border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl text-xs font-black uppercase tracking-wider text-slate-800 dark:text-slate-200 transition flex items-center justify-center gap-2 cursor-pointer"
+                                    className="w-full py-2.5 px-3 border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl text-xs font-black uppercase tracking-wider text-slate-800 dark:text-slate-200 transition flex items-center justify-center gap-2 cursor-pointer"
                                 >
                                     <span>VER PERFIL</span>
                                     <User className="w-4 h-4" />
@@ -256,11 +256,11 @@ export default function Deportes() {
                         </div>
 
                         {/* ── COLUMNA 2: Noticias y Logros (4 cols en LG) ── */}
-                        <div className="lg:col-span-4 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-6 shadow-sm flex flex-col justify-between space-y-4">
+                        <div className="lg:col-span-4 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-5 shadow-sm flex flex-col justify-between space-y-4">
                             <div>
-                                <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-100 dark:border-slate-800">
+                                <div className="flex items-center justify-between mb-3 pb-3 border-b border-slate-100 dark:border-slate-800">
                                     <div className="flex items-center gap-2">
-                                        <Megaphone className="w-5 h-5 text-[#800A15]" />
+                                        <Megaphone className="w-5 h-5 text-[#800A15] shrink-0" />
                                         <h2 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-wider">
                                             Noticias y Logros
                                         </h2>
@@ -273,7 +273,7 @@ export default function Deportes() {
 
                                 {/* Noticia Destacada Principal */}
                                 {NOTICIAS_LOGROS.filter(n => n.destacado).map((noticia) => (
-                                    <div key={noticia.id} className="relative rounded-2xl overflow-hidden bg-slate-900 text-white group mb-4 shadow-md">
+                                    <div key={noticia.id} className="relative rounded-2xl overflow-hidden bg-slate-900 text-white group mb-3 shadow-md">
                                         <div className="aspect-[16/9] overflow-hidden">
                                             <img 
                                                 src={noticia.imagen} 
@@ -281,12 +281,12 @@ export default function Deportes() {
                                                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 opacity-80" 
                                             />
                                         </div>
-                                        <div className="absolute top-3 left-3 bg-white text-slate-900 px-2.5 py-1 rounded-xl text-center shadow-md">
-                                            <span className="block text-sm font-black leading-none">{noticia.dia}</span>
-                                            <span className="block text-[9px] font-black uppercase text-slate-500">{noticia.mes}</span>
+                                        <div className="absolute top-2.5 left-2.5 bg-white text-slate-900 px-2.5 py-1 rounded-xl text-center shadow-md">
+                                            <span className="block text-xs font-black leading-none">{noticia.dia}</span>
+                                            <span className="block text-[8px] font-black uppercase text-slate-500">{noticia.mes}</span>
                                         </div>
-                                        <div className="p-4 bg-gradient-to-t from-slate-950 via-slate-950/90 to-transparent">
-                                            <h3 className="text-sm font-black leading-snug text-white">
+                                        <div className="p-3.5 bg-gradient-to-t from-slate-950 via-slate-950/90 to-transparent">
+                                            <h3 className="text-xs sm:text-sm font-black leading-snug text-white">
                                                 {noticia.titulo}
                                             </h3>
                                             <p className="text-slate-300 text-[11px] font-medium mt-1 line-clamp-2">
@@ -297,10 +297,10 @@ export default function Deportes() {
                                 ))}
 
                                 {/* Lista de Otras Noticias */}
-                                <div className="space-y-3">
+                                <div className="space-y-2.5">
                                     {NOTICIAS_LOGROS.filter(n => !n.destacado).map((noticia) => (
-                                        <div key={noticia.id} className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/50 transition">
-                                            <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 flex flex-col items-center justify-center shrink-0 border border-slate-200 dark:border-slate-700">
+                                        <div key={noticia.id} className="flex items-center gap-3 p-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/50 transition">
+                                            <div className="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 flex flex-col items-center justify-center shrink-0 border border-slate-200 dark:border-slate-700">
                                                 <span className="text-xs font-black leading-none text-slate-900 dark:text-white">{noticia.dia}</span>
                                                 <span className="text-[8px] font-black uppercase text-slate-400">{noticia.mes}</span>
                                             </div>
@@ -319,11 +319,11 @@ export default function Deportes() {
                         </div>
 
                         {/* ── COLUMNA 3: Próximos Torneos (3 cols en LG) ── */}
-                        <div className="lg:col-span-3 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-6 shadow-sm flex flex-col justify-between space-y-4">
+                        <div className="lg:col-span-3 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-5 shadow-sm flex flex-col justify-between space-y-4">
                             <div>
-                                <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-100 dark:border-slate-800">
+                                <div className="flex items-center justify-between mb-3 pb-3 border-b border-slate-100 dark:border-slate-800">
                                     <div className="flex items-center gap-2">
-                                        <Calendar className="w-5 h-5 text-[#800A15]" />
+                                        <Calendar className="w-5 h-5 text-[#800A15] shrink-0" />
                                         <h2 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-wider">
                                             Próximos Torneos
                                         </h2>
@@ -331,16 +331,16 @@ export default function Deportes() {
                                 </div>
 
                                 {/* Lista de Eventos */}
-                                <div className="space-y-3">
+                                <div className="space-y-2.5">
                                     {PROXIMOS_TORNEOS.map((torneo) => {
                                         const IconComponent = torneo.iconType;
                                         return (
-                                            <div key={torneo.id} className="p-3.5 bg-slate-50 dark:bg-slate-800/40 rounded-2xl border border-slate-100 dark:border-slate-800 flex items-start gap-3">
-                                                <div className="w-9 h-9 rounded-xl bg-blue-50 dark:bg-blue-950/50 flex items-center justify-center shrink-0 text-[#003C8F] dark:text-blue-400">
-                                                    <IconComponent className="w-5 h-5" />
+                                            <div key={torneo.id} className="p-3 bg-slate-50 dark:bg-slate-800/40 rounded-2xl border border-slate-100 dark:border-slate-800 flex items-start gap-2.5">
+                                                <div className="w-8 h-8 rounded-xl bg-blue-50 dark:bg-blue-950/50 flex items-center justify-center shrink-0 text-[#003C8F] dark:text-blue-400">
+                                                    <IconComponent className="w-4 h-4" />
                                                 </div>
                                                 <div>
-                                                    <h4 className="text-xs font-extrabold text-slate-900 dark:text-white">
+                                                    <h4 className="text-xs font-extrabold text-slate-900 dark:text-white leading-tight">
                                                         {torneo.titulo}
                                                     </h4>
                                                     <span className="text-[11px] font-bold text-[#800A15] dark:text-rose-400 block mt-0.5">
@@ -357,33 +357,33 @@ export default function Deportes() {
                             </div>
 
                             {/* Tarjeta Banner al pie */}
-                            <div className="bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-800/60 p-4 rounded-2xl flex items-center gap-3">
-                                <Trophy className="w-7 h-7 text-amber-600 dark:text-amber-400 shrink-0" />
-                                <p className="text-[11px] font-bold text-amber-900 dark:text-amber-200 leading-tight">
+                            <div className="bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-800/60 p-3.5 rounded-2xl flex items-center gap-2.5">
+                                <Trophy className="w-6 h-6 text-amber-600 dark:text-amber-400 shrink-0" />
+                                <p className="text-[10px] font-bold text-amber-900 dark:text-amber-200 leading-tight">
                                     Representamos más que un colegio, representamos valores. ¡Vamos Santa Isabel!
                                 </p>
                             </div>
                         </div>
 
-                        {/* ── COLUMNA 4: Sidebar Deportes (2 cols en LG - TEXTO Y CONTRASTE 100% LEGIBLE) ── */}
-                        <div className="lg:col-span-2 bg-[#800A15] text-white rounded-3xl p-6 shadow-xl flex flex-col justify-between space-y-6">
+                        {/* ── COLUMNA 4: Sidebar Deportes (2 cols en LG - ANCHO Y TIPOGRAFÍA 100% AJUSTADOS SIN DEFORMACIÓN) ── */}
+                        <div className="lg:col-span-2 bg-[#800A15] text-white rounded-3xl p-4 xl:p-5 shadow-xl flex flex-col justify-between space-y-4 overflow-hidden">
                             <div>
-                                <h2 className="text-base font-black text-white uppercase tracking-wider pb-3 border-b border-white/20 mb-4">
+                                <h2 className="text-sm xl:text-base font-black text-white uppercase tracking-wider pb-2.5 border-b border-white/20 mb-3">
                                     Deportes
                                 </h2>
 
-                                <ul className="space-y-2">
+                                <ul className="space-y-1.5">
                                     {DISCIPLINAS.map((item, idx) => {
                                         const DiscipIcon = item.icon;
                                         return (
                                             <li 
                                                 key={idx} 
-                                                className="flex items-center gap-3 px-2.5 py-2 rounded-xl hover:bg-white/15 transition-all cursor-pointer font-bold text-xs text-white group"
+                                                className="flex items-center gap-2 px-2 py-1.5 rounded-xl hover:bg-white/15 transition-all cursor-pointer font-bold text-xs text-white group"
                                             >
-                                                <div className="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center shrink-0 group-hover:bg-white/20 transition-colors">
-                                                    <DiscipIcon className="w-4 h-4 text-amber-300" />
+                                                <div className="w-6 h-6 rounded-lg bg-white/10 flex items-center justify-center shrink-0 group-hover:bg-white/20 transition-colors">
+                                                    <DiscipIcon className="w-3.5 h-3.5 text-amber-300 shrink-0" />
                                                 </div>
-                                                <span className="text-white text-xs font-bold">{item.nombre}</span>
+                                                <span className="text-white text-xs font-bold leading-tight whitespace-nowrap truncate">{item.nombre}</span>
                                             </li>
                                         );
                                     })}
@@ -395,14 +395,14 @@ export default function Deportes() {
                 </section>
 
                 {/* ── 3. BARRA INFERIOR DE VALORES Y FE SANTA ISABEL ── */}
-                <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
+                <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
                     <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
                         
                         {/* 4 Valores Institucionales */}
-                        <div className="md:col-span-8 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-6 grid grid-cols-2 sm:grid-cols-4 gap-4 shadow-sm">
+                        <div className="md:col-span-8 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-5 grid grid-cols-2 sm:grid-cols-4 gap-4 shadow-sm">
                             <div className="space-y-1">
                                 <div className="flex items-center gap-2 text-[#800A15] dark:text-rose-400">
-                                    <Award className="w-5 h-5" />
+                                    <Award className="w-5 h-5 shrink-0" />
                                     <span className="text-xs font-black uppercase tracking-wider">DISCIPLINA</span>
                                 </div>
                                 <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium leading-tight">
@@ -412,7 +412,7 @@ export default function Deportes() {
 
                             <div className="space-y-1">
                                 <div className="flex items-center gap-2 text-[#800A15] dark:text-rose-400">
-                                    <Activity className="w-5 h-5" />
+                                    <Activity className="w-5 h-5 shrink-0" />
                                     <span className="text-xs font-black uppercase tracking-wider">ESFUERZO</span>
                                 </div>
                                 <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium leading-tight">
@@ -422,7 +422,7 @@ export default function Deportes() {
 
                             <div className="space-y-1">
                                 <div className="flex items-center gap-2 text-[#800A15] dark:text-rose-400">
-                                    <Users className="w-5 h-5" />
+                                    <Users className="w-5 h-5 shrink-0" />
                                     <span className="text-xs font-black uppercase tracking-wider">EQUIPO</span>
                                 </div>
                                 <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium leading-tight">
@@ -432,7 +432,7 @@ export default function Deportes() {
 
                             <div className="space-y-1">
                                 <div className="flex items-center gap-2 text-[#800A15] dark:text-rose-400">
-                                    <Sparkles className="w-5 h-5" />
+                                    <Sparkles className="w-5 h-5 shrink-0" />
                                     <span className="text-xs font-black uppercase tracking-wider">SUPERACIÓN</span>
                                 </div>
                                 <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium leading-tight">
@@ -442,7 +442,7 @@ export default function Deportes() {
                         </div>
 
                         {/* Tarjeta Escudo e Identidad Final */}
-                        <div className="md:col-span-4 bg-[#08111F] text-white border border-white/10 rounded-3xl p-6 flex items-center gap-4 shadow-xl">
+                        <div className="md:col-span-4 bg-[#08111F] text-white border border-white/10 rounded-3xl p-5 flex items-center gap-4 shadow-xl">
                             <img 
                                 src="/marca/logo-colsih.svg" 
                                 alt="Logo COLSIH" 

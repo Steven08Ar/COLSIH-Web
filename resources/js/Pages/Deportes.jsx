@@ -2,621 +2,511 @@ import { Head, Link } from '@inertiajs/react';
 import { useState } from 'react';
 import AppLayout from '../Layouts/AppLayout';
 import { 
-    Trophy, Award, Medal, Flame, Calendar, Star, Users, ArrowRight, 
-    Activity, Target, ShieldCheck, Heart, Sparkles, Filter, ChevronRight, 
-    CheckCircle2, X
+    Trophy, Medal, Star, User, Calendar, Megaphone, ArrowRight, 
+    Award, Activity, Sparkles, Users, Target, Flame, ChevronRight, 
+    CheckCircle2, X, CircleDot, ShieldCheck
 } from 'lucide-react';
 
-const DEPORTISTAS = [
+const DESTACADOS = [
     {
         id: 1,
-        nombre: 'Mateo Rodríguez Flórez',
-        grado: 'Grado 11°B',
-        disciplina: 'Fútbol',
-        disciplinaKey: 'futbol',
-        categoria: 'Selección Santander Sub-17',
-        logros: [
-            'Máximo Goleador Intercolegiados Supérate 2025 (14 Goles)',
-            'Capitán Selección Santander Sub-17',
-            'Medalla de Oro Torneo Departamental'
-        ],
-        cita: '"El deporte en el COLSIH me ha enseñado disciplina, trabajo en equipo y a nunca rendirme dentro ni fuera de la cancha."',
-        foto: '/docentes/equipo-01.jpg',
-        insignia: '🥇 Deporte de Alto Rendimiento',
-        medallas: { oro: 3, plata: 1, bronce: 0 }
-    },
-    {
-        id: 2,
-        nombre: 'Valentina Mendoza Gómez',
-        grado: 'Grado 9°A',
-        disciplina: 'Natación',
-        disciplinaKey: 'natacion',
-        categoria: 'Categoría Juvenil A',
-        logros: [
-            '3 Medallas de Oro en 100m y 200m Libres',
-            'RRecord Departamental Escolar 2025',
-            'Clasificada a los Juegos Nacionales Intercolegiados'
-        ],
-        cita: '"Representar al colegio en cada brazada es un orgullo inmenso. El apoyo de mis profesores ha sido fundamental."',
-        foto: '/docentes/equipo-02.jpg',
-        insignia: '🏊 Record Departamental Escolar',
-        medallas: { oro: 4, plata: 2, bronce: 1 }
-    },
-    {
-        id: 3,
-        nombre: 'Juan Diego Hernández',
-        grado: 'Grado 10°A',
-        disciplina: 'Taekwondo',
-        disciplinaKey: 'taekwondo',
-        categoria: 'Cinturón Negro - Poomsae y Combate',
-        logros: [
-            'Campeón Departamental de Taekwondo Escolar',
-            'Medalla de Oro en Combate División -59kg',
-            'Reconocimiento a la Excelencia Marcial COLSIH'
-        ],
-        cita: '"El Taekwondo promueve el respeto y el autocontrol, valores que vivimos a diario en el Colegio Santa Isabel de Hungría."',
-        foto: '/docentes/equipo-03.jpg',
-        insignia: '🥋 Cinturón Negro Institucional',
-        medallas: { oro: 2, plata: 1, bronce: 0 }
-    },
-    {
-        id: 4,
-        nombre: 'Isabella Villamizar',
-        grado: 'Grado 8°C',
+        nombre: 'María José Palacios',
         disciplina: 'Voleibol',
-        disciplinaKey: 'voleibol',
-        categoria: 'Selección Voleibol Femenino COLSIH',
-        logros: [
-            'Mejor Armadora del Torneo Regional Intercolegiado',
-            'Subcampeona Departamental Supérate 2025',
-            'Capitana Categoría Infantil'
-        ],
-        cita: '"Cada punto lo jugamos con el corazón por el colegio. La pasión del equipo es nuestra mayor fuerza."',
-        foto: '/docentes/equipo-04.jpg',
-        insignia: '🏐 Mejor Armadora Regional',
-        medallas: { oro: 1, plata: 3, bronce: 0 }
-    },
-    {
-        id: 5,
-        nombre: 'Carlos Eduardo Silva',
-        grado: 'Grado 11°A',
-        disciplina: 'Atletismo',
-        disciplinaKey: 'atletismo',
-        categoria: 'Pista y Campo (400m y Relevos)',
-        logros: [
-            'Medalla de Oro en 400m Planos Juegos Intercolegiados',
-            'Medalla de Oro Relevo 4x100m Masculino',
-            'Atleta del Año COLSIH 2024'
-        ],
-        cita: '"Correr por mi colegio me motiva a dar cada día un paso más hacia mis sueños académicos y deportivos."',
-        foto: '/docentes/equipo-05.jpg',
-        insignia: '🏃 Atleta de Alto Rendimiento',
-        medallas: { oro: 5, plata: 0, bronce: 1 }
-    },
-    {
-        id: 6,
-        nombre: 'Mariana Suárez Rueda',
-        grado: 'Grado 7°B',
-        disciplina: 'Baloncesto',
-        disciplinaKey: 'baloncesto',
-        categoria: 'Selección Infantil Femenina',
-        logros: [
-            'Campeona Torneo Escolar Metropolitana 2025',
-            'Líder en Triples y Asistencias',
-            'Premio Espíritu Deportivo'
-        ],
-        cita: '"En la cancha somos una familia. Entrenar en COLSIH nos enseña a superar cualquier desafío juntos."',
-        foto: '/docentes/equipo-06.jpg',
-        insignia: '🏀 Revelación Deportiva 2025',
-        medallas: { oro: 2, plata: 1, bronce: 1 }
-    }
-];
-
-const PUBLICACIONES_TORNEOS = [
-    {
-        id: 1,
-        titulo: '¡COLSIH Campeón del Torneo Intercolegiado de Baloncesto 2025!',
-        categoria: 'Baloncesto Masculino',
-        fecha: '18 de Julio, 2025',
-        lugar: 'Coliseo Municipal de Floridablanca',
-        resumen: 'Con una demostración impecable de estrategia y garra deportiva, la selección masculina de baloncesto del Colegio Santa Isabel de Hungría se coronó campeona invicta del Torneo Intercolegiado 2025.',
-        detalle: 'En una electrizante final contra el Colegio San José, nuestros deportistas lograron imponerse con un marcador final de 78-65. Destacamos la brillante actuación de todo el plantel dirigido por el profesor Fernando Castro. Este título nos clasifica directamente a la Fase Departamental de los Juegos Supérate.',
-        trofeo: '🏆 Gran Trofeo de Oro Intercolegiado',
-        imagen: '/nosotros_assets/sede-principal.jpg',
-        marcador: 'COLSIH 78 - 65 San José',
-        destacados: ['Mateo Rodríguez', 'Carlos Silva', 'Andrés Morales']
+        grado: 'Grado 11°',
+        resumen: 'Mejor jugadora del torneo intercolegiado 2024. Líder en puntos y en espíritu deportivo.',
+        foto: '/docentes/Daniela Villamizar Villamizar.JPG',
+        logros: ['MVP Torneo Regional 2024', 'Capitana Selección Femenina', '15 Puntos por Partido']
     },
     {
         id: 2,
-        titulo: 'Cosecha de Medallas en el Campeonato Departamental de Natación',
-        categoria: 'Natación Escolar',
-        fecha: '5 de Junio, 2025',
-        lugar: 'Piscina Olímpica de Bucaramanga',
-        resumen: 'El equipo de natación del colegio obtuvo 12 medallas de oro, 6 de plata y 3 de bronce en la competencia departamental escolar.',
-        detalle: 'Nuestros nadadores demostraron un nivel excepcional en las pruebas de 50m, 100m y 200m estilo libre y mariposa. Valentina Mendoza impuso además un nuevo récord departamental en los 100m libres con un tiempo de 58.4 segundos.',
-        trofeo: '🥇 12 Medallas de Oro Departamentales',
-        imagen: '/nosotros_assets/planta-fisica.jpg',
-        marcador: '1er Lugar General por Equipos',
-        destacados: ['Valentina Mendoza', 'Gabriel Ortiz', 'Sofía Ramírez']
+        nombre: 'Mateo Rodríguez',
+        disciplina: 'Fútbol',
+        grado: 'Grado 10°',
+        resumen: 'Goleador del torneo intercolegiado departamental con 14 tantos anotados.',
+        foto: '/docentes/Jeyson Eduardo Suárez Ardila.JPG',
+        logros: ['Botín de Oro Intercolegiados', 'Selección Santander Sub-17', 'Capitán Equipo']
     },
     {
         id: 3,
-        titulo: 'Subcampeonato Nacional y Medallas en Taekwondo Escolar',
-        categoria: 'Artes Marciales / Taekwondo',
-        fecha: '22 de Mayo, 2025',
-        lugar: 'Palacio de Deportes - Santander',
-        resumen: 'Cinco deportistas COLSIH representaron con honor al municipio logrando la clasificación a la final nacional de Taekwondo.',
-        detalle: 'Juan Diego Hernández logró medalla de oro en la modalidad de combate -59kg, mientras que sus compañeros conquistaron 2 platas y 2 bronces. La delegación escolar recibió felicitación especial por parte de la Liga Santandereana de Taekwondo.',
-        trofeo: '🥋 5 Medallas de Honor Marcial',
-        imagen: '/nosotros_assets/fundacion-colsih.jpg',
-        marcador: '5 Atletas Clasificados a Nacionales',
-        destacados: ['Juan Diego Hernández', 'Lucas Gómez', 'Camila Vargas']
-    },
-    {
-        id: 4,
-        titulo: 'Subcampeonas de Voleibol Femenino en los Juegos Supérate',
-        categoria: 'Voleibol Femenino',
-        fecha: '14 de Abril, 2025',
-        lugar: 'Polideportivo Villabel',
-        resumen: 'El equipo femenino luchó en una reñida final de 5 sets, logrando el subcampeonato metropolitano y un cupo al zonal.',
-        detalle: 'Con una defensa sólida y gran espíritu deportivo, las atletas del COLSIH dejaron en alto el nombre de la institución. Felicitaciones a todo el equipo y al cuerpo técnico por su esfuerzo y constancia.',
-        trofeo: '🥈 Medalla de Plata Metropolitana',
-        imagen: '/nosotros_assets/escudo-colsih-antiguo.jpg',
-        marcador: 'COLSIH 2 - 3 Colegio Caldas',
-        destacados: ['Isabella Villamizar', 'Mariana Suárez', 'Lucía Torres']
+        nombre: 'Carlos Eduardo Silva',
+        disciplina: 'Atletismo',
+        grado: 'Grado 11°',
+        resumen: 'Medalla de Oro en 400m planos y relevos 4x100m en los Juegos Supérate.',
+        foto: '/docentes/Edgar Javier García Estupiñán.JPG',
+        logros: ['Medalla de Oro 400m', 'Record Regional 52.3s', 'Atleta del Año COLSIH']
     }
 ];
 
-const ESCUELAS_DEPORTIVAS = [
+const NOTICIAS_LOGROS = [
     {
-        nombre: 'Escuela de Fútbol COLSIH',
-        horario: 'Lunes a Jueves • 3:30 PM - 5:30 PM',
-        entrenador: 'Prof. Fernando Castro',
-        lugar: 'Cancha Polideportiva Villabel',
-        icono: '⚽'
+        id: 1,
+        dia: '20',
+        mes: 'MAY',
+        titulo: '¡Campeones Intercolegiados 2024!',
+        descripcion: 'Nuestro equipo de fútbol masculino obtuvo el primer lugar en la categoría juvenil.',
+        imagen: '/galeria/colegio-afuera.JPG',
+        destacado: true
     },
     {
-        nombre: 'Club de Baloncesto',
-        horario: 'Martes y Jueves • 3:30 PM - 5:30 PM',
-        entrenador: 'Prof. Jorge Eliécer Martínez',
-        lugar: 'Coliseo Abierto COLSIH',
-        icono: '🏀'
+        id: 2,
+        dia: '12',
+        mes: 'MAY',
+        titulo: 'Segundo lugar en Voleibol Femenino',
+        descripcion: 'Gran participación de nuestro equipo en el torneo intercolegiado regional.',
+        imagen: '/galeria/bachillerato.JPG',
+        destacado: false
     },
     {
-        nombre: 'Academia de Natación',
-        horario: 'Miércoles y Viernes • 3:00 PM - 5:00 PM',
-        entrenador: 'Dra. María Elena Gutiérrez',
-        lugar: 'Complejo Acuático Institucional',
-        icono: '🏊'
-    },
-    {
-        nombre: 'Formativa de Taekwondo & Artes Marciales',
-        horario: 'Lunes y Miércoles • 4:00 PM - 6:00 PM',
-        entrenador: 'Master Carlos Alberto Niño',
-        lugar: 'Salón de Artes Marciales',
-        icono: '🥋'
-    },
-    {
-        nombre: 'Semillero de Voleibol',
-        horario: 'Martes y Viernes • 3:30 PM - 5:30 PM',
-        entrenador: 'Prof. Diana Marcela Pérez',
-        lugar: 'Cancha Abierta 2',
-        icono: '🏐'
-    },
-    {
-        nombre: 'Liga de Atletismo & Fondo',
-        horario: 'Sábados • 7:00 AM - 10:00 AM',
-        entrenador: 'Prof. Ricardo Fonseca',
-        lugar: 'Pista de Atletismo & Parque La Florida',
-        icono: '🏃'
+        id: 3,
+        dia: '05',
+        mes: 'MAY',
+        titulo: 'Atletas Santa Isabel en el Podio',
+        descripcion: 'Destacada participación en atletismo: 3 oros, 2 platas y 1 bronce.',
+        imagen: '/galeria/estudiantes-espaldas.png',
+        destacado: false
     }
+];
+
+const PROXIMOS_TORNEOS = [
+    {
+        id: 1,
+        titulo: 'Torneo Intercolegiado de Fútbol',
+        fecha: 'Del 10 al 20 de junio',
+        lugar: 'Coliseo Municipal',
+        iconType: Activity
+    },
+    {
+        id: 2,
+        titulo: 'Copa Regional de Voleibol',
+        fecha: 'Del 25 al 28 de junio',
+        lugar: 'Polideportivo UIS',
+        iconType: Flame
+    },
+    {
+        id: 3,
+        titulo: 'Festival de Baloncesto',
+        fecha: 'Del 5 al 12 de julio',
+        lugar: 'Gimnasio La Juventud',
+        iconType: Target
+    }
+];
+
+const DISCIPLINAS = [
+    { nombre: 'Fútbol', icon: Activity },
+    { nombre: 'Voleibol', icon: Flame },
+    { nombre: 'Baloncesto', icon: Target },
+    { nombre: 'Atletismo', icon: Award },
+    { nombre: 'Tenis de Mesa', icon: Trophy },
+    { nombre: 'Ajedrez', icon: Sparkles }
 ];
 
 export default function Deportes() {
-    const [filtroCategoria, setFiltroCategoria] = useState('todos');
-    const [logroSeleccionado, setLogroSeleccionado] = useState(null);
+    const [indexDestacado, setIndexDestacado] = useState(0);
+    const [modalPerfil, setModalPerfil] = useState(null);
 
-    const deportistasFiltrados = filtroCategoria === 'todos'
-        ? DEPORTISTAS
-        : DEPORTISTAS.filter(d => d.disciplinaKey === filtroCategoria);
+    const atletaActual = DESTACADOS[indexDestacado];
 
     return (
         <AppLayout>
-            <Head title="Zona Deportiva & Excelencia Escolar | COLSIH" />
+            <Head title="Zona Deportiva | COLSIH" />
 
-            <div className="min-h-screen bg-[#08111F] text-slate-100 font-sans selection:bg-[#800A15] selection:text-white pb-24">
+            <div className="min-h-screen bg-[#F8FAFC] dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-sans selection:bg-[#800A15] selection:text-white pb-20">
                 
-                {/* ── HERO SECTION ZONA DEPORTIVA ── */}
-                <section className="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden">
-                    {/* Fondo decorativo con luces y formas deportivas */}
-                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[600px] pointer-events-none z-0 opacity-40">
-                        <div className="absolute top-10 left-10 w-96 h-96 rounded-full bg-[#800A15]/40 blur-[130px]"></div>
-                        <div className="absolute top-40 right-10 w-96 h-96 rounded-full bg-[#003C8F]/40 blur-[140px]"></div>
-                    </div>
+                {/* ── 1. HERO SECTION (BANNER ZONA DEPORTIVA ESTILO REFERENCIA) ── */}
+                <section className="relative pt-28 pb-16 md:pt-36 md:pb-24 bg-gradient-to-r from-[#600710] via-[#800A15] to-[#003C8F] text-white overflow-hidden shadow-2xl">
+                    
+                    {/* Formas curvadas orgánicas de fondo */}
+                    <div className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full bg-white/10 blur-3xl pointer-events-none -translate-y-1/2 translate-x-1/3"></div>
+                    <div className="absolute bottom-0 left-0 w-[500px] h-[500px] rounded-full bg-black/20 blur-2xl pointer-events-none translate-y-1/3 -translate-x-1/3"></div>
 
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                        <div className="text-center max-w-3xl mx-auto space-y-6">
+                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
                             
-                            {/* Badges superiores */}
-                            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-[#800A15]/30 via-white/10 to-[#003C8F]/30 border border-white/15 px-4 py-2 rounded-full text-xs font-black uppercase tracking-widest text-amber-300 backdrop-blur-md shadow-lg">
-                                <Trophy className="w-4 h-4 text-amber-400 animate-bounce" />
-                                <span>Orgullo Deportivo COLSIH</span>
+                            {/* Columna Izquierda: Textos y Botón */}
+                            <div className="lg:col-span-5 space-y-6 text-center lg:text-left">
+                                <div className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-md border border-white/20 px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-wider text-amber-300 shadow-sm">
+                                    <ShieldCheck className="w-4 h-4 text-amber-400" />
+                                    <span>Excelencia e Identidad COLSIH</span>
+                                </div>
+
+                                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight flex flex-wrap items-center justify-center lg:justify-start gap-3">
+                                    <span>Zona Deportiva</span>
+                                    <Medal className="w-10 h-10 sm:w-12 sm:h-12 text-amber-400 shrink-0 inline-block" />
+                                </h1>
+
+                                <p className="text-amber-200 text-lg font-bold italic">
+                                    "Pasión que nos impulsa, logros que nos unen."
+                                </p>
+
+                                <p className="text-slate-200 text-sm sm:text-base leading-relaxed max-w-lg font-medium">
+                                    Reconocemos el esfuerzo, la disciplina y el talento de nuestros estudiantes que nos representan dentro y fuera del colegio.
+                                </p>
+
+                                <div className="pt-2">
+                                    <a 
+                                        href="#destacados" 
+                                        className="inline-flex items-center justify-center px-7 py-3.5 rounded-full bg-[#800A15] hover:bg-[#600710] text-white font-black text-xs sm:text-sm uppercase tracking-wider transition-all duration-300 shadow-xl shadow-black/20 border border-white/20 group cursor-pointer"
+                                    >
+                                        <span>CONOCE MÁS</span>
+                                        <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                                    </a>
+                                </div>
                             </div>
 
-                            <h1 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight text-white leading-tight">
-                                Zona Deportiva & <br className="hidden sm:inline" />
-                                <span className="bg-gradient-to-r from-amber-300 via-rose-300 to-blue-400 bg-clip-text text-transparent">
-                                    Deportistas de Excelencia
-                                </span>
-                            </h1>
+                            {/* Columna Central: Fotografía Prominente Atletas */}
+                            <div className="lg:col-span-4 flex justify-center">
+                                <div className="relative w-full max-w-md aspect-[4/3] sm:aspect-square rounded-3xl overflow-hidden shadow-2xl border-4 border-white/20 group">
+                                    <img 
+                                        src="/galeria/estudiantes-colsih.png" 
+                                        alt="Deportistas COLSIH" 
+                                        className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                                    />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                                </div>
+                            </div>
 
-                            <p className="text-slate-300 text-sm sm:text-base md:text-lg font-medium leading-relaxed">
-                                En el Colegio Santa Isabel de Hungría formamos campeones de la vida. Celebramos la dedicación, la disciplina y los triunfos de nuestros estudiantes atletas en torneos locales, regionales y nacionales.
-                            </p>
+                            {/* Columna Derecha: Tarjeta de Cita Institucional (Don Bosco) */}
+                            <div className="lg:col-span-3 flex justify-center lg:justify-end">
+                                <div className="bg-black/40 backdrop-blur-md border border-amber-400/40 p-6 rounded-3xl text-slate-100 space-y-3 max-w-xs shadow-xl relative">
+                                    <span className="text-4xl text-amber-400 font-serif leading-none block">“</span>
+                                    <p className="text-xs sm:text-sm italic font-semibold leading-relaxed">
+                                        No se trata de ser el mejor, se trata de dar siempre lo mejor de uno mismo.
+                                    </p>
+                                    <span className="block text-right text-xs font-black uppercase text-amber-300 tracking-wider">
+                                        — Don Bosco
+                                    </span>
+                                </div>
+                            </div>
 
-                            {/* Botones de Acción */}
-                            <div className="pt-4 flex flex-wrap justify-center gap-4">
-                                <a 
-                                    href="#deportistas" 
-                                    className="px-6 py-3.5 rounded-full bg-[#800A15] hover:bg-[#a00d1b] text-white font-extrabold text-xs sm:text-sm uppercase tracking-wider transition-all duration-300 shadow-xl shadow-[#800A15]/40 flex items-center gap-2 group"
-                                >
-                                    <Star className="w-4 h-4 text-amber-300 group-hover:scale-110 transition-transform" />
-                                    <span>Deportistas Destacados</span>
-                                </a>
-
-                                <a 
-                                    href="#torneos" 
-                                    className="px-6 py-3.5 rounded-full bg-white/10 hover:bg-white/20 text-white border border-white/20 font-extrabold text-xs sm:text-sm uppercase tracking-wider backdrop-blur-md transition-all duration-300 flex items-center gap-2"
-                                >
-                                    <Trophy className="w-4 h-4 text-amber-400" />
-                                    <span>Torneos & Campeonatos</span>
-                                </a>
-                            </div>
-                        </div>
-
-                        {/* ── METRICAS / ESTADISTICAS DEPORTIVAS ── */}
-                        <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 max-w-5xl mx-auto">
-                            <div className="bg-white/5 backdrop-blur-xl border border-white/10 p-6 rounded-3xl text-center space-y-1 hover:border-amber-400/40 transition-colors">
-                                <span className="block text-3xl sm:text-4xl font-black text-amber-400">45+</span>
-                                <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Títulos Ganados</span>
-                            </div>
-                            <div className="bg-white/5 backdrop-blur-xl border border-white/10 p-6 rounded-3xl text-center space-y-1 hover:border-rose-400/40 transition-colors">
-                                <span className="block text-3xl sm:text-4xl font-black text-rose-400">120+</span>
-                                <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Atletas en Selección</span>
-                            </div>
-                            <div className="bg-white/5 backdrop-blur-xl border border-white/10 p-6 rounded-3xl text-center space-y-1 hover:border-blue-400/40 transition-colors">
-                                <span className="block text-3xl sm:text-4xl font-black text-blue-400">6</span>
-                                <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Disciplinas Formativas</span>
-                            </div>
-                            <div className="bg-white/5 backdrop-blur-xl border border-white/10 p-6 rounded-3xl text-center space-y-1 hover:border-emerald-400/40 transition-colors">
-                                <span className="block text-3xl sm:text-4xl font-black text-emerald-400">100%</span>
-                                <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Apoyo Académico</span>
-                            </div>
                         </div>
                     </div>
                 </section>
 
-                {/* ── SECCION 1: DEPORTISTAS DESTACADOS COLSIH ── */}
-                <section id="deportistas" className="py-16 relative">
-                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                {/* ── 2. GRID PRINCIPAL DE CONTENIDO (ESTRUCTURA IDÉNTICA A LA REFERENCIA) ── */}
+                <section id="destacados" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6">
                         
-                        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+                        {/* ── COLUMNA 1: Destacados del Mes (3 cols en LG) ── */}
+                        <div className="lg:col-span-3 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-6 shadow-sm flex flex-col justify-between space-y-5">
                             <div>
-                                <span className="text-xs font-black uppercase tracking-[3px] text-amber-400 bg-amber-400/10 px-3.5 py-1.5 rounded-full inline-block mb-3 border border-amber-400/20">
-                                    Excelencia Individual & Colectiva
-                                </span>
-                                <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
-                                    Nuestros Deportistas Destacados
-                                </h2>
-                                <p className="text-slate-400 text-sm mt-1 max-w-xl font-medium">
-                                    Estudiantes que combinan el rendimiento académico de alto nivel con triunfos en el deporte representativo.
-                                </p>
+                                <div className="flex items-center gap-2 mb-4 pb-3 border-b border-slate-100 dark:border-slate-800">
+                                    <Star className="w-5 h-5 text-amber-500" />
+                                    <h2 className="text-base font-black text-slate-900 dark:text-white uppercase tracking-tight">
+                                        Destacados del Mes
+                                    </h2>
+                                </div>
+
+                                {/* Tarjeta del Deportista Actual */}
+                                <div className="space-y-4">
+                                    <div className="relative aspect-[4/5] rounded-2xl overflow-hidden bg-slate-100 dark:bg-slate-800 shadow-md">
+                                        <img 
+                                            src={atletaActual.foto} 
+                                            alt={atletaActual.nombre} 
+                                            className="w-full h-full object-cover object-top"
+                                            onError={(e) => {
+                                                e.target.onerror = null;
+                                                e.target.src = '/galeria/estudiantes-colsih.png';
+                                            }}
+                                        />
+                                        <div className="absolute top-3 right-3 bg-[#800A15] text-white text-[11px] font-black uppercase px-3 py-1 rounded-full shadow-md">
+                                            {atletaActual.disciplina}
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <h3 className="text-lg font-black text-slate-900 dark:text-white">
+                                            {atletaActual.nombre}
+                                        </h3>
+                                        <span className="text-xs font-bold text-blue-600 dark:text-blue-400 block mt-0.5">
+                                            {atletaActual.grado}
+                                        </span>
+                                        <p className="text-slate-600 dark:text-slate-400 text-xs mt-2 font-medium leading-relaxed">
+                                            {atletaActual.resumen}
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
 
-                            {/* Filtro de Disciplinas */}
-                            <div className="flex flex-wrap gap-2 bg-white/5 p-1.5 rounded-2xl border border-white/10 backdrop-blur-md">
-                                {[
-                                    { key: 'todos', label: 'Todos' },
-                                    { key: 'futbol', label: 'Fútbol ⚽' },
-                                    { key: 'natacion', label: 'Natación 🏊' },
-                                    { key: 'taekwondo', label: 'Taekwondo 🥋' },
-                                    { key: 'voleibol', label: 'Voleibol 🏐' },
-                                    { key: 'atletismo', label: 'Atletismo 🏃' },
-                                    { key: 'baloncesto', label: 'Baloncesto 🏀' },
-                                ].map((cat) => (
-                                    <button
-                                        key={cat.key}
-                                        onClick={() => setFiltroCategoria(cat.key)}
-                                        className={`px-3.5 py-2 rounded-xl text-xs font-extrabold transition-all duration-200 cursor-pointer ${
-                                            filtroCategoria === cat.key
-                                                ? 'bg-[#800A15] text-white shadow-lg shadow-[#800A15]/40'
-                                                : 'text-slate-400 hover:text-white hover:bg-white/5'
-                                        }`}
-                                    >
-                                        {cat.label}
-                                    </button>
-                                ))}
+                            {/* Botón Ver Perfil & Puntos de Paginación */}
+                            <div className="space-y-4 pt-2">
+                                <button
+                                    onClick={() => setModalPerfil(atletaActual)}
+                                    className="w-full py-2.5 px-4 border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl text-xs font-black uppercase tracking-wider text-slate-800 dark:text-slate-200 transition flex items-center justify-center gap-2 cursor-pointer"
+                                >
+                                    <span>VER PERFIL</span>
+                                    <User className="w-4 h-4" />
+                                </button>
+
+                                {/* Indicadores de navegación */}
+                                <div className="flex justify-center gap-2">
+                                    {DESTACADOS.map((_, idx) => (
+                                        <button
+                                            key={idx}
+                                            onClick={() => setIndexDestacado(idx)}
+                                            className={`w-2.5 h-2.5 rounded-full transition-all cursor-pointer ${
+                                                indexDestacado === idx 
+                                                    ? 'bg-[#800A15] w-6' 
+                                                    : 'bg-slate-300 dark:bg-slate-700 hover:bg-slate-400'
+                                            }`}
+                                            title={`Ver atleta ${idx + 1}`}
+                                        />
+                                    ))}
+                                </div>
                             </div>
                         </div>
 
-                        {/* GRID DE DEPORTISTAS */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                            {deportistasFiltrados.map((atleta) => (
-                                <div 
-                                    key={atleta.id}
-                                    className="bg-gradient-to-b from-slate-900/90 to-slate-900/60 border border-white/10 rounded-3xl overflow-hidden hover:border-amber-400/40 transition-all duration-300 group flex flex-col justify-between shadow-xl"
-                                >
-                                    <div>
-                                        {/* Foto de Portada con Aspect 4/5 */}
-                                        <div className="relative aspect-[4/5] overflow-hidden bg-slate-800">
+                        {/* ── COLUMNA 2: Noticias y Logros (4 cols en LG) ── */}
+                        <div className="lg:col-span-4 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-6 shadow-sm flex flex-col justify-between space-y-4">
+                            <div>
+                                <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-100 dark:border-slate-800">
+                                    <div className="flex items-center gap-2">
+                                        <Megaphone className="w-5 h-5 text-[#800A15]" />
+                                        <h2 className="text-base font-black text-slate-900 dark:text-white uppercase tracking-tight">
+                                            Noticias y Logros
+                                        </h2>
+                                    </div>
+                                    <Link href="/noticias" className="text-[11px] font-black uppercase text-[#800A15] hover:underline flex items-center gap-1">
+                                        <span>VER TODAS</span>
+                                        <ArrowRight className="w-3.5 h-3.5" />
+                                    </Link>
+                                </div>
+
+                                {/* Noticia Destacada Principal */}
+                                {NOTICIAS_LOGROS.filter(n => n.destacado).map((noticia) => (
+                                    <div key={noticia.id} className="relative rounded-2xl overflow-hidden bg-slate-900 text-white group mb-4 shadow-md">
+                                        <div className="aspect-[16/9] overflow-hidden">
                                             <img 
-                                                src={atleta.foto} 
-                                                alt={atleta.nombre}
-                                                className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
-                                                onError={(e) => {
-                                                    e.target.onerror = null;
-                                                    e.target.src = '/nosotros_assets/sede-principal.jpg';
-                                                }}
+                                                src={noticia.imagen} 
+                                                alt={noticia.titulo}
+                                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 opacity-80" 
                                             />
-                                            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent"></div>
-
-                                            {/* Insignia Flotante */}
-                                            <div className="absolute top-4 left-4 z-10">
-                                                <span className="bg-slate-950/80 backdrop-blur-md text-amber-300 border border-amber-400/30 px-3 py-1 rounded-full text-[11px] font-black uppercase tracking-wider shadow-md">
-                                                    {atleta.insignia}
-                                                </span>
-                                            </div>
-
-                                            {/* Conteo de Medallas */}
-                                            <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between text-xs font-bold text-white z-10">
-                                                <span className="bg-[#003C8F]/80 backdrop-blur-md px-3 py-1 rounded-full border border-blue-400/30">
-                                                    {atleta.grado}
-                                                </span>
-                                                <div className="flex gap-1.5 bg-slate-950/80 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/10">
-                                                    <span title="Medallas de Oro">🥇 {atleta.medallas.oro}</span>
-                                                    <span title="Medallas de Plata">🥈 {atleta.medallas.plata}</span>
-                                                    <span title="Medallas de Bronce">🥉 {atleta.medallas.bronce}</span>
-                                                </div>
-                                            </div>
                                         </div>
+                                        <div className="absolute top-3 left-3 bg-white text-slate-900 px-2.5 py-1 rounded-xl text-center shadow-md">
+                                            <span className="block text-sm font-black leading-none">{noticia.dia}</span>
+                                            <span className="block text-[9px] font-black uppercase text-slate-500">{noticia.mes}</span>
+                                        </div>
+                                        <div className="p-4 bg-gradient-to-t from-slate-950 via-slate-950/90 to-transparent">
+                                            <h3 className="text-sm font-black leading-snug text-white">
+                                                {noticia.titulo}
+                                            </h3>
+                                            <p className="text-slate-300 text-[11px] font-medium mt-1 line-clamp-2">
+                                                {noticia.descripcion}
+                                            </p>
+                                        </div>
+                                    </div>
+                                ))}
 
-                                        {/* Información del Atleta */}
-                                        <div className="p-6 space-y-4">
+                                {/* Lista de Otras Noticias */}
+                                <div className="space-y-3">
+                                    {NOTICIAS_LOGROS.filter(n => !n.destacado).map((noticia) => (
+                                        <div key={noticia.id} className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/50 transition">
+                                            <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 flex flex-col items-center justify-center shrink-0 border border-slate-200 dark:border-slate-700">
+                                                <span className="text-xs font-black leading-none text-slate-900 dark:text-white">{noticia.dia}</span>
+                                                <span className="text-[8px] font-black uppercase text-slate-400">{noticia.mes}</span>
+                                            </div>
                                             <div>
-                                                <span className="text-xs font-extrabold text-blue-400 uppercase tracking-wider block">
-                                                    {atleta.disciplina} • {atleta.categoria}
-                                                </span>
-                                                <h3 className="text-xl font-black text-white mt-1 group-hover:text-amber-300 transition-colors">
-                                                    {atleta.nombre}
-                                                </h3>
-                                            </div>
-
-                                            {/* Lista de Logros Destacados */}
-                                            <div className="space-y-2">
-                                                <span className="text-[11px] font-black text-slate-400 uppercase tracking-widest block">
-                                                    Logros Principales:
-                                                </span>
-                                                <ul className="space-y-1.5">
-                                                    {atleta.logros.map((logro, idx) => (
-                                                        <li key={idx} className="text-xs text-slate-300 font-medium flex items-start gap-2">
-                                                            <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-                                                            <span>{logro}</span>
-                                                        </li>
-                                                    ))}
-                                                </ul>
-                                            </div>
-
-                                            {/* Cita o Mensaje */}
-                                            <div className="bg-white/5 border border-white/5 p-3.5 rounded-2xl">
-                                                <p className="text-xs text-slate-300 italic leading-relaxed">
-                                                    {atleta.cita}
+                                                <h4 className="text-xs font-bold text-slate-900 dark:text-white line-clamp-1">
+                                                    {noticia.titulo}
+                                                </h4>
+                                                <p className="text-[11px] text-slate-500 dark:text-slate-400 line-clamp-1 mt-0.5">
+                                                    {noticia.descripcion}
                                                 </p>
                                             </div>
                                         </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* ── COLUMNA 3: Próximos Torneos (3 cols en LG) ── */}
+                        <div className="lg:col-span-3 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-6 shadow-sm flex flex-col justify-between space-y-4">
+                            <div>
+                                <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-100 dark:border-slate-800">
+                                    <div className="flex items-center gap-2">
+                                        <Calendar className="w-5 h-5 text-[#800A15]" />
+                                        <h2 className="text-base font-black text-slate-900 dark:text-white uppercase tracking-tight">
+                                            Próximos Torneos
+                                        </h2>
                                     </div>
                                 </div>
-                            ))}
-                        </div>
 
-                    </div>
-                </section>
-
-                {/* ── SECCION 2: PUBLICACIONES DE TORNEOS GANADOS & CAMPEONATOS ── */}
-                <section id="torneos" className="py-16 relative bg-slate-950/60 border-y border-white/10">
-                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        
-                        <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
-                            <span className="text-xs font-black uppercase tracking-[3px] text-rose-400 bg-rose-400/10 px-4 py-1.5 rounded-full inline-block border border-rose-400/20">
-                                Galería de Victorias Institucionales
-                            </span>
-                            <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
-                                Publicaciones de Torneos & Campeonatos
-                            </h2>
-                            <p className="text-slate-400 text-sm font-medium">
-                                Revive las crónicas y triunfos más destacados de nuestras selecciones deportivas en competencias oficiales.
-                            </p>
-                        </div>
-
-                        {/* GRID DE PUBLICACIONES DE TORNEOS */}
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                            {PUBLICACIONES_TORNEOS.map((post) => (
-                                <div 
-                                    key={post.id}
-                                    className="bg-gradient-to-br from-slate-900 to-slate-900/80 border border-white/10 rounded-3xl p-6 sm:p-8 flex flex-col justify-between hover:border-blue-400/40 transition-all duration-300 group shadow-xl"
-                                >
-                                    <div className="space-y-5">
-                                        {/* Header de la Publicación */}
-                                        <div className="flex flex-wrap items-center justify-between gap-3 text-xs">
-                                            <span className="bg-[#003C8F] text-white px-3.5 py-1 rounded-full font-black uppercase tracking-wider shadow-sm">
-                                                {post.categoria}
-                                            </span>
-                                            <div className="flex items-center gap-2 text-slate-400 font-semibold">
-                                                <Calendar className="w-4 h-4 text-rose-400" />
-                                                <span>{post.fecha}</span>
-                                            </div>
-                                        </div>
-
-                                        {/* Título & Resumen */}
-                                        <div>
-                                            <h3 className="text-xl sm:text-2xl font-black text-white leading-snug group-hover:text-blue-300 transition-colors">
-                                                {post.titulo}
-                                            </h3>
-                                            <p className="text-slate-300 text-xs sm:text-sm mt-3 font-medium leading-relaxed">
-                                                {post.resumen}
-                                            </p>
-                                        </div>
-
-                                        {/* Tarjeta de Resultado / Trofeo */}
-                                        <div className="bg-gradient-to-r from-amber-400/10 via-rose-400/10 to-blue-400/10 border border-white/10 p-4 rounded-2xl flex items-center justify-between gap-4">
-                                            <div>
-                                                <span className="block text-[11px] font-black text-amber-300 uppercase tracking-wider">
-                                                    {post.trofeo}
-                                                </span>
-                                                <span className="text-xs text-white font-extrabold mt-0.5 block">
-                                                    Marcador: {post.marcador}
-                                                </span>
-                                            </div>
-                                            <span className="text-xs text-slate-400 font-semibold shrink-0">
-                                                📍 {post.lugar}
-                                            </span>
-                                        </div>
-
-                                        {/* Atletas Destacados del Partido */}
-                                        <div>
-                                            <span className="text-[11px] font-black text-slate-400 uppercase tracking-wider block mb-2">
-                                                Jugadores Clave del Encuentro:
-                                            </span>
-                                            <div className="flex flex-wrap gap-2">
-                                                {post.destacados.map((jugador, i) => (
-                                                    <span key={i} className="bg-white/5 border border-white/10 text-slate-200 text-xs px-3 py-1 rounded-full font-semibold">
-                                                        ⭐ {jugador}
+                                {/* Lista de Eventos */}
+                                <div className="space-y-3">
+                                    {PROXIMOS_TORNEOS.map((torneo) => {
+                                        const IconComponent = torneo.iconType;
+                                        return (
+                                            <div key={torneo.id} className="p-3.5 bg-slate-50 dark:bg-slate-800/40 rounded-2xl border border-slate-100 dark:border-slate-800 flex items-start gap-3">
+                                                <div className="w-9 h-9 rounded-xl bg-blue-50 dark:bg-blue-950/50 flex items-center justify-center shrink-0 text-[#003C8F] dark:text-blue-400">
+                                                    <IconComponent className="w-5 h-5" />
+                                                </div>
+                                                <div>
+                                                    <h4 className="text-xs font-extrabold text-slate-900 dark:text-white">
+                                                        {torneo.titulo}
+                                                    </h4>
+                                                    <span className="text-[11px] font-semibold text-[#800A15] dark:text-rose-400 block mt-0.5">
+                                                        {torneo.fecha}
                                                     </span>
-                                                ))}
+                                                    <span className="text-[10px] text-slate-400 font-medium block">
+                                                        {torneo.lugar}
+                                                    </span>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div>
-
-                                    {/* Botón Ver Crónica Completa */}
-                                    <div className="pt-6 mt-6 border-t border-white/10 flex justify-end">
-                                        <button
-                                            onClick={() => setLogroSeleccionado(post)}
-                                            className="text-xs font-black uppercase tracking-wider text-amber-300 hover:text-white flex items-center gap-2 cursor-pointer transition-colors group/btn"
-                                        >
-                                            <span>Ver Crónica Completa & Galería</span>
-                                            <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
-                                        </button>
-                                    </div>
+                                        );
+                                    })}
                                 </div>
-                            ))}
+                            </div>
+
+                            {/* Tarjeta Banner de Valores al pie de Torneos */}
+                            <div className="bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/40 p-4 rounded-2xl flex items-center gap-3">
+                                <Trophy className="w-7 h-7 text-amber-600 shrink-0" />
+                                <p className="text-[11px] font-bold text-amber-900 dark:text-amber-200 leading-tight">
+                                    Representamos más que un colegio, representamos valores. ¡Vamos Santa Isabel!
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* ── COLUMNA 4: Sidebar Deportes (2 cols en LG) ── */}
+                        <div className="lg:col-span-2 bg-[#800A15] text-white rounded-3xl p-6 shadow-xl flex flex-col justify-between space-y-6">
+                            <div>
+                                <h2 className="text-lg font-black uppercase tracking-tight pb-3 border-b border-white/20 mb-4">
+                                    Deportes
+                                </h2>
+
+                                <ul className="space-y-3">
+                                    {DISCIPLINAS.map((item, idx) => {
+                                        const DiscipIcon = item.icon;
+                                        return (
+                                            <li key={idx} className="flex items-center gap-3 text-xs font-bold hover:translate-x-1 transition-transform cursor-pointer">
+                                                <div className="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center shrink-0">
+                                                    <DiscipIcon className="w-4 h-4 text-amber-300" />
+                                                </div>
+                                                <span>{item.nombre}</span>
+                                            </li>
+                                        );
+                                    })}
+                                </ul>
+                            </div>
                         </div>
 
                     </div>
                 </section>
 
-                {/* ── SECCION 3: ESCUELAS & ESCENARIOS DEPORTIVOS ── */}
-                <section className="py-16 relative">
-                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                {/* ── 3. BARRA INFERIOR DE VALORES Y FE SANTA ISABEL ── */}
+                <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
+                    <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
                         
-                        <div className="text-center max-w-3xl mx-auto mb-14 space-y-3">
-                            <span className="text-xs font-black uppercase tracking-[3px] text-emerald-400 bg-emerald-400/10 px-4 py-1.5 rounded-full inline-block border border-emerald-400/20">
-                                Formación Integral
-                            </span>
-                            <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
-                                Escuelas & Selecciones Deportivas
-                            </h2>
-                            <p className="text-slate-400 text-sm font-medium">
-                                Ofrecemos programas extracurriculares guiados por entrenadores profesionales en nuestras instalaciones propias.
-                            </p>
+                        {/* 4 Valores Institucionales */}
+                        <div className="md:col-span-8 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-6 grid grid-cols-2 sm:grid-cols-4 gap-4 shadow-sm">
+                            <div className="space-y-1">
+                                <div className="flex items-center gap-2 text-[#800A15] dark:text-rose-400">
+                                    <Award className="w-5 h-5" />
+                                    <span className="text-xs font-black uppercase tracking-wider">DISCIPLINA</span>
+                                </div>
+                                <p className="text-[11px] text-slate-500 font-medium leading-tight">
+                                    Entrenamos nuestra mente y nuestro cuerpo.
+                                </p>
+                            </div>
+
+                            <div className="space-y-1">
+                                <div className="flex items-center gap-2 text-[#800A15] dark:text-rose-400">
+                                    <Activity className="w-5 h-5" />
+                                    <span className="text-xs font-black uppercase tracking-wider">ESFUERZO</span>
+                                </div>
+                                <p className="text-[11px] text-slate-500 font-medium leading-tight">
+                                    Cada gota de sudor tiene su recompensa.
+                                </p>
+                            </div>
+
+                            <div className="space-y-1">
+                                <div className="flex items-center gap-2 text-[#800A15] dark:text-rose-400">
+                                    <Users className="w-5 h-5" />
+                                    <span className="text-xs font-black uppercase tracking-wider">EQUIPO</span>
+                                </div>
+                                <p className="text-[11px] text-slate-500 font-medium leading-tight">
+                                    Juntos somos más fuertes, juntos llegamos más lejos.
+                                </p>
+                            </div>
+
+                            <div className="space-y-1">
+                                <div className="flex items-center gap-2 text-[#800A15] dark:text-rose-400">
+                                    <Sparkles className="w-5 h-5" />
+                                    <span className="text-xs font-black uppercase tracking-wider">SUPERACIÓN</span>
+                                </div>
+                                <p className="text-[11px] text-slate-500 font-medium leading-tight">
+                                    Hoy es el resultado de tus decisiones de ayer.
+                                </p>
+                            </div>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {ESCUELAS_DEPORTIVAS.map((escuela, idx) => (
-                                <div 
-                                    key={idx}
-                                    className="bg-white/5 backdrop-blur-xl border border-white/10 p-6 rounded-3xl hover:border-emerald-400/40 transition-all duration-300 space-y-4"
-                                >
-                                    <div className="flex items-center gap-3">
-                                        <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#800A15] to-[#003C8F] flex items-center justify-center text-2xl shadow-md">
-                                            {escuela.icono}
-                                        </div>
-                                        <div>
-                                            <h3 className="text-lg font-black text-white">
-                                                {escuela.nombre}
-                                            </h3>
-                                            <span className="text-xs text-emerald-400 font-bold">
-                                                {escuela.entrenador}
-                                            </span>
-                                        </div>
-                                    </div>
-
-                                    <div className="space-y-2 text-xs font-semibold text-slate-300 pt-2 border-t border-white/5">
-                                        <div className="flex items-center gap-2">
-                                            <Calendar className="w-4 h-4 text-amber-400 shrink-0" />
-                                            <span>{escuela.horario}</span>
-                                        </div>
-                                        <div className="flex items-center gap-2">
-                                            <Activity className="w-4 h-4 text-blue-400 shrink-0" />
-                                            <span>{escuela.lugar}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
+                        {/* Tarjeta Escudo e Identidad Final */}
+                        <div className="md:col-span-4 bg-[#08111F] text-white border border-white/10 rounded-3xl p-6 flex items-center gap-4 shadow-xl">
+                            <img 
+                                src="/marca/logo-colsih.svg" 
+                                alt="Logo COLSIH" 
+                                className="h-12 w-auto shrink-0 filter drop-shadow-md"
+                            />
+                            <div>
+                                <span className="block text-[11px] font-black uppercase tracking-wider text-amber-300">
+                                    Fe, Ciencia, Justicia y Hungría
+                                </span>
+                                <p className="text-xs font-medium text-slate-300 mt-0.5 leading-snug">
+                                    Formamos buenos cristianos y honrados ciudadanos.
+                                </p>
+                            </div>
                         </div>
 
                     </div>
                 </section>
 
-                {/* ── MODAL DETALLE DE PUBLICACION DE TORNEO ── */}
-                {logroSeleccionado && (
+                {/* ── MODAL DETALLE DE PERFIL DE ATLETA ── */}
+                {modalPerfil && (
                     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-fadeIn">
-                        <div className="bg-slate-900 border border-white/20 rounded-3xl max-w-2xl w-full p-6 sm:p-8 space-y-6 relative max-h-[90vh] overflow-y-auto shadow-2xl">
+                        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-lg w-full p-6 space-y-6 relative shadow-2xl">
                             
                             <button
-                                onClick={() => setLogroSeleccionado(null)}
-                                className="absolute top-4 right-4 p-2 text-slate-400 hover:text-white bg-white/5 hover:bg-white/10 rounded-full transition cursor-pointer"
+                                onClick={() => setModalPerfil(null)}
+                                className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 dark:hover:text-white bg-slate-100 dark:bg-slate-800 rounded-full transition cursor-pointer"
                             >
                                 <X className="w-5 h-5" />
                             </button>
 
-                            <div className="space-y-2">
-                                <span className="bg-[#003C8F] text-white px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider inline-block">
-                                    {logroSeleccionado.categoria}
+                            <div className="flex items-center gap-4">
+                                <div className="w-16 h-16 rounded-full overflow-hidden bg-slate-200 shrink-0">
+                                    <img src={modalPerfil.foto} alt={modalPerfil.nombre} className="w-full h-full object-cover" />
+                                </div>
+                                <div>
+                                    <span className="bg-[#800A15] text-white text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full inline-block">
+                                        {modalPerfil.disciplina}
+                                    </span>
+                                    <h3 className="text-xl font-black text-slate-900 dark:text-white mt-1">
+                                        {modalPerfil.nombre}
+                                    </h3>
+                                    <span className="text-xs text-blue-600 dark:text-blue-400 font-bold">
+                                        {modalPerfil.grado}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div className="space-y-3 pt-2 border-t border-slate-100 dark:border-slate-800">
+                                <span className="text-xs font-black uppercase tracking-wider text-slate-500">
+                                    Palmarés y Reconoicmientos:
                                 </span>
-                                <h3 className="text-2xl font-black text-white">
-                                    {logroSeleccionado.titulo}
-                                </h3>
-                                <p className="text-xs text-rose-300 font-bold">
-                                    🗓️ {logroSeleccionado.fecha} • 📍 {logroSeleccionado.lugar}
-                                </p>
+                                <ul className="space-y-2">
+                                    {modalPerfil.logros.map((logro, i) => (
+                                        <li key={i} className="text-xs font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-2">
+                                            <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+                                            <span>{logro}</span>
+                                        </li>
+                                    ))}
+                                </ul>
                             </div>
 
-                            <div className="aspect-video rounded-2xl overflow-hidden bg-slate-800 border border-white/10">
-                                <img 
-                                    src={logroSeleccionado.imagen} 
-                                    alt={logroSeleccionado.titulo}
-                                    className="w-full h-full object-cover"
-                                />
-                            </div>
-
-                            <div className="bg-gradient-to-r from-amber-400/10 to-rose-400/10 border border-white/10 p-4 rounded-2xl">
-                                <span className="block text-xs font-black text-amber-300 uppercase tracking-wider">
-                                    {logroSeleccionado.trofeo}
-                                </span>
-                                <span className="text-sm font-black text-white mt-1 block">
-                                    Resultado Final: {logroSeleccionado.marcador}
-                                </span>
-                            </div>
-
-                            <div className="space-y-3 text-slate-300 text-xs sm:text-sm font-medium leading-relaxed">
-                                <p>{logroSeleccionado.detalle}</p>
-                            </div>
-
-                            <div className="pt-4 border-t border-white/10 flex justify-end">
+                            <div className="pt-4 flex justify-end">
                                 <button
-                                    onClick={() => setLogroSeleccionado(null)}
-                                    className="px-6 py-2.5 rounded-full bg-[#800A15] hover:bg-[#a00d1b] text-white font-black text-xs uppercase tracking-wider transition cursor-pointer"
+                                    onClick={() => setModalPerfil(null)}
+                                    className="px-6 py-2.5 rounded-full bg-[#800A15] hover:bg-[#600710] text-white font-black text-xs uppercase tracking-wider transition cursor-pointer"
                                 >
-                                    Cerrar Publicación
+                                    Cerrar Perfil
                                 </button>
                             </div>
 

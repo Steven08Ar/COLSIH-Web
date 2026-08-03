@@ -82,7 +82,7 @@ export default function Equipo({ equipo = [] }) {
         { nombre: 'Sandra Patricia Parada Leal', asignatura: 'Música', area: 'Ed. Física y Expresión', foto: getDocenteR2Url('Sandra Patricia Parada Leal'), foto_posicion: 20, foto_zoom: 100 },
         { nombre: 'Sergio Andrés Mendoza Gómez', asignatura: 'Inglés', area: 'Inglés', foto: getDocenteR2Url('Sergio Andrés Mendoza Gómez'), foto_posicion: 20, foto_zoom: 100 },
         { nombre: 'Yesica Zoraya Badillo Corredor', asignatura: 'Ciencias Naturales', area: 'Ciencias Naturales', foto: getDocenteR2Url('Yesica Zoraya Badillo Corredor'), foto_posicion: 20, foto_zoom: 100 },
-        { nombre: 'Yoleida Patricia Camacho Corzo', asignatura: 'Inglés', area: 'Inglés', foto: getAdminR2Url('Yoleida Patricia Camacho Corzo'), foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Yoleida Patricia Camacho Corzo', asignatura: 'Inglés', area: 'Inglés', foto: getDocenteR2Url('Yoleida Patricia Camacho Corzo'), foto_posicion: 20, foto_zoom: 100 },
         { nombre: 'Yoni Amparo Méndez Álvarez', asignatura: 'Matemáticas e Informática', area: 'Matemáticas', foto: getDocenteR2Url('Yoni Amparo Méndez Álvarez'), foto_posicion: 20, foto_zoom: 100 }
     ];
 

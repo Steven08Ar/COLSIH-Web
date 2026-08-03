@@ -59,6 +59,9 @@ Route::prefix('noticias')->name('noticias.')->group(function () {
     Route::get('/{noticia:slug}', [NoticiasController::class, 'show'])->name('show');
 });
 
+// Zona Deportiva
+Route::get('/deportes', [\App\Http\Controllers\DeportesController::class, 'index'])->name('deportes');
+
 // Recorrido virtual 360
 Route::get('/recorrido-virtual/{slug?}', [TourController::class, 'show'])->name('tour.show');
 

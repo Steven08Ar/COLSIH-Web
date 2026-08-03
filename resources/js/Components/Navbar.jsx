@@ -213,6 +213,7 @@ export default function Navbar() {
                     </div>
 
                     <Link href="/admisiones" className={`transition-colors ${url === '/admisiones' ? 'text-white font-extrabold' : 'hover:text-white'}`}>Admisiones</Link>
+                    <Link href="/deportes" className={`transition-colors ${url === '/deportes' ? 'text-white font-extrabold' : 'hover:text-white'}`}>Deportes</Link>
                     <Link href="/noticias" className={`transition-colors ${url.startsWith('/noticias') ? 'text-white font-extrabold' : 'hover:text-white'}`}>Noticias</Link>
                     <Link href="/contacto" className={`transition-colors ${url === '/contacto' ? 'text-[#800A15] font-extrabold' : 'hover:text-white'}`}>Contacto</Link>
                 </div>
@@ -293,6 +294,7 @@ export default function Navbar() {
                         </div>
 
                         <Link href="/admisiones" onClick={() => setMobileOpen(false)} className={`block px-3 py-2 text-sm font-semibold rounded-lg ${url === '/admisiones' ? 'text-white bg-white/10' : 'text-white/85'}`}>Admisiones</Link>
+                        <Link href="/deportes" onClick={() => setMobileOpen(false)} className={`block px-3 py-2 text-sm font-semibold rounded-lg ${url === '/deportes' ? 'text-white bg-white/10' : 'text-white/85'}`}>Zona Deportiva</Link>
                         <Link href="/noticias" onClick={() => setMobileOpen(false)} className={`block px-3 py-2 text-sm font-semibold rounded-lg ${url.startsWith('/noticias') ? 'text-white bg-white/10' : 'text-white/85'}`}>Noticias</Link>
                         <Link href="/contacto" onClick={() => setMobileOpen(false)} className={`block px-3 py-2 text-sm font-semibold rounded-lg ${url === '/contacto' ? 'text-white bg-white/10' : 'text-white/85'}`}>Contacto</Link>
 

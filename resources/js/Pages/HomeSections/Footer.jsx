@@ -104,6 +104,7 @@ export default function Footer() {
                             <h4 className="text-xs font-extrabold tracking-widest uppercase text-white/50">Comunidad</h4>
                             <ul className="space-y-2.5 text-xs font-semibold text-slate-400">
                                 <li><Link href="/admisiones" className="hover:text-white transition-colors">Admisiones 2027</Link></li>
+                                <li><Link href="/deportes" className="hover:text-white transition-colors text-amber-300 font-bold">Zona Deportiva 🏆</Link></li>
                                 <li><Link href="/noticias" className="hover:text-white transition-colors">Noticias</Link></li>
                                 <li><Link href="/contacto" className="hover:text-white transition-colors">Contacto</Link></li>
                                 <li><Link href="/mjs" className="hover:text-white transition-colors font-bold text-[#800A15]">MJS Colombia</Link></li>

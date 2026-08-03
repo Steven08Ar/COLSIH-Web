@@ -4,7 +4,7 @@ import AppLayout from '../Layouts/AppLayout';
 import { 
     Trophy, Medal, Star, User, Calendar, Megaphone, ArrowRight, 
     Award, Activity, Sparkles, Users, Target, Flame, ChevronRight, 
-    CheckCircle2, X, CircleDot, ShieldCheck
+    CheckCircle2, X, ShieldCheck
 } from 'lucide-react';
 
 const DESTACADOS = [
@@ -110,20 +110,20 @@ export default function Deportes() {
         <AppLayout>
             <Head title="Zona Deportiva | COLSIH" />
 
-            <div className="min-h-screen bg-[#F8FAFC] dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-sans selection:bg-[#800A15] selection:text-white pb-20">
+            <div className="min-h-screen bg-[#F4F7FA] dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-sans selection:bg-[#800A15] selection:text-white pb-20">
                 
-                {/* ── 1. HERO SECTION (BANNER ZONA DEPORTIVA ESTILO REFERENCIA) ── */}
-                <section className="relative pt-28 pb-16 md:pt-36 md:pb-24 bg-gradient-to-r from-[#600710] via-[#800A15] to-[#003C8F] text-white overflow-hidden shadow-2xl">
+                {/* ── 1. HERO BANNER ZONA DEPORTIVA (COLORES INSTITUCIONALES PROFUNDOS + REFERENCIA) ── */}
+                <section className="relative pt-28 pb-16 md:pt-36 md:pb-24 bg-gradient-to-br from-[#800A15] via-[#600710] to-[#003C8F] text-white overflow-hidden shadow-2xl">
                     
                     {/* Formas curvadas orgánicas de fondo */}
-                    <div className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full bg-white/10 blur-3xl pointer-events-none -translate-y-1/2 translate-x-1/3"></div>
-                    <div className="absolute bottom-0 left-0 w-[500px] h-[500px] rounded-full bg-black/20 blur-2xl pointer-events-none translate-y-1/3 -translate-x-1/3"></div>
+                    <div className="absolute top-0 right-0 w-[650px] h-[650px] rounded-full bg-white/10 blur-3xl pointer-events-none -translate-y-1/2 translate-x-1/3"></div>
+                    <div className="absolute bottom-0 left-0 w-[550px] h-[550px] rounded-full bg-black/25 blur-2xl pointer-events-none translate-y-1/3 -translate-x-1/3"></div>
 
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
                             
-                            {/* Columna Izquierda: Textos y Botón */}
-                            <div className="lg:col-span-5 space-y-6 text-center lg:text-left">
+                            {/* Columna Izquierda: Título y Textos */}
+                            <div className="lg:col-span-5 space-y-5 text-center lg:text-left">
                                 <div className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-md border border-white/20 px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-wider text-amber-300 shadow-sm">
                                     <ShieldCheck className="w-4 h-4 text-amber-400" />
                                     <span>Excelencia e Identidad COLSIH</span>
@@ -131,21 +131,21 @@ export default function Deportes() {
 
                                 <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight flex flex-wrap items-center justify-center lg:justify-start gap-3">
                                     <span>Zona Deportiva</span>
-                                    <Medal className="w-10 h-10 sm:w-12 sm:h-12 text-amber-400 shrink-0 inline-block" />
+                                    <Medal className="w-10 h-10 sm:w-12 sm:h-12 text-amber-400 shrink-0 inline-block drop-shadow-md" />
                                 </h1>
 
-                                <p className="text-amber-200 text-lg font-bold italic">
+                                <p className="text-amber-300 text-lg font-bold italic tracking-wide">
                                     "Pasión que nos impulsa, logros que nos unen."
                                 </p>
 
-                                <p className="text-slate-200 text-sm sm:text-base leading-relaxed max-w-lg font-medium">
+                                <p className="text-slate-100 text-sm sm:text-base leading-relaxed max-w-lg font-medium">
                                     Reconocemos el esfuerzo, la disciplina y el talento de nuestros estudiantes que nos representan dentro y fuera del colegio.
                                 </p>
 
                                 <div className="pt-2">
                                     <a 
-                                        href="#destacados" 
-                                        className="inline-flex items-center justify-center px-7 py-3.5 rounded-full bg-[#800A15] hover:bg-[#600710] text-white font-black text-xs sm:text-sm uppercase tracking-wider transition-all duration-300 shadow-xl shadow-black/20 border border-white/20 group cursor-pointer"
+                                        href="#grid-deportes" 
+                                        className="inline-flex items-center justify-center px-7 py-3.5 rounded-full bg-[#800A15] hover:bg-[#600710] text-white font-black text-xs sm:text-sm uppercase tracking-wider transition-all duration-300 shadow-xl shadow-black/25 border border-white/20 group cursor-pointer"
                                     >
                                         <span>CONOCE MÁS</span>
                                         <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
@@ -153,7 +153,7 @@ export default function Deportes() {
                                 </div>
                             </div>
 
-                            {/* Columna Central: Fotografía Prominente Atletas */}
+                            {/* Columna Central: Imagen de Atletas */}
                             <div className="lg:col-span-4 flex justify-center">
                                 <div className="relative w-full max-w-md aspect-[4/3] sm:aspect-square rounded-3xl overflow-hidden shadow-2xl border-4 border-white/20 group">
                                     <img 
@@ -161,11 +161,11 @@ export default function Deportes() {
                                         alt="Deportistas COLSIH" 
                                         className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
                                     />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
                                 </div>
                             </div>
 
-                            {/* Columna Derecha: Tarjeta de Cita Institucional (Don Bosco) */}
+                            {/* Columna Derecha: Tarjeta Don Bosco */}
                             <div className="lg:col-span-3 flex justify-center lg:justify-end">
                                 <div className="bg-black/40 backdrop-blur-md border border-amber-400/40 p-6 rounded-3xl text-slate-100 space-y-3 max-w-xs shadow-xl relative">
                                     <span className="text-4xl text-amber-400 font-serif leading-none block">“</span>
@@ -173,7 +173,7 @@ export default function Deportes() {
                                         No se trata de ser el mejor, se trata de dar siempre lo mejor de uno mismo.
                                     </p>
                                     <span className="block text-right text-xs font-black uppercase text-amber-300 tracking-wider">
-                                        — Don Bosco
+                                        — DON BOSCO
                                     </span>
                                 </div>
                             </div>
@@ -182,8 +182,8 @@ export default function Deportes() {
                     </div>
                 </section>
 
-                {/* ── 2. GRID PRINCIPAL DE CONTENIDO (ESTRUCTURA IDÉNTICA A LA REFERENCIA) ── */}
-                <section id="destacados" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                {/* ── 2. GRID PRINCIPAL (IDÉNTICO A LA REFERENCIA) ── */}
+                <section id="grid-deportes" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6">
                         
                         {/* ── COLUMNA 1: Destacados del Mes (3 cols en LG) ── */}
@@ -191,12 +191,12 @@ export default function Deportes() {
                             <div>
                                 <div className="flex items-center gap-2 mb-4 pb-3 border-b border-slate-100 dark:border-slate-800">
                                     <Star className="w-5 h-5 text-amber-500" />
-                                    <h2 className="text-base font-black text-slate-900 dark:text-white uppercase tracking-tight">
+                                    <h2 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-wider">
                                         Destacados del Mes
                                     </h2>
                                 </div>
 
-                                {/* Tarjeta del Deportista Actual */}
+                                {/* Tarjeta Atleta Actual */}
                                 <div className="space-y-4">
                                     <div className="relative aspect-[4/5] rounded-2xl overflow-hidden bg-slate-100 dark:bg-slate-800 shadow-md">
                                         <img 
@@ -217,7 +217,7 @@ export default function Deportes() {
                                         <h3 className="text-lg font-black text-slate-900 dark:text-white">
                                             {atletaActual.nombre}
                                         </h3>
-                                        <span className="text-xs font-bold text-blue-600 dark:text-blue-400 block mt-0.5">
+                                        <span className="text-xs font-extrabold text-[#003C8F] dark:text-blue-400 block mt-0.5">
                                             {atletaActual.grado}
                                         </span>
                                         <p className="text-slate-600 dark:text-slate-400 text-xs mt-2 font-medium leading-relaxed">
@@ -227,17 +227,17 @@ export default function Deportes() {
                                 </div>
                             </div>
 
-                            {/* Botón Ver Perfil & Puntos de Paginación */}
+                            {/* Botón Ver Perfil & Puntos Paginación */}
                             <div className="space-y-4 pt-2">
                                 <button
                                     onClick={() => setModalPerfil(atletaActual)}
-                                    className="w-full py-2.5 px-4 border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl text-xs font-black uppercase tracking-wider text-slate-800 dark:text-slate-200 transition flex items-center justify-center gap-2 cursor-pointer"
+                                    className="w-full py-3 px-4 border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl text-xs font-black uppercase tracking-wider text-slate-800 dark:text-slate-200 transition flex items-center justify-center gap-2 cursor-pointer"
                                 >
                                     <span>VER PERFIL</span>
                                     <User className="w-4 h-4" />
                                 </button>
 
-                                {/* Indicadores de navegación */}
+                                {/* Dots */}
                                 <div className="flex justify-center gap-2">
                                     {DESTACADOS.map((_, idx) => (
                                         <button
@@ -261,7 +261,7 @@ export default function Deportes() {
                                 <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-100 dark:border-slate-800">
                                     <div className="flex items-center gap-2">
                                         <Megaphone className="w-5 h-5 text-[#800A15]" />
-                                        <h2 className="text-base font-black text-slate-900 dark:text-white uppercase tracking-tight">
+                                        <h2 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-wider">
                                             Noticias y Logros
                                         </h2>
                                     </div>
@@ -324,7 +324,7 @@ export default function Deportes() {
                                 <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-100 dark:border-slate-800">
                                     <div className="flex items-center gap-2">
                                         <Calendar className="w-5 h-5 text-[#800A15]" />
-                                        <h2 className="text-base font-black text-slate-900 dark:text-white uppercase tracking-tight">
+                                        <h2 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-wider">
                                             Próximos Torneos
                                         </h2>
                                     </div>
@@ -343,7 +343,7 @@ export default function Deportes() {
                                                     <h4 className="text-xs font-extrabold text-slate-900 dark:text-white">
                                                         {torneo.titulo}
                                                     </h4>
-                                                    <span className="text-[11px] font-semibold text-[#800A15] dark:text-rose-400 block mt-0.5">
+                                                    <span className="text-[11px] font-bold text-[#800A15] dark:text-rose-400 block mt-0.5">
                                                         {torneo.fecha}
                                                     </span>
                                                     <span className="text-[10px] text-slate-400 font-medium block">
@@ -356,31 +356,34 @@ export default function Deportes() {
                                 </div>
                             </div>
 
-                            {/* Tarjeta Banner de Valores al pie de Torneos */}
-                            <div className="bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/40 p-4 rounded-2xl flex items-center gap-3">
-                                <Trophy className="w-7 h-7 text-amber-600 shrink-0" />
+                            {/* Tarjeta Banner al pie */}
+                            <div className="bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-800/60 p-4 rounded-2xl flex items-center gap-3">
+                                <Trophy className="w-7 h-7 text-amber-600 dark:text-amber-400 shrink-0" />
                                 <p className="text-[11px] font-bold text-amber-900 dark:text-amber-200 leading-tight">
                                     Representamos más que un colegio, representamos valores. ¡Vamos Santa Isabel!
                                 </p>
                             </div>
                         </div>
 
-                        {/* ── COLUMNA 4: Sidebar Deportes (2 cols en LG) ── */}
+                        {/* ── COLUMNA 4: Sidebar Deportes (2 cols en LG - TEXTO Y CONTRASTE 100% LEGIBLE) ── */}
                         <div className="lg:col-span-2 bg-[#800A15] text-white rounded-3xl p-6 shadow-xl flex flex-col justify-between space-y-6">
                             <div>
-                                <h2 className="text-lg font-black uppercase tracking-tight pb-3 border-b border-white/20 mb-4">
+                                <h2 className="text-base font-black text-white uppercase tracking-wider pb-3 border-b border-white/20 mb-4">
                                     Deportes
                                 </h2>
 
-                                <ul className="space-y-3">
+                                <ul className="space-y-2">
                                     {DISCIPLINAS.map((item, idx) => {
                                         const DiscipIcon = item.icon;
                                         return (
-                                            <li key={idx} className="flex items-center gap-3 text-xs font-bold hover:translate-x-1 transition-transform cursor-pointer">
-                                                <div className="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center shrink-0">
+                                            <li 
+                                                key={idx} 
+                                                className="flex items-center gap-3 px-2.5 py-2 rounded-xl hover:bg-white/15 transition-all cursor-pointer font-bold text-xs text-white group"
+                                            >
+                                                <div className="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center shrink-0 group-hover:bg-white/20 transition-colors">
                                                     <DiscipIcon className="w-4 h-4 text-amber-300" />
                                                 </div>
-                                                <span>{item.nombre}</span>
+                                                <span className="text-white text-xs font-bold">{item.nombre}</span>
                                             </li>
                                         );
                                     })}
@@ -402,7 +405,7 @@ export default function Deportes() {
                                     <Award className="w-5 h-5" />
                                     <span className="text-xs font-black uppercase tracking-wider">DISCIPLINA</span>
                                 </div>
-                                <p className="text-[11px] text-slate-500 font-medium leading-tight">
+                                <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium leading-tight">
                                     Entrenamos nuestra mente y nuestro cuerpo.
                                 </p>
                             </div>
@@ -412,7 +415,7 @@ export default function Deportes() {
                                     <Activity className="w-5 h-5" />
                                     <span className="text-xs font-black uppercase tracking-wider">ESFUERZO</span>
                                 </div>
-                                <p className="text-[11px] text-slate-500 font-medium leading-tight">
+                                <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium leading-tight">
                                     Cada gota de sudor tiene su recompensa.
                                 </p>
                             </div>
@@ -422,7 +425,7 @@ export default function Deportes() {
                                     <Users className="w-5 h-5" />
                                     <span className="text-xs font-black uppercase tracking-wider">EQUIPO</span>
                                 </div>
-                                <p className="text-[11px] text-slate-500 font-medium leading-tight">
+                                <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium leading-tight">
                                     Juntos somos más fuertes, juntos llegamos más lejos.
                                 </p>
                             </div>
@@ -432,7 +435,7 @@ export default function Deportes() {
                                     <Sparkles className="w-5 h-5" />
                                     <span className="text-xs font-black uppercase tracking-wider">SUPERACIÓN</span>
                                 </div>
-                                <p className="text-[11px] text-slate-500 font-medium leading-tight">
+                                <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium leading-tight">
                                     Hoy es el resultado de tus decisiones de ayer.
                                 </p>
                             </div>
@@ -489,7 +492,7 @@ export default function Deportes() {
 
                             <div className="space-y-3 pt-2 border-t border-slate-100 dark:border-slate-800">
                                 <span className="text-xs font-black uppercase tracking-wider text-slate-500">
-                                    Palmarés y Reconoicmientos:
+                                    Palmarés y Reconocimientos:
                                 </span>
                                 <ul className="space-y-2">
                                     {modalPerfil.logros.map((logro, i) => (

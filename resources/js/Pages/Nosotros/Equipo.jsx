@@ -15,9 +15,14 @@ import {
 } from 'lucide-react';
 
 const R2_DOCENTES_BASE = "https://pub-c4ddb3fb75904158bbda5fbc35d6963e.r2.dev/nuestro_colegio/equipo/docentes/";
+const R2_ADMINS_BASE   = "https://pub-c4ddb3fb75904158bbda5fbc35d6963e.r2.dev/nuestro_colegio/equipo/administrativos/";
 
 const getDocenteR2Url = (nombreCompleto) => {
     return `${R2_DOCENTES_BASE}${encodeURIComponent(nombreCompleto)}.JPG`;
+};
+
+const getAdminR2Url = (nombreCompleto) => {
+    return `${R2_ADMINS_BASE}${encodeURIComponent(nombreCompleto)}.JPG`;
 };
 
 export default function Equipo({ equipo = [] }) {
@@ -28,10 +33,11 @@ export default function Equipo({ equipo = [] }) {
     const docentesFromDb = equipo.filter(m => m.tipo === 'docente');
 
     const defaultDirectivos = [
-        { nombre: 'Sor Beatriz Cortés Jerez', cargo: 'Rectora', foto: '/docentes/Sor%20Betty.JPG', foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Sor Beatriz Cortés Jerez', cargo: 'Rectora', foto: getAdminR2Url('Sor Beatriz Cortés Jerez'), foto_posicion: 20, foto_zoom: 100 },
         { nombre: 'Jaime Manuel Ardila Parra', cargo: 'Coordinador Académico', foto: getDocenteR2Url('Jaime Manuel Ardila Parra'), foto_posicion: 20, foto_zoom: 100 },
         { nombre: 'Margarita María Valle Manrique', cargo: 'Coordinadora de Convivencia', foto: getDocenteR2Url('Margarita María Valle Manrique'), foto_posicion: 20, foto_zoom: 100 },
-        { nombre: 'Erika Tatiana Delgadillo Avella', cargo: 'Coordinadora de Pastoral', foto: getDocenteR2Url('Erika Tatiana Delgadillo Avella'), foto_posicion: 20, foto_zoom: 100 }
+        { nombre: 'Erika Tatiana Delgadillo Avella', cargo: 'Coordinadora de Pastoral', foto: getDocenteR2Url('Erika Tatiana Delgadillo Avella'), foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Mayra Alexandra Parada Ruiz', cargo: 'Psicoorientación / Apoyo Administrativo', foto: getAdminR2Url('Mayra Alexandra Parada Ruiz'), foto_posicion: 20, foto_zoom: 100 }
     ];
 
     const directivos = directivosFromDb.length > 0 ? directivosFromDb : defaultDirectivos;
@@ -41,7 +47,8 @@ export default function Equipo({ equipo = [] }) {
         { area: 'Rectoría', encargado: 'Sor Beatriz Cortés Jerez', cargo: 'Rectora', tel: '(607) 637 1234', email: 'rectoria@colsih.edu.co' },
         { area: 'Coordinación Académica', encargado: 'Jaime Manuel Ardila Parra', cargo: 'Coordinador Académico', tel: '(607) 637 1235', email: 'academica@colsih.edu.co' },
         { area: 'Coordinación de Convivencia', encargado: 'Margarita María Valle Manrique', cargo: 'Coordinadora de Convivencia', tel: '(607) 637 1236', email: 'convivencia@colsih.edu.co' },
-        { area: 'Coordinación Pastoral', encargado: 'Erika Tatiana Delgadillo Avella', cargo: 'Coordinadora de Pastoral', tel: '(607) 637 1237', email: 'pastoral@colsih.edu.co' }
+        { area: 'Coordinación Pastoral', encargado: 'Erika Tatiana Delgadillo Avella', cargo: 'Coordinadora de Pastoral', tel: '(607) 637 1237', email: 'pastoral@colsih.edu.co' },
+        { area: 'Psicoorientación y Apoyo', encargado: 'Mayra Alexandra Parada Ruiz', cargo: 'Psicoorientadora', tel: '(607) 637 1238', email: 'orientacion@colsih.edu.co' }
     ];
 
     const defaultDocentes = [
@@ -76,7 +83,7 @@ export default function Equipo({ equipo = [] }) {
         { nombre: 'Sandra Patricia Parada Leal', asignatura: 'Música', area: 'Ed. Física y Expresión', foto: getDocenteR2Url('Sandra Patricia Parada Leal'), foto_posicion: 20, foto_zoom: 100 },
         { nombre: 'Sergio Andrés Mendoza Gómez', asignatura: 'Inglés', area: 'Inglés', foto: getDocenteR2Url('Sergio Andrés Mendoza Gómez'), foto_posicion: 20, foto_zoom: 100 },
         { nombre: 'Yesica Zoraya Badillo Corredor', asignatura: 'Ciencias Naturales', area: 'Ciencias Naturales', foto: getDocenteR2Url('Yesica Zoraya Badillo Corredor'), foto_posicion: 20, foto_zoom: 100 },
-        { nombre: 'Yoleida Patricia Camacho Corzo', asignatura: 'Inglés', area: 'Inglés', foto: getDocenteR2Url('Yoleida Patricia Camacho Corzo'), foto_posicion: 20, foto_zoom: 100 },
+        { nombre: 'Yoleida Patricia Camacho Corzo', asignatura: 'Inglés', area: 'Inglés', foto: getAdminR2Url('Yoleida Patricia Camacho Corzo'), foto_posicion: 20, foto_zoom: 100 },
         { nombre: 'Yoni Amparo Méndez Álvarez', asignatura: 'Matemáticas e Informática', area: 'Matemáticas', foto: getDocenteR2Url('Yoni Amparo Méndez Álvarez'), foto_posicion: 20, foto_zoom: 100 }
     ];
 
@@ -143,7 +150,7 @@ export default function Equipo({ equipo = [] }) {
                             Liderazgo Institucional
                         </span>
                         <h2 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">
-                            Equipo Directivo
+                            Equipo Directivo y Administrativo
                         </h2>
                         <p className="text-slate-600 dark:text-slate-400 text-sm">
                             Guiando a nuestra comunidad con la visión pedagógica salesiana.
@@ -290,7 +297,7 @@ export default function Equipo({ equipo = [] }) {
                         </h2>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
                         {administracion.map((item, index) => (
                             <div 
                                 key={index}

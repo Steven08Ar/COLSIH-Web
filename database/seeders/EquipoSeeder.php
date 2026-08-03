@@ -13,12 +13,14 @@ class EquipoSeeder extends Seeder
         EquipoMember::truncate();
 
         $r2DocentesBase = "https://pub-c4ddb3fb75904158bbda5fbc35d6963e.r2.dev/nuestro_colegio/equipo/docentes/";
+        $r2AdminsBase   = "https://pub-c4ddb3fb75904158bbda5fbc35d6963e.r2.dev/nuestro_colegio/equipo/administrativos/";
 
         $directivos = [
-            ['nombre' => 'Sor Beatriz Cortés Jerez', 'cargo' => 'Rectora', 'area' => 'Equipo Directivo', 'tipo' => 'directivo', 'foto' => '/docentes/Sor%20Betty.JPG', 'foto_posicion' => 20, 'foto_posicion_x' => 50, 'foto_posicion_y' => 20, 'foto_zoom' => 100, 'orden' => 1],
+            ['nombre' => 'Sor Beatriz Cortés Jerez', 'cargo' => 'Rectora', 'area' => 'Equipo Directivo', 'tipo' => 'directivo', 'foto' => $r2AdminsBase . rawurlencode('Sor Beatriz Cortés Jerez.JPG'), 'foto_posicion' => 20, 'foto_posicion_x' => 50, 'foto_posicion_y' => 20, 'foto_zoom' => 100, 'orden' => 1],
             ['nombre' => 'Jaime Manuel Ardila Parra', 'cargo' => 'Coordinador Académico', 'area' => 'Equipo Directivo', 'tipo' => 'directivo', 'foto' => $r2DocentesBase . rawurlencode('Jaime Manuel Ardila Parra.JPG'), 'foto_posicion' => 20, 'foto_posicion_x' => 50, 'foto_posicion_y' => 20, 'foto_zoom' => 100, 'orden' => 2],
             ['nombre' => 'Margarita María Valle Manrique', 'cargo' => 'Coordinadora de Convivencia', 'area' => 'Equipo Directivo', 'tipo' => 'directivo', 'foto' => $r2DocentesBase . rawurlencode('Margarita María Valle Manrique.JPG'), 'foto_posicion' => 20, 'foto_posicion_x' => 50, 'foto_posicion_y' => 20, 'foto_zoom' => 100, 'orden' => 3],
-            ['nombre' => 'Erika Tatiana Delgadillo Avella', 'cargo' => 'Coordinadora de Pastoral', 'area' => 'Equipo Directivo', 'tipo' => 'directivo', 'foto' => $r2DocentesBase . rawurlencode('Erika Tatiana Delgadillo Avella.JPG'), 'foto_posicion' => 20, 'foto_posicion_x' => 50, 'foto_posicion_y' => 20, 'foto_zoom' => 100, 'orden' => 4]
+            ['nombre' => 'Erika Tatiana Delgadillo Avella', 'cargo' => 'Coordinadora de Pastoral', 'area' => 'Equipo Directivo', 'tipo' => 'directivo', 'foto' => $r2DocentesBase . rawurlencode('Erika Tatiana Delgadillo Avella.JPG'), 'foto_posicion' => 20, 'foto_posicion_x' => 50, 'foto_posicion_y' => 20, 'foto_zoom' => 100, 'orden' => 4],
+            ['nombre' => 'Mayra Alexandra Parada Ruiz', 'cargo' => 'Psicoorientación / Apoyo Administrativo', 'area' => 'Equipo Directivo', 'tipo' => 'directivo', 'foto' => $r2AdminsBase . rawurlencode('Mayra Alexandra Parada Ruiz.JPG'), 'foto_posicion' => 20, 'foto_posicion_x' => 50, 'foto_posicion_y' => 20, 'foto_zoom' => 100, 'orden' => 5],
         ];
 
         $docentes = [
@@ -53,7 +55,7 @@ class EquipoSeeder extends Seeder
             ['nombre' => 'Sandra Patricia Parada Leal', 'cargo' => 'Música', 'area' => 'Ed. Física y Expresión', 'tipo' => 'docente', 'foto' => $r2DocentesBase . rawurlencode('Sandra Patricia Parada Leal.JPG'), 'foto_posicion' => 20, 'foto_posicion_x' => 50, 'foto_posicion_y' => 20, 'foto_zoom' => 100, 'orden' => 29],
             ['nombre' => 'Sergio Andrés Mendoza Gómez', 'cargo' => 'Inglés', 'area' => 'Inglés', 'tipo' => 'docente', 'foto' => $r2DocentesBase . rawurlencode('Sergio Andrés Mendoza Gómez.JPG'), 'foto_posicion' => 20, 'foto_posicion_x' => 50, 'foto_posicion_y' => 20, 'foto_zoom' => 100, 'orden' => 30],
             ['nombre' => 'Yesica Zoraya Badillo Corredor', 'cargo' => 'Ciencias Naturales', 'area' => 'Ciencias Naturales', 'tipo' => 'docente', 'foto' => $r2DocentesBase . rawurlencode('Yesica Zoraya Badillo Corredor.JPG'), 'foto_posicion' => 20, 'foto_posicion_x' => 50, 'foto_posicion_y' => 20, 'foto_zoom' => 100, 'orden' => 31],
-            ['nombre' => 'Yoleida Patricia Camacho Corzo', 'cargo' => 'Inglés', 'area' => 'Inglés', 'tipo' => 'docente', 'foto' => $r2DocentesBase . rawurlencode('Yoleida Patricia Camacho Corzo.JPG'), 'foto_posicion' => 20, 'foto_posicion_x' => 50, 'foto_posicion_y' => 20, 'foto_zoom' => 100, 'orden' => 32],
+            ['nombre' => 'Yoleida Patricia Camacho Corzo', 'cargo' => 'Inglés', 'area' => 'Inglés', 'tipo' => 'docente', 'foto' => $r2AdminsBase . rawurlencode('Yoleida Patricia Camacho Corzo.JPG'), 'foto_posicion' => 20, 'foto_posicion_x' => 50, 'foto_posicion_y' => 20, 'foto_zoom' => 100, 'orden' => 32],
             ['nombre' => 'Yoni Amparo Méndez Álvarez', 'cargo' => 'Matemáticas e Informática', 'area' => 'Matemáticas', 'tipo' => 'docente', 'foto' => $r2DocentesBase . rawurlencode('Yoni Amparo Méndez Álvarez.JPG'), 'foto_posicion' => 20, 'foto_posicion_x' => 50, 'foto_posicion_y' => 20, 'foto_zoom' => 100, 'orden' => 33]
         ];
 

@@ -6,7 +6,6 @@ import {
     Users, 
     Briefcase, 
     GraduationCap, 
-    Lightbulb, 
     Mail, 
     Phone, 
     Award,
@@ -111,227 +110,286 @@ export default function Equipo({ equipo = [] }) {
 
     return (
         <AppLayout>
-            <Head title="Equipo Docente y Directivo | COLSIH" />
+            <Head title="Equipo Institucional | COLSIH" />
 
-            <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-sans">
+            {/* Ocultar barra de scroll en solapas */}
+            <style dangerouslySetInnerHTML={{__html: `
+                .no-scrollbar::-webkit-scrollbar { display: none !important; }
+                .no-scrollbar { -ms-overflow-style: none !important; scrollbar-width: none !important; }
+            `}} />
+
+            <div className="relative bg-[#FAFCFF] dark:bg-slate-950 text-slate-800 dark:text-slate-100 min-h-screen overflow-hidden pb-16 transition-colors duration-300">
                 
-                {/* Hero Banner */}
-                <section className="relative pt-32 pb-20 md:pt-40 md:pb-28 bg-[#800A15] text-white overflow-hidden shadow-2xl">
-                    <div className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full bg-white/5 blur-3xl pointer-events-none -translate-y-1/2 translate-x-1/3"></div>
-                    <div className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full bg-black/20 blur-2xl pointer-events-none translate-y-1/3 -translate-x-1/3"></div>
+                {/* Dotted Grid Backdrop Decoration */}
+                <div 
+                    className="absolute inset-0 opacity-[0.05] dark:opacity-[0.01] pointer-events-none" 
+                    style={{
+                        backgroundImage: 'radial-gradient(#003C8F 1.2px, transparent 1.2px)',
+                        backgroundSize: '24px 24px'
+                    }} 
+                />
 
-                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-                        <motion.div 
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.6 }}
-                            className="space-y-4 max-w-3xl mx-auto"
-                        >
-                            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-wider text-amber-300">
+                {/* ── 1. Hero Section ── */}
+                <section className="relative w-full bg-gradient-to-r from-[#003C8F] to-[#0D1B2E] text-white pt-36 pb-36 px-6 overflow-hidden">
+                    <div 
+                        className="absolute inset-0 bg-cover bg-center opacity-10 brightness-[0.2] pointer-events-none"
+                        style={{ backgroundImage: "url('/galeria/panoramica.png')" }}
+                    />
+                    <div className="absolute right-0 bottom-0 top-0 w-[35%] opacity-15 border-l border-amber-400 rounded-l-[50%] bg-gradient-to-r from-transparent to-amber-400/5 pointer-events-none hidden lg:block" />
+
+                    <div className="relative z-10 max-w-[1240px] mx-auto text-center lg:text-left">
+                        <div className="max-w-2xl mx-auto lg:mx-0 space-y-4 flex flex-col items-center lg:items-start">
+                            <div className="flex items-center justify-center lg:justify-start gap-2 text-amber-400 font-bold uppercase tracking-wider text-xs">
                                 <Users className="w-4 h-4 text-amber-400" />
-                                <span>Comunidad Educativa Salesiana</span>
+                                Conoce a quienes hacen posible la excelencia
                             </div>
-
-                            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight">
-                                Nuestro Equipo
+                            <h1 className="text-4xl md:text-6xl font-black tracking-tight leading-tight">
+                                Equipo Institucional
                             </h1>
-
-                            <p className="text-slate-100 text-sm sm:text-base leading-relaxed font-medium">
-                                Profesionales apasionados comprometidos con la formación integral de nuestros estudiantes en la fe, la ciencia y la justicia.
+                            <div className="w-20 h-1.5 bg-amber-400 rounded-full" />
+                            <p className="text-slate-300 font-semibold text-sm md:text-base leading-relaxed pt-1">
+                                Nuestro cuerpo directivo y docente dedicado día a día a la formación integral, humana y académica de la juventud salesiana.
                             </p>
-                        </motion.div>
+                        </div>
+                    </div>
+
+                    {/* Divisor de ola */}
+                    <div className="absolute bottom-0 left-0 right-0 w-full overflow-hidden leading-none z-10 pointer-events-none">
+                        <svg 
+                            className="relative block w-full h-[30px] md:h-[60px] translate-y-[2px] scale-y-105" 
+                            viewBox="0 0 1440 120" 
+                            preserveAspectRatio="none" 
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path 
+                                d="M0,32L120,42.7C240,53,480,75,720,74.7C960,75,1200,53,1320,42.7L1440,32L1440,120L1320,120C1200,120,960,120,720,120C480,120,240,120,120,120L0,120Z" 
+                                className="fill-[#FAFCFF] dark:fill-slate-950" 
+                            />
+                        </svg>
                     </div>
                 </section>
 
-                {/* Equipo Directivo */}
-                <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-                    <div className="text-center max-w-2xl mx-auto mb-12 space-y-3">
-                        <span className="text-xs font-black uppercase tracking-widest text-[#800A15] dark:text-rose-400">
-                            Liderazgo Institucional
-                        </span>
-                        <h2 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">
-                            Equipo Directivo y Administrativo
-                        </h2>
-                        <p className="text-slate-600 dark:text-slate-400 text-sm">
-                            Guiando a nuestra comunidad con la visión pedagógica salesiana.
-                        </p>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                        {directivos.map((persona, index) => (
-                            <motion.div
-                                key={index}
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ duration: 0.5, delay: index * 0.1 }}
-                                className="bg-white dark:bg-slate-900 rounded-3xl overflow-hidden border border-slate-200/80 dark:border-slate-800 shadow-md group hover:shadow-xl transition-all duration-300 flex flex-col justify-between"
-                            >
-                                <div className="relative aspect-[4/5] bg-slate-100 dark:bg-slate-800 overflow-hidden">
-                                    {persona.foto ? (
-                                        <img 
-                                            src={persona.foto} 
-                                            alt={persona.nombre}
-                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                                            style={{
-                                                objectPosition: `${persona.foto_posicion_x ?? 50}% ${persona.foto_posicion_y ?? (persona.foto_posicion ?? 20)}%`,
-                                                transform: `scale(${(persona.foto_zoom ?? 100) / 100})`
-                                            }}
-                                            onError={(e) => {
-                                                e.target.onerror = null;
-                                                e.target.style.display = 'none';
-                                                e.target.nextSibling.style.display = 'flex';
-                                            }}
-                                        />
-                                    ) : null}
-                                    <div 
-                                        className="w-full h-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-400"
-                                        style={{ display: persona.foto ? 'none' : 'flex' }}
-                                    >
-                                        <User className="w-16 h-16 stroke-1" />
-                                    </div>
-                                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent"></div>
-                                    <div className="absolute bottom-3 left-3 right-3 text-white">
-                                        <span className="bg-[#800A15] text-white text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full inline-block mb-1 shadow-md">
-                                            {persona.cargo}
-                                        </span>
-                                        <h3 className="text-base font-black text-white leading-tight">
-                                            {persona.nombre}
-                                        </h3>
-                                    </div>
-                                </div>
-                            </motion.div>
-                        ))}
-                    </div>
-                </section>
-
-                {/* Cuerpo Docente */}
-                <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 border-t border-slate-200/80 dark:border-slate-800">
-                    <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6">
+                {/* ── 2. Equipo Directivo ── */}
+                <section className="relative z-10 py-12 px-6 max-w-[1240px] mx-auto">
+                    <div className="flex items-center gap-3.5 mb-8 border-b border-slate-100 dark:border-slate-800 pb-4">
+                        <div className="w-10 h-10 rounded-2xl bg-[#003C8F]/10 dark:bg-blue-950/40 text-[#003C8F] dark:text-blue-400 flex items-center justify-center shrink-0 shadow-sm">
+                            <Award className="w-5.5 h-5.5" />
+                        </div>
                         <div>
-                            <span className="text-xs font-black uppercase tracking-widest text-[#003C8F] dark:text-blue-400">
-                                Excelencia Académica
-                            </span>
-                            <h2 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight mt-1">
-                                Cuerpo Docente ({profesoresFiltrados.length})
+                            <h2 className="text-2xl font-black text-slate-800 dark:text-white leading-tight">
+                                Equipo Directivo
                             </h2>
-                        </div>
-
-                        {/* Filtros por Área */}
-                        <div className="flex flex-wrap gap-2">
-                            {areasList.map((area) => (
-                                <button
-                                    key={area}
-                                    onClick={() => setSelectedArea(area)}
-                                    className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer ${
-                                        selectedArea === area
-                                            ? 'bg-[#800A15] text-white shadow-md'
-                                            : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
-                                    }`}
-                                >
-                                    {area}
-                                </button>
-                            ))}
+                            <p className="text-xs text-slate-400 dark:text-slate-500 font-semibold mt-0.5">
+                                Liderazgo y dirección académica de la institución
+                            </p>
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                        {profesoresFiltrados.map((profesor, index) => (
-                            <motion.div
-                                key={index}
-                                initial={{ opacity: 0, y: 15 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ duration: 0.4, delay: (index % 8) * 0.05 }}
-                                className="bg-white dark:bg-slate-900 rounded-3xl overflow-hidden border border-slate-200/80 dark:border-slate-800 shadow-sm hover:shadow-xl transition-all duration-300 group flex flex-col justify-between"
-                            >
-                                <div className="relative aspect-[4/5] bg-slate-100 dark:bg-slate-800 overflow-hidden">
-                                    {profesor.foto ? (
-                                        <img 
-                                            src={profesor.foto} 
-                                            alt={profesor.nombre}
-                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                                            style={{
-                                                objectPosition: `${profesor.foto_posicion_x ?? 50}% ${profesor.foto_posicion_y ?? (profesor.foto_posicion ?? 20)}%`,
-                                                transform: `scale(${(profesor.foto_zoom ?? 100) / 100})`
-                                            }}
-                                            onError={(e) => {
-                                                e.target.onerror = null;
-                                                e.target.style.display = 'none';
-                                                e.target.nextSibling.style.display = 'flex';
-                                            }}
-                                        />
-                                    ) : null}
-                                    <div 
-                                        className="w-full h-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-400"
-                                        style={{ display: profesor.foto ? 'none' : 'flex' }}
-                                    >
-                                        <User className="w-16 h-16 stroke-1" />
+                    {/* Directivos Cards Grid */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                        {directivos.map((p, idx) => {
+                            const isVino = idx % 2 === 0;
+                            const borderClass = isVino ? 'border-t-4 border-t-[#800A15]' : 'border-t-4 border-t-[#003C8F]';
+                            const roleClass = isVino ? 'text-[#800A15] dark:text-rose-400' : 'text-[#003C8F] dark:text-blue-400';
+
+                            return (
+                                <motion.div 
+                                    key={p.nombre}
+                                    initial={{ opacity: 0, y: 30 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ duration: 0.5, delay: idx * 0.1 }}
+                                    className={`bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800/80 rounded-[28px] overflow-hidden shadow-sm hover:shadow-md hover:scale-[1.02] transition-all duration-300 ${borderClass}`}
+                                >
+                                    <div className="aspect-[4/5] bg-slate-100 dark:bg-slate-800 overflow-hidden relative flex items-center justify-center">
+                                        {p.foto ? (
+                                            <img 
+                                                src={p.foto} 
+                                                alt={p.nombre} 
+                                                className="w-full h-full object-cover"
+                                                style={{
+                                                    objectPosition: `center ${p.foto_posicion ?? 20}%`,
+                                                    transform: `scale(${(p.foto_zoom ?? 100) / 100})`
+                                                }}
+                                            />
+                                        ) : (
+                                            <div className="w-full h-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-400 dark:text-slate-600">
+                                                <User className="w-20 h-20" />
+                                            </div>
+                                        )}
                                     </div>
-                                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/20 to-transparent"></div>
-                                    <div className="absolute bottom-3 left-3 right-3 text-white">
-                                        <span className="bg-[#003C8F] text-white text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full inline-block mb-1 shadow-md">
-                                            {profesor.asignatura}
-                                        </span>
-                                        <h3 className="text-sm font-black text-white leading-snug">
-                                            {profesor.nombre}
-                                        </h3>
-                                        <span className="text-[11px] font-medium text-slate-300 block mt-0.5">
-                                            {profesor.area}
+                                    <div className="p-5 text-center bg-white dark:bg-slate-900">
+                                        <h4 className="font-extrabold text-slate-800 dark:text-slate-200 text-base leading-snug">
+                                            {p.nombre}
+                                        </h4>
+                                        <span className={`text-xs font-extrabold uppercase tracking-wider block mt-1 ${roleClass}`}>
+                                            {p.cargo}
                                         </span>
                                     </div>
-                                </div>
-                            </motion.div>
-                        ))}
+                                </motion.div>
+                            );
+                        })}
                     </div>
                 </section>
 
-                {/* Directorio de Contacto por Área / Administración */}
-                <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 border-t border-slate-200/80 dark:border-slate-800">
-                    <div className="text-center max-w-2xl mx-auto mb-12 space-y-3">
-                        <span className="text-xs font-black uppercase tracking-widest text-[#800A15] dark:text-rose-400">
-                            Atención a la Comunidad
-                        </span>
-                        <h2 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">
-                            Directorio Administrativo
-                        </h2>
+                {/* ── 3. Directorio Administrativo ── */}
+                <section className="relative z-10 py-12 px-6 max-w-[1240px] mx-auto">
+                    <div className="flex items-center gap-3.5 mb-8 border-b border-slate-100 dark:border-slate-800 pb-4">
+                        <div className="w-10 h-10 rounded-2xl bg-rose-50 dark:bg-rose-950/40 text-[#800A15] dark:text-rose-400 flex items-center justify-center shrink-0 shadow-sm">
+                            <Briefcase className="w-5.5 h-5.5" />
+                        </div>
+                        <div>
+                            <h2 className="text-2xl font-black text-slate-800 dark:text-white leading-tight">
+                                Directorio Administrativo
+                            </h2>
+                            <p className="text-xs text-slate-400 dark:text-slate-500 font-semibold mt-0.5">
+                                Canales directos de atención y gestión escolar
+                            </p>
+                        </div>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
-                        {administracion.map((item, index) => (
-                            <div 
-                                key={index}
-                                className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-4 flex flex-col justify-between"
-                            >
-                                <div className="space-y-2">
-                                    <div className="w-10 h-10 rounded-2xl bg-rose-50 dark:bg-rose-950/40 flex items-center justify-center text-[#800A15] dark:text-rose-400 font-bold">
-                                        <Briefcase className="w-5 h-5" />
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
+                        {administracion.map((item, idx) => {
+                            const isVino = idx % 2 === 0;
+                            const borderHover = isVino ? 'hover:border-t-[#800A15]' : 'hover:border-t-[#003C8F]';
+
+                            return (
+                                <motion.div 
+                                    key={item.area}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ duration: 0.4, delay: idx * 0.08 }}
+                                    className={`bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800/80 rounded-2xl p-6 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 border-t-4 border-t-transparent ${borderHover} flex flex-col justify-between`}
+                                >
+                                    <div>
+                                        <div className="w-9 h-9 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-300 mb-4 font-bold text-xs">
+                                            0{idx + 1}
+                                        </div>
+                                        <h4 className="font-extrabold text-slate-800 dark:text-slate-100 text-sm leading-tight mb-2">
+                                            {item.area}
+                                        </h4>
+                                        <div className="space-y-0.5">
+                                            <p className="text-xs font-bold text-slate-700 dark:text-slate-300">
+                                                {item.encargado}
+                                            </p>
+                                            <span className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest block">
+                                                {item.cargo}
+                                            </span>
+                                        </div>
                                     </div>
-                                    <h3 className="text-base font-black text-slate-900 dark:text-white">
-                                        {item.area}
-                                    </h3>
-                                    <p className="text-xs font-bold text-[#800A15] dark:text-rose-400">
-                                        {item.encargado}
-                                    </p>
-                                    <span className="text-xs text-slate-500 font-medium block">
-                                        {item.cargo}
+
+                                    <div className="mt-5 pt-4 border-t border-slate-100 dark:border-slate-800/80 space-y-2 text-left">
+                                        <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 dark:text-slate-400">
+                                            <Phone className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                                            {item.tel}
+                                        </div>
+                                        <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 dark:text-slate-400 break-all">
+                                            <Mail className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                                            {item.email}
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            );
+                        })}
+                    </div>
+                </section>
+
+                {/* ── 4. Docentes de la Institución ── */}
+                <section className="relative z-10 py-12 px-6 max-w-[1240px] mx-auto">
+                    <div className="flex items-center gap-3.5 mb-8 border-b border-slate-100 dark:border-slate-800 pb-4">
+                        <div className="w-10 h-10 rounded-2xl bg-amber-50 dark:bg-amber-950/40 text-amber-500 dark:text-amber-400 flex items-center justify-center shrink-0 shadow-sm">
+                            <GraduationCap className="w-5.5 h-5.5" />
+                        </div>
+                        <div>
+                            <h2 className="text-2xl font-black text-slate-800 dark:text-white leading-tight">
+                                Cuerpo Docente
+                            </h2>
+                            <p className="text-xs text-slate-400 dark:text-slate-500 font-semibold mt-0.5">
+                                Profesores especializados por área de enseñanza
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* Barra de filtros envolvente para que no se recorte ninguna asignatura */}
+                    <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-2.5 mb-10 w-full select-none">
+                        {areasList.map((areaName) => (
+                            <button
+                                key={areaName}
+                                onClick={() => setSelectedArea(areaName)}
+                                className={`px-4 py-2 sm:px-4.5 sm:py-2.5 rounded-full font-extrabold text-[11px] sm:text-xs uppercase tracking-wider transition-all duration-300 cursor-pointer ${
+                                    selectedArea === areaName
+                                        ? 'bg-[#800A15] text-white shadow-md shadow-[#800A15]/20 scale-105'
+                                        : 'bg-white hover:bg-slate-100 dark:bg-slate-900 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:text-[#800A15]'
+                                }`}
+                            >
+                                {areaName}
+                            </button>
+                        ))}
+                    </div>
+
+                    {/* Tarjetas de Docentes en Formato Retrato (Foto ocupa la mitad superior) */}
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
+                        {profesoresFiltrados.map((prof, idx) => (
+                            <motion.div 
+                                key={prof.nombre}
+                                initial={{ opacity: 0, y: 15 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.3, delay: (idx % 15) * 0.03 }}
+                                className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800/80 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between group"
+                            >
+                                {/* Foto de la mitad superior de la card */}
+                                <div className="w-full aspect-[4/5] bg-slate-100 dark:bg-slate-800 overflow-hidden relative flex items-center justify-center">
+                                    {prof.foto ? (
+                                        <img 
+                                            src={prof.foto} 
+                                            alt={prof.nombre} 
+                                            className="w-full h-full object-cover transition-all duration-300"
+                                            style={{
+                                                objectPosition: `center ${prof.foto_posicion ?? 20}%`,
+                                                transform: `scale(${(prof.foto_zoom ?? 100) / 100})`
+                                            }}
+                                        />
+                                    ) : (
+                                        <div className="w-full h-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-400 dark:text-slate-600">
+                                            <User className="w-12 h-12" />
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* Información en la mitad inferior de la card */}
+                                <div className="p-4 text-center flex-1 flex flex-col justify-between bg-white dark:bg-slate-900">
+                                    <h4 className="font-extrabold text-slate-900 dark:text-slate-100 text-xs sm:text-sm leading-snug">
+                                        {prof.nombre}
+                                    </h4>
+                                    <span className="text-[11px] font-bold text-[#003C8F] dark:text-blue-400 mt-2 block">
+                                        {prof.asignatura}
                                     </span>
                                 </div>
-
-                                <div className="space-y-2 pt-3 border-t border-slate-100 dark:border-slate-800 text-xs font-medium text-slate-600 dark:text-slate-400">
-                                    <div className="flex items-center gap-2">
-                                        <Phone className="w-4 h-4 text-slate-400 shrink-0" />
-                                        <span>{item.tel}</span>
-                                    </div>
-                                    <div className="flex items-center gap-2 truncate">
-                                        <Mail className="w-4 h-4 text-slate-400 shrink-0" />
-                                        <a href={`mailto:${item.email}`} className="hover:underline text-blue-600 dark:text-blue-400 truncate">
-                                            {item.email}
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
+                            </motion.div>
                         ))}
+                    </div>
+
+                    {/* Banner inspiracional */}
+                    <div className="mt-14 bg-gradient-to-r from-[#003C8F] via-blue-800 to-[#800A15] rounded-3xl p-8 text-white flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl">
+                        <div className="space-y-2 text-center md:text-left">
+                            <div className="flex items-center justify-center md:justify-start gap-2 text-amber-300 font-bold text-xs uppercase tracking-widest">
+                                <Sparkles className="w-4 h-4 text-amber-300 animate-spin" />
+                                Tradición Salesiana de Don Bosco
+                            </div>
+                            <h3 className="text-xl md:text-2xl font-black text-white">
+                                "Educación es cosa del corazón"
+                            </h3>
+                            <p className="text-blue-100 text-sm font-medium max-w-xl">
+                                Nuestros docentes inspiran, acompañan y guían con vocación y alegría el aprendizaje de los estudiantes.
+                            </p>
+                        </div>
+                        <Link
+                            href="/contacto"
+                            className="px-6 py-3.5 rounded-2xl bg-white text-[#003C8F] font-extrabold text-sm hover:scale-105 transition-all duration-300 shadow-lg shrink-0"
+                        >
+                            Contactar con la Institución
+                        </Link>
                     </div>
                 </section>
 

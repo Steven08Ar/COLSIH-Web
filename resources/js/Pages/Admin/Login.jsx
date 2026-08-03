@@ -41,14 +41,14 @@ export default function AdminLogin() {
                         </span>
                     </div>
 
-                    {/* Contenido Central Identidad COLSIH */}
+                    {/* Contenido Central Identidad COLSIH (Sin círculo blanco en el logo) */}
                     <div className="relative z-10 my-auto py-8 text-center flex flex-col items-center">
-                        {/* Escudo Circular Blanco Flotante (Identico a Referencia) */}
-                        <div className="w-32 h-32 xl:w-40 xl:h-40 rounded-full bg-white shadow-2xl p-6 flex items-center justify-center border-4 border-white/30 hover:scale-105 transition-transform duration-300 mb-8 group">
+                        {/* Escudo COLSIH Directo (Sin Fondo Blanco) */}
+                        <div className="w-36 h-36 xl:w-44 xl:h-44 flex items-center justify-center hover:scale-105 transition-transform duration-300 mb-8 group">
                             <img 
                                 src="/marca/logo-colsih.svg" 
                                 alt="Escudo COLSIH" 
-                                className="w-full h-full object-contain filter drop-shadow-md group-hover:rotate-3 transition-transform duration-300" 
+                                className="w-full h-full object-contain filter drop-shadow-2xl group-hover:rotate-3 transition-transform duration-300" 
                             />
                         </div>
 
@@ -78,9 +78,9 @@ export default function AdminLogin() {
                     <div className="absolute -top-20 -right-20 w-64 h-64 rounded-full bg-[#800A15] pointer-events-none"></div>
                     <div className="absolute -bottom-20 -left-20 w-64 h-64 rounded-full bg-white/10 pointer-events-none"></div>
 
-                    {/* Escudo Circular Blanco Flotante */}
-                    <div className="w-24 h-24 rounded-full bg-white shadow-2xl p-4 flex items-center justify-center border-4 border-white/30 mb-4 relative z-10">
-                        <img src="/marca/logo-colsih.svg" alt="Escudo COLSIH" className="w-full h-full object-contain" />
+                    {/* Escudo COLSIH Directo Móvil (Sin Fondo Blanco) */}
+                    <div className="w-28 h-28 flex items-center justify-center mb-4 relative z-10">
+                        <img src="/marca/logo-colsih.svg" alt="Escudo COLSIH" className="w-full h-full object-contain filter drop-shadow-2xl" />
                     </div>
 
                     <h2 className="text-xl font-black uppercase tracking-tight relative z-10 leading-tight">
@@ -100,7 +100,7 @@ export default function AdminLogin() {
 
                     <div className="max-w-md w-full my-auto space-y-8 relative z-10">
                         
-                        {/* Encabezado (Formato Idéntico a la Referencia) */}
+                        {/* Encabezado */}
                         <div className="text-center">
                             <h1 className="text-3xl sm:text-4xl font-black text-[#003C8F] dark:text-blue-400 tracking-tight">
                                 Iniciar Sesión

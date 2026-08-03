@@ -182,13 +182,6 @@ export default function Programs() {
                                                 </svg>
                                             </Link>
                                         </div>
-
-                                        {/* Desktop Only: Duration label when contracted */}
-                                        {!isExpanded && (
-                                            <span className="hidden lg:inline-block text-[10px] font-extrabold uppercase tracking-widest text-slate-300">
-                                                {item.duration}
-                                            </span>
-                                        )}
                                     </div>
 
                                     {/* Bottom block: Text reveals with GPU acceleration */}
@@ -252,20 +245,36 @@ export default function Programs() {
 
                                 {/* Desktop vertical spine text label if contracted */}
                                 {!isExpanded && (
-                                    <div 
-                                        className="absolute hidden lg:flex items-center justify-center pointer-events-none z-10"
-                                        style={{
-                                            left: '50%',
-                                            top: '45%',
-                                            transform: 'translate(-50%, -50%) rotate(90deg)',
-                                            width: '300px',
-                                            transformOrigin: 'center center'
-                                        }}
-                                    >
-                                        <span className="text-xs font-extrabold uppercase tracking-[4px] text-slate-200 drop-shadow-md whitespace-nowrap bg-slate-950/40 backdrop-blur-sm px-4 py-1.5 rounded-full border border-white/10">
-                                            {item.title}
-                                        </span>
-                                    </div>
+                                    <>
+                                        <div 
+                                            className="absolute hidden lg:flex items-center justify-center pointer-events-none z-10"
+                                            style={{
+                                                left: '50%',
+                                                top: '45%',
+                                                transform: 'translate(-50%, -50%) rotate(90deg)',
+                                                width: '300px',
+                                                transformOrigin: 'center center'
+                                            }}
+                                        >
+                                            <span className="text-xs font-extrabold uppercase tracking-[4px] text-slate-200 drop-shadow-md whitespace-nowrap bg-slate-950/40 backdrop-blur-sm px-4 py-1.5 rounded-full border border-white/10">
+                                                {item.title}
+                                            </span>
+                                        </div>
+
+                                        {/* Desktop duration label positioned at the bottom of the card */}
+                                        <div 
+                                            className="absolute hidden lg:flex items-center justify-center pointer-events-none z-10 w-full px-3 text-center"
+                                            style={{
+                                                bottom: '24px',
+                                                left: '50%',
+                                                transform: 'translateX(-50%)'
+                                            }}
+                                        >
+                                            <span className="text-[9px] xl:text-[10px] font-extrabold uppercase tracking-widest text-slate-200 bg-slate-950/70 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/15 shadow-xl truncate max-w-[92%]">
+                                                {item.duration}
+                                            </span>
+                                        </div>
+                                    </>
                                 )}
 
                             </div>

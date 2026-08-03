@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { Head, Link, useForm, router } from '@inertiajs/react';
+import { mediaUrl } from '@/utils/mediaUrl';
 import 'pannellum/src/css/pannellum.css';
 import 'pannellum/src/js/libpannellum.js';
 import 'pannellum/src/js/pannellum.js';
@@ -176,7 +177,7 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
             };
         });
 
-        const imageSrc = scene.imagen_url || `/storage/${scene.imagen_path}`;
+        const imageSrc = scene.imagen_url || mediaUrl(scene.imagen_path);
 
         try {
             if (window.pannellum) {
@@ -316,7 +317,7 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
     };
 
     const otherScenes = allScenes.filter((s) => s.id !== scene.id);
-    const imageSrc = scene.imagen_url || `/storage/${scene.imagen_path}`;
+    const imageSrc = scene.imagen_url || mediaUrl(scene.imagen_path);
 
     return (
         <>

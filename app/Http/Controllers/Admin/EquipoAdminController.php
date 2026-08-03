@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\EquipoMember;
 use App\Services\ImageOptimizer;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class EquipoAdminController extends Controller
@@ -60,9 +59,7 @@ class EquipoAdminController extends Controller
         ]);
 
         if ($request->hasFile('foto')) {
-            if ($member->foto) {
-                Storage::disk('public')->delete($member->foto);
-            }
+            ImageOptimizer::eliminar($member->foto);
             $data['foto'] = ImageOptimizer::guardar($request->file('foto'), 'docentes');
         } else {
             unset($data['foto']);
@@ -74,10 +71,7 @@ class EquipoAdminController extends Controller
 
     public function destroy(EquipoMember $member)
     {
-        if ($member->foto && str_starts_with($member->foto, 'storage/')) {
-            $oldPath = str_replace('storage/', '', $member->foto);
-            Storage::disk('public')->delete($oldPath);
-        }
+        ImageOptimizer::eliminar($member->foto);
         $member->delete();
         return back()->with('flash', 'Integrante eliminado exitosamente.');
     }

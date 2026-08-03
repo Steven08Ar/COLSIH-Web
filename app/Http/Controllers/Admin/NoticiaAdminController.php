@@ -66,9 +66,7 @@ class NoticiaAdminController extends Controller
         $data['publicado_en'] = $data['publicado_en'] ?: ($noticia->publicado_en?->toDateTimeString() ?? now()->toDateTimeString());
 
         if ($request->hasFile('portada')) {
-            if ($noticia->imagen) {
-                Storage::disk('public')->delete($noticia->imagen);
-            }
+            ImageOptimizer::eliminar($noticia->imagen);
             $data['imagen'] = ImageOptimizer::guardar($request->file('portada'), 'noticias/portadas');
         }
 
@@ -81,13 +79,11 @@ class NoticiaAdminController extends Controller
 
     public function destroy(Noticia $noticia)
     {
-        if ($noticia->imagen) {
-            Storage::disk('public')->delete($noticia->imagen);
-        }
+        ImageOptimizer::eliminar($noticia->imagen);
         if ($noticia->bloques) {
             foreach ($noticia->bloques as $b) {
                 if (($b['tipo'] ?? '') === 'imagen' && !empty($b['imagen'])) {
-                    Storage::disk('public')->delete($b['imagen']);
+                    ImageOptimizer::eliminar($b['imagen']);
                 }
                 if (($b['tipo'] ?? '') === 'video' && !empty($b['videoFile'])) {
                     Storage::disk('public')->delete($b['videoFile']);
@@ -153,7 +149,9 @@ class NoticiaAdminController extends Controller
             } elseif ($tipo === 'separador') {
                 $blockHtml .= "<hr class=\"my-4 border-t border-slate-100 w-full\" />";
             } elseif ($tipo === 'imagen') {
-                $imgSrc = !empty($b['imagen']) ? asset('storage/' . $b['imagen']) : '/Estudiantes COLSIH.png';
+                $imgSrc = !empty($b['imagen'])
+                    ? (str_starts_with($b['imagen'], 'http') ? $b['imagen'] : asset('storage/' . $b['imagen']))
+                    : '/Estudiantes COLSIH.png';
                 $leyenda = !empty($b['leyenda']) ? '<p class="text-xs text-slate-400 font-semibold mt-2">' . e($b['leyenda']) . '</p>' : '';
                 $blockHtml .= "<div class=\"text-left\"><div class=\"rounded-2xl overflow-hidden border border-slate-100\"><img src=\"{$imgSrc}\" class=\"w-full h-auto object-cover\" /></div>{$leyenda}</div>";
             } elseif ($tipo === 'video') {
@@ -209,8 +207,8 @@ class NoticiaAdminController extends Controller
             if ($tipo === 'imagen') {
                 $fileKey = "img_bloque_{$idx}";
                 if ($request->hasFile($fileKey)) {
-                    if (!empty($bloque['imagen']) && !str_starts_with($bloque['imagen'], 'http')) {
-                        Storage::disk('public')->delete($bloque['imagen']);
+                    if (!empty($bloque['imagen'])) {
+                        ImageOptimizer::eliminar($bloque['imagen']);
                     }
                     $bloque['imagen'] = ImageOptimizer::guardar($request->file($fileKey), 'noticias/bloques');
                 } elseif (empty($bloque['imagen']) && !empty($bloque['_key']) && isset($existentes[$bloque['_key']])) {

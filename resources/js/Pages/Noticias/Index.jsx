@@ -1,6 +1,7 @@
 import { Head, Link, router } from '@inertiajs/react';
 import AppLayout from '@/Layouts/AppLayout';
 import ScrollReveal from '../HomeSections/ScrollReveal';
+import { mediaUrl } from '@/utils/mediaUrl';
 
 const CATEGORIAS = [
     { value: '', label: 'Todas' },
@@ -140,7 +141,7 @@ export default function NoticiasIndex({ noticias, categoriaActual }) {
                                             <div className="aspect-video w-full overflow-hidden bg-slate-50 dark:bg-slate-950 relative shrink-0">
                                                 {noticia.imagen ? (
                                                     <img 
-                                                        src={`/storage/${noticia.imagen}`} 
+                                                        src={mediaUrl(noticia.imagen)} 
                                                         alt={noticia.titulo} 
                                                         className="w-full h-full object-cover transition-transform duration-[1200ms] group-hover:scale-105"
                                                     />

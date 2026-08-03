@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import ScrollReveal from './ScrollReveal';
+import { mediaUrl } from '@/utils/mediaUrl';
 
 function toEmbedUrl(url) {
     if (!url) return null;
@@ -22,7 +23,7 @@ export default function Testimonials({ testimonios }) {
         texto: t.texto,
         nombre: t.nombre,
         cargo: t.cargo ?? '',
-        image: t.imagen ? `/storage/${t.imagen}` : null,
+        image: mediaUrl(t.imagen),
         fotoPos: Number(t.foto_posicion ?? 50),
         videoActivo: !!t.video_activo,
         videoUrl: t.video_activo ? (toEmbedUrl(t.video_url || t.videoUrl) || null) : null,

@@ -3,6 +3,7 @@ import 'pannellum/src/css/pannellum.css';
 import 'pannellum/src/js/libpannellum.js';
 import 'pannellum/src/js/pannellum.js';
 import { buildPannellumConfig } from '@/utils/pannellumAdapter';
+import { mediaUrl } from '@/utils/mediaUrl';
 import { Maximize2, Minimize2, ZoomIn, ZoomOut, RotateCw, RefreshCw, X } from 'lucide-react';
 
 export default function TourViewer({
@@ -25,7 +26,7 @@ export default function TourViewer({
     useEffect(() => {
         if (!scenes || !Array.isArray(scenes) || scenes.length === 0) return;
         scenes.forEach((scene) => {
-            const url = scene.imagen_url || (scene.imagen_path ? `/storage/${scene.imagen_path}` : null);
+            const url = scene.imagen_url || mediaUrl(scene.imagen_path);
             if (url) {
                 const img = new Image();
                 img.src = url;

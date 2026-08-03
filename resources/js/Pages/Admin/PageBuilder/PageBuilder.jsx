@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { mediaUrl } from '@/utils/mediaUrl';
 import EditorToolbar from './EditorToolbar';
 import EditorCanvas from './EditorCanvas';
 import PropertyPanel from './PropertyPanel';
@@ -17,7 +18,7 @@ function mapDbBlockToEditorBlock(dbBlock) {
         content.quote = dbBlock.contenido || '';
         content.author = dbBlock.autor || '';
     } else if (tipo === 'imagen') {
-        content.url = dbBlock.imagen ? `/storage/${dbBlock.imagen}` : '';
+        content.url = mediaUrl(dbBlock.imagen) ?? '';
         content.caption = dbBlock.leyenda || '';
         content.dbPath = dbBlock.imagen || ''; // preserve original storage path
     } else if (tipo === 'video') {

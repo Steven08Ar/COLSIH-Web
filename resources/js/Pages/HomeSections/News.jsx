@@ -1,5 +1,6 @@
 import { Link } from '@inertiajs/react';
 import ScrollReveal from './ScrollReveal';
+import { mediaUrl } from '@/utils/mediaUrl';
 
 export default function News({ noticias }) {
     if (!noticias || noticias.length === 0) return null;
@@ -71,7 +72,7 @@ export default function News({ noticias }) {
                                     <div className="aspect-video w-full overflow-hidden bg-slate-50 relative shrink-0">
                                         {item.imagen ? (
                                             <img 
-                                                src={`/storage/${item.imagen}`} 
+                                                src={mediaUrl(item.imagen)} 
                                                 alt={item.titulo} 
                                                 className="w-full h-full object-cover transition-transform duration-[1200ms] group-hover:scale-105"
                                             />

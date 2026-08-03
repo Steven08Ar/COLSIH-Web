@@ -1,6 +1,7 @@
 import { Head, Link } from '@inertiajs/react';
 import { useState } from 'react';
 import AppLayout from '@/Layouts/AppLayout';
+import { mediaUrl } from '@/utils/mediaUrl';
 
 function toEmbedUrl(url) {
     if (!url) return null;
@@ -48,7 +49,7 @@ function BloqueRenderer({ bloque, onOpenVideo, onOpenImage }) {
             );
         case 'imagen': {
             const imgSrc = bloque.imagen
-                ? (bloque.imagen.startsWith('http') ? bloque.imagen : `/storage/${bloque.imagen}`)
+                ? mediaUrl(bloque.imagen)
                 : null;
             return (
                 <figure className="space-y-2 text-left w-full">
@@ -183,9 +184,9 @@ export default function NoticiasShow({ noticia, relacionadas }) {
 
                         {/* Portada - Ocultada si no hay imagen de portada */}
                         {noticia.imagen && (
-                            <div onClick={() => setSelectedImage(`/storage/${noticia.imagen}`)}
+                            <div onClick={() => setSelectedImage(mediaUrl(noticia.imagen))}
                                 className="w-full rounded-[32px] overflow-hidden border border-slate-100 shadow-md cursor-zoom-in group">
-                                <img src={`/storage/${noticia.imagen}`} alt={noticia.titulo}
+                                <img src={mediaUrl(noticia.imagen)} alt={noticia.titulo}
                                     className="w-full h-auto max-h-[600px] object-cover transition duration-700 group-hover:scale-[1.02]" />
                             </div>
                         )}

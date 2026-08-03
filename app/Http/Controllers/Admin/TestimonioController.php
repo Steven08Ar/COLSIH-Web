@@ -56,9 +56,7 @@ class TestimonioController extends Controller
         ]);
 
         if ($request->hasFile('imagen')) {
-            if ($testimonio->imagen) {
-                Storage::disk('public')->delete($testimonio->imagen);
-            }
+            ImageOptimizer::eliminar($testimonio->imagen);
             $data['imagen'] = ImageOptimizer::guardar($request->file('imagen'), 'testimonios');
         } else {
             unset($data['imagen']);
@@ -70,9 +68,7 @@ class TestimonioController extends Controller
 
     public function destroy(Testimonio $testimonio)
     {
-        if ($testimonio->imagen) {
-            Storage::disk('public')->delete($testimonio->imagen);
-        }
+        ImageOptimizer::eliminar($testimonio->imagen);
         $testimonio->delete();
         return back()->with('flash', 'Testimonio eliminado.');
     }

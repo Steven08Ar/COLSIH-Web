@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 import PageBuilder from './PageBuilder/PageBuilder';
 import { Sun, Moon, Eye, Move, ZoomIn, Camera, User, X, Check, Upload, ArrowUp, ArrowDown, ArrowLeft, ArrowRight, Plus, Minus, Trash2, Terminal, Server, RefreshCw, Database, HardDrive, ShieldAlert, Cpu, Copy, Play } from 'lucide-react';
 import { processImageFile } from '@/utils/heicConverter';
+import { mediaUrl } from '@/utils/mediaUrl';
 
 /* ── helpers ── */
 function Flash({ message }) {
@@ -171,7 +172,7 @@ function TestimoniosTab({ testimonios, flash }) {
                 setPreviewImage(form.data.imagen);
             }
         } else if (editando && editando.imagen) {
-            setPreviewImage(`/storage/${editando.imagen}`);
+            setPreviewImage(mediaUrl(editando.imagen));
         } else {
             setPreviewImage(null);
         }
@@ -227,7 +228,7 @@ function TestimoniosTab({ testimonios, flash }) {
                 {testimonios.map(t => (
                     <div key={t.id} className="bg-slate-50/50 dark:bg-slate-800/20 hover:bg-slate-50 dark:hover:bg-slate-800/40 border border-slate-200/60 dark:border-slate-800/60 hover:border-slate-300/80 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-start gap-4 transition duration-200">
                         {t.imagen && (
-                            <img src={`/storage/${t.imagen}`} alt={t.nombre} className="w-14 h-14 rounded-xl object-cover shrink-0 border border-slate-200 dark:border-slate-700" />
+                            <img src={mediaUrl(t.imagen)} alt={t.nombre} className="w-14 h-14 rounded-xl object-cover shrink-0 border border-slate-200 dark:border-slate-700" />
                         )}
                         <div className="flex-1 min-w-0 w-full">
                             <div className="flex items-center gap-2 flex-wrap">
@@ -501,7 +502,7 @@ function BloqueEditor({ bloque, idx, total, onChange, onDelete, onMoveUp, onMove
         onChange(idx, { ...bloque, _preview: URL.createObjectURL(processed), imagen: '' });
     }
 
-    const previewSrc = bloque._preview || (bloque.imagen ? `/storage/${bloque.imagen}` : null);
+    const previewSrc = bloque._preview || mediaUrl(bloque.imagen);
 
     // Formato state helpers for Text Blocks
     const toggleFormat = (key) => {
@@ -758,7 +759,7 @@ function NoticiasTab({ noticias, flash }) {
         setCategoria(n.categoria);
         setPublicadoEn(n.publicado_en ? n.publicado_en.substring(0, 10) : '');
         setActivo(!!n.activo);
-        if (n.imagen) setPortadaPreview(`/storage/${n.imagen}`);
+        if (n.imagen) setPortadaPreview(mediaUrl(n.imagen));
         setBloques(n.bloques || []);
         setEditando(n); setCreando(false);
     }
@@ -909,7 +910,7 @@ function NoticiasTab({ noticias, flash }) {
                 {noticias.map(n => (
                     <div key={n.id} className="bg-slate-50/50 dark:bg-slate-800/20 hover:bg-slate-50 dark:hover:bg-slate-800/40 border border-slate-200/60 dark:border-slate-800/60 hover:border-slate-300/80 rounded-2xl p-4 flex items-center gap-4 transition duration-200">
                         {n.imagen ? (
-                            <img src={`/storage/${n.imagen}`} alt={n.titulo} className="w-16 h-16 rounded-xl object-cover shrink-0 border border-slate-200 dark:border-slate-700" />
+                            <img src={mediaUrl(n.imagen)} alt={n.titulo} className="w-16 h-16 rounded-xl object-cover shrink-0 border border-slate-200 dark:border-slate-700" />
                         ) : (
                             <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-blue-100 to-indigo-100 shrink-0 border border-slate-200 dark:border-slate-700 flex items-center justify-center">
                                 <svg className="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
@@ -1524,7 +1525,7 @@ function RecorridoTab({ tour, scenes = [], flash, basePath }) {
                                 {/* Thumbnail */}
                                 <div className="relative w-28 h-20 rounded-xl overflow-hidden shrink-0 border border-slate-200 dark:border-slate-700 bg-slate-900 shadow-sm">
                                     <img
-                                        src={s.imagen_url || `/storage/${s.imagen_path}`}
+                                        src={s.imagen_url || mediaUrl(s.imagen_path)}
                                         alt={s.nombre}
                                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                                     />
@@ -1605,7 +1606,7 @@ function RecorridoTab({ tour, scenes = [], flash, basePath }) {
                                 {/* Thumbnail Preview */}
                                 <div className="relative w-full h-40 rounded-xl overflow-hidden mb-3 border border-slate-200 dark:border-slate-700 bg-slate-900">
                                     <img
-                                        src={s.imagen_url || `/storage/${s.imagen_path}`}
+                                        src={s.imagen_url || mediaUrl(s.imagen_path)}
                                         alt={s.nombre}
                                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                                     />
@@ -2064,7 +2065,7 @@ function EquipoTab({ equipo = [], flash }) {
             setPreviewImage(objectUrl);
             return () => URL.revokeObjectURL(objectUrl);
         } else if (editando && editando.foto) {
-            setPreviewImage(editando.foto.startsWith('/') || editando.foto.startsWith('http') ? editando.foto : `/storage/${editando.foto}`);
+            setPreviewImage(mediaUrl(editando.foto));
         } else {
             setPreviewImage(null);
         }
@@ -2167,7 +2168,7 @@ function EquipoTab({ equipo = [], flash }) {
                                     <div className="aspect-[4/5] bg-slate-100 dark:bg-slate-800 overflow-hidden relative flex items-center justify-center">
                                         {p.foto ? (
                                             <img
-                                                src={p.foto.startsWith('/') || p.foto.startsWith('http') ? p.foto : `/storage/${p.foto}`}
+                                                src={mediaUrl(p.foto)}
                                                 alt={p.nombre}
                                                 className="w-full h-full object-cover transition-all duration-300 pointer-events-none"
                                                 style={{
@@ -2221,7 +2222,7 @@ function EquipoTab({ equipo = [], flash }) {
                                 <div className="w-full aspect-[4/5] bg-slate-100 dark:bg-slate-800 overflow-hidden relative flex items-center justify-center">
                                     {prof.foto ? (
                                         <img
-                                            src={prof.foto.startsWith('/') || prof.foto.startsWith('http') ? prof.foto : `/storage/${prof.foto}`}
+                                            src={mediaUrl(prof.foto)}
                                             alt={prof.nombre}
                                             className="w-full h-full object-cover transition-all duration-300 pointer-events-none"
                                             style={{

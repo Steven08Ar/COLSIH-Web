@@ -10,56 +10,78 @@ use Intervention\Image\ImageManager;
 
 class ImageOptimizer
 {
-    const CALIDAD_JPG    = 85;
-    const LADO_NORMAL    = 1920;  // testimonios, noticias, etc.
-    const LADO_360       = 8192;  // panoramas 360° — no recortar demasiado
+    public const CALIDAD_JPG = 85;
+    public const LADO_NORMAL = 1920;
+    public const LADO_360    = 8192;
 
     /**
-     * Comprime, orienta y guarda una imagen subida.
-     * Devuelve la ruta relativa dentro del disco 'public', igual que ->store().
-     *
-     * @param  UploadedFile $file
-     * @param  string       $carpeta    Subcarpeta dentro de storage/app/public/
-     * @param  int          $ladoMaximo Píxeles máximos del lado más largo
+     * Optimiza la imagen y la guarda en Cloudflare R2 (si está configurado) o en
+     * el disco público local como fallback. Devuelve la URL pública completa (R2)
+     * o la ruta relativa dentro de storage/app/public (local).
      */
     public static function guardar(
         UploadedFile $file,
         string $carpeta,
         int $ladoMaximo = self::LADO_NORMAL
     ): string {
-        // Normalizar extensión de salida (HEIC/HEIF → JPG)
         $ext = strtolower($file->getClientOriginalExtension());
         $ext = in_array($ext, ['jpeg', 'heic', 'heif']) ? 'jpg' : $ext;
         if (!in_array($ext, ['jpg', 'png', 'webp', 'gif'])) {
             $ext = 'jpg';
         }
 
-        $nombre       = Str::random(40) . '.' . $ext;
-        $ruta         = $carpeta . '/' . $nombre;
-        $rutaAbsoluta = Storage::disk('public')->path($ruta);
-
-        Storage::disk('public')->makeDirectory($carpeta);
+        $nombre = Str::random(40) . '.' . $ext;
+        $ruta   = $carpeta . '/' . $nombre;
 
         $manager = new ImageManager(new Driver());
         $imagen  = $manager->read($file->getPathname());
-
-        // Corregir rotación EXIF (fotos tomadas con celular en vertical)
         $imagen->orient();
 
-        // Escalar solo si supera el límite máximo
         if ($imagen->width() > $ladoMaximo || $imagen->height() > $ladoMaximo) {
             $imagen->scaleDown($ladoMaximo, $ladoMaximo);
         }
 
-        // Guardar con compresión según formato
         if ($ext === 'png') {
-            $imagen->toPng()->save($rutaAbsoluta);
+            $contenido = (string) $imagen->toPng();
+            $mime      = 'image/png';
         } elseif ($ext === 'gif') {
-            $imagen->toGif()->save($rutaAbsoluta);
+            $contenido = (string) $imagen->toGif();
+            $mime      = 'image/gif';
+        } elseif ($ext === 'webp') {
+            $contenido = (string) $imagen->toWebp(self::CALIDAD_JPG);
+            $mime      = 'image/webp';
         } else {
-            $imagen->toJpeg(self::CALIDAD_JPG)->save($rutaAbsoluta);
+            $contenido = (string) $imagen->toJpeg(self::CALIDAD_JPG);
+            $mime      = 'image/jpeg';
         }
 
+        // Subir a Cloudflare R2 si está configurado
+        if (env('R2_ACCESS_KEY_ID') && env('R2_ENDPOINT')) {
+            Storage::disk('r2')->put($ruta, $contenido, ['ContentType' => $mime]);
+            return rtrim(env('R2_PUBLIC_URL', ''), '/') . '/' . $ruta;
+        }
+
+        // Fallback: guardar en disco público local
+        Storage::disk('public')->makeDirectory($carpeta);
+        file_put_contents(Storage::disk('public')->path($ruta), $contenido);
         return $ruta;
+    }
+
+    /**
+     * Elimina una imagen de R2 (URL completa) o del disco público local (ruta relativa).
+     */
+    public static function eliminar(?string $ruta): void
+    {
+        if (!$ruta) return;
+
+        if (str_starts_with($ruta, 'http')) {
+            $base = rtrim(env('R2_PUBLIC_URL', ''), '/');
+            if ($base && str_starts_with($ruta, $base)) {
+                $relPath = ltrim(substr($ruta, strlen($base)), '/');
+                Storage::disk('r2')->delete($relPath);
+            }
+        } else {
+            Storage::disk('public')->delete($ruta);
+        }
     }
 }

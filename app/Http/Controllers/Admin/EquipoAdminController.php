@@ -35,7 +35,10 @@ class EquipoAdminController extends Controller
         ]);
 
         if ($request->hasFile('foto')) {
-            $data['foto'] = ImageOptimizer::guardar($request->file('foto'), 'docentes');
+            $carpeta = ($data['tipo'] ?? 'docente') === 'directivo'
+                ? 'nuestro_colegio/equipo/administrativos'
+                : 'nuestro_colegio/equipo/docentes';
+            $data['foto'] = ImageOptimizer::guardar($request->file('foto'), $carpeta);
         }
 
         EquipoMember::create($data);
@@ -60,7 +63,10 @@ class EquipoAdminController extends Controller
 
         if ($request->hasFile('foto')) {
             ImageOptimizer::eliminar($member->foto);
-            $data['foto'] = ImageOptimizer::guardar($request->file('foto'), 'docentes');
+            $carpeta = ($data['tipo'] ?? 'docente') === 'directivo'
+                ? 'nuestro_colegio/equipo/administrativos'
+                : 'nuestro_colegio/equipo/docentes';
+            $data['foto'] = ImageOptimizer::guardar($request->file('foto'), $carpeta);
         } else {
             unset($data['foto']);
         }

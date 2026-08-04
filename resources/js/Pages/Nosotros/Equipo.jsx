@@ -13,6 +13,8 @@ import {
     User
 } from 'lucide-react';
 
+import { mediaUrl } from '@/utils/mediaUrl';
+
 const R2_DOCENTES_BASE = "https://pub-c4ddb3fb75904158bbda5fbc35d6963e.r2.dev/nuestro_colegio/equipo/docentes/";
 const R2_ADMINS_BASE   = "https://pub-c4ddb3fb75904158bbda5fbc35d6963e.r2.dev/nuestro_colegio/equipo/administrativos/";
 
@@ -204,11 +206,11 @@ export default function Equipo({ equipo = [] }) {
                                     <div className="aspect-[4/5] bg-slate-100 dark:bg-slate-800 overflow-hidden relative flex items-center justify-center">
                                         {p.foto ? (
                                             <img 
-                                                src={p.foto} 
+                                                src={mediaUrl(p.foto)} 
                                                 alt={p.nombre} 
                                                 className="w-full h-full object-cover"
                                                 style={{
-                                                    objectPosition: `center ${p.foto_posicion ?? 20}%`,
+                                                    objectPosition: `${p.foto_posicion_x ?? 50}% ${p.foto_posicion_y ?? (p.foto_posicion ?? 20)}%`,
                                                     transform: `scale(${(p.foto_zoom ?? 100) / 100})`
                                                 }}
                                             />
@@ -342,11 +344,11 @@ export default function Equipo({ equipo = [] }) {
                                 <div className="w-full aspect-[4/5] bg-slate-100 dark:bg-slate-800 overflow-hidden relative flex items-center justify-center">
                                     {prof.foto ? (
                                         <img 
-                                            src={prof.foto} 
+                                            src={mediaUrl(prof.foto)} 
                                             alt={prof.nombre} 
                                             className="w-full h-full object-cover transition-all duration-300"
                                             style={{
-                                                objectPosition: `center ${prof.foto_posicion ?? 20}%`,
+                                                objectPosition: `${prof.foto_posicion_x ?? 50}% ${prof.foto_posicion_y ?? (prof.foto_posicion ?? 20)}%`,
                                                 transform: `scale(${(prof.foto_zoom ?? 100) / 100})`
                                             }}
                                         />

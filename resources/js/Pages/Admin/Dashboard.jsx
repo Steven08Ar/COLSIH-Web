@@ -1,5 +1,6 @@
 import { Head, Link, useForm, router, usePage } from '@inertiajs/react';
 import { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import PageBuilder from './PageBuilder/PageBuilder';
 import { Sun, Moon, Eye, Move, ZoomIn, Camera, User, X, Check, Upload, ArrowUp, ArrowDown, ArrowLeft, ArrowRight, Plus, Minus, Trash2, Terminal, Server, RefreshCw, Database, HardDrive, ShieldAlert, Cpu, Copy, Play } from 'lucide-react';
 import { processImageFile } from '@/utils/heicConverter';
@@ -186,6 +187,7 @@ function TestimoniosTab({ testimonios, flash }) {
                 _method: 'PUT',
                 ...form.data
             }, {
+                forceFormData: true,
                 onSuccess: cerrar,
                 onError: (errs) => {
                     Object.keys(errs).forEach(key => form.setError(key, errs[key]));
@@ -2073,26 +2075,25 @@ function EquipoTab({ equipo = [], flash }) {
 
     function guardar(e) {
         e.preventDefault();
-        const basePath = window.location.pathname.replace(/\/[^/]+$/, '');
         if (editando) {
-            router.post(`${basePath}/equipo/${editando.id}`, {
+            router.post(`/admin/equipo/${editando.id}`, {
                 _method: 'PUT',
                 ...form.data
             }, {
+                forceFormData: true,
                 onSuccess: cerrar,
                 onError: (errs) => {
                     Object.keys(errs).forEach(key => form.setError(key, errs[key]));
                 }
             });
         } else {
-            form.post(`${basePath}/equipo`, { onSuccess: cerrar });
+            form.post('/admin/equipo', { onSuccess: cerrar });
         }
     }
 
     function eliminar(id) {
         setDeletingId(null);
-        const basePath = window.location.pathname.replace(/\/[^/]+$/, '');
-        router.delete(`${basePath}/equipo/${id}`);
+        router.delete(`/admin/equipo/${id}`);
     }
 
     const directivosList = equipo.filter(m => m.tipo === 'directivo');
@@ -2258,314 +2259,269 @@ function EquipoTab({ equipo = [], flash }) {
                 </div>
             )}
 
-            {/* ── Modal Overlay Fijo en Pantalla con Fondo Difuminado ── */}
-            {(creando || editando) && (
-                <div 
-                    className="fixed inset-0 z-[100] bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 overflow-hidden animate-fadeIn"
+            {/* ── Editor: panel fijo anclado a la pantalla ── */}
+            {(creando || editando) && createPortal(
+                <div
+                    className="fixed inset-0 z-[100] bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 animate-fadeIn"
                     onClick={cerrar}
                 >
-                    <div 
-                        className="flex flex-col lg:flex-row items-center lg:items-stretch gap-6 lg:gap-8 max-w-5xl w-full max-h-[92vh] lg:max-h-[90vh] my-auto overflow-y-auto transition-all duration-300 pr-1"
+                    <div
+                        className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl w-full max-w-4xl flex flex-col overflow-hidden"
+                        style={{ height: 'min(92vh, 680px)' }}
                         onClick={e => e.stopPropagation()}
                     >
-                        {/* ── COLUMNA IZQUIERDA: Card Literal del Usuario (Perspectiva 1:1 + Drag 2D X/Y) ── */}
-                        <div className="flex flex-col items-center justify-center space-y-3 shrink-0 w-full sm:w-80">
-                            <div className="flex items-center gap-2 bg-blue-600 text-white text-[11px] font-extrabold px-3 py-1 rounded-full shadow-md uppercase tracking-wider">
-                                <Eye className="w-3.5 h-3.5" />
-                                <span>Perspectiva Literal del Usuario</span>
-                            </div>
+                        {/* Header */}
+                        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800 shrink-0">
+                            <h3 className="font-black text-slate-800 dark:text-white text-sm flex items-center gap-2">
+                                <User className="w-4 h-4 text-[#800A15]" />
+                                {editando ? 'Editar Integrante' : 'Nuevo Integrante'}
+                            </h3>
+                            <button onClick={cerrar} className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-400 hover:text-slate-700 transition flex items-center justify-center cursor-pointer">
+                                <X className="w-4 h-4" />
+                            </button>
+                        </div>
 
-                            <div 
-                                ref={cardRef}
-                                className="w-full aspect-[4/5] bg-white dark:bg-slate-900 border-4 border-blue-500 rounded-2xl overflow-hidden shadow-2xl relative select-none cursor-move touch-none group"
-                                onMouseDown={handleStart}
-                                onMouseMove={handleMove}
-                                onMouseUp={handleEnd}
-                                onMouseLeave={handleEnd}
-                                onTouchStart={handleStart}
-                                onTouchMove={handleMove}
-                                onTouchEnd={handleEnd}
-                            >
-                                {previewImage ? (
-                                    <img
-                                        src={previewImage}
-                                        alt="Foto"
-                                        draggable={false}
-                                        className="w-full h-full object-cover pointer-events-none transition-transform duration-75"
-                                        style={{
-                                            objectPosition: `${form.data.foto_posicion_x ?? 50}% ${form.data.foto_posicion_y ?? form.data.foto_posicion ?? 20}%`,
-                                            transform: `scale(${form.data.foto_zoom / 100})`
-                                        }}
-                                    />
-                                ) : (
-                                    <div className="w-full h-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-400 dark:text-slate-600">
-                                        <User className="w-16 h-16" />
+                        {/* Body: izquierda fija + derecha scrollable */}
+                        <div className="flex-1 flex overflow-hidden">
+
+                            {/* ── Izquierda: previsualización de la tarjeta ── */}
+                            <div className="w-52 xl:w-60 shrink-0 border-r border-slate-100 dark:border-slate-800 p-5 flex flex-col items-center gap-4 bg-slate-50/60 dark:bg-slate-900/60">
+                                <span className="text-[9px] font-extrabold text-slate-400 uppercase tracking-widest">Vista en tarjeta</span>
+
+                                <div
+                                    ref={cardRef}
+                                    className="w-full aspect-[4/5] bg-slate-200 dark:bg-slate-800 rounded-xl overflow-hidden relative select-none cursor-move touch-none border-2 border-blue-300 dark:border-blue-800"
+                                    onMouseDown={handleStart}
+                                    onMouseMove={handleMove}
+                                    onMouseUp={handleEnd}
+                                    onMouseLeave={handleEnd}
+                                    onTouchStart={handleStart}
+                                    onTouchMove={handleMove}
+                                    onTouchEnd={handleEnd}
+                                >
+                                    {previewImage ? (
+                                        <img
+                                            src={previewImage}
+                                            alt="Foto"
+                                            draggable={false}
+                                            className="w-full h-full object-cover pointer-events-none transition-transform duration-75"
+                                            style={{
+                                                objectPosition: `${form.data.foto_posicion_x ?? 50}% ${form.data.foto_posicion_y ?? form.data.foto_posicion ?? 20}%`,
+                                                transform: `scale(${form.data.foto_zoom / 100})`
+                                            }}
+                                        />
+                                    ) : (
+                                        <div className="w-full h-full flex items-center justify-center text-slate-400 dark:text-slate-600">
+                                            <User className="w-14 h-14" />
+                                        </div>
+                                    )}
+                                    <div className="absolute bottom-2 inset-x-2 flex justify-center pointer-events-none">
+                                        <span className="bg-black/70 text-white text-[9px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1">
+                                            <Move className="w-2.5 h-2.5" /> Arrastra para centrar
+                                        </span>
                                     </div>
-                                )}
+                                </div>
 
-                                {/* Overlay de instrucción para arrastrar en 2D */}
-                                <div className="absolute inset-x-0 bottom-3 flex justify-center pointer-events-none px-2">
-                                    <span className="bg-black/80 backdrop-blur-md text-white text-[10px] font-extrabold px-3 py-1.5 rounded-full shadow-lg border border-white/20 text-center flex items-center gap-1.5">
-                                        <Move className="w-3.5 h-3.5 text-blue-400" />
-                                        <span>Arrastra (X / Y) para centrar imagen</span>
+                                <div className="text-center w-full space-y-1">
+                                    <p className="font-extrabold text-slate-800 dark:text-slate-100 text-xs leading-snug truncate">
+                                        {form.data.nombre || 'Nombre del Integrante'}
+                                    </p>
+                                    <p className="text-[11px] font-bold text-[#003C8F] dark:text-blue-400 truncate">
+                                        {form.data.cargo || 'Cargo / Asignatura'}
+                                    </p>
+                                    <span className={`inline-block text-[9px] font-extrabold px-2 py-0.5 rounded-full uppercase tracking-wider mt-1 ${
+                                        form.data.tipo === 'directivo'
+                                            ? 'bg-[#800A15]/10 text-[#800A15]'
+                                            : 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400'
+                                    }`}>
+                                        {form.data.tipo === 'directivo' ? 'Equipo Directivo' : 'Docente'}
                                     </span>
                                 </div>
                             </div>
 
-                            {/* Info de nombre abajo de la card preview */}
-                            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3 w-full text-center shadow-md">
-                                <h4 className="font-extrabold text-slate-900 dark:text-slate-100 text-sm leading-snug">
-                                    {form.data.nombre || 'Nombre del Integrante'}
-                                </h4>
-                                <span className="text-xs font-bold text-[#003C8F] dark:text-blue-400 block mt-0.5">
-                                    {form.data.cargo || 'Cargo / Asignatura'}
-                                </span>
-                            </div>
+                            {/* ── Derecha: formulario scrollable ── */}
+                            <form id="equipo-form" onSubmit={guardar} className="flex-1 overflow-y-auto p-6 space-y-4">
+
+                                {/* Nombre + Cargo */}
+                                <div className="grid grid-cols-2 gap-3">
+                                    <div>
+                                        <label className="text-[10px] font-extrabold text-slate-500 uppercase tracking-wider block mb-1">Nombre completo *</label>
+                                        <input
+                                            type="text" required
+                                            value={form.data.nombre}
+                                            onChange={e => form.setData('nombre', e.target.value)}
+                                            placeholder="Ej: Sor Beatriz Cortés"
+                                            className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white text-xs font-medium rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-900 transition"
+                                        />
+                                        {form.errors.nombre && <p className="text-rose-500 text-[10px] mt-1">{form.errors.nombre}</p>}
+                                    </div>
+                                    <div>
+                                        <label className="text-[10px] font-extrabold text-slate-500 uppercase tracking-wider block mb-1">Cargo o asignatura *</label>
+                                        <input
+                                            type="text" required
+                                            value={form.data.cargo}
+                                            onChange={e => form.setData('cargo', e.target.value)}
+                                            placeholder="Ej: Rectora, Matemáticas"
+                                            className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white text-xs font-medium rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-900 transition"
+                                        />
+                                        {form.errors.cargo && <p className="text-rose-500 text-[10px] mt-1">{form.errors.cargo}</p>}
+                                    </div>
+                                </div>
+
+                                {/* Tipo + Área */}
+                                <div className="grid grid-cols-2 gap-3">
+                                    <div>
+                                        <label className="text-[10px] font-extrabold text-slate-500 uppercase tracking-wider block mb-1">Tipo</label>
+                                        <select
+                                            value={form.data.tipo}
+                                            onChange={e => form.setData('tipo', e.target.value)}
+                                            className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white text-xs font-medium rounded-xl px-3 py-2.5 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-900 transition cursor-pointer"
+                                        >
+                                            <option value="docente">Docente</option>
+                                            <option value="directivo">Equipo Directivo</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label className="text-[10px] font-extrabold text-slate-500 uppercase tracking-wider block mb-1">Área académica</label>
+                                        <select
+                                            value={form.data.area}
+                                            onChange={e => form.setData('area', e.target.value)}
+                                            className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white text-xs font-medium rounded-xl px-3 py-2.5 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-900 transition cursor-pointer"
+                                        >
+                                            {AREAS_EQUIPO.filter(a => a !== 'Todos').map(area => (
+                                                <option key={area} value={area}>{area}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                {/* Upload foto */}
+                                <div>
+                                    <label className="text-[10px] font-extrabold text-slate-500 uppercase tracking-wider block mb-1.5">Fotografía</label>
+                                    <input
+                                        type="file"
+                                        id="equipo-foto-input"
+                                        accept="image/*,.heic,.heif,image/heic,image/heif"
+                                        className="hidden"
+                                        onChange={async (e) => {
+                                            const f = e.target.files[0];
+                                            if (!f) return;
+                                            const processed = await processImageFile(f);
+                                            form.setData('foto', processed);
+                                        }}
+                                    />
+                                    <label
+                                        htmlFor="equipo-foto-input"
+                                        className="flex items-center gap-3 w-full border-2 border-dashed border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 hover:border-blue-400 hover:bg-blue-50/30 dark:hover:border-blue-700 rounded-xl px-4 py-3 transition cursor-pointer group"
+                                    >
+                                        <div className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center shrink-0 group-hover:bg-blue-100 dark:group-hover:bg-blue-900/50 transition">
+                                            <Upload className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+                                        </div>
+                                        <div className="min-w-0">
+                                            <p className="text-xs font-semibold text-slate-700 dark:text-slate-200 truncate">
+                                                {form.data.foto instanceof File
+                                                    ? form.data.foto.name
+                                                    : editando?.foto ? 'Conservar foto actual' : 'Seleccionar fotografía'}
+                                            </p>
+                                            <p className="text-[10px] text-slate-400 mt-0.5">JPG, PNG, WEBP, HEIC · máx. 20 MB</p>
+                                        </div>
+                                    </label>
+                                </div>
+
+                                {/* Ajustes de imagen */}
+                                <div className="bg-slate-50 dark:bg-slate-800/40 rounded-xl border border-slate-200 dark:border-slate-700/60 px-4 py-3.5 space-y-3">
+                                    <p className="text-[9px] font-extrabold text-slate-400 uppercase tracking-widest">Ajuste de imagen</p>
+
+                                    <div className="flex items-center gap-3">
+                                        <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 w-5 shrink-0">← →</span>
+                                        <input type="range" min="0" max="100"
+                                            value={form.data.foto_posicion_x ?? 50}
+                                            onChange={e => form.setData('foto_posicion_x', Number(e.target.value))}
+                                            className="flex-1 h-1.5 accent-blue-600 cursor-pointer"
+                                        />
+                                        <span className="text-[10px] font-mono text-slate-400 w-8 text-right shrink-0">{form.data.foto_posicion_x ?? 50}%</span>
+                                    </div>
+
+                                    <div className="flex items-center gap-3">
+                                        <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 w-5 shrink-0">↑ ↓</span>
+                                        <input type="range" min="0" max="100"
+                                            value={form.data.foto_posicion_y ?? form.data.foto_posicion ?? 20}
+                                            onChange={e => {
+                                                const v = Number(e.target.value);
+                                                form.setData({ ...form.data, foto_posicion_y: v, foto_posicion: v });
+                                            }}
+                                            className="flex-1 h-1.5 accent-blue-600 cursor-pointer"
+                                        />
+                                        <span className="text-[10px] font-mono text-slate-400 w-8 text-right shrink-0">{form.data.foto_posicion_y ?? form.data.foto_posicion ?? 20}%</span>
+                                    </div>
+
+                                    <div className="flex items-center gap-3">
+                                        <ZoomIn className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                                        <input type="range" min="100" max="250" step="5"
+                                            value={form.data.foto_zoom}
+                                            onChange={e => form.setData('foto_zoom', Number(e.target.value))}
+                                            className="flex-1 h-1.5 accent-blue-600 cursor-pointer"
+                                        />
+                                        <span className="text-[10px] font-mono text-slate-400 w-8 text-right shrink-0">{form.data.foto_zoom}%</span>
+                                    </div>
+                                </div>
+
+                                {/* Orden + Activo */}
+                                <div className="flex items-center gap-4">
+                                    <div className="w-24">
+                                        <label className="text-[10px] font-extrabold text-slate-500 uppercase tracking-wider block mb-1">Orden</label>
+                                        <input
+                                            type="number" min="0"
+                                            value={form.data.orden}
+                                            onChange={e => form.setData('orden', Number(e.target.value))}
+                                            className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white text-xs font-medium rounded-xl px-3 py-2.5 focus:outline-none focus:border-blue-500 transition"
+                                        />
+                                    </div>
+                                    <div className="flex items-center gap-2 pt-5">
+                                        <button
+                                            type="button"
+                                            onClick={() => form.setData('activo', !form.data.activo)}
+                                            className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors duration-200 focus:outline-none cursor-pointer ${form.data.activo ? 'bg-emerald-500' : 'bg-slate-300 dark:bg-slate-600'}`}
+                                        >
+                                            <span className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white shadow transition-transform duration-200 ${form.data.activo ? 'translate-x-[18px]' : 'translate-x-0.5'}`} />
+                                        </button>
+                                        <span className="text-xs font-semibold text-slate-600 dark:text-slate-300">Visible en la web</span>
+                                    </div>
+                                </div>
+
+                            </form>
                         </div>
 
-                        {/* ── COLUMNA DERECHA: Card de Opciones de Edición ── */}
-                        <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl flex-1 w-full space-y-5 flex flex-col justify-between">
-                            <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
-                                <h3 className="text-lg font-black text-slate-800 dark:text-white flex items-center gap-2">
-                                    <User className="w-5 h-5 text-[#800A15]" />
-                                    <span>{editando ? 'Editar Integrante' : 'Nuevo Integrante'}</span>
-                                </h3>
-                                <button 
-                                    onClick={cerrar}
-                                    className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-400 hover:text-slate-600 transition flex items-center justify-center font-bold text-sm cursor-pointer"
+                        {/* Footer: botones siempre visibles */}
+                        <div className="flex items-center justify-between gap-3 px-6 py-4 border-t border-slate-100 dark:border-slate-800 shrink-0 bg-slate-50/50 dark:bg-slate-900/50">
+                            {editando ? (
+                                <button
+                                    type="button"
+                                    onClick={() => setDeletingId(editando.id)}
+                                    className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-900/20 text-xs font-bold transition cursor-pointer"
                                 >
-                                    <X className="w-4 h-4" />
+                                    <Trash2 className="w-3.5 h-3.5" />
+                                    Eliminar
+                                </button>
+                            ) : <div />}
+                            <div className="flex gap-2">
+                                <button type="button" onClick={cerrar} className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold transition cursor-pointer">
+                                    Cancelar
+                                </button>
+                                <button
+                                    type="submit"
+                                    form="equipo-form"
+                                    disabled={form.processing}
+                                    className="px-5 py-2 bg-[#800A15] hover:bg-[#600710] text-white text-xs font-black rounded-xl cursor-pointer shadow-md shadow-[#800A15]/20 disabled:opacity-50 flex items-center gap-1.5 transition"
+                                >
+                                    <Check className="w-3.5 h-3.5" />
+                                    {form.processing ? 'Guardando...' : 'Guardar Cambios'}
                                 </button>
                             </div>
-
-                            <form onSubmit={guardar} className="space-y-4 flex-1 flex flex-col justify-between">
-                                <div className="space-y-4">
-                                    {/* 1. Nombre Completo */}
-                                    <div>
-                                        <label className="text-xs font-extrabold text-slate-700 dark:text-slate-200 block mb-1">
-                                            Nombre Completo
-                                        </label>
-                                        <input
-                                            type="text"
-                                            required
-                                            value={form.data.nombre}
-                                            onChange={(e) => form.setData('nombre', e.target.value)}
-                                            placeholder="Ej: Sor Beatriz Cortés Jerez"
-                                            className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white text-xs font-bold rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-blue-600"
-                                        />
-                                    </div>
-
-                                    {/* 2. Cargo o Asignatura */}
-                                    <div>
-                                        <label className="text-xs font-extrabold text-slate-700 dark:text-slate-200 block mb-1">
-                                            Cargo o Asignatura
-                                        </label>
-                                        <input
-                                            type="text"
-                                            required
-                                            value={form.data.cargo}
-                                            onChange={(e) => form.setData('cargo', e.target.value)}
-                                            placeholder="Ej: Rectora, Matemáticas, Inglés"
-                                            className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white text-xs font-bold rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-blue-600"
-                                        />
-                                    </div>
-
-                                    {/* 3. Tipo y Área Académica */}
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                        <div>
-                                            <label className="text-xs font-extrabold text-slate-700 dark:text-slate-200 block mb-1">
-                                                Tipo de Integrante
-                                            </label>
-                                            <select
-                                                value={form.data.tipo}
-                                                onChange={(e) => form.setData('tipo', e.target.value)}
-                                                className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white text-xs font-bold rounded-xl px-3 py-2.5 focus:outline-none focus:border-blue-600 cursor-pointer"
-                                            >
-                                                <option value="docente">Docente</option>
-                                                <option value="directivo">Equipo Directivo</option>
-                                            </select>
-                                        </div>
-
-                                        <div>
-                                            <label className="text-xs font-extrabold text-slate-700 dark:text-slate-200 block mb-1">
-                                                Área Académica
-                                            </label>
-                                            <select
-                                                value={form.data.area}
-                                                onChange={(e) => form.setData('area', e.target.value)}
-                                                className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white text-xs font-bold rounded-xl px-3 py-2.5 focus:outline-none focus:border-blue-600 cursor-pointer"
-                                            >
-                                                {AREAS_EQUIPO.filter(a => a !== 'Todos').map(area => (
-                                                    <option key={area} value={area}>{area}</option>
-                                                ))}
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    {/* 4. Cambiar Fotografía */}
-                                    <div className="pt-1">
-                                        <label className="text-xs font-extrabold text-slate-700 dark:text-slate-200 block mb-1 flex items-center gap-1.5">
-                                            <Upload className="w-3.5 h-3.5 text-blue-600" />
-                                            <span>Subir / Cambiar Fotografía</span>
-                                        </label>
-                                        <input
-                                            type="file"
-                                            accept="image/*"
-                                            onChange={(e) => form.setData('foto', e.target.files[0])}
-                                            className="block w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-extrabold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer border border-slate-200 dark:border-slate-700 rounded-xl p-1"
-                                        />
-                                    </div>
-
-                                    {/* 5. Controles de Posición 2D (X e Y) & Zoom */}
-                                    <div className="bg-slate-50 dark:bg-slate-800/50 p-3.5 rounded-2xl border border-slate-200 dark:border-slate-700/80 space-y-3">
-                                        {/* Slider Posición Horizontal (X) */}
-                                        <div className="space-y-1">
-                                            <div className="flex justify-between items-center text-xs font-bold">
-                                                <span className="text-slate-600 dark:text-slate-300">Eje Horizontal (X)</span>
-                                                <span className="text-blue-600 dark:text-blue-400 font-mono">{form.data.foto_posicion_x ?? 50}%</span>
-                                            </div>
-                                            <div className="flex items-center gap-2">
-                                                <button
-                                                    type="button"
-                                                    onClick={() => form.setData('foto_posicion_x', Math.max(0, (form.data.foto_posicion_x ?? 50) - 5))}
-                                                    className="px-2 py-1 bg-slate-200 dark:bg-slate-700 text-xs font-bold rounded-lg text-slate-700 dark:text-white shrink-0 cursor-pointer flex items-center gap-1"
-                                                >
-                                                    <ArrowLeft className="w-3 h-3" />
-                                                    <span>Izquierda</span>
-                                                </button>
-                                                <input
-                                                    type="range"
-                                                    min="0"
-                                                    max="100"
-                                                    value={form.data.foto_posicion_x ?? 50}
-                                                    onChange={(e) => form.setData('foto_posicion_x', Number(e.target.value))}
-                                                    className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-600"
-                                                />
-                                                <button
-                                                    type="button"
-                                                    onClick={() => form.setData('foto_posicion_x', Math.min(100, (form.data.foto_posicion_x ?? 50) + 5))}
-                                                    className="px-2 py-1 bg-slate-200 dark:bg-slate-700 text-xs font-bold rounded-lg text-slate-700 dark:text-white shrink-0 cursor-pointer flex items-center gap-1"
-                                                >
-                                                    <span>Derecha</span>
-                                                    <ArrowRight className="w-3 h-3" />
-                                                </button>
-                                            </div>
-                                        </div>
-
-                                        {/* Slider Posición Vertical (Y) */}
-                                        <div className="space-y-1">
-                                            <div className="flex justify-between items-center text-xs font-bold">
-                                                <span className="text-slate-600 dark:text-slate-300">Eje Vertical (Y)</span>
-                                                <span className="text-blue-600 dark:text-blue-400 font-mono">{form.data.foto_posicion_y ?? form.data.foto_posicion ?? 20}%</span>
-                                            </div>
-                                            <div className="flex items-center gap-2">
-                                                <button
-                                                    type="button"
-                                                    onClick={() => {
-                                                        const ny = Math.max(0, (form.data.foto_posicion_y ?? form.data.foto_posicion ?? 20) - 5);
-                                                        form.setData({ ...form.data, foto_posicion_y: ny, foto_posicion: ny });
-                                                    }}
-                                                    className="px-2 py-1 bg-slate-200 dark:bg-slate-700 text-xs font-bold rounded-lg text-slate-700 dark:text-white shrink-0 cursor-pointer flex items-center gap-1"
-                                                >
-                                                    <ArrowUp className="w-3 h-3" />
-                                                    <span>Arriba</span>
-                                                </button>
-                                                <input
-                                                    type="range"
-                                                    min="0"
-                                                    max="100"
-                                                    value={form.data.foto_posicion_y ?? form.data.foto_posicion ?? 20}
-                                                    onChange={(e) => {
-                                                        const ny = Number(e.target.value);
-                                                        form.setData({ ...form.data, foto_posicion_y: ny, foto_posicion: ny });
-                                                    }}
-                                                    className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-600"
-                                                />
-                                                <button
-                                                    type="button"
-                                                    onClick={() => {
-                                                        const ny = Math.min(100, (form.data.foto_posicion_y ?? form.data.foto_posicion ?? 20) + 5);
-                                                        form.setData({ ...form.data, foto_posicion_y: ny, foto_posicion: ny });
-                                                    }}
-                                                    className="px-2 py-1 bg-slate-200 dark:bg-slate-700 text-xs font-bold rounded-lg text-slate-700 dark:text-white shrink-0 cursor-pointer flex items-center gap-1"
-                                                >
-                                                    <span>Abajo</span>
-                                                    <ArrowDown className="w-3 h-3" />
-                                                </button>
-                                            </div>
-                                        </div>
-
-                                        {/* Slider Zoom Escala */}
-                                        <div className="space-y-1">
-                                            <div className="flex justify-between items-center text-xs font-bold">
-                                                <span className="text-slate-600 dark:text-slate-300">Zoom / Escala Imagen</span>
-                                                <span className="text-blue-600 dark:text-blue-400 font-mono">{form.data.foto_zoom}%</span>
-                                            </div>
-                                            <div className="flex items-center gap-2">
-                                                <button
-                                                    type="button"
-                                                    onClick={() => form.setData('foto_zoom', Math.max(100, form.data.foto_zoom - 10))}
-                                                    className="w-8 h-8 rounded-lg bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-white font-extrabold hover:bg-slate-300 transition flex items-center justify-center shrink-0 cursor-pointer"
-                                                >
-                                                    <Minus className="w-4 h-4" />
-                                                </button>
-                                                <input
-                                                    type="range"
-                                                    min="100"
-                                                    max="250"
-                                                    step="5"
-                                                    value={form.data.foto_zoom}
-                                                    onChange={(e) => form.setData('foto_zoom', Number(e.target.value))}
-                                                    className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-600"
-                                                />
-                                                <button
-                                                    type="button"
-                                                    onClick={() => form.setData('foto_zoom', Math.min(250, form.data.foto_zoom + 10))}
-                                                    className="w-8 h-8 rounded-lg bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-white font-extrabold hover:bg-slate-300 transition flex items-center justify-center shrink-0 cursor-pointer"
-                                                >
-                                                    <Plus className="w-4 h-4" />
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* Botones del Formulario */}
-                                <div className="flex items-center justify-between gap-3 pt-4 border-t border-slate-100 dark:border-slate-800">
-                                    {editando ? (
-                                        <button
-                                            type="button"
-                                            onClick={() => setDeletingId(editando.id)}
-                                            className="px-4 py-2 bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-bold rounded-xl transition cursor-pointer flex items-center gap-1.5"
-                                        >
-                                            <Trash2 className="w-3.5 h-3.5" />
-                                            <span>Eliminar</span>
-                                        </button>
-                                    ) : <div />}
-
-                                    <div className="flex gap-2">
-                                        <button
-                                            type="button"
-                                            onClick={cerrar}
-                                            className="px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-bold rounded-xl cursor-pointer"
-                                        >
-                                            Cancelar
-                                        </button>
-                                        <button
-                                            type="submit"
-                                            disabled={form.processing}
-                                            className="px-5 py-2 bg-[#800A15] hover:bg-[#600710] text-white text-xs font-black rounded-xl cursor-pointer shadow-md disabled:opacity-50 flex items-center gap-1.5"
-                                        >
-                                            <Check className="w-4 h-4" />
-                                            <span>{form.processing ? 'Guardando...' : 'Guardar Cambios'}</span>
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
                         </div>
                     </div>
                 </div>
-            )}
+            , document.body)}
 
             {/* Modal Confirmación Eliminar */}
             {deletingId && (

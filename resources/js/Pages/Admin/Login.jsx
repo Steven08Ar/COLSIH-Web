@@ -1,4 +1,4 @@
-import { Head, useForm } from '@inertiajs/react';
+import { Head, useForm, router } from '@inertiajs/react';
 import { useState, useEffect } from 'react';
 import { User, Lock, Eye, EyeOff, ShieldCheck, ArrowRight, QrCode, KeyRound, ArrowLeft, Delete, Fingerprint } from 'lucide-react';
 
@@ -19,9 +19,12 @@ export default function AdminLogin() {
             const nextPin = data.pin + digit;
             setData('pin', nextPin);
             if (nextPin.length === 4) {
-                // Auto-submit mediante post
-                post(window.location.pathname, {
+                // Auto-submit enviando el valor exacto de 4 dígitos
+                router.post(window.location.pathname, { pin: nextPin }, {
                     preserveScroll: true,
+                    onError: () => {
+                        setData('pin', '');
+                    }
                 });
             }
         }

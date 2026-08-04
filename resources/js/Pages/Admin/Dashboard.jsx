@@ -6,6 +6,12 @@ import { Sun, Moon, Eye, Move, ZoomIn, Camera, User, X, Check, Upload, ArrowUp, 
 import { processImageFile } from '@/utils/heicConverter';
 import { mediaUrl } from '@/utils/mediaUrl';
 
+const getAdminBasePath = () => {
+    if (typeof window === 'undefined') return '/sih-panel-308';
+    const parts = window.location.pathname.split('/').filter(Boolean);
+    return parts.length > 0 ? `/${parts[0]}` : '/sih-panel-308';
+};
+
 /* ── helpers ── */
 function Flash({ message }) {
     if (!message) return null;
@@ -181,9 +187,10 @@ function TestimoniosTab({ testimonios, flash }) {
 
     function guardar(e) {
         e.preventDefault();
+        const basePath = getAdminBasePath();
         if (editando) {
             // Spoofed PUT inside Inertia POST request to support binary uploads
-            router.post(`${window.location.pathname.replace(/\/[^/]+$/, '')}/testimonios/${editando.id}`, {
+            router.post(`${basePath}/testimonios/${editando.id}`, {
                 _method: 'PUT',
                 ...form.data
             }, {
@@ -194,13 +201,14 @@ function TestimoniosTab({ testimonios, flash }) {
                 }
             });
         } else {
-            form.post(`${window.location.pathname.replace(/\/[^/]+$/, '')}/testimonios`, { onSuccess: cerrar });
+            form.post(`${basePath}/testimonios`, { onSuccess: cerrar });
         }
     }
 
     function eliminar(id) {
         setDeletingId(null);
-        router.delete(`${window.location.pathname.replace(/\/[^/]+$/, '')}/testimonios/${id}`, {
+        const basePath = getAdminBasePath();
+        router.delete(`${basePath}/testimonios/${id}`, {
             preserveState: true, preserveScroll: true,
         });
     }
@@ -2075,8 +2083,9 @@ function EquipoTab({ equipo = [], flash }) {
 
     function guardar(e) {
         e.preventDefault();
+        const basePath = getAdminBasePath();
         if (editando) {
-            router.post(`/admin/equipo/${editando.id}`, {
+            router.post(`${basePath}/equipo/${editando.id}`, {
                 _method: 'PUT',
                 ...form.data
             }, {
@@ -2087,13 +2096,14 @@ function EquipoTab({ equipo = [], flash }) {
                 }
             });
         } else {
-            form.post('/admin/equipo', { onSuccess: cerrar });
+            form.post(`${basePath}/equipo`, { onSuccess: cerrar });
         }
     }
 
     function eliminar(id) {
         setDeletingId(null);
-        router.delete(`/admin/equipo/${id}`);
+        const basePath = getAdminBasePath();
+        router.delete(`${basePath}/equipo/${id}`);
     }
 
     const directivosList = equipo.filter(m => m.tipo === 'directivo');

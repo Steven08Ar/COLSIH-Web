@@ -24,8 +24,12 @@ class CarnetsController extends Controller
             return redirect("/{$adminPath}/login");
         }
 
+        $adminPath = env('ADMIN_PATH', 'panel-admin');
+
         return Inertia::render('Admin/CarnetsKiosco', [
             'isOnlyKiosk' => !$hasAdminAuth,
+            'salirUrl' => "/{$adminPath}/carnets/salir",
+            'adminDashboardUrl' => "/{$adminPath}",
         ]);
     }
 

@@ -27,7 +27,7 @@ const DEMO_PERSONAS = [
     { code: 'ADM-106', nfc: 'NFC-106', nombre: 'Luz Marina', apellido: 'Valenzuela Castro', rol: 'Administrativo', info: 'Secretaria General', foto: null }
 ];
 
-export default function CarnetsKiosco({ isOnlyKiosk = false }) {
+export default function CarnetsKiosco({ isOnlyKiosk = false, salirUrl, adminDashboardUrl }) {
     const [currentTime, setCurrentTime] = useState(new Date());
     const [scannedRecord, setScannedRecord] = useState(null);
     const [recentScans, setRecentScans] = useState([]);
@@ -147,7 +147,8 @@ export default function CarnetsKiosco({ isOnlyKiosk = false }) {
     };
 
     const handleSalirKiosco = () => {
-        router.post('/carnets/salir');
+        const url = salirUrl || `${window.location.pathname.replace(/\/$/, '')}/salir`;
+        router.post(url);
     };
 
     const countEstudiantes = recentScans.filter(s => s.rol === 'Estudiante').length;
@@ -184,7 +185,7 @@ export default function CarnetsKiosco({ isOnlyKiosk = false }) {
 
                         {!isOnlyKiosk && (
                             <Link
-                                href="/sih-panel-308"
+                                href={adminDashboardUrl || "/sih-panel-308"}
                                 className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#003C8F] text-white hover:bg-[#002868] transition text-xs font-black uppercase tracking-wider cursor-pointer shadow-md"
                             >
                                 <ArrowLeft className="w-4 h-4" />

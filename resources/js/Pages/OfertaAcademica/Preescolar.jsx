@@ -80,7 +80,7 @@ export default function Preescolar() {
                 {/* Imagen vertical de fondo en los columpios con ambos niños */}
                 <div className="absolute inset-0 w-full h-full z-0 overflow-hidden pointer-events-none">
                     <img
-                        src="/galeria/preescolar_dos.JPG"
+                        src="https://pub-c4ddb3fb75904158bbda5fbc35d6963e.r2.dev/ofertas_academicas/preescolar/preescolar_dos.JPG"
                         alt="Niños de Preescolar COLSIH en columpios"
                         className="absolute top-0 right-0 w-full md:w-[65%] lg:w-[58%] h-full object-cover object-[center_45%] contrast-[1.05] brightness-90 md:brightness-95 scale-105"
                     />

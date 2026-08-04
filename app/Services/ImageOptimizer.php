@@ -68,6 +68,29 @@ class ImageOptimizer
     }
 
     /**
+     * Sube el archivo original sin ninguna optimización ni recompresión.
+     * Usado para imágenes 360° donde la pérdida de calidad es inaceptable.
+     */
+    public static function guardarRaw(UploadedFile $file, string $carpeta): string
+    {
+        $ext    = strtolower($file->getClientOriginalExtension()) ?: 'jpg';
+        $nombre = Str::random(40) . '.' . $ext;
+        $ruta   = $carpeta . '/' . $nombre;
+        $mime   = $file->getMimeType() ?: 'image/jpeg';
+
+        $contenido = file_get_contents($file->getPathname());
+
+        if (env('R2_ACCESS_KEY_ID') && env('R2_ENDPOINT')) {
+            Storage::disk('r2')->put($ruta, $contenido, ['ContentType' => $mime]);
+            return rtrim(env('R2_PUBLIC_URL', ''), '/') . '/' . $ruta;
+        }
+
+        Storage::disk('public')->makeDirectory($carpeta);
+        file_put_contents(Storage::disk('public')->path($ruta), $contenido);
+        return $ruta;
+    }
+
+    /**
      * Elimina una imagen de R2 (URL completa) o del disco público local (ruta relativa).
      */
     public static function eliminar(?string $ruta): void

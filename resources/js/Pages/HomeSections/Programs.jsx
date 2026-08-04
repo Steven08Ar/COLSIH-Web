@@ -54,7 +54,7 @@ export default function Programs() {
             tagline: "Sembrando la curiosidad",
             description: "Enfoque lúdico e interactivo diseñado para promover las habilidades sociales, motoras y cognitivas básicas en un ambiente estimulante y seguro bajo la pedagogía de la confianza.",
             duration: "3 Años (Prejardín a Transición)",
-            image: "/galeria/preescolar.JPG",
+            image: "https://pub-c4ddb3fb75904158bbda5fbc35d6963e.r2.dev/ofertas_academicas/preescolar.JPG",
             imagePos: "object-[center_55%]",
             ctaLink: "/oferta-academica/preescolar",
             ctaText: "Explorar Preescolar"
@@ -65,7 +65,7 @@ export default function Programs() {
             tagline: "Bases intelectuales y morales",
             description: "Desarrollo profundo de habilidades lógicas, matemáticas, lectoescritura e inglés. Potenciamos el trabajo colaborativo y la formación de valores salesianos en una cultura de paz.",
             duration: "5 Años (Primero a Quinto)",
-            image: "/galeria/primaria.JPG",
+            image: "https://pub-c4ddb3fb75904158bbda5fbc35d6963e.r2.dev/ofertas_academicas/primaria.JPG",
             imagePos: "object-[center_80%]",
             ctaLink: "/oferta-academica/primaria",
             ctaText: "Explorar Primaria"
@@ -76,7 +76,7 @@ export default function Programs() {
             tagline: "Liderazgo, ciencia e innovación",
             description: "Preparación académica avanzada enfocada en el pensamiento crítico, la investigación y la excelencia, capacitando integralmente a nuestros jóvenes para la educación superior.",
             duration: "6 Años (Sexto a Undécimo)",
-            image: "/galeria/bachillerato.JPG",
+            image: "https://pub-c4ddb3fb75904158bbda5fbc35d6963e.r2.dev/ofertas_academicas/bachillerato.JPG",
             imagePos: "object-center",
             ctaLink: "/oferta-academica/bachillerato",
             ctaText: "Explorar Bachillerato"
@@ -87,7 +87,7 @@ export default function Programs() {
             tagline: "Articulación con la Media Técnica",
             description: "Convenio institucional con el SENA. Formación como Técnico en Contabilización de Operaciones Comerciales y Financieras, con doble titulación oficial que prepara a nuestros bachilleres para el mundo profesional y universitario.",
             duration: "Grados 10° y 11° (Titulación Nacional)",
-            image: "/galeria/SENA.JPG",
+            image: "https://pub-c4ddb3fb75904158bbda5fbc35d6963e.r2.dev/ofertas_academicas/SENA.JPG",
             imagePos: "object-center",
             ctaLink: "/oferta-academica/sena",
             ctaText: "Explorar SENA"

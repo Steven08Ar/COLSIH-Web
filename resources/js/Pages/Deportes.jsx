@@ -14,7 +14,7 @@ const DESTACADOS = [
         disciplina: 'Voleibol',
         grado: 'Grado 11°',
         resumen: 'Mejor jugadora del torneo intercolegiado 2024. Líder en puntos y en espíritu deportivo.',
-        foto: '/docentes/Daniela Villamizar Villamizar.JPG',
+        foto: 'https://pub-c4ddb3fb75904158bbda5fbc35d6963e.r2.dev/nuestro_colegio/equipo/docentes/Daniela%20Villamizar%20Villamizar.JPG',
         logros: ['MVP Torneo Regional 2024', 'Capitana Selección Femenina', '15 Puntos por Partido']
     },
     {
@@ -23,7 +23,7 @@ const DESTACADOS = [
         disciplina: 'Fútbol',
         grado: 'Grado 10°',
         resumen: 'Goleador del torneo intercolegiado departamental con 14 tantos anotados.',
-        foto: '/docentes/Jeyson Eduardo Suárez Ardila.JPG',
+        foto: 'https://pub-c4ddb3fb75904158bbda5fbc35d6963e.r2.dev/nuestro_colegio/equipo/docentes/Jeyson%20Eduardo%20Su%C3%A1rez%20Ardila.JPG',
         logros: ['Botín de Oro Intercolegiados', 'Selección Santander Sub-17', 'Capitán Equipo']
     },
     {
@@ -32,7 +32,7 @@ const DESTACADOS = [
         disciplina: 'Atletismo',
         grado: 'Grado 11°',
         resumen: 'Medalla de Oro en 400m planos y relevos 4x100m en los Juegos Supérate.',
-        foto: '/docentes/Edgar Javier García Estupiñán.JPG',
+        foto: 'https://pub-c4ddb3fb75904158bbda5fbc35d6963e.r2.dev/nuestro_colegio/equipo/docentes/Edgar%20Javier%20Garc%C3%ADa%20Estupi%C3%B1%C3%A1n.JPG',
         logros: ['Medalla de Oro 400m', 'Record Regional 52.3s', 'Atleta del Año COLSIH']
     }
 ];
@@ -53,7 +53,7 @@ const NOTICIAS_LOGROS = [
         mes: 'MAY',
         titulo: 'Segundo lugar en Voleibol Femenino',
         descripcion: 'Gran participación de nuestro equipo en el torneo intercolegiado regional.',
-        imagen: '/galeria/bachillerato.JPG',
+        imagen: 'https://pub-c4ddb3fb75904158bbda5fbc35d6963e.r2.dev/ofertas_academicas/bachillerato.JPG',
         destacado: false
     },
     {

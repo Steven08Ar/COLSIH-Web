@@ -75,7 +75,7 @@ class TourAdminController extends Controller
         $imagenPath = null;
 
         if ($request->hasFile('imagen')) {
-            $imagenPath = ImageOptimizer::guardar($request->file('imagen'), 'recorrido_virtual', ImageOptimizer::LADO_360);
+            $imagenPath = ImageOptimizer::guardarRaw($request->file('imagen'), 'recorrido_360');
         } elseif ($request->filled('imagen_url_manual')) {
             $imagenPath = ltrim($request->imagen_url_manual, '/storage/');
         }
@@ -124,7 +124,7 @@ class TourAdminController extends Controller
         foreach ($request->file('escenas') as $index => $item) {
             if (isset($item['imagen']) && $item['imagen']->isValid()) {
                 $nombre = $request->input("escenas.{$index}.nombre") ?: ('Espacio ' . ($currentCount + $savedCount + 1));
-                $imagenPath = ImageOptimizer::guardar($item['imagen'], 'recorrido_virtual', ImageOptimizer::LADO_360);
+                $imagenPath = ImageOptimizer::guardarRaw($item['imagen'], 'recorrido_360');
                 
                 $baseSlug = Str::slug($nombre);
                 $slug = $baseSlug;

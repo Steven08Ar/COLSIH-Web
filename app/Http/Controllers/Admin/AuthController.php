@@ -25,6 +25,23 @@ class AuthController extends Controller
             ]);
         }
 
+        // 1. Inicio de sesión mediante PIN rápido (para Kiosco de Carnets)
+        if ($request->filled('pin')) {
+            $adminPin = env('ADMIN_PIN', '1234');
+            if (hash_equals((string)$adminPin, (string)$request->pin)) {
+                RateLimiter::clear($key);
+                $request->session()->regenerate();
+                $request->session()->put('colsih_admin_auth', true);
+
+                $adminPath = env('ADMIN_PATH', 'panel-admin');
+                return redirect("/{$adminPath}/carnets");
+            }
+
+            RateLimiter::hit($key, 60);
+            return back()->withErrors(['pin' => 'PIN de acceso incorrecto.']);
+        }
+
+        // 2. Inicio de sesión estándar (Usuario y Contraseña)
         $request->validate([
             'usuario' => 'required|string',
             'password' => 'required|string',

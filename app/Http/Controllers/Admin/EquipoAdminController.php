@@ -42,7 +42,7 @@ class EquipoAdminController extends Controller
         }
 
         EquipoMember::create($data);
-        return back()->with('flash', 'Integrante del equipo agregado exitosamente.');
+        return redirect()->route('admin.equipo')->with('flash', 'Integrante del equipo agregado exitosamente.');
     }
 
     public function update(Request $request, EquipoMember $member)
@@ -57,8 +57,8 @@ class EquipoAdminController extends Controller
             'foto_posicion_x' => 'nullable|integer|min:0|max:100',
             'foto_posicion_y' => 'nullable|integer|min:0|max:100',
             'foto_zoom'       => 'nullable|integer|min:50|max:300',
-            'orden'         => 'nullable|integer|min:0',
-            'activo'        => 'boolean',
+            'orden'           => 'nullable|integer|min:0',
+            'activo'          => 'boolean',
         ]);
 
         if ($request->hasFile('foto')) {
@@ -72,13 +72,13 @@ class EquipoAdminController extends Controller
         }
 
         $member->update($data);
-        return back()->with('flash', 'Integrante del equipo actualizado exitosamente.');
+        return redirect()->route('admin.equipo')->with('flash', 'Integrante del equipo actualizado exitosamente.');
     }
 
     public function destroy(EquipoMember $member)
     {
         ImageOptimizer::eliminar($member->foto);
         $member->delete();
-        return back()->with('flash', 'Integrante eliminado exitosamente.');
+        return redirect()->route('admin.equipo')->with('flash', 'Integrante eliminado exitosamente.');
     }
 }

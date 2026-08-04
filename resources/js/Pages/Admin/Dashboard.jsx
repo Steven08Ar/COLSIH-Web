@@ -978,7 +978,7 @@ function NoticiasTab({ noticias, flash }) {
                                             <img src={portadaPreview} alt={titulo} className="w-full h-full object-cover transition duration-500" />
                                         ) : (
                                             <div className="w-full h-full flex items-center justify-center bg-slate-50 relative">
-                                                <img src="/galeria/estudiantes-colsih.png" className="w-full h-full object-cover grayscale opacity-15" />
+                                                <img src="https://pub-c4ddb3fb75904158bbda5fbc35d6963e.r2.dev/home/estudiantes-colsih.png" className="w-full h-full object-cover grayscale opacity-15" />
                                                 <img src="/marca/logo-colsih.svg" className="w-10 h-auto opacity-10 absolute center" />
                                             </div>
                                         )}

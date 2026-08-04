@@ -126,7 +126,7 @@ export default function AboutHero() {
                             className="absolute inset-0 w-full h-full bg-[#08111F] overflow-hidden"
                         >
                             <img
-                                src="/galeria/colegio-afuera.JPG"
+                                src="https://pub-c4ddb3fb75904158bbda5fbc35d6963e.r2.dev/nuestro_colegio/quienes_somos/colegio-afuera.JPG"
                                 alt="Colegio Santa Isabel de Hungría"
                                 className="w-full h-full object-cover object-[center_35%] scale-100"
                             />
@@ -134,7 +134,7 @@ export default function AboutHero() {
 
                         {/* Layer 2: Foreground Cutout Students */}
                         <img
-                            src="/galeria/estudiantes-espaldas.png"
+                            src="https://pub-c4ddb3fb75904158bbda5fbc35d6963e.r2.dev/nuestro_colegio/quienes_somos/estudiantes-espaldas.png"
                             alt="Estudiantes COLSIH"
                             className="absolute bottom-[-10px] left-[-2%] w-[96%] max-w-none z-20 pointer-events-none object-contain drop-shadow-[0_20px_40px_rgba(8,17,31,0.35)]"
                         />
@@ -173,7 +173,7 @@ export default function AboutHero() {
                         className="absolute inset-0 w-full h-full bg-[#08111F] overflow-hidden"
                     >
                         <img
-                            src="/galeria/colegio-afuera.JPG"
+                            src="https://pub-c4ddb3fb75904158bbda5fbc35d6963e.r2.dev/nuestro_colegio/quienes_somos/colegio-afuera.JPG"
                             alt="Colegio Santa Isabel de Hungría"
                             className="w-full h-full object-cover object-[center_35%] scale-100"
                         />
@@ -181,7 +181,7 @@ export default function AboutHero() {
 
                     {/* Layer 2: Foreground Cutout Students */}
                     <img
-                        src="/galeria/estudiantes-espaldas.png"
+                        src="https://pub-c4ddb3fb75904158bbda5fbc35d6963e.r2.dev/nuestro_colegio/quienes_somos/estudiantes-espaldas.png"
                         alt="Estudiantes COLSIH"
                         className="absolute bottom-[-10px] left-[-2%] w-[96%] max-w-none z-20 pointer-events-none object-contain drop-shadow-[0_20px_40px_rgba(8,17,31,0.35)] hover:scale-[1.01] transition-transform duration-500"
                     />

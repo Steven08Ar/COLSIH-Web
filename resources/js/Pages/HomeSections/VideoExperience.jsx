@@ -33,7 +33,7 @@ export default function VideoExperience({ scenes = [] }) {
         };
     }, [tour360Open]);
 
-    const bgImage = '/galeria/panoramica.png';
+    const bgImage = 'https://pub-c4ddb3fb75904158bbda5fbc35d6963e.r2.dev/home/panoramica.png';
 
     const handleMouseMove = (e) => {
         if (!bgRef.current) return;

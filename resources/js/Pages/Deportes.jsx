@@ -44,7 +44,7 @@ const NOTICIAS_LOGROS = [
         mes: 'MAY',
         titulo: '¡Campeones Intercolegiados 2024!',
         descripcion: 'Nuestro equipo de fútbol masculino obtuvo el primer lugar en la categoría juvenil.',
-        imagen: '/galeria/colegio-afuera.JPG',
+        imagen: 'https://pub-c4ddb3fb75904158bbda5fbc35d6963e.r2.dev/nuestro_colegio/quienes_somos/colegio-afuera.JPG',
         destacado: true
     },
     {
@@ -62,7 +62,7 @@ const NOTICIAS_LOGROS = [
         mes: 'MAY',
         titulo: 'Atletas Santa Isabel en el Podio',
         descripcion: 'Destacada participación en atletismo: 3 oros, 2 platas y 1 bronce.',
-        imagen: '/galeria/estudiantes-espaldas.png',
+        imagen: 'https://pub-c4ddb3fb75904158bbda5fbc35d6963e.r2.dev/nuestro_colegio/quienes_somos/estudiantes-espaldas.png',
         destacado: false
     }
 ];
@@ -157,7 +157,7 @@ export default function Deportes() {
                             <div className="lg:col-span-4 flex justify-center">
                                 <div className="relative w-full max-w-md aspect-[4/3] sm:aspect-square rounded-3xl overflow-hidden shadow-2xl border-4 border-white/20 group">
                                     <img 
-                                        src="/galeria/estudiantes-colsih.png" 
+                                        src="https://pub-c4ddb3fb75904158bbda5fbc35d6963e.r2.dev/home/estudiantes-colsih.png" 
                                         alt="Deportistas COLSIH" 
                                         className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
                                     />
@@ -205,7 +205,7 @@ export default function Deportes() {
                                             className="w-full h-full object-cover object-top"
                                             onError={(e) => {
                                                 e.target.onerror = null;
-                                                e.target.src = '/galeria/estudiantes-colsih.png';
+                                                e.target.src = 'https://pub-c4ddb3fb75904158bbda5fbc35d6963e.r2.dev/home/estudiantes-colsih.png';
                                             }}
                                         />
                                         <div className="absolute top-3 right-3 bg-[#800A15] text-white text-[10px] font-black uppercase px-2.5 py-1 rounded-full shadow-md">

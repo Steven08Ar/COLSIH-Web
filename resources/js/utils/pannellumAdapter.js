@@ -1,7 +1,4 @@
-/**
- * Utility helper to convert raw Laravel/Backend JSON scene data
- * into Pannellum's multiScene configuration object.
- */
+import { mediaUrl } from '@/utils/mediaUrl';
 
 export function buildPannellumConfig(
     scenes = [], 
@@ -85,7 +82,7 @@ export function buildPannellumConfig(
         pannellumScenes[key] = {
             title: scene.nombre || '',
             type: 'equirectangular',
-            panorama: scene.imagen_url || (scene.imagen_path ? `/storage/${scene.imagen_path}` : ''),
+            panorama: mediaUrl(scene.imagen_url || scene.imagen_path) || '',
             yaw: Number(scene.yaw_inicial || 0),
             pitch: Number(scene.pitch_inicial || 0),
             hfov: Number(scene.hfov_inicial || 100),

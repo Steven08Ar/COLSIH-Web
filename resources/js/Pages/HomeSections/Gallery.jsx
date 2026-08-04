@@ -1,30 +1,32 @@
 import ScrollReveal from './ScrollReveal';
 
+const R2_ESPACIOS_BASE = "https://pub-c4ddb3fb75904158bbda5fbc35d6963e.r2.dev/espacios_academicos/";
+
 export default function Gallery() {
     const items = [
         {
             title: "Aulas de Tecnología e Informática",
             category: "Instalaciones de Vanguardia",
             size: "col-span-12 md:col-span-8 h-[350px] md:h-[400px]",
-            image: "/espacios_academicos/informatica_A.JPG"
+            image: `${R2_ESPACIOS_BASE}informatica_A.JPG`
         },
         {
             title: "Biblioteca Escolar",
             category: "Espacios de Lectura",
             size: "col-span-12 md:col-span-4 h-[350px] md:h-[400px]",
-            image: "/espacios_academicos/biblioteca.JPG"
+            image: `${R2_ESPACIOS_BASE}biblioteca.JPG`
         },
         {
             title: "Cancha Múltiple y Zonas Deportivas",
             category: "Deportes y Convivencia",
             size: "col-span-12 md:col-span-4 h-[320px] md:h-[360px]",
-            image: "/espacios_academicos/cancha.JPG"
+            image: `${R2_ESPACIOS_BASE}cancha.JPG`
         },
         {
             title: "Parque e Instalaciones de Preescolar",
             category: "Recreación e Infancia",
             size: "col-span-12 md:col-span-8 h-[320px] md:h-[360px]",
-            image: "/espacios_academicos/jardin.JPG"
+            image: `${R2_ESPACIOS_BASE}jardin.JPG`
         }
     ];
 

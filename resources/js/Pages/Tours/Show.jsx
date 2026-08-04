@@ -3,13 +3,16 @@ import { Head, Link } from '@inertiajs/react';
 import TourViewer from '@/Components/Tour360/TourViewer';
 import { ChevronLeft, Grid, Compass, Info, MapPin } from 'lucide-react';
 
-// Default fallback 360° scenes built from public/recorrido_virtual images
+const R2_RECORRIDO_BASE = "https://pub-c4ddb3fb75904158bbda5fbc35d6963e.r2.dev/recorrido_360/";
+const getRecorridoR2Url = (file) => `${R2_RECORRIDO_BASE}${encodeURIComponent(file)}`;
+
+// Default fallback 360° scenes built from Cloudflare R2 recorrido_360 images
 const DEFAULT_SCENES = [
     {
         id: 1,
         slug: 'entrada',
         nombre: 'Entrada Principal',
-        imagen_url: '/recorrido_virtual/1.entrada.jpg',
+        imagen_url: getRecorridoR2Url('1.entrada.jpg'),
         yaw_inicial: 0,
         pitch_inicial: 0,
         hfov_inicial: 100,
@@ -25,7 +28,7 @@ const DEFAULT_SCENES = [
         id: 2,
         slug: 'lobby',
         nombre: 'Lobby de Bienvenida',
-        imagen_url: '/recorrido_virtual/2.lobby.jpg',
+        imagen_url: getRecorridoR2Url('2.lobby.jpg'),
         yaw_inicial: 0,
         pitch_inicial: 0,
         hfov_inicial: 100,
@@ -43,7 +46,7 @@ const DEFAULT_SCENES = [
         id: 3,
         slug: 'capilla',
         nombre: 'Capilla Institucional',
-        imagen_url: '/recorrido_virtual/5.capilla.jpg',
+        imagen_url: getRecorridoR2Url('5.capilla.jpg'),
         yaw_inicial: 0,
         pitch_inicial: 0,
         hfov_inicial: 100,
@@ -59,7 +62,7 @@ const DEFAULT_SCENES = [
         id: 4,
         slug: 'cafeteria',
         nombre: 'Parque y Cafetería',
-        imagen_url: '/recorrido_virtual/4.parque_cafeteria.jpg',
+        imagen_url: getRecorridoR2Url('4.parque_cafeteria.jpg'),
         yaw_inicial: 0,
         pitch_inicial: 0,
         hfov_inicial: 100,
@@ -76,7 +79,7 @@ const DEFAULT_SCENES = [
         id: 5,
         slug: 'canchas',
         nombre: 'Canchas Deportivas',
-        imagen_url: '/recorrido_virtual/19.cancha_grande.jpg',
+        imagen_url: getRecorridoR2Url('20.cancha_grande.jpg'),
         yaw_inicial: 0,
         pitch_inicial: 0,
         hfov_inicial: 100,
@@ -93,7 +96,7 @@ const DEFAULT_SCENES = [
         id: 6,
         slug: 'informatica',
         nombre: 'Sala de Informática',
-        imagen_url: '/recorrido_virtual/12.informatica_a.jpg',
+        imagen_url: getRecorridoR2Url('13.informatica_a.jpg'),
         yaw_inicial: 0,
         pitch_inicial: 0,
         hfov_inicial: 100,
@@ -110,7 +113,7 @@ const DEFAULT_SCENES = [
         id: 7,
         slug: 'gimnasio',
         nombre: 'Gimnasio Deportivo',
-        imagen_url: '/recorrido_virtual/34.gimnasio.jpg',
+        imagen_url: getRecorridoR2Url('34.gimnasio.jpg'),
         yaw_inicial: 0,
         pitch_inicial: 0,
         hfov_inicial: 100,
@@ -126,7 +129,7 @@ const DEFAULT_SCENES = [
         id: 8,
         slug: 'biblioteca',
         nombre: 'Biblioteca Institucional',
-        imagen_url: '/recorrido_virtual/38.biblioteca.jpg',
+        imagen_url: getRecorridoR2Url('38.biblioteca.jpg'),
         yaw_inicial: 0,
         pitch_inicial: 0,
         hfov_inicial: 100,

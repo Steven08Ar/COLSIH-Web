@@ -9,9 +9,12 @@ use Illuminate\Support\Str;
 
 class Tour extends Model
 {
-    protected $fillable = ['nombre', 'slug', 'descripcion', 'activo'];
+    protected $fillable = ['nombre', 'slug', 'descripcion', 'activo', 'en_construccion'];
 
-    protected $casts = ['activo' => 'boolean'];
+    protected $casts = [
+        'activo' => 'boolean',
+        'en_construccion' => 'boolean',
+    ];
 
     protected static function booted(): void
     {

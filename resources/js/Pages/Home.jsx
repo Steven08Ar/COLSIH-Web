@@ -46,7 +46,7 @@ export default function Home({ noticias, testimonios, preguntas, tour, scenes = 
 
             {/* Section 5: Video Experience 360 */}
             <LazyViewportSection minHeight="500px">
-                <VideoExperience scenes={scenes} />
+                <VideoExperience scenes={scenes} tour={tour} />
             </LazyViewportSection>
 
             {/* Section 6: Statistics */}

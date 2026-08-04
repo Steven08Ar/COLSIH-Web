@@ -144,6 +144,46 @@ const DEFAULT_SCENES = [
 ];
 
 export default function Show({ tour = null }) {
+    if (tour?.en_construccion) {
+        return (
+            <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-6 text-center select-none font-sans relative overflow-hidden">
+                <Head title="Recorrido 360° en Construcción | COLSIH" />
+
+                {/* Ambient Glows */}
+                <div className="absolute top-1/4 left-1/3 w-96 h-96 bg-amber-500/10 rounded-full blur-[120px] pointer-events-none" />
+                <div className="absolute bottom-1/4 right-1/3 w-96 h-96 bg-[#800A15]/20 rounded-full blur-[120px] pointer-events-none" />
+
+                <div className="relative z-10 max-w-lg bg-slate-900/90 border border-slate-800 backdrop-blur-xl rounded-3xl p-8 sm:p-10 space-y-6 shadow-2xl">
+                    <div className="inline-flex items-center justify-center w-24 h-24 rounded-3xl bg-amber-500/10 border border-amber-500/30 text-amber-400 mx-auto shadow-xl shadow-amber-500/10">
+                        <span className="text-5xl animate-bounce">🚧</span>
+                    </div>
+
+                    <div className="space-y-3">
+                        <div className="inline-block px-4 py-1.5 rounded-full bg-amber-500/20 text-amber-300 text-xs font-black uppercase tracking-widest border border-amber-500/30">
+                            Modo en Construcción
+                        </div>
+                        <h1 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
+                            Recorrido Virtual 360°
+                        </h1>
+                        <p className="text-slate-300 text-sm sm:text-base font-medium leading-relaxed">
+                            Estamos actualizando las instalaciones virtuales de nuestra institución para ofrecerte una experiencia interactiva inmersiva renovada. ¡Próximamente disponible!
+                        </p>
+                    </div>
+
+                    <div className="pt-4">
+                        <Link
+                            href="/"
+                            className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full bg-[#800A15] hover:bg-[#600710] text-white font-black text-xs uppercase tracking-wider transition-all duration-300 shadow-xl shadow-rose-950/40 hover:scale-105"
+                        >
+                            <ChevronLeft className="w-4 h-4" />
+                            <span>Volver al Inicio</span>
+                        </Link>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
     const rawScenes = (tour && tour.scenes && tour.scenes.length > 0) 
         ? tour.scenes 
         : DEFAULT_SCENES;

@@ -91,6 +91,7 @@ Route::prefix($adminPath)->name('admin.')->group(function () {
 
         // Recorrido Virtual 360°
         Route::get('/recorrido',                      [TourAdminController::class, 'index'])->name('recorrido');
+        Route::post('/recorrido/toggle-construccion', [TourAdminController::class, 'toggleConstruccion'])->name('recorrido.toggle-construccion');
         Route::post('/recorrido/scenes',             [TourAdminController::class, 'storeScene'])->name('recorrido.scenes.store');
         Route::post('/recorrido/scenes/batch',       [TourAdminController::class, 'storeBatchScenes'])->name('recorrido.scenes.batch');
         Route::put('/recorrido/scenes/{scene}',       [TourAdminController::class, 'updateScene'])->name('recorrido.scenes.update');

@@ -73,9 +73,11 @@ class ImageOptimizer
      */
     public static function guardarRaw(UploadedFile $file, string $carpeta): string
     {
-        $ext    = strtolower($file->getClientOriginalExtension()) ?: 'jpg';
-        $nombre = Str::random(40) . '.' . $ext;
-        $ruta   = $carpeta . '/' . $nombre;
+        $ext        = strtolower($file->getClientOriginalExtension()) ?: 'jpg';
+        $nombreBase = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+        $nombreBase = Str::slug($nombreBase) ?: Str::random(8);
+        $nombre     = $nombreBase . '.' . $ext;
+        $ruta       = $carpeta . '/' . $nombre;
         $mime   = $file->getMimeType() ?: 'image/jpeg';
 
         $contenido = file_get_contents($file->getPathname());

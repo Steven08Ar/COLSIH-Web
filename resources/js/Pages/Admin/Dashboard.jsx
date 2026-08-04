@@ -1314,8 +1314,7 @@ function RecorridoTab({ tour, scenes = [], flash, basePath }) {
 
         const validFiles = files.slice(0, 50);
 
-        const processedItems = await Promise.all(validFiles.map(async (file, idx) => {
-            const processedFile = await processImageFile(file, { maxWidth: 3840, quality: 0.85 });
+        const processedItems = validFiles.map((file, idx) => {
             const cleanName = file.name
                 .replace(/\.[^/.]+$/, "")
                 .replace(/[-_]/g, " ")
@@ -1327,12 +1326,12 @@ function RecorridoTab({ tour, scenes = [], flash, basePath }) {
 
             return {
                 id: `batch-${Date.now()}-${idx}-${Math.random().toString(36).substr(2, 4)}`,
-                file: processedFile,
-                previewUrl: URL.createObjectURL(processedFile),
+                file,
+                previewUrl: URL.createObjectURL(file),
                 nombre: formattedName,
                 status: 'pending',
             };
-        }));
+        });
 
         setBatchItems((prev) => [...prev, ...processedItems].slice(0, 50));
     };
@@ -1454,6 +1453,64 @@ function RecorridoTab({ tour, scenes = [], flash, basePath }) {
     return (
         <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800/80 rounded-2xl sm:rounded-[24px] p-4 sm:p-6 lg:p-8 shadow-sm">
             <Flash message={flash} />
+
+            {/* Tarjeta de Control Modo En Construccion */}
+            <div className={`mb-6 p-4 sm:p-5 rounded-2xl border transition-all duration-300 ${
+                tour?.en_construccion
+                    ? 'bg-amber-50 dark:bg-amber-950/40 border-amber-300 dark:border-amber-700/60 text-amber-900 dark:text-amber-200'
+                    : 'bg-emerald-50 dark:bg-emerald-950/30 border-emerald-200 dark:border-emerald-800/60 text-emerald-900 dark:text-emerald-200'
+            }`}>
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div className="flex items-start sm:items-center gap-3">
+                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 shadow-sm ${
+                            tour?.en_construccion ? 'bg-amber-500 text-white' : 'bg-emerald-600 text-white'
+                        }`}>
+                            {tour?.en_construccion ? (
+                                <span className="text-xl">🚧</span>
+                            ) : (
+                                <Check className="w-5 h-5" />
+                            )}
+                        </div>
+                        <div>
+                            <div className="flex flex-wrap items-center gap-2">
+                                <h3 className="font-extrabold text-sm sm:text-base">
+                                    Modo "En Construcción" para Usuarios
+                                </h3>
+                                <span className={`text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full ${
+                                    tour?.en_construccion
+                                        ? 'bg-amber-200 dark:bg-amber-800 text-amber-900 dark:text-amber-100'
+                                        : 'bg-emerald-200 dark:bg-emerald-800 text-emerald-900 dark:text-emerald-100'
+                                }`}>
+                                    {tour?.en_construccion ? 'ACTIVADO (Bloqueado a usuarios)' : 'DESACTIVADO (Público)'}
+                                </span>
+                            </div>
+                            <p className="text-xs mt-1 opacity-90 leading-relaxed font-medium">
+                                {tour?.en_construccion
+                                    ? 'Los usuarios que ingresen al Recorrido 360° desde el sitio web verán un mensaje de "En construcción" y no podrán acceder al visualizador.'
+                                    : 'El recorrido 360° se encuentra activo y accesible para todos los visitantes del sitio web.'}
+                            </p>
+                        </div>
+                    </div>
+
+                    <button
+                        type="button"
+                        onClick={() => {
+                            router.post(`${basePath}/recorrido/toggle-construccion`, {
+                                en_construccion: !tour?.en_construccion
+                            }, {
+                                preserveScroll: true
+                            });
+                        }}
+                        className={`px-4 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all duration-200 shadow-md cursor-pointer shrink-0 border ${
+                            tour?.en_construccion
+                                ? 'bg-emerald-600 hover:bg-emerald-700 text-white border-emerald-500'
+                                : 'bg-amber-600 hover:bg-amber-700 text-white border-amber-500'
+                        }`}
+                    >
+                        {tour?.en_construccion ? 'Habilitar Acceso Público' : 'Activar "En Construcción"'}
+                    </button>
+                </div>
+            </div>
             <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6 pb-4 border-b border-slate-100 dark:border-slate-800/80">
                 <div>
                     <h2 className="text-slate-800 dark:text-slate-100 font-extrabold text-base sm:text-lg tracking-tight">
@@ -1738,11 +1795,10 @@ function RecorridoTab({ tour, scenes = [], flash, basePath }) {
                                 <input
                                     type="file"
                                     accept="image/*,.heic,.heif,image/heic,image/heif"
-                                    onChange={async (e) => {
+                                    onChange={(e) => {
                                         const f = e.target.files[0];
                                         if (!f) return;
-                                        const processed = await processImageFile(f, { maxWidth: 3840, quality: 0.85 });
-                                        form.setData('imagen', processed);
+                                        form.setData('imagen', f);
                                     }}
                                     className="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer"
                                 />

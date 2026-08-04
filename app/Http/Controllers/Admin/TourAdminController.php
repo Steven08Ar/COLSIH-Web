@@ -66,7 +66,7 @@ class TourAdminController extends Controller
     {
         $request->validate([
             'nombre' => ['required', 'string', 'max:255'],
-            'imagen' => ['required_without:imagen_url_manual', 'nullable', 'image', 'mimes:jpeg,jpg,png', 'max:51200'],
+            'imagen' => ['required_without:imagen_url_manual', 'nullable', 'image', 'mimes:jpeg,jpg,png,webp', 'max:102400'],
             'imagen_url_manual' => ['nullable', 'string'],
         ]);
 
@@ -193,5 +193,22 @@ class TourAdminController extends Controller
         $scene->delete();
 
         return back()->with('flash', 'Escena eliminada correctamente.');
+    }
+
+    /**
+     * Habilita o deshabilita el modo "En Construccion" para los usuarios en la web.
+     */
+    public function toggleConstruccion(Request $request): RedirectResponse
+    {
+        $tour = Tour::firstOrCreate(['slug' => 'colsih'], ['nombre' => 'Recorrido Virtual 360°']);
+
+        $enConstruccion = $request->boolean('en_construccion');
+        $tour->update(['en_construccion' => $enConstruccion]);
+
+        $mensaje = $enConstruccion
+            ? "El modo 'En construcción' del Recorrido 360° ha sido ACTIVADO para los usuarios."
+            : "El modo 'En construcción' del Recorrido 360° ha sido DESACTIVADO. El recorrido está disponible públicamente.";
+
+        return back()->with('flash', $mensaje);
     }
 }

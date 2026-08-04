@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, router } from '@inertiajs/react';
 import { 
     QrCode, 
     CheckCircle2, 
@@ -13,7 +13,8 @@ import {
     CreditCard,
     Sparkles,
     Calendar,
-    Users
+    Users,
+    LogOut
 } from 'lucide-react';
 
 // Base de datos institucional de demostración y escaneo (Estudiantes y Docentes)
@@ -26,7 +27,7 @@ const DEMO_PERSONAS = [
     { code: 'ADM-106', nfc: 'NFC-106', nombre: 'Luz Marina', apellido: 'Valenzuela Castro', rol: 'Administrativo', info: 'Secretaria General', foto: null }
 ];
 
-export default function CarnetsKiosco() {
+export default function CarnetsKiosco({ isOnlyKiosk = false }) {
     const [currentTime, setCurrentTime] = useState(new Date());
     const [scannedRecord, setScannedRecord] = useState(null);
     const [recentScans, setRecentScans] = useState([]);
@@ -47,9 +48,7 @@ export default function CarnetsKiosco() {
     useEffect(() => {
         const enableFullscreen = () => {
             if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen().catch(() => {
-                    // Si el navegador bloquea la pantalla completa por política sin interacción previa
-                });
+                document.documentElement.requestFullscreen().catch(() => {});
             }
         };
 
@@ -70,7 +69,6 @@ export default function CarnetsKiosco() {
     // 3. Captura continua del lector HID (Código de Barras + NFC)
     useEffect(() => {
         const handleKeyDown = (e) => {
-            // Ignorar si el usuario está interactuando con el input manual directamente
             if (document.activeElement === inputRef.current && e.key !== 'Enter') {
                 return;
             }
@@ -94,7 +92,6 @@ export default function CarnetsKiosco() {
         const cleaned = codigo.trim().toUpperCase();
         if (!cleaned) return;
 
-        // Buscar coincidencia en la base de datos demo o crear un registro rápido
         const encontrado = DEMO_PERSONAS.find(
             p => p.code.toUpperCase() === cleaned || p.nfc.toUpperCase() === cleaned
         ) || {
@@ -122,14 +119,10 @@ export default function CarnetsKiosco() {
             fecha: now.toLocaleDateString('es-CO')
         };
 
-        // Activar animación superrápida de bienvenida
         if (autoDismissTimer.current) clearTimeout(autoDismissTimer.current);
         setScannedRecord(nuevoRegistro);
-
-        // Añadir a lista en vivo de lecturas recientes
         setRecentScans(prev => [nuevoRegistro, ...prev.slice(0, 19)]);
 
-        // Desvanecer notificación de bienvenida tras 2.5 segundos
         autoDismissTimer.current = setTimeout(() => {
             setScannedRecord(null);
         }, 2500);
@@ -151,6 +144,10 @@ export default function CarnetsKiosco() {
                 document.exitFullscreen();
             }
         }
+    };
+
+    const handleSalirKiosco = () => {
+        router.post('/carnets/salir');
     };
 
     const countEstudiantes = recentScans.filter(s => s.rol === 'Estudiante').length;
@@ -185,13 +182,24 @@ export default function CarnetsKiosco() {
                             {isFullscreen ? <Minimize className="w-5 h-5" /> : <Maximize className="w-5 h-5" />}
                         </button>
 
-                        <Link
-                            href="/sih-panel-308"
+                        {!isOnlyKiosk && (
+                            <Link
+                                href="/sih-panel-308"
+                                className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#003C8F] text-white hover:bg-[#002868] transition text-xs font-black uppercase tracking-wider cursor-pointer shadow-md"
+                            >
+                                <ArrowLeft className="w-4 h-4" />
+                                <span>Panel Admin</span>
+                            </Link>
+                        )}
+
+                        <button
+                            onClick={handleSalirKiosco}
                             className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#800A15] text-white hover:bg-[#600710] transition text-xs font-black uppercase tracking-wider cursor-pointer shadow-md"
+                            title="Cerrar Kiosco y regresar a la pantalla de inicio"
                         >
-                            <ArrowLeft className="w-4 h-4" />
-                            <span>Panel Admin</span>
-                        </Link>
+                            <LogOut className="w-4 h-4" />
+                            <span>Cerrar Kiosco</span>
+                        </button>
                     </div>
                 </header>
 

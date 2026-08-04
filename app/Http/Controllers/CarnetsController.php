@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -13,8 +14,28 @@ class CarnetsController extends Controller
     /**
      * Renderiza la vista de Kiosco de Registro de Asistencia.
      */
-    public function kiosco(): Response
+    public function kiosco(Request $request)
     {
-        return Inertia::render('Admin/CarnetsKiosco');
+        $hasKioskAuth = $request->session()->get('colsih_kiosk_auth');
+        $hasAdminAuth = $request->session()->get('colsih_admin_auth');
+
+        if (!$hasKioskAuth && !$hasAdminAuth) {
+            $adminPath = env('ADMIN_PATH', 'panel-admin');
+            return redirect("/{$adminPath}/login");
+        }
+
+        return Inertia::render('Admin/CarnetsKiosco', [
+            'isOnlyKiosk' => !$hasAdminAuth,
+        ]);
+    }
+
+    /**
+     * Cierra el modo Kiosco y regresa al login.
+     */
+    public function salir(Request $request)
+    {
+        $request->session()->forget('colsih_kiosk_auth');
+        $adminPath = env('ADMIN_PATH', 'panel-admin');
+        return redirect("/{$adminPath}/login");
     }
 }

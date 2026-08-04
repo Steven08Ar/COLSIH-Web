@@ -136,7 +136,8 @@ Route::prefix($adminPath)->name('admin.')->group(function () {
         // Redirect raíz → testimonios
         Route::get('/', fn() => redirect()->route('admin.testimonios'))->name('dashboard');
 
-        // Carnets — Sistema de Control de Ingreso (EN DESARROLLO, solo acceso admin)
+        // Carnets — Sistema de Control de Ingreso Kiosco
         Route::get('/carnets', [App\Http\Controllers\CarnetsController::class, 'kiosco'])->name('carnets.kiosco');
+        Route::post('/carnets/salir', [App\Http\Controllers\CarnetsController::class, 'salir'])->name('carnets.salir');
     });
 });

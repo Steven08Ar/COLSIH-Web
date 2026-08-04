@@ -106,25 +106,25 @@ Route::prefix($adminPath)->name('admin.')->group(function () {
         // Testimonios
         Route::get('/testimonios',                    [TestimonioController::class, 'index'])->name('testimonios');
         Route::post('/testimonios',                   [TestimonioController::class, 'store'])->name('testimonios.store');
-        Route::put('/testimonios/{testimonio}',       [TestimonioController::class, 'update'])->name('testimonios.update');
+        Route::match(['post', 'put'], '/testimonios/{testimonio}', [TestimonioController::class, 'update'])->name('testimonios.update');
         Route::delete('/testimonios/{testimonio}',    [TestimonioController::class, 'destroy'])->name('testimonios.destroy');
 
         // Noticias / Eventos
         Route::get('/noticias',                       [NoticiaAdminController::class, 'index'])->name('noticias');
         Route::post('/noticias',                      [NoticiaAdminController::class, 'store'])->name('noticias.store');
-        Route::put('/noticias/{noticia}',             [NoticiaAdminController::class, 'update'])->name('noticias.update');
+        Route::match(['post', 'put'], '/noticias/{noticia}', [NoticiaAdminController::class, 'update'])->name('noticias.update');
         Route::delete('/noticias/{noticia}',          [NoticiaAdminController::class, 'destroy'])->name('noticias.destroy');
 
         // Preguntas frecuentes
         Route::get('/preguntas',                      [PreguntaController::class, 'index'])->name('preguntas');
         Route::post('/preguntas',                     [PreguntaController::class, 'store'])->name('preguntas.store');
-        Route::put('/preguntas/{pregunta}',           [PreguntaController::class, 'update'])->name('preguntas.update');
+        Route::match(['post', 'put'], '/preguntas/{pregunta}', [PreguntaController::class, 'update'])->name('preguntas.update');
         Route::delete('/preguntas/{pregunta}',        [PreguntaController::class, 'destroy'])->name('preguntas.destroy');
 
         // Equipo Institucional
         Route::get('/equipo',                         [App\Http\Controllers\Admin\EquipoAdminController::class, 'index'])->name('equipo');
         Route::post('/equipo',                        [App\Http\Controllers\Admin\EquipoAdminController::class, 'store'])->name('equipo.store');
-        Route::put('/equipo/{member}',                [App\Http\Controllers\Admin\EquipoAdminController::class, 'update'])->name('equipo.update');
+        Route::match(['post', 'put'], '/equipo/{member}', [App\Http\Controllers\Admin\EquipoAdminController::class, 'update'])->name('equipo.update');
         Route::delete('/equipo/{member}',             [App\Http\Controllers\Admin\EquipoAdminController::class, 'destroy'])->name('equipo.destroy');
         Route::get('/equipo/{member}',                fn() => redirect()->route('admin.equipo'));
 

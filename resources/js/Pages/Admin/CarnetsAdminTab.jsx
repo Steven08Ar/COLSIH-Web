@@ -16,7 +16,8 @@ import {
     AlertCircle,
     Copy,
     Zap,
-    Terminal
+    Terminal,
+    Sparkles
 } from 'lucide-react';
 
 export default function CarnetsAdminTab({ carnets = [], flash }) {
@@ -48,16 +49,21 @@ export default function CarnetsAdminTab({ carnets = [], flash }) {
         activo: true,
     });
 
+    const addLog = (msg) => {
+        const time = new Date().toLocaleTimeString('es-CO');
+        setSerialLogs(prev => [`[${time}] ${msg}`, ...prev.slice(0, 19)]);
+    };
+
     // 1. Captura global de lecturas HID (Escáner de código de barras USB / Lector NFC emulador de teclado)
     useEffect(() => {
         const handleKeyDown = (e) => {
-            // Evitar interferir si el usuario está escribiendo dentro de una ventana modal o input de texto
             const isModalOpen = showModal || showCodeModal;
             if (isModalOpen) return;
 
             if (e.key === 'Enter') {
                 if (hidBuffer.trim().length >= 3) {
-                    handleCardDetected(hidBuffer.trim().toUpperCase());
+                    addLog(`⌨️ Escáner USB (HID) capturó: "${hidBuffer.trim()}"`);
+                    extractAndProcessUid(hidBuffer.trim());
                     setHidBuffer('');
                 }
             } else if (e.key.length === 1) {
@@ -69,7 +75,31 @@ export default function CarnetsAdminTab({ carnets = [], flash }) {
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, [hidBuffer, showModal, showCodeModal, carnets]);
 
-    // 2. Conexión Web Serial API con Arduino UNO (COM9)
+    // Extractor inteligente de UID desde cualquier formato impreso por Arduino o lectores RFID
+    const extractAndProcessUid = (rawText) => {
+        if (!rawText) return;
+        const text = rawText.trim().toUpperCase();
+
+        // 1. Si contiene formato "Card UID: 13 8A 4F 2B" o "UID: 138A4F2B"
+        let uidMatch = text.match(/(?:UID\s*:?\s*)([0-9A-F\s:-]+)/i);
+        let cleanedUid = '';
+
+        if (uidMatch && uidMatch[1]) {
+            cleanedUid = uidMatch[1].replace(/[\s:-]/g, '');
+        } else {
+            // 2. Extraer subsecuencia hex o limpia removiendo palabras comunes
+            cleanedUid = text.replace(/^CARD\s*/i, '').replace(/^NFC:\s*/i, '').replace(/[\s:-]/g, '');
+        }
+
+        if (cleanedUid.length >= 3) {
+            addLog(`⚡ UID Extraído: "${cleanedUid}" (Original: "${text}")`);
+            handleCardDetected(cleanedUid);
+        } else {
+            addLog(`⚠️ Texto omitido (formato no reconocido): "${text}"`);
+        }
+    };
+
+    // 2. Conexión Web Serial API ultra-robusta con Arduino UNO (COM9)
     const connectArduino = async () => {
         if (!('serial' in navigator)) {
             alert('La Web Serial API no está soportada en este navegador. Por favor usa Google Chrome o Microsoft Edge.');
@@ -84,38 +114,46 @@ export default function CarnetsAdminTab({ carnets = [], flash }) {
             portRef.current = port;
             setIsArduinoConnected(true);
             setArduinoStatus('Conectado a Arduino UNO (COM9)');
-            addLog('Puerto Serial abierto exitosamente a 9600 baudios');
+            addLog('✅ Puerto Serial abierto exitosamente a 9600 baudios en COM9');
 
-            const textDecoder = new TextDecoderStream();
-            port.readable.pipeTo(textDecoder.writable);
-            const reader = textDecoder.readable.getReader();
-
+            const reader = port.readable.getReader();
+            const decoder = new TextDecoder();
             let serialBuffer = '';
-            while (true) {
-                const { value, done } = await reader.read();
-                if (done) {
-                    reader.releaseLock();
-                    break;
-                }
-                if (value) {
-                    serialBuffer += value;
-                    const lines = serialBuffer.split(/[\r\n]+/);
-                    serialBuffer = lines.pop();
 
-                    for (const line of lines) {
-                        const cleanUid = line.trim().toUpperCase();
-                        if (cleanUid.length >= 3) {
-                            addLog(`Lectura recibida: ${cleanUid}`);
-                            handleCardDetected(cleanUid);
+            try {
+                while (true) {
+                    const { value, done } = await reader.read();
+                    if (done) break;
+                    if (value) {
+                        const chunk = decoder.decode(value, { stream: true });
+                        serialBuffer += chunk;
+
+                        addLog(`📥 Bytes recibidos (${value.length}b): "${chunk.trim()}"`);
+
+                        let lines = serialBuffer.split(/\r?\n/);
+                        serialBuffer = lines.pop(); // Conservar línea incompleta
+
+                        for (let line of lines) {
+                            const trimmed = line.trim();
+                            if (trimmed.length > 0) {
+                                addLog(`▶️ Línea completa: "${trimmed}"`);
+                                extractAndProcessUid(trimmed);
+                            }
                         }
                     }
                 }
+            } catch (readErr) {
+                console.error('Error durante la lectura del puerto serial:', readErr);
+                addLog(`⚠️ Error de lectura: ${readErr.message}`);
+            } finally {
+                reader.releaseLock();
             }
+
         } catch (err) {
             console.error('Error al conectar Arduino Serial:', err);
             setIsArduinoConnected(false);
             setArduinoStatus('Error de conexión o puerto cancelado');
-            addLog(`Error Serial: ${err.message || 'Desconectado'}`);
+            addLog(`❌ Error al abrir puerto: ${err.message || 'Cancelado'}`);
         }
     };
 
@@ -129,11 +167,6 @@ export default function CarnetsAdminTab({ carnets = [], flash }) {
         setIsArduinoConnected(false);
         setArduinoStatus('Desconectado');
         addLog('Conexión Serial finalizada por el usuario');
-    };
-
-    const addLog = (msg) => {
-        const time = new Date().toLocaleTimeString('es-CO');
-        setSerialLogs(prev => [`[${time}] ${msg}`, ...prev.slice(0, 15)]);
     };
 
     // Al detectar una tarjeta desde Arduino, Lector USB o Simulación
@@ -152,16 +185,22 @@ export default function CarnetsAdminTab({ carnets = [], flash }) {
             setTestResult({
                 status: 'registrada',
                 uid: uid,
-                message: `Tarjeta (${uid}) encontrada en el sistema`,
+                message: `Tarjeta (${uid}) registrada en el sistema`,
                 carnet: found
             });
         } else {
             setTestResult({
                 status: 'nueva',
                 uid: uid,
-                message: `UID detectado: ${uid} (No asignado a ningún carnet)`
+                message: `UID detectado: ${uid} (No asignado)`
             });
         }
+    };
+
+    // Simulación rápida de lectura
+    const handleSimulateScan = (uidSimulated = '138A4F2B') => {
+        addLog(`🧪 Simulación de lectura activada: ${uidSimulated}`);
+        extractAndProcessUid(uidSimulated);
     };
 
     // Abrir Modal asignando el UID detectado
@@ -175,7 +214,7 @@ export default function CarnetsAdminTab({ carnets = [], flash }) {
             nombre: '',
             apellido: '',
             rol: 'Estudiante',
-            info: 'Grado 11°',
+            info: 'Grado 11° - Bachillerato',
             foto: '',
             activo: true,
         });
@@ -265,13 +304,13 @@ export default function CarnetsAdminTab({ carnets = [], flash }) {
   CÓDIGO ARDUINO UNO + LECTOR RFID-RC522 (COLSIH KIOSCO COM9)
   =============================================================
   Conexión SPI RFID-RC522 en Arduino UNO:
+  - VCC  -> 3.3V (¡ADVERTENCIA: NUNCA USAR 5V!)
   - RST  -> Pin 9
-  - SDA (SS) -> Pin 10
-  - MOSI -> Pin 11
-  - MISO -> Pin 12
-  - SCK  -> Pin 13
-  - VCC  -> 3.3V (¡NUNCA 5V!)
   - GND  -> GND
+  - MISO -> Pin 12
+  - MOSI -> Pin 11
+  - SCK  -> Pin 13
+  - SDA (SS) -> Pin 10
 */
 
 #include <SPI.h>
@@ -300,7 +339,7 @@ void loop() {
   }
   uidStr.toUpperCase();
 
-  // Imprime el UID formateado en el puerto Serial (COM9)
+  // Imprime el UID formateado directamente al puerto Serial (COM9)
   Serial.println(uidStr);
 
   rfid.PICC_HaltA();
@@ -380,12 +419,22 @@ void loop() {
                         </div>
                     </div>
 
-                    <div>
+                    <div className="flex items-center gap-2">
+                        <button
+                            type="button"
+                            onClick={() => handleSimulateScan('138A4F2B')}
+                            className="px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer border border-slate-200 dark:border-slate-700"
+                            title="Probar simulación de lectura con UID 138A4F2B"
+                        >
+                            <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+                            <span>Simular Lectura</span>
+                        </button>
+
                         {!isArduinoConnected ? (
                             <button
                                 type="button"
                                 onClick={connectArduino}
-                                className="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold transition flex items-center gap-2 shadow-sm cursor-pointer"
+                                className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold transition flex items-center gap-2 shadow-sm cursor-pointer"
                             >
                                 <Radio className="w-4 h-4" />
                                 <span>Conectar Arduino UNO (COM9)</span>
@@ -394,7 +443,7 @@ void loop() {
                             <button
                                 type="button"
                                 onClick={disconnectArduino}
-                                className="px-4 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-extrabold transition flex items-center gap-2 shadow-sm cursor-pointer"
+                                className="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-extrabold transition flex items-center gap-2 shadow-sm cursor-pointer"
                             >
                                 <X className="w-4 h-4" />
                                 <span>Desconectar Puerto COM</span>
@@ -425,12 +474,12 @@ void loop() {
                                 placeholder="Escanear tarjeta o escribir UID (Ej: NFC-101 / 138A4F2B)..."
                                 value={lastScannedUid}
                                 onChange={e => setLastScannedUid(e.target.value.toUpperCase())}
-                                onKeyDown={e => e.key === 'Enter' && handleCardDetected(lastScannedUid)}
+                                onKeyDown={e => e.key === 'Enter' && extractAndProcessUid(lastScannedUid)}
                                 className="flex-1 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-white px-4 py-3 rounded-xl text-sm font-mono font-bold focus:outline-none focus:border-[#003C8F]"
                             />
                             <button
                                 type="button"
-                                onClick={() => handleCardDetected(lastScannedUid)}
+                                onClick={() => extractAndProcessUid(lastScannedUid)}
                                 className="px-5 py-3 bg-[#003C8F] hover:bg-[#002868] text-white text-xs font-extrabold rounded-xl transition cursor-pointer shadow-sm"
                             >
                                 Probar UID
@@ -514,8 +563,8 @@ void loop() {
 
                     </div>
 
-                    {/* COLUMNA 3: REGISTRO DE EVENTOS SERIAL (LOGS) */}
-                    <div className="bg-slate-950 text-slate-200 border border-slate-800 rounded-2xl p-4 flex flex-col justify-between font-mono text-[11px] h-full min-h-[180px]">
+                    {/* COLUMNA 3: REGISTRO DE EVENTOS SERIAL (LOGS EN TIEMPO REAL) ── */}
+                    <div className="bg-slate-950 text-slate-200 border border-slate-800 rounded-2xl p-4 flex flex-col justify-between font-mono text-[11px] h-full min-h-[220px]">
                         <div>
                             <div className="flex items-center justify-between border-b border-slate-800 pb-2 mb-2">
                                 <span className="font-bold text-emerald-400 flex items-center gap-1.5">
@@ -524,7 +573,7 @@ void loop() {
                                 </span>
                                 <span className="text-[10px] text-slate-500">9600 Baud</span>
                             </div>
-                            <div className="space-y-1 max-h-36 overflow-y-auto pr-1">
+                            <div className="space-y-1 max-h-44 overflow-y-auto pr-1">
                                 {serialLogs.length > 0 ? (
                                     serialLogs.map((log, i) => (
                                         <div key={i} className="text-slate-300 leading-tight">

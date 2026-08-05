@@ -29,6 +29,16 @@ Thumbs.db
 *.mp4
 *.MOV
 
-# Sistema de Carnets
+# Sistema de Carnets y Datos Locales
 /carnets
 /public/carnets/
+/database/*.sqlite
+/database/*.sqlite-journal
+/database/*.db
+*.sqlite
+*.db
+
+# Diseños y recursos de pruebas locales
+/diseños figma/
+/diseños figma
+*.json.local

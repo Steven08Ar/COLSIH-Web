@@ -1,367 +1,329 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useForm, router } from '@inertiajs/react';
-import { 
-    CreditCard, 
-    Plus, 
-    Search, 
-    Edit2, 
-    Trash2, 
-    Check, 
-    X, 
-    Cpu, 
-    User, 
-    Radio, 
-    Code, 
-    CheckCircle2, 
-    AlertCircle,
-    Copy,
-    Zap,
-    Terminal
+import { createPortal } from 'react-dom';
+import {
+    CreditCard, Plus, Search, Edit2, Trash2, X, Cpu, Radio,
+    Code, CheckCircle2, Copy, Terminal, Wifi, WifiOff
 } from 'lucide-react';
 
 export default function CarnetsAdminTab({ carnets = [], flash }) {
-    const [searchTerm, setSearchTerm] = useState('');
-    const [filterRol, setFilterRol] = useState('Todos');
-    const [showModal, setShowModal] = useState(false);
+    const [searchTerm, setSearchTerm]       = useState('');
+    const [filterRol, setFilterRol]         = useState('Todos');
+    const [showModal, setShowModal]         = useState(false);
     const [editingCarnet, setEditingCarnet] = useState(null);
     const [showCodeModal, setShowCodeModal] = useState(false);
 
-    // Conexión Web Serial API con Arduino UNO (COM9) y Lector HID
-    const [isArduinoConnected, setIsArduinoConnected] = useState(false);
-    const [arduinoStatus, setArduinoStatus] = useState('Desconectado (Esperando Arduino UNO COM9)');
-    const [lastScannedUid, setLastScannedUid] = useState('');
-    const [testResult, setTestResult] = useState(null);
-    const [serialLogs, setSerialLogs] = useState([]);
-    const [hidBuffer, setHidBuffer] = useState('');
+    // Estado serial
+    const [isConnected, setIsConnected]     = useState(false);
+    const [serialStatus, setSerialStatus]   = useState('Desconectado');
+    const [lastUid, setLastUid]             = useState('');
+    const [serialLogs, setSerialLogs]       = useState([]);
 
-    const portRef = useRef(null);
+    const portRef    = useRef(null);
+    const readerRef  = useRef(null);
 
-    // Formulario Inertia para Crear / Editar Carnet
-    const { data, setData, post, put, processing, errors, reset } = useForm({
-        code: '',
-        nfc: '',
-        nombre: '',
-        apellido: '',
-        rol: 'Estudiante',
-        info: '',
-        foto: '',
-        activo: true,
+    // Ref para carnets — evita stale closure en el read loop
+    const carnetsRef = useRef(carnets);
+    useEffect(() => { carnetsRef.current = carnets; }, [carnets]);
+
+    const { data, setData, post, processing, reset } = useForm({
+        code: '', nfc: '', nombre: '', apellido: '',
+        rol: 'Estudiante', info: '', foto: '', activo: true,
     });
 
-    const addLog = (msg) => {
+    // ── Helpers ──────────────────────────────────────────────────────────────
+
+    const addLog = useCallback((msg) => {
         const time = new Date().toLocaleTimeString('es-CO');
-        setSerialLogs(prev => [`[${time}] ${msg}`, ...prev.slice(0, 24)]);
-    };
+        setSerialLogs(prev => [`[${time}] ${msg}`, ...prev.slice(0, 29)]);
+    }, []);
 
-    // 1. Captura global de lecturas HID (Escáner de código de barras USB / Lector NFC emulador de teclado)
-    useEffect(() => {
-        const handleKeyDown = (e) => {
-            const isModalOpen = showModal || showCodeModal;
-            if (isModalOpen) return;
+    const openCreate = useCallback((uid = '') => {
+        setEditingCarnet(null);
+        reset();
+        setData({
+            code: `EST-${Math.floor(100 + Math.random() * 900)}`,
+            nfc: uid, nombre: '', apellido: '',
+            rol: 'Estudiante', info: '', foto: '', activo: true,
+        });
+        setShowModal(true);
+    }, [reset, setData]);
 
-            if (e.key === 'Enter') {
-                if (hidBuffer.trim().length >= 3) {
-                    addLog(`⌨️ Escáner USB capturó: "${hidBuffer.trim()}"`);
-                    extractAndProcessUid(hidBuffer.trim());
-                    setHidBuffer('');
-                }
-            } else if (e.key.length === 1) {
-                setHidBuffer(prev => prev + e.key);
-            }
-        };
+    const openEdit = useCallback((carnet) => {
+        setEditingCarnet(carnet);
+        setData({
+            code: carnet.code || '', nfc: carnet.nfc || '',
+            nombre: carnet.nombre || '', apellido: carnet.apellido || '',
+            rol: carnet.rol || 'Estudiante', info: carnet.info || '',
+            foto: carnet.foto || '', activo: carnet.activo ?? true,
+        });
+        setShowModal(true);
+    }, [setData]);
 
-        window.addEventListener('keydown', handleKeyDown);
-        return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [hidBuffer, showModal, showCodeModal, carnets]);
+    // Ref para los handlers de modal — evita que el read loop capture versiones viejas
+    const openCreateRef = useRef(openCreate);
+    const openEditRef   = useRef(openEdit);
+    const addLogRef     = useRef(addLog);
+    useEffect(() => { openCreateRef.current = openCreate; }, [openCreate]);
+    useEffect(() => { openEditRef.current   = openEdit;   }, [openEdit]);
+    useEffect(() => { addLogRef.current     = addLog;     }, [addLog]);
 
-    // Extractor de UID en tiempo real desde cualquier formato (e.g. "138A4F2B", "13 8A 4F 2B", "Card UID: 13 8A 4F 2B")
-    const extractAndProcessUid = (rawText) => {
-        if (!rawText) return;
-        const text = rawText.trim().toUpperCase();
+    // ── Procesamiento de línea serial ─────────────────────────────────────────
 
-        // 1. Si contiene formato "Card UID: 13 8A 4F 2B" o "UID: 138A4F2B"
-        let uidMatch = text.match(/(?:UID\s*:?\s*)([0-9A-F\s:-]+)/i);
-        let cleanedUid = '';
-
-        if (uidMatch && uidMatch[1]) {
-            cleanedUid = uidMatch[1].replace(/[\s:-]/g, '');
-        } else {
-            // 2. Extraer subsecuencia limpia removiendo prefijos comunes
-            cleanedUid = text.replace(/^CARD\s*/i, '').replace(/^NFC:\s*/i, '').replace(/[\s:-]/g, '');
+    const processLine = useCallback((line) => {
+        const raw = line.trim();
+        if (!raw) return;
+        // Extraer UID: acepta "AABBCCDD", "AA BB CC DD", "Card UID: AA BB CC DD"
+        let uid = '';
+        const uidMatch = raw.match(/(?:card\s+)?uid\s*:?\s*([0-9a-f\s]+)/i);
+        if (uidMatch) {
+            uid = uidMatch[1].replace(/\s/g, '');
+        } else if (/^[0-9a-f\s]{4,23}$/i.test(raw)) {
+            uid = raw.replace(/\s/g, '');
         }
 
-        if (cleanedUid.length >= 3) {
-            addLog(`⚡ UID Detección Real: "${cleanedUid}"`);
-            handleCardDetected(cleanedUid);
-        } else {
-            addLog(`⚠️ Fragmento recibido: "${text}"`);
-        }
-    };
+        if (uid.length < 4 || uid.length > 16) return;
+        uid = uid.toUpperCase();
 
-    // 2. Conexión Web Serial API ultra-robusta en tiempo real con Arduino UNO (COM9)
-    const connectArduino = async () => {
-        if (!('serial' in navigator)) {
-            alert('La Web Serial API no está soportada en este navegador. Por favor usa Google Chrome o Microsoft Edge.');
-            return;
-        }
+        addLogRef.current(`⚡ UID: ${uid}`);
+        setLastUid(uid);
 
-        try {
-            setArduinoStatus('Solicitando puerto COM en Windows...');
-            const port = await navigator.serial.requestPort();
-            await port.open({ baudRate: 9600 });
-
-            portRef.current = port;
-            setIsArduinoConnected(true);
-            setArduinoStatus('Conectado a Arduino UNO (COM9)');
-            addLog('✅ Puerto COM9 abierto a 9600 baudios. Esperando tarjeta RFID...');
-
-            const reader = port.readable.getReader();
-            const decoder = new TextDecoder();
-            let serialBuffer = '';
-
-            try {
-                while (true) {
-                    const { value, done } = await reader.read();
-                    if (done) break;
-                    if (value) {
-                        const chunk = decoder.decode(value, { stream: true });
-                        serialBuffer += chunk;
-
-                        addLog(`📥 Datos recibidos de Arduino: "${chunk.trim()}"`);
-
-                        let lines = serialBuffer.split(/\r?\n/);
-                        if (lines.length > 1) {
-                            serialBuffer = lines.pop(); // Conservar fragmento incompleto
-                            for (let line of lines) {
-                                const trimmed = line.trim();
-                                if (trimmed.length > 0) {
-                                    extractAndProcessUid(trimmed);
-                                }
-                            }
-                        } else if (serialBuffer.trim().length >= 4 && !serialBuffer.includes('\n')) {
-                            // Si Arduino envía datos sin salto de línea
-                            const candidate = serialBuffer.trim();
-                            if (/^[0-9A-Z]{4,16}$/i.test(candidate)) {
-                                extractAndProcessUid(candidate);
-                                serialBuffer = '';
-                            }
-                        }
-                    }
-                }
-            } catch (readErr) {
-                console.error('Error en lectura del puerto serial:', readErr);
-                addLog(`⚠️ Error de puerto: ${readErr.message}`);
-            } finally {
-                reader.releaseLock();
-            }
-
-        } catch (err) {
-            console.error('Error al conectar Arduino Serial:', err);
-            setIsArduinoConnected(false);
-            setArduinoStatus('Error de conexión o puerto cancelado');
-            addLog(`❌ Error al conectar: ${err.message || 'Cancelado por usuario'}`);
-        }
-    };
-
-    const disconnectArduino = async () => {
-        if (portRef.current) {
-            try {
-                await portRef.current.close();
-            } catch (e) {}
-            portRef.current = null;
-        }
-        setIsArduinoConnected(false);
-        setArduinoStatus('Desconectado');
-        addLog('Conexión Serial finalizada por el usuario');
-    };
-
-    // Al detectar una tarjeta física desde Arduino o Lector USB
-    const handleCardDetected = (uidRaw) => {
-        const uid = uidRaw.trim().toUpperCase();
-        if (!uid) return;
-
-        setLastScannedUid(uid);
-
-        // Buscar si el UID coincide con `nfc` o `code` en la base de datos
-        const found = carnets.find(
-            c => (c.nfc && c.nfc.toUpperCase() === uid) || (c.code && c.code.toUpperCase() === uid)
+        // Buscar en carnets vía ref (siempre actualizado)
+        const found = carnetsRef.current.find(
+            c => (c.nfc  && c.nfc.toUpperCase()  === uid) ||
+                 (c.code && c.code.toUpperCase() === uid)
         );
 
         if (found) {
-            setTestResult({
-                status: 'registrada',
-                uid: uid,
-                message: `Tarjeta (${uid}) registrada en el sistema`,
-                carnet: found
-            });
+            addLogRef.current(`✅ Registrado: ${found.nombre} ${found.apellido}`);
+            openEditRef.current(found);
         } else {
-            setTestResult({
-                status: 'nueva',
-                uid: uid,
-                message: `UID detectado: ${uid} (No asignado)`
-            });
+            addLogRef.current(`🆕 Tarjeta nueva — abriendo registro`);
+            openCreateRef.current(uid);
+        }
+    }, []);
+
+    // ── Read loop del puerto serial ───────────────────────────────────────────
+
+    const startReadLoop = useCallback(async (port) => {
+        const decoder = new TextDecoder();
+        let buffer = '';
+
+        readerRef.current = port.readable.getReader();
+        try {
+            while (true) {
+                const { value, done } = await readerRef.current.read();
+                if (done) break;
+                if (!value) continue;
+
+                const chunk = decoder.decode(value, { stream: true });
+                buffer += chunk;
+
+                // Log raw para diagnóstico (solo si tiene contenido visible)
+                const rawVisible = chunk.replace(/[\r\n]/g, '').trim();
+                if (rawVisible) addLogRef.current(`📡 Raw: "${rawVisible}"`);
+
+                const lines = buffer.split(/\r?\n/);
+                buffer = lines.pop() ?? '';
+                for (const line of lines) {
+                    if (line.trim()) processLine(line);
+                }
+            }
+        } catch (err) {
+            addLogRef.current(`⚠️ Puerto: ${err.message}`);
+        } finally {
+            try { readerRef.current.releaseLock(); } catch {}
+            readerRef.current = null;
+            setIsConnected(false);
+            setSerialStatus('Desconectado (puerto cerrado)');
+        }
+    }, [processLine]);
+
+    // ── Conectar a un puerto ya obtenido ─────────────────────────────────────
+
+    const connectToPort = useCallback(async (port) => {
+        try {
+            await port.open({ baudRate: 9600 });
+            portRef.current = port;
+            setIsConnected(true);
+            setSerialStatus('Conectado a Arduino UNO (COM10)');
+            addLog('✅ Puerto abierto a 9600 baudios — esperando tarjeta RFID...');
+            startReadLoop(port);   // loop infinito, no await
+        } catch (err) {
+            setIsConnected(false);
+            setSerialStatus('Error: ' + err.message);
+            addLog(`❌ ${err.message}`);
+        }
+    }, [addLog, startReadLoop]);
+
+    // ── Auto-connect: si el usuario ya autorizó el puerto, reconectar al montar ──
+
+    useEffect(() => {
+        if (!('serial' in navigator)) return;
+        let cancelled = false;
+        (async () => {
+            try {
+                const ports = await navigator.serial.getPorts();
+                if (ports.length > 0 && !cancelled) {
+                    addLog('🔄 Puerto autorizado encontrado — reconectando...');
+                    connectToPort(ports[0]);
+                }
+            } catch {}
+        })();
+        return () => { cancelled = true; };
+    }, [addLog, connectToPort]);
+
+    // ── Botón de conexión manual (requestPort muestra el selector) ────────────
+
+    const handleConnect = async () => {
+        if (!('serial' in navigator)) {
+            alert('Web Serial API no disponible. Usa Google Chrome o Edge en escritorio.');
+            return;
+        }
+        try {
+            setSerialStatus('Selecciona el puerto COM del Arduino...');
+            const port = await navigator.serial.requestPort();
+            await connectToPort(port);
+        } catch (err) {
+            setIsConnected(false);
+            setSerialStatus('Conexión cancelada');
+            addLog(`❌ ${err.message || 'Cancelado por el usuario'}`);
         }
     };
 
-    // Abrir Modal asignando el UID detectado
-    const handleAssignUidToNew = (uidToAssign) => {
-        const uid = uidToAssign || lastScannedUid || '';
-        setEditingCarnet(null);
-        reset();
-        setData({
-            code: `EST-${Math.floor(100 + Math.random() * 900)}`,
-            nfc: uid,
-            nombre: '',
-            apellido: '',
-            rol: 'Estudiante',
-            info: 'Grado 11° - Bachillerato',
-            foto: '',
-            activo: true,
-        });
-        setShowModal(true);
+    const handleDisconnect = async () => {
+        try { readerRef.current?.cancel(); } catch {}
+        try { await portRef.current?.close(); } catch {}
+        portRef.current = null;
+        setIsConnected(false);
+        setSerialStatus('Desconectado');
+        addLog('Conexión serial finalizada por el usuario.');
     };
 
-    // Abrir Modal de Creación Limpio
-    const handleOpenCreate = () => {
-        setEditingCarnet(null);
-        reset();
-        setData({
-            code: `EST-${Math.floor(100 + Math.random() * 900)}`,
-            nfc: lastScannedUid || '',
-            nombre: '',
-            apellido: '',
-            rol: 'Estudiante',
-            info: '',
-            foto: '',
-            activo: true,
-        });
-        setShowModal(true);
-    };
+    // ── Lector HID (escáner USB que emula teclado) ────────────────────────────
 
-    // Abrir Modal de Edición
-    const handleOpenEdit = (carnet) => {
-        setEditingCarnet(carnet);
-        setData({
-            code: carnet.code || '',
-            nfc: carnet.nfc || '',
-            nombre: carnet.nombre || '',
-            apellido: carnet.apellido || '',
-            rol: carnet.rol || 'Estudiante',
-            info: carnet.info || '',
-            foto: carnet.foto || '',
-            activo: carnet.activo ?? true,
-        });
-        setShowModal(true);
-    };
+    const hidBufferRef = useRef('');
+    useEffect(() => {
+        const onKeyDown = (e) => {
+            if (showModal || showCodeModal) return;
+            if (e.key === 'Enter') {
+                const buf = hidBufferRef.current.trim();
+                hidBufferRef.current = '';
+                if (buf.length >= 3) {
+                    addLog(`⌨️ HID: "${buf}"`);
+                    processLine(buf);
+                }
+            } else if (e.key.length === 1) {
+                hidBufferRef.current += e.key;
+            }
+        };
+        window.addEventListener('keydown', onKeyDown);
+        return () => window.removeEventListener('keydown', onKeyDown);
+    }, [showModal, showCodeModal, processLine, addLog]);
 
-    // Guardar (Crear o Actualizar)
-    const handleSubmitForm = (e) => {
+    // ── CRUD ──────────────────────────────────────────────────────────────────
+
+    const handleSubmit = (e) => {
         e.preventDefault();
-        const basePath = window.location.pathname.split('/')[1] || 'sih-panel-308';
-        const url = editingCarnet 
-            ? `/${basePath}/carnets-admin/${editingCarnet.id}`
-            : `/${basePath}/carnets-admin`;
-
+        const base = window.location.pathname.replace(/\/[^/]+$/, '');
         if (editingCarnet) {
-            put(url, {
-                onSuccess: () => {
-                    setShowModal(false);
-                    reset();
-                }
+            router.post(`${base}/carnets-admin/${editingCarnet.id}`, { _method: 'PUT', ...data }, {
+                forceFormData: true,
+                onSuccess: () => { setShowModal(false); reset(); },
             });
         } else {
-            post(url, {
-                onSuccess: () => {
-                    setShowModal(false);
-                    reset();
-                }
-            });
+            post(`${base}/carnets-admin`, { onSuccess: () => { setShowModal(false); reset(); } });
         }
     };
 
-    // Eliminar Carnet
     const handleDelete = (carnet) => {
-        if (confirm(`¿Estás seguro de eliminar el registro de ${carnet.nombre} ${carnet.apellido}?`)) {
-            const basePath = window.location.pathname.split('/')[1] || 'sih-panel-308';
-            router.delete(`/${basePath}/carnets-admin/${carnet.id}`);
-        }
+        if (!confirm(`¿Eliminar el registro de ${carnet.nombre} ${carnet.apellido}?`)) return;
+        const base = window.location.pathname.replace(/\/[^/]+$/, '');
+        router.delete(`${base}/carnets-admin/${carnet.id}`);
     };
 
-    // Filtros
-    const filteredCarnets = carnets.filter(c => {
-        const matchesSearch = 
-            c.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            c.apellido.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            (c.code && c.code.toLowerCase().includes(searchTerm.toLowerCase())) ||
-            (c.nfc && c.nfc.toLowerCase().includes(searchTerm.toLowerCase()));
-        
-        const matchesRol = filterRol === 'Todos' || c.rol === filterRol;
-        return matchesSearch && matchesRol;
+    // ── Filtros ───────────────────────────────────────────────────────────────
+
+    const filtered = carnets.filter(c => {
+        const q = searchTerm.toLowerCase();
+        const matchQ = c.nombre.toLowerCase().includes(q) ||
+                       c.apellido.toLowerCase().includes(q) ||
+                       (c.code && c.code.toLowerCase().includes(q)) ||
+                       (c.nfc  && c.nfc.toLowerCase().includes(q));
+        return matchQ && (filterRol === 'Todos' || c.rol === filterRol);
     });
 
-    const arduinoSketchCode = `/*
-  =============================================================
-  CÓDIGO ARDUINO UNO + LECTOR RFID-RC522 (COLSIH KIOSCO COM9)
-  =============================================================
-  Conexión SPI RFID-RC522 en Arduino UNO:
-  - VCC  -> 3.3V (¡ADVERTENCIA: NUNCA USAR 5V!)
-  - RST  -> Pin 9
-  - GND  -> GND
-  - MISO -> Pin 12
-  - MOSI -> Pin 11
-  - SCK  -> Pin 13
-  - SDA (SS) -> Pin 10
-*/
+    // ── Código Arduino ────────────────────────────────────────────────────────
 
+    const sketchCode = `/*
+  COLSIH — Arduino UNO + RFID-RC522
+  Pines SPI:
+    VCC  → 3.3V  (¡NUNCA 5V!)
+    GND  → GND
+    RST  → Pin 9
+    SDA  → Pin 10
+    MOSI → Pin 11
+    MISO → Pin 12
+    SCK  → Pin 13
+    IRQ  → No conectar
+*/
 #include <SPI.h>
 #include <MFRC522.h>
 
-#define SS_PIN 10
-#define RST_PIN 9
+#define PIN_SS        10
+#define PIN_RST        9
+#define DEBOUNCE_MS 2000
 
-MFRC522 rfid(SS_PIN, RST_PIN);
+MFRC522 rfid(PIN_SS, PIN_RST);
+String ultimoUID = "";
+unsigned long ultimoMs = 0;
+
+String uidAHex(byte *buffer, byte longitud) {
+  String hex = "";
+  for (byte i = 0; i < longitud; i++) {
+    if (buffer[i] < 0x10) hex += "0";
+    hex += String(buffer[i], HEX);
+  }
+  hex.toUpperCase();
+  return hex;
+}
 
 void setup() {
   Serial.begin(9600);
   SPI.begin();
   rfid.PCD_Init();
-  Serial.println("ARDUINO_OK");
 }
 
 void loop() {
   if (!rfid.PICC_IsNewCardPresent()) return;
-  if (!rfid.PICC_ReadCardSerial()) return;
+  if (!rfid.PICC_ReadCardSerial())   return;
 
-  String uidStr = "";
-  for (byte i = 0; i < rfid.uid.size; i++) {
-    if (rfid.uid.uidByte[i] < 0x10) uidStr += "0";
-    uidStr += String(rfid.uid.uidByte[i], HEX);
+  String uid = uidAHex(rfid.uid.uidByte, rfid.uid.size);
+  unsigned long ahora = millis();
+
+  if (uid != ultimoUID || ahora - ultimoMs >= DEBOUNCE_MS) {
+    Serial.println(uid);
+    ultimoUID = uid;
+    ultimoMs  = ahora;
   }
-  uidStr.toUpperCase();
-
-  // Imprime el UID formateado directamente al puerto Serial (COM9)
-  Serial.println(uidStr);
 
   rfid.PICC_HaltA();
   rfid.PCD_StopCrypto1();
-  delay(1200);
-}
-`;
+}`;
+
+    // ── Render ────────────────────────────────────────────────────────────────
 
     return (
         <div className="space-y-6 animate-fadeIn">
-            
-            {/* FLASH MESSAGE */}
+
             {flash && (
-                <div className="p-4 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold rounded-2xl flex items-center justify-between shadow-sm">
-                    <div className="flex items-center gap-2">
-                        <CheckCircle2 className="w-5 h-5 text-emerald-600" />
-                        <span>{flash}</span>
-                    </div>
+                <div className="p-4 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold rounded-2xl flex items-center gap-2 shadow-sm">
+                    <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
+                    <span>{flash}</span>
                 </div>
             )}
 
-            {/* HEADER SECCIÓN & BANNER ARDUINO */}
+            {/* HEADER */}
             <div className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-6 shadow-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                 <div>
                     <div className="flex items-center gap-2 text-xs font-black text-[#003C8F] uppercase tracking-wider mb-1">
@@ -372,223 +334,139 @@ void loop() {
                         Gestión de Carnets y Tarjetas NFC
                     </h2>
                     <p className="text-xs font-medium text-slate-500 dark:text-slate-400 mt-0.5">
-                        Registra, edita, prueba lecturas de UID en tiempo real y vincula tu Arduino UNO (COM9)
+                        Conecta el Arduino UNO — al acercar una tarjeta NFC se abre el formulario automáticamente
                     </p>
                 </div>
-
                 <div className="flex flex-wrap items-center gap-2.5">
-                    <button
-                        type="button"
-                        onClick={() => setShowCodeModal(true)}
-                        className="px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300 text-xs font-bold transition flex items-center gap-2 cursor-pointer border border-slate-200 dark:border-slate-700"
-                    >
+                    <button type="button" onClick={() => setShowCodeModal(true)}
+                        className="px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300 text-xs font-bold transition flex items-center gap-2 cursor-pointer border border-slate-200 dark:border-slate-700">
                         <Code className="w-4 h-4 text-[#003C8F]" />
-                        <span>Código Arduino (.ino)</span>
+                        Código Arduino (.ino)
                     </button>
-
-                    <button
-                        type="button"
-                        onClick={handleOpenCreate}
-                        className="px-4 py-2.5 rounded-xl bg-[#003C8F] hover:bg-[#002868] text-white text-xs font-extrabold transition flex items-center gap-2 shadow-md cursor-pointer"
-                    >
+                    <button type="button" onClick={() => openCreate()}
+                        className="px-4 py-2.5 rounded-xl bg-[#003C8F] hover:bg-[#002868] text-white text-xs font-extrabold transition flex items-center gap-2 shadow-md cursor-pointer">
                         <Plus className="w-4 h-4" />
-                        <span>Registrar Carnet / NFC</span>
+                        Registrar Carnet / NFC
                     </button>
                 </div>
             </div>
 
-            {/* ── PANEL EN TIEMPO REAL: DETECCIÓN DE UID & ARDUINO COM9 ── */}
-            <div className="bg-gradient-to-r from-[#003C8F]/5 via-white to-[#800A15]/5 dark:from-slate-900 dark:to-slate-900 border-2 border-[#003C8F]/20 dark:border-slate-800 rounded-3xl p-6 space-y-6 shadow-sm">
-                
-                {/* BARRA DE ESTADO DE CONEXIÓN */}
+            {/* PANEL LECTOR RFID */}
+            <div className="bg-gradient-to-r from-[#003C8F]/5 via-white to-[#800A15]/5 dark:from-slate-900 dark:to-slate-900 border-2 border-[#003C8F]/20 dark:border-slate-800 rounded-3xl p-6 space-y-5 shadow-sm">
+
+                {/* Estado conexión */}
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-200 dark:border-slate-800">
                     <div className="flex items-center gap-3">
-                        <div className={`w-11 h-11 rounded-2xl flex items-center justify-center ${
-                            isArduinoConnected ? 'bg-emerald-500 text-white animate-pulse' : 'bg-slate-200 dark:bg-slate-800 text-slate-500'
+                        <div className={`w-11 h-11 rounded-2xl flex items-center justify-center transition ${
+                            isConnected ? 'bg-emerald-500 text-white' : 'bg-slate-200 dark:bg-slate-800 text-slate-400'
                         }`}>
                             <Cpu className="w-6 h-6" />
                         </div>
                         <div>
                             <h3 className="text-sm font-extrabold text-slate-800 dark:text-slate-200 flex items-center gap-2">
-                                Lector RFID / NFC (Arduino UNO COM9 & USB HID)
-                                <span className={`w-2.5 h-2.5 rounded-full ${isArduinoConnected ? 'bg-emerald-500 animate-ping' : 'bg-amber-500'}`}></span>
+                                Lector RFID / NFC — Arduino UNO
+                                <span className={`w-2.5 h-2.5 rounded-full inline-block ${
+                                    isConnected ? 'bg-emerald-500 animate-ping' : 'bg-amber-400'
+                                }`} />
                             </h3>
-                            <p className="text-xs font-semibold text-slate-500 dark:text-slate-400">
-                                {arduinoStatus}
-                            </p>
+                            <p className="text-xs font-semibold text-slate-500 dark:text-slate-400">{serialStatus}</p>
                         </div>
                     </div>
-
-                    <div className="flex items-center gap-2">
-                        {!isArduinoConnected ? (
-                            <button
-                                type="button"
-                                onClick={connectArduino}
-                                className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold transition flex items-center gap-2 shadow-sm cursor-pointer"
-                            >
-                                <Radio className="w-4 h-4" />
-                                <span>Conectar Arduino UNO (COM9)</span>
-                            </button>
-                        ) : (
-                            <button
-                                type="button"
-                                onClick={disconnectArduino}
-                                className="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-extrabold transition flex items-center gap-2 shadow-sm cursor-pointer"
-                            >
-                                <X className="w-4 h-4" />
-                                <span>Desconectar Puerto COM</span>
-                            </button>
-                        )}
-                    </div>
+                    {!isConnected ? (
+                        <button type="button" onClick={handleConnect}
+                            className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold transition flex items-center gap-2 shadow-sm cursor-pointer">
+                            <Wifi className="w-4 h-4" />
+                            Conectar Puerto COM
+                        </button>
+                    ) : (
+                        <button type="button" onClick={handleDisconnect}
+                            className="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-extrabold transition flex items-center gap-2 shadow-sm cursor-pointer">
+                            <WifiOff className="w-4 h-4" />
+                            Desconectar
+                        </button>
+                    )}
                 </div>
 
-                {/* ── RESULTADO DESTACADO DE LECTURA EN TIEMPO REAL ── */}
+                {/* Monitor + Logs */}
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-                    
-                    {/* COLUMNA 1 & 2: MONITOR DE LECTURA DE UID */}
-                    <div className="lg:col-span-2 space-y-4 bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-2xl p-5 shadow-xs">
-                        
+
+                    {/* Monitor */}
+                    <div className="lg:col-span-2 bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-2xl p-5 space-y-4 shadow-xs">
                         <div className="flex items-center justify-between">
-                            <span className="text-xs font-black text-[#003C8F] uppercase tracking-wider">
-                                Monitor de Lectura de Tarjeta RFID
-                            </span>
-                            <span className="text-[10px] font-bold text-slate-400">
-                                Detección Automática Activa
-                            </span>
+                            <span className="text-xs font-black text-[#003C8F] uppercase tracking-wider">Monitor de Lectura RFID</span>
+                            <span className="text-[10px] font-bold text-slate-400">Detección Automática Activa</span>
                         </div>
 
-                        {/* ENTRADA MANUAL O LECTURA DIRECTA */}
+                        {/* Input manual */}
                         <div className="flex gap-2">
                             <input
                                 type="text"
-                                placeholder="Escanear tarjeta física o escribir UID (Ej: NFC-101 / 138A4F2B)..."
-                                value={lastScannedUid}
-                                onChange={e => setLastScannedUid(e.target.value.toUpperCase())}
-                                onKeyDown={e => e.key === 'Enter' && extractAndProcessUid(lastScannedUid)}
+                                placeholder="Escribe un UID manualmente y presiona Enter..."
+                                value={lastUid}
+                                onChange={e => setLastUid(e.target.value.toUpperCase())}
+                                onKeyDown={e => { if (e.key === 'Enter') processLine(lastUid); }}
                                 className="flex-1 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-white px-4 py-3 rounded-xl text-sm font-mono font-bold focus:outline-none focus:border-[#003C8F]"
                             />
-                            <button
-                                type="button"
-                                onClick={() => extractAndProcessUid(lastScannedUid)}
-                                className="px-5 py-3 bg-[#003C8F] hover:bg-[#002868] text-white text-xs font-extrabold rounded-xl transition cursor-pointer shadow-sm"
-                            >
-                                Consultar UID
+                            <button type="button" onClick={() => processLine(lastUid)}
+                                className="px-5 py-3 bg-[#003C8F] hover:bg-[#002868] text-white text-xs font-extrabold rounded-xl transition cursor-pointer shadow-sm">
+                                Consultar
                             </button>
                         </div>
 
-                        {/* RESULTADO DE LA TARJETA SCANNEADA */}
-                        {testResult ? (
-                            <div className={`p-4 rounded-2xl border transition-all duration-300 ${
-                                testResult.status === 'registrada'
-                                    ? 'bg-emerald-50/90 border-emerald-300 dark:bg-emerald-950/40 dark:border-emerald-800'
-                                    : 'bg-amber-50/90 border-amber-300 dark:bg-amber-950/40 dark:border-amber-800'
-                            }`}>
-                                {testResult.status === 'registrada' ? (
-                                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                                        <div className="flex items-center gap-3">
-                                            <div className="w-12 h-12 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold shrink-0 shadow-md">
-                                                <CheckCircle2 className="w-7 h-7" />
-                                            </div>
-                                            <div>
-                                                <span className="text-xs font-extrabold text-emerald-800 dark:text-emerald-300 uppercase tracking-wide block">
-                                                    ¡Tarjeta Registrada y Activa!
-                                                </span>
-                                                <h4 className="text-base font-black text-slate-900 dark:text-white">
-                                                    {testResult.carnet.nombre} {testResult.carnet.apellido}
-                                                </h4>
-                                                <p className="text-xs font-bold text-slate-600 dark:text-slate-300">
-                                                    Rol: {testResult.carnet.rol} • Código: {testResult.carnet.code} | NFC: <span className="font-mono text-[#800A15]">{testResult.carnet.nfc || 'N/A'}</span>
-                                                </p>
-                                            </div>
-                                        </div>
-
-                                        <button
-                                            type="button"
-                                            onClick={() => handleOpenEdit(testResult.carnet)}
-                                            className="px-3.5 py-2 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold rounded-xl shadow-xs transition cursor-pointer self-start sm:self-center"
-                                        >
-                                            Editar Registro
-                                        </button>
-                                    </div>
-                                ) : (
-                                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                                        <div className="flex items-start gap-3">
-                                            <div className="w-12 h-12 rounded-full bg-amber-500 text-white flex items-center justify-center font-bold shrink-0 shadow-md">
-                                                <AlertCircle className="w-7 h-7" />
-                                            </div>
-                                            <div>
-                                                <span className="text-xs font-extrabold text-amber-800 dark:text-amber-300 uppercase tracking-wide block">
-                                                    Tarjeta No Registrada Aún
-                                                </span>
-                                                <h4 className="text-lg font-mono font-black text-[#800A15] dark:text-rose-400">
-                                                    UID: {testResult.uid}
-                                                </h4>
-                                                <p className="text-xs font-semibold text-slate-600 dark:text-slate-300">
-                                                    Esta tarjeta o llavero NFC no está asociada a ningún estudiante ni docente.
-                                                </p>
-                                            </div>
-                                        </div>
-
-                                        <button
-                                            type="button"
-                                            onClick={() => handleAssignUidToNew(testResult.uid)}
-                                            className="px-4 py-2.5 bg-[#800A15] hover:bg-[#600710] text-white text-xs font-black rounded-xl shadow-md transition cursor-pointer flex items-center gap-1.5 self-start sm:self-center"
-                                        >
-                                            <Zap className="w-4 h-4" />
-                                            <span>Registrar UID {testResult.uid}</span>
-                                        </button>
-                                    </div>
-                                )}
-                            </div>
-                        ) : (
-                            <div className="p-6 border border-dashed border-slate-300 dark:border-slate-700 rounded-2xl text-center space-y-1">
-                                <span className="text-xs font-extrabold text-slate-500 dark:text-slate-400 block uppercase tracking-wider">
-                                    Esperando Lectura Real...
-                                </span>
-                                <p className="text-xs font-medium text-slate-400">
-                                    Acerca tu tarjeta o llavero NFC al lector RFID-RC522 en COM9 o usa un escáner USB.
-                                </p>
-                            </div>
-                        )}
-
+                        {/* Estado de espera */}
+                        <div className={`p-5 border border-dashed rounded-2xl text-center space-y-1 transition ${
+                            isConnected
+                                ? 'border-emerald-400/50 bg-emerald-50/40 dark:bg-emerald-950/20'
+                                : 'border-slate-300 dark:border-slate-700'
+                        }`}>
+                            {isConnected ? (
+                                <>
+                                    <span className="text-xs font-extrabold text-emerald-700 dark:text-emerald-400 block uppercase tracking-wider animate-pulse">
+                                        ● Esperando tarjeta RFID...
+                                    </span>
+                                    <p className="text-xs font-medium text-slate-500">
+                                        Acerca tu tarjeta o llavero NFC al lector. El formulario se abrirá automáticamente.
+                                    </p>
+                                </>
+                            ) : (
+                                <>
+                                    <span className="text-xs font-extrabold text-slate-500 dark:text-slate-400 block uppercase tracking-wider">
+                                        Arduino Desconectado
+                                    </span>
+                                    <p className="text-xs font-medium text-slate-400">
+                                        Haz clic en "Conectar Puerto COM" y selecciona el Arduino UNO (COM10).
+                                    </p>
+                                </>
+                            )}
+                        </div>
                     </div>
 
-                    {/* COLUMNA 3: REGISTRO DE EVENTOS SERIAL (LOGS EN TIEMPO REAL) ── */}
-                    <div className="bg-slate-950 text-slate-200 border border-slate-800 rounded-2xl p-4 flex flex-col justify-between font-mono text-[11px] h-full min-h-[220px]">
-                        <div>
-                            <div className="flex items-center justify-between border-b border-slate-800 pb-2 mb-2">
-                                <span className="font-bold text-emerald-400 flex items-center gap-1.5">
-                                    <Terminal className="w-3.5 h-3.5" />
-                                    <span>Log Serial (COM9)</span>
-                                </span>
-                                <span className="text-[10px] text-slate-500">9600 Baud</span>
-                            </div>
-                            <div className="space-y-1 max-h-44 overflow-y-auto pr-1">
-                                {serialLogs.length > 0 ? (
-                                    serialLogs.map((log, i) => (
-                                        <div key={i} className="text-slate-300 leading-tight">
-                                            {log}
-                                        </div>
-                                    ))
-                                ) : (
-                                    <div className="text-slate-600 italic">
-                                        No hay datos seriales recientes...
-                                    </div>
-                                )}
-                            </div>
+                    {/* Log serial */}
+                    <div className="bg-slate-950 text-slate-200 border border-slate-800 rounded-2xl p-4 flex flex-col font-mono text-[11px] min-h-[220px]">
+                        <div className="flex items-center justify-between border-b border-slate-800 pb-2 mb-2">
+                            <span className="font-bold text-emerald-400 flex items-center gap-1.5">
+                                <Terminal className="w-3.5 h-3.5" />
+                                Log Serial
+                            </span>
+                            <span className="text-[10px] text-slate-500">9600 Baud</span>
                         </div>
-
-                        <div className="pt-2 border-t border-slate-800 text-[10px] text-slate-500 flex justify-between">
+                        <div className="flex-1 space-y-1 overflow-y-auto pr-1">
+                            {serialLogs.length > 0 ? serialLogs.map((log, i) => (
+                                <div key={i} className="text-slate-300 leading-tight">{log}</div>
+                            )) : (
+                                <div className="text-slate-600 italic">Sin actividad...</div>
+                            )}
+                        </div>
+                        <div className="pt-2 border-t border-slate-800 text-[10px] text-slate-500 flex justify-between mt-2">
                             <span>COLSIH NFC System</span>
                             <span>{serialLogs.length} eventos</span>
                         </div>
                     </div>
 
                 </div>
-
             </div>
 
-            {/* ── BARRA DE BÚSQUEDA Y FILTROS ── */}
+            {/* BÚSQUEDA Y FILTROS */}
             <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
                 <div className="relative w-full sm:w-80">
                     <Search className="w-4 h-4 absolute left-3.5 top-3 text-slate-400" />
@@ -600,26 +478,19 @@ void loop() {
                         className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl pl-10 pr-4 py-2.5 text-xs font-bold text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:border-[#003C8F]"
                     />
                 </div>
-
                 <div className="flex items-center gap-1.5 p-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl">
                     {['Todos', 'Estudiante', 'Docente', 'Administrativo'].map(rol => (
-                        <button
-                            key={rol}
-                            type="button"
-                            onClick={() => setFilterRol(rol)}
+                        <button key={rol} type="button" onClick={() => setFilterRol(rol)}
                             className={`px-3 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer ${
-                                filterRol === rol
-                                    ? 'bg-[#003C8F] text-white shadow-xs'
-                                    : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
-                            }`}
-                        >
+                                filterRol === rol ? 'bg-[#003C8F] text-white shadow-xs' : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
+                            }`}>
                             {rol}
                         </button>
                     ))}
                 </div>
             </div>
 
-            {/* ── TABLA DE REGISTROS DE CARNETS Y TARJETAS NFC ── */}
+            {/* TABLA */}
             <div className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl overflow-hidden shadow-xs">
                 <div className="overflow-x-auto">
                     <table className="w-full text-left text-xs">
@@ -634,76 +505,54 @@ void loop() {
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60 font-semibold text-slate-700 dark:text-slate-300">
-                            {filteredCarnets.length > 0 ? (
-                                filteredCarnets.map((c) => (
-                                    <tr key={c.id} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition">
-                                        <td className="px-6 py-4">
-                                            <div className="flex items-center gap-3">
-                                                <div className="w-9 h-9 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 overflow-hidden flex items-center justify-center font-bold text-[#003C8F] shrink-0">
-                                                    {c.foto ? (
-                                                        <img src={c.foto} alt={c.nombre} className="w-full h-full object-cover" />
-                                                    ) : (
-                                                        <span>{c.nombre[0]}{c.apellido[0]}</span>
-                                                    )}
-                                                </div>
-                                                <div>
-                                                    <span className="font-extrabold text-slate-800 dark:text-slate-100 block">{c.nombre} {c.apellido}</span>
-                                                </div>
+                            {filtered.length > 0 ? filtered.map(c => (
+                                <tr key={c.id} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition">
+                                    <td className="px-6 py-4">
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-9 h-9 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 overflow-hidden flex items-center justify-center font-bold text-[#003C8F] shrink-0">
+                                                {c.foto
+                                                    ? <img src={c.foto} alt={c.nombre} className="w-full h-full object-cover" />
+                                                    : <span>{c.nombre[0]}{c.apellido[0]}</span>
+                                                }
                                             </div>
-                                        </td>
-                                        <td className="px-6 py-4">
-                                            <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider ${
-                                                c.rol === 'Docente' ? 'bg-[#800A15]/10 text-[#800A15]' : 'bg-[#003C8F]/10 text-[#003C8F]'
-                                            }`}>
-                                                {c.rol}
-                                            </span>
-                                            {c.info && <span className="text-[11px] text-slate-400 block font-normal mt-0.5">{c.info}</span>}
-                                        </td>
-                                        <td className="px-6 py-4 font-mono font-bold text-slate-800 dark:text-slate-200">
-                                            {c.code}
-                                        </td>
-                                        <td className="px-6 py-4 font-mono font-bold text-[#800A15] dark:text-rose-400">
-                                            {c.nfc ? (
-                                                <span className="bg-rose-50 dark:bg-rose-950/40 px-2.5 py-1 rounded-lg border border-rose-200/60 dark:border-rose-900/60">
-                                                    {c.nfc}
-                                                </span>
-                                            ) : (
-                                                <span className="text-slate-400 font-normal italic">Sin NFC asignado</span>
-                                            )}
-                                        </td>
-                                        <td className="px-6 py-4 text-center">
-                                            <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase ${
-                                                c.activo ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-500'
-                                            }`}>
-                                                {c.activo ? 'Activo' : 'Inactivo'}
-                                            </span>
-                                        </td>
-                                        <td className="px-6 py-4 text-right">
-                                            <div className="flex items-center justify-end gap-2">
-                                                <button
-                                                    type="button"
-                                                    onClick={() => handleOpenEdit(c)}
-                                                    className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-[#003C8F] hover:text-white text-slate-600 dark:text-slate-300 transition cursor-pointer"
-                                                    title="Editar"
-                                                >
-                                                    <Edit2 className="w-4 h-4" />
-                                                </button>
-                                                <button
-                                                    type="button"
-                                                    onClick={() => handleDelete(c)}
-                                                    className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-rose-600 hover:text-white text-slate-600 dark:text-slate-300 transition cursor-pointer"
-                                                    title="Eliminar"
-                                                >
-                                                    <Trash2 className="w-4 h-4" />
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))
-                            ) : (
+                                            <span className="font-extrabold text-slate-800 dark:text-slate-100">{c.nombre} {c.apellido}</span>
+                                        </div>
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider ${
+                                            c.rol === 'Docente' ? 'bg-[#800A15]/10 text-[#800A15]' : 'bg-[#003C8F]/10 text-[#003C8F]'
+                                        }`}>{c.rol}</span>
+                                        {c.info && <span className="text-[11px] text-slate-400 block font-normal mt-0.5">{c.info}</span>}
+                                    </td>
+                                    <td className="px-6 py-4 font-mono font-bold text-slate-800 dark:text-slate-200">{c.code}</td>
+                                    <td className="px-6 py-4 font-mono font-bold text-[#800A15] dark:text-rose-400">
+                                        {c.nfc
+                                            ? <span className="bg-rose-50 dark:bg-rose-950/40 px-2.5 py-1 rounded-lg border border-rose-200/60 dark:border-rose-900/60">{c.nfc}</span>
+                                            : <span className="text-slate-400 font-normal italic">Sin NFC</span>
+                                        }
+                                    </td>
+                                    <td className="px-6 py-4 text-center">
+                                        <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase ${
+                                            c.activo ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-500'
+                                        }`}>{c.activo ? 'Activo' : 'Inactivo'}</span>
+                                    </td>
+                                    <td className="px-6 py-4 text-right">
+                                        <div className="flex items-center justify-end gap-2">
+                                            <button type="button" onClick={() => openEdit(c)}
+                                                className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-[#003C8F] hover:text-white text-slate-600 dark:text-slate-300 transition cursor-pointer" title="Editar">
+                                                <Edit2 className="w-4 h-4" />
+                                            </button>
+                                            <button type="button" onClick={() => handleDelete(c)}
+                                                className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-rose-600 hover:text-white text-slate-600 dark:text-slate-300 transition cursor-pointer" title="Eliminar">
+                                                <Trash2 className="w-4 h-4" />
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            )) : (
                                 <tr>
                                     <td colSpan={6} className="px-6 py-8 text-center text-slate-400 font-semibold">
-                                        No se encontraron registros de tarjetas NFC o Carnets.
+                                        No se encontraron carnets o tarjetas NFC.
                                     </td>
                                 </tr>
                             )}
@@ -712,11 +561,13 @@ void loop() {
                 </div>
             </div>
 
-            {/* ── MODAL PARA CREAR / EDITAR CARNET & NFC ── */}
-            {showModal && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4" onClick={() => setShowModal(false)}>
-                    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl space-y-6" onClick={e => e.stopPropagation()}>
-                        
+            {/* MODAL CREAR / EDITAR */}
+            {showModal && createPortal(
+                <div className="fixed inset-0 z-[200] flex items-center justify-center bg-slate-900/70 backdrop-blur-sm p-4"
+                    onClick={() => setShowModal(false)}>
+                    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl space-y-5"
+                        onClick={e => e.stopPropagation()}>
+
                         <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
                             <h3 className="text-base sm:text-lg font-black text-[#003C8F] dark:text-blue-400">
                                 {editingCarnet ? 'Editar Tarjeta / Carnet' : 'Registrar Nuevo Carnet / Tarjeta NFC'}
@@ -726,126 +577,99 @@ void loop() {
                             </button>
                         </div>
 
-                        <form onSubmit={handleSubmitForm} className="space-y-4">
+                        {data.nfc && (
+                            <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-2xl px-4 py-2.5 flex items-center gap-2">
+                                <Radio className="w-4 h-4 text-amber-600 shrink-0" />
+                                <span className="text-xs font-bold text-amber-800 dark:text-amber-300">
+                                    UID detectado: <span className="font-mono">{data.nfc}</span>
+                                </span>
+                            </div>
+                        )}
+
+                        <form onSubmit={handleSubmit} className="space-y-4">
                             <div className="grid grid-cols-2 gap-3">
                                 <div>
                                     <label className="text-[11px] font-black text-slate-500 uppercase tracking-wider block mb-1">Nombre</label>
-                                    <input
-                                        type="text"
-                                        required
-                                        value={data.nombre}
-                                        onChange={e => setData('nombre', e.target.value)}
+                                    <input type="text" required value={data.nombre} onChange={e => setData('nombre', e.target.value)}
                                         className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white px-3.5 py-2.5 rounded-xl text-xs font-bold focus:outline-none focus:border-[#003C8F]"
-                                        placeholder="Ej: Santiago"
-                                    />
+                                        placeholder="Ej: Santiago" />
                                 </div>
                                 <div>
                                     <label className="text-[11px] font-black text-slate-500 uppercase tracking-wider block mb-1">Apellido</label>
-                                    <input
-                                        type="text"
-                                        required
-                                        value={data.apellido}
-                                        onChange={e => setData('apellido', e.target.value)}
+                                    <input type="text" required value={data.apellido} onChange={e => setData('apellido', e.target.value)}
                                         className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white px-3.5 py-2.5 rounded-xl text-xs font-bold focus:outline-none focus:border-[#003C8F]"
-                                        placeholder="Ej: Camacho"
-                                    />
+                                        placeholder="Ej: Camacho" />
                                 </div>
                             </div>
 
                             <div className="grid grid-cols-2 gap-3">
                                 <div>
                                     <label className="text-[11px] font-black text-slate-500 uppercase tracking-wider block mb-1">Rol</label>
-                                    <select
-                                        value={data.rol}
-                                        onChange={e => setData('rol', e.target.value)}
-                                        className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white px-3.5 py-2.5 rounded-xl text-xs font-bold focus:outline-none focus:border-[#003C8F]"
-                                    >
-                                        <option value="Estudiante">Estudiante</option>
-                                        <option value="Docente">Docente</option>
-                                        <option value="Administrativo">Administrativo</option>
-                                        <option value="Visitante">Visitante</option>
+                                    <select value={data.rol} onChange={e => setData('rol', e.target.value)}
+                                        className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white px-3.5 py-2.5 rounded-xl text-xs font-bold focus:outline-none focus:border-[#003C8F]">
+                                        <option>Estudiante</option>
+                                        <option>Docente</option>
+                                        <option>Administrativo</option>
+                                        <option>Visitante</option>
                                     </select>
                                 </div>
-
                                 <div>
                                     <label className="text-[11px] font-black text-slate-500 uppercase tracking-wider block mb-1">Info / Grado</label>
-                                    <input
-                                        type="text"
-                                        value={data.info}
-                                        onChange={e => setData('info', e.target.value)}
+                                    <input type="text" value={data.info} onChange={e => setData('info', e.target.value)}
                                         className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white px-3.5 py-2.5 rounded-xl text-xs font-bold focus:outline-none focus:border-[#003C8F]"
-                                        placeholder="Ej: Grado 11°"
-                                    />
+                                        placeholder="Ej: Grado 11°" />
                                 </div>
                             </div>
 
                             <div className="grid grid-cols-2 gap-3">
                                 <div>
                                     <label className="text-[11px] font-black text-[#003C8F] uppercase tracking-wider block mb-1">Código de Barras</label>
-                                    <input
-                                        type="text"
-                                        required
-                                        value={data.code}
-                                        onChange={e => setData('code', e.target.value.toUpperCase())}
+                                    <input type="text" required value={data.code} onChange={e => setData('code', e.target.value.toUpperCase())}
                                         className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white px-3.5 py-2.5 rounded-xl text-xs font-mono font-bold focus:outline-none focus:border-[#003C8F]"
-                                        placeholder="Ej: EST-101"
-                                    />
+                                        placeholder="Ej: EST-101" />
                                 </div>
-
                                 <div>
                                     <label className="text-[11px] font-black text-[#800A15] uppercase tracking-wider block mb-1">UID Tarjeta NFC</label>
-                                    <input
-                                        type="text"
-                                        value={data.nfc}
-                                        onChange={e => setData('nfc', e.target.value.toUpperCase())}
+                                    <input type="text" value={data.nfc} onChange={e => setData('nfc', e.target.value.toUpperCase())}
                                         className="w-full bg-rose-50/50 dark:bg-slate-800 border border-rose-200 dark:border-slate-700 text-slate-800 dark:text-white px-3.5 py-2.5 rounded-xl text-xs font-mono font-bold focus:outline-none focus:border-[#800A15]"
-                                        placeholder="Ej: NFC-101 o UID 138A4F2B"
-                                    />
+                                        placeholder="Ej: AABBCCDD" />
                                 </div>
                             </div>
 
                             <div>
-                                <label className="text-[11px] font-black text-slate-500 uppercase tracking-wider block mb-1">Foto Avatar URL (Opcional)</label>
-                                <input
-                                    type="text"
-                                    value={data.foto}
-                                    onChange={e => setData('foto', e.target.value)}
+                                <label className="text-[11px] font-black text-slate-500 uppercase tracking-wider block mb-1">Foto URL (Opcional)</label>
+                                <input type="text" value={data.foto} onChange={e => setData('foto', e.target.value)}
                                     className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white px-3.5 py-2.5 rounded-xl text-xs font-bold focus:outline-none focus:border-[#003C8F]"
-                                    placeholder="URL de foto o Cloudflare R2"
-                                />
+                                    placeholder="URL de imagen o Cloudflare R2" />
                             </div>
 
                             <div className="pt-2 flex items-center justify-between border-t border-slate-100 dark:border-slate-800">
-                                <button
-                                    type="button"
-                                    onClick={() => setShowModal(false)}
-                                    className="px-4 py-2 text-xs font-bold text-slate-500 hover:text-slate-800 cursor-pointer"
-                                >
+                                <button type="button" onClick={() => setShowModal(false)}
+                                    className="px-4 py-2 text-xs font-bold text-slate-500 hover:text-slate-800 cursor-pointer">
                                     Cancelar
                                 </button>
-                                <button
-                                    type="submit"
-                                    disabled={processing}
-                                    className="px-5 py-2.5 bg-[#003C8F] hover:bg-[#002868] text-white text-xs font-black rounded-xl shadow-md transition cursor-pointer"
-                                >
+                                <button type="submit" disabled={processing}
+                                    className="px-5 py-2.5 bg-[#003C8F] hover:bg-[#002868] text-white text-xs font-black rounded-xl shadow-md transition cursor-pointer disabled:opacity-50">
                                     {editingCarnet ? 'Guardar Cambios' : 'Registrar Carnet'}
                                 </button>
                             </div>
                         </form>
-
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
 
-            {/* ── MODAL CON CÓDIGO DE ARDUINO UNO (.INO) ── */}
-            {showCodeModal && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4" onClick={() => setShowCodeModal(false)}>
-                    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 max-w-2xl w-full shadow-2xl space-y-4" onClick={e => e.stopPropagation()}>
-                        
+            {/* MODAL CÓDIGO ARDUINO */}
+            {showCodeModal && createPortal(
+                <div className="fixed inset-0 z-[200] flex items-center justify-center bg-slate-900/70 backdrop-blur-sm p-4"
+                    onClick={() => setShowCodeModal(false)}>
+                    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 max-w-2xl w-full shadow-2xl space-y-4"
+                        onClick={e => e.stopPropagation()}>
+
                         <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
                             <h3 className="text-base sm:text-lg font-black text-[#003C8F] dark:text-blue-400 flex items-center gap-2">
                                 <Code className="w-5 h-5 text-[#800A15]" />
-                                <span>Código Arduino UNO + RFID-RC522 (COM9)</span>
+                                Código Arduino UNO + RFID-RC522
                             </h3>
                             <button onClick={() => setShowCodeModal(false)} className="text-slate-400 hover:text-slate-600 p-1 cursor-pointer">
                                 <X className="w-5 h-5" />
@@ -853,33 +677,27 @@ void loop() {
                         </div>
 
                         <p className="text-xs font-semibold text-slate-500 dark:text-slate-400">
-                            Copia y sube este programa a tu **Arduino UNO (COM9)** mediante el Arduino IDE. Asegúrate de conectar el módulo RFID-RC522 a los pines indicados.
+                            Copia y sube este sketch al Arduino UNO a través del Arduino IDE. Baudrate: <strong>9600</strong>.
                         </p>
 
                         <div className="relative bg-slate-950 text-slate-100 rounded-2xl p-4 font-mono text-xs overflow-x-auto max-h-80 shadow-inner">
-                            <button
-                                type="button"
-                                onClick={() => navigator.clipboard.writeText(arduinoSketchCode)}
-                                className="absolute top-3 right-3 px-3 py-1 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-[10px] font-bold transition flex items-center gap-1.5 cursor-pointer border border-slate-700"
-                            >
+                            <button type="button" onClick={() => navigator.clipboard.writeText(sketchCode)}
+                                className="absolute top-3 right-3 px-3 py-1 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-[10px] font-bold transition flex items-center gap-1.5 cursor-pointer border border-slate-700">
                                 <Copy className="w-3.5 h-3.5" />
-                                <span>Copiar Código</span>
+                                Copiar
                             </button>
-                            <pre>{arduinoSketchCode}</pre>
+                            <pre>{sketchCode}</pre>
                         </div>
 
                         <div className="pt-2 flex justify-end">
-                            <button
-                                type="button"
-                                onClick={() => setShowCodeModal(false)}
-                                className="px-5 py-2.5 bg-[#003C8F] text-white text-xs font-black rounded-xl shadow-md cursor-pointer"
-                            >
+                            <button type="button" onClick={() => setShowCodeModal(false)}
+                                className="px-5 py-2.5 bg-[#003C8F] text-white text-xs font-black rounded-xl shadow-md cursor-pointer">
                                 Entendido
                             </button>
                         </div>
-
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
 
         </div>

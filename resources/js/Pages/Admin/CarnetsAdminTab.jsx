@@ -9,15 +9,14 @@ import {
     Check, 
     X, 
     Cpu, 
-    RefreshCw, 
     User, 
-    ShieldCheck, 
     Radio, 
     Code, 
     CheckCircle2, 
     AlertCircle,
+    Copy,
     Zap,
-    Copy
+    Terminal
 } from 'lucide-react';
 
 export default function CarnetsAdminTab({ carnets = [], flash }) {
@@ -27,11 +26,13 @@ export default function CarnetsAdminTab({ carnets = [], flash }) {
     const [editingCarnet, setEditingCarnet] = useState(null);
     const [showCodeModal, setShowCodeModal] = useState(false);
 
-    // Estado para conexión Web Serial API con Arduino UNO (COM9)
+    // Conexión Web Serial API con Arduino UNO (COM9) y Lector HID
     const [isArduinoConnected, setIsArduinoConnected] = useState(false);
-    const [arduinoStatus, setArduinoStatus] = useState('Desconectado');
+    const [arduinoStatus, setArduinoStatus] = useState('Desconectado (Esperando USB / Arduino COM9)');
     const [lastScannedUid, setLastScannedUid] = useState('');
     const [testResult, setTestResult] = useState(null);
+    const [serialLogs, setSerialLogs] = useState([]);
+    const [hidBuffer, setHidBuffer] = useState('');
 
     const portRef = useRef(null);
 
@@ -47,7 +48,28 @@ export default function CarnetsAdminTab({ carnets = [], flash }) {
         activo: true,
     });
 
-    // 1. Conexión Web Serial API con Arduino UNO (COM9)
+    // 1. Captura global de lecturas HID (Escáner de código de barras USB / Lector NFC emulador de teclado)
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            // Evitar interferir si el usuario está escribiendo dentro de una ventana modal o input de texto
+            const isModalOpen = showModal || showCodeModal;
+            if (isModalOpen) return;
+
+            if (e.key === 'Enter') {
+                if (hidBuffer.trim().length >= 3) {
+                    handleCardDetected(hidBuffer.trim().toUpperCase());
+                    setHidBuffer('');
+                }
+            } else if (e.key.length === 1) {
+                setHidBuffer(prev => prev + e.key);
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [hidBuffer, showModal, showCodeModal, carnets]);
+
+    // 2. Conexión Web Serial API con Arduino UNO (COM9)
     const connectArduino = async () => {
         if (!('serial' in navigator)) {
             alert('La Web Serial API no está soportada en este navegador. Por favor usa Google Chrome o Microsoft Edge.');
@@ -62,6 +84,7 @@ export default function CarnetsAdminTab({ carnets = [], flash }) {
             portRef.current = port;
             setIsArduinoConnected(true);
             setArduinoStatus('Conectado a Arduino UNO (COM9)');
+            addLog('Puerto Serial abierto exitosamente a 9600 baudios');
 
             const textDecoder = new TextDecoderStream();
             port.readable.pipeTo(textDecoder.writable);
@@ -81,7 +104,8 @@ export default function CarnetsAdminTab({ carnets = [], flash }) {
 
                     for (const line of lines) {
                         const cleanUid = line.trim().toUpperCase();
-                        if (cleanUid.length >= 4) {
+                        if (cleanUid.length >= 3) {
+                            addLog(`Lectura recibida: ${cleanUid}`);
                             handleCardDetected(cleanUid);
                         }
                     }
@@ -91,6 +115,7 @@ export default function CarnetsAdminTab({ carnets = [], flash }) {
             console.error('Error al conectar Arduino Serial:', err);
             setIsArduinoConnected(false);
             setArduinoStatus('Error de conexión o puerto cancelado');
+            addLog(`Error Serial: ${err.message || 'Desconectado'}`);
         }
     };
 
@@ -103,13 +128,22 @@ export default function CarnetsAdminTab({ carnets = [], flash }) {
         }
         setIsArduinoConnected(false);
         setArduinoStatus('Desconectado');
+        addLog('Conexión Serial finalizada por el usuario');
     };
 
-    // Al detectar una tarjeta desde Arduino u otro lector
-    const handleCardDetected = (uid) => {
+    const addLog = (msg) => {
+        const time = new Date().toLocaleTimeString('es-CO');
+        setSerialLogs(prev => [`[${time}] ${msg}`, ...prev.slice(0, 15)]);
+    };
+
+    // Al detectar una tarjeta desde Arduino, Lector USB o Simulación
+    const handleCardDetected = (uidRaw) => {
+        const uid = uidRaw.trim().toUpperCase();
+        if (!uid) return;
+
         setLastScannedUid(uid);
-        
-        // Buscar si la tarjeta ya existe en los registros actuales
+
+        // Buscar si el UID coincide con `nfc` o `code` en la base de datos
         const found = carnets.find(
             c => (c.nfc && c.nfc.toUpperCase() === uid) || (c.code && c.code.toUpperCase() === uid)
         );
@@ -117,25 +151,38 @@ export default function CarnetsAdminTab({ carnets = [], flash }) {
         if (found) {
             setTestResult({
                 status: 'registrada',
-                message: '¡Tarjeta registrada y activa en la base de datos!',
+                uid: uid,
+                message: `Tarjeta (${uid}) encontrada en el sistema`,
                 carnet: found
             });
         } else {
             setTestResult({
                 status: 'nueva',
-                message: `Tarjeta detectada (${uid}). Puedes asignarla a un nuevo registro.`,
-                uid: uid
+                uid: uid,
+                message: `UID detectado: ${uid} (No asignado a ningún carnet)`
             });
-            // Si el modal de creación está abierto o se desea crear rápido, autocompletar el campo NFC
-            setData(prev => ({
-                ...prev,
-                nfc: prev.nfc || uid,
-                code: prev.code || `EST-${Math.floor(100 + Math.random() * 900)}`
-            }));
         }
     };
 
-    // Abrir Modal de Creación
+    // Abrir Modal asignando el UID detectado
+    const handleAssignUidToNew = (uidToAssign) => {
+        const uid = uidToAssign || lastScannedUid || '';
+        setEditingCarnet(null);
+        reset();
+        setData({
+            code: `EST-${Math.floor(100 + Math.random() * 900)}`,
+            nfc: uid,
+            nombre: '',
+            apellido: '',
+            rol: 'Estudiante',
+            info: 'Grado 11°',
+            foto: '',
+            activo: true,
+        });
+        setShowModal(true);
+    };
+
+    // Abrir Modal de Creación Limpio
     const handleOpenCreate = () => {
         setEditingCarnet(null);
         reset();
@@ -286,7 +333,7 @@ void loop() {
                         Gestión de Carnets y Tarjetas NFC
                     </h2>
                     <p className="text-xs font-medium text-slate-500 dark:text-slate-400 mt-0.5">
-                        Registra, edita, prueba lecturas en tiempo real y vincula tu Arduino UNO (COM9)
+                        Registra, edita, prueba lecturas de UID en tiempo real y vincula tu Arduino UNO (COM9)
                     </p>
                 </div>
 
@@ -311,20 +358,21 @@ void loop() {
                 </div>
             </div>
 
-            {/* ── PANEL DE PRUEBAS DE LECTURA Y CONEXIÓN CON ARDUINO UNO (COM9) ── */}
-            <div className="bg-gradient-to-r from-[#003C8F]/5 via-white to-[#800A15]/5 dark:from-slate-900 dark:to-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 space-y-4 shadow-sm">
+            {/* ── PANEL EN TIEMPO REAL: DETECCIÓN DE UID & ARDUINO COM9 ── */}
+            <div className="bg-gradient-to-r from-[#003C8F]/5 via-white to-[#800A15]/5 dark:from-slate-900 dark:to-slate-900 border-2 border-[#003C8F]/20 dark:border-slate-800 rounded-3xl p-6 space-y-6 shadow-sm">
                 
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-200/60 dark:border-slate-800">
+                {/* BARRA DE ESTADO DE CONEXIÓN */}
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-200 dark:border-slate-800">
                     <div className="flex items-center gap-3">
-                        <div className={`w-10 h-10 rounded-2xl flex items-center justify-center ${
+                        <div className={`w-11 h-11 rounded-2xl flex items-center justify-center ${
                             isArduinoConnected ? 'bg-emerald-500 text-white animate-pulse' : 'bg-slate-200 dark:bg-slate-800 text-slate-500'
                         }`}>
-                            <Cpu className="w-5 h-5" />
+                            <Cpu className="w-6 h-6" />
                         </div>
                         <div>
                             <h3 className="text-sm font-extrabold text-slate-800 dark:text-slate-200 flex items-center gap-2">
-                                Pruebas de Lectura NFC (Arduino UNO - COM9)
-                                <span className={`w-2.5 h-2.5 rounded-full ${isArduinoConnected ? 'bg-emerald-500 animate-ping' : 'bg-rose-500'}`}></span>
+                                Lector RFID / NFC (Arduino UNO COM9 & USB HID)
+                                <span className={`w-2.5 h-2.5 rounded-full ${isArduinoConnected ? 'bg-emerald-500 animate-ping' : 'bg-amber-500'}`}></span>
                             </h3>
                             <p className="text-xs font-semibold text-slate-500 dark:text-slate-400">
                                 {arduinoStatus}
@@ -337,7 +385,7 @@ void loop() {
                             <button
                                 type="button"
                                 onClick={connectArduino}
-                                className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold transition flex items-center gap-2 shadow-sm cursor-pointer"
+                                className="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold transition flex items-center gap-2 shadow-sm cursor-pointer"
                             >
                                 <Radio className="w-4 h-4" />
                                 <span>Conectar Arduino UNO (COM9)</span>
@@ -346,78 +394,155 @@ void loop() {
                             <button
                                 type="button"
                                 onClick={disconnectArduino}
-                                className="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-extrabold transition flex items-center gap-2 shadow-sm cursor-pointer"
+                                className="px-4 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-extrabold transition flex items-center gap-2 shadow-sm cursor-pointer"
                             >
                                 <X className="w-4 h-4" />
-                                <span>Desconectar Arduino</span>
+                                <span>Desconectar Puerto COM</span>
                             </button>
                         )}
                     </div>
                 </div>
 
-                {/* PRUEBA MANUAL / ÚLTIMA LECTURA CAPTURADA */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
+                {/* ── RESULTADO DESTACADO DE LECTURA EN TIEMPO REAL ── */}
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
                     
-                    {/* Simular o Digitar Lectura */}
-                    <div className="space-y-2">
-                        <label className="text-[11px] font-black text-slate-500 uppercase tracking-wider block">
-                            Simular o Probar UID de Tarjeta RFID (Ej: NFC-101 / 138A4F2B)
-                        </label>
+                    {/* COLUMNA 1 & 2: MONITOR DE LECTURA DE UID */}
+                    <div className="lg:col-span-2 space-y-4 bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-2xl p-5 shadow-xs">
+                        
+                        <div className="flex items-center justify-between">
+                            <span className="text-xs font-black text-[#003C8F] uppercase tracking-wider">
+                                Monitor de Lectura de Tarjeta RFID
+                            </span>
+                            <span className="text-[10px] font-bold text-slate-400">
+                                Detección Automática Activa
+                            </span>
+                        </div>
+
+                        {/* ENTRADA MANUAL O PRUEBA RÁPIDA */}
                         <div className="flex gap-2">
                             <input
                                 type="text"
-                                placeholder="Escanear o escribir UID..."
+                                placeholder="Escanear tarjeta o escribir UID (Ej: NFC-101 / 138A4F2B)..."
                                 value={lastScannedUid}
                                 onChange={e => setLastScannedUid(e.target.value.toUpperCase())}
-                                className="flex-1 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-white px-4 py-2.5 rounded-xl text-xs font-mono font-bold focus:outline-none focus:border-[#003C8F]"
+                                onKeyDown={e => e.key === 'Enter' && handleCardDetected(lastScannedUid)}
+                                className="flex-1 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-white px-4 py-3 rounded-xl text-sm font-mono font-bold focus:outline-none focus:border-[#003C8F]"
                             />
                             <button
                                 type="button"
                                 onClick={() => handleCardDetected(lastScannedUid)}
-                                className="px-4 py-2.5 bg-[#003C8F] hover:bg-[#002868] text-white text-xs font-bold rounded-xl transition cursor-pointer"
+                                className="px-5 py-3 bg-[#003C8F] hover:bg-[#002868] text-white text-xs font-extrabold rounded-xl transition cursor-pointer shadow-sm"
                             >
-                                Probar Lectura
+                                Probar UID
                             </button>
                         </div>
-                    </div>
 
-                    {/* Resultado de la Prueba */}
-                    <div className="p-3.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl min-h-[72px] flex items-center justify-between">
+                        {/* RESULTADO DE LA TARJETA SCANNEADA */}
                         {testResult ? (
-                            <div className="flex items-center gap-3 w-full">
+                            <div className={`p-4 rounded-2xl border transition-all duration-300 ${
+                                testResult.status === 'registrada'
+                                    ? 'bg-emerald-50/90 border-emerald-300 dark:bg-emerald-950/40 dark:border-emerald-800'
+                                    : 'bg-amber-50/90 border-amber-300 dark:bg-amber-950/40 dark:border-amber-800'
+                            }`}>
                                 {testResult.status === 'registrada' ? (
-                                    <>
-                                        <div className="w-9 h-9 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
-                                            <CheckCircle2 className="w-5 h-5" />
+                                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-12 h-12 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold shrink-0 shadow-md">
+                                                <CheckCircle2 className="w-7 h-7" />
+                                            </div>
+                                            <div>
+                                                <span className="text-xs font-extrabold text-emerald-800 dark:text-emerald-300 uppercase tracking-wide block">
+                                                    ¡Tarjeta Registrada y Activa!
+                                                </span>
+                                                <h4 className="text-base font-black text-slate-900 dark:text-white">
+                                                    {testResult.carnet.nombre} {testResult.carnet.apellido}
+                                                </h4>
+                                                <p className="text-xs font-bold text-slate-600 dark:text-slate-300">
+                                                    Rol: {testResult.carnet.rol} • Código: {testResult.carnet.code} | NFC: <span className="font-mono text-[#800A15]">{testResult.carnet.nfc || 'N/A'}</span>
+                                                </p>
+                                            </div>
                                         </div>
-                                        <div className="flex-1 text-left">
-                                            <span className="text-xs font-black text-emerald-700 block">{testResult.carnet.nombre} {testResult.carnet.apellido}</span>
-                                            <span className="text-[10px] font-bold text-slate-500">{testResult.carnet.rol} • Code: {testResult.carnet.code} | NFC: {testResult.carnet.nfc || 'N/A'}</span>
-                                        </div>
-                                    </>
+
+                                        <button
+                                            type="button"
+                                            onClick={() => handleOpenEdit(testResult.carnet)}
+                                            className="px-3.5 py-2 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold rounded-xl shadow-xs transition cursor-pointer self-start sm:self-center"
+                                        >
+                                            Editar Registro
+                                        </button>
+                                    </div>
                                 ) : (
-                                    <>
-                                        <div className="w-9 h-9 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center shrink-0">
-                                            <AlertCircle className="w-5 h-5" />
+                                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                                        <div className="flex items-start gap-3">
+                                            <div className="w-12 h-12 rounded-full bg-amber-500 text-white flex items-center justify-center font-bold shrink-0 shadow-md">
+                                                <AlertCircle className="w-7 h-7" />
+                                            </div>
+                                            <div>
+                                                <span className="text-xs font-extrabold text-amber-800 dark:text-amber-300 uppercase tracking-wide block">
+                                                    Tarjeta No Registrada Aún
+                                                </span>
+                                                <h4 className="text-lg font-mono font-black text-[#800A15] dark:text-rose-400">
+                                                    UID: {testResult.uid}
+                                                </h4>
+                                                <p className="text-xs font-semibold text-slate-600 dark:text-slate-300">
+                                                    Esta tarjeta o llavero NFC no está asociada a ningún estudiante ni docente.
+                                                </p>
+                                            </div>
                                         </div>
-                                        <div className="flex-1 text-left">
-                                            <span className="text-xs font-bold text-amber-800 block">Tarjeta No Registrada ({testResult.uid})</span>
-                                            <button
-                                                type="button"
-                                                onClick={handleOpenCreate}
-                                                className="text-[10px] font-black text-[#003C8F] underline cursor-pointer"
-                                            >
-                                                + Registrar esta tarjeta ahora
-                                            </button>
-                                        </div>
-                                    </>
+
+                                        <button
+                                            type="button"
+                                            onClick={() => handleAssignUidToNew(testResult.uid)}
+                                            className="px-4 py-2.5 bg-[#800A15] hover:bg-[#600710] text-white text-xs font-black rounded-xl shadow-md transition cursor-pointer flex items-center gap-1.5 self-start sm:self-center"
+                                        >
+                                            <Zap className="w-4 h-4" />
+                                            <span>Registrar UID {testResult.uid}</span>
+                                        </button>
+                                    </div>
                                 )}
                             </div>
                         ) : (
-                            <div className="text-xs font-semibold text-slate-400 text-center w-full">
-                                Acerque una tarjeta al lector RC522 o digite el UID arriba para probar
+                            <div className="p-6 border border-dashed border-slate-300 dark:border-slate-700 rounded-2xl text-center space-y-1">
+                                <span className="text-xs font-extrabold text-slate-500 dark:text-slate-400 block uppercase tracking-wider">
+                                    Esperando Lectura...
+                                </span>
+                                <p className="text-xs font-medium text-slate-400">
+                                    Acerca tu tarjeta o llavero NFC al lector RFID-RC522 en COM9 o usa un escáner USB.
+                                </p>
                             </div>
                         )}
+
+                    </div>
+
+                    {/* COLUMNA 3: REGISTRO DE EVENTOS SERIAL (LOGS) */}
+                    <div className="bg-slate-950 text-slate-200 border border-slate-800 rounded-2xl p-4 flex flex-col justify-between font-mono text-[11px] h-full min-h-[180px]">
+                        <div>
+                            <div className="flex items-center justify-between border-b border-slate-800 pb-2 mb-2">
+                                <span className="font-bold text-emerald-400 flex items-center gap-1.5">
+                                    <Terminal className="w-3.5 h-3.5" />
+                                    <span>Log Serial (COM9)</span>
+                                </span>
+                                <span className="text-[10px] text-slate-500">9600 Baud</span>
+                            </div>
+                            <div className="space-y-1 max-h-36 overflow-y-auto pr-1">
+                                {serialLogs.length > 0 ? (
+                                    serialLogs.map((log, i) => (
+                                        <div key={i} className="text-slate-300 leading-tight">
+                                            {log}
+                                        </div>
+                                    ))
+                                ) : (
+                                    <div className="text-slate-600 italic">
+                                        No hay datos seriales recientes...
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+
+                        <div className="pt-2 border-t border-slate-800 text-[10px] text-slate-500 flex justify-between">
+                            <span>COLSIH NFC System</span>
+                            <span>{serialLogs.length} eventos</span>
+                        </div>
                     </div>
 
                 </div>

@@ -12,7 +12,7 @@ const DEMO_PERSONAS = [
     { code: 'ADM-106', nfc: 'NFC-106', nombre: 'Luz Marina', apellido: 'Valenzuela Castro', rol: 'Administrativo', info: 'Secretaria General' }
 ];
 
-export default function CarnetsKiosco({ salirUrl }) {
+export default function CarnetsKiosco({ salirUrl, carnetsRegistrados = [] }) {
     const [scannedRecord, setScannedRecord] = useState(null);
     const [buffer, setBuffer] = useState('');
     const autoDismissTimer = useRef(null);
@@ -32,14 +32,19 @@ export default function CarnetsKiosco({ salirUrl }) {
 
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [buffer]);
+    }, [buffer, carnetsRegistrados]);
 
     // Procesar código leído por NFC o Código de Barras
     const procesarEscaneo = (codigo) => {
         const cleaned = codigo.trim().toUpperCase();
         if (!cleaned) return;
 
-        const encontrado = DEMO_PERSONAS.find(
+        // Buscar primero en la base de datos de la app
+        const deBD = carnetsRegistrados.find(
+            c => (c.code && c.code.toUpperCase() === cleaned) || (c.nfc && c.nfc.toUpperCase() === cleaned)
+        );
+
+        const encontrado = deBD || DEMO_PERSONAS.find(
             p => p.code.toUpperCase() === cleaned || p.nfc.toUpperCase() === cleaned
         ) || {
             code: cleaned,

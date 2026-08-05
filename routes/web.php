@@ -133,6 +133,13 @@ Route::prefix($adminPath)->name('admin.')->group(function () {
         Route::get('/mantenimiento',                  [App\Http\Controllers\Admin\SystemAdminController::class, 'index'])->name('mantenimiento');
         Route::post('/sistema/ejecutar-comando',      [App\Http\Controllers\Admin\SystemAdminController::class, 'runCommand'])->name('sistema.comando');
 
+        // Gestión y Prueba de Carnets / Tarjetas NFC
+        Route::get('/carnets-admin',                   [App\Http\Controllers\Admin\CarnetsAdminController::class, 'index'])->name('carnets-admin');
+        Route::post('/carnets-admin',                  [App\Http\Controllers\Admin\CarnetsAdminController::class, 'store'])->name('carnets-admin.store');
+        Route::match(['post', 'put'], '/carnets-admin/{carnet}', [App\Http\Controllers\Admin\CarnetsAdminController::class, 'update'])->name('carnets-admin.update');
+        Route::delete('/carnets-admin/{carnet}',       [App\Http\Controllers\Admin\CarnetsAdminController::class, 'destroy'])->name('carnets-admin.destroy');
+        Route::post('/carnets-admin/probar',           [App\Http\Controllers\Admin\CarnetsAdminController::class, 'probar'])->name('carnets-admin.probar');
+
         // Redirect raíz → testimonios
         Route::get('/', fn() => redirect()->route('admin.testimonios'))->name('dashboard');
     });

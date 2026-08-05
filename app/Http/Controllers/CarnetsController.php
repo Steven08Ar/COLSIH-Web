@@ -25,11 +25,13 @@ class CarnetsController extends Controller
         }
 
         $adminPath = env('ADMIN_PATH', 'panel-admin');
+        $carnetsRegistrados = \App\Models\Carnet::where('activo', true)->get();
 
         return Inertia::render('Admin/CarnetsKiosco', [
             'isOnlyKiosk' => !$hasAdminAuth,
             'salirUrl' => "/{$adminPath}/carnets/salir",
             'adminDashboardUrl' => "/{$adminPath}",
+            'carnetsRegistrados' => $carnetsRegistrados,
         ]);
     }
 

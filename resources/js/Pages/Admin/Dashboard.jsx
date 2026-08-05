@@ -2,7 +2,8 @@ import { Head, Link, useForm, router, usePage } from '@inertiajs/react';
 import { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import PageBuilder from './PageBuilder/PageBuilder';
-import { Sun, Moon, Eye, Move, ZoomIn, Camera, User, X, Check, Upload, ArrowUp, ArrowDown, ArrowLeft, ArrowRight, Plus, Minus, Trash2, Terminal, Server, RefreshCw, Database, HardDrive, ShieldAlert, Cpu, Copy, Play } from 'lucide-react';
+import CarnetsAdminTab from './CarnetsAdminTab';
+import { Sun, Moon, Eye, Move, ZoomIn, Camera, User, X, Check, Upload, ArrowUp, ArrowDown, ArrowLeft, ArrowRight, Plus, Minus, Trash2, Terminal, Server, RefreshCw, Database, HardDrive, ShieldAlert, Cpu, Copy, Play, CreditCard } from 'lucide-react';
 import { processImageFile } from '@/utils/heicConverter';
 import { mediaUrl } from '@/utils/mediaUrl';
 
@@ -2898,6 +2899,7 @@ function MantenimientoTab({ flash, flash_error, command_output, basePath }) {
 
 /* ── Dashboard principal ── */
 const TABS = [
+    { key: 'carnets-admin', label: 'Tarjetas NFC & Carnets' },
     { key: 'equipo',        label: 'Equipo Institucional' },
     { key: 'testimonios',   label: 'Testimonios' },
     { key: 'noticias',      label: 'Noticias y Eventos' },
@@ -2906,7 +2908,7 @@ const TABS = [
     { key: 'mantenimiento', label: 'Servidor / cPanel' },
 ];
 
-export default function AdminDashboard({ seccion, equipo = [], testimonios = [], noticias = [], preguntas = [], tour, scenes = [], flash, adminCounts }) {
+export default function AdminDashboard({ seccion, carnets = [], equipo = [], testimonios = [], noticias = [], preguntas = [], tour, scenes = [], flash, adminCounts }) {
     const pageProps = usePage().props;
     const flash_error = pageProps.flash_error;
     const command_output = pageProps.command_output;
@@ -3007,6 +3009,9 @@ export default function AdminDashboard({ seccion, equipo = [], testimonios = [],
                                         }`}
                                     >
                                         <div className="flex items-center gap-3">
+                                            {tab.key === 'carnets-admin' && (
+                                                <CreditCard className="w-5 h-5 text-[#800A15]" />
+                                            )}
                                             {tab.key === 'equipo' && (
                                                 <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
                                                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
@@ -3042,6 +3047,7 @@ export default function AdminDashboard({ seccion, equipo = [], testimonios = [],
                                         <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${
                                             isActive ? 'bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300' : 'bg-slate-100 dark:bg-slate-800 text-slate-500'
                                         }`}>
+                                            {tab.key === 'carnets-admin' && (adminCounts?.carnets     ?? carnets.length)}
                                             {tab.key === 'equipo'        && (adminCounts?.equipo      ?? equipo.length)}
                                             {tab.key === 'testimonios'   && (adminCounts?.testimonios ?? testimonios.length)}
                                             {tab.key === 'noticias'      && (adminCounts?.noticias    ?? noticias.length)}
@@ -3136,6 +3142,7 @@ export default function AdminDashboard({ seccion, equipo = [], testimonios = [],
                         
                         {/* ── Active Module Content Card ── */}
                         <div className="transition-all duration-300">
+                            {(seccion === 'carnets' || seccion === 'carnets-admin') && <CarnetsAdminTab carnets={carnets} flash={flash} />}
                             {seccion === 'equipo'        && <EquipoTab        equipo={equipo}           flash={flash} />}
                             {seccion === 'testimonios'   && <TestimoniosTab   testimonios={testimonios} flash={flash} />}
                             {seccion === 'noticias'      && <NoticiasTab      noticias={noticias}       flash={flash} />}

@@ -1,6 +1,6 @@
 import { Head, useForm, router } from '@inertiajs/react';
 import { useState, useEffect } from 'react';
-import { User, Lock, Eye, EyeOff, ShieldCheck, ArrowRight, QrCode, KeyRound, ArrowLeft, Delete, Fingerprint } from 'lucide-react';
+import { User, Lock, Eye, EyeOff, ArrowRight, ArrowLeft, Delete, KeyRound } from 'lucide-react';
 
 export default function AdminLogin() {
     const [loginMode, setLoginMode] = useState('standard'); // 'standard' | 'pin'
@@ -19,7 +19,6 @@ export default function AdminLogin() {
             const nextPin = data.pin + digit;
             setData('pin', nextPin);
             if (nextPin.length === 4) {
-                // Auto-submit enviando el valor exacto de 4 dígitos
                 router.post(window.location.pathname, { pin: nextPin }, {
                     preserveScroll: true,
                     onError: () => {
@@ -64,181 +63,208 @@ export default function AdminLogin() {
 
     return (
         <>
-            <Head title={loginMode === 'pin' ? "Escribe tu PIN | Kiosco COLSIH" : "Acceso Administrativo | COLSIH"} />
+            <Head title={loginMode === 'pin' ? "Kiosco de Asistencia (PIN) | COLSIH" : "Inicio de Sesión | Panel Administrador COLSIH"} />
             
-            <div className="min-h-screen w-full relative flex flex-col justify-between items-center p-4 sm:p-6 bg-slate-100 dark:bg-slate-950 font-sans select-none overflow-x-hidden">
+            <div className="min-h-screen w-full relative flex items-center justify-center bg-white font-sans select-none overflow-hidden p-4 sm:p-6">
                 
-                {/* ── BORDES PLANOS Y ACENTOS GEOMÉTRICOS INSTITUCIONALES (Sin Ondas) ── */}
-                <div className="absolute top-0 inset-x-0 h-2 bg-[#003C8F] z-20"></div>
-                <div className="absolute top-2 inset-x-0 h-1 bg-[#800A15] z-20"></div>
-                <div className="absolute bottom-0 inset-x-0 h-2 bg-[#800A15] z-20"></div>
-
-                {/* Insignia Superior */}
-                <div className="pt-4 z-10">
-                    <span className="inline-flex items-center gap-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-4 py-1.5 rounded-full text-[11px] font-black uppercase tracking-wider text-[#003C8F] dark:text-blue-400 shadow-sm">
-                        <ShieldCheck className="w-4 h-4 text-[#800A15] dark:text-rose-400" />
-                        <span>Portal Institucional COLSIH</span>
-                    </span>
+                {/* ── FONDO DE ONDAS FLUIDAS ORGÁNICAS (FIGMA DESIGN) ── */}
+                {/* Ondas Superiores Rojas */}
+                <div className="absolute top-0 inset-x-0 w-full h-[45vh] overflow-hidden pointer-events-none z-0">
+                    <svg className="w-full h-full" viewBox="0 0 1440 450" fill="none" preserveAspectRatio="none">
+                        <path d="M0 0H1440V240C1250 340 980 180 680 300C380 420 180 260 0 320V0Z" fill="#F7C4C8" />
+                        <path d="M0 0H1440V160C1180 280 920 120 620 230C320 340 140 180 0 220V0Z" fill="#E63946" />
+                        <path d="M0 0H1440V90C1100 210 820 50 520 160C220 270 90 90 0 140V0Z" fill="#C81E2B" />
+                    </svg>
                 </div>
 
-                {/* ── TARJETA PLANAMENTE CENTRADA EN PANTALLA ── */}
-                <div className="my-auto w-full max-w-md bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl space-y-6 relative z-10">
+                {/* Ondas Inferiores Azules */}
+                <div className="absolute bottom-0 inset-x-0 w-full h-[45vh] overflow-hidden pointer-events-none z-0">
+                    <svg className="w-full h-full" viewBox="0 0 1440 450" fill="none" preserveAspectRatio="none">
+                        <path d="M0 450H1440V180C1220 110 940 300 640 160C340 20 160 200 0 130V450Z" fill="#C2DCFF" />
+                        <path d="M0 450H1440V240C1180 170 900 340 580 220C280 100 120 260 0 190V450Z" fill="#2B68E0" />
+                        <path d="M0 450H1440V310C1120 250 820 380 500 280C220 180 80 310 0 260V450Z" fill="#003C8F" />
+                    </svg>
+                </div>
+
+                {/* ── TARJETA PRINCIPAL DE INICIO DE SESIÓN (ESTILO FIGMA EXACTO) ── */}
+                <div className="my-auto w-full max-w-[440px] bg-white rounded-[32px] p-8 sm:p-10 shadow-[0_20px_50px_rgba(0,0,0,0.15)] border border-slate-100 relative z-10 flex flex-col items-center text-center space-y-6">
                     
+                    {/* MARCA DE AGUA DEL ESCUDO EN EL FONDO DE LA TARJETA */}
+                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden rounded-[32px]">
+                        <img 
+                            src="/marca/logo-colsih.svg" 
+                            alt="" 
+                            className="w-80 h-80 object-contain opacity-[0.04] grayscale" 
+                        />
+                    </div>
+
+                    {/* LOGO SUPERIOR COLSIH */}
+                    <div className="flex flex-col items-center relative z-10">
+                        <div className="w-24 h-24 sm:w-28 sm:h-28 mb-2 flex items-center justify-center">
+                            <img 
+                                src="/marca/logo-colsih.svg" 
+                                alt="Escudo COLSIH" 
+                                className="w-full h-full object-contain filter drop-shadow-sm" 
+                            />
+                        </div>
+
+                        <p className="text-xs font-semibold text-slate-700 tracking-tight">
+                            Colegio Santa Isabel de Hungría
+                        </p>
+                    </div>
+
                     {loginMode === 'standard' ? (
-                        /* ── MODO 1: INGRESO PANEL ADMIN (ESTÁNDAR) ── */
-                        <>
-                            {/* LOGO COLSIH ARRIBA */}
-                            <div className="flex flex-col items-center text-center">
-                                <div className="w-24 h-24 sm:w-28 sm:h-28 mb-3 flex items-center justify-center">
-                                    <img 
-                                        src="/marca/logo-colsih.svg" 
-                                        alt="Escudo COLSIH" 
-                                        className="w-full h-full object-contain filter drop-shadow-md" 
-                                    />
-                                </div>
-
-                                <h1 className="text-lg sm:text-xl font-black text-[#003C8F] dark:text-blue-400 tracking-tight uppercase leading-tight">
-                                    Colegio Santa Isabel de Hungría
+                        /* ── MODO ESTÁNDAR: USUARIO Y CONTRASEÑA (FIGMA REPLICA) ── */
+                        <div className="w-full space-y-6 relative z-10">
+                            
+                            {/* TÍTULO EN SECCIÓN PRINCIPAL */}
+                            <div className="space-y-0.5">
+                                <h1 className="text-2xl sm:text-3xl font-black text-[#003C8F] tracking-tight">
+                                    Inicio de Sesión
                                 </h1>
-                                <p className="text-[11px] font-bold text-[#800A15] dark:text-rose-400 uppercase tracking-wider mt-0.5">
-                                    "Formamos buenos cristianos y honestos ciudadanos"
-                                </p>
+                                <h2 className="text-base sm:text-lg font-bold text-[#003C8F]/90">
+                                    Panel Administrador
+                                </h2>
                             </div>
 
-                            {/* SELECTOR PLANO DE MODO DE INGRESO */}
-                            <div className="grid grid-cols-2 p-1 bg-slate-100 dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700">
-                                <button
-                                    type="button"
-                                    onClick={() => switchMode('standard')}
-                                    className="py-2 text-xs font-black rounded-lg transition-all cursor-pointer flex items-center justify-center gap-1.5 bg-[#003C8F] text-white shadow-sm"
-                                >
-                                    <User className="w-3.5 h-3.5" />
-                                    <span>Panel Admin</span>
-                                </button>
-
-                                <button
-                                    type="button"
-                                    onClick={() => switchMode('pin')}
-                                    className="py-2 text-xs font-black rounded-lg transition-all cursor-pointer flex items-center justify-center gap-1.5 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200"
-                                >
-                                    <QrCode className="w-3.5 h-3.5" />
-                                    <span>Kiosco (PIN)</span>
-                                </button>
-                            </div>
-
-                            <div className="text-center">
-                                <p className="text-xs font-bold text-slate-500 dark:text-slate-400">
-                                    Credenciales para gestionar el sitio y contenidos en el Panel Admin
-                                </p>
-                            </div>
-
-                            {/* FORMULARIO ESTÁNDAR */}
-                            <form onSubmit={handleSubmit} className="space-y-4">
+                            {/* FORMULARIO FIGMA */}
+                            <form onSubmit={handleSubmit} className="space-y-4 text-left">
+                                
+                                {/* INPUT 1: USUARIO (BORDE AZUL REY) */}
                                 <div>
-                                    <div className="relative">
-                                        <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-[#003C8F] dark:text-blue-400">
-                                            <User className="w-4 h-4" />
+                                    <div className="relative flex items-center w-full bg-white rounded-2xl border-[2px] border-[#003C8F] shadow-sm hover:border-[#002868] transition-all">
+                                        <div className="pl-4 pr-2 text-[#003C8F] flex items-center justify-center pointer-events-none">
+                                            <User className="w-5 h-5 stroke-[2.2]" />
                                         </div>
                                         <input
                                             type="text"
-                                            placeholder="Email o Usuario................"
+                                            placeholder="Usuario"
                                             value={data.usuario}
                                             onChange={e => setData('usuario', e.target.value)}
                                             autoComplete="username"
                                             required
-                                            className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white placeholder-slate-400 rounded-xl pl-11 pr-5 py-3 text-xs sm:text-sm font-bold focus:outline-none focus:border-[#003C8F] transition-all"
+                                            className="w-full bg-transparent pr-4 py-3.5 text-sm sm:text-base font-medium text-slate-800 placeholder:text-slate-400 focus:outline-none"
                                         />
                                     </div>
                                     {errors.usuario && (
-                                        <p className="mt-1.5 text-xs text-rose-600 font-extrabold pl-2 flex items-center gap-1">
-                                            <span>•</span> {errors.usuario}
+                                        <p className="mt-1 text-xs text-rose-600 font-bold pl-2">
+                                            • {errors.usuario}
                                         </p>
                                     )}
                                 </div>
 
+                                {/* INPUT 2: CONTRASEÑA (BORDE VINOTINTO) */}
                                 <div>
-                                    <div className="relative">
-                                        <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-[#003C8F] dark:text-blue-400">
-                                            <Lock className="w-4 h-4" />
+                                    <div className="relative flex items-center w-full bg-white rounded-2xl border-[2px] border-[#800A15] shadow-sm hover:border-[#600710] transition-all">
+                                        <div className="pl-4 pr-2 text-[#800A15] flex items-center justify-center pointer-events-none">
+                                            <Lock className="w-5 h-5 stroke-[2.2]" />
                                         </div>
                                         <input
                                             type={showPassword ? 'text' : 'password'}
-                                            placeholder="Password................"
+                                            placeholder="Contraseña"
                                             value={data.password}
                                             onChange={e => setData('password', e.target.value)}
                                             autoComplete="current-password"
                                             required
-                                            className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white placeholder-slate-400 rounded-xl pl-11 pr-12 py-3 text-xs sm:text-sm font-bold focus:outline-none focus:border-[#003C8F] transition-all"
+                                            className="w-full bg-transparent pr-12 py-3.5 text-sm sm:text-base font-medium text-slate-800 placeholder:text-slate-400 focus:outline-none"
                                         />
                                         <button
                                             type="button"
                                             onClick={() => setShowPassword(!showPassword)}
-                                            className="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-[#003C8F] dark:hover:text-blue-400 cursor-pointer transition"
+                                            className="absolute right-4 text-[#800A15] hover:opacity-75 transition cursor-pointer p-1"
                                             tabIndex="-1"
                                         >
-                                            {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                                            {showPassword ? <EyeOff className="w-5 h-5 stroke-[2.2]" /> : <Eye className="w-5 h-5 stroke-[2.2]" />}
                                         </button>
                                     </div>
                                     {errors.password && (
-                                        <p className="mt-1.5 text-xs text-rose-600 font-extrabold pl-2 flex items-center gap-1">
-                                            <span>•</span> {errors.password}
+                                        <p className="mt-1 text-xs text-rose-600 font-bold pl-2">
+                                            • {errors.password}
                                         </p>
                                     )}
                                 </div>
 
+                                {/* BOTÓN DE INGRESO PRINCIPAL */}
                                 <div className="pt-2">
                                     <button
                                         type="submit"
                                         disabled={processing}
-                                        className="w-full rounded-xl py-3.5 text-xs sm:text-sm font-black text-white bg-[#003C8F] hover:bg-[#002868] active:scale-[0.99] disabled:opacity-50 transition-all duration-200 cursor-pointer uppercase tracking-wider flex items-center justify-center gap-2 shadow-md"
+                                        className="w-full rounded-2xl py-3.5 text-sm sm:text-base font-bold text-white bg-[#003C8F] hover:bg-[#002868] active:scale-[0.99] disabled:opacity-50 transition-all duration-200 cursor-pointer shadow-md flex items-center justify-center gap-2"
                                     >
-                                        <span>{processing ? 'Autenticando…' : 'Ingresar al Panel Admin'}</span>
-                                        {!processing && <ArrowRight className="w-4 h-4" />}
+                                        <span>{processing ? 'Iniciando sesión…' : 'Ingresar al Panel'}</span>
+                                        {!processing && <ArrowRight className="w-5 h-5" />}
                                     </button>
                                 </div>
                             </form>
-                        </>
+
+                            {/* OPCIÓN INFERIOR FIGMA: INGRESO MEDIANTE CARNETS (QR / PIN) */}
+                            <div className="pt-2 flex flex-col items-center justify-center">
+                                <button
+                                    type="button"
+                                    onClick={() => switchMode('pin')}
+                                    className="group flex flex-col items-center gap-1.5 transition cursor-pointer"
+                                >
+                                    {/* Ícono de Marco QR Figma */}
+                                    <div className="w-12 h-12 rounded-2xl bg-white border-2 border-[#800A15] p-2 flex items-center justify-center text-[#800A15] group-hover:scale-105 transition-all shadow-sm">
+                                        <svg className="w-full h-full" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                            <path d="M3 7V5a2 2 0 0 1 2-2h2" />
+                                            <path d="M17 3h2a2 2 0 0 1 2 2v2" />
+                                            <path d="M21 17v2a2 2 0 0 1-2 2h-2" />
+                                            <path d="M7 21H5a2 2 0 0 1-2-2v-2" />
+                                            <rect x="7" y="7" width="3" height="3" fill="currentColor" />
+                                            <rect x="14" y="7" width="3" height="3" fill="currentColor" />
+                                            <rect x="7" y="14" width="3" height="3" fill="currentColor" />
+                                            <path d="M14 14h3v3h-3z" />
+                                        </svg>
+                                    </div>
+                                    <span className="text-xs font-extrabold text-[#800A15] group-hover:underline">
+                                        Ingreso mediante Carnets
+                                    </span>
+                                </button>
+                            </div>
+
+                        </div>
                     ) : (
-                        /* ── MODO 2: TECLADO PIN INTERACTIVO PARA KIOSCO DE ASISTENCIA ── */
-                        <div className="space-y-6 animate-fadeIn">
-                            {/* Header Superior con Botón Atrás */}
-                            <div className="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
+                        /* ── MODO KIOSCO PIN: VISTA TECLADO INTERACTIVO ── */
+                        <div className="w-full space-y-5 relative z-10 animate-fadeIn">
+                            
+                            {/* BOTÓN REGRESAR AL ACCESO ESTÁNDAR */}
+                            <div className="flex items-center justify-between pb-2 border-b border-slate-100">
                                 <button
                                     type="button"
                                     onClick={() => switchMode('standard')}
-                                    className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 transition cursor-pointer"
-                                    title="Volver al inicio estándar"
+                                    className="flex items-center gap-1 text-xs font-bold text-slate-500 hover:text-[#003C8F] transition cursor-pointer"
                                 >
-                                    <ArrowLeft className="w-5 h-5" />
+                                    <ArrowLeft className="w-4 h-4" />
+                                    <span>Volver</span>
                                 </button>
-                                <span className="text-xs font-black uppercase tracking-wider text-[#800A15] dark:text-rose-400">
-                                    Kiosco de Asistencia
+                                <span className="text-xs font-black uppercase tracking-wider text-[#800A15]">
+                                    Acceso Kiosco
                                 </span>
-                                <div className="w-9"></div> {/* Espaciador balance */}
                             </div>
 
-                            {/* Título de Clave */}
-                            <div className="text-center space-y-1">
-                                <h2 className="text-2xl sm:text-3xl font-black text-[#800A15] dark:text-rose-400 tracking-tight">
-                                    Escribe tu clave
+                            {/* TÍTULO KIOSCO */}
+                            <div className="space-y-1">
+                                <h2 className="text-2xl font-black text-[#800A15] tracking-tight">
+                                    Escribe tu PIN
                                 </h2>
-                                <p className="text-xs font-bold text-slate-400">
-                                    Ingresa tu PIN de 4 dígitos para activar el Kiosco
+                                <p className="text-xs font-medium text-slate-500">
+                                    Ingresa el PIN de 4 dígitos para activar el Kiosco de Asistencia
                                 </p>
                             </div>
 
-                            {/* 4 CASILLAS DE DÍGITOS DEL PIN */}
-                            <div className="flex justify-center items-center gap-3 sm:gap-4 my-4">
+                            {/* 4 CASILLAS DE DÍGITOS */}
+                            <div className="flex justify-center items-center gap-3 my-3">
                                 {[0, 1, 2, 3].map((index) => {
                                     const digit = data.pin[index];
                                     const isFilled = digit !== undefined;
                                     return (
                                         <div
                                             key={index}
-                                            className={`w-14 h-14 sm:w-16 sm:h-16 rounded-2xl border-2 flex items-center justify-center text-2xl sm:text-3xl font-black transition-all duration-200 ${
+                                            className={`w-13 h-13 sm:w-14 sm:h-14 rounded-2xl border-[2.5px] flex items-center justify-center text-2xl font-black transition-all duration-200 ${
                                                 isFilled
-                                                    ? 'border-[#800A15] bg-[#800A15]/10 text-[#800A15] dark:text-rose-400 shadow-md scale-105'
-                                                    : 'border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-300'
+                                                    ? 'border-[#800A15] bg-[#800A15]/10 text-[#800A15] shadow-sm scale-105'
+                                                    : 'border-slate-200 bg-slate-50 text-slate-300'
                                             }`}
                                         >
                                             {isFilled ? '●' : ''}
@@ -247,80 +273,55 @@ export default function AdminLogin() {
                                 })}
                             </div>
 
-                            {/* Mensaje de Error si aplica */}
+                            {/* ERROR PIN */}
                             {errors.pin && (
-                                <p className="text-xs text-rose-600 font-black text-center animate-bounce">
+                                <p className="text-xs text-rose-600 font-bold animate-bounce">
                                     • {errors.pin}
                                 </p>
                             )}
 
                             {/* TECLADO NUMÉRICO 3x4 INTERACTIVO */}
-                            <div className="max-w-xs mx-auto grid grid-cols-3 gap-3 pt-2">
+                            <div className="max-w-xs mx-auto grid grid-cols-3 gap-2.5 pt-1">
                                 {['1', '2', '3', '4', '5', '6', '7', '8', '9'].map((num) => (
                                     <button
                                         key={num}
                                         type="button"
                                         onClick={() => handlePinDigit(num)}
                                         disabled={processing}
-                                        className="h-14 rounded-2xl bg-slate-100 dark:bg-slate-800 hover:bg-[#800A15] hover:text-white dark:hover:bg-[#800A15] text-[#800A15] dark:text-rose-300 text-2xl font-black transition-all active:scale-95 cursor-pointer flex items-center justify-center shadow-sm"
+                                        className="h-12 rounded-2xl bg-slate-100 hover:bg-[#800A15] hover:text-white text-[#800A15] text-xl font-black transition-all active:scale-95 cursor-pointer flex items-center justify-center shadow-xs"
                                     >
                                         {num}
                                     </button>
                                 ))}
 
-                                {/* Botón Ícono QR / Escáner (Esquina inferior izquierda) */}
-                                <div className="h-14 rounded-2xl bg-slate-50 dark:bg-slate-800/50 flex items-center justify-center text-slate-400">
-                                    <QrCode className="w-6 h-6 text-[#800A15]/60" />
+                                <div className="h-12 rounded-2xl bg-slate-50 flex items-center justify-center text-slate-300">
+                                    <KeyRound className="w-5 h-5 text-[#800A15]/40" />
                                 </div>
 
-                                {/* Botón '0' */}
                                 <button
                                     type="button"
                                     onClick={() => handlePinDigit('0')}
                                     disabled={processing}
-                                    className="h-14 rounded-2xl bg-slate-100 dark:bg-slate-800 hover:bg-[#800A15] hover:text-white dark:hover:bg-[#800A15] text-[#800A15] dark:text-rose-300 text-2xl font-black transition-all active:scale-95 cursor-pointer flex items-center justify-center shadow-sm"
+                                    className="h-12 rounded-2xl bg-slate-100 hover:bg-[#800A15] hover:text-white text-[#800A15] text-xl font-black transition-all active:scale-95 cursor-pointer flex items-center justify-center shadow-xs"
                                 >
                                     0
                                 </button>
 
-                                {/* Botón Borrar (Esquina inferior derecha) */}
                                 <button
                                     type="button"
                                     onClick={handlePinDelete}
                                     disabled={processing || data.pin.length === 0}
-                                    className="h-14 rounded-2xl bg-slate-100 dark:bg-slate-800 hover:bg-rose-600 hover:text-white text-slate-600 dark:text-slate-300 transition-all active:scale-95 cursor-pointer flex items-center justify-center disabled:opacity-30 shadow-sm"
+                                    className="h-12 rounded-2xl bg-slate-100 hover:bg-rose-600 hover:text-white text-slate-600 transition-all active:scale-95 cursor-pointer flex items-center justify-center disabled:opacity-30 shadow-xs"
                                     title="Borrar último dígito"
                                 >
-                                    <Delete className="w-6 h-6" />
+                                    <Delete className="w-5 h-5" />
                                 </button>
                             </div>
 
-                            {/* Enlace de ayuda o cambiar a usuario */}
-                            <div className="text-center pt-2">
-                                <button
-                                    type="button"
-                                    onClick={() => switchMode('standard')}
-                                    className="text-xs font-bold text-slate-400 hover:text-[#800A15] transition cursor-pointer underline"
-                                >
-                                    ¿Acceso por usuario y contraseña?
-                                </button>
-                            </div>
                         </div>
                     )}
 
-                    {/* PIE DE TARJETA */}
-                    <div className="pt-3 border-t border-slate-100 dark:border-slate-800 text-center">
-                        <p className="text-slate-400 text-[11px] font-bold uppercase tracking-wider">
-                            Floridablanca • Santander
-                        </p>
-                    </div>
-
                 </div>
-
-                {/* ── PIE DE PÁGINA ── */}
-                <footer className="py-3 text-center text-xs font-bold text-slate-400 dark:text-slate-500">
-                    <span>Colegio Santa Isabel de Hungría &copy; {new Date().getFullYear()} • Todos los derechos reservados</span>
-                </footer>
 
             </div>
         </>

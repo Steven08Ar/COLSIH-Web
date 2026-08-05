@@ -16,8 +16,7 @@ import {
     AlertCircle,
     Copy,
     Zap,
-    Terminal,
-    Sparkles
+    Terminal
 } from 'lucide-react';
 
 export default function CarnetsAdminTab({ carnets = [], flash }) {
@@ -29,7 +28,7 @@ export default function CarnetsAdminTab({ carnets = [], flash }) {
 
     // Conexión Web Serial API con Arduino UNO (COM9) y Lector HID
     const [isArduinoConnected, setIsArduinoConnected] = useState(false);
-    const [arduinoStatus, setArduinoStatus] = useState('Desconectado (Esperando USB / Arduino COM9)');
+    const [arduinoStatus, setArduinoStatus] = useState('Desconectado (Esperando Arduino UNO COM9)');
     const [lastScannedUid, setLastScannedUid] = useState('');
     const [testResult, setTestResult] = useState(null);
     const [serialLogs, setSerialLogs] = useState([]);
@@ -51,7 +50,7 @@ export default function CarnetsAdminTab({ carnets = [], flash }) {
 
     const addLog = (msg) => {
         const time = new Date().toLocaleTimeString('es-CO');
-        setSerialLogs(prev => [`[${time}] ${msg}`, ...prev.slice(0, 19)]);
+        setSerialLogs(prev => [`[${time}] ${msg}`, ...prev.slice(0, 24)]);
     };
 
     // 1. Captura global de lecturas HID (Escáner de código de barras USB / Lector NFC emulador de teclado)
@@ -62,7 +61,7 @@ export default function CarnetsAdminTab({ carnets = [], flash }) {
 
             if (e.key === 'Enter') {
                 if (hidBuffer.trim().length >= 3) {
-                    addLog(`⌨️ Escáner USB (HID) capturó: "${hidBuffer.trim()}"`);
+                    addLog(`⌨️ Escáner USB capturó: "${hidBuffer.trim()}"`);
                     extractAndProcessUid(hidBuffer.trim());
                     setHidBuffer('');
                 }
@@ -75,7 +74,7 @@ export default function CarnetsAdminTab({ carnets = [], flash }) {
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, [hidBuffer, showModal, showCodeModal, carnets]);
 
-    // Extractor inteligente de UID desde cualquier formato impreso por Arduino o lectores RFID
+    // Extractor de UID en tiempo real desde cualquier formato (e.g. "138A4F2B", "13 8A 4F 2B", "Card UID: 13 8A 4F 2B")
     const extractAndProcessUid = (rawText) => {
         if (!rawText) return;
         const text = rawText.trim().toUpperCase();
@@ -87,19 +86,19 @@ export default function CarnetsAdminTab({ carnets = [], flash }) {
         if (uidMatch && uidMatch[1]) {
             cleanedUid = uidMatch[1].replace(/[\s:-]/g, '');
         } else {
-            // 2. Extraer subsecuencia hex o limpia removiendo palabras comunes
+            // 2. Extraer subsecuencia limpia removiendo prefijos comunes
             cleanedUid = text.replace(/^CARD\s*/i, '').replace(/^NFC:\s*/i, '').replace(/[\s:-]/g, '');
         }
 
         if (cleanedUid.length >= 3) {
-            addLog(`⚡ UID Extraído: "${cleanedUid}" (Original: "${text}")`);
+            addLog(`⚡ UID Detección Real: "${cleanedUid}"`);
             handleCardDetected(cleanedUid);
         } else {
-            addLog(`⚠️ Texto omitido (formato no reconocido): "${text}"`);
+            addLog(`⚠️ Fragmento recibido: "${text}"`);
         }
     };
 
-    // 2. Conexión Web Serial API ultra-robusta con Arduino UNO (COM9)
+    // 2. Conexión Web Serial API ultra-robusta en tiempo real con Arduino UNO (COM9)
     const connectArduino = async () => {
         if (!('serial' in navigator)) {
             alert('La Web Serial API no está soportada en este navegador. Por favor usa Google Chrome o Microsoft Edge.');
@@ -107,14 +106,14 @@ export default function CarnetsAdminTab({ carnets = [], flash }) {
         }
 
         try {
-            setArduinoStatus('Solicitando puerto COM...');
+            setArduinoStatus('Solicitando puerto COM en Windows...');
             const port = await navigator.serial.requestPort();
             await port.open({ baudRate: 9600 });
 
             portRef.current = port;
             setIsArduinoConnected(true);
             setArduinoStatus('Conectado a Arduino UNO (COM9)');
-            addLog('✅ Puerto Serial abierto exitosamente a 9600 baudios en COM9');
+            addLog('✅ Puerto COM9 abierto a 9600 baudios. Esperando tarjeta RFID...');
 
             const reader = port.readable.getReader();
             const decoder = new TextDecoder();
@@ -128,23 +127,30 @@ export default function CarnetsAdminTab({ carnets = [], flash }) {
                         const chunk = decoder.decode(value, { stream: true });
                         serialBuffer += chunk;
 
-                        addLog(`📥 Bytes recibidos (${value.length}b): "${chunk.trim()}"`);
+                        addLog(`📥 Datos recibidos de Arduino: "${chunk.trim()}"`);
 
                         let lines = serialBuffer.split(/\r?\n/);
-                        serialBuffer = lines.pop(); // Conservar línea incompleta
-
-                        for (let line of lines) {
-                            const trimmed = line.trim();
-                            if (trimmed.length > 0) {
-                                addLog(`▶️ Línea completa: "${trimmed}"`);
-                                extractAndProcessUid(trimmed);
+                        if (lines.length > 1) {
+                            serialBuffer = lines.pop(); // Conservar fragmento incompleto
+                            for (let line of lines) {
+                                const trimmed = line.trim();
+                                if (trimmed.length > 0) {
+                                    extractAndProcessUid(trimmed);
+                                }
+                            }
+                        } else if (serialBuffer.trim().length >= 4 && !serialBuffer.includes('\n')) {
+                            // Si Arduino envía datos sin salto de línea
+                            const candidate = serialBuffer.trim();
+                            if (/^[0-9A-Z]{4,16}$/i.test(candidate)) {
+                                extractAndProcessUid(candidate);
+                                serialBuffer = '';
                             }
                         }
                     }
                 }
             } catch (readErr) {
-                console.error('Error durante la lectura del puerto serial:', readErr);
-                addLog(`⚠️ Error de lectura: ${readErr.message}`);
+                console.error('Error en lectura del puerto serial:', readErr);
+                addLog(`⚠️ Error de puerto: ${readErr.message}`);
             } finally {
                 reader.releaseLock();
             }
@@ -153,7 +159,7 @@ export default function CarnetsAdminTab({ carnets = [], flash }) {
             console.error('Error al conectar Arduino Serial:', err);
             setIsArduinoConnected(false);
             setArduinoStatus('Error de conexión o puerto cancelado');
-            addLog(`❌ Error al abrir puerto: ${err.message || 'Cancelado'}`);
+            addLog(`❌ Error al conectar: ${err.message || 'Cancelado por usuario'}`);
         }
     };
 
@@ -169,7 +175,7 @@ export default function CarnetsAdminTab({ carnets = [], flash }) {
         addLog('Conexión Serial finalizada por el usuario');
     };
 
-    // Al detectar una tarjeta desde Arduino, Lector USB o Simulación
+    // Al detectar una tarjeta física desde Arduino o Lector USB
     const handleCardDetected = (uidRaw) => {
         const uid = uidRaw.trim().toUpperCase();
         if (!uid) return;
@@ -195,12 +201,6 @@ export default function CarnetsAdminTab({ carnets = [], flash }) {
                 message: `UID detectado: ${uid} (No asignado)`
             });
         }
-    };
-
-    // Simulación rápida de lectura
-    const handleSimulateScan = (uidSimulated = '138A4F2B') => {
-        addLog(`🧪 Simulación de lectura activada: ${uidSimulated}`);
-        extractAndProcessUid(uidSimulated);
     };
 
     // Abrir Modal asignando el UID detectado
@@ -420,16 +420,6 @@ void loop() {
                     </div>
 
                     <div className="flex items-center gap-2">
-                        <button
-                            type="button"
-                            onClick={() => handleSimulateScan('138A4F2B')}
-                            className="px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer border border-slate-200 dark:border-slate-700"
-                            title="Probar simulación de lectura con UID 138A4F2B"
-                        >
-                            <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-                            <span>Simular Lectura</span>
-                        </button>
-
                         {!isArduinoConnected ? (
                             <button
                                 type="button"
@@ -467,11 +457,11 @@ void loop() {
                             </span>
                         </div>
 
-                        {/* ENTRADA MANUAL O PRUEBA RÁPIDA */}
+                        {/* ENTRADA MANUAL O LECTURA DIRECTA */}
                         <div className="flex gap-2">
                             <input
                                 type="text"
-                                placeholder="Escanear tarjeta o escribir UID (Ej: NFC-101 / 138A4F2B)..."
+                                placeholder="Escanear tarjeta física o escribir UID (Ej: NFC-101 / 138A4F2B)..."
                                 value={lastScannedUid}
                                 onChange={e => setLastScannedUid(e.target.value.toUpperCase())}
                                 onKeyDown={e => e.key === 'Enter' && extractAndProcessUid(lastScannedUid)}
@@ -482,7 +472,7 @@ void loop() {
                                 onClick={() => extractAndProcessUid(lastScannedUid)}
                                 className="px-5 py-3 bg-[#003C8F] hover:bg-[#002868] text-white text-xs font-extrabold rounded-xl transition cursor-pointer shadow-sm"
                             >
-                                Probar UID
+                                Consultar UID
                             </button>
                         </div>
 
@@ -553,7 +543,7 @@ void loop() {
                         ) : (
                             <div className="p-6 border border-dashed border-slate-300 dark:border-slate-700 rounded-2xl text-center space-y-1">
                                 <span className="text-xs font-extrabold text-slate-500 dark:text-slate-400 block uppercase tracking-wider">
-                                    Esperando Lectura...
+                                    Esperando Lectura Real...
                                 </span>
                                 <p className="text-xs font-medium text-slate-400">
                                     Acerca tu tarjeta o llavero NFC al lector RFID-RC522 en COM9 o usa un escáner USB.

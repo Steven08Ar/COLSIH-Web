@@ -27,14 +27,14 @@ class AuthController extends Controller
 
         // 1. Inicio de sesión mediante PIN (EXCLUSIVO para Kiosco de Asistencia - NO otorga acceso al Panel Admin)
         if ($request->filled('pin')) {
-            $adminPin = env('ADMIN_PIN', '1234');
+            $adminPin = config('admin.pin');
             if (hash_equals((string)$adminPin, (string)$request->pin)) {
                 RateLimiter::clear($key);
                 $request->session()->regenerate();
                 // Solo otorga acceso de lectura/escaneo al Kiosco de Asistencia
                 $request->session()->put('colsih_kiosk_auth', true);
 
-                $adminPath = env('ADMIN_PATH', 'panel-admin');
+                $adminPath = config('admin.path');
                 return redirect("/{$adminPath}/carnets");
             }
 
@@ -48,15 +48,15 @@ class AuthController extends Controller
             'password' => 'required|string',
         ]);
 
-        $validUser  = hash_equals(env('ADMIN_USUARIO', ''), $request->usuario);
-        $validPass  = hash_equals(env('ADMIN_CLAVE', ''),   $request->password);
+        $validUser  = hash_equals(config('admin.usuario'), $request->usuario);
+        $validPass  = hash_equals(config('admin.clave'),   $request->password);
 
         if ($validUser && $validPass) {
             RateLimiter::clear($key);
             $request->session()->regenerate();
             $request->session()->put('colsih_admin_auth', true);
 
-            $adminPath = env('ADMIN_PATH', 'panel-admin');
+            $adminPath = config('admin.path');
             return redirect("/{$adminPath}");
         }
 
@@ -68,7 +68,7 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         $request->session()->forget('colsih_admin_auth');
-        $adminPath = env('ADMIN_PATH', 'panel-admin');
+        $adminPath = config('admin.path');
         return redirect("/{$adminPath}/login");
     }
 }

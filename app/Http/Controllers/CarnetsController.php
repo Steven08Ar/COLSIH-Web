@@ -20,11 +20,11 @@ class CarnetsController extends Controller
         $hasAdminAuth = $request->session()->get('colsih_admin_auth');
 
         if (!$hasKioskAuth && !$hasAdminAuth) {
-            $adminPath = env('ADMIN_PATH', 'panel-admin');
+            $adminPath = config('admin.path');
             return redirect("/{$adminPath}/login");
         }
 
-        $adminPath = env('ADMIN_PATH', 'panel-admin');
+        $adminPath = config('admin.path');
         $carnetsRegistrados = \App\Models\Carnet::where('activo', true)->get();
 
         return Inertia::render('Admin/CarnetsKiosco', [
@@ -41,7 +41,7 @@ class CarnetsController extends Controller
     public function salir(Request $request)
     {
         $request->session()->forget('colsih_kiosk_auth');
-        $adminPath = env('ADMIN_PATH', 'panel-admin');
+        $adminPath = config('admin.path');
         return redirect("/{$adminPath}/login");
     }
 }

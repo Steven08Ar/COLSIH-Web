@@ -43,7 +43,7 @@ class HandleInertiaRequests extends Middleware
             ...parent::share($request),
             'flash' => $request->session()->get('flash'),
             'adminCounts' => function () use ($request) {
-                $adminPath = env('ADMIN_PATH', 'panel-admin');
+                $adminPath = config('admin.path');
                 if (! str_starts_with($request->path(), $adminPath)) {
                     return null;
                 }

@@ -75,7 +75,7 @@ Route::prefix('contacto')->name('contacto.')->group(function () {
 Route::post('/suscripcion', [SuscripcionController::class, 'store'])->name('suscripcion.store');
 
 // Panel administrativo — URL oculta definida en .env (ADMIN_PATH)
-$adminPath = env('ADMIN_PATH', 'panel-admin');
+$adminPath = config('admin.path');
 
 use App\Http\Controllers\Admin\HotspotController;
 use App\Http\Controllers\Admin\TourAdminController;

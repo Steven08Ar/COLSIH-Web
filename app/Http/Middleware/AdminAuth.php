@@ -11,7 +11,7 @@ class AdminAuth
     public function handle(Request $request, Closure $next): Response
     {
         if (! $request->session()->get('colsih_admin_auth')) {
-            $adminPath = env('ADMIN_PATH', 'panel-admin');
+            $adminPath = config('admin.path');
             return redirect("/{$adminPath}/login");
         }
 

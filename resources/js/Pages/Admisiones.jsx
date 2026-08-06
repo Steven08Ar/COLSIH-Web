@@ -27,9 +27,9 @@ const LINK_INSCRIPCIONES = "https://e.plataformaintegra.net/sihungria/index.php/
 const CORREO_ADMISIONES = "admisionescolsihfloridablanca@gmail.com";
 
 const cuposGrados = [
-    { nivel: 'Preescolar', grados: ['Jardín', 'Transición'], color: 'from-[#003C8F] to-blue-700' },
-    { nivel: 'Primaria', grados: ['1°', '2°', '3°', '4°'], color: 'from-[#800A15] to-rose-700' },
-    { nivel: 'Bachillerato', grados: ['6°', '7°', '8°', '9°'], color: 'from-slate-800 to-slate-950' }
+    { nivel: 'Preescolar', grados: ['Jardín', 'Transición'], color: 'bg-[#003C8F]' },
+    { nivel: 'Primaria', grados: ['1°', '2°', '3°', '4°'], color: 'bg-[#800A15]' },
+    { nivel: 'Bachillerato', grados: ['6°', '7°', '8°', '9°'], color: 'bg-slate-800' }
 ];
 
 const pasosProceso = [
@@ -39,7 +39,7 @@ const pasosProceso = [
         subtitulo: 'Registro inicial en la plataforma web',
         icono: FileText,
         badge: 'Inicio en Línea',
-        colorBadge: 'bg-blue-500/10 text-blue-400 border-blue-500/30',
+        colorBadge: 'bg-blue-100 text-[#003C8F] border-blue-200',
         detalles: [
             'Ingresa a la plataforma oficial de cupos para la inscripción de tu hijo(a).',
             'Completa cuidadosamente la información básica del aspirante y los padres de familia.'
@@ -66,7 +66,7 @@ const pasosProceso = [
         subtitulo: 'Requisito previo a la entrevista presencial',
         icono: ShieldCheck,
         badge: 'Hasta el 10 de Septiembre',
-        colorBadge: 'bg-amber-500/10 text-amber-400 border-amber-500/30',
+        colorBadge: 'bg-amber-100 text-amber-900 border-amber-300',
         detalles: [
             'Envía al correo admisionescolsihfloridablanca@gmail.com todos los documentos obligatorios escaneados en formato PDF o imagen nítida.',
             'La entrega oportuna es requisito indispensable para habilitar la cita con la psicóloga.'
@@ -94,7 +94,7 @@ const pasosProceso = [
         subtitulo: 'Evaluación integral en las instalaciones del colegio',
         icono: UserCheck,
         badge: 'Presencial e Indispensable',
-        colorBadge: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30',
+        colorBadge: 'bg-emerald-100 text-emerald-900 border-emerald-300',
         detalles: [
             'La prueba académica y la entrevista se realizarán de manera presencial en la sede principal del Colegio Santa Isabel de Hungría.',
             'Asistencia obligatoria: En la entrevista debe estar presente el papá, la mamá y el aspirante.',
@@ -107,7 +107,7 @@ const pasosProceso = [
         subtitulo: 'Resultados oficiales del proceso 2026',
         icono: GraduationCap,
         badge: '1 de Octubre de 2025',
-        colorBadge: 'bg-purple-500/10 text-purple-400 border-purple-500/30',
+        colorBadge: 'bg-purple-100 text-purple-900 border-purple-300',
         detalles: [
             'La lista oficial de admitidos se publicará directamente en la página web institucional (colsih.edu.co/admisiones) el 1 de octubre de 2025.',
             'Aplica para quienes hayan completado todas las fases (inscripción, pago, envío de documentos, prueba y entrevista) en las fechas indicadas.'
@@ -157,20 +157,16 @@ export default function Admisiones() {
         <AppLayout>
             <Head title="Inscripciones y Admisiones Estudiantes Nuevos 2026 | COLSIH" />
 
-            {/* 1. HERO SECTION (Imponente, con llamado a la acción destacado y gradientes Salesianos) */}
+            {/* 1. HERO SECTION (Colores sólidos y limpios sin degradados) */}
             <section className="relative pt-36 pb-32 md:pt-44 md:pb-44 bg-[#08111F] overflow-hidden select-none">
-                {/* Visual Glow Orbs */}
-                <div className="absolute top-1/3 left-1/4 -translate-y-1/2 w-[550px] h-[550px] bg-[#003C8F]/20 rounded-full blur-[140px] pointer-events-none z-0"></div>
-                <div className="absolute bottom-1/4 right-1/4 w-[450px] h-[450px] bg-[#800A15]/25 rounded-full blur-[130px] pointer-events-none z-0"></div>
-
                 <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] relative z-10">
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
                         
                         {/* Hero Text Content */}
                         <div className="lg:col-span-7 text-center lg:text-left space-y-7">
                             <ScrollReveal distance="translate-y-6">
-                                <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-gradient-to-r from-[#800A15] via-rose-900 to-[#003C8F] text-white text-xs md:text-sm font-black tracking-wider uppercase shadow-xl shadow-rose-900/30 border border-white/20">
-                                    <Sparkles className="w-4 h-4 text-amber-300 animate-pulse" />
+                                <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-[#800A15] text-white text-xs md:text-sm font-black tracking-wider uppercase border border-white/20">
+                                    <Sparkles className="w-4 h-4 text-amber-300" />
                                     <span>INSCRIPCIÓN DE ESTUDIANTES NUEVOS · AÑO 2026</span>
                                 </div>
                             </ScrollReveal>
@@ -178,7 +174,7 @@ export default function Admisiones() {
                             <ScrollReveal distance="translate-y-6" delay={150}>
                                 <h1 className="text-4xl sm:text-5xl lg:text-[62px] font-black text-white leading-[1.05] tracking-tight font-sans">
                                     Tu lugar en la familia <br className="hidden sm:block" />
-                                    <span className="bg-gradient-to-r from-blue-400 via-amber-300 to-rose-400 bg-clip-text text-transparent">
+                                    <span className="text-amber-400">
                                         Salesiana COLSIH
                                     </span>
                                 </h1>
@@ -190,14 +186,14 @@ export default function Admisiones() {
                                 </p>
                             </ScrollReveal>
 
-                            {/* Botón Principal Destacado en el Hero */}
+                            {/* Botón Principal Destacado (Color Sólido Vinotinto / Azul) */}
                             <ScrollReveal distance="translate-y-6" delay={450}>
                                 <div className="pt-3 flex flex-wrap items-center justify-center lg:justify-start gap-4">
                                     <a
                                         href={LINK_INSCRIPCIONES}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="group inline-flex items-center justify-center gap-3 px-8 py-4.5 rounded-2xl bg-gradient-to-r from-[#800A15] via-[#a80e1e] to-[#003C8F] hover:from-[#003C8F] hover:to-[#800A15] text-white font-black text-base shadow-2xl shadow-rose-900/40 hover:scale-[1.03] active:scale-[0.98] transition-all duration-300 border border-white/30 cursor-pointer"
+                                        className="group inline-flex items-center justify-center gap-3 px-8 py-4.5 rounded-2xl bg-[#800A15] hover:bg-[#a80e1e] text-white font-black text-base shadow-2xl hover:scale-[1.03] active:scale-[0.98] transition-all duration-300 border border-white/30 cursor-pointer"
                                     >
                                         <FileText className="w-5 h-5 text-amber-300 group-hover:rotate-12 transition-transform duration-300" />
                                         <span>ENTRAR A INSCRIPCIONES (SOLICITAR CUPO)</span>
@@ -206,7 +202,7 @@ export default function Admisiones() {
 
                                     <a
                                         href="#pasos-proceso"
-                                        className="inline-flex items-center gap-2 px-6 py-4 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-extrabold text-sm backdrop-blur-md border border-white/20 hover:scale-[1.02] transition-all duration-300"
+                                        className="inline-flex items-center gap-2 px-6 py-4 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-extrabold text-sm border border-white/20 hover:scale-[1.02] transition-all duration-300"
                                     >
                                         <span>Ver Paso a Paso</span>
                                         <ArrowRight className="w-4 h-4 text-blue-300" />
@@ -218,9 +214,7 @@ export default function Admisiones() {
                         {/* Cupos Disponibles - Widget Card */}
                         <div className="lg:col-span-5">
                             <ScrollReveal distance="translate-y-8" delay={300}>
-                                <div className="bg-gradient-to-b from-slate-900/90 to-[#08111F]/95 border border-white/15 backdrop-blur-xl rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6 relative overflow-hidden">
-                                    <div className="absolute top-0 right-0 w-32 h-32 bg-amber-400/10 rounded-full blur-2xl pointer-events-none"></div>
-
+                                <div className="bg-[#0D1B2E] border border-white/15 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6 relative overflow-hidden">
                                     <div className="flex items-center justify-between border-b border-white/10 pb-4">
                                         <div>
                                             <span className="text-[11px] font-black uppercase tracking-widest text-amber-400 block font-sans">
@@ -230,20 +224,20 @@ export default function Admisiones() {
                                                 Grados Abiertos para Admisión
                                             </h3>
                                         </div>
-                                        <div className="w-10 h-10 rounded-xl bg-amber-400/20 border border-amber-400/40 text-amber-300 flex items-center justify-center font-black">
+                                        <div className="w-10 h-10 rounded-xl bg-amber-400 text-slate-950 flex items-center justify-center font-black">
                                             2026
                                         </div>
                                     </div>
 
                                     <div className="space-y-4">
                                         {cuposGrados.map((item, idx) => (
-                                            <div key={idx} className="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-2 hover:bg-white/10 transition-colors">
+                                            <div key={idx} className="p-4 rounded-2xl bg-slate-900 border border-white/10 space-y-2 hover:bg-slate-800 transition-colors">
                                                 <span className="text-xs font-black uppercase tracking-wider text-slate-300 font-sans block">
                                                     {item.nivel}:
                                                 </span>
                                                 <div className="flex flex-wrap gap-2">
                                                     {item.grados.map((grado, gIdx) => (
-                                                        <span key={gIdx} className={`px-3 py-1 rounded-xl bg-gradient-to-r ${item.color} text-white font-extrabold text-xs shadow-md border border-white/20`}>
+                                                        <span key={gIdx} className={`px-3 py-1 rounded-xl ${item.color} text-white font-extrabold text-xs shadow-md border border-white/20`}>
                                                             Grado {grado}
                                                         </span>
                                                     ))}
@@ -252,7 +246,7 @@ export default function Admisiones() {
                                         ))}
                                     </div>
 
-                                    <div className="p-4 rounded-2xl bg-gradient-to-r from-[#800A15]/40 to-amber-500/20 border border-amber-400/30 flex items-start gap-3">
+                                    <div className="p-4 rounded-2xl bg-[#800A15]/40 border border-amber-400/40 flex items-start gap-3">
                                         <CheckCircle2 className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
                                         <p className="text-xs font-semibold text-slate-200 leading-snug">
                                             <strong className="text-amber-300">Costo del formulario:</strong> $70.000 COP (No reembolsable). Se cancela en Banco Caja Social previa recepción del recibo por correo.
@@ -281,9 +275,9 @@ export default function Admisiones() {
                             const Icono = nota.icono;
                             return (
                                 <ScrollReveal key={idx} distance="translate-y-6" delay={idx * 100}>
-                                    <div className="p-6 rounded-3xl bg-slate-50 border border-slate-200/80 hover:bg-white hover:shadow-xl hover:border-blue-200 transition-all duration-300 space-y-3 h-full flex flex-col justify-between group">
+                                    <div className="p-6 rounded-3xl bg-slate-50 border border-slate-200 hover:bg-white hover:shadow-xl hover:border-blue-200 transition-all duration-300 space-y-3 h-full flex flex-col justify-between group">
                                         <div className="space-y-3">
-                                            <div className="w-12 h-12 rounded-2xl bg-[#003C8F]/10 text-[#003C8F] group-hover:bg-[#800A15] group-hover:text-white transition-colors duration-300 flex items-center justify-center shrink-0 shadow-sm">
+                                            <div className="w-12 h-12 rounded-2xl bg-[#003C8F] text-white group-hover:bg-[#800A15] transition-colors duration-300 flex items-center justify-center shrink-0 shadow-sm">
                                                 <Icono className="w-6 h-6" />
                                             </div>
                                             <h3 className="text-base font-extrabold text-slate-900 font-sans">
@@ -301,8 +295,8 @@ export default function Admisiones() {
                 </div>
             </section>
 
-            {/* 3. PASO A PASO DETALLADO (Línea de Tiempo Ilustrada) */}
-            <section id="pasos-proceso" className="relative py-20 md:py-32 bg-slate-50 border-y border-slate-200/80 overflow-hidden select-none">
+            {/* 3. PASO A PASO DETALLADO (Colores Sólidos) */}
+            <section id="pasos-proceso" className="relative py-20 md:py-32 bg-slate-50 border-y border-slate-200 overflow-hidden select-none">
                 <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] space-y-16">
                     
                     <div className="text-center max-w-3xl mx-auto space-y-4">
@@ -411,7 +405,7 @@ export default function Admisiones() {
                                                 {paso.documentosPorNivel && (
                                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
                                                         {paso.documentosPorNivel.map((doc, docIdx) => (
-                                                            <div key={docIdx} className="p-5 rounded-2xl bg-blue-50/60 border border-blue-200/80 space-y-3">
+                                                            <div key={docIdx} className="p-5 rounded-2xl bg-blue-50 border border-blue-200 space-y-3">
                                                                 <span className="text-xs font-black uppercase tracking-wider text-[#003C8F] block font-sans border-b border-blue-200 pb-2">
                                                                     {doc.nivel}
                                                                 </span>
@@ -462,7 +456,7 @@ export default function Admisiones() {
                             <ScrollReveal key={idx} distance="translate-y-6" delay={idx * 150}>
                                 <div className="p-8 rounded-3xl bg-slate-50 border border-slate-200 hover:border-rose-300 hover:shadow-xl transition-all duration-300 space-y-4 text-left h-full flex flex-col justify-between">
                                     <div className="space-y-2">
-                                        <span className="px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-[#800A15]/10 text-[#800A15]">
+                                        <span className="px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-[#800A15] text-white">
                                             {h.badge}
                                         </span>
                                         <h3 className="text-xl font-black text-slate-900 font-sans pt-2">
@@ -472,7 +466,7 @@ export default function Admisiones() {
                                             Grados: {h.grados}
                                         </span>
                                     </div>
-                                    <div className="pt-4 border-t border-slate-200/80 flex items-center justify-between">
+                                    <div className="pt-4 border-t border-slate-200 flex items-center justify-between">
                                         <span className="text-xs font-bold text-slate-400 uppercase">Horario:</span>
                                         <span className="text-sm font-black text-[#003C8F] font-sans">
                                             {h.horario}
@@ -486,12 +480,12 @@ export default function Admisiones() {
                 </div>
             </section>
 
-            {/* 5. LLAMADO A LA ACCIÓN FINAL (CTA masivo) */}
-            <section className="relative py-24 bg-gradient-to-r from-[#003C8F] via-blue-900 to-[#800A15] text-white overflow-hidden select-none">
+            {/* 5. LLAMADO A LA ACCIÓN FINAL (Color Sólido Azul Salesiano #003C8F) */}
+            <section className="relative py-24 bg-[#003C8F] text-white overflow-hidden select-none">
                 <div className="max-w-5xl mx-auto px-6 text-center relative z-10 space-y-8">
                     
                     <ScrollReveal distance="translate-y-6">
-                        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/20 backdrop-blur-md text-amber-300 text-xs font-black uppercase tracking-wider">
+                        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#800A15] border border-white/20 text-amber-300 text-xs font-black uppercase tracking-wider">
                             <Sparkles className="w-4 h-4 text-amber-300" />
                             <span>INSCRIPCIONES ABIERTAS 2026</span>
                         </div>
@@ -526,7 +520,7 @@ export default function Admisiones() {
                                 texto={CORREO_ADMISIONES}
                                 className="inline-flex items-center gap-2 px-7 py-4 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-extrabold text-sm border border-white/25 backdrop-blur-md transition-all cursor-pointer"
                             >
-                                <Mail className="w-4 h-4 text-blue-300" />
+                                <Mail className="w-4 h-4 text-amber-300" />
                                 <span>Copiar Correo de Admisiones</span>
                             </CopiarTexto>
                         </div>

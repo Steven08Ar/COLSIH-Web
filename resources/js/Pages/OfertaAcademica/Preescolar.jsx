@@ -43,24 +43,6 @@ const docentesPreescolar = [
     }
 ];
 
-const blogCards = [
-    {
-        titulo: 'Aprender Jugando: ¿Por qué no?',
-        desc: '¡Abraza la alegría del juego para enriquecer cada etapa de la experiencia de aprendizaje de tus hijos!',
-        imagen: 'https://media.colsih.edu.co/ofertas_academicas/preescolar/preescolar_dos.JPG'
-    },
-    {
-        titulo: '10 Ideas de Juegos Educativos',
-        desc: '10 sugerencias lúdicas e inspiradoras para divertirse y aprender en familia sin salir de casa.',
-        imagen: 'https://media.colsih.edu.co/ofertas_academicas/preescolar/preescolar_uno.JPG'
-    },
-    {
-        titulo: 'Actividades Recreativas Infantiles',
-        desc: '¿Quieres desconectar un rato de las pantallas? Aquí tienes nuestras mejores recomendaciones dinámicas.',
-        imagen: 'https://media.colsih.edu.co/espacios_academicos/jardin.JPG'
-    }
-];
-
 const faqsPreescolar = [
     {
         pregunta: '¿Qué hace que Preescolar COLSIH sea diferente de otras plataformas e instituciones?',
@@ -165,16 +147,6 @@ function TeacherCard({ docente, idx }) {
 
 export default function Preescolar({ noticias = [] }) {
     const [faqOpen, setFaqOpen] = useState(null);
-
-    const displayBlogCards = (noticias && noticias.length > 0)
-        ? noticias.map(n => ({
-            id: n.id,
-            slug: n.slug,
-            titulo: n.titulo,
-            desc: n.resumen || 'Noticia de Preescolar COLSIH',
-            imagen: n.imagen ? mediaUrl(n.imagen) : 'https://media.colsih.edu.co/espacios_academicos/jardin.JPG'
-        }))
-        : blogCards;
 
     const toggleFaq = (index) => {
         setFaqOpen(faqOpen === index ? null : index);
@@ -562,66 +534,68 @@ export default function Preescolar({ noticias = [] }) {
                 </section>
 
 
-                {/* 5. READ OUR BLOG ("Read our blog") */}
-                <section className="py-20 md:py-32 bg-white">
-                    <div className="max-w-[1440px] mx-auto px-6 md:px-12 space-y-16">
-                        
-                        {/* Header + Botón "See All" a la derecha */}
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-                            <div className="space-y-2 text-left">
-                                <h2 className="text-4xl sm:text-5xl font-black text-[#121212] tracking-tight">
-                                    Lee nuestro <span className="font-serif italic text-[#704FE6]">blog</span>
-                                </h2>
+                {/* 5. READ OUR BLOG - Solo aparece si el administrador ha creado publicaciones en la categoría Preescolar */}
+                {noticias && noticias.length > 0 && (
+                    <section className="py-20 md:py-32 bg-white">
+                        <div className="max-w-[1440px] mx-auto px-6 md:px-12 space-y-16">
+                            
+                            {/* Header + Botón "Ver Todo" a la derecha */}
+                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+                                <div className="space-y-2 text-left">
+                                    <h2 className="text-4xl sm:text-5xl font-black text-[#121212] tracking-tight">
+                                        Lee nuestro <span className="font-serif italic text-[#704FE6]">blog</span>
+                                    </h2>
+                                </div>
+
+                                <Link
+                                    href="/noticias"
+                                    className="group inline-flex items-center gap-3 font-extrabold text-base text-[#704FE6] hover:text-[#5e3ed4] transition-colors self-start sm:self-auto"
+                                >
+                                    <span>Ver Todo</span>
+                                    <div className="w-9 h-9 rounded-full bg-[#704FE6] text-white flex items-center justify-center group-hover:rotate-45 transition-transform">
+                                        <ArrowUpRight className="w-5 h-5 stroke-[2.5]" />
+                                    </div>
+                                </Link>
                             </div>
 
-                            <Link
-                                href="/noticias"
-                                className="group inline-flex items-center gap-3 font-extrabold text-base text-[#704FE6] hover:text-[#5e3ed4] transition-colors self-start sm:self-auto"
-                            >
-                                <span>Ver Todo</span>
-                                <div className="w-9 h-9 rounded-full bg-[#704FE6] text-white flex items-center justify-center group-hover:rotate-45 transition-transform">
-                                    <ArrowUpRight className="w-5 h-5 stroke-[2.5]" />
-                                </div>
-                            </Link>
-                        </div>
-
-                        {/* 3 Tarjetas de Blog (`bg-[#F7F7F7] rounded-[32px] p-4`) */}
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
-                            {displayBlogCards.map((blog, idx) => (
-                                <ScrollReveal key={idx} distance="translate-y-8" delay={idx * 100}>
-                                    <Link 
-                                        href={blog.slug ? `/noticias/${blog.slug}` : '/noticias'}
-                                        className="bg-[#F7F7F7] rounded-[32px] overflow-hidden p-5 space-y-6 hover:shadow-xl hover:bg-white transition-all duration-300 border border-slate-200/80 group h-full flex flex-col justify-between block"
-                                    >
-                                        <div className="space-y-4">
-                                            <div className="h-52 rounded-2xl overflow-hidden">
-                                                <img 
-                                                    src={blog.imagen} 
-                                                    alt={blog.titulo} 
-                                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                                                />
+                            {/* Tarjetas de Blog Creadas por el Administrador */}
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
+                                {noticias.map((blog, idx) => (
+                                    <ScrollReveal key={blog.id || idx} distance="translate-y-8" delay={idx * 100}>
+                                        <Link 
+                                            href={`/noticias/${blog.slug}`}
+                                            className="bg-[#F7F7F7] rounded-[32px] overflow-hidden p-5 space-y-6 hover:shadow-xl hover:bg-white transition-all duration-300 border border-slate-200/80 group h-full flex flex-col justify-between block"
+                                        >
+                                            <div className="space-y-4">
+                                                <div className="h-52 rounded-2xl overflow-hidden">
+                                                    <img 
+                                                        src={blog.imagen ? mediaUrl(blog.imagen) : 'https://media.colsih.edu.co/espacios_academicos/jardin.JPG'} 
+                                                        alt={blog.titulo} 
+                                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                                    />
+                                                </div>
+                                                <h3 className="text-2xl font-black text-[#121212] leading-snug group-hover:text-[#704FE6] transition-colors">
+                                                    {blog.titulo}
+                                                </h3>
+                                                <p className="text-base font-semibold text-[#666666] leading-relaxed line-clamp-3">
+                                                    {blog.resumen || 'Noticia de Preescolar COLSIH'}
+                                                </p>
                                             </div>
-                                            <h3 className="text-2xl font-black text-[#121212] leading-snug group-hover:text-[#704FE6] transition-colors">
-                                                {blog.titulo}
-                                            </h3>
-                                            <p className="text-base font-semibold text-[#666666] leading-relaxed line-clamp-3">
-                                                {blog.desc}
-                                            </p>
-                                        </div>
 
-                                        <div className="pt-4 border-t border-slate-200 flex items-center justify-between text-sm font-extrabold text-[#704FE6]">
-                                            <span>Conocer más</span>
-                                            <div className="w-8 h-8 rounded-full bg-[#704FE6] text-white flex items-center justify-center group-hover:rotate-45 transition-transform">
-                                                <ArrowUpRight className="w-4 h-4 stroke-[2.5]" />
+                                            <div className="pt-4 border-t border-slate-200 flex items-center justify-between text-sm font-extrabold text-[#704FE6]">
+                                                <span>Conocer más</span>
+                                                <div className="w-8 h-8 rounded-full bg-[#704FE6] text-white flex items-center justify-center group-hover:rotate-45 transition-transform">
+                                                    <ArrowUpRight className="w-4 h-4 stroke-[2.5]" />
+                                                </div>
                                             </div>
-                                        </div>
-                                    </Link>
-                                </ScrollReveal>
-                            ))}
-                        </div>
+                                        </Link>
+                                    </ScrollReveal>
+                                ))}
+                            </div>
 
-                    </div>
-                </section>
+                        </div>
+                    </section>
+                )}
 
 
                 {/* 6. FAQ ("Frequently asked questions") */}

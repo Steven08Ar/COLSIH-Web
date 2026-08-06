@@ -380,71 +380,53 @@ export default function Preescolar() {
                                 </ScrollReveal>
                             </div>
 
-                            {/* Columna Derecha: 3 Pill Cards Apiladas Horizontalmente Réplica 100% Figma */}
-                            <div className="lg:col-span-6 space-y-10">
+                            {/* Columna Derecha: Composición de Nodos 100% Réplica de Figma */}
+                            <div className="lg:col-span-6 relative h-[560px] w-full max-w-[580px] mx-auto">
                                 
-                                {/* Top Pill Card (Soft Lavender `#DEC8FE` + Sol Starburst + Foto de Niño Sobresaliendo) */}
+                                {/* 1. Píldora Superior (Soft Lavender `#DEC8FE`) + Sol Starburst + Foto Niño 1 */}
                                 <ScrollReveal distance="translate-y-6" delay={100}>
-                                    <div className="relative h-32 rounded-full bg-[#DEC8FE] flex items-center justify-between px-8 shadow-xs">
-                                        {/* Foto del Niño Sobresaliendo en el lado izquierdo */}
-                                        <div className="absolute -left-2 -top-6 bottom-0 w-36 h-40">
-                                            <img 
-                                                src="https://media.colsih.edu.co/ofertas_academicas/preescolar/preescolar_uno.JPG" 
-                                                alt="Niño de Preescolar" 
-                                                className="w-full h-full object-cover rounded-[40px] drop-shadow-md"
-                                            />
+                                    <div className="absolute right-0 top-12 w-[72%] sm:w-[340px] h-32 rounded-full bg-[#DEC8FE] shadow-sm flex items-center justify-between px-6 z-10">
+                                        {/* Sol Starburst en la esquina superior derecha de la píldora lavanda */}
+                                        <div className="absolute -top-7 -right-4 z-20">
+                                            <StarburstSunSVG className="w-24 h-24 text-[#FFD25D] drop-shadow-sm" />
                                         </div>
-                                        
-                                        {/* Espaciador izquierdo */}
-                                        <div className="w-32" />
-
-                                        {/* Sol Starburst Flotante a la derecha */}
-                                        <div className="pr-2">
-                                            <StarburstSunSVG className="w-20 h-20 text-[#FFD25D]" />
-                                        </div>
+                                        {/* Niña con osito de peluche sobresaliendo en el lado izquierdo de la píldora */}
+                                        <img 
+                                            src="https://media.colsih.edu.co/ofertas_academicas/preescolar/preescolar_uno.JPG" 
+                                            alt="Niña sonriendo con peluche" 
+                                            className="absolute -top-12 left-10 h-44 w-auto object-cover rounded-[36px] z-30 drop-shadow-md border-2 border-white"
+                                        />
                                     </div>
                                 </ScrollReveal>
 
-                                {/* Middle Pill Card (Vibrant Purple `#704FE6` + Splash ZigZag + Foto de Niña a la derecha) */}
+                                {/* 2. Píldora Central (Vibrant Purple `#704FE6`) + Splash ZigZag + Foto Niña 2 */}
                                 <ScrollReveal distance="translate-y-6" delay={200}>
-                                    <div className="relative h-32 rounded-full bg-[#704FE6] flex items-center justify-between px-8 shadow-xs">
-                                        {/* Splash Wavy a la izquierda */}
-                                        <div className="pl-4">
-                                            <ZigZagWavySVG className="w-28 h-14 text-[#DEC8FE]" />
+                                    <div className="absolute right-0 top-52 w-[88%] sm:w-[450px] h-32 rounded-full bg-[#704FE6] shadow-md z-20 overflow-visible">
+                                        {/* Splash ZigZag Lavanda a la izquierda */}
+                                        <div className="absolute left-6 top-5 z-20">
+                                            <ZigZagWavySVG className="w-32 h-16 text-[#DEC8FE]" />
                                         </div>
-
-                                        {/* Foto de la Niña Sobresaliendo en el lado derecho */}
-                                        <div className="absolute -right-2 -top-6 bottom-0 w-36 h-40">
-                                            <img 
-                                                src="https://media.colsih.edu.co/ofertas_academicas/preescolar/preescolar_dos.JPG" 
-                                                alt="Niña sonriendo" 
-                                                className="w-full h-full object-cover rounded-[40px] drop-shadow-md"
-                                            />
-                                        </div>
-
-                                        {/* Espaciador derecho */}
-                                        <div className="w-32" />
+                                        {/* Niña con camiseta amarilla apuntando a la izquierda sobresaliendo en la derecha */}
+                                        <img 
+                                            src="https://media.colsih.edu.co/ofertas_academicas/preescolar/preescolar_dos.JPG" 
+                                            alt="Niña feliz apuntando" 
+                                            className="absolute -top-10 right-4 h-40 w-auto object-cover rounded-[36px] z-30 drop-shadow-md border-2 border-white"
+                                        />
                                     </div>
                                 </ScrollReveal>
 
-                                {/* Bottom Pill Card (Golden Yellow `#FFD25D` + Foto a la izquierda + Círculos Concéntricos) */}
+                                {/* 3. Píldora Inferior (Golden Yellow `#FFD25D`) + Foto Niño 3 + Círculos Concéntricos */}
                                 <ScrollReveal distance="translate-y-6" delay={300}>
-                                    <div className="relative h-32 rounded-full bg-[#FFD25D] flex items-center justify-between px-8 shadow-xs">
-                                        {/* Foto del Niño Escribiendo en el lado izquierdo */}
-                                        <div className="absolute -left-2 -top-6 bottom-0 w-36 h-40">
-                                            <img 
-                                                src="https://media.colsih.edu.co/espacios_academicos/jardin.JPG" 
-                                                alt="Niño escribiendo" 
-                                                className="w-full h-full object-cover rounded-[40px] drop-shadow-md"
-                                            />
-                                        </div>
-
-                                        {/* Espaciador izquierdo */}
-                                        <div className="w-32" />
-
-                                        {/* Círculos Concéntricos Púrpura a la derecha */}
-                                        <div className="pr-2">
-                                            <ConcentricCirclesSVG className="w-24 h-24 text-[#704FE6]" />
+                                    <div className="absolute right-0 top-[370px] w-full sm:w-[530px] h-32 rounded-full bg-[#FFD25D] shadow-md z-30 overflow-visible">
+                                        {/* Niña escribiendo en libreta sobresaliendo en la parte izquierda */}
+                                        <img 
+                                            src="https://media.colsih.edu.co/espacios_academicos/jardin.JPG" 
+                                            alt="Niño concentrado escribiendo" 
+                                            className="absolute -top-12 left-12 h-44 w-auto object-cover rounded-[36px] z-40 drop-shadow-md border-2 border-white"
+                                        />
+                                        {/* Círculos Concéntricos Púrpura flotando abajo a la derecha de la píldora amarilla */}
+                                        <div className="absolute -bottom-6 right-6 z-40">
+                                            <ConcentricCirclesSVG className="w-28 h-28 text-[#704FE6]" />
                                         </div>
                                     </div>
                                 </ScrollReveal>

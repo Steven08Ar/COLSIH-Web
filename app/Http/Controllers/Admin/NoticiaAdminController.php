@@ -27,7 +27,7 @@ class NoticiaAdminController extends Controller
         $request->validate([
             'titulo'       => 'required|string|max:200',
             'resumen'      => 'nullable|string|max:500',
-            'categoria'    => 'required|in:noticia,evento,comunicado',
+            'categoria'    => 'required|in:noticia,evento,comunicado,preescolar',
             'activo'       => 'nullable',
             'publicado_en' => 'nullable|date',
             'portada'      => 'nullable|file|mimes:jpeg,png,jpg,gif,svg,webp,heic,heif,HEIC,HEIF|max:20480',
@@ -55,7 +55,7 @@ class NoticiaAdminController extends Controller
         $request->validate([
             'titulo'       => 'required|string|max:200',
             'resumen'      => 'nullable|string|max:500',
-            'categoria'    => 'required|in:noticia,evento,comunicado',
+            'categoria'    => 'required|in:noticia,evento,comunicado,preescolar',
             'activo'       => 'nullable',
             'publicado_en' => 'nullable|date',
             'portada'      => 'nullable|file|mimes:jpeg,png,jpg,gif,svg,webp,heic,heif,HEIC,HEIF|max:20480',
@@ -99,7 +99,8 @@ class NoticiaAdminController extends Controller
         return match($categoria) {
             'evento'      => 'noticias/eventos',
             'comunicado'  => 'noticias/comunicados',
-            default       => 'noticias/noticias',
+            'preescolar'  => 'noticias/preescolar',
+            default       => 'noticias/articulos',
         };
     }
 

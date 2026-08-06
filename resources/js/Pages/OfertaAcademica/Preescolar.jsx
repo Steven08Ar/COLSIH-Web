@@ -12,6 +12,7 @@ import {
     User
 } from 'lucide-react';
 import { useState } from 'react';
+import { mediaUrl } from '@/utils/mediaUrl';
 
 const LINK_INSCRIPCIONES = "https://e.plataformaintegra.net/sihungria/index.php/cupo";
 
@@ -162,8 +163,18 @@ function TeacherCard({ docente, idx }) {
     );
 }
 
-export default function Preescolar() {
+export default function Preescolar({ noticias = [] }) {
     const [faqOpen, setFaqOpen] = useState(null);
+
+    const displayBlogCards = (noticias && noticias.length > 0)
+        ? noticias.map(n => ({
+            id: n.id,
+            slug: n.slug,
+            titulo: n.titulo,
+            desc: n.resumen || 'Noticia de Preescolar COLSIH',
+            imagen: n.imagen ? mediaUrl(n.imagen) : 'https://media.colsih.edu.co/espacios_academicos/jardin.JPG'
+        }))
+        : blogCards;
 
     const toggleFaq = (index) => {
         setFaqOpen(faqOpen === index ? null : index);
@@ -179,7 +190,7 @@ export default function Preescolar() {
                 <section className="relative pt-32 pb-24 md:pt-44 md:pb-36 bg-white overflow-hidden">
                     
                     {/* Elemento Flotante Top-Left: Foto de Niño en Círculo Lavanda */}
-                    <div className="hidden lg:block absolute top-28 left-12 z-10 w-28 h-28 rounded-full bg-[#DEC8FE] p-2 shadow-lg hover:scale-105 transition-transform">
+                    <div className="hidden lg:block absolute top-20 left-16 z-10 w-28 h-28 rounded-full bg-[#DEC8FE] p-2 shadow-lg hover:scale-105 transition-transform">
                         <img 
                             src="https://media.colsih.edu.co/ofertas_academicas/preescolar.JPG" 
                             alt="Niño Preescolar" 
@@ -187,27 +198,53 @@ export default function Preescolar() {
                         />
                     </div>
 
-                    {/* Elemento Flotante Top-Right: Revolve Sticker "WonderKids · Learning Kids" */}
-                    <div className="hidden lg:block absolute top-24 right-16 z-10 w-32 h-32 rounded-full border-2 border-dashed border-[#FFD25D] p-2 flex items-center justify-center shadow-sm">
-                        <div className="w-full h-full rounded-full bg-[#FFD25D] text-[#121212] flex flex-col items-center justify-center p-2 text-center">
-                            <span className="text-[10px] font-black uppercase leading-tight tracking-tight">Preescolar<br/>COLSIH</span>
-                            <Sparkles className="w-4 h-4 text-[#704FE6] mt-1" />
+                    {/* Flecha Rizada Púrpura apuntando desde la foto superior izquierda hacia el título */}
+                    <div className="hidden lg:block absolute top-48 left-16 z-10 pointer-events-none">
+                        <svg className="w-24 h-24 text-[#704FE6]" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M 20,15 C 10,45 35,70 50,45 C 65,20 20,25 35,70 C 45,85 80,80 92,70" />
+                            <path d="M 82,76 L 94,70 L 90,56" />
+                        </svg>
+                    </div>
+
+                    {/* Stamp Circular Giratorio de Figma "WonderKids · Learning Kids ·" */}
+                    <div className="hidden lg:block absolute top-20 right-16 z-10 w-32 h-32 pointer-events-none">
+                        <div className="relative w-full h-full flex items-center justify-center">
+                            {/* Texto circular giratorio */}
+                            <svg className="w-full h-full animate-spin-slow text-[#FFBE17]" viewBox="0 0 100 100">
+                                <path id="circlePath" d="M 50, 50 m -37, 0 a 37,37 0 1,1 74,0 a 37,37 0 1,1 -74,0" fill="none" />
+                                <text className="text-[9.5px] font-extrabold fill-[#FFBE17] tracking-widest uppercase">
+                                    <textPath href="#circlePath" startOffset="0%">
+                                        WonderKids • Learning Kids •
+                                    </textPath>
+                                </text>
+                            </svg>
+                            {/* Flor central en púrpura */}
+                            <div className="absolute w-10 h-10 rounded-full bg-[#DEC8FE] flex items-center justify-center">
+                                <Sparkles className="w-5 h-5 text-[#704FE6]" />
+                            </div>
                         </div>
                     </div>
+
+                    {/* Círculo suave en el centro derecho */}
+                    <div className="hidden lg:block absolute top-1/2 right-28 z-10 w-5 h-5 rounded-full bg-[#DEC8FE] pointer-events-none" />
 
                     {/* Elemento Flotante Bottom-Left: Concentric Circles SVG */}
                     <div className="hidden lg:block absolute bottom-20 left-20 z-10 opacity-75">
                         <ConcentricCirclesSVG className="w-24 h-24 text-[#DEC8FE]" />
                     </div>
 
-                    {/* Elemento Flotante Bottom-Right: Niño en Splash Púrpura Suave */}
-                    <div className="hidden lg:block absolute bottom-16 right-20 z-10 w-32 h-36">
-                        <div className="relative w-full h-full">
-                            <div className="absolute inset-0 bg-[#DEC8FE] rounded-[40px] rotate-12" />
+                    {/* Niño en Blob Orgánico Vertical Lavanda idéntico a Figma */}
+                    <div className="hidden lg:block absolute bottom-12 right-16 z-10 w-44 h-56 pointer-events-none">
+                        <div className="relative w-full h-full flex items-center justify-center">
+                            {/* Formación orgánica de fondo lavanda vertical */}
+                            <div 
+                                className="absolute inset-0 bg-[#DEC8FE] shadow-sm"
+                                style={{ borderRadius: '35% 65% 60% 40% / 50% 30% 70% 50%' }}
+                            />
                             <img 
                                 src="https://media.colsih.edu.co/espacios_academicos/jardin.JPG" 
-                                alt="Niño feliz" 
-                                className="relative z-10 w-full h-full object-cover rounded-[32px] shadow-md"
+                                alt="Niño feliz preescolar" 
+                                className="relative z-10 w-36 h-48 object-cover rounded-[28px] shadow-sm transform -rotate-3"
                             />
                         </div>
                     </div>
@@ -215,10 +252,10 @@ export default function Preescolar() {
                     <div className="max-w-[1440px] mx-auto px-6 md:px-12 relative z-20 text-center flex flex-col items-center justify-center">
                         <div className="max-w-4xl mx-auto space-y-8 text-center flex flex-col items-center">
                             
-                            {/* Titular Gigante idéntico a Figma perfectamente centrado */}
+                            {/* Titular Gigante en Quicksand Semibold idéntico a Figma */}
                             <ScrollReveal distance="translate-y-6">
-                                <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[72px] font-extrabold text-[#121212] leading-[1.3] tracking-tight font-sans text-center">
-                                    <span className="block mb-2 font-extrabold text-[#121212]">
+                                <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[72px] font-['Quicksand'] font-semibold text-[#121212] leading-[1.3] tracking-tight text-center">
+                                    <span className="block mb-2 font-['Quicksand'] font-semibold text-[#121212]">
                                         El mejor lugar para
                                     </span>
                                     
@@ -231,7 +268,7 @@ export default function Preescolar() {
                                             </svg>
                                         </span>
 
-                                        <span className="font-extrabold text-[#121212] text-3xl sm:text-4xl md:text-5xl mx-1 align-baseline">
+                                        <span className="font-['Quicksand'] font-semibold text-[#121212] text-3xl sm:text-4xl md:text-5xl mx-1 align-baseline">
                                             y
                                         </span>
 
@@ -244,7 +281,7 @@ export default function Preescolar() {
                                         </span>
                                     </span>
 
-                                    <span className="block mt-4 font-extrabold text-[#121212]">
+                                    <span className="block mt-4 font-['Quicksand'] font-semibold text-[#121212]">
                                         para tus hijos
                                     </span>
                                 </h1>
@@ -550,9 +587,12 @@ export default function Preescolar() {
 
                         {/* 3 Tarjetas de Blog (`bg-[#F7F7F7] rounded-[32px] p-4`) */}
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
-                            {blogCards.map((blog, idx) => (
+                            {displayBlogCards.map((blog, idx) => (
                                 <ScrollReveal key={idx} distance="translate-y-8" delay={idx * 100}>
-                                    <div className="bg-[#F7F7F7] rounded-[32px] overflow-hidden p-5 space-y-6 hover:shadow-xl hover:bg-white transition-all duration-300 border border-slate-200/80 group h-full flex flex-col justify-between">
+                                    <Link 
+                                        href={blog.slug ? `/noticias/${blog.slug}` : '/noticias'}
+                                        className="bg-[#F7F7F7] rounded-[32px] overflow-hidden p-5 space-y-6 hover:shadow-xl hover:bg-white transition-all duration-300 border border-slate-200/80 group h-full flex flex-col justify-between block"
+                                    >
                                         <div className="space-y-4">
                                             <div className="h-52 rounded-2xl overflow-hidden">
                                                 <img 
@@ -564,7 +604,7 @@ export default function Preescolar() {
                                             <h3 className="text-2xl font-black text-[#121212] leading-snug group-hover:text-[#704FE6] transition-colors">
                                                 {blog.titulo}
                                             </h3>
-                                            <p className="text-base font-semibold text-[#666666] leading-relaxed">
+                                            <p className="text-base font-semibold text-[#666666] leading-relaxed line-clamp-3">
                                                 {blog.desc}
                                             </p>
                                         </div>
@@ -575,7 +615,7 @@ export default function Preescolar() {
                                                 <ArrowUpRight className="w-4 h-4 stroke-[2.5]" />
                                             </div>
                                         </div>
-                                    </div>
+                                    </Link>
                                 </ScrollReveal>
                             ))}
                         </div>

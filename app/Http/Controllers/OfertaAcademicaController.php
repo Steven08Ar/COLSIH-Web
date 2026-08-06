@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Noticia;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -14,7 +15,15 @@ class OfertaAcademicaController extends Controller
 
     public function preescolar(): Response
     {
-        return Inertia::render('OfertaAcademica/Preescolar');
+        $noticias = Noticia::where('activo', true)
+            ->where('categoria', 'preescolar')
+            ->latest('publicado_en')
+            ->take(6)
+            ->get(['id', 'titulo', 'slug', 'resumen', 'imagen', 'categoria', 'publicado_en']);
+
+        return Inertia::render('OfertaAcademica/Preescolar', [
+            'noticias' => $noticias,
+        ]);
     }
 
     public function primaria(): Response

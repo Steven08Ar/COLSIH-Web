@@ -740,7 +740,7 @@ function NoticiasTab({ noticias, flash }) {
     const [errors, setErrors] = useState({});
 
     const basePath = window.location.pathname.replace(/\/[^/]+$/, '');
-    const categoriaLabel = { noticia: 'Noticia', evento: 'Evento', comunicado: 'Comunicado' };
+    const categoriaLabel = { noticia: 'Noticia', evento: 'Evento', comunicado: 'Comunicado', preescolar: 'Preescolar' };
 
     const formatDate = (dateStr) => {
         try {
@@ -1030,6 +1030,7 @@ function NoticiasTab({ noticias, flash }) {
                                             <option value="noticia">Noticia</option>
                                             <option value="evento">Evento</option>
                                             <option value="comunicado">Comunicado</option>
+                                            <option value="preescolar">Preescolar (Blog Preescolar)</option>
                                         </select>
                                     </div>
                                     <div className="flex-1">

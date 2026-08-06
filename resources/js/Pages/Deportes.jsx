@@ -14,7 +14,7 @@ const DESTACADOS = [
         disciplina: 'Voleibol',
         grado: 'Grado 11°',
         resumen: 'Mejor jugadora del torneo intercolegiado 2024. Líder en puntos y en espíritu deportivo.',
-        foto: 'https://pub-c4ddb3fb75904158bbda5fbc35d6963e.r2.dev/nuestro_colegio/equipo/docentes/Daniela%20Villamizar%20Villamizar.JPG',
+        foto: 'https://media.colsih.edu.co/nuestro_colegio/equipo/docentes/Daniela%20Villamizar%20Villamizar.JPG',
         logros: ['MVP Torneo Regional 2024', 'Capitana Selección Femenina', '15 Puntos por Partido']
     },
     {
@@ -23,7 +23,7 @@ const DESTACADOS = [
         disciplina: 'Fútbol',
         grado: 'Grado 10°',
         resumen: 'Goleador del torneo intercolegiado departamental con 14 tantos anotados.',
-        foto: 'https://pub-c4ddb3fb75904158bbda5fbc35d6963e.r2.dev/nuestro_colegio/equipo/docentes/Jeyson%20Eduardo%20Su%C3%A1rez%20Ardila.JPG',
+        foto: 'https://media.colsih.edu.co/nuestro_colegio/equipo/docentes/Jeyson%20Eduardo%20Su%C3%A1rez%20Ardila.JPG',
         logros: ['Botín de Oro Intercolegiados', 'Selección Santander Sub-17', 'Capitán Equipo']
     },
     {
@@ -32,7 +32,7 @@ const DESTACADOS = [
         disciplina: 'Atletismo',
         grado: 'Grado 11°',
         resumen: 'Medalla de Oro en 400m planos y relevos 4x100m en los Juegos Supérate.',
-        foto: 'https://pub-c4ddb3fb75904158bbda5fbc35d6963e.r2.dev/nuestro_colegio/equipo/docentes/Edgar%20Javier%20Garc%C3%ADa%20Estupi%C3%B1%C3%A1n.JPG',
+        foto: 'https://media.colsih.edu.co/nuestro_colegio/equipo/docentes/Edgar%20Javier%20Garc%C3%ADa%20Estupi%C3%B1%C3%A1n.JPG',
         logros: ['Medalla de Oro 400m', 'Record Regional 52.3s', 'Atleta del Año COLSIH']
     }
 ];
@@ -44,7 +44,7 @@ const NOTICIAS_LOGROS = [
         mes: 'MAY',
         titulo: '¡Campeones Intercolegiados 2024!',
         descripcion: 'Nuestro equipo de fútbol masculino obtuvo el primer lugar en la categoría juvenil.',
-        imagen: 'https://pub-c4ddb3fb75904158bbda5fbc35d6963e.r2.dev/nuestro_colegio/quienes_somos/colegio-afuera.JPG',
+        imagen: 'https://media.colsih.edu.co/nuestro_colegio/quienes_somos/colegio-afuera.JPG',
         destacado: true
     },
     {
@@ -53,7 +53,7 @@ const NOTICIAS_LOGROS = [
         mes: 'MAY',
         titulo: 'Segundo lugar en Voleibol Femenino',
         descripcion: 'Gran participación de nuestro equipo en el torneo intercolegiado regional.',
-        imagen: 'https://pub-c4ddb3fb75904158bbda5fbc35d6963e.r2.dev/ofertas_academicas/bachillerato.JPG',
+        imagen: 'https://media.colsih.edu.co/ofertas_academicas/bachillerato.JPG',
         destacado: false
     },
     {
@@ -62,7 +62,7 @@ const NOTICIAS_LOGROS = [
         mes: 'MAY',
         titulo: 'Atletas Santa Isabel en el Podio',
         descripcion: 'Destacada participación en atletismo: 3 oros, 2 platas y 1 bronce.',
-        imagen: 'https://pub-c4ddb3fb75904158bbda5fbc35d6963e.r2.dev/nuestro_colegio/quienes_somos/estudiantes-espaldas.png',
+        imagen: 'https://media.colsih.edu.co/nuestro_colegio/quienes_somos/estudiantes-espaldas.png',
         destacado: false
     }
 ];
@@ -157,7 +157,7 @@ export default function Deportes() {
                             <div className="lg:col-span-4 flex justify-center">
                                 <div className="relative w-full max-w-md aspect-[4/3] sm:aspect-square rounded-3xl overflow-hidden shadow-2xl border-4 border-white/20 group">
                                     <img 
-                                        src="https://pub-c4ddb3fb75904158bbda5fbc35d6963e.r2.dev/home/estudiantes-colsih.png" 
+                                        src="https://media.colsih.edu.co/home/estudiantes-colsih.png" 
                                         alt="Deportistas COLSIH" 
                                         className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
                                     />
@@ -205,7 +205,7 @@ export default function Deportes() {
                                             className="w-full h-full object-cover object-top"
                                             onError={(e) => {
                                                 e.target.onerror = null;
-                                                e.target.src = 'https://pub-c4ddb3fb75904158bbda5fbc35d6963e.r2.dev/home/estudiantes-colsih.png';
+                                                e.target.src = 'https://media.colsih.edu.co/home/estudiantes-colsih.png';
                                             }}
                                         />
                                         <div className="absolute top-3 right-3 bg-[#800A15] text-white text-[10px] font-black uppercase px-2.5 py-1 rounded-full shadow-md">

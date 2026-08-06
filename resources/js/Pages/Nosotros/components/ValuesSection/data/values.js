@@ -15,7 +15,7 @@ export const valoresData = [
         subtitulo: "Trascendencia y Alegría Salesiana",
         descripcion: "Vivir la trascendencia y la búsqueda de la felicidad auténtica inspirados en la fe, la esperanza y el amor que Don Bosco enseñó a la juventud.",
         iconName: "Sun",
-        portada: "https://pub-c4ddb3fb75904158bbda5fbc35d6963e.r2.dev/nuestro_colegio/quienes_somos/colegio-afuera.JPG",
+        portada: "https://media.colsih.edu.co/nuestro_colegio/quienes_somos/colegio-afuera.JPG",
         galeria: [
             "/nosotros_assets/historia/historia-1983.png",
             "/nosotros_assets/historia/historia-1995.png",
@@ -30,7 +30,7 @@ export const valoresData = [
         subtitulo: "Empatía y Servicio al Prójimo",
         descripcion: "Sentir con el otro y comprender su situación, comprometiéndonos activamente en causas comunitarias y en el bien común de nuestro entorno.",
         iconName: "HandHelping",
-        portada: "https://pub-c4ddb3fb75904158bbda5fbc35d6963e.r2.dev/home/estudiantes-colsih.png",
+        portada: "https://media.colsih.edu.co/home/estudiantes-colsih.png",
         galeria: [
             "/testimonios/egresada.png",
             "/testimonios/estudiante.png",
@@ -45,7 +45,7 @@ export const valoresData = [
         subtitulo: "Reconocimiento y Corazón Agradecido",
         descripcion: "Aceptación alegre de la interdependencia humana desde Dios, valorando cada oportunidad, don y persona que enriquece nuestra comunidad.",
         iconName: "Heart",
-        portada: "https://pub-c4ddb3fb75904158bbda5fbc35d6963e.r2.dev/nuestro_colegio/quienes_somos/estudiantes-espaldas.png",
+        portada: "https://media.colsih.edu.co/nuestro_colegio/quienes_somos/estudiantes-espaldas.png",
         galeria: [
             "/nosotros_assets/historia/historia-hoy.png",
             "/nosotros_assets/historia/historia-1995.png",
@@ -60,7 +60,7 @@ export const valoresData = [
         subtitulo: "Rectitud e Integridad Personal",
         descripcion: "Reconocimiento de la dignidad del otro y de su importancia a través de la rectitud, la verdad y la transparencia en cada una de nuestras acciones.",
         iconName: "ShieldCheck",
-        portada: "https://pub-c4ddb3fb75904158bbda5fbc35d6963e.r2.dev/nuestro_colegio/quienes_somos/colegio-afuera.JPG",
+        portada: "https://media.colsih.edu.co/nuestro_colegio/quienes_somos/colegio-afuera.JPG",
         galeria: [
             "/testimonios/egresada.png",
             "/testimonios/estudiante.png",
@@ -75,7 +75,7 @@ export const valoresData = [
         subtitulo: "Misericordia y Clima de Familia",
         descripcion: "Aceptación de la vulnerabilidad humana y capacidad de convivencia fraterna, promoviendo la reconciliación y la paz en el día a día.",
         iconName: "Smile",
-        portada: "https://pub-c4ddb3fb75904158bbda5fbc35d6963e.r2.dev/home/estudiantes-colsih.png",
+        portada: "https://media.colsih.edu.co/home/estudiantes-colsih.png",
         galeria: [
             "/nosotros_assets/historia/historia-1983.png",
             "/nosotros_assets/historia/historia-1995.png",
@@ -90,7 +90,7 @@ export const valoresData = [
         subtitulo: "Identidad e Integración Salesiana",
         descripcion: "Una manera concreta de vivir y estar en el mundo con orgullo por nuestro colegio, fortaleciendo el espíritu de familia de la comunidad COLSIH.",
         iconName: "Users",
-        portada: "https://pub-c4ddb3fb75904158bbda5fbc35d6963e.r2.dev/nuestro_colegio/quienes_somos/estudiantes-espaldas.png",
+        portada: "https://media.colsih.edu.co/nuestro_colegio/quienes_somos/estudiantes-espaldas.png",
         galeria: [
             "/nosotros_assets/historia/historia-hoy.png",
             "/nosotros_assets/historia/historia-1995.png",
@@ -105,7 +105,7 @@ export const valoresData = [
         subtitulo: "Creatividad y Transformación Social",
         descripcion: "Capacidad de transformar la realidad social humanizándola mediante soluciones creativas, pensamiento crítico y ciencia al servicio de la vida.",
         iconName: "Lightbulb",
-        portada: "https://pub-c4ddb3fb75904158bbda5fbc35d6963e.r2.dev/nuestro_colegio/quienes_somos/colegio-afuera.JPG",
+        portada: "https://media.colsih.edu.co/nuestro_colegio/quienes_somos/colegio-afuera.JPG",
         galeria: [
             "/testimonios/egresada.png",
             "/testimonios/estudiante.png",
@@ -120,7 +120,7 @@ export const valoresData = [
         subtitulo: "Dignidad y Tolerancia Mutua",
         descripcion: "Reconocimiento genuino del que está a mi lado, promoviendo un ambiente educativo caracterizado por la amabilidad, la inclusión y la consideración.",
         iconName: "HeartHandshake",
-        portada: "https://pub-c4ddb3fb75904158bbda5fbc35d6963e.r2.dev/home/estudiantes-colsih.png",
+        portada: "https://media.colsih.edu.co/home/estudiantes-colsih.png",
         galeria: [
             "/nosotros_assets/historia/historia-1983.png",
             "/nosotros_assets/historia/historia-1995.png",
@@ -135,7 +135,7 @@ export const valoresData = [
         subtitulo: "Ecología Integral y Cuidado de la Casa Común",
         descripcion: "Respuesta al sueño creador de Dios que nos dio el mundo para cuidarlo, educando líderes apasionados por el ambiente y el bienestar integral.",
         iconName: "Star",
-        portada: "https://pub-c4ddb3fb75904158bbda5fbc35d6963e.r2.dev/nuestro_colegio/quienes_somos/estudiantes-espaldas.png",
+        portada: "https://media.colsih.edu.co/nuestro_colegio/quienes_somos/estudiantes-espaldas.png",
         galeria: [
             "/nosotros_assets/historia/historia-hoy.png",
             "/nosotros_assets/historia/historia-1995.png",

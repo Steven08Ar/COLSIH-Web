@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { Head, router } from '@inertiajs/react';
 import { X, Check, Radio, Cpu, AlertCircle } from 'lucide-react';
 
@@ -15,31 +15,110 @@ const DEMO_PERSONAS = [
 
 export default function CarnetsKiosco({ salirUrl, carnetsRegistrados = [] }) {
     const [scannedRecord, setScannedRecord] = useState(null);
-    const [buffer, setBuffer] = useState('');
     const [isArduinoConnected, setIsArduinoConnected] = useState(false);
     const [serialStatus, setSerialStatus] = useState('Arduino COM10 listo');
+    
     const portRef = useRef(null);
     const autoDismissTimer = useRef(null);
+    const carnetsRef = useRef(carnetsRegistrados);
+    const bufferRef = useRef('');
+    const lastScanRef = useRef({ code: '', time: 0 });
 
-    // 1. Captura continua del lector USB HID (Código de Barras + NFC Teclado)
+    useEffect(() => {
+        carnetsRef.current = carnetsRegistrados;
+    }, [carnetsRegistrados]);
+
+    // Procesar código escaneado (NFC, Código de Barras o Arduino COM10)
+    const procesarEscaneo = useCallback((codigoRaw) => {
+        if (!codigoRaw) return;
+        const line = codigoRaw.trim();
+
+        // 1. Filtrar líneas de depuración emitidas por bibliotecas Arduino MFRC522
+        if (/(MIFARE|PICC|TYPE|CARD DETECTED|ANTICOLL|S50|S70|ARDUINO_OK|READY)/i.test(line)) {
+            return;
+        }
+
+        // 2. Extraer el UID hexadecimal o código de carnet limpio
+        let cleaned = '';
+        const match = line.match(/(?:card\s+)?uid\s*:?\s*([0-9a-f\s:-]+)/i);
+        if (match && match[1]) {
+            cleaned = match[1].replace(/[\s:-]/g, '');
+        } else if (/^[0-9a-f\s:-]{4,24}$/i.test(line)) {
+            cleaned = line.replace(/[\s:-]/g, '');
+        } else {
+            cleaned = line.replace(/^CARD\s*/i, '').replace(/^NFC:\s*/i, '').replace(/[\s:-]/g, '');
+        }
+
+        cleaned = cleaned.toUpperCase();
+
+        if (cleaned.length < 4 || cleaned.length > 20) return;
+
+        // Debounce: Evitar procesar el mismo escaneo repetitivo en menos de 1.2 segundos (por tarjetas apoyadas en el sensor)
+        const now = Date.now();
+        if (lastScanRef.current.code === cleaned && (now - lastScanRef.current.time) < 1200) {
+            return;
+        }
+        lastScanRef.current = { code: cleaned, time: now };
+
+        // 3. Buscar coincidencia exacta en la Base de Datos o Lista Demo
+        const deBD = carnetsRef.current.find(
+            c => (c.nfc && c.nfc.toUpperCase() === cleaned) || (c.code && c.code.toUpperCase() === cleaned)
+        );
+
+        const deDemo = DEMO_PERSONAS.find(
+            p => p.nfc.toUpperCase() === cleaned || p.code.toUpperCase() === cleaned
+        );
+
+        const encontrado = deBD || deDemo;
+
+        if (autoDismissTimer.current) clearTimeout(autoDismissTimer.current);
+
+        if (encontrado) {
+            setScannedRecord({
+                status: 'exito',
+                nombreCompleto: `${encontrado.nombre} ${encontrado.apellido}`,
+                rol: encontrado.rol || 'Estudiante',
+                info: encontrado.info || 'Institucional COLSIH',
+                foto: encontrado.foto || null,
+                iniciales: `${encontrado.nombre ? encontrado.nombre[0] : ''}${encontrado.apellido ? encontrado.apellido[0] : ''}`.toUpperCase()
+            });
+        } else {
+            setScannedRecord({
+                status: 'desconocida',
+                nombreCompleto: 'Tarjeta No Registrada',
+                rol: 'Aviso de Asistencia',
+                info: `UID Detectado: ${cleaned}`,
+                foto: null,
+                iniciales: '?'
+            });
+        }
+
+        // Regresar suavemente a estado en espera tras 4 segundos
+        autoDismissTimer.current = setTimeout(() => {
+            setScannedRecord(null);
+        }, 4000);
+    }, []);
+
+    // 1. Captura continua ultra-estable del lector USB HID (Barcodes + NFC Keyboard) sin des-suscripciones constantes
     useEffect(() => {
         const handleKeyDown = (e) => {
             if (e.key === 'Enter') {
-                if (buffer.trim().length > 0) {
-                    procesarEscaneo(buffer.trim());
-                    setBuffer('');
+                const text = bufferRef.current.trim();
+                bufferRef.current = '';
+                if (text.length > 0) {
+                    procesarEscaneo(text);
                 }
             } else if (e.key.length === 1) {
-                setBuffer(prev => prev + e.key);
+                bufferRef.current += e.key;
             }
         };
 
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [buffer, carnetsRegistrados]);
+    }, [procesarEscaneo]);
 
-    // Read loop del puerto serial
-    const startReadLoop = async (port) => {
+    // Read loop permanente del puerto serial Arduino COM10
+    const startReadLoop = useCallback(async (port) => {
         const reader = port.readable.getReader();
         const decoder = new TextDecoder();
         let serialBuffer = '';
@@ -48,24 +127,20 @@ export default function CarnetsKiosco({ salirUrl, carnetsRegistrados = [] }) {
             while (true) {
                 const { value, done } = await reader.read();
                 if (done) break;
-                if (value) {
-                    const chunk = decoder.decode(value, { stream: true });
-                    serialBuffer += chunk;
+                if (!value) continue;
 
-                    let lines = serialBuffer.split(/\r?\n/);
-                    if (lines.length > 1) {
-                        serialBuffer = lines.pop();
-                        for (let line of lines) {
-                            const trimmed = line.trim();
-                            if (trimmed.length >= 3) {
-                                procesarEscaneo(trimmed);
-                            }
-                        }
-                    } else if (serialBuffer.trim().length >= 4 && !serialBuffer.includes('\n')) {
-                        const candidate = serialBuffer.trim();
-                        if (/^[0-9A-Z]{4,16}$/i.test(candidate)) {
-                            procesarEscaneo(candidate);
-                            serialBuffer = '';
+                const chunk = decoder.decode(value, { stream: true });
+                serialBuffer += chunk;
+
+                const lines = serialBuffer.split(/\r?\n/);
+                serialBuffer = lines.pop() ?? ''; // Conservar fragmento incompleto hasta la llegada completa del salto de línea
+
+                for (const line of lines) {
+                    if (line.trim()) {
+                        try {
+                            procesarEscaneo(line.trim());
+                        } catch (pErr) {
+                            console.error('Error al procesar línea serial:', pErr);
                         }
                     }
                 }
@@ -77,7 +152,7 @@ export default function CarnetsKiosco({ salirUrl, carnetsRegistrados = [] }) {
         } finally {
             try { reader.releaseLock(); } catch {}
         }
-    };
+    }, [procesarEscaneo]);
 
     // Auto-reconectar al puerto COM10 autorizado al cargar la página
     useEffect(() => {
@@ -99,7 +174,7 @@ export default function CarnetsKiosco({ salirUrl, carnetsRegistrados = [] }) {
             }
         })();
         return () => { cancelled = true; };
-    }, []);
+    }, [startReadLoop]);
 
     // 2. Conexión Web Serial API manual para Arduino UNO (COM10 / RFID-RC522)
     const connectArduino = async () => {
@@ -134,71 +209,6 @@ export default function CarnetsKiosco({ salirUrl, carnetsRegistrados = [] }) {
         }
         setIsArduinoConnected(false);
         setSerialStatus('Desconectado');
-    };
-
-    // Procesar código escaneado (NFC, Código de Barras o Arduino COM10)
-    const procesarEscaneo = (codigoRaw) => {
-        if (!codigoRaw) return;
-        const line = codigoRaw.trim();
-
-        // 1. Filtrar líneas de texto de depuración emitidas por bibliotecas Arduino MFRC522
-        if (/(MIFARE|PICC|TYPE|CARD DETECTED|ANTICOLL|S50|S70|ARDUINO_OK|READY)/i.test(line)) {
-            return;
-        }
-
-        // 2. Extraer el UID hexadecimal o código de carnet limpio
-        let cleaned = '';
-        const match = line.match(/(?:card\s+)?uid\s*:?\s*([0-9a-f\s:-]+)/i);
-        if (match && match[1]) {
-            cleaned = match[1].replace(/[\s:-]/g, '');
-        } else if (/^[0-9a-f\s:-]{4,24}$/i.test(line)) {
-            cleaned = line.replace(/[\s:-]/g, '');
-        } else {
-            cleaned = line.replace(/^CARD\s*/i, '').replace(/^NFC:\s*/i, '').replace(/[\s:-]/g, '');
-        }
-
-        cleaned = cleaned.toUpperCase();
-
-        if (cleaned.length < 4 || cleaned.length > 20) return;
-
-        // 3. Buscar coincidencia exacta en los registros de la Base de Datos de Laravel
-        const deBD = carnetsRegistrados.find(
-            c => (c.nfc && c.nfc.toUpperCase() === cleaned) || (c.code && c.code.toUpperCase() === cleaned)
-        );
-
-        // 4. Buscar en el registro local de demostración
-        const deDemo = DEMO_PERSONAS.find(
-            p => p.nfc.toUpperCase() === cleaned || p.code.toUpperCase() === cleaned
-        );
-
-        const encontrado = deBD || deDemo;
-
-        if (autoDismissTimer.current) clearTimeout(autoDismissTimer.current);
-
-        if (encontrado) {
-            setScannedRecord({
-                status: 'exito',
-                nombreCompleto: `${encontrado.nombre} ${encontrado.apellido}`,
-                rol: encontrado.rol || 'Estudiante',
-                info: encontrado.info || 'Institucional COLSIH',
-                foto: encontrado.foto || null,
-                iniciales: `${encontrado.nombre ? encontrado.nombre[0] : ''}${encontrado.apellido ? encontrado.apellido[0] : ''}`.toUpperCase()
-            });
-        } else {
-            setScannedRecord({
-                status: 'desconocida',
-                nombreCompleto: 'Tarjeta No Registrada',
-                rol: 'Aviso de Asistencia',
-                info: `UID Detectado: ${cleaned}`,
-                foto: null,
-                iniciales: '?'
-            });
-        }
-
-        // Regresar suavemente a estado en espera tras 4 segundos
-        autoDismissTimer.current = setTimeout(() => {
-            setScannedRecord(null);
-        }, 4000);
     };
 
     const handleSalirKiosco = () => {

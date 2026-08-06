@@ -147,7 +147,7 @@ export default function NoticiasIndex({ noticias, categoriaActual }) {
                                                     />
                                                 ) : (
                                                     <div className="w-full h-full flex items-center justify-center bg-slate-50 dark:bg-slate-950 relative">
-                                                        <img src="https://pub-c4ddb3fb75904158bbda5fbc35d6963e.r2.dev/home/estudiantes-colsih.png" alt="COLSIH" className="w-full h-full object-cover grayscale opacity-10" />
+                                                        <img src="https://media.colsih.edu.co/home/estudiantes-colsih.png" alt="COLSIH" className="w-full h-full object-cover grayscale opacity-10" />
                                                         <img src="/marca/logo-colsih.svg" alt="Logo COLSIH" className="w-14 h-auto opacity-10 absolute" />
                                                     </div>
                                                 )}

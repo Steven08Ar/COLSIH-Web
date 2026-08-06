@@ -58,7 +58,7 @@ export default function Sena() {
                 {/* Imagen vertical de fondo enfocada a los estudiantes técnicos SENA */}
                 <div className="absolute inset-0 w-full h-full z-0 overflow-hidden pointer-events-none">
                     <img
-                        src="https://pub-c4ddb3fb75904158bbda5fbc35d6963e.r2.dev/ofertas_academicas/SENA.JPG"
+                        src="https://media.colsih.edu.co/ofertas_academicas/SENA.JPG"
                         alt="Estudiantes Convenio SENA COLSIH"
                         className="absolute top-0 right-0 w-full md:w-[65%] lg:w-[58%] h-full object-cover object-[center_40%] contrast-[1.05] brightness-90 md:brightness-95 scale-105"
                     />

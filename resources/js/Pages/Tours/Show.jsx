@@ -3,7 +3,7 @@ import { Head, Link } from '@inertiajs/react';
 import TourViewer from '@/Components/Tour360/TourViewer';
 import { ChevronLeft, Grid, Compass, Info, MapPin } from 'lucide-react';
 
-const R2_RECORRIDO_BASE = "https://pub-c4ddb3fb75904158bbda5fbc35d6963e.r2.dev/recorrido_360/";
+const R2_RECORRIDO_BASE = "https://media.colsih.edu.co/recorrido_360/";
 const getRecorridoR2Url = (file) => `${R2_RECORRIDO_BASE}${encodeURIComponent(file)}`;
 
 // Default fallback 360° scenes built from Cloudflare R2 recorrido_360 images

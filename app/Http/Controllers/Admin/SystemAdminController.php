@@ -84,6 +84,14 @@ class SystemAdminController extends Controller
             'category'    => 'base_datos',
             'color'       => 'orange',
         ],
+        'git_pull' => [
+            'label'       => 'git pull + migrate + optimize',
+            'command'     => '__shell__',
+            'params'      => [],
+            'description' => 'Descarga los últimos cambios de GitHub, actualiza dependencias, ejecuta migraciones y limpia cachés.',
+            'category'    => 'deploy',
+            'color'       => 'violet',
+        ],
     ];
 
     public function runCommand(Request $request)
@@ -101,6 +109,10 @@ class SystemAdminController extends Controller
         $cmdInfo = $this->allowedCommands[$actionKey];
 
         try {
+            if ($cmdInfo['command'] === '__shell__') {
+                return $this->runDeploy($actionKey, $cmdInfo);
+            }
+
             $exitCode = Artisan::call($cmdInfo['command'], $cmdInfo['params']);
             $output = Artisan::output();
 
@@ -139,5 +151,50 @@ class SystemAdminController extends Controller
                 ]
             ]);
         }
+    }
+
+    protected function runDeploy(string $actionKey, array $cmdInfo)
+    {
+        $basePath = base_path();
+        $php      = PHP_BINARY;
+        $output   = [];
+        $exitCode = 0;
+
+        $steps = [
+            "git -C {$basePath} pull origin main 2>&1",
+            "{$php} {$basePath}/artisan migrate --force 2>&1",
+            "{$php} {$basePath}/artisan optimize:clear 2>&1",
+            "{$php} {$basePath}/artisan config:cache 2>&1",
+            "{$php} {$basePath}/artisan route:cache 2>&1",
+            "{$php} {$basePath}/artisan view:cache 2>&1",
+        ];
+
+        foreach ($steps as $cmd) {
+            $stepOut  = [];
+            $stepCode = 0;
+            exec($cmd, $stepOut, $stepCode);
+            $output[] = "$ {$cmd}";
+            $output[] = implode("\n", $stepOut);
+            $output[] = '';
+            if ($stepCode !== 0) {
+                $exitCode = $stepCode;
+            }
+        }
+
+        $outputStr = implode("\n", $output);
+
+        Log::info("Admin ejecutó deploy desde panel.", ['output' => $outputStr]);
+
+        return back()->with([
+            'flash'          => $exitCode === 0 ? 'Deploy ejecutado correctamente.' : 'Deploy finalizado con advertencias — revisa el log.',
+            'command_output' => [
+                'action'      => $actionKey,
+                'label'       => $cmdInfo['label'],
+                'command'     => 'git pull + artisan',
+                'exitCode'    => $exitCode,
+                'output'      => $outputStr,
+                'executed_at' => now()->format('Y-m-d H:i:s'),
+            ],
+        ]);
     }
 }

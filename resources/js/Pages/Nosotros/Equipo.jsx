@@ -15,8 +15,8 @@ import {
 
 import { mediaUrl } from '@/utils/mediaUrl';
 
-const R2_DOCENTES_BASE = "https://pub-c4ddb3fb75904158bbda5fbc35d6963e.r2.dev/nuestro_colegio/equipo/docentes/";
-const R2_ADMINS_BASE   = "https://pub-c4ddb3fb75904158bbda5fbc35d6963e.r2.dev/nuestro_colegio/equipo/administrativos/";
+const R2_DOCENTES_BASE = "https://media.colsih.edu.co/nuestro_colegio/equipo/docentes/";
+const R2_ADMINS_BASE   = "https://media.colsih.edu.co/nuestro_colegio/equipo/administrativos/";
 
 const getDocenteR2Url = (nombreCompleto) => {
     return `${R2_DOCENTES_BASE}${encodeURIComponent(nombreCompleto)}.JPG`;
@@ -135,7 +135,7 @@ export default function Equipo({ equipo = [] }) {
                 <section className="relative w-full bg-gradient-to-r from-[#003C8F] to-[#0D1B2E] text-white pt-36 pb-36 px-6 overflow-hidden">
                     <div 
                         className="absolute inset-0 bg-cover bg-center opacity-10 brightness-[0.2] pointer-events-none"
-                        style={{ backgroundImage: "url('https://pub-c4ddb3fb75904158bbda5fbc35d6963e.r2.dev/home/panoramica.png')" }}
+                        style={{ backgroundImage: "url('https://media.colsih.edu.co/home/panoramica.png')" }}
                     />
                     <div className="absolute right-0 bottom-0 top-0 w-[35%] opacity-15 border-l border-amber-400 rounded-l-[50%] bg-gradient-to-r from-transparent to-amber-400/5 pointer-events-none hidden lg:block" />
 

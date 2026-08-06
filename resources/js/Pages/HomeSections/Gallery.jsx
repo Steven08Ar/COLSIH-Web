@@ -1,6 +1,6 @@
 import ScrollReveal from './ScrollReveal';
 
-const R2_ESPACIOS_BASE = "https://pub-c4ddb3fb75904158bbda5fbc35d6963e.r2.dev/espacios_academicos/";
+const R2_ESPACIOS_BASE = "https://media.colsih.edu.co/espacios_academicos/";
 
 export default function Gallery() {
     const items = [

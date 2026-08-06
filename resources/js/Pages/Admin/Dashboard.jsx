@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import PageBuilder from './PageBuilder/PageBuilder';
 import CarnetsAdminTab from './CarnetsAdminTab';
-import { Sun, Moon, Eye, Move, ZoomIn, Camera, User, X, Check, Upload, ArrowUp, ArrowDown, ArrowLeft, ArrowRight, Plus, Minus, Trash2, Terminal, Server, RefreshCw, Database, HardDrive, ShieldAlert, Cpu, Copy, Play, CreditCard } from 'lucide-react';
+import { Sun, Moon, Eye, Move, ZoomIn, Camera, User, X, Check, Upload, ArrowUp, ArrowDown, ArrowLeft, ArrowRight, Plus, Minus, Trash2, Terminal, Server, RefreshCw, Database, HardDrive, ShieldAlert, Cpu, Copy, Play, CreditCard, GitBranch } from 'lucide-react';
 import { processImageFile } from '@/utils/heicConverter';
 import { mediaUrl } from '@/utils/mediaUrl';
 
@@ -979,7 +979,7 @@ function NoticiasTab({ noticias, flash }) {
                                             <img src={portadaPreview} alt={titulo} className="w-full h-full object-cover transition duration-500" />
                                         ) : (
                                             <div className="w-full h-full flex items-center justify-center bg-slate-50 relative">
-                                                <img src="https://pub-c4ddb3fb75904158bbda5fbc35d6963e.r2.dev/home/estudiantes-colsih.png" className="w-full h-full object-cover grayscale opacity-15" />
+                                                <img src="https://media.colsih.edu.co/home/estudiantes-colsih.png" className="w-full h-full object-cover grayscale opacity-15" />
                                                 <img src="/marca/logo-colsih.svg" className="w-10 h-auto opacity-10 absolute center" />
                                             </div>
                                         )}
@@ -2697,6 +2697,16 @@ function MantenimientoTab({ flash, flash_error, command_output, basePath }) {
             badge: 'Restauración',
             icon: User,
             color: 'orange',
+            requiresConfirm: true,
+        },
+        {
+            key: 'git_pull',
+            title: 'git pull + migrate + optimize',
+            desc: 'Descarga los últimos cambios de GitHub, ejecuta migraciones pendientes y limpia todas las cachés. Úsalo después de cada commit.',
+            cat: 'Deploy',
+            badge: 'Actualizar Sitio',
+            icon: GitBranch,
+            color: 'violet',
             requiresConfirm: true,
         },
     ];

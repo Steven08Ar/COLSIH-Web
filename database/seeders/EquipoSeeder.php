@@ -12,8 +12,8 @@ class EquipoSeeder extends Seeder
         // Limpiar tabla antes de poblar
         EquipoMember::truncate();
 
-        $r2DocentesBase = "https://pub-c4ddb3fb75904158bbda5fbc35d6963e.r2.dev/nuestro_colegio/equipo/docentes/";
-        $r2AdminsBase = "https://pub-c4ddb3fb75904158bbda5fbc35d6963e.r2.dev/nuestro_colegio/equipo/administrativos/";
+        $r2DocentesBase = "https://media.colsih.edu.co/nuestro_colegio/equipo/docentes/";
+        $r2AdminsBase = "https://media.colsih.edu.co/nuestro_colegio/equipo/administrativos/";
 
         $directivos = [
             ['nombre' => 'Sor Beatriz Cortés Jerez', 'cargo' => 'Rectora', 'area' => 'Equipo Directivo', 'tipo' => 'directivo', 'foto' => $r2AdminsBase . rawurlencode('Sor Beatriz Cortés Jerez.JPG'), 'foto_posicion' => 20, 'foto_posicion_x' => 50, 'foto_posicion_y' => 20, 'foto_zoom' => 100, 'orden' => 1],

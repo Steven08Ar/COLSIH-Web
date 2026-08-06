@@ -18,18 +18,20 @@ import {
     ShieldCheck, 
     HelpCircle,
     Copy,
-    Check
+    Check,
+    ChevronRight,
+    Users,
+    BookmarkCheck
 } from 'lucide-react';
 import { useState } from 'react';
-import CopiarTexto from '@/Components/CopiarTexto';
 
 const LINK_INSCRIPCIONES = "https://e.plataformaintegra.net/sihungria/index.php/cupo";
 const CORREO_ADMISIONES = "admisionescolsihfloridablanca@gmail.com";
 
 const cuposGrados = [
-    { nivel: 'Preescolar', grados: ['Jardín', 'Transición'], color: 'bg-[#003C8F]' },
-    { nivel: 'Primaria', grados: ['1°', '2°', '3°', '4°'], color: 'bg-[#800A15]' },
-    { nivel: 'Bachillerato', grados: ['6°', '7°', '8°', '9°'], color: 'bg-slate-800' }
+    { nivel: 'Preescolar', grados: ['Jardín', 'Transición'], bgBadge: 'bg-[#003C8F]', textBadge: 'text-white' },
+    { nivel: 'Primaria', grados: ['1°', '2°', '3°', '4°'], bgBadge: 'bg-[#800A15]', textBadge: 'text-white' },
+    { nivel: 'Bachillerato', grados: ['6°', '7°', '8°', '9°'], bgBadge: 'bg-[#0B1F3A]', textBadge: 'text-white' }
 ];
 
 const pasosProceso = [
@@ -38,24 +40,27 @@ const pasosProceso = [
         titulo: 'Diligenciar Formulario de Inscripción',
         subtitulo: 'Registro inicial en la plataforma web',
         icono: FileText,
-        badge: 'Inicio en Línea',
-        colorBadge: 'bg-blue-100 text-[#003C8F] border-blue-200',
+        badge: 'PASO 1 · EN LÍNEA',
+        colorBadge: 'bg-[#003C8F] text-white',
         detalles: [
-            'Ingresa a la plataforma oficial de cupos para la inscripción de tu hijo(a).',
-            'Completa cuidadosamente la información básica del aspirante y los padres de familia.'
+            'Ingresa a la plataforma oficial de cupos e inicia el formulario de tu hijo(a).',
+            'Diligencia los datos completos del aspirante y los acudientes.'
         ],
         fechasImportantes: [
             {
-                fecha: '26 de Agosto',
-                desc: 'Se enviará a tu correo electrónico registrado el recibo de pago oficial para ser cancelado en el BANCO CAJA SOCIAL.'
+                fecha: '26 DE AGOSTO',
+                titulo: 'Envío de Recibo de Pago',
+                desc: 'Se enviará a tu correo electrónico el recibo oficial para cancelar el formulario en el BANCO CAJA SOCIAL.'
             },
             {
-                fecha: '28 de Agosto',
-                desc: 'Debes enviar la fotocopia o foto legible del recibo de pago (cancelado) emitido por el Banco al correo oficial: admisionescolsihfloridablanca@gmail.com'
+                fecha: '28 DE AGOSTO',
+                titulo: 'Envío de Comprobante',
+                desc: 'Enviar el recibo cancelado en el banco al correo admisionescolsihfloridablanca@gmail.com'
             },
             {
-                fecha: '29 de Agosto',
-                desc: 'Recibirás un mensaje de confirmación de pago y la citación con la fecha y hora para la prueba académica presencial.'
+                fecha: '29 DE AGOSTO',
+                titulo: 'Confirmación y Citación',
+                desc: 'Recibirás el mensaje de confirmación de pago con la fecha y hora asignadas para la prueba académica presencial.'
             }
         ],
         asuntoCorreo: 'Admisiones 2026, [Nombre y Apellidos del Hijo/a], [Grado que solicita]'
@@ -63,13 +68,13 @@ const pasosProceso = [
     {
         paso: '02',
         titulo: 'Envío de Documentación Obligatoria',
-        subtitulo: 'Requisito previo a la entrevista presencial',
+        subtitulo: 'Requisito previo e indispensable a la entrevista',
         icono: ShieldCheck,
-        badge: 'Hasta el 10 de Septiembre',
-        colorBadge: 'bg-amber-100 text-amber-900 border-amber-300',
+        badge: 'HASTA EL 10 DE SEPTIEMBRE',
+        colorBadge: 'bg-[#800A15] text-white',
         detalles: [
-            'Envía al correo admisionescolsihfloridablanca@gmail.com todos los documentos obligatorios escaneados en formato PDF o imagen nítida.',
-            'La entrega oportuna es requisito indispensable para habilitar la cita con la psicóloga.'
+            'Envía al correo oficial admisionescolsihfloridablanca@gmail.com todos los documentos requeridos escaneados en PDF o imagen nítida.',
+            'La entrega oportuna habilita la cita con la psicóloga.'
         ],
         documentosPorNivel: [
             {
@@ -82,7 +87,7 @@ const pasosProceso = [
                 nivel: 'PRIMARIA Y BACHILLERATO (1° a 9°)',
                 requisitos: [
                     'Fotocopia del observador del estudiante o constancia de comportamiento del año 2025.',
-                    'Registro Civil y/o Tarjeta de Identidad (para mayores de 7 años).',
+                    'Registro Civil y/o Tarjeta de Identidad (mayores de 7 años).',
                     'Boletines de calificaciones de los 3 periodos académicos del año 2025 cursados a la fecha.'
                 ]
             }
@@ -91,307 +96,342 @@ const pasosProceso = [
     {
         paso: '03',
         titulo: 'Prueba Académica y Entrevista Presencial',
-        subtitulo: 'Evaluación integral en las instalaciones del colegio',
+        subtitulo: 'Evaluación presencial en la sede principal',
         icono: UserCheck,
-        badge: 'Presencial e Indispensable',
-        colorBadge: 'bg-emerald-100 text-emerald-900 border-emerald-300',
+        badge: 'PRESENCIAL Y OBLIGATORIO',
+        colorBadge: 'bg-[#003C8F] text-white',
         detalles: [
-            'La prueba académica y la entrevista se realizarán de manera presencial en la sede principal del Colegio Santa Isabel de Hungría.',
-            'Asistencia obligatoria: En la entrevista debe estar presente el papá, la mamá y el aspirante.',
-            'Tanto la entrevista como los boletines, la prueba y los documentos serán evaluados por el Comité de Admisiones para la decisión final.'
+            'Tanto la prueba académica como la entrevista se realizarán de manera presencial.',
+            'En la entrevista es de asistencia obligatoria: Papá, Mamá y el aspirante.',
+            'Tanto la prueba, la entrevista y los documentos serán evaluados por el Comité de Admisiones para la decisión final.'
         ]
     },
     {
         paso: '04',
         titulo: 'Publicación de Lista de Admitidos',
-        subtitulo: 'Resultados oficiales del proceso 2026',
+        subtitulo: 'Resultados finales en el portal oficial',
         icono: GraduationCap,
-        badge: '1 de Octubre de 2025',
-        colorBadge: 'bg-purple-100 text-purple-900 border-purple-300',
+        badge: '1 DE OCTUBRE DE 2025',
+        colorBadge: 'bg-emerald-600 text-white',
         detalles: [
-            'La lista oficial de admitidos se publicará directamente en la página web institucional (colsih.edu.co/admisiones) el 1 de octubre de 2025.',
-            'Aplica para quienes hayan completado todas las fases (inscripción, pago, envío de documentos, prueba y entrevista) en las fechas indicadas.'
+            'La lista de estudiantes admitidos será publicada el 1 de octubre de 2025 en colsih.edu.co/admisiones',
+            'Válido para las familias que completaron oportunamente el formulario, pago, documentos, prueba y entrevista.'
         ]
     }
 ];
 
-const notasGenerales = [
+const notasClave = [
     {
-        titulo: 'Valor de la Inscripción',
-        desc: 'El costo del formulario es de setenta mil pesos ($70.000 COP). Recuerda que el valor no es reembolsable.',
-        icono: CreditCard
+        titulo: 'Costo del Formulario',
+        valor: '$70.000 COP',
+        desc: 'El valor de la inscripción es de setenta mil pesos m/cte. Este valor no es reembolsable.',
+        icono: CreditCard,
+        destacado: true
     },
     {
-        titulo: 'Lugar de Pago Oficial',
-        desc: 'El recibo emitido el 26 de agosto debe ser cancelado únicamente en las oficinas o canales autorizados del BANCO CAJA SOCIAL.',
-        icono: Building2
+        titulo: 'Pago Autorizado',
+        valor: 'BANCO CAJA SOCIAL',
+        desc: 'Único banco autorizado para el pago del recibo enviado el 26 de agosto al correo.',
+        icono: Building2,
+        destacado: false
     },
     {
         titulo: 'Condición de Selección',
-        desc: 'El diligenciamiento del formulario y el pago del recibo no aseguran el cupo; la admisión está sujeta a la evaluación del comité.',
-        icono: AlertCircle
+        valor: 'Sujeto a Evaluación',
+        desc: 'El diligenciamiento y pago no aseguran el cupo; está sujeto a la prueba y entrevista.',
+        icono: AlertCircle,
+        destacado: false
     },
     {
-        titulo: 'Correo Único de Contacto',
-        desc: 'Toda la comunicación de recibos y documentos debe hacerse exclusivamente al correo admisionescolsihfloridablanca@gmail.com',
-        icono: Mail
+        titulo: 'Canal Oficial',
+        valor: 'Correo Electrónico',
+        desc: 'admisionescolsihfloridablanca@gmail.com para el envío de comprobantes y papelería.',
+        icono: Mail,
+        destacado: false
     }
 ];
 
-const horariosNiveles = [
+const horariosJornadas = [
     { nivel: 'Preescolar', grados: 'Jardín y Transición', horario: '7:00 a.m. – 12:30 p.m.', badge: 'Jornada Mañana' },
     { nivel: 'Básica Primaria', grados: '1° a 5° Grado', horario: '6:30 a.m. – 1:00 p.m.', badge: 'Jornada Única' },
     { nivel: 'Bachillerato', grados: '6° a 11° Grado', horario: '6:30 a.m. – 2:00 p.m.', badge: 'Jornada Única' }
 ];
 
 export default function Admisiones() {
+    const [pasoActivo, setPasoActivo] = useState(0);
     const [asuntoCopiado, setAsuntoCopiado] = useState(false);
+    const [correoCopiado, setCorreoCopiado] = useState(false);
 
-    const copiarTextoAsunto = (texto) => {
+    const copiarTexto = (texto, esAsunto = true) => {
         navigator.clipboard.writeText(texto);
-        setAsuntoCopiado(true);
-        setTimeout(() => setAsuntoCopiado(false), 2500);
+        if (esAsunto) {
+            setAsuntoCopiado(true);
+            setTimeout(() => setAsuntoCopiado(false), 2500);
+        } else {
+            setCorreoCopiado(true);
+            setTimeout(() => setCorreoCopiado(false), 2500);
+        }
     };
 
     return (
         <AppLayout>
-            <Head title="Inscripciones y Admisiones Estudiantes Nuevos 2026 | COLSIH" />
+            <Head title="Inscripciones y Admisiones 2026 | COLSIH" />
 
-            {/* 1. HERO SECTION (Colores sólidos y limpios sin degradados) */}
-            <section className="relative pt-36 pb-32 md:pt-44 md:pb-44 bg-[#08111F] overflow-hidden select-none">
+            {/* 1. HERO LUMINOSO Y CLARO CON TIPOGRAFÍA GIGANTE */}
+            <section className="relative pt-36 pb-24 md:pt-48 md:pb-36 bg-[#FAFCFF] border-b border-slate-200 select-none overflow-hidden">
+                {/* Micro patrones limpios */}
+                <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: "radial-gradient(#003C8F 1.5px, transparent 1.5px)", backgroundSize: "28px 28px" }} />
+                
                 <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] relative z-10">
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+                    <div className="max-w-4xl mx-auto text-center space-y-8">
                         
-                        {/* Hero Text Content */}
-                        <div className="lg:col-span-7 text-center lg:text-left space-y-7">
-                            <ScrollReveal distance="translate-y-6">
-                                <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-[#800A15] text-white text-xs md:text-sm font-black tracking-wider uppercase border border-white/20">
-                                    <Sparkles className="w-4 h-4 text-amber-300" />
-                                    <span>INSCRIPCIÓN DE ESTUDIANTES NUEVOS · AÑO 2026</span>
-                                </div>
-                            </ScrollReveal>
+                        {/* Badge Gigante y Claro */}
+                        <ScrollReveal distance="translate-y-6">
+                            <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-[#800A15] text-white text-xs sm:text-sm md:text-base font-black tracking-widest uppercase shadow-lg shadow-[#800A15]/20">
+                                <Sparkles className="w-5 h-5 text-amber-300 shrink-0" />
+                                <span>PROCESO DE INSCRIPCIÓN · ESTUDIANTES NUEVOS 2026</span>
+                            </div>
+                        </ScrollReveal>
 
-                            <ScrollReveal distance="translate-y-6" delay={150}>
-                                <h1 className="text-4xl sm:text-5xl lg:text-[62px] font-black text-white leading-[1.05] tracking-tight font-sans">
-                                    Tu lugar en la familia <br className="hidden sm:block" />
-                                    <span className="text-amber-400">
-                                        Salesiana COLSIH
-                                    </span>
-                                </h1>
-                            </ScrollReveal>
+                        {/* Título Gigante Claro */}
+                        <ScrollReveal distance="translate-y-6" delay={150}>
+                            <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-[76px] font-black text-[#0B1F3A] leading-[0.95] tracking-tight font-sans">
+                                Proceso de Admisiones <br className="hidden sm:block" />
+                                <span className="text-[#003C8F]">
+                                    Año Escolar 2026
+                                </span>
+                            </h1>
+                        </ScrollReveal>
 
-                            <ScrollReveal distance="translate-y-6" delay={300}>
-                                <p className="text-base sm:text-lg md:text-xl font-medium text-slate-300 leading-relaxed max-w-2xl font-sans">
-                                    Formamos buenos cristianos y honestos ciudadanos. Explora el proceso paso a paso para el ingreso de tu hijo(a) y registra la solicitud de cupo directamente en nuestra plataforma.
-                                </p>
-                            </ScrollReveal>
+                        {/* Subtítulo Grande */}
+                        <ScrollReveal distance="translate-y-6" delay={300}>
+                            <p className="text-xl sm:text-2xl font-semibold text-slate-600 leading-relaxed font-sans max-w-3xl mx-auto">
+                                Te damos la bienvenida al Colegio Santa Isabel de Hungría. Revisa los grados disponibles, sigue la guía paso a paso e inicia la solicitud de cupo en la plataforma oficial.
+                            </p>
+                        </ScrollReveal>
 
-                            {/* Botón Principal Destacado (Color Sólido Vinotinto / Azul) */}
-                            <ScrollReveal distance="translate-y-6" delay={450}>
-                                <div className="pt-3 flex flex-wrap items-center justify-center lg:justify-start gap-4">
-                                    <a
-                                        href={LINK_INSCRIPCIONES}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="group inline-flex items-center justify-center gap-3 px-8 py-4.5 rounded-2xl bg-[#800A15] hover:bg-[#a80e1e] text-white font-black text-base shadow-2xl hover:scale-[1.03] active:scale-[0.98] transition-all duration-300 border border-white/30 cursor-pointer"
-                                    >
-                                        <FileText className="w-5 h-5 text-amber-300 group-hover:rotate-12 transition-transform duration-300" />
-                                        <span>ENTRAR A INSCRIPCIONES (SOLICITAR CUPO)</span>
-                                        <ExternalLink className="w-5 h-5 text-white/80 group-hover:translate-x-1 transition-transform" />
-                                    </a>
+                        {/* BOTÓN GIGANTE LLAMATIVO SIN DEGRADADOS */}
+                        <ScrollReveal distance="translate-y-6" delay={450}>
+                            <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-5">
+                                <a
+                                    href={LINK_INSCRIPCIONES}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="group inline-flex items-center justify-center gap-4 px-10 py-5 rounded-2xl bg-[#003C8F] hover:bg-[#002e6e] text-white font-black text-lg md:text-xl shadow-xl shadow-[#003C8F]/30 hover:scale-[1.03] active:scale-[0.98] transition-all duration-300 border-2 border-[#003C8F] cursor-pointer"
+                                >
+                                    <FileText className="w-6 h-6 text-amber-300 group-hover:rotate-12 transition-transform duration-300" />
+                                    <span>ENTRAR A INSCRIPCIONES (SOLICITAR CUPO)</span>
+                                    <ExternalLink className="w-6 h-6 text-white group-hover:translate-x-1 transition-transform" />
+                                </a>
 
-                                    <a
-                                        href="#pasos-proceso"
-                                        className="inline-flex items-center gap-2 px-6 py-4 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-extrabold text-sm border border-white/20 hover:scale-[1.02] transition-all duration-300"
-                                    >
-                                        <span>Ver Paso a Paso</span>
-                                        <ArrowRight className="w-4 h-4 text-blue-300" />
-                                    </a>
-                                </div>
-                            </ScrollReveal>
+                                <a
+                                    href="#guia-pasos"
+                                    className="inline-flex items-center gap-2 px-8 py-5 rounded-2xl bg-white hover:bg-slate-100 text-[#0B1F3A] font-extrabold text-base md:text-lg border-2 border-slate-300 shadow-md hover:scale-[1.02] transition-all duration-300"
+                                >
+                                    <span>Ver Instrucciones</span>
+                                    <ArrowRight className="w-5 h-5 text-[#003C8F]" />
+                                </a>
+                            </div>
+                        </ScrollReveal>
+
+                    </div>
+                </div>
+            </section>
+
+            {/* 2. BARRA DESTACADA DE CUPOS DISPONIBLES (CLARA Y MODERNA) */}
+            <section className="py-16 bg-white border-b border-slate-200 select-none">
+                <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px]">
+                    <div className="bg-[#F0F4FA] border-2 border-[#003C8F]/20 rounded-3xl p-8 md:p-10 shadow-sm space-y-6">
+                        
+                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b-2 border-slate-200/80 pb-6">
+                            <div className="space-y-1 text-left">
+                                <span className="text-xs font-black uppercase tracking-widest text-[#800A15] block font-sans">
+                                    DISPONIBILIDAD CONFIRMADA DE CUPOS
+                                </span>
+                                <h2 className="text-3xl md:text-4xl font-black text-[#0B1F3A] font-sans">
+                                    Cupos Disponibles para el Año 2026:
+                                </h2>
+                            </div>
+                            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-[#003C8F] text-white font-black text-sm tracking-wider uppercase self-start md:self-auto">
+                                <BookmarkCheck className="w-5 h-5 text-amber-300" />
+                                <span>Inscripciones Habilitadas</span>
+                            </div>
                         </div>
 
-                        {/* Cupos Disponibles - Widget Card */}
-                        <div className="lg:col-span-5">
-                            <ScrollReveal distance="translate-y-8" delay={300}>
-                                <div className="bg-[#0D1B2E] border border-white/15 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6 relative overflow-hidden">
-                                    <div className="flex items-center justify-between border-b border-white/10 pb-4">
-                                        <div>
-                                            <span className="text-[11px] font-black uppercase tracking-widest text-amber-400 block font-sans">
-                                                CUPOS DISPONIBLES AÑO 2026
+                        {/* Grid de Grados por Nivel */}
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
+                            {cuposGrados.map((item, idx) => (
+                                <div key={idx} className="bg-white p-6 rounded-2xl border-2 border-slate-200 space-y-3 hover:border-[#003C8F] transition-colors shadow-xs">
+                                    <span className="text-xs font-black uppercase tracking-wider text-slate-400 font-sans block">
+                                        {item.nivel}:
+                                    </span>
+                                    <div className="flex flex-wrap gap-2.5">
+                                        {item.grados.map((grado, gIdx) => (
+                                            <span key={gIdx} className={`px-4 py-2 rounded-xl ${item.bgBadge} ${item.textBadge} font-black text-sm shadow-sm`}>
+                                                Grado {grado}
                                             </span>
-                                            <h3 className="text-xl font-black text-white font-sans mt-0.5">
-                                                Grados Abiertos para Admisión
-                                            </h3>
-                                        </div>
-                                        <div className="w-10 h-10 rounded-xl bg-amber-400 text-slate-950 flex items-center justify-center font-black">
-                                            2026
-                                        </div>
-                                    </div>
-
-                                    <div className="space-y-4">
-                                        {cuposGrados.map((item, idx) => (
-                                            <div key={idx} className="p-4 rounded-2xl bg-slate-900 border border-white/10 space-y-2 hover:bg-slate-800 transition-colors">
-                                                <span className="text-xs font-black uppercase tracking-wider text-slate-300 font-sans block">
-                                                    {item.nivel}:
-                                                </span>
-                                                <div className="flex flex-wrap gap-2">
-                                                    {item.grados.map((grado, gIdx) => (
-                                                        <span key={gIdx} className={`px-3 py-1 rounded-xl ${item.color} text-white font-extrabold text-xs shadow-md border border-white/20`}>
-                                                            Grado {grado}
-                                                        </span>
-                                                    ))}
-                                                </div>
-                                            </div>
                                         ))}
                                     </div>
-
-                                    <div className="p-4 rounded-2xl bg-[#800A15]/40 border border-amber-400/40 flex items-start gap-3">
-                                        <CheckCircle2 className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
-                                        <p className="text-xs font-semibold text-slate-200 leading-snug">
-                                            <strong className="text-amber-300">Costo del formulario:</strong> $70.000 COP (No reembolsable). Se cancela en Banco Caja Social previa recepción del recibo por correo.
-                                        </p>
-                                    </div>
                                 </div>
-                            </ScrollReveal>
+                            ))}
+                        </div>
+
+                        {/* Banner del Costo */}
+                        <div className="p-5 rounded-2xl bg-white border-2 border-[#800A15]/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                            <div className="flex items-center gap-3 text-left">
+                                <div className="w-12 h-12 rounded-2xl bg-[#800A15] text-white flex items-center justify-center shrink-0 font-black">
+                                    $
+                                </div>
+                                <div>
+                                    <span className="text-xs font-black uppercase text-[#800A15] tracking-wider block font-sans">COSTO DEL FORMULARIO</span>
+                                    <p className="text-lg font-black text-[#0B1F3A] font-sans">
+                                        SETENTA MIL PESOS ($70.000 COP) · <span className="text-slate-500 font-semibold text-sm">Valor no reembolsable</span>
+                                    </p>
+                                </div>
+                            </div>
+                            <span className="text-xs font-bold text-slate-500 bg-slate-100 px-3 py-1.5 rounded-xl border border-slate-200">
+                                Pago en Banco Caja Social
+                            </span>
                         </div>
 
                     </div>
                 </div>
-
-                {/* Bottom Wave Divider */}
-                <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-none z-20 pointer-events-none">
-                    <svg className="relative block w-full h-[40px] sm:h-[70px]" viewBox="0 0 1440 100" preserveAspectRatio="none">
-                        <path d="M0,100 C380,10 760,90 1080,30 C1200,10 1320,20 1440,60 L1440,100 L0,100 Z" fill="#ffffff"></path>
-                    </svg>
-                </div>
             </section>
 
-            {/* 2. NOTAS DE INFORMACIÓN GENERAL */}
-            <section className="relative py-16 bg-white overflow-hidden select-none">
-                <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px]">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                        {notasGenerales.map((nota, idx) => {
-                            const Icono = nota.icono;
-                            return (
-                                <ScrollReveal key={idx} distance="translate-y-6" delay={idx * 100}>
-                                    <div className="p-6 rounded-3xl bg-slate-50 border border-slate-200 hover:bg-white hover:shadow-xl hover:border-blue-200 transition-all duration-300 space-y-3 h-full flex flex-col justify-between group">
-                                        <div className="space-y-3">
-                                            <div className="w-12 h-12 rounded-2xl bg-[#003C8F] text-white group-hover:bg-[#800A15] transition-colors duration-300 flex items-center justify-center shrink-0 shadow-sm">
-                                                <Icono className="w-6 h-6" />
-                                            </div>
-                                            <h3 className="text-base font-extrabold text-slate-900 font-sans">
-                                                {nota.titulo}
-                                            </h3>
-                                            <p className="text-xs font-semibold text-slate-600 leading-relaxed font-sans">
-                                                {nota.desc}
-                                            </p>
-                                        </div>
-                                    </div>
-                                </ScrollReveal>
-                            );
-                        })}
-                    </div>
-                </div>
-            </section>
-
-            {/* 3. PASO A PASO DETALLADO (Colores Sólidos) */}
-            <section id="pasos-proceso" className="relative py-20 md:py-32 bg-slate-50 border-y border-slate-200 overflow-hidden select-none">
+            {/* 3. GUÍA PASO A PASO INTERACTIVA (MÁS GRANDE, DINÁMICA Y DETALLADA) */}
+            <section id="guia-pasos" className="py-20 md:py-36 bg-[#FAFCFF] border-b border-slate-200 select-none">
                 <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] space-y-16">
                     
-                    <div className="text-center max-w-3xl mx-auto space-y-4">
+                    <div className="text-center max-w-4xl mx-auto space-y-4">
                         <ScrollReveal distance="translate-y-6">
-                            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-100 text-[#003C8F] font-extrabold text-xs tracking-[3px] uppercase border border-blue-200">
-                                <Calendar className="w-4 h-4 text-[#003C8F]" />
-                                INSTRUCCIONES PASO A PASO
+                            <span className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#003C8F] text-white font-black text-xs md:text-sm tracking-widest uppercase shadow-md">
+                                <Calendar className="w-4 h-4 text-amber-300" />
+                                PASOS PARA SEGUIR
                             </span>
                         </ScrollReveal>
                         <ScrollReveal distance="translate-y-6" delay={150}>
-                            <h2 className="text-3xl sm:text-4xl lg:text-[48px] font-black text-slate-900 leading-[1.1] tracking-tight font-sans">
-                                Guía para la Inscripción y Admisión
+                            <h2 className="text-4xl sm:text-5xl lg:text-[56px] font-black text-[#0B1F3A] leading-[1.05] tracking-tight font-sans">
+                                Instrucciones y Cronograma 2026
                             </h2>
                         </ScrollReveal>
                         <ScrollReveal distance="translate-y-6" delay={300}>
-                            <p className="text-slate-600 font-medium text-base sm:text-lg">
-                                Sigue detalladamente cada una de las 4 etapas para asegurar el correcto registro y participación de tu hijo(a) en el proceso de selección.
+                            <p className="text-slate-600 font-semibold text-lg md:text-xl max-w-2xl mx-auto">
+                                Haz clic en las etapas o desplázate para conocer en detalle las fechas, documentos obligatorios y requisitos presenciales.
                             </p>
                         </ScrollReveal>
                     </div>
 
-                    <div className="space-y-12">
+                    {/* Selector Dinámico de Pasos */}
+                    <div className="flex justify-center gap-3 overflow-x-auto pb-4 no-scrollbar">
+                        {pasosProceso.map((p, idx) => (
+                            <button
+                                key={idx}
+                                onClick={() => setPasoActivo(idx)}
+                                className={`px-6 py-3.5 rounded-2xl font-black text-sm sm:text-base transition-all duration-300 flex items-center gap-3 whitespace-nowrap cursor-pointer border-2 ${
+                                    pasoActivo === idx
+                                        ? 'bg-[#003C8F] text-white border-[#003C8F] shadow-lg scale-105'
+                                        : 'bg-white text-slate-700 border-slate-300 hover:border-[#003C8F]'
+                                }`}
+                            >
+                                <span className={`w-7 h-7 rounded-lg text-xs font-black flex items-center justify-center ${pasoActivo === idx ? 'bg-amber-400 text-slate-950' : 'bg-slate-100 text-slate-800'}`}>
+                                    {p.paso}
+                                </span>
+                                <span>Etapa {p.paso}</span>
+                            </button>
+                        ))}
+                    </div>
+
+                    {/* Contenido Completo de Todos los Pasos */}
+                    <div className="space-y-10">
                         {pasosProceso.map((paso, idx) => {
                             const IconoPaso = paso.icono;
+                            const esSeleccionado = pasoActivo === idx;
                             return (
-                                <ScrollReveal key={idx} distance="translate-y-8" delay={idx * 150}>
-                                    <div className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-lg hover:shadow-2xl transition-all duration-300 relative overflow-hidden group">
-                                        
+                                <ScrollReveal key={idx} distance="translate-y-8">
+                                    <div 
+                                        onClick={() => setPasoActivo(idx)}
+                                        className={`bg-white rounded-3xl p-8 sm:p-12 border-2 transition-all duration-300 text-left cursor-pointer ${
+                                            esSeleccionado
+                                                ? 'border-[#003C8F] shadow-2xl ring-4 ring-[#003C8F]/10 scale-[1.01]'
+                                                : 'border-slate-200 hover:border-slate-300 shadow-md'
+                                        }`}
+                                    >
                                         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
                                             
-                                            {/* Header y Número */}
-                                            <div className="lg:col-span-4 space-y-4 text-left border-b lg:border-b-0 lg:border-r border-slate-100 lg:pr-8 pb-6 lg:pb-0">
+                                            {/* Columna Izquierda: Título y Datos */}
+                                            <div className="lg:col-span-5 space-y-5 lg:border-r-2 lg:border-slate-100 lg:pr-8">
                                                 <div className="flex items-center justify-between">
-                                                    <span className="text-4xl font-black text-[#003C8F] font-sans opacity-80 group-hover:text-[#800A15] transition-colors">
+                                                    <span className="text-5xl font-black text-[#003C8F] font-sans">
                                                         Paso {paso.paso}
                                                     </span>
-                                                    <span className={`px-3.5 py-1 rounded-full text-xs font-black uppercase tracking-wider border ${paso.colorBadge}`}>
+                                                    <span className={`px-4 py-1.5 rounded-xl font-black text-xs uppercase tracking-wider ${paso.colorBadge}`}>
                                                         {paso.badge}
                                                     </span>
                                                 </div>
 
-                                                <div className="flex items-center gap-3">
-                                                    <div className="w-12 h-12 rounded-2xl bg-[#003C8F] text-white flex items-center justify-center shrink-0 shadow-md">
-                                                        <IconoPaso className="w-6 h-6" />
+                                                <div className="flex items-start gap-4">
+                                                    <div className="w-14 h-14 rounded-2xl bg-[#003C8F] text-white flex items-center justify-center shrink-0 shadow-md">
+                                                        <IconoPaso className="w-7 h-7" />
                                                     </div>
                                                     <div>
-                                                        <h3 className="text-xl font-black text-slate-900 leading-snug font-sans">
+                                                        <h3 className="text-2xl sm:text-3xl font-black text-[#0B1F3A] leading-tight font-sans">
                                                             {paso.titulo}
                                                         </h3>
-                                                        <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mt-0.5">
+                                                        <p className="text-sm font-bold text-slate-400 uppercase tracking-wider mt-1">
                                                             {paso.subtitulo}
-                                                        </span>
+                                                        </p>
                                                     </div>
                                                 </div>
 
-                                                {/* Asunto de Correo si aplica */}
+                                                {/* Asunto de correo interactivo */}
                                                 {paso.asuntoCorreo && (
-                                                    <div className="p-4 rounded-2xl bg-amber-50 border border-amber-200 space-y-2">
-                                                        <span className="text-[11px] font-black uppercase tracking-wider text-amber-900 block font-sans">
+                                                    <div className="p-5 rounded-2xl bg-amber-50 border-2 border-amber-300 space-y-2">
+                                                        <span className="text-xs font-black uppercase tracking-wider text-amber-900 block font-sans">
                                                             ASUNTO DEL CORREO (OBLIGATORIO):
                                                         </span>
-                                                        <div className="flex items-center justify-between bg-white p-2.5 rounded-xl border border-amber-300">
-                                                            <code className="text-xs font-extrabold text-slate-800 break-all">
+                                                        <div className="flex items-center justify-between bg-white p-3 rounded-xl border border-amber-300">
+                                                            <code className="text-xs sm:text-sm font-extrabold text-slate-900 break-all">
                                                                 {paso.asuntoCorreo}
                                                             </code>
                                                             <button
-                                                                onClick={() => copiarTextoAsunto(paso.asuntoCorreo)}
-                                                                className="ml-2 p-1.5 rounded-lg bg-amber-100 hover:bg-amber-200 text-amber-900 transition-colors shrink-0 cursor-pointer"
-                                                                title="Copiar asunto"
+                                                                onClick={(e) => { e.stopPropagation(); copiarTexto(paso.asuntoCorreo, true); }}
+                                                                className="ml-3 px-3 py-1.5 rounded-lg bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs transition-colors shrink-0 flex items-center gap-1 cursor-pointer"
+                                                                title="Copiar asunto al portapapeles"
                                                             >
-                                                                {asuntoCopiado ? <Check className="w-4 h-4 text-emerald-600" /> : <Copy className="w-4 h-4" />}
+                                                                {asuntoCopiado ? <Check className="w-4 h-4 text-emerald-950" /> : <Copy className="w-4 h-4" />}
+                                                                <span>{asuntoCopiado ? '¡Copiado!' : 'Copiar'}</span>
                                                             </button>
                                                         </div>
                                                     </div>
                                                 )}
                                             </div>
 
-                                            {/* Detalles y Fechas / Requisitos */}
-                                            <div className="lg:col-span-8 space-y-6 text-left">
-                                                <ul className="space-y-2.5">
-                                                    {paso.detalles.map((det, dIdx) => (
-                                                        <li key={dIdx} className="flex items-start gap-3 text-sm font-semibold text-slate-700 leading-relaxed font-sans">
-                                                            <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
-                                                            <span>{det}</span>
-                                                        </li>
-                                                    ))}
-                                                </ul>
+                                            {/* Columna Derecha: Requisitos y Fechas */}
+                                            <div className="lg:col-span-7 space-y-6">
+                                                <div className="space-y-3">
+                                                    <h4 className="text-xs font-black uppercase tracking-widest text-[#800A15] block font-sans">
+                                                        DETALLES DE ESTA ETAPA:
+                                                    </h4>
+                                                    <ul className="space-y-3">
+                                                        {paso.detalles.map((det, dIdx) => (
+                                                            <li key={dIdx} className="flex items-start gap-3 text-base sm:text-lg font-semibold text-slate-800 leading-relaxed font-sans">
+                                                                <CheckCircle2 className="w-6 h-6 text-emerald-600 shrink-0 mt-0.5" />
+                                                                <span>{det}</span>
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                </div>
 
-                                                {/* Bloque de Fechas si aplica (Paso 1) */}
+                                                {/* Fechas de Envío (Paso 1) */}
                                                 {paso.fechasImportantes && (
                                                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
                                                         {paso.fechasImportantes.map((f, fIdx) => (
-                                                            <div key={fIdx} className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-1.5">
+                                                            <div key={fIdx} className="p-4 rounded-2xl bg-[#F8FAFC] border-2 border-slate-200 space-y-2">
                                                                 <span className="text-xs font-black uppercase tracking-wider text-[#800A15] block font-sans">
                                                                     {f.fecha}
+                                                                </span>
+                                                                <span className="text-sm font-extrabold text-[#0B1F3A] block font-sans">
+                                                                    {f.titulo}
                                                                 </span>
                                                                 <p className="text-xs font-semibold text-slate-600 leading-relaxed font-sans">
                                                                     {f.desc}
@@ -401,18 +441,18 @@ export default function Admisiones() {
                                                     </div>
                                                 )}
 
-                                                {/* Bloque de Documentos por Nivel si aplica (Paso 2) */}
+                                                {/* Documentos por Nivel (Paso 2) */}
                                                 {paso.documentosPorNivel && (
                                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
                                                         {paso.documentosPorNivel.map((doc, docIdx) => (
-                                                            <div key={docIdx} className="p-5 rounded-2xl bg-blue-50 border border-blue-200 space-y-3">
+                                                            <div key={docIdx} className="p-5 rounded-2xl bg-[#F0F4FA] border-2 border-[#003C8F]/30 space-y-3">
                                                                 <span className="text-xs font-black uppercase tracking-wider text-[#003C8F] block font-sans border-b border-blue-200 pb-2">
                                                                     {doc.nivel}
                                                                 </span>
                                                                 <ul className="space-y-2">
                                                                     {doc.requisitos.map((req, rIdx) => (
-                                                                        <li key={rIdx} className="flex items-start gap-2.5 text-xs font-semibold text-slate-700 leading-relaxed font-sans">
-                                                                            <span className="w-1.5 h-1.5 rounded-full bg-[#003C8F] mt-1.5 shrink-0" />
+                                                                        <li key={rIdx} className="flex items-start gap-2.5 text-xs sm:text-sm font-bold text-slate-800 leading-relaxed font-sans">
+                                                                            <span className="w-2 h-2 rounded-full bg-[#003C8F] mt-1.5 shrink-0" />
                                                                             <span>{req}</span>
                                                                         </li>
                                                                     ))}
@@ -425,104 +465,139 @@ export default function Admisiones() {
                                             </div>
 
                                         </div>
-
                                     </div>
                                 </ScrollReveal>
                             );
                         })}
                     </div>
+
                 </div>
             </section>
 
-            {/* 4. HORARIOS Y JORNADA ÚNICA */}
-            <section className="relative py-20 bg-white overflow-hidden select-none">
-                <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] space-y-12">
+            {/* 4. SECCIÓN INFORMACIÓN CLAVE & HORARIOS */}
+            <section className="py-20 bg-white select-none">
+                <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] space-y-16">
                     
-                    <div className="text-center max-w-2xl mx-auto space-y-3">
-                        <ScrollReveal distance="translate-y-6">
-                            <span className="text-[#800A15] text-xs font-extrabold tracking-[3px] uppercase block font-sans">
-                                HORARIOS ESCOLARES OFICIALES
-                            </span>
-                        </ScrollReveal>
-                        <ScrollReveal distance="translate-y-6" delay={150}>
-                            <h2 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight font-sans">
-                                Jornada Única e Inicial
-                            </h2>
-                        </ScrollReveal>
-                    </div>
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+                        
+                        {/* Notas Clave */}
+                        <div className="lg:col-span-6 space-y-6 text-left">
+                            <div className="space-y-2">
+                                <span className="text-xs font-black uppercase tracking-widest text-[#800A15] block font-sans">
+                                    INFORMACIÓN GENERAL DE ADMISIÓN
+                                </span>
+                                <h3 className="text-3xl sm:text-4xl font-black text-[#0B1F3A] font-sans">
+                                    Aspectos Clave a Tener en Cuenta
+                                </h3>
+                            </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        {horariosNiveles.map((h, idx) => (
-                            <ScrollReveal key={idx} distance="translate-y-6" delay={idx * 150}>
-                                <div className="p-8 rounded-3xl bg-slate-50 border border-slate-200 hover:border-rose-300 hover:shadow-xl transition-all duration-300 space-y-4 text-left h-full flex flex-col justify-between">
-                                    <div className="space-y-2">
-                                        <span className="px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-[#800A15] text-white">
-                                            {h.badge}
-                                        </span>
-                                        <h3 className="text-xl font-black text-slate-900 font-sans pt-2">
-                                            {h.nivel}
-                                        </h3>
-                                        <span className="text-xs font-semibold text-slate-500 block">
-                                            Grados: {h.grados}
-                                        </span>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                {notasClave.map((nota, idx) => {
+                                    const IconoNota = nota.icono;
+                                    return (
+                                        <div key={idx} className="p-6 rounded-2xl bg-[#F8FAFC] border-2 border-slate-200 space-y-2.5">
+                                            <div className="flex items-center gap-3">
+                                                <div className="w-10 h-10 rounded-xl bg-[#003C8F] text-white flex items-center justify-center shrink-0 font-bold">
+                                                    <IconoNota className="w-5 h-5" />
+                                                </div>
+                                                <div>
+                                                    <span className="text-xs font-bold text-slate-400 uppercase block">{nota.titulo}</span>
+                                                    <span className="text-sm font-black text-[#0B1F3A] font-sans">{nota.valor}</span>
+                                                </div>
+                                            </div>
+                                            <p className="text-xs font-semibold text-slate-600 leading-relaxed font-sans pt-1">
+                                                {nota.desc}
+                                            </p>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
+
+                        {/* Horarios Escolares */}
+                        <div className="lg:col-span-6 space-y-6 text-left">
+                            <div className="space-y-2">
+                                <span className="text-xs font-black uppercase tracking-widest text-[#003C8F] block font-sans">
+                                    HORARIOS DE ATENCIÓN ESCOLAR
+                                </span>
+                                <h3 className="text-3xl sm:text-4xl font-black text-[#0B1F3A] font-sans">
+                                    Jornada Única e Inicial
+                                </h3>
+                            </div>
+
+                            <div className="space-y-4">
+                                {horariosJornadas.map((h, idx) => (
+                                    <div key={idx} className="p-6 rounded-2xl bg-white border-2 border-slate-200 hover:border-[#003C8F] transition-colors flex items-center justify-between gap-4 shadow-xs">
+                                        <div className="space-y-1">
+                                            <span className="px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-[#800A15] text-white inline-block mb-1">
+                                                {h.badge}
+                                            </span>
+                                            <h4 className="text-lg font-black text-[#0B1F3A] font-sans">
+                                                {h.nivel}
+                                            </h4>
+                                            <span className="text-xs font-bold text-slate-500 block">
+                                                Grados: {h.grados}
+                                            </span>
+                                        </div>
+                                        <div className="text-right">
+                                            <span className="text-xs font-bold text-slate-400 block uppercase">Horario:</span>
+                                            <span className="text-base sm:text-lg font-black text-[#003C8F] font-sans">
+                                                {h.horario}
+                                            </span>
+                                        </div>
                                     </div>
-                                    <div className="pt-4 border-t border-slate-200 flex items-center justify-between">
-                                        <span className="text-xs font-bold text-slate-400 uppercase">Horario:</span>
-                                        <span className="text-sm font-black text-[#003C8F] font-sans">
-                                            {h.horario}
-                                        </span>
-                                    </div>
-                                </div>
-                            </ScrollReveal>
-                        ))}
+                                ))}
+                            </div>
+                        </div>
+
                     </div>
 
                 </div>
             </section>
 
-            {/* 5. LLAMADO A LA ACCIÓN FINAL (Color Sólido Azul Salesiano #003C8F) */}
-            <section className="relative py-24 bg-[#003C8F] text-white overflow-hidden select-none">
-                <div className="max-w-5xl mx-auto px-6 text-center relative z-10 space-y-8">
+            {/* 5. LLAMADO A LA ACCIÓN FINAL GIGANTE Y CLARO */}
+            <section className="py-24 bg-[#003C8F] text-white select-none">
+                <div className="max-w-5xl mx-auto px-6 text-center space-y-8">
                     
                     <ScrollReveal distance="translate-y-6">
-                        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#800A15] border border-white/20 text-amber-300 text-xs font-black uppercase tracking-wider">
+                        <div className="inline-flex items-center gap-2.5 px-6 py-2.5 rounded-full bg-[#800A15] text-amber-300 text-xs sm:text-sm font-black uppercase tracking-widest shadow-lg">
                             <Sparkles className="w-4 h-4 text-amber-300" />
-                            <span>INSCRIPCIONES ABIERTAS 2026</span>
+                            <span>PLATAFORMA OFICIAL DE INSCRIPCIÓN 2026</span>
                         </div>
                     </ScrollReveal>
 
                     <ScrollReveal distance="translate-y-6" delay={150}>
-                        <h2 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight leading-tight text-white font-sans drop-shadow-md">
-                            ¡Asegura el cupo de tu hijo(a) en el Colegio Santa Isabel de Hungría!
+                        <h2 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight leading-tight text-white font-sans">
+                            ¡Ingresa a la plataforma e inicia la solicitud de cupo!
                         </h2>
                     </ScrollReveal>
 
                     <ScrollReveal distance="translate-y-6" delay={300}>
-                        <p className="text-blue-100 text-base md:text-xl font-medium max-w-2xl mx-auto font-sans leading-relaxed">
-                            Haz clic en el siguiente botón para acceder al formulario oficial de solicitud de cupo en la plataforma e iniciar el trámite.
+                        <p className="text-blue-100 text-lg sm:text-2xl font-semibold max-w-3xl mx-auto font-sans leading-relaxed">
+                            Forma parte de nuestra comunidad educativa salesiana en Floridablanca. Registra la información de tu hijo(a) en pocos minutos.
                         </p>
                     </ScrollReveal>
 
                     <ScrollReveal distance="translate-y-6" delay={450}>
-                        <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
+                        <div className="flex flex-col sm:flex-row items-center justify-center gap-5 pt-4">
                             <a
                                 href={LINK_INSCRIPCIONES}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="group inline-flex items-center gap-3 px-9 py-4.5 rounded-2xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-base shadow-2xl hover:scale-105 transition-all duration-300 cursor-pointer"
+                                className="group inline-flex items-center justify-center gap-4 px-10 py-5 rounded-2xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-lg md:text-xl shadow-2xl hover:scale-105 transition-all duration-300 cursor-pointer"
                             >
-                                <FileText className="w-5 h-5 text-slate-950" />
+                                <FileText className="w-6 h-6 text-slate-950" />
                                 <span>ENTRAR A INSCRIPCIONES (SOLICITAR CUPO)</span>
-                                <ExternalLink className="w-5 h-5 text-slate-950 group-hover:translate-x-1 transition-transform" />
+                                <ExternalLink className="w-6 h-6 text-slate-950 group-hover:translate-x-1 transition-transform" />
                             </a>
 
-                            <CopiarTexto
-                                texto={CORREO_ADMISIONES}
-                                className="inline-flex items-center gap-2 px-7 py-4 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-extrabold text-sm border border-white/25 backdrop-blur-md transition-all cursor-pointer"
+                            <button
+                                onClick={() => copiarTexto(CORREO_ADMISIONES, false)}
+                                className="inline-flex items-center gap-3 px-8 py-5 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-extrabold text-base border-2 border-white/20 backdrop-blur-md transition-all cursor-pointer"
                             >
-                                <Mail className="w-4 h-4 text-amber-300" />
-                                <span>Copiar Correo de Admisiones</span>
-                            </CopiarTexto>
+                                <Mail className="w-5 h-5 text-amber-300" />
+                                <span>{correoCopiado ? '¡Correo Copiado!' : 'Copiar Correo de Admisiones'}</span>
+                            </button>
                         </div>
                     </ScrollReveal>
 

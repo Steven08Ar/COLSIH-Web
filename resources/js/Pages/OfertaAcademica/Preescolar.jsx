@@ -20,7 +20,7 @@ import {
 } from 'lucide-react';
 import { useState } from 'react';
 
-constLINK_INSCRIPCIONES = "https://e.plataformaintegra.net/sihungria/index.php/cupo";
+const LINK_INSCRIPCIONES = "https://e.plataformaintegra.net/sihungria/index.php/cupo";
 
 const docentesPreescolar = [
     {

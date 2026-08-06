@@ -21,7 +21,12 @@ import {
     Check,
     ChevronRight,
     Users,
-    BookmarkCheck
+    BookmarkCheck,
+    Heart,
+    Trophy,
+    BookOpen,
+    Award,
+    Briefcase
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -32,6 +37,49 @@ const cuposGrados = [
     { nivel: 'Preescolar', grados: ['Jardín', 'Transición'], bgBadge: 'bg-[#003C8F]', textBadge: 'text-white' },
     { nivel: 'Primaria', grados: ['1°', '2°', '3°', '4°'], bgBadge: 'bg-[#800A15]', textBadge: 'text-white' },
     { nivel: 'Bachillerato', grados: ['6°', '7°', '8°', '9°'], bgBadge: 'bg-[#0B1F3A]', textBadge: 'text-white' }
+];
+
+const beneficiosInstitucionales = [
+    {
+        titulo: 'Formación Espiritual y en Valores',
+        descripcion: 'Acompañamiento pastoral salesiano, desarrollo humano integral, vivencia activa de la fe y educación en valores cristianos basados en el Sistema Preventivo de San Juan Bosco.',
+        icono: Heart,
+        badge: 'Identidad Salesiana',
+        badgeBg: 'bg-[#800A15]',
+        badgeText: 'text-white'
+    },
+    {
+        titulo: 'Actividades Extraescolares',
+        descripcion: 'Escuelas deportivas (fútbol, voleibol, atletismo), expresiones artísticas, música, coro, robótica educativa y pertenencia activa al Movimiento Juvenil Salesiano (MJS).',
+        icono: Trophy,
+        badge: 'Deporte & Cultura',
+        badgeBg: 'bg-[#003C8F]',
+        badgeText: 'text-white'
+    },
+    {
+        titulo: 'Inglés desde Jardín',
+        descripcion: 'Aprendizaje del idioma inglés desde los primeros niveles de formación inicial mediante metodologías lúdicas, interactivas y continuas durante toda la etapa escolar.',
+        icono: BookOpen,
+        badge: 'Bilingüismo Inicial',
+        badgeBg: 'bg-[#0B1F3A]',
+        badgeText: 'text-white'
+    },
+    {
+        titulo: 'Becas UPB del 90%',
+        descripcion: 'Los mejores bachilleres de nuestra institución acceden a becas del 90% de matrícula para estudios superiores en la Universidad Pontificia Bolivariana.',
+        icono: Award,
+        badge: 'Convenio Universitario',
+        badgeBg: 'bg-emerald-700',
+        badgeText: 'text-white'
+    },
+    {
+        titulo: 'Técnico en Contabilización SENA',
+        descripcion: 'Articulación directa con el SENA para egresar con doble titulación oficial como Bachiller Técnico en Contabilización de Operaciones Comerciales y Financieras.',
+        icono: Briefcase,
+        badge: 'Doble Titulación SENA',
+        badgeBg: 'bg-amber-500',
+        badgeText: 'text-slate-950'
+    }
 ];
 
 const pasosProceso = [
@@ -63,7 +111,7 @@ const pasosProceso = [
                 desc: 'Recibirás el mensaje de confirmación de pago con la fecha y hora asignadas para la prueba académica presencial.'
             }
         ],
-        asuntoCorreo: 'Admisiones 2026, [Nombre y Apellidos del Hijo/a], [Grado que solicita]'
+        asuntoCorreo: 'Admisiones 2027, [Nombre y Apellidos del Hijo/a], [Grado que solicita]'
     },
     {
         paso: '02',
@@ -86,9 +134,9 @@ const pasosProceso = [
             {
                 nivel: 'PRIMARIA Y BACHILLERATO (1° a 9°)',
                 requisitos: [
-                    'Fotocopia del observador del estudiante o constancia de comportamiento del año 2025.',
+                    'Fotocopia del observador del estudiante o constancia de comportamiento del año 2026.',
                     'Registro Civil y/o Tarjeta de Identidad (mayores de 7 años).',
-                    'Boletines de calificaciones de los 3 periodos académicos del año 2025 cursados a la fecha.'
+                    'Boletines de calificaciones de los 3 periodos académicos del año 2026 cursados a la fecha.'
                 ]
             }
         ]
@@ -111,10 +159,10 @@ const pasosProceso = [
         titulo: 'Publicación de Lista de Admitidos',
         subtitulo: 'Resultados finales en el portal oficial',
         icono: GraduationCap,
-        badge: '1 DE OCTUBRE DE 2025',
+        badge: '1 DE OCTUBRE DE 2026',
         colorBadge: 'bg-emerald-600 text-white',
         detalles: [
-            'La lista de estudiantes admitidos será publicada el 1 de octubre de 2025 en colsih.edu.co/admisiones',
+            'La lista de estudiantes admitidos será publicada el 1 de octubre de 2026 en colsih.edu.co/admisiones',
             'Válido para las familias que completaron oportunamente el formulario, pago, documentos, prueba y entrevista.'
         ]
     }
@@ -175,7 +223,7 @@ export default function Admisiones() {
 
     return (
         <AppLayout>
-            <Head title="Inscripciones y Admisiones 2026 | COLSIH" />
+            <Head title="Inscripciones y Admisiones 2027 | COLSIH" />
 
             {/* 1. HERO LUMINOSO Y CLARO CON TIPOGRAFÍA GIGANTE */}
             <section className="relative pt-36 pb-24 md:pt-48 md:pb-36 bg-[#FAFCFF] border-b border-slate-200 select-none overflow-hidden">
@@ -189,7 +237,7 @@ export default function Admisiones() {
                         <ScrollReveal distance="translate-y-6">
                             <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-[#800A15] text-white text-xs sm:text-sm md:text-base font-black tracking-widest uppercase shadow-lg shadow-[#800A15]/20">
                                 <Sparkles className="w-5 h-5 text-amber-300 shrink-0" />
-                                <span>PROCESO DE INSCRIPCIÓN · ESTUDIANTES NUEVOS 2026</span>
+                                <span>PROCESO DE INSCRIPCIÓN · ESTUDIANTES NUEVOS 2027</span>
                             </div>
                         </ScrollReveal>
 
@@ -198,7 +246,7 @@ export default function Admisiones() {
                             <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-[76px] font-black text-[#0B1F3A] leading-[0.95] tracking-tight font-sans">
                                 Proceso de Admisiones <br className="hidden sm:block" />
                                 <span className="text-[#003C8F]">
-                                    Año Escolar 2026
+                                    Año Escolar 2027
                                 </span>
                             </h1>
                         </ScrollReveal>
@@ -249,7 +297,7 @@ export default function Admisiones() {
                                     DISPONIBILIDAD CONFIRMADA DE CUPOS
                                 </span>
                                 <h2 className="text-3xl md:text-4xl font-black text-[#0B1F3A] font-sans">
-                                    Cupos Disponibles para el Año 2026:
+                                    Cupos Disponibles para el Año 2027:
                                 </h2>
                             </div>
                             <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-[#003C8F] text-white font-black text-sm tracking-wider uppercase self-start md:self-auto">
@@ -298,7 +346,69 @@ export default function Admisiones() {
                 </div>
             </section>
 
-            {/* 3. GUÍA PASO A PASO INTERACTIVA (MÁS GRANDE, DINÁMICA Y DETALLADA) */}
+            {/* 3. BENEFICIOS INSTITUCIONALES (POR QUÉ ELEGIR COLSIH - TEMA CLARO CON TIPOGRAFÍA GIGANTE) */}
+            <section className="py-20 md:py-32 bg-[#F8FAFC] border-b border-slate-200 select-none">
+                <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] space-y-16">
+                    
+                    <div className="text-center max-w-4xl mx-auto space-y-4">
+                        <ScrollReveal distance="translate-y-6">
+                            <span className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#800A15] text-white font-black text-xs md:text-sm tracking-widest uppercase shadow-md">
+                                <Award className="w-4 h-4 text-amber-300" />
+                                BENEFICIOS INSTITUCIONALES
+                            </span>
+                        </ScrollReveal>
+                        <ScrollReveal distance="translate-y-6" delay={150}>
+                            <h2 className="text-4xl sm:text-5xl lg:text-[56px] font-black text-[#0B1F3A] leading-[1.05] tracking-tight font-sans">
+                                ¿Por qué elegir COLSIH?
+                            </h2>
+                        </ScrollReveal>
+                        <ScrollReveal distance="translate-y-6" delay={300}>
+                            <p className="text-slate-600 font-semibold text-lg md:text-xl max-w-3xl mx-auto font-sans">
+                                Una propuesta educativa integral que combina la excelencia académica, la formación en valores cristianos salesianos y valiosas oportunidades para el futuro de tus hijos.
+                            </p>
+                        </ScrollReveal>
+                    </div>
+
+                    {/* Grid de 5 Beneficios Institucionales Grandes */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-left">
+                        {beneficiosInstitucionales.map((ben, bIdx) => {
+                            const IconoBen = ben.icono;
+                            return (
+                                <ScrollReveal key={bIdx} distance="translate-y-8" delay={bIdx * 100}>
+                                    <div className="bg-white rounded-3xl p-8 border-2 border-slate-200/80 hover:border-[#003C8F] hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 space-y-5 h-full flex flex-col justify-between group">
+                                        <div className="space-y-4">
+                                            <div className="flex items-center justify-between">
+                                                <div className="w-14 h-14 rounded-2xl bg-[#003C8F] text-white group-hover:bg-[#800A15] transition-colors duration-300 flex items-center justify-center shrink-0 shadow-md">
+                                                    <IconoBen className="w-7 h-7" />
+                                                </div>
+                                                <span className={`px-3.5 py-1.5 rounded-xl font-black text-xs uppercase tracking-wider ${ben.badgeBg} ${ben.badgeText}`}>
+                                                    {ben.badge}
+                                                </span>
+                                            </div>
+
+                                            <h3 className="text-2xl font-black text-[#0B1F3A] font-sans group-hover:text-[#003C8F] transition-colors">
+                                                {ben.titulo}
+                                            </h3>
+
+                                            <p className="text-base font-semibold text-slate-600 leading-relaxed font-sans">
+                                                {ben.descripcion}
+                                            </p>
+                                        </div>
+
+                                        <div className="pt-4 border-t border-slate-100 flex items-center gap-2 text-xs font-black uppercase tracking-wider text-[#003C8F]">
+                                            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                                            <span>Componente Clave COLSIH</span>
+                                        </div>
+                                    </div>
+                                </ScrollReveal>
+                            );
+                        })}
+                    </div>
+
+                </div>
+            </section>
+
+            {/* 4. GUÍA PASO A PASO INTERACTIVA (MÁS GRANDE, DINÁMICA Y DETALLADA) */}
             <section id="guia-pasos" className="py-20 md:py-36 bg-[#FAFCFF] border-b border-slate-200 select-none">
                 <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] space-y-16">
                     
@@ -311,7 +421,7 @@ export default function Admisiones() {
                         </ScrollReveal>
                         <ScrollReveal distance="translate-y-6" delay={150}>
                             <h2 className="text-4xl sm:text-5xl lg:text-[56px] font-black text-[#0B1F3A] leading-[1.05] tracking-tight font-sans">
-                                Instrucciones y Cronograma 2026
+                                Instrucciones y Cronograma 2027
                             </h2>
                         </ScrollReveal>
                         <ScrollReveal distance="translate-y-6" delay={300}>
@@ -374,7 +484,7 @@ export default function Admisiones() {
                                                         <IconoPaso className="w-7 h-7" />
                                                     </div>
                                                     <div>
-                                                        <h3 className="text-2xl sm:text-3xl font-black text-[#0B1F3A] leading-tight font-sans">
+                                                        <h3 className="text-2xl sm:text-3xl font-black text-[#0B1F3A] leading-snug font-sans">
                                                             {paso.titulo}
                                                         </h3>
                                                         <p className="text-sm font-bold text-slate-400 uppercase tracking-wider mt-1">
@@ -474,7 +584,7 @@ export default function Admisiones() {
                 </div>
             </section>
 
-            {/* 4. SECCIÓN INFORMACIÓN CLAVE & HORARIOS */}
+            {/* 5. SECCIÓN INFORMACIÓN CLAVE & HORARIOS */}
             <section className="py-20 bg-white select-none">
                 <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] space-y-16">
                     
@@ -555,14 +665,14 @@ export default function Admisiones() {
                 </div>
             </section>
 
-            {/* 5. LLAMADO A LA ACCIÓN FINAL GIGANTE Y CLARO */}
+            {/* 6. LLAMADO A LA ACCIÓN FINAL GIGANTE Y CLARO */}
             <section className="py-24 bg-[#003C8F] text-white select-none">
                 <div className="max-w-5xl mx-auto px-6 text-center space-y-8">
                     
                     <ScrollReveal distance="translate-y-6">
                         <div className="inline-flex items-center gap-2.5 px-6 py-2.5 rounded-full bg-[#800A15] text-amber-300 text-xs sm:text-sm font-black uppercase tracking-widest shadow-lg">
                             <Sparkles className="w-4 h-4 text-amber-300" />
-                            <span>PLATAFORMA OFICIAL DE INSCRIPCIÓN 2026</span>
+                            <span>PLATAFORMA OFICIAL DE INSCRIPCIÓN 2027</span>
                         </div>
                     </ScrollReveal>
 

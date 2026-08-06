@@ -30,8 +30,10 @@ class ImageOptimizer
             $ext = 'jpg';
         }
 
-        $nombre = Str::random(40) . '.' . $ext;
-        $ruta   = $carpeta . '/' . $nombre;
+        $nombreBase = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+        $nombreBase = Str::slug($nombreBase) ?: Str::random(8);
+        $nombre     = $nombreBase . '.' . $ext;
+        $ruta       = $carpeta . '/' . $nombre;
 
         $manager = new ImageManager(new Driver());
         $imagen  = $manager->read($file->getPathname());

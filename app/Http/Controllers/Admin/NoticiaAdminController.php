@@ -40,7 +40,7 @@ class NoticiaAdminController extends Controller
         $data['slug']         = $this->uniqueSlug(Str::slug($data['titulo']));
 
         if ($request->hasFile('portada')) {
-            $data['imagen'] = ImageOptimizer::guardar($request->file('portada'), 'noticias/portadas');
+            $data['imagen'] = ImageOptimizer::guardar($request->file('portada'), $this->carpetaCategoria($data['categoria']));
         }
 
         $data['bloques'] = $this->procesarBloques($request, []);
@@ -67,7 +67,7 @@ class NoticiaAdminController extends Controller
 
         if ($request->hasFile('portada')) {
             ImageOptimizer::eliminar($noticia->imagen);
-            $data['imagen'] = ImageOptimizer::guardar($request->file('portada'), 'noticias/portadas');
+            $data['imagen'] = ImageOptimizer::guardar($request->file('portada'), $this->carpetaCategoria($data['categoria']));
         }
 
         $data['bloques'] = $this->procesarBloques($request, $noticia->bloques ?? []);
@@ -92,6 +92,15 @@ class NoticiaAdminController extends Controller
         }
         $noticia->forceDelete();
         return back()->with('flash', 'Publicacion eliminada.');
+    }
+
+    private function carpetaCategoria(string $categoria): string
+    {
+        return match($categoria) {
+            'evento'      => 'noticias/eventos',
+            'comunicado'  => 'noticias/comunicados',
+            default       => 'noticias/noticias',
+        };
     }
 
     private function uniqueSlug(string $base, ?int $excludeId = null): string
@@ -210,7 +219,7 @@ class NoticiaAdminController extends Controller
                     if (!empty($bloque['imagen'])) {
                         ImageOptimizer::eliminar($bloque['imagen']);
                     }
-                    $bloque['imagen'] = ImageOptimizer::guardar($request->file($fileKey), 'noticias/bloques');
+                    $bloque['imagen'] = ImageOptimizer::guardar($request->file($fileKey), $this->carpetaCategoria($request->input('categoria', 'noticia')));
                 } elseif (empty($bloque['imagen']) && !empty($bloque['_key']) && isset($existentes[$bloque['_key']])) {
                     $bloque['imagen'] = $existentes[$bloque['_key']];
                 }

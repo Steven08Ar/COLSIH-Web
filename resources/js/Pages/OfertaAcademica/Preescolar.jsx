@@ -1,273 +1,642 @@
 import { Head, Link } from '@inertiajs/react';
 import AppLayout from '@/Layouts/AppLayout';
 import ScrollReveal from '../HomeSections/ScrollReveal';
-import { Sparkles, Heart, Smile, Palette, Music, BookOpen, Sun, Gamepad2, Star, Award, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { 
+    Sparkles, 
+    ArrowRight, 
+    Send, 
+    CheckCircle2, 
+    Plus, 
+    Minus, 
+    Smile, 
+    Palette, 
+    Gamepad2, 
+    Heart, 
+    BookOpen, 
+    Star, 
+    Users, 
+    ChevronRight,
+    HelpCircle
+} from 'lucide-react';
+import { useState } from 'react';
 
-const gradosPreescolar = [
+constLINK_INSCRIPCIONES = "https://e.plataformaintegra.net/sihungria/index.php/cupo";
+
+const docentesPreescolar = [
     {
-        nombre: 'Prejardín',
-        edad: '3 Años',
-        color: 'from-pink-400 via-rose-400 to-amber-400',
-        borderColor: 'border-pink-200',
-        badgeBg: 'bg-pink-100 text-pink-700 border border-pink-300',
-        cardBg: 'from-pink-50/40 via-orange-50/30 to-amber-50/20',
-        icon: Heart,
-        iconColor: 'text-pink-500 bg-pink-100 border-pink-200',
-        descripcion: 'Primer acercamiento a la vida escolar en un entorno seguro, afectuoso y enriquecedor.',
-        enfoques: ['Adaptación feliz y autónoma', 'Estimulación sensorial y del lenguaje', 'Juego guiado y socialización']
+        nombre: 'Lic. María Fernanda',
+        cargo: 'Docente de Jardín',
+        colorBlob: 'bg-[#FFD25D]',
+        foto: 'https://media.colsih.edu.co/espacios_academicos/jardin.JPG'
     },
     {
-        nombre: 'Jardín',
-        edad: '4 Años',
-        color: 'from-cyan-400 via-sky-400 to-blue-500',
-        borderColor: 'border-cyan-200',
-        badgeBg: 'bg-cyan-100 text-cyan-800 border border-cyan-300',
-        cardBg: 'from-cyan-50/40 via-sky-50/30 to-blue-50/20',
-        icon: Palette,
-        iconColor: 'text-cyan-600 bg-cyan-100 border-cyan-200',
-        descripcion: 'Desarrollo de la curiosidad natural, exploración del entorno y primer acercamiento al pensamiento lógico.',
-        enfoques: ['Pre-escritura y garabateo creativo', 'Iniciación al inglés recreativo', 'Desarrollo motriz fino y grueso']
+        nombre: 'Lic. Johana Gómez',
+        cargo: 'Docente de Transición',
+        colorBlob: 'bg-[#F3E3D4]',
+        foto: 'https://media.colsih.edu.co/ofertas_academicas/preescolar/preescolar_dos.JPG'
     },
     {
-        nombre: 'Transición',
-        edad: '5 - 6 Años',
-        color: 'from-emerald-400 via-teal-400 to-amber-400',
-        borderColor: 'border-emerald-200',
-        badgeBg: 'bg-emerald-100 text-emerald-800 border border-emerald-300',
-        cardBg: 'from-emerald-50/40 via-teal-50/30 to-amber-50/20',
-        icon: Star,
-        iconColor: 'text-emerald-600 bg-emerald-100 border-emerald-200',
-        descripcion: 'Consolidación de competencias lectoras iniciales y preparación integral para la Básica Primaria.',
-        enfoques: ['Procesos de conciencia fonológica', 'Pensamiento matemático inicial', 'Autonomía y convivencia salesiana']
+        nombre: 'Lic. Carolina Silva',
+        cargo: 'Psicóloga Infantil',
+        colorBlob: 'bg-[#ADA3DA]',
+        foto: 'https://media.colsih.edu.co/ofertas_academicas/preescolar/preescolar_uno.JPG'
+    },
+    {
+        nombre: 'Prof. Carlos Ruiz',
+        cargo: 'Docente de Expresión & Música',
+        colorBlob: 'bg-[#90C5DE]',
+        foto: 'https://media.colsih.edu.co/deportes/deportes.JPG'
     }
 ];
 
-const pilaresPreescolar = [
+const blogCards = [
     {
-        icon: Smile,
-        color: 'bg-amber-100 text-amber-600 border-amber-300',
-        titulo: 'Pedagogía de la Alegría',
-        desc: 'Inspirados en Don Bosco, creamos un ambiente donde aprender es una experiencia alegre, llena de afecto, música, teatro y celebración del crecimiento diario.'
+        titulo: 'Aprendizaje a través del Juego: ¿Por qué es la mejor opción?',
+        desc: 'Descubre cómo las actividades lúdicas en Jardín y Transición potencian la creatividad y la inteligencia emocional.',
+        imagen: 'https://media.colsih.edu.co/ofertas_academicas/preescolar/preescolar_dos.JPG'
     },
     {
-        icon: BookOpen,
-        color: 'bg-cyan-100 text-cyan-600 border-cyan-300',
-        titulo: 'Iniciación al Bilingüismo',
-        desc: 'Sensibilización continua al idioma inglés a través de canciones divertidas, juegos interactivos, comandos de aula y vocabulario cotidiano.'
+        titulo: '10 Ideas de Juegos Educativos para Compartir en Casa',
+        desc: 'Actividades sencillas y divertidas para fortalecer el lenguaje, el dibujo y la motricidad fina en familia.',
+        imagen: 'https://media.colsih.edu.co/ofertas_academicas/preescolar/preescolar_uno.JPG'
     },
     {
-        icon: Music,
-        color: 'bg-pink-100 text-pink-600 border-pink-300',
-        titulo: 'Expresión Artística y Motriz',
-        desc: 'Espacios de exploración corporal, desarrollo de la psicomotricidad fina y gruesa, pintura, moldeado y actividades rítmicas al aire libre.'
+        titulo: 'Iniciación al Bilingüismo desde Temprana Edad',
+        desc: 'Estrategias lúdicas con canciones y comandos diarios que preparan a los niños para comunicarse en inglés.',
+        imagen: 'https://media.colsih.edu.co/espacios_academicos/jardin.JPG'
+    }
+];
+
+const faqsPreescolar = [
+    {
+        pregunta: '¿Qué hace diferente al Preescolar COLSIH de otros jardines infantiles?',
+        respuesta: 'Nuestra educación salesiana preventiva centrada en el afecto, la iniciación al bilingüismo desde Jardín, las amplias instalaciones campestres de Floridablanca y el acompañamiento psicológico continuo.'
     },
     {
-        icon: Heart,
-        color: 'bg-emerald-100 text-emerald-600 border-emerald-300',
-        titulo: 'Acompañamiento de Familia',
-        desc: 'Alianza continua entre educadores salesianos y padres de familia para respaldar el bienestar emocional, espiritual y adaptativo de cada niño.'
+        pregunta: '¿Cómo es el proceso de admisión e ingreso para Preescolar 2027?',
+        respuesta: 'El proceso inicia en línea diligenciando el formulario en el portal oficial de inscripciones. Tras la recepción del pago, se programa una cita académica y una entrevista presencial familiar.'
+    },
+    {
+        pregunta: '¿Cuál es el horario escolar y cómo se gestiona la adaptación?',
+        respuesta: 'El horario para Jardín y Transición es de 7:00 a.m. a 12:30 p.m. Ofrecemos un protocolo de acogida respetuosa y progresiva que garantiza una transición escolar feliz y segura.'
     }
 ];
 
 export default function Preescolar() {
+    const [faqOpen, setFaqOpen] = useState(null);
+    const [nombreForm, setNombreForm] = useState('');
+    const [contactoForm, setContactoForm] = useState('');
+    const [formEnviado, setFormEnviado] = useState(false);
+
+    const toggleFaq = (index) => {
+        setFaqOpen(faqOpen === index ? null : index);
+    };
+
+    const handleFormSubmit = (e) => {
+        e.preventDefault();
+        if (nombreForm.trim() && contactoForm.trim()) {
+            setFormEnviado(true);
+            setTimeout(() => setFormEnviado(false), 4000);
+            setNombreForm('');
+            setContactoForm('');
+        }
+    };
+
     return (
         <AppLayout>
-            <Head title="Preescolar | Oferta Académica COLSIH" />
+            <Head title="Preescolar COLSIH | Jardín y Transición 2027" />
 
-            {/* 1. HERO INFANTIL MULTICOLOR PREESCOLAR */}
-            <section className="relative min-h-[680px] md:min-h-[760px] pt-36 pb-32 md:pt-44 md:pb-40 bg-[#1C1002] overflow-hidden select-none flex items-center">
-                
-                {/* Imagen vertical de fondo en los columpios con ambos niños */}
-                <div className="absolute inset-0 w-full h-full z-0 overflow-hidden pointer-events-none">
-                    <img
-                        src="https://media.colsih.edu.co/ofertas_academicas/preescolar/preescolar_dos.JPG"
-                        alt="Niños de Preescolar COLSIH en columpios"
-                        className="absolute top-0 right-0 w-full md:w-[65%] lg:w-[58%] h-full object-cover object-[center_45%] contrast-[1.05] brightness-90 md:brightness-95 scale-105"
-                    />
-                </div>
+            <div className="bg-[#FAF8FF] font-sans overflow-x-hidden text-[#1F1943] select-none">
 
-                {/* Sombra gradiente para móvil */}
-                <div className="absolute inset-0 bg-gradient-to-r from-[#1C1002] via-[#1C1002]/90 to-[#1C1002]/60 md:hidden z-10 pointer-events-none"></div>
+                {/* 1. HERO SECTION ("The best place to learn and play for kids") */}
+                <section className="relative pt-32 pb-24 md:pt-44 md:pb-36 overflow-hidden">
+                    
+                    {/* Elementos decorativos circulares de fondo */}
+                    <div className="absolute top-12 left-10 w-32 h-32 rounded-full bg-[#DEC8FE]/30 blur-2xl pointer-events-none" />
+                    <div className="absolute top-1/3 right-10 w-48 h-48 rounded-full bg-[#FFD25D]/30 blur-3xl pointer-events-none" />
 
-                {/* Sombra gradiente de izquierda a derecha para escritorio */}
-                <div className="absolute inset-y-0 left-0 w-full md:w-[70%] lg:w-[60%] z-10 hidden md:block pointer-events-none">
-                    <div className="w-full h-full bg-gradient-to-r from-[#1C1002] via-[#1C1002] via-75% to-transparent"></div>
-                </div>
+                    <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] relative z-10">
+                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                            
+                            {/* Columna Izquierda: Texto e Interactividad */}
+                            <div className="lg:col-span-7 space-y-8 text-left">
+                                <ScrollReveal distance="translate-y-6">
+                                    <div className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-[#EAE0FE] text-[#704FE6] text-xs md:text-sm font-extrabold tracking-wider uppercase shadow-xs">
+                                        <Sparkles className="w-4 h-4 text-[#704FE6]" />
+                                        <span>EDUCACIÓN INICIAL · JARDÍN Y TRANSICIÓN</span>
+                                    </div>
+                                </ScrollReveal>
 
-                {/* Burbujas y Blobs Animados Infantiles Multicolores */}
-                <div className="absolute top-1/4 left-1/6 w-72 h-72 bg-amber-500/20 rounded-full blur-[100px] pointer-events-none z-10 animate-pulse"></div>
-                <div className="absolute top-1/2 left-1/3 w-64 h-64 bg-pink-500/20 rounded-full blur-[90px] pointer-events-none z-10 animate-pulse delay-700"></div>
-                <div className="absolute bottom-1/4 left-1/4 w-80 h-80 bg-cyan-500/20 rounded-full blur-[110px] pointer-events-none z-10 animate-pulse delay-1000"></div>
+                                <ScrollReveal distance="translate-y-6" delay={150}>
+                                    <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-[76px] font-black text-[#1F1943] leading-[1.02] tracking-tight">
+                                        El mejor lugar para <br className="hidden sm:block" />
+                                        <span className="font-serif italic text-[#704FE6]">aprender</span> y{' '}
+                                        <span className="font-serif italic text-[#FFB800]">jugar</span> tus hijos
+                                    </h1>
+                                </ScrollReveal>
 
-                <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] relative z-20 w-full">
-                    <div className="max-w-3xl space-y-6">
-                        <ScrollReveal distance="translate-y-6">
-                            <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-gradient-to-r from-amber-500/20 via-pink-500/20 to-cyan-500/20 border border-amber-400/40 backdrop-blur-md shadow-lg shadow-amber-500/10">
-                                <Sparkles className="w-4 h-4 text-amber-300 animate-spin" />
-                                <span className="bg-gradient-to-r from-amber-300 via-pink-300 to-cyan-300 bg-clip-text text-transparent text-xs md:text-sm font-black tracking-wider uppercase font-sans">
-                                    Educación Inicial • 3 a 6 Años
-                                </span>
-                                <Sun className="w-4 h-4 text-pink-300 animate-pulse" />
-                            </div>
-                        </ScrollReveal>
+                                <ScrollReveal distance="translate-y-6" delay={300}>
+                                    <p className="text-lg md:text-xl font-medium text-slate-600 leading-relaxed max-w-2xl">
+                                        Descubre miles de actividades lúdicas e interactivas diseñadas para apoyar el crecimiento feliz, la afectividad y el aprendizaje integral en nuestros pequeños.
+                                    </p>
+                                </ScrollReveal>
 
-                        <ScrollReveal distance="translate-y-6" delay={150}>
-                            <h1 className="text-4xl sm:text-5xl lg:text-[62px] font-black text-white leading-[1.08] tracking-tight font-sans">
-                                Descubrir el mundo con <br className="hidden sm:block" />
-                                <span className="bg-gradient-to-r from-amber-300 via-pink-400 to-cyan-300 bg-clip-text text-transparent drop-shadow-md">
-                                    alegría, amor y curiosidad
-                                </span>
-                            </h1>
-                        </ScrollReveal>
-
-                        <ScrollReveal distance="translate-y-6" delay={300}>
-                            <p className="text-lg md:text-xl font-medium text-amber-100/90 leading-relaxed max-w-2xl font-sans">
-                                En el Preescolar COLSIH brindamos una formación amorosa y divertida que estimula los talentos, la creatividad y la dimensión afectiva de nuestros niños bajo la tradición salesiana.
-                            </p>
-                        </ScrollReveal>
-
-                        <ScrollReveal distance="translate-y-6" delay={450}>
-                            <div className="flex flex-wrap gap-4 pt-4">
-                                <Link
-                                    href="/admisiones"
-                                    className="px-8 py-4 rounded-2xl bg-gradient-to-r from-amber-500 via-orange-500 to-pink-500 hover:from-amber-600 hover:to-pink-600 text-white font-black text-sm md:text-base shadow-xl shadow-orange-500/25 hover:scale-105 transition-all duration-300 border border-amber-300/40 flex items-center gap-2"
-                                >
-                                    <span>Iniciar Admisión Preescolar</span>
-                                    <ArrowRight className="w-5 h-5" />
-                                </Link>
-                                <a
-                                    href="#grados"
-                                    className="px-7 py-4 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold text-sm backdrop-blur-md border border-white/25 hover:scale-105 transition-all duration-300 flex items-center gap-2"
-                                >
-                                    <span>Ver Grados</span>
-                                    <Star className="w-4 h-4 text-amber-300" />
-                                </a>
-                            </div>
-                        </ScrollReveal>
-                    </div>
-                </div>
-
-                {/* Divisor de ola inferior */}
-                <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-none z-20 pointer-events-none">
-                    <svg className="relative block w-full h-[50px] md:h-[80px]" viewBox="0 0 1440 100" preserveAspectRatio="none">
-                        <path d="M0,100 C380,20 760,90 1080,30 C1200,10 1320,20 1440,60 L1440,100 L0,100 Z" fill="#FFFBEB"></path>
-                    </svg>
-                </div>
-            </section>
-
-            {/* 2. GRADOS DE PREESCOLAR (Multicolor e Infantil) */}
-            <section id="grados" className="py-20 md:py-28 bg-gradient-to-b from-[#FFFBEB] via-[#FFF7ED] to-[#FEF2F2] relative z-10">
-                <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px]">
-                    <div className="text-center max-w-3xl mx-auto mb-16">
-                        <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-100 text-amber-800 font-extrabold text-xs tracking-[3px] uppercase mb-4 border border-amber-200">
-                            <Palette className="w-4 h-4 text-amber-600" />
-                            NIVELES FORMATIVOS INFANTILES
-                        </span>
-                        <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight">
-                            Nuestros Grados de Preescolar
-                        </h2>
-                        <p className="text-slate-600 text-base md:text-lg mt-4 font-medium">
-                            Cada etapa evolutiva está llena de color, juegos estimulantes y experiencias diseñadas para promover el crecimiento feliz de nuestros niños.
-                        </p>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        {gradosPreescolar.map((grado, idx) => {
-                            const IconComponent = grado.icon;
-                            return (
-                                <ScrollReveal key={grado.nombre} delay={idx * 150} distance="translate-y-8">
-                                    <div className={`bg-gradient-to-br ${grado.cardBg} bg-white rounded-[32px] p-8 shadow-xl border-2 ${grado.borderColor} hover:shadow-2xl hover:shadow-orange-500/10 transition-all duration-300 hover:-translate-y-2 flex flex-col h-full relative overflow-hidden group`}>
-                                        <div className={`h-2.5 w-full absolute top-0 left-0 bg-gradient-to-r ${grado.color}`}></div>
-                                        <div className="flex justify-between items-center mb-6 pt-2">
-                                            <div className="flex items-center gap-3">
-                                                <div className={`p-3 rounded-2xl border ${grado.iconColor} shadow-sm group-hover:scale-110 transition-transform duration-300`}>
-                                                    <IconComponent className="w-6 h-6" />
-                                                </div>
-                                                <h3 className="text-2xl font-black text-slate-900">{grado.nombre}</h3>
+                                <ScrollReveal distance="translate-y-6" delay={450}>
+                                    <div className="pt-2 flex flex-wrap items-center gap-5">
+                                        <a
+                                            href={LINK_INSCRIPCIONES}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="group inline-flex items-center gap-4 px-9 py-4.5 rounded-full bg-[#704FE6] hover:bg-[#5b3cc4] text-white font-extrabold text-lg shadow-xl shadow-[#704FE6]/25 hover:scale-105 transition-all duration-300 cursor-pointer"
+                                        >
+                                            <span>Empezar Inscripción</span>
+                                            <div className="w-10 h-10 rounded-full bg-white text-[#704FE6] flex items-center justify-center group-hover:rotate-12 transition-transform shadow-xs">
+                                                <Send className="w-5 h-5 ml-0.5" />
                                             </div>
-                                            <span className={`px-4 py-1.5 rounded-full text-xs font-black tracking-wider shadow-sm ${grado.badgeBg}`}>
-                                                {grado.edad}
-                                            </span>
+                                        </a>
+
+                                        <a
+                                            href="#caracteristicas"
+                                            className="inline-flex items-center gap-2 px-8 py-4.5 rounded-full bg-white hover:bg-slate-100 text-[#1F1943] font-bold text-base border-2 border-slate-200 shadow-sm hover:scale-105 transition-all"
+                                        >
+                                            <span>Conocer Experiencia</span>
+                                            <ArrowRight className="w-5 h-5 text-[#704FE6]" />
+                                        </a>
+                                    </div>
+                                </ScrollReveal>
+                            </div>
+
+                            {/* Columna Derecha: Fotos con Badges Orgánicos y Stickers */}
+                            <div className="lg:col-span-5 relative">
+                                <ScrollReveal distance="translate-y-8" delay={300}>
+                                    <div className="relative mx-auto max-w-md lg:max-w-none">
+                                        
+                                        {/* Foto Principal en Blob / Badge redondeado */}
+                                        <div className="relative z-10 w-full h-[420px] sm:h-[480px] rounded-[48px] bg-[#DEC8FE] p-4 overflow-hidden shadow-2xl rotate-1 hover:rotate-0 transition-transform duration-500 border-4 border-white">
+                                            <img 
+                                                src="https://media.colsih.edu.co/ofertas_academicas/preescolar/preescolar_dos.JPG" 
+                                                alt="Niños de Preescolar COLSIH" 
+                                                className="w-full h-full object-cover rounded-[36px]"
+                                            />
                                         </div>
-                                        <p className="text-slate-600 font-medium text-sm leading-relaxed mb-6">
-                                            {grado.descripcion}
+
+                                        {/* Badge Circular Giratorio / Floating Top Right */}
+                                        <div className="absolute -top-6 -right-6 z-20 w-32 h-32 rounded-full bg-[#FFD25D] p-3 shadow-xl flex items-center justify-center border-4 border-white animate-bounce-slow">
+                                            <div className="text-center font-black text-xs uppercase tracking-tight text-slate-900 leading-tight">
+                                                ★ PREESCOLAR <br /> COLSIH 2027 ★
+                                            </div>
+                                        </div>
+
+                                        {/* Tarjeta flotante inferior */}
+                                        <div className="absolute -bottom-8 -left-6 z-20 bg-white p-5 rounded-3xl shadow-xl border-2 border-slate-100 flex items-center gap-4 max-w-xs">
+                                            <div className="w-12 h-12 rounded-2xl bg-[#704FE6] text-white flex items-center justify-center shrink-0">
+                                                <Heart className="w-6 h-6 text-amber-300" />
+                                            </div>
+                                            <div>
+                                                <span className="text-xs font-black uppercase text-[#704FE6] tracking-wider block">PEDAGOGÍA SALESIANA</span>
+                                                <p className="text-sm font-extrabold text-[#1F1943]">Aprender con amor y alegría</p>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </ScrollReveal>
+                            </div>
+
+                        </div>
+                    </div>
+                </section>
+
+
+                {/* 2. OUR INTERACTIVE FEATURES ("Our interactive features") */}
+                <section id="caracteristicas" className="py-20 md:py-32 bg-white border-y border-slate-100">
+                    <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] space-y-16">
+                        
+                        {/* Header con Tags Orgánicos */}
+                        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                            <div className="space-y-3 text-left max-w-2xl">
+                                <span className="text-xs font-black uppercase tracking-widest text-[#704FE6] block">
+                                    VIVENCIA EN EL AULA
+                                </span>
+                                <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-[#1F1943] leading-tight">
+                                    Nuestras características <span className="font-serif italic text-[#704FE6]">interactivas</span>
+                                </h2>
+                            </div>
+
+                            {/* Blob de Tags */}
+                            <div className="p-4 rounded-3xl bg-[#EAE0FE] border border-[#704FE6]/20 flex flex-wrap gap-2.5 items-center">
+                                <span className="px-4 py-2 rounded-full bg-white text-[#704FE6] font-bold text-sm shadow-xs">#felicidad</span>
+                                <span className="px-4 py-2 rounded-full bg-[#FFD25D] text-slate-950 font-bold text-sm shadow-xs">#diversión</span>
+                                <span className="px-4 py-2 rounded-full bg-[#704FE6] text-white font-bold text-sm shadow-xs">#aprender</span>
+                            </div>
+                        </div>
+
+                        {/* Grid de 3 Tarjetas Grandes ("Fun Quiz", "Creative Activities", "Learn with Games") */}
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
+                            
+                            {/* Card 1: Lavender Card */}
+                            <ScrollReveal distance="translate-y-8" delay={100}>
+                                <div className="bg-[#EAE0FE] rounded-[36px] p-8 md:p-10 border-2 border-[#DEC8FE] hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 space-y-6 relative overflow-hidden group h-full flex flex-col justify-between">
+                                    <div className="space-y-4">
+                                        <div className="w-16 h-16 rounded-2xl bg-white text-[#704FE6] flex items-center justify-center shadow-md">
+                                            <BookOpen className="w-8 h-8" />
+                                        </div>
+                                        <h3 className="text-3xl font-black text-[#1F1943] leading-snug">
+                                            Pruebas <br />
+                                            <span className="font-serif italic text-[#704FE6]">Divertidas</span>
+                                        </h3>
+                                        <p className="text-base font-semibold text-slate-700 leading-relaxed">
+                                            Evaluación continua a través de cuestionarios breves e interactivos que estimulan la lógica y la memoria.
                                         </p>
-                                        <div className="mt-auto space-y-3 pt-5 border-t border-amber-200/60">
-                                            <span className="text-xs font-bold text-amber-800 uppercase tracking-wider block">Énfasis del Nivel:</span>
-                                            {grado.enfoques.map((item) => (
-                                                <div key={item} className="flex items-center gap-2.5 text-xs font-bold text-slate-700">
-                                                    <CheckCircle2 className="w-4 h-4 text-amber-500 shrink-0" />
-                                                    <span>{item}</span>
+                                    </div>
+                                    <div className="pt-4 border-t border-[#704FE6]/20 font-extrabold text-sm text-[#704FE6] flex items-center gap-2">
+                                        <span>Estimulación Cognitiva</span>
+                                        <ChevronRight className="w-4 h-4" />
+                                    </div>
+                                </div>
+                            </ScrollReveal>
+
+                            {/* Card 2: Vibrant Purple Card */}
+                            <ScrollReveal distance="translate-y-8" delay={200}>
+                                <div className="bg-[#704FE6] text-white rounded-[36px] p-8 md:p-10 border-2 border-[#704FE6] hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 space-y-6 relative overflow-hidden group h-full flex flex-col justify-between">
+                                    <div className="space-y-4">
+                                        <div className="w-16 h-16 rounded-2xl bg-[#FFD25D] text-slate-950 flex items-center justify-center shadow-md">
+                                            <Palette className="w-8 h-8" />
+                                        </div>
+                                        <h3 className="text-3xl font-black leading-snug">
+                                            Actividades <br />
+                                            <span className="font-serif italic text-[#FFD25D]">Creativas</span>
+                                        </h3>
+                                        <p className="text-base font-semibold text-purple-100 leading-relaxed">
+                                            Pintura, dibujo, expresión corporal, modelado y pequeñas experiencias de ciencia adaptadas a la primera infancia.
+                                        </p>
+                                    </div>
+                                    <div className="pt-4 border-t border-white/20 font-extrabold text-sm text-[#FFD25D] flex items-center gap-2">
+                                        <span>Motricidad & Arte</span>
+                                        <ChevronRight className="w-4 h-4" />
+                                    </div>
+                                </div>
+                            </ScrollReveal>
+
+                            {/* Card 3: Bright Yellow Card */}
+                            <ScrollReveal distance="translate-y-8" delay={300}>
+                                <div className="bg-[#FFD25D] text-slate-950 rounded-[36px] p-8 md:p-10 border-2 border-[#FFC837] hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 space-y-6 relative overflow-hidden group h-full flex flex-col justify-between">
+                                    <div className="space-y-4">
+                                        <div className="w-16 h-16 rounded-2xl bg-white text-slate-950 flex items-center justify-center shadow-md">
+                                            <Gamepad2 className="w-8 h-8" />
+                                        </div>
+                                        <h3 className="text-3xl font-black leading-snug">
+                                            Aprender con <br />
+                                            <span className="font-serif italic text-[#704FE6]">Juegos</span>
+                                        </h3>
+                                        <p className="text-base font-semibold text-slate-900 leading-relaxed">
+                                            Aprender algo nuevo mientras juegan y conviven con sus amiguitos en entornos seguros y guiados.
+                                        </p>
+                                    </div>
+                                    <div className="pt-4 border-t border-slate-950/20 font-extrabold text-sm text-[#704FE6] flex items-center gap-2">
+                                        <span>Juego Didáctico</span>
+                                        <ChevronRight className="w-4 h-4" />
+                                    </div>
+                                </div>
+                            </ScrollReveal>
+
+                        </div>
+
+                    </div>
+                </section>
+
+
+                {/* 3. LEARNING MATERIALS ("The learning materials provided are enjoyable for children") */}
+                <section className="py-20 md:py-32 bg-[#FAF8FF]">
+                    <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px]">
+                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                            
+                            {/* Columna Izquierda: Texto e Información */}
+                            <div className="lg:col-span-6 space-y-8 text-left">
+                                <ScrollReveal distance="translate-y-6">
+                                    <div className="space-y-4">
+                                        <span className="text-xs font-black uppercase tracking-widest text-[#704FE6] block">
+                                            RECURSOS PEDAGÓGICOS
+                                        </span>
+                                        <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-[#1F1943] leading-tight">
+                                            Materiales educativos <br />
+                                            <span className="font-serif italic text-[#704FE6]">diseñados</span> para disfrutar
+                                        </h2>
+                                    </div>
+                                </ScrollReveal>
+
+                                <ScrollReveal distance="translate-y-6" delay={200}>
+                                    <p className="text-lg font-semibold text-slate-600 leading-relaxed">
+                                        ¡No te preocupes! Tus hijos disfrutarán cada jornada escolar con recursos ilustrados, interactivos y acordes a su nivel de comprensión, respaldados por la tradición salesiana.
+                                    </p>
+                                </ScrollReveal>
+
+                                <ScrollReveal distance="translate-y-6" delay={350}>
+                                    <div className="space-y-3 pt-2">
+                                        <div className="flex items-center gap-3 text-base font-bold text-slate-800">
+                                            <CheckCircle2 className="w-6 h-6 text-[#704FE6]" />
+                                            <span>Textos ilustrados y cuentos interactivos en aula</span>
+                                        </div>
+                                        <div className="flex items-center gap-3 text-base font-bold text-slate-800">
+                                            <CheckCircle2 className="w-6 h-6 text-[#704FE6]" />
+                                            <span>Iniciación lúdica al bilingüismo desde Jardín</span>
+                                        </div>
+                                        <div className="flex items-center gap-3 text-base font-bold text-slate-800">
+                                            <CheckCircle2 className="w-6 h-6 text-[#704FE6]" />
+                                            <span>Salones temáticos y zonas recreativas campestres</span>
+                                        </div>
+                                    </div>
+                                </ScrollReveal>
+
+                                <ScrollReveal distance="translate-y-6" delay={500}>
+                                    <div className="pt-4">
+                                        <a
+                                            href={LINK_INSCRIPCIONES}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="group inline-flex items-center gap-4 px-8 py-4 rounded-full bg-[#704FE6] hover:bg-[#5b3cc4] text-white font-black text-base shadow-lg shadow-[#704FE6]/20 transition-all cursor-pointer"
+                                        >
+                                            <span>Solicitar Cupo Preescolar</span>
+                                            <div className="w-8 h-8 rounded-full bg-white text-[#704FE6] flex items-center justify-center">
+                                                <Send className="w-4 h-4 ml-0.5" />
+                                            </div>
+                                        </a>
+                                    </div>
+                                </ScrollReveal>
+                            </div>
+
+                            {/* Columna Derecha: Pill Cards Apiladas con Fotografías */}
+                            <div className="lg:col-span-6 space-y-6">
+                                <ScrollReveal distance="translate-y-8" delay={150}>
+                                    <div className="p-6 rounded-[36px] bg-[#FFD25D] flex flex-col sm:flex-row items-center gap-6 shadow-md border-2 border-white">
+                                        <img 
+                                            src="https://media.colsih.edu.co/espacios_academicos/jardin.JPG" 
+                                            alt="Espacio Jardín COLSIH" 
+                                            className="w-full sm:w-44 h-36 object-cover rounded-2xl shadow-xs"
+                                        />
+                                        <div className="space-y-2 text-left">
+                                            <span className="text-xs font-black uppercase text-slate-900 tracking-wider">AULAS LÚDICAS Y AMPLIAS</span>
+                                            <h3 className="text-2xl font-black text-slate-950">Aulas Diseñadas para Jugar</h3>
+                                            <p className="text-xs font-semibold text-slate-900 leading-relaxed">Mobiliario ergonómico y material seguro para el libre aprendizaje.</p>
+                                        </div>
+                                    </div>
+                                </ScrollReveal>
+
+                                <ScrollReveal distance="translate-y-8" delay={300}>
+                                    <div className="p-6 rounded-[36px] bg-[#704FE6] text-white flex flex-col sm:flex-row items-center gap-6 shadow-md border-2 border-white">
+                                        <img 
+                                            src="https://media.colsih.edu.co/ofertas_academicas/preescolar/preescolar_uno.JPG" 
+                                            alt="Experiencia Preescolar COLSIH" 
+                                            className="w-full sm:w-44 h-36 object-cover rounded-2xl shadow-xs"
+                                        />
+                                        <div className="space-y-2 text-left">
+                                            <span className="text-xs font-black uppercase text-amber-300 tracking-wider">APRENDIZAJE INTEGRAL</span>
+                                            <h3 className="text-2xl font-black text-white">Desarrollo Afectivo y Social</h3>
+                                            <p className="text-xs font-semibold text-purple-100 leading-relaxed">Formación en valores, amistad y convivencia salesiana.</p>
+                                        </div>
+                                    </div>
+                                </ScrollReveal>
+                            </div>
+
+                        </div>
+                    </div>
+                </section>
+
+
+                {/* 4. OUR TEACHERS / DOCENTES ("We aim to help children discover the joy of creative learning...") */}
+                <section className="py-20 md:py-32 bg-white">
+                    <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px]">
+                        <div className="bg-[#704FE6] text-white rounded-[44px] p-8 md:p-16 relative overflow-hidden shadow-2xl space-y-12">
+                            
+                            {/* Titular Grande */}
+                            <div className="max-w-4xl mx-auto text-center space-y-4">
+                                <ScrollReveal distance="translate-y-6">
+                                    <span className="inline-block px-5 py-2 rounded-full bg-white/10 text-amber-300 font-extrabold text-xs uppercase tracking-widest border border-white/20">
+                                        EQUIPO DOCENTE PREESCOLAR
+                                    </span>
+                                </ScrollReveal>
+                                <ScrollReveal distance="translate-y-6" delay={150}>
+                                    <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black leading-tight">
+                                        Buscamos ayudar a los niños a <span className="font-serif italic text-[#FFD25D]">descubrir la alegría</span> de aprender y crecer felices.
+                                    </h2>
+                                </ScrollReveal>
+                            </div>
+
+                            {/* Grid de 4 Profesores */}
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-center">
+                                {docentesPreescolar.map((docente, idx) => (
+                                    <ScrollReveal key={idx} distance="translate-y-8" delay={idx * 100}>
+                                        <div className="bg-white/10 backdrop-blur-md rounded-3xl p-6 border border-white/20 hover:bg-white/20 transition-all space-y-4">
+                                            <div className="relative mx-auto w-28 h-28">
+                                                <div className={`absolute inset-0 rounded-full ${docente.colorBlob} rotate-6 scale-105`} />
+                                                <img 
+                                                    src={docente.foto} 
+                                                    alt={docente.nombre} 
+                                                    className="relative z-10 w-full h-full object-cover rounded-full border-4 border-white shadow-md"
+                                                />
+                                            </div>
+                                            <div>
+                                                <h3 className="text-xl font-black text-white">{docente.nombre}</h3>
+                                                <p className="text-xs font-bold text-amber-300 uppercase tracking-wider mt-1">{docente.cargo}</p>
+                                            </div>
+                                        </div>
+                                    </ScrollReveal>
+                                ))}
+                            </div>
+
+                        </div>
+                    </div>
+                </section>
+
+
+                {/* 5. OUR BLOG / NOTICIAS PREESCOLAR ("Read our blog") */}
+                <section className="py-20 md:py-32 bg-[#FAF8FF]">
+                    <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] space-y-16">
+                        
+                        {/* Header */}
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+                            <div className="space-y-2 text-left">
+                                <span className="text-xs font-black uppercase tracking-widest text-[#704FE6] block">ARTÍCULOS Y NOVEDADES</span>
+                                <h2 className="text-4xl sm:text-5xl font-black text-[#1F1943]">
+                                    Lee nuestro <span className="font-serif italic text-[#704FE6]">blog</span> de Preescolar
+                                </h2>
+                            </div>
+
+                            <Link
+                                href="/noticias"
+                                className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-[#704FE6] text-white font-extrabold text-sm shadow-md hover:scale-105 transition-all self-start sm:self-auto"
+                            >
+                                <span>Ver Todo</span>
+                                <Send className="w-4 h-4" />
+                            </Link>
+                        </div>
+
+                        {/* 3 Tarjetas de Blog */}
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
+                            {blogCards.map((blog, idx) => (
+                                <ScrollReveal key={idx} distance="translate-y-8" delay={idx * 100}>
+                                    <div className="bg-[#F5F5F5] rounded-3xl overflow-hidden p-5 space-y-4 hover:shadow-xl hover:bg-white transition-all duration-300 border border-slate-200/80 group h-full flex flex-col justify-between">
+                                        <div className="space-y-4">
+                                            <div className="h-48 rounded-2xl overflow-hidden">
+                                                <img 
+                                                    src={blog.imagen} 
+                                                    alt={blog.titulo} 
+                                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                                />
+                                            </div>
+                                            <h3 className="text-2xl font-black text-[#1F1943] leading-snug group-hover:text-[#704FE6] transition-colors">
+                                                {blog.titulo}
+                                            </h3>
+                                            <p className="text-sm font-semibold text-slate-600 leading-relaxed">
+                                                {blog.desc}
+                                            </p>
+                                        </div>
+
+                                        <div className="pt-3 border-t border-slate-200 flex items-center justify-between text-xs font-black uppercase text-[#704FE6]">
+                                            <span>Leer artículo completo</span>
+                                            <div className="w-7 h-7 rounded-full bg-[#704FE6] text-white flex items-center justify-center group-hover:translate-x-1 transition-transform">
+                                                <Send className="w-3.5 h-3.5" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ScrollReveal>
+                            ))}
+                        </div>
+
+                    </div>
+                </section>
+
+
+                {/* 6. FAQ ("Frequently asked questions") */}
+                <section className="py-20 md:py-32 bg-white border-t border-slate-100">
+                    <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px]">
+                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+                            
+                            {/* Titular */}
+                            <div className="lg:col-span-5 space-y-6 text-left">
+                                <ScrollReveal distance="translate-y-6">
+                                    <span className="text-xs font-black uppercase tracking-widest text-[#704FE6] block">RESOLVEMOS TUS DUDAS</span>
+                                    <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-[#1F1943] leading-tight">
+                                        Preguntas <br />
+                                        <span className="font-serif italic text-[#704FE6]">frecuentes</span>
+                                    </h2>
+                                    <p className="text-base font-semibold text-slate-600 leading-relaxed pt-2">
+                                        Encuentra aquí la información clave sobre nuestra propuesta pedagógica, matrículas y adaptación para los más pequeños.
+                                    </p>
+                                </ScrollReveal>
+                            </div>
+
+                            {/* Acordeón de FAQs */}
+                            <div className="lg:col-span-7 space-y-4 text-left">
+                                {faqsPreescolar.map((faq, idx) => {
+                                    const isOpen = faqOpen === idx;
+                                    return (
+                                        <ScrollReveal key={idx} distance="translate-y-4" delay={idx * 100}>
+                                            <div 
+                                                onClick={() => toggleFaq(idx)}
+                                                className={`rounded-3xl p-6 md:p-8 transition-all cursor-pointer border-2 ${
+                                                    isOpen
+                                                        ? 'bg-[#EAE0FE] border-[#704FE6] shadow-md'
+                                                        : 'bg-[#F8FAFC] border-slate-200 hover:border-slate-300'
+                                                }`}
+                                            >
+                                                <div className="flex items-center justify-between gap-4">
+                                                    <h3 className="text-xl font-black text-[#1F1943] font-sans">
+                                                        {faq.pregunta}
+                                                    </h3>
+                                                    <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 transition-transform ${isOpen ? 'bg-[#704FE6] text-white rotate-45' : 'bg-white text-[#704FE6] border border-slate-200'}`}>
+                                                        <Plus className="w-5 h-5" />
+                                                    </div>
                                                 </div>
-                                            ))}
-                                        </div>
+
+                                                {isOpen && (
+                                                    <p className="mt-4 pt-4 border-t border-[#704FE6]/20 text-base font-semibold text-slate-700 leading-relaxed">
+                                                        {faq.respuesta}
+                                                    </p>
+                                                )}
+                                            </div>
+                                        </ScrollReveal>
+                                    );
+                                })}
+                            </div>
+
+                        </div>
+                    </div>
+                </section>
+
+
+                {/* 7. JOIN COMMUNITY CTA ("Join our WonderKids community now") */}
+                <section className="py-24 bg-[#FAF8FF]">
+                    <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px]">
+                        <div className="bg-[#704FE6] text-white rounded-[44px] p-8 md:p-16 shadow-2xl relative overflow-hidden">
+                            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                                
+                                {/* Foto de Form */}
+                                <div className="lg:col-span-5">
+                                    <div className="rounded-3xl overflow-hidden border-4 border-white shadow-xl h-80 lg:h-96">
+                                        <img 
+                                            src="https://media.colsih.edu.co/ofertas_academicas/preescolar/preescolar_dos.JPG" 
+                                            alt="Preescolar COLSIH Comunidad" 
+                                            className="w-full h-full object-cover"
+                                        />
                                     </div>
-                                </ScrollReveal>
-                            );
-                        })}
-                    </div>
-                </div>
-            </section>
+                                </div>
 
-            {/* 3. PILARES PEDAGÓGICOS MULTICOLORES */}
-            <section className="py-20 md:py-28 bg-white relative z-10">
-                <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px]">
-                    <div className="text-center max-w-3xl mx-auto mb-16">
-                        <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-pink-100 text-pink-800 font-extrabold text-xs tracking-[3px] uppercase mb-4 border border-pink-200">
-                            <Sparkles className="w-4 h-4 text-pink-600" />
-                            PROPUESTA EDUCATIVA ALEGRE
-                        </span>
-                        <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight">
-                            ¿Por qué elegir el Preescolar COLSIH?
-                        </h2>
-                    </div>
+                                {/* Formulario */}
+                                <div className="lg:col-span-7 space-y-6 text-left">
+                                    <h2 className="text-4xl sm:text-5xl font-black leading-tight text-white font-sans">
+                                        Únete a la comunidad de <br />
+                                        <span className="font-serif italic text-[#FFD25D]">Preescolar COLSIH</span> ahora
+                                    </h2>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        {pilaresPreescolar.map((pilar, idx) => {
-                            const IconComponent = pilar.icon;
-                            return (
-                                <ScrollReveal key={pilar.titulo} delay={idx * 120} distance="translate-y-6">
-                                    <div className="p-8 rounded-[32px] bg-gradient-to-br from-amber-50/50 via-pink-50/40 to-cyan-50/40 border-2 border-amber-100 hover:border-amber-300 shadow-lg shadow-amber-500/5 transition-all duration-300 flex items-start gap-5 group hover:-translate-y-1">
-                                        <div className={`p-4 rounded-2xl ${pilar.color} group-hover:scale-110 transition-transform duration-300 shrink-0 shadow-sm border`}>
-                                            <IconComponent className="w-7 h-7" />
+                                    <p className="text-purple-100 font-semibold text-lg">
+                                        Déjanos tus datos de contacto y te enviaremos la información personalizada sobre cupos e inscripciones para el año escolar 2027.
+                                    </p>
+
+                                    <form onSubmit={handleFormSubmit} className="space-y-4 pt-2">
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                            <input 
+                                                type="text" 
+                                                required
+                                                placeholder="Nombre del Acudiente" 
+                                                value={nombreForm}
+                                                onChange={(e) => setNombreForm(e.target.value)}
+                                                className="w-full px-6 py-4 rounded-full bg-white text-slate-900 font-bold placeholder-slate-400 border-none outline-none focus:ring-4 focus:ring-amber-300"
+                                            />
+                                            <input 
+                                                type="text" 
+                                                required
+                                                placeholder="Correo o Teléfono" 
+                                                value={contactoForm}
+                                                onChange={(e) => setContactoForm(e.target.value)}
+                                                className="w-full px-6 py-4 rounded-full bg-white text-slate-900 font-bold placeholder-slate-400 border-none outline-none focus:ring-4 focus:ring-amber-300"
+                                            />
                                         </div>
-                                        <div>
-                                            <h3 className="text-xl font-black text-slate-900 mb-2">{pilar.titulo}</h3>
-                                            <p className="text-slate-600 text-sm font-medium leading-relaxed">{pilar.desc}</p>
-                                        </div>
-                                    </div>
-                                </ScrollReveal>
-                            );
-                        })}
-                    </div>
-                </div>
-            </section>
 
-            {/* 4. BANNER FINAL ADMISIONES PREESCOLAR MULTICOLOR */}
-            <section className="py-20 bg-gradient-to-r from-amber-500 via-pink-500 to-cyan-500 text-white relative overflow-hidden">
-                <div className="absolute inset-0 bg-black/10 backdrop-blur-[2px]"></div>
-                <div className="max-w-5xl mx-auto px-6 text-center relative z-10 space-y-6">
-                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/20 backdrop-blur-md text-white font-black text-xs uppercase tracking-widest border border-white/30">
-                        <Award className="w-4 h-4 text-amber-200" />
-                        <span>¡INSCRIPCIONES ABIERTAS 2026!</span>
+                                        <div className="flex items-center gap-4 pt-2">
+                                            <button 
+                                                type="submit"
+                                                className="px-9 py-4.5 rounded-full bg-[#FFD25D] hover:bg-amber-300 text-slate-950 font-black text-lg shadow-xl hover:scale-105 transition-all flex items-center gap-3 cursor-pointer"
+                                            >
+                                                <span>Enviar Solicitud</span>
+                                                <Send className="w-5 h-5" />
+                                            </button>
+
+                                            {formEnviado && (
+                                                <span className="text-amber-300 font-black text-sm flex items-center gap-2 animate-bounce">
+                                                    <CheckCircle2 className="w-5 h-5" />
+                                                    ¡Información enviada con éxito!
+                                                </span>
+                                            )}
+                                        </div>
+                                    </form>
+                                </div>
+
+                            </div>
+                        </div>
                     </div>
-                    <h2 className="text-3xl md:text-5xl font-black tracking-tight drop-shadow-md">
-                        ¡Acompaña los primeros pasos escolares de tu hijo con nosotros!
-                    </h2>
-                    <p className="text-amber-50 text-base md:text-xl font-medium max-w-2xl mx-auto leading-relaxed">
-                        Inscripciones abiertas para Prejardín, Jardín y Transición. Ven y conoce nuestras instalaciones y nuestro cálido equipo docente salesiano.
-                    </p>
-                    <div className="pt-4">
-                        <Link
-                            href="/admisiones"
-                            className="inline-flex items-center gap-3 px-9 py-4 rounded-2xl bg-white text-slate-900 font-black text-sm md:text-base shadow-2xl hover:scale-105 transition-all duration-300 hover:bg-amber-50"
-                        >
-                            <span>Solicitar Información de Admisión</span>
-                            <ArrowRight className="w-5 h-5 text-amber-600" />
-                        </Link>
-                    </div>
-                </div>
-            </section>
+                </section>
+
+            </div>
         </AppLayout>
     );
 }

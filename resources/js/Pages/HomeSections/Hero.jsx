@@ -89,8 +89,8 @@ export default function Hero({ setVideoOpen }) {
             {/* Transparent Borderless Header */}
             <header className={`fixed top-0 left-0 right-0 z-50 py-4 transition-all duration-300 bg-gradient-to-b from-[#08111F]/60 to-transparent ${scrolled ? 'bg-[#08111F]/40 backdrop-blur-md' : 'backdrop-blur-[2px]'
                 }`}>
-                <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] flex items-center justify-between">
-                    {/* Logo (left) */}
+                <div className="w-full px-6 md:px-10 lg:px-16 flex items-center justify-between relative">
+                    {/* Logo (Extremo Izquierdo) */}
                     <Link href="/" className="flex items-center gap-3 group focus:outline-none shrink-0">
                         <img
                             src="/marca/logo-colsih.svg"
@@ -106,8 +106,8 @@ export default function Hero({ setVideoOpen }) {
                         </div>
                     </Link>
 
-                    {/* Navigation centered */}
-                    <div className="hidden lg:flex items-center gap-10 text-[15px] font-semibold text-white/70">
+                    {/* Navigation Centrada en la Pantalla */}
+                    <div className="hidden lg:flex items-center gap-8 xl:gap-10 text-[15px] font-semibold text-white/70 absolute left-1/2 -translate-x-1/2">
                         <Link href="/" className="text-white hover:text-white transition-colors">Inicio</Link>
 
                         {/* Nuestro Colegio dropdown */}

@@ -8,7 +8,8 @@ import {
     Sparkles, 
     BookOpen, 
     Palette, 
-    Gamepad2
+    Gamepad2,
+    User
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -114,6 +115,50 @@ function ZigZagWavySVG({ className = "w-28 h-14 text-[#DEC8FE]" }) {
         <svg className={className} viewBox="0 0 120 60" fill="currentColor">
             <path d="M10,30 Q20,10 30,30 T50,30 T70,30 T90,30 T110,30" stroke="currentColor" strokeWidth="16" strokeLinecap="round" fill="none" />
         </svg>
+    );
+}
+
+// Estilos para las formas orgánicas asimétricas no perfectas (Blobs) idénticas a Figma
+const organicBlobStyles = [
+    { borderRadius: '58% 42% 62% 38% / 44% 56% 44% 56%' }, // Blob 1 (Yellow)
+    { borderRadius: '42% 58% 38% 62% / 56% 44% 56% 44%' }, // Blob 2 (Beige)
+    { borderRadius: '65% 35% 55% 45% / 45% 55% 35% 65%' }, // Blob 3 (Lavender)
+    { borderRadius: '45% 55% 40% 60% / 60% 40% 60% 40%' }  // Blob 4 (Sky Blue)
+];
+
+// Componente para la tarjeta de cada docente con forma orgánica grande y avatar limpio si falta foto
+function TeacherCard({ docente, idx }) {
+    const [hasError, setHasError] = useState(false);
+    const blobStyle = organicBlobStyles[idx % 4];
+
+    return (
+        <ScrollReveal distance="translate-y-8" delay={idx * 100}>
+            <div className="space-y-5 group flex flex-col items-center">
+                {/* Contenedor Orgánico Asimétrico Grande idéntico a Figma */}
+                <div 
+                    className={`relative w-56 h-56 sm:w-64 sm:h-64 lg:w-68 lg:h-68 ${docente.colorCircle} shadow-xl group-hover:scale-105 transition-transform duration-500 overflow-hidden flex items-center justify-center`}
+                    style={blobStyle}
+                >
+                    {(!docente.foto || hasError) ? (
+                        <div className="flex flex-col items-center justify-center text-white/80 p-4">
+                            <User className="w-24 h-24 stroke-[1.5]" />
+                        </div>
+                    ) : (
+                        <img 
+                            src={docente.foto} 
+                            alt={docente.nombre} 
+                            className="w-full h-full object-cover"
+                            onError={() => setHasError(true)}
+                        />
+                    )}
+                </div>
+
+                <div className="space-y-1 text-center">
+                    <h3 className="text-2xl font-black text-white leading-snug">{docente.nombre}</h3>
+                    <p className="text-base font-semibold text-purple-200">{docente.cargo}</p>
+                </div>
+            </div>
+        </ScrollReveal>
     );
 }
 
@@ -464,30 +509,10 @@ export default function Preescolar() {
                             </ScrollReveal>
                         </div>
 
-                        {/* Grid de 4 Profesoras Reales de Preescolar COLSIH */}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 text-center">
+                        {/* Grid de 4 Profesoras Reales de Preescolar COLSIH en Formas Orgánicas Grandes */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 text-center items-start">
                             {docentesPreescolar.map((docente, idx) => (
-                                <ScrollReveal key={idx} distance="translate-y-8" delay={idx * 100}>
-                                    <div className="space-y-4 group">
-                                        <div className="relative mx-auto w-40 h-40 flex items-center justify-center">
-                                            {/* Círculo de color de fondo */}
-                                            <div className={`absolute inset-0 rounded-full ${docente.colorCircle} group-hover:scale-105 transition-transform duration-300 shadow-lg`} />
-                                            <img 
-                                                src={docente.foto} 
-                                                alt={docente.nombre} 
-                                                className="relative z-10 w-36 h-36 object-cover rounded-full shadow-md"
-                                                onError={(e) => {
-                                                    e.target.onerror = null;
-                                                    e.target.src = "https://media.colsih.edu.co/ofertas_academicas/preescolar.JPG";
-                                                }}
-                                            />
-                                        </div>
-                                        <div className="space-y-1">
-                                            <h3 className="text-xl font-extrabold text-white leading-snug">{docente.nombre}</h3>
-                                            <p className="text-sm font-semibold text-purple-200">{docente.cargo}</p>
-                                        </div>
-                                    </div>
-                                </ScrollReveal>
+                                <TeacherCard key={idx} docente={docente} idx={idx} />
                             ))}
                         </div>
                     </div>

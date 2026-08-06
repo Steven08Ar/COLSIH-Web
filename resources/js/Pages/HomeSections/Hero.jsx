@@ -384,11 +384,11 @@ export default function Hero({ setVideoOpen }) {
             </div>
 
             {/* Main Content Container (Figma grid aligned) */}
-            <div className="relative z-30 max-w-[1680px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 w-full pt-24 pb-16">
+            <div className="relative z-30 max-w-[1680px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 w-full pt-16 sm:pt-24 md:pt-32 pb-44 md:pb-36">
                 <div className="grid grid-cols-12 gap-6 items-center">
 
                     {/* Left Side Content (centered on mobile, left-aligned on desktop) */}
-                    <div className="col-span-12 md:col-span-7 lg:col-span-6 space-y-8 text-center md:text-left mx-auto md:mx-0 md:-ml-2 lg:-ml-4">
+                    <div className="col-span-12 md:col-span-7 lg:col-span-6 space-y-6 text-center md:text-left mx-auto md:mx-0 md:-ml-2 lg:-ml-4">
                         {/* Headline con tipografias y colores combinados */}
                         <h1 className="text-4xl sm:text-5xl lg:text-[64px] xl:text-[72px] font-black text-white leading-[1.1] tracking-tight font-sans animate-fadeIn text-center md:text-left">
                             {/* Linea 1: Formamos */}
@@ -417,18 +417,18 @@ export default function Hero({ setVideoOpen }) {
                             </span>
                         </h1>
 
-                        {/* Botón Destacado de INSCRIPCIONES 2027 (Web y Móvil) */}
-                        <div className="pt-5 flex justify-center md:justify-start">
+                        {/* Botón Suave, Minimalista y Plano de INSCRIPCIONES 2027 */}
+                        <div className="pt-3 flex justify-center md:justify-start">
                             <a
                                 href="https://e.plataformaintegra.net/sihungria/index.php/cupo"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="group inline-flex items-center justify-center gap-3 px-8 py-4 rounded-full bg-[#003C8F] hover:bg-[#002866] text-white text-base sm:text-lg font-black shadow-[0_10px_25px_rgba(0,60,143,0.5)] hover:scale-105 active:scale-95 transition-all duration-300 border-2 border-amber-300 cursor-pointer"
+                                className="inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-full bg-[#003C8F] hover:bg-[#002b66] text-white text-sm sm:text-base font-bold transition-all duration-200 shadow-md border border-white/20 active:scale-95 cursor-pointer"
                             >
-                                <svg className="w-5 h-5 text-amber-300 shrink-0 group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                <svg className="w-4 h-4 text-amber-300 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                 </svg>
-                                <span className="tracking-wider uppercase">INSCRIPCIONES 2027</span>
+                                <span className="tracking-wide uppercase">INSCRIPCIONES 2027</span>
                             </a>
                         </div>
                     </div>

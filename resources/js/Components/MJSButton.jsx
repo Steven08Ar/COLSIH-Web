@@ -26,7 +26,7 @@ export default function MJSButton() {
 
     return (
         <div 
-            className={`fixed bottom-6 left-6 sm:bottom-8 sm:left-8 z-[99999] flex items-center gap-3 select-none pointer-events-auto transition-all duration-500 ${
+            className={`fixed bottom-4 left-3 sm:bottom-8 sm:left-8 z-[99990] flex items-center gap-3 select-none pointer-events-auto transition-all duration-500 ${
                 hideForFooter ? 'opacity-0 pointer-events-none translate-y-10' : 'opacity-100 translate-y-0'
             }`}
         >

@@ -211,19 +211,33 @@ export default function Hero({ setVideoOpen }) {
                                 />
                             </Link>
                         ) : (
-                            <a
-                                href="https://e.plataformaintegra.net/sihungria/"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="hidden md:inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#800A15] hover:bg-[#9e0d1c] text-white text-xs sm:text-sm font-extrabold shadow-md hover:shadow-lg shadow-[#800A15]/30 hover:scale-105 transition-all duration-300 border border-white/20"
-                                title="Ingreso a Plataforma Integra"
-                            >
-                                <svg className="w-4 h-4 text-white shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" d="M12 14l9-5-9-5-9 5 9 5z" />
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0112 20.055a11.952 11.952 0 01-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
-                                </svg>
-                                <span>Plataforma</span>
-                            </a>
+                            <div className="hidden md:flex items-center gap-2">
+                                <a
+                                    href="https://e.plataformaintegra.net/sihungria/"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-[#800A15] hover:bg-[#9e0d1c] text-white text-xs sm:text-sm font-extrabold shadow-md hover:shadow-lg shadow-[#800A15]/30 hover:scale-105 transition-all duration-300 border border-white/20"
+                                    title="Ingreso a Plataforma Integra"
+                                >
+                                    <svg className="w-4 h-4 text-white shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" d="M12 14l9-5-9-5-9 5 9 5z" />
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0112 20.055a11.952 11.952 0 01-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+                                    </svg>
+                                    <span>Plataforma</span>
+                                </a>
+                                <a
+                                    href="https://e.plataformaintegra.net/sihungria/index.php/cupo"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-[#003C8F] hover:bg-[#002e6e] text-white text-xs sm:text-sm font-extrabold shadow-md hover:shadow-lg shadow-blue-900/40 hover:scale-105 transition-all duration-300 border border-white/20"
+                                    title="Solicitud de Cupo e Inscripción 2027"
+                                >
+                                    <svg className="w-4 h-4 text-amber-300 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                    </svg>
+                                    <span>INSCRIPCIONES</span>
+                                </a>
+                            </div>
                         )}
 
                         {/* Mobile toggle */}
@@ -247,7 +261,7 @@ export default function Hero({ setVideoOpen }) {
 
                 {/* Mobile panel */}
                 {mobileOpen && (
-                    <div className="lg:hidden mt-2 mx-6 md:mx-12 bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl shadow-2xl overflow-hidden">
+                    <div className="lg:hidden mt-2 mx-6 md:mx-12 bg-[#08111F]/95 backdrop-blur-md border border-white/15 rounded-2xl shadow-2xl overflow-hidden max-h-[85vh] overflow-y-auto">
                         <div className="px-4 py-4 space-y-1">
                             <Link href="/" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 text-sm font-semibold text-white rounded-lg hover:bg-white/10 transition-colors">Inicio</Link>
                             <div>
@@ -265,7 +279,19 @@ export default function Hero({ setVideoOpen }) {
                             <Link href="/noticias" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 text-sm font-semibold text-white/75 hover:text-white rounded-lg hover:bg-white/10 transition-colors">Noticias</Link>
                             <Link href="/contacto" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 text-sm font-semibold text-white/75 hover:text-white rounded-lg hover:bg-white/10 transition-colors">Contacto</Link>
                             {url !== '/mjs' && (
-                                <div className="pt-2 border-t border-white/10">
+                                <div className="pt-2 border-t border-white/10 space-y-2">
+                                    <a
+                                        href="https://e.plataformaintegra.net/sihungria/index.php/cupo"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        onClick={() => setMobileOpen(false)}
+                                        className="flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl bg-[#003C8F] hover:bg-[#002e6e] text-white text-xs font-extrabold shadow-md border border-white/20 transition-all duration-300"
+                                    >
+                                        <svg className="w-4 h-4 text-amber-300 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                        </svg>
+                                        <span>INSCRIPCIONES 2027</span>
+                                    </a>
                                     <a
                                         href="https://e.plataformaintegra.net/sihungria/"
                                         target="_blank"
@@ -391,7 +417,20 @@ export default function Hero({ setVideoOpen }) {
                             </span>
                         </h1>
 
-
+                        {/* Botón Destacado de INSCRIPCIONES 2027 (Web y Móvil) */}
+                        <div className="pt-5 flex justify-center md:justify-start">
+                            <a
+                                href="https://e.plataformaintegra.net/sihungria/index.php/cupo"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="group inline-flex items-center justify-center gap-3 px-8 py-4 rounded-full bg-[#003C8F] hover:bg-[#002866] text-white text-base sm:text-lg font-black shadow-[0_10px_25px_rgba(0,60,143,0.5)] hover:scale-105 active:scale-95 transition-all duration-300 border-2 border-amber-300 cursor-pointer"
+                            >
+                                <svg className="w-5 h-5 text-amber-300 shrink-0 group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                </svg>
+                                <span className="tracking-wider uppercase">INSCRIPCIONES 2027</span>
+                            </a>
+                        </div>
                     </div>
 
                 </div>

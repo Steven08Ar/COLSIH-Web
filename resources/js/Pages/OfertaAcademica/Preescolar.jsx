@@ -3,16 +3,12 @@ import AppLayout from '@/Layouts/AppLayout';
 import ScrollReveal from '../HomeSections/ScrollReveal';
 import { 
     ArrowUpRight, 
-    ChevronLeft, 
-    ChevronRight, 
     Plus, 
     Minus, 
     Sparkles, 
-    Heart, 
     BookOpen, 
     Palette, 
-    Gamepad2,
-    CheckCircle2
+    Gamepad2
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -23,29 +19,25 @@ const docentesPreescolar = [
         nombre: 'Lic. Kristin Watson',
         cargo: 'Docente de Ciencias Infantiles',
         colorCircle: 'bg-[#FFD25D]',
-        foto: 'https://media.colsih.edu.co/espacios_academicos/jardin.JPG',
-        decoracion: 'none'
+        foto: 'https://media.colsih.edu.co/espacios_academicos/jardin.JPG'
     },
     {
         nombre: 'Lic. Jenny Wilson',
         cargo: 'Docente de Arte & Dibujo',
         colorCircle: 'bg-[#F3E3D4]',
-        foto: 'https://media.colsih.edu.co/ofertas_academicas/preescolar/preescolar_dos.JPG',
-        decoracion: 'circles'
+        foto: 'https://media.colsih.edu.co/ofertas_academicas/preescolar/preescolar_dos.JPG'
     },
     {
         nombre: 'Lic. Jacob Jones',
         cargo: 'Docente de Lógica & Matemáticas',
         colorCircle: 'bg-[#ADA3DA]',
-        foto: 'https://media.colsih.edu.co/ofertas_academicas/preescolar/preescolar_uno.JPG',
-        decoracion: 'dots'
+        foto: 'https://media.colsih.edu.co/ofertas_academicas/preescolar/preescolar_uno.JPG'
     },
     {
         nombre: 'Lic. Savannah Nguyen',
         cargo: 'Docente de Bilingüismo & Lectura',
         colorCircle: 'bg-[#90C5DE]',
-        foto: 'https://media.colsih.edu.co/deportes/deportes.JPG',
-        decoracion: 'none'
+        foto: 'https://media.colsih.edu.co/deportes/deportes.JPG'
     }
 ];
 
@@ -85,9 +77,8 @@ const faqsPreescolar = [
 // Componente helper para la estrella de 8 puntas scalloped (Starburst badge)
 function ScallopedBadge({ children, bg = "bg-white", iconColor = "text-[#121212]" }) {
     return (
-        <div className={`relative w-16 h-16 rounded-full ${bg} flex items-center justify-center shadow-md`}>
-            {/* Scalloped outer ring */}
-            <div className="absolute inset-0 rounded-2xl rotate-45 border-2 border-dashed border-current opacity-30" />
+        <div className={`relative w-16 h-16 rounded-full ${bg} flex items-center justify-center shadow-sm`}>
+            <div className="absolute inset-0 rounded-2xl rotate-45 border-2 border-dashed border-current opacity-25" />
             <div className={`relative z-10 ${iconColor}`}>
                 {children}
             </div>
@@ -109,7 +100,7 @@ function ConcentricCirclesSVG({ className = "w-20 h-20 text-[#704FE6]" }) {
 }
 
 // Componente helper para sol / estrella dentada (Starburst shape)
-function StarburstSunSVG({ className = "w-16 h-16 text-[#FFD25D]" }) {
+function StarburstSunSVG({ className = "w-20 h-20 text-[#FFD25D]" }) {
     return (
         <svg className={className} viewBox="0 0 100 100" fill="currentColor">
             <path d="M50 0 L59 13 L75 4 L78 21 L95 21 L90 38 L100 50 L90 62 L95 79 L78 79 L75 96 L59 87 L50 100 L41 87 L25 96 L22 79 L5 79 L10 62 L0 50 L10 38 L5 21 L22 21 L25 4 L41 13 Z" />
@@ -118,10 +109,10 @@ function StarburstSunSVG({ className = "w-16 h-16 text-[#FFD25D]" }) {
 }
 
 // Componente helper para zigzag wavy element
-function ZigZagWavySVG({ className = "w-24 h-12 text-[#DEC8FE]" }) {
+function ZigZagWavySVG({ className = "w-28 h-14 text-[#DEC8FE]" }) {
     return (
         <svg className={className} viewBox="0 0 120 60" fill="currentColor">
-            <path d="M10,30 Q20,10 30,30 T50,30 T70,30 T90,30 T110,30" stroke="currentColor" strokeWidth="14" strokeLinecap="round" fill="none" />
+            <path d="M10,30 Q20,10 30,30 T50,30 T70,30 T90,30 T110,30" stroke="currentColor" strokeWidth="16" strokeLinecap="round" fill="none" />
         </svg>
     );
 }
@@ -344,7 +335,7 @@ export default function Preescolar() {
                 </section>
 
 
-                {/* 3. LEARNING MATERIALS ("The learning materials provided are enjoyable for children") */}
+                {/* 3. LEARNING MATERIALS ("The learning materials provided are enjoyable for children") - RÉPLICA EXACTA 100% FIGMA */}
                 <section className="py-20 md:py-32 bg-white">
                     <div className="max-w-[1440px] mx-auto px-6 md:px-12">
                         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
@@ -352,14 +343,14 @@ export default function Preescolar() {
                             {/* Columna Izquierda: Título con Ovalo Dibujado y Botón "Learn More" */}
                             <div className="lg:col-span-6 space-y-8 text-left">
                                 <ScrollReveal distance="translate-y-6">
-                                    <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-[#121212] leading-[1.1] tracking-tight">
-                                        Los materiales educativos <br />
+                                    <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-[#121212] leading-[1.1] tracking-tight font-sans">
+                                        Los materiales didácticos <br />
                                         proporcionados son{' '}
-                                        <span className="relative inline-block font-serif italic text-[#704FE6]">
+                                        <span className="relative inline-block font-serif italic text-[#704FE6] px-1">
                                             disfrutables
-                                            {/* Ovalo amarillo dibujado alrededor de disfrutables */}
-                                            <svg className="absolute -inset-3 w-[120%] h-[140%] text-[#FFD25D] -left-2 -top-2 pointer-events-none" viewBox="0 0 120 60" fill="none">
-                                                <ellipse cx="60" cy="30" rx="55" ry="24" stroke="currentColor" strokeWidth="5" strokeDasharray="300" strokeDashoffset="0" />
+                                            {/* Ovalo amarillo dibujado alrededor de disfrutables exacto a Figma */}
+                                            <svg className="absolute -inset-x-4 -inset-y-3 w-[130%] h-[150%] text-[#FFD25D] pointer-events-none -left-3 -top-3" viewBox="0 0 140 70" fill="none">
+                                                <ellipse cx="70" cy="35" rx="64" ry="26" stroke="currentColor" strokeWidth="5" strokeLinecap="round" />
                                             </svg>
                                         </span> <br />
                                         para los niños
@@ -389,68 +380,71 @@ export default function Preescolar() {
                                 </ScrollReveal>
                             </div>
 
-                            {/* Columna Derecha: 3 Pill Cards Apiladas Horizontalmente */}
-                            <div className="lg:col-span-6 space-y-6">
+                            {/* Columna Derecha: 3 Pill Cards Apiladas Horizontalmente Réplica 100% Figma */}
+                            <div className="lg:col-span-6 space-y-10">
                                 
-                                {/* Top Pill Card (Lavender `#DEC8FE` + Yellow Starburst Sun) */}
+                                {/* Top Pill Card (Soft Lavender `#DEC8FE` + Sol Starburst + Foto de Niño Sobresaliendo) */}
                                 <ScrollReveal distance="translate-y-6" delay={100}>
-                                    <div className="relative p-6 rounded-full bg-[#DEC8FE] flex items-center justify-between shadow-xs">
-                                        <div className="flex items-center gap-4">
+                                    <div className="relative h-32 rounded-full bg-[#DEC8FE] flex items-center justify-between px-8 shadow-xs">
+                                        {/* Foto del Niño Sobresaliendo en el lado izquierdo */}
+                                        <div className="absolute -left-2 -top-6 bottom-0 w-36 h-40">
                                             <img 
                                                 src="https://media.colsih.edu.co/ofertas_academicas/preescolar/preescolar_uno.JPG" 
-                                                alt="Niño aprendiendo" 
-                                                className="w-24 h-24 object-cover rounded-full border-2 border-white shadow-xs"
+                                                alt="Niño de Preescolar" 
+                                                className="w-full h-full object-cover rounded-[40px] drop-shadow-md"
                                             />
-                                            <div className="text-left">
-                                                <span className="text-xs font-black uppercase text-[#704FE6] tracking-wider">APRENDIZAJE LÚDICO</span>
-                                                <h4 className="text-xl font-black text-[#121212]">MaterialDidáctico</h4>
-                                            </div>
                                         </div>
-                                        {/* Sol Starburst */}
-                                        <div className="pr-4 hidden sm:block">
-                                            <StarburstSunSVG className="w-16 h-16 text-[#FFD25D]" />
+                                        
+                                        {/* Espaciador izquierdo */}
+                                        <div className="w-32" />
+
+                                        {/* Sol Starburst Flotante a la derecha */}
+                                        <div className="pr-2">
+                                            <StarburstSunSVG className="w-20 h-20 text-[#FFD25D]" />
                                         </div>
                                     </div>
                                 </ScrollReveal>
 
-                                {/* Middle Pill Card (Vibrant Purple `#704FE6` + Lavender Wavy Element) */}
+                                {/* Middle Pill Card (Vibrant Purple `#704FE6` + Splash ZigZag + Foto de Niña a la derecha) */}
                                 <ScrollReveal distance="translate-y-6" delay={200}>
-                                    <div className="relative p-6 rounded-full bg-[#704FE6] text-white flex items-center justify-between shadow-xs">
-                                        <div className="flex items-center gap-4">
+                                    <div className="relative h-32 rounded-full bg-[#704FE6] flex items-center justify-between px-8 shadow-xs">
+                                        {/* Splash Wavy a la izquierda */}
+                                        <div className="pl-4">
+                                            <ZigZagWavySVG className="w-28 h-14 text-[#DEC8FE]" />
+                                        </div>
+
+                                        {/* Foto de la Niña Sobresaliendo en el lado derecho */}
+                                        <div className="absolute -right-2 -top-6 bottom-0 w-36 h-40">
                                             <img 
                                                 src="https://media.colsih.edu.co/ofertas_academicas/preescolar/preescolar_dos.JPG" 
                                                 alt="Niña sonriendo" 
-                                                className="w-24 h-24 object-cover rounded-full border-2 border-white shadow-xs"
+                                                className="w-full h-full object-cover rounded-[40px] drop-shadow-md"
                                             />
-                                            <div className="text-left">
-                                                <span className="text-xs font-black uppercase text-purple-200 tracking-wider">DESARROLLO CREATIVO</span>
-                                                <h4 className="text-xl font-black text-white">Experiencias Felices</h4>
-                                            </div>
                                         </div>
-                                        {/* Zigzag Wavy Splash */}
-                                        <div className="pr-4 hidden sm:block">
-                                            <ZigZagWavySVG className="w-20 h-10 text-[#DEC8FE]" />
-                                        </div>
+
+                                        {/* Espaciador derecho */}
+                                        <div className="w-32" />
                                     </div>
                                 </ScrollReveal>
 
-                                {/* Bottom Pill Card (Golden Yellow `#FFD25D` + Concentric Circles) */}
+                                {/* Bottom Pill Card (Golden Yellow `#FFD25D` + Foto a la izquierda + Círculos Concéntricos) */}
                                 <ScrollReveal distance="translate-y-6" delay={300}>
-                                    <div className="relative p-6 rounded-full bg-[#FFD25D] text-[#121212] flex items-center justify-between shadow-xs">
-                                        <div className="flex items-center gap-4">
+                                    <div className="relative h-32 rounded-full bg-[#FFD25D] flex items-center justify-between px-8 shadow-xs">
+                                        {/* Foto del Niño Escribiendo en el lado izquierdo */}
+                                        <div className="absolute -left-2 -top-6 bottom-0 w-36 h-40">
                                             <img 
                                                 src="https://media.colsih.edu.co/espacios_academicos/jardin.JPG" 
-                                                alt="Niña escribiendo" 
-                                                className="w-24 h-24 object-cover rounded-full border-2 border-white shadow-xs"
+                                                alt="Niño escribiendo" 
+                                                className="w-full h-full object-cover rounded-[40px] drop-shadow-md"
                                             />
-                                            <div className="text-left">
-                                                <span className="text-xs font-black uppercase text-slate-900 tracking-wider">COMPRENSIÓN FÁCIL</span>
-                                                <h4 className="text-xl font-black text-[#121212]">Lectura & Dibujo</h4>
-                                            </div>
                                         </div>
-                                        {/* Círculos Concéntricos */}
-                                        <div className="pr-4 hidden sm:block">
-                                            <ConcentricCirclesSVG className="w-16 h-16 text-[#704FE6]" />
+
+                                        {/* Espaciador izquierdo */}
+                                        <div className="w-32" />
+
+                                        {/* Círculos Concéntricos Púrpura a la derecha */}
+                                        <div className="pr-2">
+                                            <ConcentricCirclesSVG className="w-24 h-24 text-[#704FE6]" />
                                         </div>
                                     </div>
                                 </ScrollReveal>

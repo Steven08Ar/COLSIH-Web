@@ -94,23 +94,6 @@ const pasosProceso = [
             'Ingresa a la plataforma oficial de cupos e inicia el formulario de tu hijo(a).',
             'Diligencia los datos completos del aspirante y los acudientes.'
         ],
-        fechasImportantes: [
-            {
-                fecha: '26 DE AGOSTO',
-                titulo: 'Envío de Recibo de Pago',
-                desc: 'Se enviará a tu correo electrónico el recibo oficial para cancelar el formulario en el BANCO CAJA SOCIAL.'
-            },
-            {
-                fecha: '28 DE AGOSTO',
-                titulo: 'Envío de Comprobante',
-                desc: 'Enviar el recibo cancelado en el banco al correo admisionescolsihfloridablanca@gmail.com'
-            },
-            {
-                fecha: '29 DE AGOSTO',
-                titulo: 'Confirmación y Citación',
-                desc: 'Recibirás el mensaje de confirmación de pago con la fecha y hora asignadas para la prueba académica presencial.'
-            }
-        ],
         asuntoCorreo: 'Admisiones 2027, [Nombre y Apellidos del Hijo/a], [Grado que solicita]'
     },
     {
@@ -532,24 +515,7 @@ export default function Admisiones() {
                                                     </ul>
                                                 </div>
 
-                                                {/* Fechas de Envío (Paso 1) */}
-                                                {paso.fechasImportantes && (
-                                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
-                                                        {paso.fechasImportantes.map((f, fIdx) => (
-                                                            <div key={fIdx} className="p-4 rounded-2xl bg-[#F8FAFC] border-2 border-slate-200 space-y-2">
-                                                                <span className="text-xs font-black uppercase tracking-wider text-[#800A15] block font-sans">
-                                                                    {f.fecha}
-                                                                </span>
-                                                                <span className="text-sm font-extrabold text-[#0B1F3A] block font-sans">
-                                                                    {f.titulo}
-                                                                </span>
-                                                                <p className="text-xs font-semibold text-slate-600 leading-relaxed font-sans">
-                                                                    {f.desc}
-                                                                </p>
-                                                            </div>
-                                                        ))}
-                                                    </div>
-                                                )}
+
 
                                                 {/* Documentos por Nivel (Paso 2) */}
                                                 {paso.documentosPorNivel && (

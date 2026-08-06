@@ -283,7 +283,7 @@ export default function Preescolar() {
                 <section className="py-20 md:py-32 bg-white">
                     <div className="max-w-[1440px] mx-auto px-6 md:px-12 space-y-16">
                         
-                        {/* Header con Título + Blob de 3 Tags Rotados a la derecha */}
+                        {/* Header con Título + 3 Tags Rotados sin fondo gris */}
                         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                             <div className="space-y-2 text-left">
                                 <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-[#121212] tracking-tight">
@@ -292,11 +292,11 @@ export default function Preescolar() {
                                 </h2>
                             </div>
 
-                            {/* Blob contenedor con 3 tags rotados */}
-                            <div className="relative p-6 rounded-[32px] border-2 border-[#DEC8FE]/50 bg-[#F7F7FB] flex items-center gap-3">
-                                <span className="px-5 py-2.5 rounded-full bg-[#DEC8FE] text-[#704FE6] font-bold text-base shadow-xs -rotate-6 inline-block">#funny</span>
-                                <span className="px-5 py-2.5 rounded-full bg-[#FFD25D] text-[#121212] font-bold text-base shadow-xs rotate-6 inline-block">#enjoy</span>
-                                <span className="px-5 py-2.5 rounded-full bg-[#704FE6] text-white font-bold text-base shadow-xs -rotate-3 inline-block">#happy</span>
+                            {/* 3 tags rotados sin contenedor ni fondo gris */}
+                            <div className="flex items-center gap-3">
+                                <span className="px-5 py-2.5 rounded-full bg-[#DEC8FE] text-[#704FE6] font-bold text-base shadow-xs -rotate-6 inline-block">#divertido</span>
+                                <span className="px-5 py-2.5 rounded-full bg-[#FFD25D] text-[#121212] font-bold text-base shadow-xs rotate-6 inline-block">#disfruta</span>
+                                <span className="px-5 py-2.5 rounded-full bg-[#704FE6] text-white font-bold text-base shadow-xs -rotate-3 inline-block">#feliz</span>
                             </div>
                         </div>
 
@@ -311,17 +311,15 @@ export default function Preescolar() {
                                         <ConcentricCirclesSVG className="w-36 h-36 text-[#704FE6]" />
                                     </div>
 
-                                    {/* Badge con ícono */}
-                                    <div className="relative z-10">
-                                        <ScallopedBadge bg="bg-white" iconColor="text-[#121212]">
-                                            <BookOpen className="w-7 h-7" />
-                                        </ScallopedBadge>
+                                    {/* Ícono grande sin círculo alrededor */}
+                                    <div className="relative z-10 pt-2">
+                                        <BookOpen className="w-14 h-14 text-[#121212] stroke-[1.8]" />
                                     </div>
 
                                     <div className="space-y-4 relative z-10 pt-4">
                                         <h3 className="text-4xl font-black text-[#121212] leading-tight">
-                                            Fun <br />
-                                            <span className="font-serif italic text-[#121212]">Quiz</span>
+                                            Cuestionarios <br />
+                                            <span className="font-serif italic text-[#121212]">Divertidos</span>
                                         </h3>
                                         <p className="text-base font-semibold text-[#555670] leading-relaxed">
                                             ¡Evalúa la comprensión de forma lúdica con cuestionarios breves e interactivos muy divertidos!
@@ -338,17 +336,15 @@ export default function Preescolar() {
                                         <ZigZagWavySVG className="w-32 h-16 text-[#DEC8FE]" />
                                     </div>
 
-                                    {/* Badge con ícono */}
-                                    <div className="relative z-10">
-                                        <ScallopedBadge bg="bg-[#9B84EE]" iconColor="text-white">
-                                            <Palette className="w-7 h-7" />
-                                        </ScallopedBadge>
+                                    {/* Ícono grande sin círculo alrededor */}
+                                    <div className="relative z-10 pt-2">
+                                        <Palette className="w-14 h-14 text-white stroke-[1.8]" />
                                     </div>
 
                                     <div className="space-y-4 relative z-10 pt-4">
                                         <h3 className="text-4xl font-black text-white leading-tight">
-                                            Creative <br />
-                                            <span className="font-serif italic text-purple-200">Activities</span>
+                                            Actividades <br />
+                                            <span className="font-serif italic text-purple-200">Creativas</span>
                                         </h3>
                                         <p className="text-base font-semibold text-purple-100 leading-relaxed">
                                             Descubre actividades disfrutables como colorear, hacer manualidades y pequeñas ciencias infantiles.
@@ -367,17 +363,15 @@ export default function Preescolar() {
                                         ))}
                                     </div>
 
-                                    {/* Badge con ícono */}
-                                    <div className="relative z-10">
-                                        <ScallopedBadge bg="bg-white" iconColor="text-[#121212]">
-                                            <Gamepad2 className="w-7 h-7" />
-                                        </ScallopedBadge>
+                                    {/* Ícono grande sin círculo alrededor */}
+                                    <div className="relative z-10 pt-2">
+                                        <Gamepad2 className="w-14 h-14 text-[#121212] stroke-[1.8]" />
                                     </div>
 
                                     <div className="space-y-4 relative z-10 pt-4">
                                         <h3 className="text-4xl font-black text-[#121212] leading-tight">
-                                            Learn with <br />
-                                            <span className="font-serif italic text-[#121212]">Games</span>
+                                            Aprende con <br />
+                                            <span className="font-serif italic text-[#121212]">Juegos</span>
                                         </h3>
                                         <p className="text-base font-semibold text-slate-900 leading-relaxed">
                                             ¡Aprende algo nuevo todos los días mientras tus hijos disfrutan jugando alegremente!

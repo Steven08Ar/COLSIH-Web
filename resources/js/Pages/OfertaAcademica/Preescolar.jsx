@@ -181,7 +181,7 @@ export default function Preescolar() {
                     {/* Elemento Flotante Top-Left: Foto de Niño en Círculo Lavanda */}
                     <div className="hidden lg:block absolute top-28 left-12 z-10 w-28 h-28 rounded-full bg-[#DEC8FE] p-2 shadow-lg hover:scale-105 transition-transform">
                         <img 
-                            src="https://media.colsih.edu.co/ofertas_academicas/preescolar/preescolar_uno.JPG" 
+                            src="https://media.colsih.edu.co/ofertas_academicas/preescolar.JPG" 
                             alt="Niño Preescolar" 
                             className="w-full h-full object-cover rounded-full"
                         />
@@ -212,29 +212,41 @@ export default function Preescolar() {
                         </div>
                     </div>
 
-                    <div className="max-w-[1440px] mx-auto px-6 md:px-12 relative z-20 text-center">
-                        <div className="max-w-4xl mx-auto space-y-8">
+                    <div className="max-w-[1440px] mx-auto px-6 md:px-12 relative z-20 text-center flex flex-col items-center justify-center">
+                        <div className="max-w-4xl mx-auto space-y-8 text-center flex flex-col items-center">
                             
-                            {/* Titular Gigante idéntico a Figma */}
+                            {/* Titular Gigante idéntico a Figma perfectamente centrado */}
                             <ScrollReveal distance="translate-y-6">
-                                <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-[82px] font-black text-[#121212] leading-[1.05] tracking-tight font-sans">
-                                    El mejor lugar para <br />
-                                    <span className="relative inline-block font-serif italic text-[#704FE6] px-2">
-                                        aprender
-                                        {/* Squiggle púrpura */}
-                                        <svg className="absolute -bottom-2 left-0 w-full h-3 text-[#DEC8FE]" viewBox="0 0 100 20" preserveAspectRatio="none">
-                                            <path d="M0,10 Q25,18 50,10 T100,10" fill="none" stroke="currentColor" strokeWidth="6" strokeLinecap="round" />
-                                        </svg>
-                                    </span>{' '}
-                                    y{' '}
-                                    <span className="relative inline-block font-serif italic text-[#FFBE17] px-2">
-                                        jugar
-                                        {/* Trazo amarillo */}
-                                        <svg className="absolute -bottom-2 left-0 w-full h-3 text-[#FFD25D]" viewBox="0 0 100 20" preserveAspectRatio="none">
-                                            <path d="M0,10 Q25,2 50,14 T100,8" fill="none" stroke="currentColor" strokeWidth="6" strokeLinecap="round" />
-                                        </svg>
-                                    </span> <br />
-                                    tus hijos
+                                <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[72px] font-extrabold text-[#121212] leading-[1.3] tracking-tight font-sans text-center">
+                                    <span className="block mb-2 font-extrabold text-[#121212]">
+                                        El mejor lugar para
+                                    </span>
+                                    
+                                    <span className="inline-flex flex-wrap items-center justify-center gap-x-3 gap-y-2 my-2 py-1">
+                                        <span className="relative inline-block font-serif italic text-[#704FE6] text-5xl sm:text-6xl md:text-7xl lg:text-[80px] font-normal px-2">
+                                            aprender
+                                            {/* Squiggle púrpura */}
+                                            <svg className="absolute -bottom-2 left-0 w-full h-3 text-[#DEC8FE]" viewBox="0 0 100 20" preserveAspectRatio="none">
+                                                <path d="M0,10 Q25,18 50,10 T100,10" fill="none" stroke="currentColor" strokeWidth="6" strokeLinecap="round" />
+                                            </svg>
+                                        </span>
+
+                                        <span className="font-extrabold text-[#121212] text-3xl sm:text-4xl md:text-5xl mx-1 align-baseline">
+                                            y
+                                        </span>
+
+                                        <span className="relative inline-block font-serif italic text-[#FFBE17] text-5xl sm:text-6xl md:text-7xl lg:text-[80px] font-normal px-2">
+                                            jugar
+                                            {/* Trazo amarillo */}
+                                            <svg className="absolute -bottom-2 left-0 w-full h-3 text-[#FFD25D]" viewBox="0 0 100 20" preserveAspectRatio="none">
+                                                <path d="M0,10 Q25,2 50,14 T100,8" fill="none" stroke="currentColor" strokeWidth="6" strokeLinecap="round" />
+                                            </svg>
+                                        </span>
+                                    </span>
+
+                                    <span className="block mt-4 font-extrabold text-[#121212]">
+                                        para tus hijos
+                                    </span>
                                 </h1>
                             </ScrollReveal>
 

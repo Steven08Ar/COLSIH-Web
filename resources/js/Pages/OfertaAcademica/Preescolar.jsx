@@ -16,28 +16,28 @@ const LINK_INSCRIPCIONES = "https://e.plataformaintegra.net/sihungria/index.php/
 
 const docentesPreescolar = [
     {
-        nombre: 'Lic. Kristin Watson',
-        cargo: 'Docente de Ciencias Infantiles',
+        nombre: 'Lic. Daniela Villamizar',
+        cargo: 'Docente de Preescolar',
         colorCircle: 'bg-[#FFD25D]',
-        foto: 'https://media.colsih.edu.co/espacios_academicos/jardin.JPG'
+        foto: 'https://media.colsih.edu.co/nuestro_colegio/equipo/docentes/Daniela%20Villamizar%20Villamizar.JPG'
     },
     {
-        nombre: 'Lic. Jenny Wilson',
-        cargo: 'Docente de Arte & Dibujo',
+        nombre: 'Lic. Lady Diana Osorio',
+        cargo: 'Docente de Desarrollo Infantil',
         colorCircle: 'bg-[#F3E3D4]',
-        foto: 'https://media.colsih.edu.co/ofertas_academicas/preescolar/preescolar_dos.JPG'
+        foto: 'https://media.colsih.edu.co/nuestro_colegio/equipo/docentes/Lady%20Diana%20Osorio%20Fonseca.JPG'
     },
     {
-        nombre: 'Lic. Jacob Jones',
-        cargo: 'Docente de Lógica & Matemáticas',
+        nombre: 'Lic. Paula Lorena Cuadros',
+        cargo: 'Docente de Dimensión Comunicativa',
         colorCircle: 'bg-[#ADA3DA]',
-        foto: 'https://media.colsih.edu.co/ofertas_academicas/preescolar/preescolar_uno.JPG'
+        foto: 'https://media.colsih.edu.co/nuestro_colegio/equipo/docentes/Paula%20Lorena%20Cuadros%20Ballesteros.JPG'
     },
     {
-        nombre: 'Lic. Savannah Nguyen',
-        cargo: 'Docente de Bilingüismo & Lectura',
+        nombre: 'Lic. Diana Soidé Villamizar',
+        cargo: 'Docente de Lectoescritura Inicial',
         colorCircle: 'bg-[#90C5DE]',
-        foto: 'https://media.colsih.edu.co/deportes/deportes.JPG'
+        foto: 'https://media.colsih.edu.co/nuestro_colegio/equipo/docentes/Diana%20Soid%C3%A9%20Villamizar%20Bautista.JPG'
     }
 ];
 
@@ -438,55 +438,57 @@ export default function Preescolar() {
                 </section>
 
 
-                {/* 4. OUR TEACHERS / DOCENTES ("We aim to help children discover the joy of creative learning...") */}
-                <section className="py-20 md:py-32 bg-white">
-                    <div className="max-w-[1440px] mx-auto px-6 md:px-12">
-                        <div className="bg-[#704FE6] text-white rounded-[44px] p-10 md:p-16 relative overflow-hidden shadow-2xl space-y-16">
-                            
-                            {/* Decorador Sol Izquierda Top */}
-                            <div className="absolute top-8 left-8 pointer-events-none">
-                                <StarburstSunSVG className="w-20 h-20 text-[#FFD25D]" />
-                            </div>
+                {/* 4. OUR TEACHERS / DOCENTES - FONDO DE ESQUINA A ESQUINA (FULL-BLEED EDGE-TO-EDGE) */}
+                <section className="w-full bg-[#704FE6] text-white py-24 md:py-32 relative overflow-hidden my-12">
+                    {/* Decorador Sol Izquierda Top */}
+                    <div className="absolute top-10 left-8 md:left-16 pointer-events-none">
+                        <StarburstSunSVG className="w-24 h-24 text-[#FFD25D]" />
+                    </div>
 
-                            {/* Decorador Wavy Derecha Top */}
-                            <div className="absolute top-12 right-12 pointer-events-none rotate-45">
-                                <ZigZagWavySVG className="w-28 h-14 text-[#DEC8FE]" />
-                            </div>
+                    {/* Decorador Wavy Derecha Top */}
+                    <div className="absolute top-12 right-8 md:right-16 pointer-events-none rotate-45">
+                        <ZigZagWavySVG className="w-32 h-16 text-[#DEC8FE]" />
+                    </div>
 
-                            {/* Titular Grande Centrado idéntico a Figma */}
-                            <div className="max-w-4xl mx-auto text-center space-y-4 relative z-10 pt-4">
-                                <ScrollReveal distance="translate-y-6">
-                                    <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black leading-tight tracking-tight">
-                                        Buscamos ayudar a los niños a <br />
-                                        <span className="font-serif italic text-[#FFD25D]">descubrir la alegría</span> del aprendizaje <br />
-                                        creativo y crecer como personas integrales.
-                                    </h2>
-                                </ScrollReveal>
-                            </div>
+                    <div className="max-w-[1440px] mx-auto px-6 md:px-12 space-y-16 relative z-10">
+                        {/* Titular Limpio, Tipografía Perfecta y Espaciada */}
+                        <div className="max-w-4xl mx-auto text-center space-y-4">
+                            <ScrollReveal distance="translate-y-6">
+                                <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-snug tracking-tight text-white font-sans">
+                                    Buscamos ayudar a los niños a{' '}
+                                    <span className="font-serif italic text-[#FFD25D] mx-2 inline-block">
+                                        descubrir la alegría
+                                    </span>{' '}
+                                    del aprendizaje creativo y crecer como personas integrales.
+                                </h2>
+                            </ScrollReveal>
+                        </div>
 
-                            {/* Grid de 4 Profesores con Avatares Circulares y Fondos de Colores */}
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-center relative z-10">
-                                {docentesPreescolar.map((docente, idx) => (
-                                    <ScrollReveal key={idx} distance="translate-y-8" delay={idx * 100}>
-                                        <div className="space-y-4 group">
-                                            <div className="relative mx-auto w-36 h-36 flex items-center justify-center">
-                                                {/* Círculo de color de fondo */}
-                                                <div className={`absolute inset-0 rounded-full ${docente.colorCircle} group-hover:scale-105 transition-transform duration-300 shadow-md`} />
-                                                <img 
-                                                    src={docente.foto} 
-                                                    alt={docente.nombre} 
-                                                    className="relative z-10 w-32 h-32 object-cover rounded-full shadow-sm"
-                                                />
-                                            </div>
-                                            <div>
-                                                <h3 className="text-2xl font-black text-white">{docente.nombre}</h3>
-                                                <p className="text-sm font-semibold text-purple-200 mt-1">{docente.cargo}</p>
-                                            </div>
+                        {/* Grid de 4 Profesoras Reales de Preescolar COLSIH */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 text-center">
+                            {docentesPreescolar.map((docente, idx) => (
+                                <ScrollReveal key={idx} distance="translate-y-8" delay={idx * 100}>
+                                    <div className="space-y-4 group">
+                                        <div className="relative mx-auto w-40 h-40 flex items-center justify-center">
+                                            {/* Círculo de color de fondo */}
+                                            <div className={`absolute inset-0 rounded-full ${docente.colorCircle} group-hover:scale-105 transition-transform duration-300 shadow-lg`} />
+                                            <img 
+                                                src={docente.foto} 
+                                                alt={docente.nombre} 
+                                                className="relative z-10 w-36 h-36 object-cover rounded-full shadow-md"
+                                                onError={(e) => {
+                                                    e.target.onerror = null;
+                                                    e.target.src = "https://media.colsih.edu.co/ofertas_academicas/preescolar.JPG";
+                                                }}
+                                            />
                                         </div>
-                                    </ScrollReveal>
-                                ))}
-                            </div>
-
+                                        <div className="space-y-1">
+                                            <h3 className="text-xl font-extrabold text-white leading-snug">{docente.nombre}</h3>
+                                            <p className="text-sm font-semibold text-purple-200">{docente.cargo}</p>
+                                        </div>
+                                    </div>
+                                </ScrollReveal>
+                            ))}
                         </div>
                     </div>
                 </section>

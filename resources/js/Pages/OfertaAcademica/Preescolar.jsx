@@ -162,7 +162,7 @@ export default function Preescolar() {
                             <img 
                                 src="https://media.colsih.edu.co/espacios_academicos/jardin.JPG" 
                                 alt="Niño feliz" 
-                                className="relative z-10 w-full h-full object-cover rounded-[32px] border-2 border-white shadow-md"
+                                className="relative z-10 w-full h-full object-cover rounded-[32px] shadow-md"
                             />
                         </div>
                     </div>
@@ -387,14 +387,14 @@ export default function Preescolar() {
                                 <ScrollReveal distance="translate-y-6" delay={100}>
                                     <div className="absolute right-0 top-12 w-[72%] sm:w-[340px] h-32 rounded-full bg-[#DEC8FE] shadow-sm flex items-center justify-between px-6 z-10">
                                         {/* Sol Starburst en la esquina superior derecha de la píldora lavanda */}
-                                        <div className="absolute -top-7 -right-4 z-20">
+                                        <div className="absolute -top-7 -right-4 z-20 pointer-events-none">
                                             <StarburstSunSVG className="w-24 h-24 text-[#FFD25D] drop-shadow-sm" />
                                         </div>
-                                        {/* Niña con osito de peluche sobresaliendo en el lado izquierdo de la píldora */}
+                                        {/* Niña con peluche sobresaliendo en el lado izquierdo de la píldora (SIN BORDE) */}
                                         <img 
-                                            src="https://media.colsih.edu.co/ofertas_academicas/preescolar/preescolar_uno.JPG" 
-                                            alt="Niña sonriendo con peluche" 
-                                            className="absolute -top-12 left-10 h-44 w-auto object-cover rounded-[36px] z-30 drop-shadow-md border-2 border-white"
+                                            src="https://media.colsih.edu.co/ofertas_academicas/preescolar.JPG" 
+                                            alt="Niños en preescolar" 
+                                            className="absolute -top-8 left-8 h-40 w-32 object-cover rounded-[32px] z-30 shadow-md"
                                         />
                                     </div>
                                 </ScrollReveal>
@@ -403,14 +403,14 @@ export default function Preescolar() {
                                 <ScrollReveal distance="translate-y-6" delay={200}>
                                     <div className="absolute right-0 top-52 w-[88%] sm:w-[450px] h-32 rounded-full bg-[#704FE6] shadow-md z-20 overflow-visible">
                                         {/* Splash ZigZag Lavanda a la izquierda */}
-                                        <div className="absolute left-6 top-5 z-20">
+                                        <div className="absolute left-6 top-5 z-20 pointer-events-none">
                                             <ZigZagWavySVG className="w-32 h-16 text-[#DEC8FE]" />
                                         </div>
-                                        {/* Niña con camiseta amarilla apuntando a la izquierda sobresaliendo en la derecha */}
+                                        {/* Niña feliz sobresaliendo en la derecha de la píldora (SIN BORDE) */}
                                         <img 
-                                            src="https://media.colsih.edu.co/ofertas_academicas/preescolar/preescolar_dos.JPG" 
-                                            alt="Niña feliz apuntando" 
-                                            className="absolute -top-10 right-4 h-40 w-auto object-cover rounded-[36px] z-30 drop-shadow-md border-2 border-white"
+                                            src="https://media.colsih.edu.co/espacios_academicos/jardin.JPG" 
+                                            alt="Espacio de Jardín Preescolar" 
+                                            className="absolute -top-8 right-6 h-40 w-32 object-cover rounded-[32px] z-30 shadow-md"
                                         />
                                     </div>
                                 </ScrollReveal>
@@ -418,14 +418,14 @@ export default function Preescolar() {
                                 {/* 3. Píldora Inferior (Golden Yellow `#FFD25D`) + Foto Niño 3 + Círculos Concéntricos */}
                                 <ScrollReveal distance="translate-y-6" delay={300}>
                                     <div className="absolute right-0 top-[370px] w-full sm:w-[530px] h-32 rounded-full bg-[#FFD25D] shadow-md z-30 overflow-visible">
-                                        {/* Niña escribiendo en libreta sobresaliendo en la parte izquierda */}
+                                        {/* Foto de estudiantes sobresaliendo en la parte izquierda (SIN BORDE) */}
                                         <img 
-                                            src="https://media.colsih.edu.co/espacios_academicos/jardin.JPG" 
-                                            alt="Niño concentrado escribiendo" 
-                                            className="absolute -top-12 left-12 h-44 w-auto object-cover rounded-[36px] z-40 drop-shadow-md border-2 border-white"
+                                            src="/valores/hermanos.JPG" 
+                                            alt="Estudiantes en el colegio" 
+                                            className="absolute -top-10 left-10 h-44 w-44 object-cover rounded-[32px] z-40 shadow-md"
                                         />
                                         {/* Círculos Concéntricos Púrpura flotando abajo a la derecha de la píldora amarilla */}
-                                        <div className="absolute -bottom-6 right-6 z-40">
+                                        <div className="absolute -bottom-6 right-6 z-40 pointer-events-none">
                                             <ConcentricCirclesSVG className="w-28 h-28 text-[#704FE6]" />
                                         </div>
                                     </div>
@@ -475,7 +475,7 @@ export default function Preescolar() {
                                                 <img 
                                                     src={docente.foto} 
                                                     alt={docente.nombre} 
-                                                    className="relative z-10 w-32 h-32 object-cover rounded-full border-4 border-white shadow-sm"
+                                                    className="relative z-10 w-32 h-32 object-cover rounded-full shadow-sm"
                                                 />
                                             </div>
                                             <div>

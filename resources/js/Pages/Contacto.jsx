@@ -223,7 +223,7 @@ export default function Contacto() {
                                     <button 
                                         type="submit" 
                                         disabled={processing}
-                                        className="w-full py-4 bg-[#001659] hover:bg-[#08111F] disabled:bg-slate-300 text-white font-extrabold text-xs tracking-wider uppercase rounded-full shadow-md hover:shadow-lg transition-all duration-300 font-sans cursor-pointer flex justify-center items-center gap-2"
+                                        className="btn-colsih-3d-blue w-full text-xs py-4"
                                     >
                                         {processing ? (
                                             <>

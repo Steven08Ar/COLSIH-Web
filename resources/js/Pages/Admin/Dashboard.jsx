@@ -286,89 +286,103 @@ function TestimoniosTab({ testimonios, flash }) {
                 ))}
             </div>
 
-            {(creando || editando) && (
-                <Modal title={editando ? 'Editar Testimonio' : 'Crear Nuevo Testimonio'} onClose={cerrar} isWide={true}>
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
+            {(creando || editando) && typeof document !== 'undefined' && createPortal(
+                <div className="fixed inset-0 z-[9999] bg-[#6C727F]/90 dark:bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 overflow-y-auto animate-fadeIn" onClick={cerrar}>
+                    <div className="w-full max-w-6xl my-auto grid grid-cols-1 lg:grid-cols-12 gap-6 items-start" onClick={e => e.stopPropagation()}>
+                        
+                        {/* COLUMNA IZQUIERDA: Vista Previa Testimonio */}
+                        <div className="lg:col-span-4 flex flex-col gap-4">
+                            {/* Card Header Vista Previa */}
+                            <div className="bg-white dark:bg-slate-900 rounded-[20px] py-3.5 px-6 shadow-xl text-center border border-slate-100/50 dark:border-slate-800">
+                                <h3 className="text-[#000000] dark:text-white font-bold text-xl tracking-tight font-sans">Vista Previa</h3>
+                            </div>
 
-                        {/* Left: Card Preview */}
-                        <div className="order-2 lg:order-1 lg:col-span-5 flex flex-col items-center justify-start space-y-4">
-                            <span className="text-slate-400 text-[11px] font-bold uppercase tracking-wider block">Vista Previa en Web</span>
-                            <div className="w-full bg-[#030712] p-4 sm:p-6 rounded-3xl flex items-center justify-center border border-slate-900 shadow-inner min-h-[360px] sm:min-h-[440px]">
-                                <div className="w-full max-w-[280px] min-h-[360px] sm:min-h-[380px] rounded-3xl overflow-hidden shadow-2xl border border-slate-800/80 bg-slate-900/50 relative flex flex-col justify-between p-6 select-none">
-                                    {previewImage ? (
-                                        <img
-                                            src={previewImage}
-                                            alt="Vista Previa"
-                                            className="absolute inset-0 w-full h-full object-cover z-0 select-none pointer-events-none"
-                                            style={{ objectPosition: `center ${form.data.foto_posicion}%` }}
-                                        />
-                                    ) : (
-                                        <div className="absolute inset-0 bg-slate-800 z-0 flex items-center justify-center">
-                                            <span className="text-slate-600 text-xs">Sin imagen</span>
+                            {/* Tarjeta de Vista Previa (Directa sin card de fondo externa, con sombra 2xl) */}
+                            <div className="w-full rounded-[30px] overflow-hidden shadow-2xl border border-slate-800/80 bg-slate-900/90 relative flex flex-col justify-between p-6 select-none min-h-[440px] transition-all duration-300">
+                                {previewImage ? (
+                                    <img
+                                        src={previewImage}
+                                        alt="Vista Previa"
+                                        className="absolute inset-0 w-full h-full object-cover z-0 select-none pointer-events-none"
+                                        style={{ objectPosition: `center ${form.data.foto_posicion}%` }}
+                                    />
+                                ) : (
+                                    <div className="absolute inset-0 bg-slate-800 z-0 flex items-center justify-center">
+                                        <span className="text-slate-500 text-xs font-semibold">Sin imagen seleccionada</span>
+                                    </div>
+                                )}
+                                <div className="absolute inset-0 bg-slate-950/75 z-10"></div>
+                                {form.data.video_activo && form.data.video_url && (
+                                    <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/25 pointer-events-none">
+                                        <div className="w-14 h-14 rounded-full bg-white/20 text-white border border-white/30 backdrop-blur-md flex items-center justify-center shadow-xl">
+                                            <svg className="w-5 h-5 fill-current ml-0.5" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
                                         </div>
-                                    )}
-                                    <div className="absolute inset-0 bg-slate-950/75 z-10"></div>
-                                    {form.data.video_activo && form.data.video_url && (
-                                        <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/25 pointer-events-none">
-                                            <div className="w-14 h-14 rounded-full bg-white/20 text-white border border-white/30 backdrop-blur-md flex items-center justify-center shadow-xl">
-                                                <svg className="w-5 h-5 fill-current ml-0.5" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
+                                    </div>
+                                )}
+                                <div className="relative z-30 flex flex-col justify-between h-full flex-1 min-h-[380px]">
+                                    <div className="flex justify-between items-start">
+                                        <span className="text-6xl font-serif text-white/30 leading-none">"</span>
+                                        {form.data.video_activo && form.data.video_url && (
+                                            <div className="bg-[#800A15] text-white text-[9px] font-bold tracking-wider uppercase px-2.5 py-1 rounded-full flex items-center gap-1 shadow-md">
+                                                <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>
+                                                Video
                                             </div>
-                                        </div>
-                                    )}
-                                    <div className="relative z-30 flex flex-col justify-between h-full flex-1">
-                                        <div className="flex justify-between items-start">
-                                            <span className="text-6xl font-serif text-white/25 leading-none">"</span>
-                                            {form.data.video_activo && form.data.video_url && (
-                                                <div className="bg-[#800A15] text-white text-[9px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full flex items-center gap-1">
-                                                    <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>
-                                                    Video
-                                                </div>
-                                            )}
-                                        </div>
-                                        <div className="flex-1 min-h-[60px]"></div>
-                                        <div className="space-y-3">
-                                            <p className="text-white text-[11px] font-bold italic leading-relaxed text-left"
-                                                style={{ textShadow: '0 2px 4px rgba(0,0,0,0.95)' }}>
-                                                {form.data.texto ? `«${form.data.texto}»` : '«Texto del testimonio...»'}
-                                            </p>
-                                            <div className="text-left">
-                                                <span className="block text-xs font-extrabold text-white drop-shadow-[0_1.5px_2px_rgba(0,0,0,0.9)]">
-                                                    {form.data.nombre || 'Nombre de la Persona'}
-                                                </span>
-                                                <span className="block text-[9px] font-bold text-[#3b82f6] uppercase tracking-wider mt-1 drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
-                                                    {form.data.cargo || 'Rol'}
-                                                </span>
-                                            </div>
+                                        )}
+                                    </div>
+                                    <div className="flex-1 min-h-[40px]"></div>
+                                    <div className="space-y-3">
+                                        <p className="text-white text-xs sm:text-sm font-bold italic leading-relaxed text-left"
+                                            style={{ textShadow: '0 2px 4px rgba(0,0,0,0.95)' }}>
+                                            {form.data.texto ? `«${form.data.texto}»` : '«Texto del testimonio...»'}
+                                        </p>
+                                        <div className="text-left pt-2 border-t border-white/10">
+                                            <span className="block text-sm font-extrabold text-white drop-shadow-[0_1.5px_2px_rgba(0,0,0,0.9)]">
+                                                {form.data.nombre || 'Nombre de la Persona'}
+                                            </span>
+                                            <span className="block text-[10px] font-bold text-[#3b82f6] uppercase tracking-wider mt-0.5 drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
+                                                {form.data.cargo || 'Rol'}
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        {/* Right: Form */}
-                        <form onSubmit={guardar} className="order-1 lg:order-2 lg:col-span-7 space-y-4 text-left flex flex-col justify-between">
-                            <div className="space-y-4">
+                        {/* COLUMNA DERECHA: Formulario Testimonio */}
+                        <form onSubmit={guardar} className="lg:col-span-8 bg-white dark:bg-slate-900 rounded-[30px] p-6 sm:p-8 shadow-2xl border border-slate-100 dark:border-slate-800 space-y-4">
+                            {/* Título */}
+                            <h2 className="text-[#000000] dark:text-white font-bold text-xl sm:text-2xl text-center tracking-tight font-sans">
+                                {editando ? 'Editar testimonio' : 'Nuevo testimonio'}
+                            </h2>
 
-                                {/* Nombre */}
+                            {/* Separador 1 */}
+                            <div className="h-px bg-slate-200/80 dark:bg-slate-800 my-3" />
+
+                            <div className="space-y-4">
+                                {/* Campo Nombre */}
                                 <div>
-                                    <label className="text-slate-500 text-[10px] font-bold uppercase tracking-wider block mb-1">Nombre Completo *</label>
+                                    <label className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block mb-1.5">
+                                        NOMBRE COMPLETO *
+                                    </label>
                                     <input
                                         value={form.data.nombre}
                                         onChange={e => form.setData('nombre', e.target.value)}
                                         required
                                         placeholder="Ej: María Camila Restrepo"
-                                        className="w-full bg-slate-50 border border-slate-200 text-slate-800 placeholder-slate-400 rounded-xl px-4 py-2 text-sm focus:outline-none focus:bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-100 transition font-medium"
+                                        className="w-full bg-[#E5E7EB] dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 rounded-md px-3.5 py-2 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 transition border-none"
                                     />
                                     {form.errors.nombre && <p className="text-rose-500 text-xs mt-1 font-semibold">{form.errors.nombre}</p>}
                                 </div>
 
-                                {/* Rol — select fijo */}
+                                {/* Campo Rol */}
                                 <div>
-                                    <label className="text-slate-500 text-[10px] font-bold uppercase tracking-wider block mb-1">Rol *</label>
+                                    <label className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block mb-1.5">
+                                        ROL / CARGO *
+                                    </label>
                                     <select
                                         value={form.data.cargo}
                                         onChange={e => form.setData('cargo', e.target.value)}
-                                        className="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-4 py-2 text-sm focus:outline-none focus:bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-100 transition font-medium cursor-pointer"
+                                        className="w-full bg-[#E5E7EB] dark:bg-slate-800 text-slate-900 dark:text-white rounded-md px-3 py-2 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 transition cursor-pointer border-none"
                                     >
                                         {ROLES_TESTIMONIO.map(r => (
                                             <option key={r} value={r}>{r}</option>
@@ -376,23 +390,27 @@ function TestimoniosTab({ testimonios, flash }) {
                                     </select>
                                 </div>
 
-                                {/* Texto */}
+                                {/* Campo Texto */}
                                 <div>
-                                    <label className="text-slate-500 text-[10px] font-bold uppercase tracking-wider block mb-1">Texto del Testimonio *</label>
+                                    <label className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block mb-1.5">
+                                        TEXTO DEL TESTIMONIO *
+                                    </label>
                                     <textarea
                                         value={form.data.texto}
                                         onChange={e => form.setData('texto', e.target.value)}
                                         required
                                         rows={3}
                                         placeholder="Escribe el testimonio aquí..."
-                                        className="w-full bg-slate-50 border border-slate-200 text-slate-800 placeholder-slate-400 rounded-xl px-4 py-2 text-sm focus:outline-none focus:bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-100 transition font-medium resize-none"
+                                        className="w-full bg-[#E5E7EB] dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 rounded-md px-3.5 py-2 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 transition resize-none border-none"
                                     />
                                     {form.errors.texto && <p className="text-rose-500 text-xs mt-1 font-semibold">{form.errors.texto}</p>}
                                 </div>
 
-                                {/* Foto + botón subir */}
+                                {/* Campo Foto */}
                                 <div>
-                                    <label className="text-slate-500 text-[10px] font-bold uppercase tracking-wider block mb-1.5">Foto de Fondo *</label>
+                                    <label className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block mb-1.5">
+                                        FOTO DE FONDO *
+                                    </label>
                                     <div className="flex items-center gap-3">
                                         <input
                                             type="file"
@@ -407,95 +425,116 @@ function TestimoniosTab({ testimonios, flash }) {
                                             className="hidden"
                                             id="testimonio-file-upload"
                                         />
-                                        <label htmlFor="testimonio-file-upload"
-                                            className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl border border-slate-200 transition cursor-pointer select-none whitespace-nowrap">
+                                        <label 
+                                            htmlFor="testimonio-file-upload"
+                                            className="bg-[#E5E7EB] dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs font-bold px-4 py-2 rounded-md transition cursor-pointer select-none whitespace-nowrap"
+                                        >
                                             {form.data.imagen ? 'Cambiar Foto' : 'Seleccionar Foto'}
                                         </label>
-                                        <span className="text-xs text-slate-400 font-medium truncate">
-                                            {form.data.imagen ? form.data.imagen.name : (editando ? 'Conservar foto actual' : 'Ningún archivo')}
+                                        <span className="text-xs font-medium text-slate-400 dark:text-slate-500 truncate max-w-[240px]">
+                                            {form.data.imagen ? form.data.imagen.name : (editando ? 'Conservar foto actual' : 'Ningún archivo seleccionado')}
                                         </span>
                                     </div>
                                     {form.errors.imagen && <p className="text-rose-500 text-xs mt-1 font-semibold">{form.errors.imagen}</p>}
                                 </div>
 
-                                {/* Editor de posición de foto */}
+                                {/* Editor de Posición */}
                                 <FotoPositionEditor
                                     previewImage={previewImage}
                                     posicion={form.data.foto_posicion}
                                     onChange={v => form.setData('foto_posicion', v)}
                                 />
 
-                                {/* Toggle de video */}
-                                <div className="border border-slate-200 dark:border-slate-700 rounded-xl p-4 space-y-3">
+                                {/* Toggle de Video */}
+                                <div className="bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/80 rounded-xl p-3.5 space-y-2.5">
                                     <div className="flex items-center justify-between">
                                         <div>
-                                            <span className="text-slate-700 dark:text-slate-200 text-sm font-bold">Video del testimonio</span>
-                                            <p className="text-slate-400 text-[11px] mt-0.5">
+                                            <span className="text-slate-800 dark:text-slate-200 text-xs font-bold">Video del testimonio</span>
+                                            <p className="text-slate-400 text-[10px] mt-0.5">
                                                 {form.data.video_activo ? 'Habilitado — se mostrará botón de reproducción' : 'Deshabilitado — la tarjeta no tendrá video'}
                                             </p>
                                         </div>
                                         <button
                                             type="button"
                                             onClick={() => form.setData('video_activo', !form.data.video_activo)}
-                                            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 focus:outline-none cursor-pointer ${
+                                            className={`relative inline-flex h-5.5 w-10 items-center rounded-full transition-colors duration-200 focus:outline-none cursor-pointer ${
                                                 form.data.video_activo ? 'bg-blue-600' : 'bg-slate-300 dark:bg-slate-600'
                                             }`}
                                         >
-                                            <span className={`inline-block h-4 w-4 transform rounded-full bg-white shadow-sm transition-transform duration-200 ${
-                                                form.data.video_activo ? 'translate-x-6' : 'translate-x-1'
+                                            <span className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white shadow-sm transition-transform duration-200 ${
+                                                form.data.video_activo ? 'translate-x-5' : 'translate-x-1'
                                             }`} />
                                         </button>
                                     </div>
                                     {form.data.video_activo && (
                                         <div>
-                                            <label className="text-slate-500 text-[10px] font-bold uppercase tracking-wider block mb-1">URL de YouTube</label>
+                                            <label className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block mb-1">URL de YouTube</label>
                                             <input
                                                 value={form.data.video_url}
                                                 onChange={e => form.setData('video_url', e.target.value)}
                                                 placeholder="https://www.youtube.com/watch?v=..."
-                                                className="w-full bg-slate-50 border border-slate-200 text-slate-800 placeholder-slate-400 rounded-xl px-4 py-2 text-sm focus:outline-none focus:bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-100 transition font-medium"
+                                                className="w-full bg-[#E5E7EB] dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 rounded-md px-3.5 py-1.5 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 transition border-none"
                                             />
                                             {form.errors.video_url && <p className="text-rose-500 text-xs mt-1 font-semibold">{form.errors.video_url}</p>}
                                         </div>
                                     )}
                                 </div>
-
-                                {/* Orden + Visible */}
-                                <div className="flex gap-4 items-center">
-                                    <div className="flex-1">
-                                        <label className="text-slate-500 text-[10px] font-bold uppercase tracking-wider block mb-1">Orden</label>
-                                        <input
-                                            type="number"
-                                            min="0"
-                                            value={form.data.orden}
-                                            onChange={e => form.setData('orden', Number(e.target.value))}
-                                            className="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-4 py-2 text-sm focus:outline-none focus:bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-100 transition font-medium"
-                                        />
-                                    </div>
-                                    <div className="flex items-end pb-0.5 h-full pt-5">
-                                        <label className="flex items-center gap-2 cursor-pointer select-none">
-                                            <input
-                                                type="checkbox"
-                                                checked={form.data.activo}
-                                                onChange={e => form.setData('activo', e.target.checked)}
-                                                className="w-5 h-5 text-blue-600 border-slate-300 rounded focus:ring-blue-500"
-                                            />
-                                            <span className="text-slate-600 text-sm font-semibold">Visible</span>
-                                        </label>
-                                    </div>
-                                </div>
                             </div>
 
-                            <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-slate-100 dark:border-slate-800 mt-5">
-                                <button type="submit" disabled={form.processing} className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-bold rounded-xl py-3 text-sm transition cursor-pointer shadow-md shadow-blue-500/10 active:scale-[0.98]">
+                            {/* Separador 2 */}
+                            <div className="h-px bg-slate-200/80 dark:bg-slate-800 my-4" />
+
+                            {/* Orden & Visible */}
+                            <div className="flex items-center justify-between gap-4">
+                                <div className="flex items-center gap-2">
+                                    <label className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                                        ORDEN:
+                                    </label>
+                                    <input
+                                        type="number"
+                                        min="0"
+                                        value={form.data.orden}
+                                        onChange={e => form.setData('orden', Number(e.target.value))}
+                                        className="w-20 bg-[#E5E7EB] dark:bg-slate-800 text-slate-900 dark:text-white rounded-md px-3 py-1.5 text-xs font-semibold text-center focus:outline-none focus:ring-2 focus:ring-blue-500 transition border-none"
+                                    />
+                                </div>
+
+                                <label className="flex items-center gap-2.5 cursor-pointer select-none">
+                                    <input
+                                        type="checkbox"
+                                        checked={form.data.activo}
+                                        onChange={e => form.setData('activo', e.target.checked)}
+                                        className="w-5 h-5 text-blue-600 border-slate-300 rounded focus:ring-blue-500 cursor-pointer accent-blue-600"
+                                    />
+                                    <span className="text-slate-700 dark:text-slate-300 text-xs font-semibold">Visible en la web</span>
+                                </label>
+                            </div>
+
+                            {/* Separador 3 */}
+                            <div className="h-px bg-slate-200/80 dark:bg-slate-800 my-4" />
+
+                            {/* Botones de Acción */}
+                            <div className="flex flex-col sm:flex-row items-center justify-end gap-2.5 pt-1">
+                                <button
+                                    type="submit"
+                                    disabled={form.processing}
+                                    className="w-full sm:w-auto bg-[#E5E7EB] dark:bg-slate-800 hover:bg-emerald-600 hover:text-white disabled:opacity-50 text-slate-800 dark:text-slate-200 text-xs font-bold px-4 py-2 rounded-md transition cursor-pointer active:scale-95"
+                                >
                                     {form.processing ? 'Guardando…' : 'Guardar Testimonio'}
                                 </button>
-                                <button type="button" onClick={cerrar} className="w-full sm:w-auto px-5 bg-slate-100 hover:bg-slate-200 text-slate-600 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 rounded-xl py-3 text-sm transition font-bold cursor-pointer">Cancelar</button>
+                                <button
+                                    type="button"
+                                    onClick={cerrar}
+                                    className="w-full sm:w-auto bg-[#E5E7EB] dark:bg-slate-800 hover:bg-rose-600 hover:text-white text-slate-800 dark:text-slate-200 text-xs font-bold px-4 py-2 rounded-md transition cursor-pointer active:scale-95"
+                                >
+                                    Cancelar
+                                </button>
                             </div>
                         </form>
 
                     </div>
-                </Modal>
+                </div>,
+                document.body
             )}
         </div>
     );

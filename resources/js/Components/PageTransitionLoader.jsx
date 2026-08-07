@@ -4,20 +4,11 @@ import { router } from '@inertiajs/react';
 export default function PageTransitionLoader({ initialComponent }) {
     const [currentComponent, setCurrentComponent] = useState(initialComponent ?? '');
 
-    useEffect(() => {
-        const unbind = router.on('navigate', (e) => {
-            setCurrentComponent(e.detail.page.component ?? '');
-        });
-        return unbind;
-    }, []);
-
-    if (currentComponent.startsWith('Admin/')) return null;
-
     const [visible, setVisible] = useState(true);
     const [animating, setAnimating] = useState(true);
     const [isMjs, setIsMjs] = useState(false);
     const [isReturningFromMjs, setIsReturningFromMjs] = useState(false);
-    
+
     // State machine for MJS loading sequence
     const [showMjsFilled, setShowMjsFilled] = useState(false);
     const [mjsSequenceDone, setMjsSequenceDone] = useState(false);
@@ -29,27 +20,31 @@ export default function PageTransitionLoader({ initialComponent }) {
     const [pageLoaded, setPageLoaded] = useState(false);
     const [loaderSessionId, setLoaderSessionId] = useState(0);
 
+    useEffect(() => {
+        const unbind = router.on('navigate', (e) => {
+            setCurrentComponent(e.detail.page.component ?? '');
+        });
+        return unbind;
+    }, []);
+
     // Initial mount loading phase (runs on initial page visit)
     useEffect(() => {
         const path = window.location.pathname;
         const isInitialMjs = path.startsWith('/mjs') || path.includes('/mjs');
         setIsMjs(isInitialMjs);
         setIsReturningFromMjs(false);
-        
+
         if (isInitialMjs) {
             setPageLoaded(false);
             setMjsSequenceDone(false);
-            
-            // Initial mount is immediate, simulate a brief page load completion
+
             const timerLoad = setTimeout(() => {
                 setPageLoaded(true);
             }, 600);
 
-            // Phase 1: Draw borders for 3.9s
             const timer1 = setTimeout(() => {
                 setShowMjsFilled(true);
-                
-                // Phase 2: Fade in Logo-MJS over 700ms, hold for 300ms (total 1s)
+
                 const timer2 = setTimeout(() => {
                     setMjsSequenceDone(true);
                 }, 1000);
@@ -62,7 +57,6 @@ export default function PageTransitionLoader({ initialComponent }) {
                 clearTimeout(timer1);
             };
         } else {
-            // COLSIH initial load fade out after 1 second
             const timer = setTimeout(() => {
                 setVisible(false);
                 const timerUnmount = setTimeout(() => setAnimating(false), 600);
@@ -91,28 +85,25 @@ export default function PageTransitionLoader({ initialComponent }) {
                     } catch (e) {}
                 }
             }
-            
+
             const isTargetMjs = targetPath.startsWith('/mjs') || targetPath.includes('/mjs');
             const isCurrentMjs = window.location.pathname.startsWith('/mjs') || window.location.pathname.includes('/mjs');
-            
-            // Check if returning from MJS to COLSIH
+
             const returning = isCurrentMjs && !isTargetMjs;
             setIsReturningFromMjs(returning);
 
-            // Reset state machine for new transition session
             setIsMjs(isTargetMjs);
             setShowMjsFilled(false);
             setMjsSequenceDone(false);
-            
+
             setShowColsihFilled(false);
             setColsihSequenceDone(false);
-            
+
             setPageLoaded(false);
             setLoaderSessionId(prev => prev + 1);
             setAnimating(true);
             setVisible(true);
             if (isTargetMjs) {
-                // MJS Loader sequence (Phase 1: 3.9s draw -> Phase 2: 1.0s filled fade-in)
                 timer1 = setTimeout(() => {
                     setShowMjsFilled(true);
                     timer2 = setTimeout(() => {
@@ -120,7 +111,6 @@ export default function PageTransitionLoader({ initialComponent }) {
                     }, 1000);
                 }, 3900);
             } else if (returning) {
-                // COLSIH special draw sequence when returning from MJS (Phase 1: 3.2s draw -> Phase 2: 1.0s filled fade-in)
                 timer1 = setTimeout(() => {
                     setShowColsihFilled(true);
                     timer2 = setTimeout(() => {
@@ -128,7 +118,6 @@ export default function PageTransitionLoader({ initialComponent }) {
                     }, 1000);
                 }, 3200);
             } else {
-                // Regular COLSIH transitions don't enforce sequential phases
                 setMjsSequenceDone(true);
                 setColsihSequenceDone(true);
             }
@@ -151,8 +140,8 @@ export default function PageTransitionLoader({ initialComponent }) {
 
     // Trigger loading screen fade-out once BOTH the animation sequence is done AND the page has loaded
     useEffect(() => {
-        const sequenceCompleted = isMjs 
-            ? mjsSequenceDone 
+        const sequenceCompleted = isMjs
+            ? mjsSequenceDone
             : (isReturningFromMjs ? colsihSequenceDone : true);
 
         if (sequenceCompleted && pageLoaded) {
@@ -162,38 +151,40 @@ export default function PageTransitionLoader({ initialComponent }) {
                     setAnimating(false);
                 }, 600);
                 return () => clearTimeout(timerUnmount);
-            }, 300); // Small visual holding delay
+            }, 300);
             return () => clearTimeout(timer);
         }
     }, [mjsSequenceDone, colsihSequenceDone, pageLoaded, isMjs, isReturningFromMjs]);
 
+    // Early return AFTER all hooks — admin pages don't show the transition loader
+    if (currentComponent.startsWith('Admin/')) return null;
+
     if (!animating) return null;
 
     return (
-        <div 
+        <div
             className={`fixed inset-0 z-[99999] bg-white flex flex-col items-center justify-center transition-all duration-[600ms] ease-[cubic-bezier(0.25,1,0.5,1)] ${
                 visible ? 'opacity-100 scale-100' : 'opacity-0 scale-102 pointer-events-none'
             }`}
         >
-            {/* Aspect-ratio aligned container with overflow visible to display glowing drop shadows */}
             <div className="relative w-48 h-48 md:w-56 md:h-56 flex items-center justify-center overflow-visible select-none">
-                
+
                 {/* 1. Base Skeleton Draw / School Shield Logo */}
-                <img 
+                <img
                     key={`ske-${loaderSessionId}`}
                     src={
-                        isMjs 
+                        isMjs
                             ? '/marca/esqueleto-mjs.svg'
                             : (isReturningFromMjs ? '/marca/bordado-draw.svg' : '/marca/bordado-colsih.svg')
-                    } 
-                    alt={isMjs ? 'Esqueleto MJS' : 'Bordado COLSIH'} 
+                    }
+                    alt={isMjs ? 'Esqueleto MJS' : 'Bordado COLSIH'}
                     className="absolute inset-0 w-full h-full object-contain p-6 overflow-visible transition-opacity duration-[800ms] ease-out"
                     style={{
-                        animation: isMjs 
-                            ? 'mjs-logo-glow 3s ease-in-out infinite' 
+                        animation: isMjs
+                            ? 'mjs-logo-glow 3s ease-in-out infinite'
                             : (isReturningFromMjs ? 'none' : 'logo-glow 3s ease-in-out infinite'),
-                        filter: isReturningFromMjs 
-                            ? 'drop-shadow(0 0 15px rgba(128, 10, 21, 0.65))' 
+                        filter: isReturningFromMjs
+                            ? 'drop-shadow(0 0 15px rgba(128, 10, 21, 0.65))'
                             : undefined,
                         overflow: 'visible',
                         opacity: (isMjs && showMjsFilled) || (isReturningFromMjs && showColsihFilled) ? 0.25 : 1
@@ -202,7 +193,7 @@ export default function PageTransitionLoader({ initialComponent }) {
 
                 {/* 2. Full Colored Logo overlay (Fades in over the drawn skeleton in MJS routes) */}
                 {isMjs && (
-                    <img 
+                    <img
                         key={`fill-mjs-${loaderSessionId}`}
                         src="/marca/logo-mjs.svg"
                         alt="Logo MJS"
@@ -217,7 +208,7 @@ export default function PageTransitionLoader({ initialComponent }) {
 
                 {/* 3. Full Colored Logo overlay for COLSIH (Fades in when returning from MJS to COLSIH) */}
                 {isReturningFromMjs && (
-                    <img 
+                    <img
                         key={`fill-colsih-${loaderSessionId}`}
                         src="/marca/logo-colsih.svg"
                         alt="Logo COLSIH"
@@ -229,7 +220,7 @@ export default function PageTransitionLoader({ initialComponent }) {
                         }}
                     />
                 )}
-                
+
             </div>
         </div>
     );

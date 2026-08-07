@@ -3748,7 +3748,7 @@ export default function AdminDashboard({ seccion, carnets = [], equipo = [], tes
 
                 {/* ── Right Content Container (Ajustable segun isCollapsed) ── */}
                 <div className={`flex-1 flex flex-col min-h-screen w-full transition-all duration-300 ${
-                    isCollapsed ? 'pl-0 lg:pl-[72px]' : 'pl-0 lg:pl-[260px]'
+                    isCollapsed ? 'pl-0 lg:pl-[84px]' : 'pl-0 lg:pl-[260px]'
                 }`}>
                     
                     {/* Header Top Navbar estilo SnowUI / Apple Minimal (Breadcrumbs + Buscador + Herramientas) */}

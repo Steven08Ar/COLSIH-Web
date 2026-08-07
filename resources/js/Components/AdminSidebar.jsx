@@ -163,17 +163,17 @@ export default function AdminSidebar({
     return (
         <>
             <aside className={`bg-white dark:bg-[#0E1726] border-r border-slate-200/80 dark:border-slate-800/80 h-screen fixed left-0 top-0 z-50 flex flex-col justify-between transition-all duration-300 ease-in-out ${
-                isCollapsed ? 'w-[72px]' : 'w-[260px]'
+                isCollapsed ? 'w-[84px]' : 'w-[260px]'
             } ${sidebarOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full lg:translate-x-0'}`}>
                 
-                {/* ── Botón flotante para colapsar/expandir en el borde derecho (Diseño Figma) ── */}
+                {/* ── Botón flotante para colapsar/expandir en el borde derecho (Cuadrado redondeado) ── */}
                 <button
                     type="button"
                     onClick={() => {
                         closePopoverImmediately();
                         setIsCollapsed(!isCollapsed);
                     }}
-                    className="hidden lg:flex absolute -right-3.5 top-7 w-7 h-7 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-md items-center justify-center text-slate-500 hover:text-slate-900 dark:hover:text-white transition-transform hover:scale-110 cursor-pointer z-50"
+                    className="hidden lg:flex absolute -right-3.5 top-7 w-7 h-7 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-md items-center justify-center text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 transition-transform hover:scale-105 cursor-pointer z-50"
                     title={isCollapsed ? "Expandir Menú" : "Colapsar Menú"}
                 >
                     {isCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}

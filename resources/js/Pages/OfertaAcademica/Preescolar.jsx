@@ -406,18 +406,10 @@ export default function Preescolar({ noticias = [] }) {
                                     <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-[#121212] leading-[1.1] tracking-tight font-sans">
                                         Los materiales didácticos <br />
                                         proporcionados son{' '}
-                                        <span className="relative inline-block font-serif italic text-[#704FE6] px-3 py-0.5 mx-1">
-                                            disfrutables
-                                            {/* Óvalo amarillo hand-drawn perfectamente centrado alrededor de disfrutables */}
-                                            <svg className="absolute -inset-x-3 -inset-y-2 w-[125%] h-[140%] text-[#FFD25D] pointer-events-none -left-3 -top-2" viewBox="0 0 200 70" fill="none" preserveAspectRatio="none">
-                                                <path 
-                                                    d="M 20,35 C 20,10 180,8 180,35 C 180,60 20,58 20,35 Z" 
-                                                    stroke="currentColor" 
-                                                    strokeWidth="5" 
-                                                    strokeLinecap="round" 
-                                                    strokeLinejoin="round" 
-                                                />
-                                            </svg>
+                                        <span className="relative inline-block font-serif italic px-6 py-2 mx-1 align-middle">
+                                            {/* Bloque / Círculo amarillo sólido rotado detrás de la palabra */}
+                                            <span className="absolute inset-0 bg-[#FFD25D] rounded-[32px] -rotate-3 -z-10 shadow-sm" />
+                                            <span className="relative z-10 text-[#121212]">disfrutables</span>
                                         </span> <br />
                                         para los niños
                                     </h2>

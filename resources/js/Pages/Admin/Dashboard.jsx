@@ -55,43 +55,56 @@ function Modal({ title, onClose, isWide = false, children }) {
 /* ── Testimonios ── */
 const ROLES_TESTIMONIO = ['Estudiante', 'Docente', 'Administrativo', 'Planta'];
 
-function FotoPositionEditor({ previewImage, posicion, onChange }) {
+const FotoPositionEditor = React.memo(function FotoPositionEditor({ previewImage, posicion, onChange }) {
     const containerRef = useRef(null);
     const isDragging = useRef(false);
     const startY = useRef(0);
     const startPos = useRef(50);
+    const rafRef = useRef(null);
 
-    function getClientY(e) {
-        return e.touches ? e.touches[0].clientY : e.clientY;
-    }
+    const getClientY = (e) => e.touches ? e.touches[0].clientY : e.clientY;
 
-    function onStart(e) {
+    const onStart = useCallback((e) => {
         isDragging.current = true;
         startY.current = getClientY(e);
         startPos.current = posicion;
-        e.preventDefault();
-    }
+        
+        const handleMove = (moveEvent) => {
+            if (!isDragging.current) return;
+            const dy = getClientY(moveEvent) - startY.current;
+            const h = containerRef.current?.offsetHeight || 1;
+            const next = Math.round(Math.max(0, Math.min(100, startPos.current + (dy / h) * 100)));
+            
+            if (rafRef.current) cancelAnimationFrame(rafRef.current);
+            rafRef.current = requestAnimationFrame(() => {
+                onChange(next);
+            });
+        };
 
-    function onMove(e) {
-        if (!isDragging.current) return;
-        const dy = getClientY(e) - startY.current;
-        const h = containerRef.current?.offsetHeight || 1;
-        const next = Math.round(Math.max(0, Math.min(100, startPos.current + (dy / h) * 100)));
-        onChange(next);
-    }
+        const handleEnd = () => {
+            isDragging.current = false;
+            window.removeEventListener('mousemove', handleMove);
+            window.removeEventListener('mouseup', handleEnd);
+            window.removeEventListener('touchmove', handleMove);
+            window.removeEventListener('touchend', handleEnd);
+        };
 
-    function onEnd() { isDragging.current = false; }
+        window.addEventListener('mousemove', handleMove, { passive: true });
+        window.addEventListener('mouseup', handleEnd);
+        window.addEventListener('touchmove', handleMove, { passive: true });
+        window.addEventListener('touchend', handleEnd);
+    }, [posicion, onChange]);
 
     return (
         <div className="space-y-2">
-            <label className="text-slate-500 text-[10px] font-bold uppercase tracking-wider block">
+            <label className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">
                 Posición de la Foto
             </label>
             <div
                 ref={containerRef}
                 className="relative rounded-xl overflow-hidden h-36 cursor-ns-resize select-none border border-slate-200 dark:border-slate-700"
-                onMouseDown={onStart} onMouseMove={onMove} onMouseUp={onEnd} onMouseLeave={onEnd}
-                onTouchStart={onStart} onTouchMove={onMove} onTouchEnd={onEnd}
+                onMouseDown={onStart}
+                onTouchStart={onStart}
             >
                 {previewImage ? (
                     <img
@@ -103,11 +116,11 @@ function FotoPositionEditor({ previewImage, posicion, onChange }) {
                     />
                 ) : (
                     <div className="w-full h-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
-                        <span className="text-slate-400 text-xs">Sube una foto primero</span>
+                        <span className="text-slate-400 text-xs font-semibold">Sube una foto primero</span>
                     </div>
                 )}
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                    <div className="bg-black/50 backdrop-blur-sm text-white text-[10px] font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5">
+                    <div className="bg-black/50 backdrop-blur-sm text-white text-[10px] font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-md">
                         <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M7 16V4m0 0L3 8m4-4l4 4M17 8v12m0 0l4-4m-4 4l-4-4" />
                         </svg>
@@ -116,19 +129,25 @@ function FotoPositionEditor({ previewImage, posicion, onChange }) {
                 </div>
             </div>
             <div className="flex items-center gap-2">
-                <button type="button" onClick={() => onChange(Math.max(0, posicion - 10))}
-                    className="flex-1 text-xs font-bold py-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-lg transition cursor-pointer">
+                <button 
+                    type="button" 
+                    onClick={() => onChange(Math.max(0, posicion - 10))}
+                    className="flex-1 text-xs font-bold py-1.5 bg-[#E5E7EB] hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg transition cursor-pointer active:scale-95"
+                >
                     ↑ Arriba
                 </button>
-                <span className="text-[11px] font-bold text-slate-400 w-12 text-center shrink-0">{posicion}%</span>
-                <button type="button" onClick={() => onChange(Math.min(100, posicion + 10))}
-                    className="flex-1 text-xs font-bold py-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-lg transition cursor-pointer">
+                <span className="text-[11px] font-extrabold text-slate-500 dark:text-slate-400 w-12 text-center shrink-0">{posicion}%</span>
+                <button 
+                    type="button" 
+                    onClick={() => onChange(Math.min(100, posicion + 10))}
+                    className="flex-1 text-xs font-bold py-1.5 bg-[#E5E7EB] hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg transition cursor-pointer active:scale-95"
+                >
                     ↓ Abajo
                 </button>
             </div>
         </div>
     );
-}
+});
 
 const INITIAL_TESTIMONIO = {
     nombre: '',
@@ -142,45 +161,28 @@ const INITIAL_TESTIMONIO = {
     orden: 0
 };
 
-function TestimoniosTab({ testimonios, flash }) {
-    const [editando, setEditando] = useState(null);
-    const [creando, setCreando] = useState(false);
-    const [previewImage, setPreviewImage] = useState(null);
-    const [deletingId, setDeletingId] = useState(null);
-
-    const form = useForm(INITIAL_TESTIMONIO);
-
-    function abrirCrear() {
-        form.setData(INITIAL_TESTIMONIO);
-        setPreviewImage(null);
-        setEditando(null);
-        form.clearErrors();
-        setCreando(true);
-    }
-
-    function abrirEditar(t) {
-        form.setData({
-            nombre: t.nombre || '',
-            cargo: t.cargo ?? 'Estudiante',
-            texto: t.texto || '',
+const TestimonioModal = React.memo(function TestimonioModal({ editando, creando, cerrar }) {
+    const basePath = getAdminBasePath();
+    const form = useForm(
+        editando ? {
+            nombre: editando.nombre || '',
+            cargo: editando.cargo ?? 'Estudiante',
+            texto: editando.texto || '',
             imagen: null,
-            foto_posicion: Number(t.foto_posicion ?? 50),
-            video_url: t.video_url ?? '',
-            video_activo: !!t.video_activo,
-            activo: !!t.activo,
-            orden: t.orden ?? 0
-        });
-        setEditando(t);
-        setCreando(false);
-    }
+            foto_posicion: Number(editando.foto_posicion ?? 50),
+            video_url: editando.video_url ?? '',
+            video_activo: !!editando.video_activo,
+            activo: !!editando.activo,
+            orden: editando.orden ?? 0
+        } : INITIAL_TESTIMONIO
+    );
 
-    function cerrar() {
-        setCreando(false);
-        setEditando(null);
-        setPreviewImage(null);
-        form.clearErrors();
-        form.setData(INITIAL_TESTIMONIO);
-    }
+    const [previewImage, setPreviewImage] = useState(() => {
+        if (editando && editando.imagen) {
+            return mediaUrl(editando.imagen);
+        }
+        return null;
+    });
 
     useEffect(() => {
         if (form.data.imagen) {
@@ -196,13 +198,11 @@ function TestimoniosTab({ testimonios, flash }) {
         } else {
             setPreviewImage(null);
         }
-    }, [form.data.imagen, editando, creando]);
+    }, [form.data.imagen, editando]);
 
     function guardar(e) {
         e.preventDefault();
-        const basePath = getAdminBasePath();
         if (editando) {
-            // Spoofed PUT inside Inertia POST request to support binary uploads
             router.post(`${basePath}/testimonios/${editando.id}`, {
                 _method: 'PUT',
                 ...form.data
@@ -216,6 +216,281 @@ function TestimoniosTab({ testimonios, flash }) {
         } else {
             form.post(`${basePath}/testimonios`, { onSuccess: cerrar });
         }
+    }
+
+    if (!creando && !editando) return null;
+    if (typeof document === 'undefined') return null;
+
+    return createPortal(
+        <div className="fixed inset-0 z-[9999] bg-[#6C727F]/90 dark:bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 overflow-y-auto animate-fadeIn" onClick={cerrar}>
+            <div className="w-full max-w-6xl my-auto grid grid-cols-1 lg:grid-cols-12 gap-6 items-start" onClick={e => e.stopPropagation()}>
+                
+                {/* COLUMNA IZQUIERDA: Vista Previa Testimonio */}
+                <div className="lg:col-span-4 flex flex-col gap-4">
+                    {/* Card Header Vista Previa */}
+                    <div className="bg-white dark:bg-slate-900 rounded-[20px] py-3.5 px-6 shadow-xl text-center border border-slate-100/50 dark:border-slate-800">
+                        <h3 className="text-[#000000] dark:text-white font-bold text-xl tracking-tight font-sans">Vista Previa</h3>
+                    </div>
+
+                    {/* Tarjeta de Vista Previa (Directa sin card de fondo externa, con sombra 2xl) */}
+                    <div className="w-full rounded-[30px] overflow-hidden shadow-2xl border border-slate-800/80 bg-slate-900/90 relative flex flex-col justify-between p-6 select-none min-h-[440px] transition-all duration-300">
+                        {previewImage ? (
+                            <img
+                                src={previewImage}
+                                alt="Vista Previa"
+                                className="absolute inset-0 w-full h-full object-cover z-0 select-none pointer-events-none"
+                                style={{ objectPosition: `center ${form.data.foto_posicion}%` }}
+                            />
+                        ) : (
+                            <div className="absolute inset-0 bg-slate-800 z-0 flex items-center justify-center">
+                                <span className="text-slate-500 text-xs font-semibold">Sin imagen seleccionada</span>
+                            </div>
+                        )}
+                        <div className="absolute inset-0 bg-slate-950/75 z-10"></div>
+                        {form.data.video_activo && form.data.video_url && (
+                            <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/25 pointer-events-none">
+                                <div className="w-14 h-14 rounded-full bg-white/20 text-white border border-white/30 backdrop-blur-md flex items-center justify-center shadow-xl">
+                                    <svg className="w-5 h-5 fill-current ml-0.5" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
+                                </div>
+                            </div>
+                        )}
+                        <div className="relative z-30 flex flex-col justify-between h-full flex-1 min-h-[380px]">
+                            <div className="flex justify-between items-start">
+                                <span className="text-6xl font-serif text-white/30 leading-none">"</span>
+                                {form.data.video_activo && form.data.video_url && (
+                                    <div className="bg-[#800A15] text-white text-[9px] font-bold tracking-wider uppercase px-2.5 py-1 rounded-full flex items-center gap-1 shadow-md">
+                                        <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>
+                                        Video
+                                    </div>
+                                )}
+                            </div>
+                            <div className="flex-1 min-h-[40px]"></div>
+                            <div className="space-y-3">
+                                <p className="text-white text-xs sm:text-sm font-bold italic leading-relaxed text-left"
+                                    style={{ textShadow: '0 2px 4px rgba(0,0,0,0.95)' }}>
+                                    {form.data.texto ? `«${form.data.texto}»` : '«Texto del testimonio...»'}
+                                </p>
+                                <div className="text-left pt-2 border-t border-white/10">
+                                    <span className="block text-sm font-extrabold text-white drop-shadow-[0_1.5px_2px_rgba(0,0,0,0.9)]">
+                                        {form.data.nombre || 'Nombre de la Persona'}
+                                    </span>
+                                    <span className="block text-[10px] font-bold text-[#3b82f6] uppercase tracking-wider mt-0.5 drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
+                                        {form.data.cargo || 'Rol'}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* COLUMNA DERECHA: Formulario Testimonio */}
+                <form onSubmit={guardar} className="lg:col-span-8 bg-white dark:bg-slate-900 rounded-[30px] p-6 sm:p-8 shadow-2xl border border-slate-100 dark:border-slate-800 space-y-4">
+                    {/* Título */}
+                    <h2 className="text-[#000000] dark:text-white font-bold text-xl sm:text-2xl text-center tracking-tight font-sans">
+                        {editando ? 'Editar testimonio' : 'Nuevo testimonio'}
+                    </h2>
+
+                    {/* Separador 1 */}
+                    <div className="h-px bg-slate-200/80 dark:bg-slate-800 my-3" />
+
+                    <div className="space-y-4">
+                        {/* Campo Nombre */}
+                        <div>
+                            <label className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block mb-1.5">
+                                NOMBRE COMPLETO *
+                            </label>
+                            <input
+                                value={form.data.nombre}
+                                onChange={e => form.setData('nombre', e.target.value)}
+                                required
+                                placeholder="Ej: María Camila Restrepo"
+                                className="w-full bg-[#E5E7EB] dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 rounded-md px-3.5 py-2 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 transition border-none"
+                            />
+                            {form.errors.nombre && <p className="text-rose-500 text-xs mt-1 font-semibold">{form.errors.nombre}</p>}
+                        </div>
+
+                        {/* Campo Rol */}
+                        <div>
+                            <label className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block mb-1.5">
+                                ROL / CARGO *
+                            </label>
+                            <select
+                                value={form.data.cargo}
+                                onChange={e => form.setData('cargo', e.target.value)}
+                                className="w-full bg-[#E5E7EB] dark:bg-slate-800 text-slate-900 dark:text-white rounded-md px-3 py-2 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 transition cursor-pointer border-none"
+                            >
+                                {ROLES_TESTIMONIO.map(r => (
+                                    <option key={r} value={r}>{r}</option>
+                                ))}
+                            </select>
+                        </div>
+
+                        {/* Campo Texto */}
+                        <div>
+                            <label className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block mb-1.5">
+                                TEXTO DEL TESTIMONIO *
+                            </label>
+                            <textarea
+                                value={form.data.texto}
+                                onChange={e => form.setData('texto', e.target.value)}
+                                required
+                                rows={3}
+                                placeholder="Escribe el testimonio aquí..."
+                                className="w-full bg-[#E5E7EB] dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 rounded-md px-3.5 py-2 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 transition resize-none border-none"
+                            />
+                            {form.errors.texto && <p className="text-rose-500 text-xs mt-1 font-semibold">{form.errors.texto}</p>}
+                        </div>
+
+                        {/* Campo Foto */}
+                        <div>
+                            <label className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block mb-1.5">
+                                FOTO DE FONDO *
+                            </label>
+                            <div className="flex items-center gap-3">
+                                <input
+                                    type="file"
+                                    accept="image/*,.heic,.heif,image/heic,image/heif"
+                                    onChange={async (e) => {
+                                        const f = e.target.files[0];
+                                        if (!f) return;
+                                        const processed = await processImageFile(f);
+                                        form.setData('imagen', processed);
+                                    }}
+                                    required={!editando}
+                                    className="hidden"
+                                    id="testimonio-file-upload"
+                                />
+                                <label 
+                                    htmlFor="testimonio-file-upload"
+                                    className="bg-[#E5E7EB] dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs font-bold px-4 py-2 rounded-md transition cursor-pointer select-none whitespace-nowrap"
+                                >
+                                    {form.data.imagen ? 'Cambiar Foto' : 'Seleccionar Foto'}
+                                </label>
+                                <span className="text-xs font-medium text-slate-400 dark:text-slate-500 truncate max-w-[240px]">
+                                    {form.data.imagen ? form.data.imagen.name : (editando ? 'Conservar foto actual' : 'Ningún archivo seleccionado')}
+                                </span>
+                            </div>
+                            {form.errors.imagen && <p className="text-rose-500 text-xs mt-1 font-semibold">{form.errors.imagen}</p>}
+                        </div>
+
+                        {/* Editor de Posición */}
+                        <FotoPositionEditor
+                            previewImage={previewImage}
+                            posicion={form.data.foto_posicion}
+                            onChange={v => form.setData('foto_posicion', v)}
+                        />
+
+                        {/* Toggle de Video */}
+                        <div className="bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/80 rounded-xl p-3.5 space-y-2.5">
+                            <div className="flex items-center justify-between">
+                                <div>
+                                    <span className="text-slate-800 dark:text-slate-200 text-xs font-bold">Video del testimonio</span>
+                                    <p className="text-slate-400 text-[10px] mt-0.5">
+                                        {form.data.video_activo ? 'Habilitado — se mostrará botón de reproducción' : 'Deshabilitado — la tarjeta no tendrá video'}
+                                    </p>
+                                </div>
+                                <button
+                                    type="button"
+                                    onClick={() => form.setData('video_activo', !form.data.video_activo)}
+                                    className={`relative inline-flex h-5.5 w-10 items-center rounded-full transition-colors duration-200 focus:outline-none cursor-pointer ${
+                                        form.data.video_activo ? 'bg-blue-600' : 'bg-slate-300 dark:bg-slate-600'
+                                    }`}
+                                >
+                                    <span className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white shadow-sm transition-transform duration-200 ${
+                                        form.data.video_activo ? 'translate-x-5' : 'translate-x-1'
+                                    }`} />
+                                </button>
+                            </div>
+                            {form.data.video_activo && (
+                                <div>
+                                    <label className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block mb-1">URL de YouTube</label>
+                                    <input
+                                        value={form.data.video_url}
+                                        onChange={e => form.setData('video_url', e.target.value)}
+                                        placeholder="https://www.youtube.com/watch?v=..."
+                                        className="w-full bg-[#E5E7EB] dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 rounded-md px-3.5 py-1.5 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 transition border-none"
+                                    />
+                                    {form.errors.video_url && <p className="text-rose-500 text-xs mt-1 font-semibold">{form.errors.video_url}</p>}
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* Separador 2 */}
+                    <div className="h-px bg-slate-200/80 dark:bg-slate-800 my-4" />
+
+                    {/* Orden & Visible */}
+                    <div className="flex items-center justify-between gap-4">
+                        <div className="flex items-center gap-2">
+                            <label className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                                ORDEN:
+                            </label>
+                            <input
+                                type="number"
+                                min="0"
+                                value={form.data.orden}
+                                onChange={e => form.setData('orden', Number(e.target.value))}
+                                className="w-20 bg-[#E5E7EB] dark:bg-slate-800 text-slate-900 dark:text-white rounded-md px-3 py-1.5 text-xs font-semibold text-center focus:outline-none focus:ring-2 focus:ring-blue-500 transition border-none"
+                            />
+                        </div>
+
+                        <label className="flex items-center gap-2.5 cursor-pointer select-none">
+                            <input
+                                type="checkbox"
+                                checked={form.data.activo}
+                                onChange={e => form.setData('activo', e.target.checked)}
+                                className="w-5 h-5 text-blue-600 border-slate-300 rounded focus:ring-blue-500 cursor-pointer accent-blue-600"
+                            />
+                            <span className="text-slate-700 dark:text-slate-300 text-xs font-semibold">Visible en la web</span>
+                        </label>
+                    </div>
+
+                    {/* Separador 3 */}
+                    <div className="h-px bg-slate-200/80 dark:bg-slate-800 my-4" />
+
+                    {/* Botones de Acción */}
+                    <div className="flex flex-col sm:flex-row items-center justify-end gap-2.5 pt-1">
+                        <button
+                            type="submit"
+                            disabled={form.processing}
+                            className="w-full sm:w-auto bg-[#E5E7EB] dark:bg-slate-800 hover:bg-emerald-600 hover:text-white disabled:opacity-50 text-slate-800 dark:text-slate-200 text-xs font-bold px-4 py-2 rounded-md transition cursor-pointer active:scale-95"
+                        >
+                            {form.processing ? 'Guardando…' : 'Guardar Testimonio'}
+                        </button>
+                        <button
+                            type="button"
+                            onClick={cerrar}
+                            className="w-full sm:w-auto bg-[#E5E7EB] dark:bg-slate-800 hover:bg-rose-600 hover:text-white text-slate-800 dark:text-slate-200 text-xs font-bold px-4 py-2 rounded-md transition cursor-pointer active:scale-95"
+                        >
+                            Cancelar
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+        </div>,
+        document.body
+    );
+});
+
+function TestimoniosTab({ testimonios, flash }) {
+    const [editando, setEditando] = useState(null);
+    const [creando, setCreando] = useState(false);
+    const [deletingId, setDeletingId] = useState(null);
+
+    function abrirCrear() {
+        setEditando(null);
+        setCreando(true);
+    }
+
+    function abrirEditar(t) {
+        setEditando(t);
+        setCreando(false);
+    }
+
+    function cerrar() {
+        setCreando(false);
+        setEditando(null);
     }
 
     function eliminar(id) {
@@ -286,255 +561,12 @@ function TestimoniosTab({ testimonios, flash }) {
                 ))}
             </div>
 
-            {(creando || editando) && typeof document !== 'undefined' && createPortal(
-                <div className="fixed inset-0 z-[9999] bg-[#6C727F]/90 dark:bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 overflow-y-auto animate-fadeIn" onClick={cerrar}>
-                    <div className="w-full max-w-6xl my-auto grid grid-cols-1 lg:grid-cols-12 gap-6 items-start" onClick={e => e.stopPropagation()}>
-                        
-                        {/* COLUMNA IZQUIERDA: Vista Previa Testimonio */}
-                        <div className="lg:col-span-4 flex flex-col gap-4">
-                            {/* Card Header Vista Previa */}
-                            <div className="bg-white dark:bg-slate-900 rounded-[20px] py-3.5 px-6 shadow-xl text-center border border-slate-100/50 dark:border-slate-800">
-                                <h3 className="text-[#000000] dark:text-white font-bold text-xl tracking-tight font-sans">Vista Previa</h3>
-                            </div>
-
-                            {/* Tarjeta de Vista Previa (Directa sin card de fondo externa, con sombra 2xl) */}
-                            <div className="w-full rounded-[30px] overflow-hidden shadow-2xl border border-slate-800/80 bg-slate-900/90 relative flex flex-col justify-between p-6 select-none min-h-[440px] transition-all duration-300">
-                                {previewImage ? (
-                                    <img
-                                        src={previewImage}
-                                        alt="Vista Previa"
-                                        className="absolute inset-0 w-full h-full object-cover z-0 select-none pointer-events-none"
-                                        style={{ objectPosition: `center ${form.data.foto_posicion}%` }}
-                                    />
-                                ) : (
-                                    <div className="absolute inset-0 bg-slate-800 z-0 flex items-center justify-center">
-                                        <span className="text-slate-500 text-xs font-semibold">Sin imagen seleccionada</span>
-                                    </div>
-                                )}
-                                <div className="absolute inset-0 bg-slate-950/75 z-10"></div>
-                                {form.data.video_activo && form.data.video_url && (
-                                    <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/25 pointer-events-none">
-                                        <div className="w-14 h-14 rounded-full bg-white/20 text-white border border-white/30 backdrop-blur-md flex items-center justify-center shadow-xl">
-                                            <svg className="w-5 h-5 fill-current ml-0.5" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
-                                        </div>
-                                    </div>
-                                )}
-                                <div className="relative z-30 flex flex-col justify-between h-full flex-1 min-h-[380px]">
-                                    <div className="flex justify-between items-start">
-                                        <span className="text-6xl font-serif text-white/30 leading-none">"</span>
-                                        {form.data.video_activo && form.data.video_url && (
-                                            <div className="bg-[#800A15] text-white text-[9px] font-bold tracking-wider uppercase px-2.5 py-1 rounded-full flex items-center gap-1 shadow-md">
-                                                <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>
-                                                Video
-                                            </div>
-                                        )}
-                                    </div>
-                                    <div className="flex-1 min-h-[40px]"></div>
-                                    <div className="space-y-3">
-                                        <p className="text-white text-xs sm:text-sm font-bold italic leading-relaxed text-left"
-                                            style={{ textShadow: '0 2px 4px rgba(0,0,0,0.95)' }}>
-                                            {form.data.texto ? `«${form.data.texto}»` : '«Texto del testimonio...»'}
-                                        </p>
-                                        <div className="text-left pt-2 border-t border-white/10">
-                                            <span className="block text-sm font-extrabold text-white drop-shadow-[0_1.5px_2px_rgba(0,0,0,0.9)]">
-                                                {form.data.nombre || 'Nombre de la Persona'}
-                                            </span>
-                                            <span className="block text-[10px] font-bold text-[#3b82f6] uppercase tracking-wider mt-0.5 drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
-                                                {form.data.cargo || 'Rol'}
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* COLUMNA DERECHA: Formulario Testimonio */}
-                        <form onSubmit={guardar} className="lg:col-span-8 bg-white dark:bg-slate-900 rounded-[30px] p-6 sm:p-8 shadow-2xl border border-slate-100 dark:border-slate-800 space-y-4">
-                            {/* Título */}
-                            <h2 className="text-[#000000] dark:text-white font-bold text-xl sm:text-2xl text-center tracking-tight font-sans">
-                                {editando ? 'Editar testimonio' : 'Nuevo testimonio'}
-                            </h2>
-
-                            {/* Separador 1 */}
-                            <div className="h-px bg-slate-200/80 dark:bg-slate-800 my-3" />
-
-                            <div className="space-y-4">
-                                {/* Campo Nombre */}
-                                <div>
-                                    <label className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block mb-1.5">
-                                        NOMBRE COMPLETO *
-                                    </label>
-                                    <input
-                                        value={form.data.nombre}
-                                        onChange={e => form.setData('nombre', e.target.value)}
-                                        required
-                                        placeholder="Ej: María Camila Restrepo"
-                                        className="w-full bg-[#E5E7EB] dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 rounded-md px-3.5 py-2 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 transition border-none"
-                                    />
-                                    {form.errors.nombre && <p className="text-rose-500 text-xs mt-1 font-semibold">{form.errors.nombre}</p>}
-                                </div>
-
-                                {/* Campo Rol */}
-                                <div>
-                                    <label className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block mb-1.5">
-                                        ROL / CARGO *
-                                    </label>
-                                    <select
-                                        value={form.data.cargo}
-                                        onChange={e => form.setData('cargo', e.target.value)}
-                                        className="w-full bg-[#E5E7EB] dark:bg-slate-800 text-slate-900 dark:text-white rounded-md px-3 py-2 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 transition cursor-pointer border-none"
-                                    >
-                                        {ROLES_TESTIMONIO.map(r => (
-                                            <option key={r} value={r}>{r}</option>
-                                        ))}
-                                    </select>
-                                </div>
-
-                                {/* Campo Texto */}
-                                <div>
-                                    <label className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block mb-1.5">
-                                        TEXTO DEL TESTIMONIO *
-                                    </label>
-                                    <textarea
-                                        value={form.data.texto}
-                                        onChange={e => form.setData('texto', e.target.value)}
-                                        required
-                                        rows={3}
-                                        placeholder="Escribe el testimonio aquí..."
-                                        className="w-full bg-[#E5E7EB] dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 rounded-md px-3.5 py-2 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 transition resize-none border-none"
-                                    />
-                                    {form.errors.texto && <p className="text-rose-500 text-xs mt-1 font-semibold">{form.errors.texto}</p>}
-                                </div>
-
-                                {/* Campo Foto */}
-                                <div>
-                                    <label className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block mb-1.5">
-                                        FOTO DE FONDO *
-                                    </label>
-                                    <div className="flex items-center gap-3">
-                                        <input
-                                            type="file"
-                                            accept="image/*,.heic,.heif,image/heic,image/heif"
-                                            onChange={async (e) => {
-                                                const f = e.target.files[0];
-                                                if (!f) return;
-                                                const processed = await processImageFile(f);
-                                                form.setData('imagen', processed);
-                                            }}
-                                            required={!editando}
-                                            className="hidden"
-                                            id="testimonio-file-upload"
-                                        />
-                                        <label 
-                                            htmlFor="testimonio-file-upload"
-                                            className="bg-[#E5E7EB] dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs font-bold px-4 py-2 rounded-md transition cursor-pointer select-none whitespace-nowrap"
-                                        >
-                                            {form.data.imagen ? 'Cambiar Foto' : 'Seleccionar Foto'}
-                                        </label>
-                                        <span className="text-xs font-medium text-slate-400 dark:text-slate-500 truncate max-w-[240px]">
-                                            {form.data.imagen ? form.data.imagen.name : (editando ? 'Conservar foto actual' : 'Ningún archivo seleccionado')}
-                                        </span>
-                                    </div>
-                                    {form.errors.imagen && <p className="text-rose-500 text-xs mt-1 font-semibold">{form.errors.imagen}</p>}
-                                </div>
-
-                                {/* Editor de Posición */}
-                                <FotoPositionEditor
-                                    previewImage={previewImage}
-                                    posicion={form.data.foto_posicion}
-                                    onChange={v => form.setData('foto_posicion', v)}
-                                />
-
-                                {/* Toggle de Video */}
-                                <div className="bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/80 rounded-xl p-3.5 space-y-2.5">
-                                    <div className="flex items-center justify-between">
-                                        <div>
-                                            <span className="text-slate-800 dark:text-slate-200 text-xs font-bold">Video del testimonio</span>
-                                            <p className="text-slate-400 text-[10px] mt-0.5">
-                                                {form.data.video_activo ? 'Habilitado — se mostrará botón de reproducción' : 'Deshabilitado — la tarjeta no tendrá video'}
-                                            </p>
-                                        </div>
-                                        <button
-                                            type="button"
-                                            onClick={() => form.setData('video_activo', !form.data.video_activo)}
-                                            className={`relative inline-flex h-5.5 w-10 items-center rounded-full transition-colors duration-200 focus:outline-none cursor-pointer ${
-                                                form.data.video_activo ? 'bg-blue-600' : 'bg-slate-300 dark:bg-slate-600'
-                                            }`}
-                                        >
-                                            <span className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white shadow-sm transition-transform duration-200 ${
-                                                form.data.video_activo ? 'translate-x-5' : 'translate-x-1'
-                                            }`} />
-                                        </button>
-                                    </div>
-                                    {form.data.video_activo && (
-                                        <div>
-                                            <label className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block mb-1">URL de YouTube</label>
-                                            <input
-                                                value={form.data.video_url}
-                                                onChange={e => form.setData('video_url', e.target.value)}
-                                                placeholder="https://www.youtube.com/watch?v=..."
-                                                className="w-full bg-[#E5E7EB] dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 rounded-md px-3.5 py-1.5 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 transition border-none"
-                                            />
-                                            {form.errors.video_url && <p className="text-rose-500 text-xs mt-1 font-semibold">{form.errors.video_url}</p>}
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-
-                            {/* Separador 2 */}
-                            <div className="h-px bg-slate-200/80 dark:bg-slate-800 my-4" />
-
-                            {/* Orden & Visible */}
-                            <div className="flex items-center justify-between gap-4">
-                                <div className="flex items-center gap-2">
-                                    <label className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                                        ORDEN:
-                                    </label>
-                                    <input
-                                        type="number"
-                                        min="0"
-                                        value={form.data.orden}
-                                        onChange={e => form.setData('orden', Number(e.target.value))}
-                                        className="w-20 bg-[#E5E7EB] dark:bg-slate-800 text-slate-900 dark:text-white rounded-md px-3 py-1.5 text-xs font-semibold text-center focus:outline-none focus:ring-2 focus:ring-blue-500 transition border-none"
-                                    />
-                                </div>
-
-                                <label className="flex items-center gap-2.5 cursor-pointer select-none">
-                                    <input
-                                        type="checkbox"
-                                        checked={form.data.activo}
-                                        onChange={e => form.setData('activo', e.target.checked)}
-                                        className="w-5 h-5 text-blue-600 border-slate-300 rounded focus:ring-blue-500 cursor-pointer accent-blue-600"
-                                    />
-                                    <span className="text-slate-700 dark:text-slate-300 text-xs font-semibold">Visible en la web</span>
-                                </label>
-                            </div>
-
-                            {/* Separador 3 */}
-                            <div className="h-px bg-slate-200/80 dark:bg-slate-800 my-4" />
-
-                            {/* Botones de Acción */}
-                            <div className="flex flex-col sm:flex-row items-center justify-end gap-2.5 pt-1">
-                                <button
-                                    type="submit"
-                                    disabled={form.processing}
-                                    className="w-full sm:w-auto bg-[#E5E7EB] dark:bg-slate-800 hover:bg-emerald-600 hover:text-white disabled:opacity-50 text-slate-800 dark:text-slate-200 text-xs font-bold px-4 py-2 rounded-md transition cursor-pointer active:scale-95"
-                                >
-                                    {form.processing ? 'Guardando…' : 'Guardar Testimonio'}
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={cerrar}
-                                    className="w-full sm:w-auto bg-[#E5E7EB] dark:bg-slate-800 hover:bg-rose-600 hover:text-white text-slate-800 dark:text-slate-200 text-xs font-bold px-4 py-2 rounded-md transition cursor-pointer active:scale-95"
-                                >
-                                    Cancelar
-                                </button>
-                            </div>
-                        </form>
-
-                    </div>
-                </div>,
-                document.body
+            {(creando || editando) && (
+                <TestimonioModal 
+                    editando={editando} 
+                    creando={creando} 
+                    cerrar={cerrar} 
+                />
             )}
         </div>
     );

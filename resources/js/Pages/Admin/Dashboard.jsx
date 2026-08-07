@@ -4,7 +4,8 @@ import { createPortal } from 'react-dom';
 import PageBuilder from './PageBuilder/PageBuilder';
 import CarnetsAdminTab from './CarnetsAdminTab';
 import AdminSidebar from '@/Components/AdminSidebar';
-import { Sun, Moon, Eye, Move, ZoomIn, Camera, User, X, Check, Upload, ArrowUp, ArrowDown, ArrowLeft, ArrowRight, Plus, Minus, Trash2, Terminal, Server, RefreshCw, Database, HardDrive, ShieldAlert, Cpu, Copy, Play, CreditCard, GitBranch, Trophy, Flame, Sparkles, Shield } from 'lucide-react';
+import DashboardOverview from '@/Components/DashboardOverview';
+import { Sun, Moon, Eye, Move, ZoomIn, Camera, User, X, Check, Upload, ArrowUp, ArrowDown, ArrowLeft, ArrowRight, Plus, Minus, Trash2, Terminal, Server, RefreshCw, Database, HardDrive, ShieldAlert, Cpu, Copy, Play, CreditCard, GitBranch, Trophy, Flame, Sparkles, Shield, Star, Bell, Search, PanelLeft } from 'lucide-react';
 import { processImageFile } from '@/utils/heicConverter';
 import { mediaUrl } from '@/utils/mediaUrl';
 
@@ -3611,82 +3612,80 @@ export default function AdminDashboard({ seccion, carnets = [], equipo = [], tes
                     isCollapsed ? 'pl-0 lg:pl-20' : 'pl-0 lg:pl-72'
                 }`}>
                     
-                    {/* Header Top Navbar (Sticky Normal Flow to Never Overlap Main Content) */}
-                    <header className="h-16 sm:h-20 bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800/80 sticky top-0 z-30 flex items-center justify-between px-4 sm:px-8 shadow-[0_1px_3px_rgba(0,0,0,0.01)] shrink-0">
+                    {/* Header Top Navbar estilo SnowUI / Apple Minimal (Breadcrumbs + Buscador + Herramientas) */}
+                    <header className="h-16 bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800/80 sticky top-0 z-30 flex items-center justify-between px-4 sm:px-6 shadow-[0_1px_2px_rgba(0,0,0,0.02)] shrink-0">
                         
+                        {/* Izquierda: Drawer Móvil + Breadcrumbs estilo SnowUI */}
                         <div className="flex items-center gap-3">
-                            {/* Mobile drawer hamburger menu button */}
                             <button
                                 type="button"
                                 onClick={() => setSidebarOpen(!sidebarOpen)}
                                 className="lg:hidden p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 transition cursor-pointer"
                                 aria-label="Abrir Menú"
                             >
-                                <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-                                </svg>
+                                <PanelLeft className="w-4 h-4" />
                             </button>
 
-                            {/* Search input mock */}
-                            <div className="hidden sm:flex relative bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/80 rounded-xl px-4 py-2 flex items-center gap-3 w-44 md:w-80">
-                                <svg className="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                                </svg>
-                                <input 
-                                    type="text" 
-                                    placeholder="Buscar en el panel..." 
-                                    className="bg-transparent text-xs font-medium text-slate-600 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none w-full"
-                                    readOnly
-                                />
-                                <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-[9px] font-bold text-slate-400 px-1.5 py-0.5 rounded shadow-sm">
-                                    Ctrl + K
-                                </div>
+                            {/* Breadcrumbs de Navegación */}
+                            <div className="hidden sm:flex items-center gap-2 text-xs font-medium text-slate-400 dark:text-slate-500">
+                                <button className="hover:text-slate-700 dark:hover:text-slate-300 transition">
+                                    <Star className="w-3.5 h-3.5" />
+                                </button>
+                                <span>/</span>
+                                <span className="text-slate-500 dark:text-slate-400 font-semibold">Panel COLSIH</span>
+                                <span>/</span>
+                                <span className="text-slate-900 dark:text-white font-extrabold capitalize">
+                                    {seccion ? seccion.replace('-admin', '') : 'Resumen'}
+                                </span>
                             </div>
                         </div>
 
-                        {/* Topbar Right Tools */}
-                        <div className="flex items-center gap-2.5 sm:gap-4">
-                            {/* Functional Dark/Light Mode Switch */}
-                            <button 
-                                onClick={() => setDarkMode(!darkMode)}
-                                className="w-9 h-9 rounded-full bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200/50 dark:border-slate-700/80 flex items-center justify-center text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white transition cursor-pointer"
-                                title="Cambiar Tema"
-                            >
-                                {darkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-                            </button>
-                            <button className="w-9 h-9 rounded-full bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 border border-slate-200/50 dark:border-slate-700/80 flex items-center justify-center text-slate-500 hover:text-slate-800 transition relative cursor-pointer">
-                                <span className="absolute top-1 right-1.5 w-2 h-2 rounded-full bg-blue-600 border border-white"></span>
-                                <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                                </svg>
-                            </button>
-                            <div className="h-6 w-[1px] bg-slate-200 dark:bg-slate-700"></div>
+                        {/* Derecha: Buscador Plano + Modo Oscuro + Notificaciones + Perfil */}
+                        <div className="flex items-center gap-3">
+                            {/* Buscador plano minimalista estilo SnowUI */}
+                            <div className="hidden md:flex items-center gap-2 bg-[#F4F5F7] dark:bg-slate-800/80 rounded-xl px-3 py-1.5 w-56 lg:w-72">
+                                <Search className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                                <input 
+                                    type="text" 
+                                    placeholder="Buscar en el portal..." 
+                                    className="bg-transparent text-xs font-medium text-slate-700 dark:text-slate-200 placeholder-slate-400 focus:outline-none w-full"
+                                    readOnly
+                                />
+                                <span className="text-[9px] font-bold text-slate-400 bg-white dark:bg-slate-900 px-1.5 py-0.5 rounded border border-slate-200/60 dark:border-slate-700/60 shadow-2xs">
+                                    Ctrl K
+                                </span>
+                            </div>
+
+                            <div className="flex items-center gap-1.5">
+                                {/* Botón Tema (Sol/Luna) */}
+                                <button 
+                                    onClick={() => setDarkMode(!darkMode)}
+                                    className="w-8 h-8 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-center text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition cursor-pointer"
+                                    title="Cambiar Tema"
+                                >
+                                    {darkMode ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-slate-600" />}
+                                </button>
+
+                                {/* Botón Notificaciones */}
+                                <button 
+                                    className="w-8 h-8 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-center text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition relative cursor-pointer"
+                                    title="Notificaciones"
+                                >
+                                    <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-blue-600"></span>
+                                    <Bell className="w-4 h-4" />
+                                </button>
+                            </div>
+
+                            <div className="h-5 w-[1px] bg-slate-200 dark:bg-slate-800 hidden sm:block"></div>
                             
-                            <div className="flex items-center gap-2.5">
-                                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-blue-100 text-blue-700 font-extrabold flex items-center justify-center text-xs shadow-sm">
+                            {/* Avatar Administrador */}
+                            <div className="flex items-center gap-2">
+                                <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#800A15] to-[#003C8F] text-white font-extrabold flex items-center justify-center text-xs shadow-xs">
                                     A
                                 </div>
-                                <span className="text-xs font-bold text-slate-700 dark:text-slate-200 hidden sm:inline-block">Administrador</span>
                             </div>
                         </div>
                     </header>
-
-                    {/* Main Scrollable Area */}
-                    <main className="flex-1 p-4 sm:p-6 lg:p-8 bg-[#F4F7FA] dark:bg-slate-950 overflow-y-auto">
-                        
-                        {/* ── Active Module Content Card ── */}
-                        <div className="transition-all duration-300">
-                            {(seccion === 'carnets' || seccion === 'carnets-admin') && <CarnetsAdminTab carnets={carnets} flash={flash} />}
-                            {(seccion === 'deportes' || seccion === 'deportes-admin') && <DeportesAdminTab torneoPartidos={torneoPartidos} deportesBanners={deportesBanners} cuadrangularesBloqueado={cuadrangularesBloqueado} flash={flash} />}
-                            {seccion === 'equipo'         && <EquipoTab        equipo={equipo}           flash={flash} />}
-                            {seccion === 'testimonios'    && <TestimoniosTab   testimonios={testimonios} flash={flash} />}
-                            {seccion === 'noticias'       && <NoticiasTab      noticias={noticias}       flash={flash} />}
-                            {seccion === 'preguntas'      && <PreguntasTab     preguntas={preguntas}     flash={flash} />}
-                            {seccion === 'recorrido'      && <RecorridoTab     tour={tour} scenes={scenes} flash={flash} basePath={basePath} />}
-                            {seccion === 'mantenimiento'  && <MantenimientoTab flash={flash} flash_error={flash_error} command_output={command_output} basePath={basePath} />}
-                        </div>
-
-                    </main>
 
                     {/* Footer branding */}
                     <footer className="py-4 px-4 sm:px-8 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-400 font-semibold select-none">

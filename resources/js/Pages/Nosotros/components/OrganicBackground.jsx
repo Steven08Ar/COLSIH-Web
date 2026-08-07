@@ -47,7 +47,7 @@ export default function OrganicBackground({ mouseX, mouseY }) {
 
             {/* Background Parallax Blur Lights (Azul & Rojo) */}
             <AnimatedBlob 
-                className="w-96 h-96 bg-[#003C8F]/10 -top-24 -left-24 blur-3xl" 
+                className="w-96 h-96 bg-[#001659]/10 -top-24 -left-24 blur-3xl" 
                 mouseX={activeMouseX} 
                 mouseY={activeMouseY} 
                 speed={0.8} 

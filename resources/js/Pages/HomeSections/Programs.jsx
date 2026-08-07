@@ -157,7 +157,7 @@ export default function Programs() {
                                     <div className="w-full flex justify-between items-center">
                                         <span className={`text-3xl font-black font-sans tracking-tighter transition-colors duration-300 ${
                                             isExpanded 
-                                                ? (isEven ? 'text-[#800A15] dark:text-rose-400' : 'text-[#003C8F] dark:text-blue-400')
+                                                ? (isEven ? 'text-[#800A15] dark:text-rose-400' : 'text-[#001659] dark:text-blue-400')
                                                 : 'text-slate-300'
                                         }`}>
                                             {item.num}
@@ -173,7 +173,7 @@ export default function Programs() {
                                                 className={`inline-flex items-center gap-1.5 font-extrabold text-[10px] sm:text-xs uppercase tracking-wider px-3.5 py-2.5 rounded-xl shadow-lg active:scale-95 transition-all cursor-pointer text-white ${
                                                     isEven 
                                                         ? 'bg-[#800A15] hover:bg-rose-900' 
-                                                        : 'bg-[#003C8F] hover:bg-blue-900'
+                                                        : 'bg-[#001659] hover:bg-blue-900'
                                                 }`}
                                             >
                                                 <span>{item.ctaText}</span>
@@ -229,7 +229,7 @@ export default function Programs() {
                                                 className={`inline-flex items-center gap-2 font-extrabold text-[10px] sm:text-xs uppercase tracking-wider px-5 py-3.5 rounded-xl shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 transition-all cursor-pointer focus:outline-none w-full sm:w-auto justify-center sm:justify-start ${
                                                     isEven 
                                                         ? 'bg-[#800A15] hover:bg-rose-900 text-white' 
-                                                        : 'bg-[#003C8F] hover:bg-blue-900 text-white'
+                                                        : 'bg-[#001659] hover:bg-blue-900 text-white'
                                                 }`}
                                             >
                                                 {item.ctaText}

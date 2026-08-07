@@ -8,7 +8,7 @@ export default function Admissions() {
             num: "01",
             title: "Inscripción Online",
             description: "Diligencia el formulario digital de admisión y carga los documentos del estudiante de forma rápida.",
-            color: "border-t-[#003C8F]",
+            color: "border-t-[#001659]",
         },
         {
             num: "02",
@@ -20,7 +20,7 @@ export default function Admissions() {
             num: "03",
             title: "Resultados",
             description: "Revisa el estado de la postulación en nuestra plataforma y recibe la confirmación vía correo.",
-            color: "border-t-[#003C8F]",
+            color: "border-t-[#001659]",
         },
         {
             num: "04",

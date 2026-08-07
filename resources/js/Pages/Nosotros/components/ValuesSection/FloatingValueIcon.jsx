@@ -34,7 +34,7 @@ export default function FloatingValueIcon({ iconName, alignment, index }) {
     const isVino = index % 2 === 0;
     const bgClass = isVino 
         ? 'bg-[#800A15] shadow-red-500/20 text-white' 
-        : 'bg-[#003C8F] shadow-blue-500/20 text-white';
+        : 'bg-[#001659] shadow-blue-500/20 text-white';
 
     // Position styling: overlap left or right on desktop, sit top-right inside card on mobile
     const positionClass = alignment === 'left'

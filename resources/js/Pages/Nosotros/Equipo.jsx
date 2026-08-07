@@ -126,13 +126,13 @@ export default function Equipo({ equipo = [] }) {
                 <div 
                     className="absolute inset-0 opacity-[0.05] dark:opacity-[0.01] pointer-events-none" 
                     style={{
-                        backgroundImage: 'radial-gradient(#003C8F 1.2px, transparent 1.2px)',
+                        backgroundImage: 'radial-gradient(#001659 1.2px, transparent 1.2px)',
                         backgroundSize: '24px 24px'
                     }} 
                 />
 
                 {/* ── 1. Hero Section ── */}
-                <section className="relative w-full bg-gradient-to-r from-[#003C8F] to-[#0D1B2E] text-white pt-36 pb-36 px-6 overflow-hidden">
+                <section className="relative w-full bg-gradient-to-r from-[#001659] to-[#0D1B2E] text-white pt-36 pb-36 px-6 overflow-hidden">
                     <div 
                         className="absolute inset-0 bg-cover bg-center opacity-10 brightness-[0.2] pointer-events-none"
                         style={{ backgroundImage: "url('https://media.colsih.edu.co/home/panoramica.png')" }}
@@ -174,7 +174,7 @@ export default function Equipo({ equipo = [] }) {
                 {/* ── 2. Equipo Directivo ── */}
                 <section className="relative z-10 py-12 px-6 max-w-[1240px] mx-auto">
                     <div className="flex items-center gap-3.5 mb-8 border-b border-slate-100 dark:border-slate-800 pb-4">
-                        <div className="w-10 h-10 rounded-2xl bg-[#003C8F]/10 dark:bg-blue-950/40 text-[#003C8F] dark:text-blue-400 flex items-center justify-center shrink-0 shadow-sm">
+                        <div className="w-10 h-10 rounded-2xl bg-[#001659]/10 dark:bg-blue-950/40 text-[#001659] dark:text-blue-400 flex items-center justify-center shrink-0 shadow-sm">
                             <Award className="w-5.5 h-5.5" />
                         </div>
                         <div>
@@ -191,8 +191,8 @@ export default function Equipo({ equipo = [] }) {
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                         {directivos.map((p, idx) => {
                             const isVino = idx % 2 === 0;
-                            const borderClass = isVino ? 'border-t-4 border-t-[#800A15]' : 'border-t-4 border-t-[#003C8F]';
-                            const roleClass = isVino ? 'text-[#800A15] dark:text-rose-400' : 'text-[#003C8F] dark:text-blue-400';
+                            const borderClass = isVino ? 'border-t-4 border-t-[#800A15]' : 'border-t-4 border-t-[#001659]';
+                            const roleClass = isVino ? 'text-[#800A15] dark:text-rose-400' : 'text-[#001659] dark:text-blue-400';
 
                             return (
                                 <motion.div 
@@ -253,7 +253,7 @@ export default function Equipo({ equipo = [] }) {
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
                         {administracion.map((item, idx) => {
                             const isVino = idx % 2 === 0;
-                            const borderHover = isVino ? 'hover:border-t-[#800A15]' : 'hover:border-t-[#003C8F]';
+                            const borderHover = isVino ? 'hover:border-t-[#800A15]' : 'hover:border-t-[#001659]';
 
                             return (
                                 <motion.div 
@@ -364,7 +364,7 @@ export default function Equipo({ equipo = [] }) {
                                     <h4 className="font-extrabold text-slate-900 dark:text-slate-100 text-xs sm:text-sm leading-snug">
                                         {prof.nombre}
                                     </h4>
-                                    <span className="text-[11px] font-bold text-[#003C8F] dark:text-blue-400 mt-2 block">
+                                    <span className="text-[11px] font-bold text-[#001659] dark:text-blue-400 mt-2 block">
                                         {prof.asignatura}
                                     </span>
                                 </div>
@@ -373,7 +373,7 @@ export default function Equipo({ equipo = [] }) {
                     </div>
 
                     {/* Banner inspiracional */}
-                    <div className="mt-14 bg-gradient-to-r from-[#003C8F] via-blue-800 to-[#800A15] rounded-3xl p-8 text-white flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl">
+                    <div className="mt-14 bg-gradient-to-r from-[#001659] via-blue-800 to-[#800A15] rounded-3xl p-8 text-white flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl">
                         <div className="space-y-2 text-center md:text-left">
                             <div className="flex items-center justify-center md:justify-start gap-2 text-amber-300 font-bold text-xs uppercase tracking-widest">
                                 <Sparkles className="w-4 h-4 text-amber-300 animate-spin" />
@@ -388,7 +388,7 @@ export default function Equipo({ equipo = [] }) {
                         </div>
                         <Link
                             href="/contacto"
-                            className="px-6 py-3.5 rounded-2xl bg-white text-[#003C8F] font-extrabold text-sm hover:scale-105 transition-all duration-300 shadow-lg shrink-0"
+                            className="px-6 py-3.5 rounded-2xl bg-white text-[#001659] font-extrabold text-sm hover:scale-105 transition-all duration-300 shadow-lg shrink-0"
                         >
                             Contactar con la Institución
                         </Link>

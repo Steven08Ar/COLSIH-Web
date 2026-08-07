@@ -105,7 +105,7 @@ export default function Stats() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 items-center justify-center">
                     {stats.map((stat, index) => {
                         const isEven = index % 2 === 0;
-                        const accentColor = isEven ? '#003C8F' : '#800A15';
+                        const accentColor = isEven ? '#001659' : '#800A15';
                         const hoverBgClass = isEven ? 'hover:bg-blue-50/20' : 'hover:bg-red-50/20';
                         return (
                             <ScrollReveal 

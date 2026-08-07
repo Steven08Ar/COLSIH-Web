@@ -174,10 +174,10 @@ export default function Valores() {
                                     setJumpMenuOpen(!jumpMenuOpen);
                                     setFilterMenuOpen(false);
                                 }}
-                                className="w-full px-5 py-3.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-md flex items-center justify-between gap-3 text-slate-800 dark:text-slate-100 hover:border-[#003C8F] transition-all cursor-pointer select-none"
+                                className="w-full px-5 py-3.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-md flex items-center justify-between gap-3 text-slate-800 dark:text-slate-100 hover:border-[#001659] transition-all cursor-pointer select-none"
                             >
                                 <div className="flex items-center gap-2.5">
-                                    <div className="w-8 h-8 rounded-xl bg-[#003C8F]/10 text-[#003C8F] dark:text-blue-400 flex items-center justify-center">
+                                    <div className="w-8 h-8 rounded-xl bg-[#001659]/10 text-[#001659] dark:text-blue-400 flex items-center justify-center">
                                         <Compass className="w-4 h-4" />
                                     </div>
                                     <div className="text-left">
@@ -189,7 +189,7 @@ export default function Valores() {
                                         </span>
                                     </div>
                                 </div>
-                                <ChevronDown className={`w-5 h-5 text-slate-400 transition-transform duration-300 ${jumpMenuOpen ? 'rotate-180 text-[#003C8F]' : ''}`} />
+                                <ChevronDown className={`w-5 h-5 text-slate-400 transition-transform duration-300 ${jumpMenuOpen ? 'rotate-180 text-[#001659]' : ''}`} />
                             </button>
 
                             {/* Lista Desplegable de Valores */}
@@ -215,7 +215,7 @@ export default function Valores() {
                                                         scrollToValue(val.id);
                                                     }
                                                 }}
-                                                className="w-full px-4 py-2.5 text-left text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-blue-50 dark:hover:bg-slate-800 hover:text-[#003C8F] transition-colors flex items-center gap-2 cursor-pointer"
+                                                className="w-full px-4 py-2.5 text-left text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-blue-50 dark:hover:bg-slate-800 hover:text-[#001659] transition-colors flex items-center gap-2 cursor-pointer"
                                             >
                                                 <span className="w-6 text-slate-400 text-[11px] font-mono">{val.numero}.</span>
                                                 <span>{val.titulo}</span>
@@ -262,7 +262,7 @@ export default function Valores() {
 
                 {/* Bottom Navigation & CTA Banner */}
                 <section className="relative z-10 mt-16 max-w-[1140px] mx-auto px-6">
-                    <div className="bg-gradient-to-r from-[#08111F] via-[#003C8F] to-[#800A15] p-8 md:p-12 rounded-[32px] text-white shadow-xl text-center space-y-4 relative overflow-hidden">
+                    <div className="bg-gradient-to-r from-[#08111F] via-[#001659] to-[#800A15] p-8 md:p-12 rounded-[32px] text-white shadow-xl text-center space-y-4 relative overflow-hidden">
                         <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl pointer-events-none" />
                         
                         <span className="text-xs font-bold uppercase tracking-widest text-amber-300 block font-sans">

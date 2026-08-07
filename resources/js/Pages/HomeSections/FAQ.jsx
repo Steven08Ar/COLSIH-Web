@@ -45,11 +45,11 @@ export default function FAQ({ preguntas }) {
                                     onClick={() => toggleIndex(index)}
                                     className="w-full py-6 flex items-center justify-between text-left cursor-pointer focus:outline-none group"
                                 >
-                                    <span className="font-extrabold text-[17px] md:text-[19px] text-[#08111F] group-hover:text-[#003C8F] transition-colors duration-300 pr-8">
+                                    <span className="font-extrabold text-[17px] md:text-[19px] text-[#08111F] group-hover:text-[#001659] transition-colors duration-300 pr-8">
                                         {item.question}
                                     </span>
                                     {/* Minimal Plus/Minus Icon */}
-                                    <span className="text-slate-400 group-hover:text-[#003C8F] transition-colors duration-300 shrink-0 pr-2">
+                                    <span className="text-slate-400 group-hover:text-[#001659] transition-colors duration-300 shrink-0 pr-2">
                                         {isOpen ? (
                                             <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                                                 <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 12h-15" />

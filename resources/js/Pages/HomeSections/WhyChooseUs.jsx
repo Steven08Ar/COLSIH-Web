@@ -101,7 +101,7 @@ function TiltCard({ pillar, index }) {
                         <h3 className={`font-extrabold text-[20px] text-white transition-colors duration-300 ${
                             pillar.num === "02" || pillar.num === "04"
                                 ? 'group-hover:text-[#800A15]'
-                                : 'group-hover:text-[#003C8F]'
+                                : 'group-hover:text-[#001659]'
                         }`}>
                             {pillar.title}
                         </h3>
@@ -152,7 +152,7 @@ export default function WhyChooseUs() {
             </div>
 
             {/* Background glowing effects for visual depth */}
-            <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[500px] h-[500px] bg-[#003C8F]/10 rounded-full blur-[140px] pointer-events-none z-0"></div>
+            <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[500px] h-[500px] bg-[#001659]/10 rounded-full blur-[140px] pointer-events-none z-0"></div>
             <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-[500px] h-[500px] bg-[#800A15]/8 rounded-full blur-[140px] pointer-events-none z-0"></div>
 
             <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] space-y-20 relative z-10">

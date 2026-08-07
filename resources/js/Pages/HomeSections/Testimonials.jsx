@@ -203,7 +203,7 @@ export default function Testimonials({ testimonios }) {
             {/* Layered Blue Waves Background */}
             <div className="absolute inset-0 z-0 pointer-events-none select-none">
                 <div className="absolute inset-0 bg-gradient-to-b from-[#030712] via-[#071329] to-[#020617]"></div>
-                <svg className="absolute inset-x-0 bottom-0 w-full h-[600px] text-[#003C8F]/20" viewBox="0 0 1440 600" fill="currentColor" preserveAspectRatio="none">
+                <svg className="absolute inset-x-0 bottom-0 w-full h-[600px] text-[#001659]/20" viewBox="0 0 1440 600" fill="currentColor" preserveAspectRatio="none">
                     <path d="M0,320L48,298.7C96,277,192,235,288,218.7C384,203,480,213,576,240C672,267,768,309,864,293.3C960,277,1056,203,1152,176C1248,149,1344,171,1392,181.3L1440,192L1440,600L1392,600C1344,600,1248,600,1152,600C1056,600,960,600,864,600C768,600,672,600,576,600C480,600,384,600,288,600C192,600,96,600,48,600L0,600Z" opacity="0.5"></path>
                     <path d="M0,240L48,229.3C96,219,192,197,288,213.3C384,230,480,283,576,272C672,261,768,187,864,176C960,165,1056,219,1152,224C1248,229,1344,187,1392,165.3L1440,144L1440,600L1392,600C1344,600,1248,600,1152,600C1056,600,960,600,864,600C768,600,672,600,576,600C480,600,384,600,288,600C192,600,96,600,48,600L0,600Z" opacity="0.3"></path>
                 </svg>

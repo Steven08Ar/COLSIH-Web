@@ -22,7 +22,7 @@ export default function News({ noticias }) {
     return (
         <section className="relative py-28 lg:py-36 bg-[#F8F9FB] overflow-hidden select-none">
             {/* Background Blob decoration */}
-            <div className="absolute top-1/2 left-0 -translate-y-1/2 w-[450px] h-[450px] rounded-full bg-[#003C8F]/5 blur-[120px] pointer-events-none"></div>
+            <div className="absolute top-1/2 left-0 -translate-y-1/2 w-[450px] h-[450px] rounded-full bg-[#001659]/5 blur-[120px] pointer-events-none"></div>
 
             <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] space-y-16">
                 

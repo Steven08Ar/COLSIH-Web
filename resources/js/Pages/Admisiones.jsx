@@ -34,9 +34,9 @@ const LINK_INSCRIPCIONES = "https://e.plataformaintegra.net/sihungria/index.php/
 const CORREO_ADMISIONES = "admisionescolsihfloridablanca@gmail.com";
 
 const cuposGrados = [
-    { nivel: 'Preescolar', grados: ['Jardín', 'Transición'], bgBadge: 'bg-[#003C8F]', textBadge: 'text-white' },
+    { nivel: 'Preescolar', grados: ['Jardín', 'Transición'], bgBadge: 'bg-[#001659]', textBadge: 'text-white' },
     { nivel: 'Primaria', grados: ['1°', '2°', '3°', '4°'], bgBadge: 'bg-[#800A15]', textBadge: 'text-white' },
-    { nivel: 'Bachillerato', grados: ['6°', '7°', '8°', '9°'], bgBadge: 'bg-[#0B1F3A]', textBadge: 'text-white' }
+    { nivel: 'Bachillerato', grados: ['6°', '7°', '8°', '9°'], bgBadge: 'bg-[#001659]', textBadge: 'text-white' }
 ];
 
 const beneficiosInstitucionales = [

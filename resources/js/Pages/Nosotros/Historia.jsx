@@ -68,7 +68,7 @@ function FootprintsConnector({ direction }) {
                         {/* Parallel trail offset to represent footprints pair */}
                         <path 
                             d="M 35 5 C 35 69, 195 69, 195 123" 
-                            stroke="#003C8F" 
+                            stroke="#001659" 
                             strokeWidth="3" 
                             strokeLinecap="round" 
                             strokeDasharray="4 16" 
@@ -89,7 +89,7 @@ function FootprintsConnector({ direction }) {
                         />
                         <path 
                             d="M 165 5 C 165 69, 5 69, 5 123" 
-                            stroke="#003C8F" 
+                            stroke="#001659" 
                             strokeWidth="3" 
                             strokeLinecap="round" 
                             strokeDasharray="4 16" 
@@ -121,14 +121,14 @@ export default function Historia() {
             <Head title="Historia | COLSIH" />
             <section className="relative pt-24 pb-16 bg-white text-slate-900 overflow-hidden border-b border-slate-100">
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(128,10,21,0.03),transparent_50%)]"></div>
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_70%,rgba(0,60,143,0.03),transparent_50%)]"></div>
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_70%,rgba(0,22,89,0.03),transparent_50%)]"></div>
                 
                 <div className="relative z-10 max-w-[850px] mx-auto px-6 flex flex-col items-center text-center space-y-6">
                     
                     <h1 className="text-3xl md:text-4xl lg:text-5xl font-black tracking-tight leading-tight text-slate-900 font-sans text-center">
                         Reseña Histórica
                     </h1>
-                    <div className="h-1 w-20 bg-gradient-to-r from-[#800A15] to-[#003C8F] rounded-full mx-auto"></div>
+                    <div className="h-1 w-20 bg-gradient-to-r from-[#800A15] to-[#001659] rounded-full mx-auto"></div>
                     
                     <div className="space-y-4 text-slate-600 text-sm md:text-base leading-relaxed font-medium text-center">
                         <p>
@@ -138,7 +138,7 @@ export default function Historia() {
                             Ante la inquietud de la comunidad, el Pbro. Ramiro Parra Mantilla, párroco de Santa Isabel de Hungría, solicitó al arzobispo de Bucaramanga el permiso para erigir una sede alterna del Gimnasio José Alejandro Peralta, quedando oficialmente fundado el centro el <strong className="text-slate-950 font-semibold">25 de noviembre de 1988</strong>.
                         </p>
                         <p>
-                            La institución inició labores académicas el <strong className="text-slate-950 font-semibold">6 de febrero de 1989</strong>. En 1991, el colegio adoptó oficialmente su nombre definitivo: <strong className="text-[#800A15] font-semibold">Colegio Santa Isabel de Hungría</strong>. Posteriormente, en 2016, la administración del colegio fue encomendada a la comunidad de las <strong className="text-[#003C8F] font-semibold">Hijas de María Auxiliadora (Salesianas)</strong>, fortaleciendo nuestra formación bajo el Sistema Preventivo de Don Bosco.
+                            La institución inició labores académicas el <strong className="text-slate-950 font-semibold">6 de febrero de 1989</strong>. En 1991, el colegio adoptó oficialmente su nombre definitivo: <strong className="text-[#800A15] font-semibold">Colegio Santa Isabel de Hungría</strong>. Posteriormente, en 2016, la administración del colegio fue encomendada a la comunidad de las <strong className="text-[#001659] font-semibold">Hijas de María Auxiliadora (Salesianas)</strong>, fortaleciendo nuestra formación bajo el Sistema Preventivo de Don Bosco.
                         </p>
                     </div>
                     

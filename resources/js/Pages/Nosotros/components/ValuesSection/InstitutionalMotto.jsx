@@ -36,11 +36,11 @@ export default function InstitutionalMotto() {
                 </motion.div>
 
                 {/* Right decorative line */}
-                <div className="hidden sm:block h-[1px] flex-1 bg-gradient-to-l from-transparent via-slate-300 dark:via-slate-800 to-[#003C8F]/40" />
+                <div className="hidden sm:block h-[1px] flex-1 bg-gradient-to-l from-transparent via-slate-300 dark:via-slate-800 to-[#001659]/40" />
             </div>
 
             {/* Sparkle decorative background details */}
-            <div className="absolute top-1/2 left-[12%] -translate-y-1/2 text-[#003C8F]/25 text-xl font-light font-mono select-none pointer-events-none">✦</div>
+            <div className="absolute top-1/2 left-[12%] -translate-y-1/2 text-[#001659]/25 text-xl font-light font-mono select-none pointer-events-none">✦</div>
             <div className="absolute top-1/2 right-[12%] -translate-y-1/2 text-[#800A15]/25 text-xl font-light font-mono select-none pointer-events-none">✦</div>
         </section>
     );

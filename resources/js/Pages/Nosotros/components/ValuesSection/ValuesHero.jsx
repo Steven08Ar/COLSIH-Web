@@ -29,7 +29,7 @@ export default function ValuesHero() {
                         className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight leading-[1.1] text-slate-900 dark:text-white"
                     >
                         Nuestros <br />
-                        <span className="bg-gradient-to-r from-[#003C8F] to-[#800A15] bg-clip-text text-transparent">
+                        <span className="bg-gradient-to-r from-[#001659] to-[#800A15] bg-clip-text text-transparent">
                             Valores Corporativos
                         </span>
                     </motion.h1>
@@ -93,7 +93,7 @@ export default function ValuesHero() {
                     >
                         
                         {/* Outer Shield Frame shape in background blur */}
-                        <div className="absolute inset-0 bg-gradient-to-b from-[#800A15]/15 to-[#003C8F]/15 dark:from-slate-900 dark:to-slate-950 rounded-[48px] blur-2xl pointer-events-none" />
+                        <div className="absolute inset-0 bg-gradient-to-b from-[#800A15]/15 to-[#001659]/15 dark:from-slate-900 dark:to-slate-950 rounded-[48px] blur-2xl pointer-events-none" />
 
                         {/* Single Graphic Frame - Shield / Diamond Mask */}
                         <div 

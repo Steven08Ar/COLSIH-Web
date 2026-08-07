@@ -55,7 +55,7 @@ export default function NoticiasIndex({ noticias, categoriaActual }) {
                 />
 
                 {/* Glowing background elements */}
-                <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[400px] h-[400px] bg-[#003C8F]/10 rounded-full blur-[120px] pointer-events-none z-0"></div>
+                <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[400px] h-[400px] bg-[#001659]/10 rounded-full blur-[120px] pointer-events-none z-0"></div>
                 <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-[400px] h-[400px] bg-[#800A15]/8 rounded-full blur-[120px] pointer-events-none z-0"></div>
 
                 <div className="max-w-[1240px] mx-auto px-6 relative z-10 text-center lg:text-left">
@@ -206,7 +206,7 @@ export default function NoticiasIndex({ noticias, categoriaActual }) {
                                             dangerouslySetInnerHTML={{ __html: link.label }}
                                             className={`px-4.5 py-2.5 border rounded-2xl text-xs font-bold transition-all duration-300 select-none cursor-pointer ${
                                                 isActive
-                                                    ? 'bg-[#003C8F] text-white border-[#003C8F]'
+                                                    ? 'bg-[#001659] text-white border-[#001659]'
                                                     : 'bg-white dark:bg-slate-900 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-800 hover:bg-slate-50 hover:text-[#08111F] dark:hover:bg-slate-850'
                                             }`}
                                             aria-current={isActive ? 'page' : undefined}
@@ -227,7 +227,7 @@ export default function NoticiasIndex({ noticias, categoriaActual }) {
                     <ScrollReveal distance="translate-y-12">
                         <div className="relative overflow-hidden rounded-[32px] bg-[#08111F] border border-white/10 text-left shadow-lg group p-8 md:p-12 mt-20 select-none max-w-[1240px] mx-auto">
                             <div className="absolute -top-12 -right-12 w-64 h-64 bg-[#800A15]/10 rounded-full blur-[60px] group-hover:bg-[#800A15]/20 transition-colors duration-500"></div>
-                            <div className="absolute -bottom-12 -left-12 w-64 h-64 bg-[#003C8F]/10 rounded-full blur-[60px]"></div>
+                            <div className="absolute -bottom-12 -left-12 w-64 h-64 bg-[#001659]/10 rounded-full blur-[60px]"></div>
 
                             <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center">
                                 <div className="col-span-full lg:col-span-8 space-y-4">

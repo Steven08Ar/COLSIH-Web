@@ -423,7 +423,7 @@ export default function Hero({ setVideoOpen }) {
                                 href="https://e.plataformaintegra.net/sihungria/index.php/cupo"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-full bg-[#003C8F] hover:bg-[#002b66] text-white text-sm sm:text-base font-bold transition-all duration-200 shadow-md border border-white/20 active:scale-95 cursor-pointer"
+                                className="inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-full bg-[#001659] hover:bg-[#002B80] text-white text-sm sm:text-base font-bold transition-all duration-200 shadow-md border border-white/20 active:scale-95 cursor-pointer"
                             >
                                 <svg className="w-4 h-4 text-amber-300 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />

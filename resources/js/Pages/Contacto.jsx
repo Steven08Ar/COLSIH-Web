@@ -33,7 +33,7 @@ export default function Contacto() {
             <section className="relative pt-36 pb-32 md:pt-44 md:pb-40 bg-[#08111F] overflow-hidden select-none">
                 
                 {/* Glowing light blobs */}
-                <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[400px] h-[400px] bg-[#003C8F]/10 rounded-full blur-[120px] pointer-events-none z-0"></div>
+                <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[400px] h-[400px] bg-[#001659]/10 rounded-full blur-[120px] pointer-events-none z-0"></div>
                 <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-[400px] h-[400px] bg-[#800A15]/8 rounded-full blur-[120px] pointer-events-none z-0"></div>
 
                 <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] relative z-10 text-center lg:text-left">
@@ -74,7 +74,7 @@ export default function Contacto() {
                             
                             <div className="space-y-4 flex flex-col items-center lg:items-start">
                                 <ScrollReveal distance="translate-y-6">
-                                    <span className="text-[#003C8F] text-xs font-bold tracking-[3px] uppercase block font-sans">
+                                    <span className="text-[#001659] text-xs font-bold tracking-[3px] uppercase block font-sans">
                                         UBICACIÓN
                                     </span>
                                 </ScrollReveal>
@@ -89,7 +89,7 @@ export default function Contacto() {
                             <div className="space-y-4 pt-2">
                                 <ScrollReveal distance="translate-y-6" delay={250}>
                                     <div className="p-6 border border-slate-100 bg-slate-50/50 rounded-2xl space-y-2">
-                                        <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#003C8F] font-sans">Dirección</span>
+                                        <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#001659] font-sans">Dirección</span>
                                         <p className="text-sm font-semibold text-slate-600 font-sans leading-relaxed">
                                             Calle 13 # 13-30 Barrio Villabel, Floridablanca, Santander
                                         </p>
@@ -107,7 +107,7 @@ export default function Contacto() {
 
                                 <ScrollReveal distance="translate-y-6" delay={450}>
                                     <div className="p-6 border border-slate-100 bg-slate-50/50 rounded-2xl space-y-2">
-                                        <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#003C8F] font-sans">Horario de atención</span>
+                                        <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#001659] font-sans">Horario de atención</span>
                                         <p className="text-sm font-semibold text-slate-600 font-sans leading-relaxed">
                                             Lunes a viernes, 6:30 A.M. - 2:00 P.M. (Jornada Única)
                                         </p>
@@ -160,7 +160,7 @@ export default function Contacto() {
                                                 type="text"
                                                 value={data.nombre}
                                                 onChange={(e) => setData('nombre', e.target.value)}
-                                                className="w-full px-4 py-3.5 bg-white border border-slate-200 rounded-xl text-sm font-semibold text-[#08111F] focus:outline-none focus:ring-2 focus:ring-[#003C8F] focus:border-transparent transition-all duration-300 font-sans"
+                                                className="w-full px-4 py-3.5 bg-white border border-slate-200 rounded-xl text-sm font-semibold text-[#08111F] focus:outline-none focus:ring-2 focus:ring-[#001659] focus:border-transparent transition-all duration-300 font-sans"
                                                 required
                                             />
                                             {errors.nombre && <span className="block text-xs font-bold text-red-500 font-sans" role="alert">{errors.nombre}</span>}
@@ -173,7 +173,7 @@ export default function Contacto() {
                                                 type="email"
                                                 value={data.email}
                                                 onChange={(e) => setData('email', e.target.value)}
-                                                className="w-full px-4 py-3.5 bg-white border border-slate-200 rounded-xl text-sm font-semibold text-[#08111F] focus:outline-none focus:ring-2 focus:ring-[#003C8F] focus:border-transparent transition-all duration-300 font-sans"
+                                                className="w-full px-4 py-3.5 bg-white border border-slate-200 rounded-xl text-sm font-semibold text-[#08111F] focus:outline-none focus:ring-2 focus:ring-[#001659] focus:border-transparent transition-all duration-300 font-sans"
                                                 required
                                             />
                                             {errors.email && <span className="block text-xs font-bold text-red-500 font-sans" role="alert">{errors.email}</span>}
@@ -188,7 +188,7 @@ export default function Contacto() {
                                                 type="tel"
                                                 value={data.telefono}
                                                 onChange={(e) => setData('telefono', e.target.value)}
-                                                className="w-full px-4 py-3.5 bg-white border border-slate-200 rounded-xl text-sm font-semibold text-[#08111F] focus:outline-none focus:ring-2 focus:ring-[#003C8F] focus:border-transparent transition-all duration-300 font-sans"
+                                                className="w-full px-4 py-3.5 bg-white border border-slate-200 rounded-xl text-sm font-semibold text-[#08111F] focus:outline-none focus:ring-2 focus:ring-[#001659] focus:border-transparent transition-all duration-300 font-sans"
                                             />
                                             {errors.telefono && <span className="block text-xs font-bold text-red-500 font-sans" role="alert">{errors.telefono}</span>}
                                         </div>
@@ -200,7 +200,7 @@ export default function Contacto() {
                                                 type="text"
                                                 value={data.asunto}
                                                 onChange={(e) => setData('asunto', e.target.value)}
-                                                className="w-full px-4 py-3.5 bg-white border border-slate-200 rounded-xl text-sm font-semibold text-[#08111F] focus:outline-none focus:ring-2 focus:ring-[#003C8F] focus:border-transparent transition-all duration-300 font-sans"
+                                                className="w-full px-4 py-3.5 bg-white border border-slate-200 rounded-xl text-sm font-semibold text-[#08111F] focus:outline-none focus:ring-2 focus:ring-[#001659] focus:border-transparent transition-all duration-300 font-sans"
                                                 required
                                             />
                                             {errors.asunto && <span className="block text-xs font-bold text-red-500 font-sans" role="alert">{errors.asunto}</span>}
@@ -214,7 +214,7 @@ export default function Contacto() {
                                             rows={5}
                                             value={data.mensaje}
                                             onChange={(e) => setData('mensaje', e.target.value)}
-                                            className="w-full px-4 py-3.5 bg-white border border-slate-200 rounded-xl text-sm font-semibold text-[#08111F] focus:outline-none focus:ring-2 focus:ring-[#003C8F] focus:border-transparent transition-all duration-300 font-sans"
+                                            className="w-full px-4 py-3.5 bg-white border border-slate-200 rounded-xl text-sm font-semibold text-[#08111F] focus:outline-none focus:ring-2 focus:ring-[#001659] focus:border-transparent transition-all duration-300 font-sans"
                                             required
                                         />
                                         {errors.mensaje && <span className="block text-xs font-bold text-red-500 font-sans" role="alert">{errors.mensaje}</span>}
@@ -223,7 +223,7 @@ export default function Contacto() {
                                     <button 
                                         type="submit" 
                                         disabled={processing}
-                                        className="w-full py-4 bg-[#003C8F] hover:bg-[#08111F] disabled:bg-slate-300 text-white font-extrabold text-xs tracking-wider uppercase rounded-full shadow-md hover:shadow-lg transition-all duration-300 font-sans cursor-pointer flex justify-center items-center gap-2"
+                                        className="w-full py-4 bg-[#001659] hover:bg-[#08111F] disabled:bg-slate-300 text-white font-extrabold text-xs tracking-wider uppercase rounded-full shadow-md hover:shadow-lg transition-all duration-300 font-sans cursor-pointer flex justify-center items-center gap-2"
                                     >
                                         {processing ? (
                                             <>
@@ -264,8 +264,8 @@ export default function Contacto() {
                     <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 items-stretch max-w-[1240px] mx-auto">
                         {administracion.map((item, idx) => {
                             const isVino = idx % 2 === 0;
-                            const borderClass = isVino ? 'border-l-4 border-l-[#800A15]' : 'border-l-4 border-l-[#003C8F]';
-                            const badgeBg = isVino ? 'bg-[#800A15]/10 text-[#800A15]' : 'bg-[#003C8F]/10 text-[#003C8F]';
+                            const borderClass = isVino ? 'border-l-4 border-l-[#800A15]' : 'border-l-4 border-l-[#001659]';
+                            const badgeBg = isVino ? 'bg-[#800A15]/10 text-[#800A15]' : 'bg-[#001659]/10 text-[#001659]';
 
                             return (
                                 <ScrollReveal key={idx} distance="translate-y-6" delay={idx * 100}>

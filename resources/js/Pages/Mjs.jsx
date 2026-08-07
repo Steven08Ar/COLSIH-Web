@@ -24,8 +24,8 @@ export default function Mjs() {
             name: "Líderes Salesianos",
             tagline: "Protagonismo y animación",
             description: "Formación integral en liderazgo cristiano y salesiano. Nuestros jóvenes se capacitan para animar campamentos, dirigir dinámicas grupales y ser motores de cambio alegre en la institución.",
-            color: "border-t-[#003C8F]",
-            glowColor: "hover:border-[#003C8F]/20 hover:shadow-[0_20px_50px_rgba(0,60,143,0.03)]"
+            color: "border-t-[#001659]",
+            glowColor: "hover:border-[#001659]/20 hover:shadow-[0_20px_50px_rgba(0,22,89,0.03)]"
         },
         {
             num: "02",
@@ -40,8 +40,8 @@ export default function Mjs() {
             name: "Infancia Misionera",
             tagline: "Semillero de amor al prójimo",
             description: "Grupo asociativo para los más pequeños del colegio. Aprenden a compartir la fe, a ser solidarios con los más necesitados y a vivir el espíritu misionero salesiano.",
-            color: "border-t-[#003C8F]",
-            glowColor: "hover:border-[#003C8F]/20 hover:shadow-[0_20px_50px_rgba(0,60,143,0.03)]"
+            color: "border-t-[#001659]",
+            glowColor: "hover:border-[#001659]/20 hover:shadow-[0_20px_50px_rgba(0,22,89,0.03)]"
         },
         {
             num: "04",

@@ -1,13 +1,13 @@
 import { Head, Link } from '@inertiajs/react';
 import AppLayout from '@/Layouts/AppLayout';
 import ScrollReveal from '../HomeSections/ScrollReveal';
-import { 
-    ArrowUpRight, 
-    Plus, 
-    Minus, 
-    Sparkles, 
-    BookOpen, 
-    Palette, 
+import {
+    ArrowUpRight,
+    Plus,
+    Minus,
+    Sparkles,
+    BookOpen,
+    Palette,
     Gamepad2,
     User
 } from 'lucide-react';
@@ -118,7 +118,7 @@ function TeacherCard({ docente, idx }) {
         <ScrollReveal distance="translate-y-8" delay={idx * 100}>
             <div className="space-y-5 group flex flex-col items-center">
                 {/* Contenedor Orgánico Asimétrico Grande idéntico a Figma */}
-                <div 
+                <div
                     className={`relative w-56 h-56 sm:w-64 sm:h-64 lg:w-68 lg:h-68 ${docente.colorCircle} shadow-xl group-hover:scale-105 transition-transform duration-500 overflow-hidden flex items-center justify-center`}
                     style={blobStyle}
                 >
@@ -127,9 +127,9 @@ function TeacherCard({ docente, idx }) {
                             <User className="w-24 h-24 stroke-[1.5]" />
                         </div>
                     ) : (
-                        <img 
-                            src={docente.foto} 
-                            alt={docente.nombre} 
+                        <img
+                            src={docente.foto}
+                            alt={docente.nombre}
                             className="w-full h-full object-cover"
                             onError={() => setHasError(true)}
                         />
@@ -160,12 +160,12 @@ export default function Preescolar({ noticias = [] }) {
 
                 {/* 1. HERO SECTION ("The best place to learn and play for kids") */}
                 <section className="relative pt-32 pb-24 md:pt-44 md:pb-36 bg-white overflow-hidden">
-                    
+
                     {/* Elemento Flotante Top-Left: Foto de Niño en Círculo Lavanda */}
                     <div className="hidden lg:block absolute top-20 left-16 z-10 w-28 h-28 rounded-full bg-[#DEC8FE] p-2 shadow-lg hover:scale-105 transition-transform">
-                        <img 
-                            src="https://media.colsih.edu.co/ofertas_academicas/preescolar.JPG" 
-                            alt="Niño Preescolar" 
+                        <img
+                            src="https://media.colsih.edu.co/ofertas_academicas/preescolar.JPG"
+                            alt="Niño Preescolar"
                             className="w-full h-full object-cover rounded-full"
                         />
                     </div>
@@ -209,13 +209,13 @@ export default function Preescolar({ noticias = [] }) {
                     <div className="hidden lg:block absolute bottom-12 right-16 z-10 w-44 h-56 pointer-events-none">
                         <div className="relative w-full h-full flex items-center justify-center">
                             {/* Formación orgánica de fondo lavanda vertical */}
-                            <div 
+                            <div
                                 className="absolute inset-0 bg-[#DEC8FE] shadow-sm"
                                 style={{ borderRadius: '35% 65% 60% 40% / 50% 30% 70% 50%' }}
                             />
-                            <img 
-                                src="https://media.colsih.edu.co/espacios_academicos/jardin.JPG" 
-                                alt="Niño feliz preescolar" 
+                            <img
+                                src="https://media.colsih.edu.co/espacios_academicos/jardin.JPG"
+                                alt="Niño feliz preescolar"
                                 className="relative z-10 w-36 h-48 object-cover rounded-[28px] shadow-sm transform -rotate-3"
                             />
                         </div>
@@ -223,14 +223,14 @@ export default function Preescolar({ noticias = [] }) {
 
                     <div className="max-w-[1440px] mx-auto px-6 md:px-12 relative z-20 text-center flex flex-col items-center justify-center">
                         <div className="max-w-4xl mx-auto space-y-8 text-center flex flex-col items-center">
-                            
+
                             {/* Titular Gigante en Quicksand Semibold idéntico a Figma */}
                             <ScrollReveal distance="translate-y-6">
                                 <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[72px] font-['Quicksand'] font-semibold text-[#121212] leading-[1.3] tracking-tight text-center">
                                     <span className="block mb-2 font-['Quicksand'] font-semibold text-[#121212]">
                                         El mejor lugar para
                                     </span>
-                                    
+
                                     <span className="inline-flex flex-wrap items-center justify-center gap-x-3 gap-y-2 my-2 py-1">
                                         <span className="relative inline-block font-serif italic text-[#704FE6] text-5xl sm:text-6xl md:text-7xl lg:text-[80px] font-normal px-2">
                                             aprender
@@ -291,7 +291,7 @@ export default function Preescolar({ noticias = [] }) {
                 {/* 2. OUR INTERACTIVE FEATURES ("Our interactive features") */}
                 <section className="py-20 md:py-32 bg-white">
                     <div className="max-w-[1440px] mx-auto px-6 md:px-12 space-y-16">
-                        
+
                         {/* Header con Título + 3 Tags Rotados sin fondo gris */}
                         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                             <div className="space-y-2 text-left">
@@ -311,7 +311,7 @@ export default function Preescolar({ noticias = [] }) {
 
                         {/* Grid de 3 Tarjetas Grandes e Iguales (`rounded-[40px]`) */}
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
-                            
+
                             {/* Card 1: Lavender Card */}
                             <ScrollReveal distance="translate-y-8" delay={100}>
                                 <div className="bg-[#DEC8FE] rounded-[40px] p-8 md:p-10 relative overflow-hidden space-y-8 h-full flex flex-col justify-between hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 border-2 border-[#DEC8FE]">
@@ -399,7 +399,7 @@ export default function Preescolar({ noticias = [] }) {
                 <section className="py-20 md:py-32 bg-white">
                     <div className="max-w-[1440px] mx-auto px-6 md:px-12">
                         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-                            
+
                             {/* Columna Izquierda: Título con Ovalo Dibujado y Botón "Learn More" */}
                             <div className="lg:col-span-6 space-y-8 text-left">
                                 <ScrollReveal distance="translate-y-6">
@@ -440,7 +440,7 @@ export default function Preescolar({ noticias = [] }) {
 
                             {/* Columna Derecha: Composición de Nodos (Imágenes desactivadas temporalmente por solicitud) */}
                             <div className="lg:col-span-6 relative h-[560px] w-full max-w-[580px] mx-auto">
-                                
+
                                 {/* 1. Píldora Superior (Soft Lavender `#DEC8FE`) + Sol Starburst */}
                                 <ScrollReveal distance="translate-y-6" delay={100}>
                                     <div className="absolute right-0 top-12 w-[72%] sm:w-[340px] h-32 rounded-full bg-[#DEC8FE] shadow-sm flex items-center justify-between px-6 z-10">
@@ -536,7 +536,7 @@ export default function Preescolar({ noticias = [] }) {
                 {noticias && noticias.length > 0 && (
                     <section className="py-20 md:py-32 bg-white">
                         <div className="max-w-[1440px] mx-auto px-6 md:px-12 space-y-16">
-                            
+
                             {/* Header + Botón "Ver Todo" a la derecha */}
                             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
                                 <div className="space-y-2 text-left">
@@ -560,15 +560,15 @@ export default function Preescolar({ noticias = [] }) {
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
                                 {noticias.map((blog, idx) => (
                                     <ScrollReveal key={blog.id || idx} distance="translate-y-8" delay={idx * 100}>
-                                        <Link 
+                                        <Link
                                             href={`/noticias/${blog.slug}`}
                                             className="bg-[#F7F7F7] rounded-[32px] overflow-hidden p-5 space-y-6 hover:shadow-xl hover:bg-white transition-all duration-300 border border-slate-200/80 group h-full flex flex-col justify-between block"
                                         >
                                             <div className="space-y-4">
                                                 <div className="h-52 rounded-2xl overflow-hidden">
-                                                    <img 
-                                                        src={blog.imagen ? mediaUrl(blog.imagen) : 'https://media.colsih.edu.co/espacios_academicos/jardin.JPG'} 
-                                                        alt={blog.titulo} 
+                                                    <img
+                                                        src={blog.imagen ? mediaUrl(blog.imagen) : 'https://media.colsih.edu.co/espacios_academicos/jardin.JPG'}
+                                                        alt={blog.titulo}
                                                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                                                     />
                                                 </div>
@@ -600,7 +600,7 @@ export default function Preescolar({ noticias = [] }) {
                 <section className="py-20 md:py-32 bg-white border-t border-slate-100">
                     <div className="max-w-[1440px] mx-auto px-6 md:px-12">
                         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-                            
+
                             {/* Columna Izquierda: Título + Adornos Gráficos */}
                             <div className="lg:col-span-5 space-y-6 text-left relative">
                                 <ScrollReveal distance="translate-y-6">
@@ -623,13 +623,12 @@ export default function Preescolar({ noticias = [] }) {
                                     const isOpen = faqOpen === idx;
                                     return (
                                         <ScrollReveal key={idx} distance="translate-y-4" delay={idx * 100}>
-                                            <div 
+                                            <div
                                                 onClick={() => toggleFaq(idx)}
-                                                className={`rounded-[24px] p-6 md:p-8 transition-all cursor-pointer border-2 ${
-                                                    isOpen
-                                                        ? 'bg-[#F7F7FB] border-[#704FE6] shadow-md'
-                                                        : 'bg-[#F9F9F9] border-slate-200 hover:border-slate-300'
-                                                }`}
+                                                className={`rounded-[24px] p-6 md:p-8 transition-all cursor-pointer border-2 ${isOpen
+                                                    ? 'bg-[#F7F7FB] border-[#704FE6] shadow-md'
+                                                    : 'bg-[#F9F9F9] border-slate-200 hover:border-slate-300'
+                                                    }`}
                                             >
                                                 <div className="flex items-center justify-between gap-4">
                                                     <h3 className="text-xl font-bold text-[#121212] font-sans">

@@ -90,7 +90,7 @@ export default function AboutHero() {
                     >
                         Una historia de fe,<br />
                         educación y<br />
-                        <span className="relative inline-block text-[#003C8F]" style={{ fontFamily: "'Caveat', cursive" }}>
+                        <span className="relative inline-block text-[#001659]" style={{ fontFamily: "'Caveat', cursive" }}>
                             transformación
                             <svg className="absolute -bottom-3.5 left-0 w-full h-2.5 text-[#800A15] opacity-80" viewBox="0 0 100 10" preserveAspectRatio="none">
                                 <path d="M0,5 Q50,10 100,5" stroke="currentColor" strokeWidth="4" fill="none" strokeLinecap="round" />
@@ -152,7 +152,7 @@ export default function AboutHero() {
                 {/* Parallax Blobs Behind Photograph */}
                 <div className="absolute inset-0 z-0 pointer-events-none">
                     <AnimatedBlob
-                        className="w-80 h-80 bg-[#003C8F]/15 -top-12 -left-12 blur-2xl"
+                        className="w-80 h-80 bg-[#001659]/15 -top-12 -left-12 blur-2xl"
                         mouseX={springX}
                         mouseY={springY}
                         speed={1.3}

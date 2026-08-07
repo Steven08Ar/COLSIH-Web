@@ -7,14 +7,14 @@ export default function SectionBackground() {
             <div 
                 className="absolute inset-0 opacity-[0.05] dark:opacity-[0.02]" 
                 style={{
-                    backgroundImage: 'radial-gradient(#003C8F 1.2px, transparent 1.2px)',
+                    backgroundImage: 'radial-gradient(#001659 1.2px, transparent 1.2px)',
                     backgroundSize: '24px 24px'
                 }} 
             />
 
             {/* Glowing Blurry Gradient Orbs */}
             <div 
-                className="absolute top-10 left-10 w-96 h-96 rounded-full bg-[#003C8F] opacity-[0.04] blur-[100px]"
+                className="absolute top-10 left-10 w-96 h-96 rounded-full bg-[#001659] opacity-[0.04] blur-[100px]"
                 style={{
                     animation: 'float-slow 22s ease-in-out infinite alternate'
                 }}
@@ -34,7 +34,7 @@ export default function SectionBackground() {
 
             {/* Subtle Abstract Lines */}
             <svg className="absolute top-20 left-0 w-full h-[600px] opacity-[0.03] dark:opacity-[0.01]" viewBox="0 0 1440 600" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M-100 100 C 300 400, 600 -100, 1000 300 C 1200 450, 1300 200, 1600 400" stroke="#003C8F" strokeWidth="2.5" strokeLinecap="round" />
+                <path d="M-100 100 C 300 400, 600 -100, 1000 300 C 1200 450, 1300 200, 1600 400" stroke="#001659" strokeWidth="2.5" strokeLinecap="round" />
                 <path d="M-50 200 C 350 450, 550 -50, 950 350 C 1150 480, 1250 250, 1550 450" stroke="#800A15" strokeWidth="1.5" strokeLinecap="round" />
             </svg>
 

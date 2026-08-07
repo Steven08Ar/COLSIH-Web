@@ -112,7 +112,7 @@ export default function ValueCard({ value, index, onOpenGallery }) {
                     )}
 
                     {/* Tiny styled separator line */}
-                    <div className={`w-14 h-[3px] rounded-full ${isEven ? 'bg-[#800A15]' : 'bg-[#003C8F]'}`} />
+                    <div className={`w-14 h-[3px] rounded-full ${isEven ? 'bg-[#800A15]' : 'bg-[#001659]'}`} />
 
                     <p className="text-sm md:text-base font-medium text-slate-600 dark:text-slate-300 leading-relaxed max-w-md">
                         {value.descripcion}
@@ -147,7 +147,7 @@ export default function ValueCard({ value, index, onOpenGallery }) {
                         className={`w-full py-2.5 rounded-xl border font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all duration-300 select-none cursor-pointer ${
                             isEven 
                                 ? 'border-[#800A15]/15 text-[#800A15] hover:bg-[#800A15] hover:text-white dark:border-rose-900/30 dark:text-rose-400 dark:hover:bg-rose-950/20' 
-                                : 'border-[#003C8F]/15 text-[#003C8F] hover:bg-[#003C8F] hover:text-white dark:border-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-950/20'
+                                : 'border-[#001659]/15 text-[#001659] hover:bg-[#001659] hover:text-white dark:border-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-950/20'
                         }`}
                     >
                         <Images className="w-4 h-4 shrink-0" />

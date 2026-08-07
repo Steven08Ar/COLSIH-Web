@@ -31,7 +31,7 @@ function BloqueRenderer({ bloque, onOpenVideo, onOpenImage }) {
             
             let colorClass = 'text-slate-600';
             if (formato.color === 'rojo') colorClass = 'text-[#800A15]';
-            if (formato.color === 'azul') colorClass = 'text-[#003C8F]';
+            if (formato.color === 'azul') colorClass = 'text-[#001659]';
             
             return (
                 <p className={`${sizeClass} ${colorClass} ${styles.join(' ')} leading-relaxed text-left whitespace-pre-line`}>
@@ -88,7 +88,7 @@ function BloqueRenderer({ bloque, onOpenVideo, onOpenImage }) {
                                     <svg className="w-5 h-5 fill-white ml-0.5" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
                                 </div>
                             </div>
-                            <div className="absolute inset-0 bg-gradient-to-br from-[#003C8F]/60 to-[#800A15]/60"></div>
+                            <div className="absolute inset-0 bg-gradient-to-br from-[#001659]/60 to-[#800A15]/60"></div>
                         </div>
                     ) : (
                         <video

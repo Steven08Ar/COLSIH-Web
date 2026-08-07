@@ -28,6 +28,69 @@ body {
     --font-sans: 'Poppins', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
     --font-serif: 'Caveat', cursive, Georgia, serif;
+
+    /* PALETA INSTITUCIONAL COLSIH (OFICIAL) */
+    
+    /* Azul Institucional (#001659) */
+    --color-colsih-blue-darkest: #001659;
+    --color-colsih-blue-950: #001659;
+    --color-colsih-blue-900: #002B80;
+    --color-colsih-blue-800: #0047B3;
+    --color-colsih-blue-700: #2563EB;
+    --color-colsih-blue-600: #3B82F6;
+    --color-colsih-blue-500: #60A5FA;
+    --color-colsih-blue-400: #93C5FD;
+    --color-colsih-blue-300: #BFDBFE;
+    --color-colsih-blue-200: #D6E4FF;
+    --color-colsih-blue-100: #EDF2FF;
+    --color-colsih-blue: #001659;
+
+    /* Rojo Institucional (#800A15) */
+    --color-colsih-red-darkest: #800A15;
+    --color-colsih-red-950: #800A15;
+    --color-colsih-red-900: #A70F1D;
+    --color-colsih-red-800: #C71829;
+    --color-colsih-red-700: #E53B45;
+    --color-colsih-red-600: #EF5B63;
+    --color-colsih-red-500: #F47F86;
+    --color-colsih-red-400: #F8A5AB;
+    --color-colsih-red-300: #FBC5CA;
+    --color-colsih-red-200: #FAD1D4;
+    --color-colsih-red-100: #FDEBED;
+    --color-colsih-red: #800A15;
+
+    /* Amarillo Institucional (#FFC107) */
+    --color-colsih-yellow-500: #FFC107;
+    --color-colsih-yellow-400: #FFD43B;
+    --color-colsih-yellow-300: #FFDD64;
+    --color-colsih-yellow-200: #FFE88F;
+    --color-colsih-yellow-100: #FFEEB8;
+    --color-colsih-yellow-50: #FFF3D1;
+    --color-colsih-yellow-25: #FFF7E5;
+    --color-colsih-yellow-10: #FFFBEF;
+    --color-colsih-yellow-5: #FFFDF7;
+    --color-colsih-yellow-2: #FFFEFC;
+    --color-colsih-yellow: #FFC107;
+
+    /* Celeste Institucional (#4DB6FF) */
+    --color-colsih-sky-500: #4DB6FF;
+    --color-colsih-sky-400: #7ECDFB;
+    --color-colsih-sky-300: #90D5FF;
+    --color-colsih-sky-200: #B3E1FF;
+    --color-colsih-sky-100: #C7EAFF;
+    --color-colsih-sky-50: #DBF1FF;
+    --color-colsih-sky-25: #E6F6FF;
+    --color-colsih-sky-10: #F0F9FF;
+    --color-colsih-sky-5: #F7FCFF;
+    --color-colsih-sky-2: #FBFEFF;
+    --color-colsih-sky: #4DB6FF;
+}
+
+:root {
+    --colsih-blue-main: #001659;
+    --colsih-red-main: #800A15;
+    --colsih-yellow-main: #FFC107;
+    --colsih-sky-main: #4DB6FF;
 }
 
 /* Custom Minimalist Scrollbar */

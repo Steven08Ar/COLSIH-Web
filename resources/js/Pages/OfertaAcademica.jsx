@@ -33,7 +33,7 @@ const niveles = [
         destacados: ['Pre-ICFES especializado', 'Laboratorios STEM', 'Ciudadanía crítica'],
         href: '/oferta-academica/bachillerato',
         badge: 'Grados 6° a 11°',
-        btnBg: 'bg-[#003C8F] hover:bg-blue-800 text-white',
+        btnBg: 'bg-[#001659] hover:bg-blue-800 text-white',
         borderAccent: 'hover:border-blue-300'
     },
     {
@@ -85,7 +85,7 @@ export default function OfertaAcademica() {
             <section className="relative pt-36 pb-32 md:pt-44 md:pb-40 bg-[#08111F] overflow-hidden select-none">
                 
                 {/* Glowing light blobs */}
-                <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[400px] h-[400px] bg-[#003C8F]/10 rounded-full blur-[120px] pointer-events-none z-0"></div>
+                <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[400px] h-[400px] bg-[#001659]/10 rounded-full blur-[120px] pointer-events-none z-0"></div>
                 <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-[400px] h-[400px] bg-[#800A15]/8 rounded-full blur-[120px] pointer-events-none z-0"></div>
 
                 <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] relative z-10 text-center lg:text-left">
@@ -122,7 +122,7 @@ export default function OfertaAcademica() {
                     
                     <div className="max-w-2xl mx-auto lg:mx-0 text-center lg:text-left space-y-4 flex flex-col items-center lg:items-start">
                         <ScrollReveal distance="translate-y-6">
-                            <span className="text-[#003C8F] text-xs font-bold tracking-[3px] uppercase block font-sans">
+                            <span className="text-[#001659] text-xs font-bold tracking-[3px] uppercase block font-sans">
                                 ETAPAS FORMATIVAS
                             </span>
                         </ScrollReveal>
@@ -139,7 +139,7 @@ export default function OfertaAcademica() {
                                 <div className="group relative h-full border border-slate-100 p-8 md:p-10 rounded-3xl bg-slate-50/50 hover:bg-white hover:border-slate-200/80 hover:shadow-[0_20px_50px_rgba(8,17,31,0.04)] transition-all duration-300 flex flex-col justify-between text-left">
                                     <div className="space-y-6">
                                         <div className="flex justify-between items-start gap-4">
-                                            <h3 className="text-2xl font-black text-[#08111F] group-hover:text-[#003C8F] transition-colors duration-300 font-sans">
+                                            <h3 className="text-2xl font-black text-[#08111F] group-hover:text-[#001659] transition-colors duration-300 font-sans">
                                                 {nivel.nombre}
                                             </h3>
                                             <span className="px-3 py-1.5 bg-white border border-slate-200 text-slate-500 rounded-full text-xs font-bold shrink-0 font-sans">
@@ -165,7 +165,7 @@ export default function OfertaAcademica() {
                                     <div className="border-t border-slate-100 pt-6 mt-6 space-y-4">
                                         <div className="flex flex-wrap gap-3">
                                             {nivel.destacados.map((item, dIdx) => (
-                                                <span key={dIdx} className="flex items-center gap-1.5 text-xs font-extrabold text-[#003C8F] font-sans">
+                                                <span key={dIdx} className="flex items-center gap-1.5 text-xs font-extrabold text-[#001659] font-sans">
                                                     <span className="w-1.5 h-1.5 rounded-full bg-[#800A15]" />
                                                     {item}
                                                 </span>
@@ -217,7 +217,7 @@ export default function OfertaAcademica() {
                         {ofrecemos.map((item, idx) => (
                             <ScrollReveal key={idx} distance="translate-y-6" delay={idx * 80} className="h-full">
                                 <div className="p-7 border border-slate-200/60 rounded-2xl bg-white hover:border-slate-300 hover:shadow-[0_12px_40px_rgba(8,17,31,0.05)] transition-all duration-300 text-left space-y-3 h-full flex flex-col">
-                                    <div className="w-8 h-8 rounded-lg bg-[#003C8F]/8 flex items-center justify-center">
+                                    <div className="w-8 h-8 rounded-lg bg-[#001659]/8 flex items-center justify-center">
                                         <span className="w-2 h-2 rounded-full bg-[#800A15]" />
                                     </div>
                                     <h3 className="text-[15px] font-extrabold text-[#08111F] font-sans leading-snug">
@@ -264,7 +264,7 @@ export default function OfertaAcademica() {
                             <ScrollReveal key={idx} distance="translate-x-6" delay={idx * 120} className="h-full">
                                 <div className="p-8 bg-slate-50 border border-slate-100 rounded-2xl text-left space-y-4 flex flex-col justify-between h-full">
                                     <div className="space-y-1">
-                                        <span className="text-[#003C8F] text-xs font-bold uppercase tracking-wider font-sans">{h.nivel}</span>
+                                        <span className="text-[#001659] text-xs font-bold uppercase tracking-wider font-sans">{h.nivel}</span>
                                         <h3 className="text-lg font-extrabold text-[#08111F] font-sans">{h.grados}</h3>
                                     </div>
                                     <div className="p-4 bg-white border border-slate-100 rounded-xl">
@@ -284,7 +284,7 @@ export default function OfertaAcademica() {
                     
                     <div className="max-w-2xl mx-auto lg:mx-0 text-center lg:text-left space-y-4 flex flex-col items-center lg:items-start">
                         <ScrollReveal distance="translate-y-6">
-                            <span className="text-[#003C8F] text-xs font-bold tracking-[3px] uppercase block font-sans">
+                            <span className="text-[#001659] text-xs font-bold tracking-[3px] uppercase block font-sans">
                                 PLAN ACADÉMICO
                             </span>
                         </ScrollReveal>
@@ -299,7 +299,7 @@ export default function OfertaAcademica() {
                         {areas.map((area, idx) => (
                             <ScrollReveal key={idx} distance="translate-y-6" delay={idx * 100} className="h-full">
                                 <div className="p-8 border border-slate-100 rounded-2xl hover:border-slate-200/80 transition-all duration-300 text-left space-y-3 bg-white">
-                                    <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-[#003C8F] font-black text-sm font-sans">
+                                    <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-[#001659] font-black text-sm font-sans">
                                         {(idx + 1).toString().padStart(2, '0')}
                                     </div>
                                     <h3 className="text-[17px] font-extrabold text-[#08111F] font-sans">
@@ -338,7 +338,7 @@ export default function OfertaAcademica() {
                             </p>
                         </ScrollReveal>
                         <ScrollReveal distance="translate-y-6" delay={400} className="pt-2">
-                            <Link href="/mjs" className="inline-flex items-center gap-2 px-6 py-3 bg-[#08111F] hover:bg-[#003C8F] text-white font-extrabold text-xs tracking-wider uppercase rounded-full shadow-md hover:shadow-lg transition-all duration-300 font-sans cursor-pointer">
+                            <Link href="/mjs" className="inline-flex items-center gap-2 px-6 py-3 bg-[#08111F] hover:bg-[#001659] text-white font-extrabold text-xs tracking-wider uppercase rounded-full shadow-md hover:shadow-lg transition-all duration-300 font-sans cursor-pointer">
                                 Conocer el MJS
                                 <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
@@ -352,7 +352,7 @@ export default function OfertaAcademica() {
                             <ScrollReveal key={idx} distance="translate-x-6" delay={idx * 150} className="h-full">
                                 <div className="p-6 bg-white border border-slate-200/50 rounded-2xl text-left space-y-2 hover:border-slate-300 transition-all duration-300">
                                     <h3 className="font-extrabold text-[15px] text-[#08111F] font-sans flex items-center gap-2">
-                                        <span className="w-2 h-2 rounded-full bg-[#003C8F]" />
+                                        <span className="w-2 h-2 rounded-full bg-[#001659]" />
                                         {item.club}
                                     </h3>
                                     <p className="text-xs font-semibold text-slate-500 leading-relaxed font-sans">
@@ -371,7 +371,7 @@ export default function OfertaAcademica() {
                 <div className="max-w-[1000px] mx-auto px-6 text-center space-y-10">
                     <div className="space-y-4">
                         <ScrollReveal distance="translate-y-6">
-                            <span className="text-[#003C8F] text-xs font-bold tracking-[3px] uppercase block font-sans">
+                            <span className="text-[#001659] text-xs font-bold tracking-[3px] uppercase block font-sans">
                                 INSCRIPCIONES
                             </span>
                         </ScrollReveal>
@@ -388,7 +388,7 @@ export default function OfertaAcademica() {
                     </div>
 
                     <ScrollReveal distance="translate-y-6" delay={450} className="flex flex-col sm:flex-row justify-center items-center gap-4">
-                        <Link href="/admisiones" className="w-full sm:w-auto px-8 py-4 bg-[#003C8F] hover:bg-[#08111F] text-white font-extrabold text-xs tracking-wider uppercase rounded-full shadow-md hover:shadow-lg transition-all duration-300 font-sans cursor-pointer">
+                        <Link href="/admisiones" className="w-full sm:w-auto px-8 py-4 bg-[#001659] hover:bg-[#08111F] text-white font-extrabold text-xs tracking-wider uppercase rounded-full shadow-md hover:shadow-lg transition-all duration-300 font-sans cursor-pointer">
                             Proceso de Admisión
                         </Link>
                         <Link href="/contacto" className="w-full sm:w-auto px-8 py-4 bg-white border border-slate-200 hover:border-slate-400 text-[#08111F] font-extrabold text-xs tracking-wider uppercase rounded-full transition-all duration-300 font-sans cursor-pointer">

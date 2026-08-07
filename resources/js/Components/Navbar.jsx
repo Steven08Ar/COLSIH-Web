@@ -250,7 +250,7 @@ export default function Navbar() {
                                 href="https://e.plataformaintegra.net/sihungria/index.php/cupo"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-[#003C8F] hover:bg-[#002e6e] text-white text-xs sm:text-sm font-extrabold shadow-md hover:shadow-lg shadow-blue-900/40 hover:scale-105 transition-all duration-300 border border-white/20"
+                                className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-[#001659] hover:bg-[#002B80] text-white text-xs sm:text-sm font-extrabold shadow-md hover:shadow-lg shadow-blue-950/40 hover:scale-105 transition-all duration-300 border border-white/20"
                                 title="Solicitud de Cupo e Inscripción 2027"
                             >
                                 <svg className="w-4 h-4 text-amber-300 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">

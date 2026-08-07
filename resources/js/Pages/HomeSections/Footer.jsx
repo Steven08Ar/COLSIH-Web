@@ -18,10 +18,10 @@ export default function Footer() {
         <footer id="site-footer" className="relative bg-[#08111F] text-white overflow-hidden border-t border-white/5 select-none">
             {/* Soft background glow circles */}
             <div className="absolute top-0 right-0 w-[400px] h-[400px] rounded-full bg-[#800A15]/5 blur-[120px] pointer-events-none"></div>
-            <div className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full bg-[#003C8F]/5 blur-[120px] pointer-events-none"></div>
+            <div className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full bg-[#001659]/5 blur-[120px] pointer-events-none"></div>
 
             {/* Large Animated Divider on top */}
-            <div className="bg-gradient-to-r from-[#800A15] via-[#003C8F] to-[#800A15] h-[3px] w-full"></div>
+            <div className="bg-gradient-to-r from-[#800A15] via-[#001659] to-[#800A15] h-[3px] w-full"></div>
 
             <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] pt-16 md:pt-20 pb-6 md:pb-8 space-y-12 md:space-y-14">
 

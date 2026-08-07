@@ -18,7 +18,7 @@ const LINK_INSCRIPCIONES = "https://e.plataformaintegra.net/sihungria/index.php/
 
 const docentesPreescolar = [
     {
-        nombre: 'Daniela Villamizar',
+        nombre: 'Lic. Daniela Villamizar',
         cargo: 'Docente de Preescolar',
         colorCircle: 'bg-[#FFD25D]',
         foto: 'https://media.colsih.edu.co/nuestro_colegio/equipo/docentes/Daniela%20Villamizar%20Villamizar.JPG'

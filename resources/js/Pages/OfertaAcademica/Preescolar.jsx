@@ -406,11 +406,17 @@ export default function Preescolar({ noticias = [] }) {
                                     <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-[#121212] leading-[1.1] tracking-tight font-sans">
                                         Los materiales didácticos <br />
                                         proporcionados son{' '}
-                                        <span className="relative inline-block font-serif italic text-[#704FE6] px-1">
+                                        <span className="relative inline-block font-serif italic text-[#704FE6] px-3 py-0.5 mx-1">
                                             disfrutables
-                                            {/* Ovalo amarillo dibujado alrededor de disfrutables exacto a Figma */}
-                                            <svg className="absolute -inset-x-4 -inset-y-3 w-[130%] h-[150%] text-[#FFD25D] pointer-events-none -left-3 -top-3" viewBox="0 0 140 70" fill="none">
-                                                <ellipse cx="70" cy="35" rx="64" ry="26" stroke="currentColor" strokeWidth="5" strokeLinecap="round" />
+                                            {/* Óvalo amarillo hand-drawn perfectamente centrado alrededor de disfrutables */}
+                                            <svg className="absolute -inset-x-3 -inset-y-2 w-[125%] h-[140%] text-[#FFD25D] pointer-events-none -left-3 -top-2" viewBox="0 0 200 70" fill="none" preserveAspectRatio="none">
+                                                <path 
+                                                    d="M 20,35 C 20,10 180,8 180,35 C 180,60 20,58 20,35 Z" 
+                                                    stroke="currentColor" 
+                                                    strokeWidth="5" 
+                                                    strokeLinecap="round" 
+                                                    strokeLinejoin="round" 
+                                                />
                                             </svg>
                                         </span> <br />
                                         para los niños
@@ -440,50 +446,50 @@ export default function Preescolar({ noticias = [] }) {
                                 </ScrollReveal>
                             </div>
 
-                            {/* Columna Derecha: Composición de Nodos 100% Réplica de Figma */}
+                            {/* Columna Derecha: Composición de Nodos (Imágenes desactivadas temporalmente por solicitud) */}
                             <div className="lg:col-span-6 relative h-[560px] w-full max-w-[580px] mx-auto">
                                 
-                                {/* 1. Píldora Superior (Soft Lavender `#DEC8FE`) + Sol Starburst + Foto Niño 1 */}
+                                {/* 1. Píldora Superior (Soft Lavender `#DEC8FE`) + Sol Starburst */}
                                 <ScrollReveal distance="translate-y-6" delay={100}>
                                     <div className="absolute right-0 top-12 w-[72%] sm:w-[340px] h-32 rounded-full bg-[#DEC8FE] shadow-sm flex items-center justify-between px-6 z-10">
                                         {/* Sol Starburst en la esquina superior derecha de la píldora lavanda */}
                                         <div className="absolute -top-7 -right-4 z-20 pointer-events-none">
                                             <StarburstSunSVG className="w-24 h-24 text-[#FFD25D] drop-shadow-sm" />
                                         </div>
-                                        {/* Niña con peluche sobresaliendo en el lado izquierdo de la píldora (SIN BORDE) */}
-                                        <img 
+                                        {/* Foto desactivada temporalmente */}
+                                        {/* <img 
                                             src="https://media.colsih.edu.co/ofertas_academicas/preescolar.JPG" 
                                             alt="Niños en preescolar" 
                                             className="absolute -top-8 left-8 h-40 w-32 object-cover rounded-[32px] z-30 shadow-md"
-                                        />
+                                        /> */}
                                     </div>
                                 </ScrollReveal>
 
-                                {/* 2. Píldora Central (Vibrant Purple `#704FE6`) + Splash ZigZag + Foto Niña 2 */}
+                                {/* 2. Píldora Central (Vibrant Purple `#704FE6`) + Splash ZigZag */}
                                 <ScrollReveal distance="translate-y-6" delay={200}>
                                     <div className="absolute right-0 top-52 w-[88%] sm:w-[450px] h-32 rounded-full bg-[#704FE6] shadow-md z-20 overflow-visible">
                                         {/* Splash ZigZag Lavanda a la izquierda */}
                                         <div className="absolute left-6 top-5 z-20 pointer-events-none">
                                             <ZigZagWavySVG className="w-32 h-16 text-[#DEC8FE]" />
                                         </div>
-                                        {/* Niña feliz sobresaliendo en la derecha de la píldora (SIN BORDE) */}
-                                        <img 
+                                        {/* Foto desactivada temporalmente */}
+                                        {/* <img 
                                             src="https://media.colsih.edu.co/espacios_academicos/jardin.JPG" 
                                             alt="Espacio de Jardín Preescolar" 
                                             className="absolute -top-8 right-6 h-40 w-32 object-cover rounded-[32px] z-30 shadow-md"
-                                        />
+                                        /> */}
                                     </div>
                                 </ScrollReveal>
 
-                                {/* 3. Píldora Inferior (Golden Yellow `#FFD25D`) + Foto Niño 3 + Círculos Concéntricos */}
+                                {/* 3. Píldora Inferior (Golden Yellow `#FFD25D`) + Círculos Concéntricos */}
                                 <ScrollReveal distance="translate-y-6" delay={300}>
                                     <div className="absolute right-0 top-[370px] w-full sm:w-[530px] h-32 rounded-full bg-[#FFD25D] shadow-md z-30 overflow-visible">
-                                        {/* Foto de estudiantes sobresaliendo en la parte izquierda (SIN BORDE) */}
-                                        <img 
+                                        {/* Foto desactivada temporalmente */}
+                                        {/* <img 
                                             src="/valores/hermanos.JPG" 
                                             alt="Estudiantes en el colegio" 
                                             className="absolute -top-10 left-10 h-44 w-44 object-cover rounded-[32px] z-40 shadow-md"
-                                        />
+                                        /> */}
                                         {/* Círculos Concéntricos Púrpura flotando abajo a la derecha de la píldora amarilla */}
                                         <div className="absolute -bottom-6 right-6 z-40 pointer-events-none">
                                             <ConcentricCirclesSVG className="w-28 h-28 text-[#704FE6]" />

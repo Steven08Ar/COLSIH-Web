@@ -29,16 +29,26 @@ function Flash({ message }) {
 }
 
 function Modal({ title, onClose, isWide = false, children }) {
-    return (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-3 sm:p-6 md:p-8 animate-fadeIn" onClick={onClose}>
-            <div className={`bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl sm:rounded-[28px] p-4 sm:p-6 md:p-8 w-full ${isWide ? 'max-w-5xl' : 'max-w-xl'} max-h-[92vh] overflow-y-auto shadow-2xl transform scale-100 transition-all duration-300`} onClick={e => e.stopPropagation()}>
-                <div className="flex items-center justify-between mb-4 sm:mb-6 pb-3 sm:pb-4 border-b border-slate-100 dark:border-slate-800">
+    if (typeof document === 'undefined') return null;
+    return createPortal(
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-3 sm:p-6 md:p-8 animate-fadeIn" onClick={onClose}>
+            <div 
+                className={`bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl sm:rounded-[24px] p-5 sm:p-6 lg:p-8 w-full ${isWide ? 'max-w-5xl' : 'max-w-xl'} max-h-[90vh] overflow-y-auto shadow-2xl transform scale-100 transition-all duration-300 relative`} 
+                onClick={e => e.stopPropagation()}
+            >
+                <div className="flex items-center justify-between mb-4 sm:mb-6 pb-3 sm:pb-4 border-b border-slate-100 dark:border-slate-800 sticky top-0 bg-white dark:bg-slate-900 z-10">
                     <h3 className="text-slate-800 dark:text-slate-100 font-extrabold text-base sm:text-lg tracking-tight">{title}</h3>
-                    <button onClick={onClose} className="w-8 h-8 rounded-full bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-400 hover:text-slate-600 transition flex items-center justify-center text-lg leading-none cursor-pointer">✕</button>
+                    <button 
+                        onClick={onClose} 
+                        className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-500 hover:text-slate-700 dark:text-slate-400 transition flex items-center justify-center text-sm font-bold cursor-pointer"
+                    >
+                        ✕
+                    </button>
                 </div>
                 {children}
             </div>
-        </div>
+        </div>,
+        document.body
     );
 }
 
@@ -217,7 +227,7 @@ function TestimoniosTab({ testimonios, flash }) {
     }
 
     return (
-        <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800/80 rounded-2xl sm:rounded-[24px] p-4 sm:p-6 lg:p-8 shadow-sm">
+        <div className="space-y-6 animate-fadeIn">
             <Flash message={flash} />
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-slate-100 dark:border-slate-800/80">
                 <div>
@@ -1100,15 +1110,17 @@ function NoticiasTab({ noticias, flash }) {
                                     </label>
                                 </div>
                             </div>
-                            <div className="flex gap-3 pt-6 border-t border-slate-100 mt-6 justify-end">
-                                <button type="button" onClick={() => setPaso(2)} disabled={!titulo} className="px-6 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-bold rounded-xl py-3 text-sm transition cursor-pointer shadow-md shadow-blue-500/10 active:scale-[0.98] flex items-center gap-2">
-                                    Siguiente: Escribir Contenido
-                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>
+                            <div className="flex flex-col sm:flex-row items-center justify-end gap-2.5 pt-4 border-t border-slate-100 dark:border-slate-800 mt-4">
+                                <button type="button" onClick={() => setPaso(2)} disabled={!titulo} className="w-full sm:w-auto px-4 py-2.5 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-bold rounded-xl text-xs transition cursor-pointer shadow-sm active:scale-[0.98] flex items-center justify-center gap-1.5">
+                                    <span>Siguiente: Escribir Contenido</span>
+                                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>
                                 </button>
-                                <button type="button" onClick={() => guardar()} disabled={!titulo || submitting} className="px-6 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-bold rounded-xl py-3 text-sm transition cursor-pointer shadow-md shadow-emerald-500/10 active:scale-[0.98]">
-                                    {submitting ? 'Guardando...' : 'Guardar'}
+                                <button type="button" onClick={() => guardar()} disabled={!titulo || submitting} className="w-full sm:w-auto px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-bold rounded-xl text-xs transition cursor-pointer shadow-sm active:scale-[0.98]">
+                                    {submitting ? 'Guardando...' : 'Guardar Rápido'}
                                 </button>
-                                <button type="button" onClick={cerrar} className="px-5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl py-3 text-sm transition font-bold cursor-pointer">Cancelar</button>
+                                <button type="button" onClick={cerrar} className="w-full sm:w-auto px-4 py-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-600 dark:text-slate-300 rounded-xl text-xs font-bold transition cursor-pointer">
+                                    Cancelar
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -2225,7 +2237,7 @@ function EquipoTab({ equipo = [], flash }) {
             <Flash message={flash} />
 
             {/* Encabezado */}
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800/80 p-6 rounded-3xl shadow-sm">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-slate-100 dark:border-slate-800/80">
                 <div>
                     <h2 className="text-xl font-black text-slate-900 dark:text-white leading-tight flex items-center gap-2">
                         <User className="w-6 h-6 text-[#800A15]" />
@@ -2790,7 +2802,7 @@ function MantenimientoTab({ flash, flash_error, command_output, basePath }) {
             )}
 
             {/* Header del Tab */}
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800/80 p-6 rounded-3xl shadow-sm">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-slate-100 dark:border-slate-800/80">
                 <div>
                     <h2 className="text-xl font-black text-slate-900 dark:text-white leading-tight flex items-center gap-2.5">
                         <Terminal className="w-6 h-6 text-blue-600" />
@@ -3109,7 +3121,7 @@ function DeportesAdminTab({ torneoPartidos = [], deportesBanners = [], cuadrangu
     return (
         <div className="space-y-6 animate-fadeIn">
             {/* Header del Tab */}
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-sm">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-slate-100 dark:border-slate-800/80">
                 <div>
                     <h2 className="text-xl font-black text-slate-900 dark:text-white flex items-center gap-2.5">
                         <Trophy className="w-6 h-6 text-amber-500" />

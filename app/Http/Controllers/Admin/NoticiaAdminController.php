@@ -17,7 +17,7 @@ class NoticiaAdminController extends Controller
         return Inertia::render('Admin/Dashboard', [
             'seccion'     => 'noticias',
             'testimonios' => [],
-            'noticias'    => Noticia::latest()->get(['id', 'titulo', 'slug', 'resumen', 'imagen', 'bloques', 'categoria', 'activo', 'publicado_en']),
+            'noticias'    => Noticia::latest()->get(['id', 'titulo', 'slug', 'resumen', 'imagen', 'bloques', 'categoria', 'seccion', 'es_deporte', 'activo', 'publicado_en']),
             'preguntas'   => [],
         ]);
     }
@@ -28,12 +28,16 @@ class NoticiaAdminController extends Controller
             'titulo'       => 'required|string|max:200',
             'resumen'      => 'nullable|string|max:500',
             'categoria'    => 'required|in:noticia,evento,comunicado,preescolar',
+            'seccion'      => 'nullable|string|in:general,preescolar,primaria,bachillerato,sena',
+            'es_deporte'   => 'nullable',
             'activo'       => 'nullable',
             'publicado_en' => 'nullable|date',
             'portada'      => 'nullable|file|mimes:jpeg,png,jpg,gif,svg,webp,heic,heif,HEIC,HEIF|max:20480',
         ]);
 
-        $data = $request->only(['titulo', 'resumen', 'categoria', 'publicado_en']);
+        $data = $request->only(['titulo', 'resumen', 'categoria', 'seccion', 'publicado_en']);
+        $data['seccion']      = $data['seccion'] ?? 'general';
+        $data['es_deporte']   = $data['seccion'] === 'sena' ? false : $request->boolean('es_deporte');
         $data['activo']       = $request->boolean('activo');
         $data['publicado_en'] = $data['publicado_en'] ?: now()->toDateTimeString();
         $data['contenido']    = '';
@@ -56,12 +60,16 @@ class NoticiaAdminController extends Controller
             'titulo'       => 'required|string|max:200',
             'resumen'      => 'nullable|string|max:500',
             'categoria'    => 'required|in:noticia,evento,comunicado,preescolar',
+            'seccion'      => 'nullable|string|in:general,preescolar,primaria,bachillerato,sena',
+            'es_deporte'   => 'nullable',
             'activo'       => 'nullable',
             'publicado_en' => 'nullable|date',
             'portada'      => 'nullable|file|mimes:jpeg,png,jpg,gif,svg,webp,heic,heif,HEIC,HEIF|max:20480',
         ]);
 
-        $data = $request->only(['titulo', 'resumen', 'categoria', 'publicado_en']);
+        $data = $request->only(['titulo', 'resumen', 'categoria', 'seccion', 'publicado_en']);
+        $data['seccion']      = $data['seccion'] ?? 'general';
+        $data['es_deporte']   = $data['seccion'] === 'sena' ? false : $request->boolean('es_deporte');
         $data['activo']       = $request->boolean('activo');
         $data['publicado_en'] = $data['publicado_en'] ?: ($noticia->publicado_en?->toDateTimeString() ?? now()->toDateTimeString());
 

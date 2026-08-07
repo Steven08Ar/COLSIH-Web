@@ -730,6 +730,8 @@ function NoticiasTab({ noticias, flash }) {
     const [titulo, setTitulo] = useState('');
     const [resumen, setResumen] = useState('');
     const [categoria, setCategoria] = useState('noticia');
+    const [seccionNoticia, setSeccionNoticia] = useState('general');
+    const [esDeporte, setEsDeporte] = useState(false);
     const [publicado_en, setPublicadoEn] = useState('');
     const [activo, setActivo] = useState(true);
     const [portadaFile, setPortadaFile] = useState(null);
@@ -756,6 +758,7 @@ function NoticiasTab({ noticias, flash }) {
 
     function resetForm() {
         setTitulo(''); setResumen(''); setCategoria('noticia');
+        setSeccionNoticia('general'); setEsDeporte(false);
         setPublicadoEn(''); setActivo(true);
         setPortadaFile(null); setPortadaPreview(null);
         setBloques([]); Object.keys(blockFilesRef).forEach(k => delete blockFilesRef[k]);
@@ -768,6 +771,8 @@ function NoticiasTab({ noticias, flash }) {
         resetForm();
         setTitulo(n.titulo); setResumen(n.resumen ?? '');
         setCategoria(n.categoria);
+        setSeccionNoticia(n.seccion || 'general');
+        setEsDeporte(!!n.es_deporte);
         setPublicadoEn(n.publicado_en ? n.publicado_en.substring(0, 10) : '');
         setActivo(!!n.activo);
         if (n.imagen) setPortadaPreview(mediaUrl(n.imagen));
@@ -856,6 +861,8 @@ function NoticiasTab({ noticias, flash }) {
         fd.append('titulo', currentTitle);
         fd.append('resumen', currentResumen || '');
         fd.append('categoria', currentCategoria);
+        fd.append('seccion', seccionNoticia);
+        fd.append('es_deporte', seccionNoticia === 'sena' ? '0' : (esDeporte ? '1' : '0'));
         fd.append('publicado_en', currentPublicadoEn || '');
         fd.append('activo', currentActivo ? '1' : '0');
         if (portadaFile) fd.append('portada', portadaFile);
@@ -1023,19 +1030,37 @@ function NoticiasTab({ noticias, flash }) {
                                     </div>
                                     <textarea value={resumen} onChange={e => setResumen(e.target.value.substring(0, 400))} rows={3} placeholder="Escribe un breve resumen descriptivo para la tarjeta..." className="w-full bg-slate-50 border border-slate-200 text-slate-800 placeholder-slate-400 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-100 transition font-medium resize-none" />
                                 </div>
-                                <div className="flex gap-4">
-                                    <div className="flex-1">
-                                        <label className="text-slate-500 text-[10px] font-bold uppercase tracking-wider block mb-1">Categoría *</label>
-                                        <select value={categoria} onChange={e => setCategoria(e.target.value)} className="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-100 transition font-medium">
+                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                    <div>
+                                        <label className="text-slate-500 text-[10px] font-bold uppercase tracking-wider block mb-1">Tipo / Categoría *</label>
+                                        <select value={categoria} onChange={e => setCategoria(e.target.value)} className="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-3 py-2.5 text-xs font-semibold focus:outline-none focus:bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-100 transition">
                                             <option value="noticia">Noticia</option>
                                             <option value="evento">Evento</option>
                                             <option value="comunicado">Comunicado</option>
-                                            <option value="preescolar">Preescolar (Blog Preescolar)</option>
+                                            <option value="preescolar">Preescolar (Blog)</option>
                                         </select>
                                     </div>
-                                    <div className="flex-1">
-                                        <label className="text-slate-500 text-[10px] font-bold uppercase tracking-wider block mb-1">Fecha de Publicación</label>
-                                        <input type="date" value={publicado_en} onChange={e => setPublicadoEn(e.target.value)} className="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-100 transition font-medium" />
+                                    <div>
+                                        <label className="text-slate-500 text-[10px] font-bold uppercase tracking-wider block mb-1">Sección Académica</label>
+                                        <select 
+                                            value={seccionNoticia} 
+                                            onChange={e => {
+                                                const val = e.target.value;
+                                                setSeccionNoticia(val);
+                                                if (val === 'sena') setEsDeporte(false);
+                                            }} 
+                                            className="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-3 py-2.5 text-xs font-semibold focus:outline-none focus:bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-100 transition"
+                                        >
+                                            <option value="general">Toda la Institución</option>
+                                            <option value="preescolar">Preescolar</option>
+                                            <option value="primaria">Primaria</option>
+                                            <option value="bachillerato">Bachillerato</option>
+                                            <option value="sena">SENA</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label className="text-slate-500 text-[10px] font-bold uppercase tracking-wider block mb-1">Fecha Publicación</label>
+                                        <input type="date" value={publicado_en} onChange={e => setPublicadoEn(e.target.value)} className="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-3 py-2.5 text-xs font-semibold focus:outline-none focus:bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-100 transition" />
                                     </div>
                                 </div>
                                 <div>
@@ -1048,10 +1073,28 @@ function NoticiasTab({ noticias, flash }) {
                                         <span className="text-xs text-slate-400 font-medium truncate max-w-[200px]">{portadaFile ? portadaFile.name : (editando ? 'Conservar imagen actual' : 'Ninguno seleccionado')}</span>
                                     </div>
                                 </div>
-                                <div className="flex items-center gap-2 pt-2">
+                                <div className="flex flex-wrap items-center justify-between gap-4 pt-2 border-t border-slate-100">
                                     <label className="flex items-center gap-2 cursor-pointer select-none">
                                         <input type="checkbox" checked={activo} onChange={e => setActivo(e.target.checked)} className="w-5 h-5 text-blue-600 border-slate-300 rounded focus:ring-blue-500 focus:ring-opacity-25" />
-                                        <span className="text-slate-600 text-sm font-semibold">Visible en la Web</span>
+                                        <span className="text-slate-600 text-xs font-semibold">Visible en la Web</span>
+                                    </label>
+
+                                    <label className={`flex items-center gap-2 select-none ${seccionNoticia === 'sena' ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}>
+                                        <input 
+                                            type="checkbox" 
+                                            checked={seccionNoticia === 'sena' ? false : esDeporte} 
+                                            disabled={seccionNoticia === 'sena'}
+                                            onChange={e => setEsDeporte(e.target.checked)} 
+                                            className="w-5 h-5 text-[#001659] border-slate-300 rounded focus:ring-[#001659] focus:ring-opacity-25" 
+                                        />
+                                        <span className="text-slate-700 text-xs font-bold flex items-center gap-1.5">
+                                            ⚽ Destacar en Sección de Deportes
+                                            {seccionNoticia === 'sena' && (
+                                                <span className="text-[10px] font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200">
+                                                    (SENA no aplica deportes)
+                                                </span>
+                                            )}
+                                        </span>
                                     </label>
                                 </div>
                             </div>

@@ -18,12 +18,15 @@ class Noticia extends Model
         'imagen',
         'bloques',
         'categoria',
+        'seccion',
+        'es_deporte',
         'activo',
         'publicado_en',
     ];
 
     protected $casts = [
         'activo'       => 'boolean',
+        'es_deporte'   => 'boolean',
         'publicado_en' => 'datetime',
         'bloques'      => 'array',
     ];

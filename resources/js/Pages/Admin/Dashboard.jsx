@@ -986,74 +986,120 @@ function NoticiasTab({ noticias, flash }) {
                 ))}
             </div>
 
-            {(creando || editando) && paso === 1 && (
-                <Modal title={editando ? 'Editar Publicacion' : 'Nueva Publicacion'} onClose={cerrar} isWide>
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-                        <div className="lg:col-span-5 flex flex-col items-center justify-start space-y-4">
-                            <span className="text-slate-400 text-[11px] font-bold uppercase tracking-wider block">Vista Previa de la Tarjeta</span>
-                            <div className="w-full bg-slate-100 border border-slate-200 p-6 rounded-[32px] flex items-center justify-center shadow-inner flex-1 min-h-[420px]">
-                                <div className="w-full max-w-[280px] min-h-[380px] rounded-3xl overflow-hidden shadow-xl border border-slate-100 bg-white relative flex flex-col justify-between group cursor-pointer transition-all duration-300 select-none">
-                                    <div className="aspect-video w-full overflow-hidden bg-slate-50 relative shrink-0">
+            {(creando || editando) && paso === 1 && typeof document !== 'undefined' && createPortal(
+                <div className="fixed inset-0 z-[9999] bg-[#6C727F]/90 dark:bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 overflow-y-auto animate-fadeIn" onClick={cerrar}>
+                    <div className="w-full max-w-6xl my-auto grid grid-cols-1 lg:grid-cols-12 gap-6 items-start" onClick={e => e.stopPropagation()}>
+                        
+                        {/* COLUMNA IZQUIERDA: Vista Previa */}
+                        <div className="lg:col-span-4 flex flex-col gap-4">
+                            {/* Card Header Vista Previa */}
+                            <div className="bg-white dark:bg-slate-900 rounded-[20px] py-3.5 px-6 shadow-lg text-center border border-slate-100 dark:border-slate-800">
+                                <h3 className="text-[#000000] dark:text-white font-bold text-xl tracking-tight font-sans">Vista Previa</h3>
+                            </div>
+
+                            {/* Contenedor Vista Previa Tarjeta */}
+                            <div className="bg-white dark:bg-slate-900 rounded-[30px] p-6 shadow-xl border border-slate-100 dark:border-slate-800 flex items-center justify-center min-h-[380px]">
+                                <div className="w-full max-w-[280px] rounded-[24px] overflow-hidden shadow-lg border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 flex flex-col justify-between transition-all duration-200">
+                                    <div className="aspect-video w-full overflow-hidden bg-slate-100 dark:bg-slate-800 relative shrink-0">
                                         {portadaPreview ? (
-                                            <img src={portadaPreview} alt={titulo} className="w-full h-full object-cover transition duration-500" />
+                                            <img src={portadaPreview} alt={titulo} className="w-full h-full object-cover" />
                                         ) : (
-                                            <div className="w-full h-full flex items-center justify-center bg-slate-50 relative">
-                                                <img src="https://media.colsih.edu.co/home/estudiantes-colsih.png" className="w-full h-full object-cover grayscale opacity-15" />
-                                                <img src="/marca/logo-colsih.svg" className="w-10 h-auto opacity-10 absolute center" />
+                                            <div className="w-full h-full flex items-center justify-center bg-slate-100 dark:bg-slate-800 relative">
+                                                <img src="https://media.colsih.edu.co/home/estudiantes-colsih.png" className="w-full h-full object-cover grayscale opacity-20" />
+                                                <img src="/marca/logo-colsih.svg" className="w-10 h-auto opacity-20 absolute center" />
                                             </div>
                                         )}
                                         <span className="absolute top-3 left-3 bg-[#800A15] text-white font-extrabold text-[9px] uppercase tracking-widest px-3 py-1 rounded-full shadow-xs">
                                             {categoriaLabel[categoria]}
                                         </span>
                                     </div>
-                                    <div className="p-5 flex-grow flex flex-col justify-between text-left space-y-3">
-                                        <div className="space-y-2">
-                                            <time className="text-[9px] font-black text-slate-400 uppercase tracking-widest">
+                                    <div className="p-4 flex-grow flex flex-col justify-between text-left space-y-2.5">
+                                        <div className="space-y-1.5">
+                                            <time className="text-[9px] font-black text-slate-400 uppercase tracking-widest block">
                                                 {publicado_en ? new Date(publicado_en + 'T00:00:00').toLocaleDateString('es-CO') : 'Hoy'}
                                             </time>
-                                            <h3 className="font-extrabold text-sm text-[#08111F] leading-snug group-hover:text-[#800A15] transition-colors duration-200">
+                                            <h3 className="font-extrabold text-sm text-slate-900 dark:text-white leading-snug line-clamp-2">
                                                 {titulo || 'Título de la Noticia'}
                                             </h3>
-                                            <p className="text-[11px] font-semibold text-slate-500 line-clamp-3 leading-relaxed">
+                                            <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 line-clamp-3 leading-relaxed">
                                                 {resumen || 'Resumen o copete de la noticia que se mostrará en la tarjeta de la página de inicio...'}
                                             </p>
                                         </div>
-                                        <div className="pt-1">
-                                            <div className="inline-flex items-center gap-1.5 text-[10px] font-extrabold text-[#08111F] uppercase tracking-wider">
-                                                Leer noticia
-                                                <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>
+                                        <div className="pt-2 border-t border-slate-100 dark:border-slate-800">
+                                            <div className="inline-flex items-center gap-1 text-[10px] font-extrabold text-slate-900 dark:text-blue-400 uppercase tracking-wider">
+                                                Leer noticia →
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div className="lg:col-span-7 space-y-4 text-left flex flex-col justify-between">
+
+                        {/* COLUMNA DERECHA: Formulario Nueva Publicación */}
+                        <div className="lg:col-span-8 bg-white dark:bg-slate-900 rounded-[30px] p-6 sm:p-8 shadow-2xl border border-slate-100 dark:border-slate-800 space-y-4">
+                            {/* Título de la tarjeta */}
+                            <h2 className="text-[#000000] dark:text-white font-bold text-xl sm:text-2xl text-center tracking-tight font-sans">
+                                {editando ? 'Editar publicación' : 'Nueva publicación'}
+                            </h2>
+
+                            {/* Separador 1 */}
+                            <div className="h-px bg-slate-200/80 dark:bg-slate-800 my-3" />
+
                             <div className="space-y-4">
+                                {/* Campo Título */}
                                 <div>
-                                    <label className="text-slate-500 text-[10px] font-bold uppercase tracking-wider block mb-1">Título de la Publicación *</label>
-                                    <input value={titulo} onChange={e => setTitulo(e.target.value)} required placeholder="Ej: Gran feria de ciencias COLSIH 2026" className="w-full bg-slate-50 border border-slate-200 text-slate-800 placeholder-slate-400 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-100 transition font-medium" />
+                                    <label className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block mb-1.5">
+                                        TÍTULO DE LA PUBLICACIÓN *
+                                    </label>
+                                    <input 
+                                        value={titulo} 
+                                        onChange={e => setTitulo(e.target.value)} 
+                                        required 
+                                        placeholder="Ej: Gran feria de ciencias COLSIH 2026" 
+                                        className="w-full bg-[#E5E7EB] dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 rounded-md px-3.5 py-2 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 transition border-none" 
+                                    />
                                     {errors.titulo && <p className="text-rose-500 text-xs mt-1 font-semibold">{errors.titulo}</p>}
                                 </div>
+
+                                {/* Campo Resumen */}
                                 <div>
-                                    <div className="flex justify-between items-center mb-1">
-                                        <label className="text-slate-500 text-[10px] font-bold uppercase tracking-wider block">Resumen / Copete de Tarjeta</label>
-                                        <span className="text-[10px] text-slate-400 font-bold">{resumen.length}/400</span>
+                                    <div className="flex justify-between items-center mb-1.5">
+                                        <label className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">
+                                            RESUMEN / COPETE DE TARJETA
+                                        </label>
+                                        <span className="text-[10px] font-bold text-slate-400">{resumen.length}/400</span>
                                     </div>
-                                    <textarea value={resumen} onChange={e => setResumen(e.target.value.substring(0, 400))} rows={3} placeholder="Escribe un breve resumen descriptivo para la tarjeta..." className="w-full bg-slate-50 border border-slate-200 text-slate-800 placeholder-slate-400 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-100 transition font-medium resize-none" />
+                                    <textarea 
+                                        value={resumen} 
+                                        onChange={e => setResumen(e.target.value.substring(0, 400))} 
+                                        rows={3} 
+                                        placeholder="Escribe un breve resumen descriptivo para la tarjeta..." 
+                                        className="w-full bg-[#E5E7EB] dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 rounded-md px-3.5 py-2 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 transition resize-none border-none" 
+                                    />
                                 </div>
+
+                                {/* Fila 3 Columnas: Categoría / Sección / Fecha */}
                                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                                     <div>
-                                        <label className="text-slate-500 text-[10px] font-bold uppercase tracking-wider block mb-1">Tipo / Categoría *</label>
-                                        <select value={categoria} onChange={e => setCategoria(e.target.value)} className="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-3 py-2.5 text-xs font-semibold focus:outline-none focus:bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-100 transition">
+                                        <label className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block mb-1.5">
+                                            TIPO / CATEGORÍA*
+                                        </label>
+                                        <select 
+                                            value={categoria} 
+                                            onChange={e => setCategoria(e.target.value)} 
+                                            className="w-full bg-[#E5E7EB] dark:bg-slate-800 text-slate-900 dark:text-white rounded-md px-3 py-2 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 transition cursor-pointer border-none"
+                                        >
                                             <option value="noticia">Noticia</option>
                                             <option value="evento">Evento</option>
                                             <option value="comunicado">Comunicado</option>
                                             <option value="preescolar">Preescolar (Blog)</option>
                                         </select>
                                     </div>
+
                                     <div>
-                                        <label className="text-slate-500 text-[10px] font-bold uppercase tracking-wider block mb-1">Sección Académica</label>
+                                        <label className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block mb-1.5">
+                                            SECCIÓN ACADÉMICA
+                                        </label>
                                         <select 
                                             value={seccionNoticia} 
                                             onChange={e => {
@@ -1061,7 +1107,7 @@ function NoticiasTab({ noticias, flash }) {
                                                 setSeccionNoticia(val);
                                                 if (val === 'sena') setEsDeporte(false);
                                             }} 
-                                            className="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-3 py-2.5 text-xs font-semibold focus:outline-none focus:bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-100 transition"
+                                            className="w-full bg-[#E5E7EB] dark:bg-slate-800 text-slate-900 dark:text-white rounded-md px-3 py-2 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 transition cursor-pointer border-none"
                                         >
                                             <option value="general">Toda la Institución</option>
                                             <option value="preescolar">Preescolar</option>
@@ -1070,61 +1116,105 @@ function NoticiasTab({ noticias, flash }) {
                                             <option value="sena">SENA</option>
                                         </select>
                                     </div>
+
                                     <div>
-                                        <label className="text-slate-500 text-[10px] font-bold uppercase tracking-wider block mb-1">Fecha Publicación</label>
-                                        <input type="date" value={publicado_en} onChange={e => setPublicadoEn(e.target.value)} className="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-3 py-2.5 text-xs font-semibold focus:outline-none focus:bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-100 transition" />
+                                        <label className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block mb-1.5">
+                                            FECHA PUBLICACIÓN
+                                        </label>
+                                        <input 
+                                            type="date" 
+                                            value={publicado_en} 
+                                            onChange={e => setPublicadoEn(e.target.value)} 
+                                            className="w-full bg-[#E5E7EB] dark:bg-slate-800 text-slate-900 dark:text-white rounded-md px-3 py-2 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 transition cursor-pointer border-none" 
+                                        />
                                     </div>
                                 </div>
+
+                                {/* Campo Foto de Portada */}
                                 <div>
-                                    <label className="text-slate-500 text-[10px] font-bold uppercase tracking-wider block mb-1.5">Foto de Portada</label>
+                                    <label className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block mb-1.5">
+                                        FOTO DE PORTADA
+                                    </label>
                                     <div className="flex items-center gap-3">
                                         <input type="file" accept="image/*,.heic,.heif,image/heic,image/heif" onChange={handlePortada} className="hidden" id="noticia-portada-upload" />
-                                        <label htmlFor="noticia-portada-upload" className="px-4.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl border border-slate-200 transition cursor-pointer select-none">
+                                        <label htmlFor="noticia-portada-upload" className="bg-[#E5E7EB] dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs font-bold px-4 py-2 rounded-md transition cursor-pointer select-none">
                                             {portadaFile ? 'Cambiar Portada' : 'Seleccionar Portada'}
                                         </label>
-                                        <span className="text-xs text-slate-400 font-medium truncate max-w-[200px]">{portadaFile ? portadaFile.name : (editando ? 'Conservar imagen actual' : 'Ninguno seleccionado')}</span>
+                                        <span className="text-xs font-medium text-slate-400 dark:text-slate-500 truncate max-w-[240px]">
+                                            {portadaFile ? portadaFile.name : (editando ? 'Conservar imagen actual' : 'Ninguno Seleccionado')}
+                                        </span>
                                     </div>
                                 </div>
-                                <div className="flex flex-wrap items-center justify-between gap-4 pt-2 border-t border-slate-100">
-                                    <label className="flex items-center gap-2 cursor-pointer select-none">
-                                        <input type="checkbox" checked={activo} onChange={e => setActivo(e.target.checked)} className="w-5 h-5 text-blue-600 border-slate-300 rounded focus:ring-blue-500 focus:ring-opacity-25" />
-                                        <span className="text-slate-600 text-xs font-semibold">Visible en la Web</span>
-                                    </label>
-
-                                    <label className={`flex items-center gap-2 select-none ${seccionNoticia === 'sena' ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}>
-                                        <input 
-                                            type="checkbox" 
-                                            checked={seccionNoticia === 'sena' ? false : esDeporte} 
-                                            disabled={seccionNoticia === 'sena'}
-                                            onChange={e => setEsDeporte(e.target.checked)} 
-                                            className="w-5 h-5 text-[#001659] border-slate-300 rounded focus:ring-[#001659] focus:ring-opacity-25" 
-                                        />
-                                        <span className="text-slate-700 text-xs font-bold flex items-center gap-1.5">
-                                            ⚽ Destacar en Sección de Deportes
-                                            {seccionNoticia === 'sena' && (
-                                                <span className="text-[10px] font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200">
-                                                    (SENA no aplica deportes)
-                                                </span>
-                                            )}
-                                        </span>
-                                    </label>
-                                </div>
                             </div>
-                            <div className="flex flex-col sm:flex-row items-center justify-end gap-2.5 pt-4 border-t border-slate-100 dark:border-slate-800 mt-4">
-                                <button type="button" onClick={() => setPaso(2)} disabled={!titulo} className="w-full sm:w-auto px-4 py-2.5 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-bold rounded-xl text-xs transition cursor-pointer shadow-sm active:scale-[0.98] flex items-center justify-center gap-1.5">
+
+                            {/* Separador 2 */}
+                            <div className="h-px bg-slate-200/80 dark:bg-slate-800 my-4" />
+
+                            {/* Checkboxes */}
+                            <div className="flex flex-wrap items-center justify-between gap-4">
+                                <label className="flex items-center gap-2.5 cursor-pointer select-none">
+                                    <input 
+                                        type="checkbox" 
+                                        checked={activo} 
+                                        onChange={e => setActivo(e.target.checked)} 
+                                        className="w-5 h-5 text-blue-600 border-slate-300 rounded focus:ring-blue-500 cursor-pointer accent-blue-600" 
+                                    />
+                                    <span className="text-slate-700 dark:text-slate-300 text-xs font-semibold">Visible en la web</span>
+                                </label>
+
+                                <label className={`flex items-center gap-2.5 select-none ${seccionNoticia === 'sena' ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}>
+                                    <input 
+                                        type="checkbox" 
+                                        checked={seccionNoticia === 'sena' ? false : esDeporte} 
+                                        disabled={seccionNoticia === 'sena'}
+                                        onChange={e => setEsDeporte(e.target.checked)} 
+                                        className="w-5 h-5 text-blue-600 border-slate-300 rounded focus:ring-blue-500 cursor-pointer accent-blue-600" 
+                                    />
+                                    <span className="text-slate-700 dark:text-slate-300 text-xs font-semibold flex items-center gap-1.5">
+                                        Destacar en Sección de Deportes
+                                        {seccionNoticia === 'sena' && (
+                                            <span className="text-[10px] font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200">
+                                                (SENA no aplica)
+                                            </span>
+                                        )}
+                                    </span>
+                                </label>
+                            </div>
+
+                            {/* Separador 3 */}
+                            <div className="h-px bg-slate-200/80 dark:bg-slate-800 my-4" />
+
+                            {/* Botones de Acción */}
+                            <div className="flex flex-col sm:flex-row items-center justify-end gap-2.5 pt-1">
+                                <button 
+                                    type="button" 
+                                    onClick={() => setPaso(2)} 
+                                    disabled={!titulo} 
+                                    className="w-full sm:w-auto bg-[#E5E7EB] dark:bg-slate-800 hover:bg-blue-600 hover:text-white disabled:opacity-50 text-slate-800 dark:text-slate-200 text-xs font-bold px-4 py-2 rounded-md transition cursor-pointer active:scale-95 flex items-center justify-center gap-1"
+                                >
                                     <span>Siguiente: Escribir Contenido</span>
-                                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>
                                 </button>
-                                <button type="button" onClick={() => guardar()} disabled={!titulo || submitting} className="w-full sm:w-auto px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-bold rounded-xl text-xs transition cursor-pointer shadow-sm active:scale-[0.98]">
+                                <button 
+                                    type="button" 
+                                    onClick={() => guardar()} 
+                                    disabled={!titulo || submitting} 
+                                    className="w-full sm:w-auto bg-[#E5E7EB] dark:bg-slate-800 hover:bg-emerald-600 hover:text-white disabled:opacity-50 text-slate-800 dark:text-slate-200 text-xs font-bold px-4 py-2 rounded-md transition cursor-pointer active:scale-95"
+                                >
                                     {submitting ? 'Guardando...' : 'Guardar Rápido'}
                                 </button>
-                                <button type="button" onClick={cerrar} className="w-full sm:w-auto px-4 py-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-600 dark:text-slate-300 rounded-xl text-xs font-bold transition cursor-pointer">
+                                <button 
+                                    type="button" 
+                                    onClick={cerrar} 
+                                    className="w-full sm:w-auto bg-[#E5E7EB] dark:bg-slate-800 hover:bg-rose-600 hover:text-white text-slate-800 dark:text-slate-200 text-xs font-bold px-4 py-2 rounded-md transition cursor-pointer active:scale-95"
+                                >
                                     Cancelar
                                 </button>
                             </div>
                         </div>
+
                     </div>
-                </Modal>
+                </div>,
+                document.body
             )}
             {(creando || editando) && paso === 2 && (
                 <PageBuilder

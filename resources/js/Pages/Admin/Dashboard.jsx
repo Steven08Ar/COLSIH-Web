@@ -993,42 +993,40 @@ function NoticiasTab({ noticias, flash }) {
                         {/* COLUMNA IZQUIERDA: Vista Previa */}
                         <div className="lg:col-span-4 flex flex-col gap-4">
                             {/* Card Header Vista Previa */}
-                            <div className="bg-white dark:bg-slate-900 rounded-[20px] py-3.5 px-6 shadow-lg text-center border border-slate-100 dark:border-slate-800">
+                            <div className="bg-white dark:bg-slate-900 rounded-[20px] py-3.5 px-6 shadow-xl text-center border border-slate-100/50 dark:border-slate-800">
                                 <h3 className="text-[#000000] dark:text-white font-bold text-xl tracking-tight font-sans">Vista Previa</h3>
                             </div>
 
-                            {/* Contenedor Vista Previa Tarjeta */}
-                            <div className="bg-white dark:bg-slate-900 rounded-[30px] p-6 shadow-xl border border-slate-100 dark:border-slate-800 flex items-center justify-center min-h-[380px]">
-                                <div className="w-full max-w-[280px] rounded-[24px] overflow-hidden shadow-lg border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 flex flex-col justify-between transition-all duration-200">
-                                    <div className="aspect-video w-full overflow-hidden bg-slate-100 dark:bg-slate-800 relative shrink-0">
-                                        {portadaPreview ? (
-                                            <img src={portadaPreview} alt={titulo} className="w-full h-full object-cover" />
-                                        ) : (
-                                            <div className="w-full h-full flex items-center justify-center bg-slate-100 dark:bg-slate-800 relative">
-                                                <img src="https://media.colsih.edu.co/home/estudiantes-colsih.png" className="w-full h-full object-cover grayscale opacity-20" />
-                                                <img src="/marca/logo-colsih.svg" className="w-10 h-auto opacity-20 absolute center" />
-                                            </div>
-                                        )}
-                                        <span className="absolute top-3 left-3 bg-[#800A15] text-white font-extrabold text-[9px] uppercase tracking-widest px-3 py-1 rounded-full shadow-xs">
-                                            {categoriaLabel[categoria]}
-                                        </span>
-                                    </div>
-                                    <div className="p-4 flex-grow flex flex-col justify-between text-left space-y-2.5">
-                                        <div className="space-y-1.5">
-                                            <time className="text-[9px] font-black text-slate-400 uppercase tracking-widest block">
-                                                {publicado_en ? new Date(publicado_en + 'T00:00:00').toLocaleDateString('es-CO') : 'Hoy'}
-                                            </time>
-                                            <h3 className="font-extrabold text-sm text-slate-900 dark:text-white leading-snug line-clamp-2">
-                                                {titulo || 'Título de la Noticia'}
-                                            </h3>
-                                            <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 line-clamp-3 leading-relaxed">
-                                                {resumen || 'Resumen o copete de la noticia que se mostrará en la tarjeta de la página de inicio...'}
-                                            </p>
+                            {/* Tarjeta de Vista Previa (Directa sin card de fondo, más grande y con sombra) */}
+                            <div className="w-full rounded-[30px] overflow-hidden shadow-2xl border border-slate-100/80 dark:border-slate-800 bg-white dark:bg-slate-900 flex flex-col justify-between transition-all duration-300 min-h-[440px]">
+                                <div className="h-48 sm:h-52 w-full overflow-hidden bg-slate-100 dark:bg-slate-800 relative shrink-0">
+                                    {portadaPreview ? (
+                                        <img src={portadaPreview} alt={titulo} className="w-full h-full object-cover" />
+                                    ) : (
+                                        <div className="w-full h-full flex items-center justify-center bg-slate-100 dark:bg-slate-800 relative">
+                                            <img src="https://media.colsih.edu.co/home/estudiantes-colsih.png" className="w-full h-full object-cover grayscale opacity-20" />
+                                            <img src="/marca/logo-colsih.svg" className="w-12 h-auto opacity-20 absolute center" />
                                         </div>
-                                        <div className="pt-2 border-t border-slate-100 dark:border-slate-800">
-                                            <div className="inline-flex items-center gap-1 text-[10px] font-extrabold text-slate-900 dark:text-blue-400 uppercase tracking-wider">
-                                                Leer noticia →
-                                            </div>
+                                    )}
+                                    <span className="absolute top-3.5 left-3.5 bg-[#800A15] text-white font-extrabold text-[10px] uppercase tracking-widest px-3.5 py-1 rounded-full shadow-md">
+                                        {categoriaLabel[categoria]}
+                                    </span>
+                                </div>
+                                <div className="p-6 flex-grow flex flex-col justify-between text-left space-y-4">
+                                    <div className="space-y-2">
+                                        <time className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">
+                                            {publicado_en ? new Date(publicado_en + 'T00:00:00').toLocaleDateString('es-CO') : 'Hoy'}
+                                        </time>
+                                        <h3 className="font-extrabold text-base text-slate-900 dark:text-white leading-snug line-clamp-2">
+                                            {titulo || 'Título de la Publicación'}
+                                        </h3>
+                                        <p className="text-xs font-medium text-slate-500 dark:text-slate-400 line-clamp-4 leading-relaxed">
+                                            {resumen || 'Resumen o copete de la noticia que se mostrará en la tarjeta de la página de inicio...'}
+                                        </p>
+                                    </div>
+                                    <div className="pt-3 border-t border-slate-100 dark:border-slate-800">
+                                        <div className="inline-flex items-center gap-1.5 text-xs font-extrabold text-slate-900 dark:text-blue-400 uppercase tracking-wider">
+                                            Leer noticia →
                                         </div>
                                     </div>
                                 </div>

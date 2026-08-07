@@ -906,7 +906,7 @@ function NoticiasTab({ noticias, flash }) {
     }
 
     return (
-        <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800/80 rounded-2xl sm:rounded-[24px] p-4 sm:p-6 lg:p-8 shadow-sm">
+        <div className="space-y-6 animate-fadeIn">
             <Flash message={flash} />
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-slate-100 dark:border-slate-800/80">
                 <div>
@@ -1209,7 +1209,7 @@ function PreguntasTab({ preguntas, flash }) {
     }
 
     return (
-        <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800/80 rounded-[24px] p-8 shadow-sm">
+        <div className="space-y-6 animate-fadeIn">
             <Flash message={flash} />
             <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-100 dark:border-slate-800/80">
                 <div>
@@ -1498,7 +1498,7 @@ function RecorridoTab({ tour, scenes = [], flash, basePath }) {
     };
 
     return (
-        <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800/80 rounded-2xl sm:rounded-[24px] p-4 sm:p-6 lg:p-8 shadow-sm">
+        <div className="space-y-6 animate-fadeIn">
             <Flash message={flash} />
 
             {/* Tarjeta de Control Modo En Construccion */}
@@ -3702,9 +3702,9 @@ export default function AdminDashboard({ seccion, carnets = [], equipo = [], tes
                             />
                         )}
 
-                        {/* ── Contenedores de Tarjeta Blanca Plana para los Módulos ── */}
+                        {/* ── Módulos de Gestión (Renderizado Plano Directo a Pantalla) ── */}
                         {seccion && seccion !== 'dashboard' && (
-                            <div className="bg-white dark:bg-slate-900 border border-slate-100/90 dark:border-slate-800/80 rounded-2xl p-4 sm:p-6 lg:p-8 shadow-[0_1px_3px_rgba(0,0,0,0.01)] transition-all duration-300">
+                            <div className="w-full animate-fadeIn">
                                 {(seccion === 'carnets' || seccion === 'carnets-admin') && <CarnetsAdminTab carnets={carnets} flash={flash} />}
                                 {(seccion === 'deportes' || seccion === 'deportes-admin') && <DeportesAdminTab torneoPartidos={torneoPartidos} deportesBanners={deportesBanners} cuadrangularesBloqueado={cuadrangularesBloqueado} flash={flash} />}
                                 {seccion === 'equipo'         && <EquipoTab        equipo={equipo}           flash={flash} />}

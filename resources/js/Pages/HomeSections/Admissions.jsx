@@ -87,28 +87,28 @@ export default function Admissions() {
                         </span>
                     </div>
 
-                    {/* CAPA GRIS TRANSPARENTE ENCIMA CON EL LETRERO MINIMALISTA EN VINOTINTO Y GRADOS CON CUPO */}
-                    <div className="absolute inset-0 -m-3 bg-slate-900/70 backdrop-blur-md rounded-3xl z-30 flex flex-col items-center justify-center p-6 text-center shadow-2xl border border-white/10">
-                        <div className="bg-[#08111F]/95 border border-rose-500/40 p-8 sm:p-10 rounded-3xl shadow-2xl max-w-2xl space-y-6 backdrop-blur-xl transform hover:scale-[1.01] transition-transform">
-                            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#800A15] text-white text-xs sm:text-sm font-black tracking-widest uppercase shadow-md">
-                                <Sparkles className="w-4 h-4 text-amber-300 animate-pulse" />
+                    {/* CAPA SOLIDA MINIMALISTA ENCIMA CON EL LETRERO EN VINOTINTO Y GRADOS CON CUPO */}
+                    <div className="absolute inset-0 -m-3 bg-[#08111F]/90 rounded-3xl z-30 flex flex-col items-center justify-center p-6 text-center shadow-2xl border border-slate-700">
+                        <div className="bg-[#08111F] border-2 border-[#800A15] p-8 sm:p-10 rounded-2xl shadow-2xl max-w-2xl space-y-6">
+                            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#800A15] text-white text-xs sm:text-sm font-black tracking-wider uppercase">
+                                <span className="w-2 h-2 rounded-full bg-amber-400 shrink-0" />
                                 <span>CUPOS HABILITADOS 2027</span>
                             </div>
-                            <h3 className="text-2xl sm:text-4xl font-black text-white leading-tight font-sans">
-                                ¡Inscripciones Abiertas para Grados Seleccionados!
+                            <h3 className="text-2xl sm:text-4xl font-black text-white leading-tight font-sans uppercase tracking-tight">
+                                Inscripciones Abiertas para Grados Seleccionados
                             </h3>
                             <p className="text-xs sm:text-sm font-semibold text-slate-300 leading-relaxed font-sans max-w-lg mx-auto">
                                 Garantiza el cupo de tus hijos para el próximo año escolar. Vacantes limitadas únicamente en los siguientes grados:
                             </p>
                             
-                            {/* Badges de Grados */}
+                            {/* Badges de Grados (Plano Minimalista) */}
                             <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
                                 {['Prejardín', 'Jardín', 'Transición', 'Primero (1°)', 'Sexto (6°)'].map((grado) => (
                                     <span
                                         key={grado}
-                                        className="px-4 py-1.5 rounded-xl bg-gradient-to-r from-amber-400/20 to-rose-500/20 border border-amber-300/40 text-amber-200 text-xs sm:text-sm font-black shadow-md backdrop-blur-sm"
+                                        className="px-4 py-2 rounded-lg bg-white text-[#001659] text-xs sm:text-sm font-black shadow-sm border border-slate-200"
                                     >
-                                        ✨ {grado}
+                                        {grado}
                                     </span>
                                 ))}
                             </div>
@@ -118,16 +118,16 @@ export default function Admissions() {
                                     href="https://e.plataformaintegra.net/sihungria/index.php/cupo"
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-[#800A15] hover:bg-[#9c0d1b] text-white font-black text-xs sm:text-sm uppercase tracking-wider transition-all duration-300 shadow-xl border border-white/20 hover:scale-105"
+                                    className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-[#800A15] hover:bg-[#a00d1b] text-white font-black text-xs sm:text-sm uppercase tracking-wider transition-all duration-200 border border-rose-400/30 shadow-md"
                                 >
                                     <span>Solicitar Cupo Directo</span>
-                                    <svg className="w-4 h-4 text-amber-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                    <svg className="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                                     </svg>
                                 </a>
                                 <Link 
                                     href="/admisiones" 
-                                    className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-white/10 hover:bg-white/20 text-slate-200 font-bold text-xs sm:text-sm transition-all duration-300 border border-white/20"
+                                    className="inline-flex items-center gap-2 px-7 py-4 rounded-xl bg-white/10 hover:bg-white/20 text-white font-extrabold text-xs sm:text-sm transition-all duration-200 border border-white/20"
                                 >
                                     Ver Requisitos Completos
                                 </Link>

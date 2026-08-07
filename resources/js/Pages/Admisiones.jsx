@@ -245,9 +245,9 @@ export default function Admisiones() {
                                     {['Prejardín', 'Jardín', 'Transición', 'Primero (1°)', 'Sexto (6°)'].map((grado) => (
                                         <span
                                             key={grado}
-                                            className="px-4 py-2 rounded-2xl bg-gradient-to-r from-[#003C8F] to-[#800A15] text-white font-black text-sm sm:text-base shadow-md border border-white/20 hover:scale-105 transition-transform"
+                                            className="px-4 py-2 rounded-xl bg-[#003C8F] text-white font-black text-sm sm:text-base shadow-sm border border-blue-900"
                                         >
-                                            ✨ {grado}
+                                            {grado}
                                         </span>
                                     ))}
                                 </div>

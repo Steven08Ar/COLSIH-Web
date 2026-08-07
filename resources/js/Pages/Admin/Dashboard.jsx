@@ -3536,7 +3536,7 @@ function DeportesAdminTab({ torneoPartidos = [], deportesBanners = [], cuadrangu
 /* ── Dashboard principal ── */
 const TABS = [
     { key: 'carnets-admin',   label: 'Tarjetas NFC & Carnets' },
-    { key: 'deportes-admin',  label: '⚽ Deportes & Cuadrangulares' },
+    { key: 'deportes-admin',  label: 'Deportes & Cuadrangulares' },
     { key: 'equipo',          label: 'Equipo Institucional' },
     { key: 'testimonios',     label: 'Testimonios' },
     { key: 'noticias',        label: 'Noticias y Eventos' },

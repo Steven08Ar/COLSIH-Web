@@ -196,8 +196,8 @@ export default function Deportes() {
 
                 <div className="relative z-10">
 
-                    {/* ── 1. HERO SECTION EXACT FIGMA MATCH ── */}
-                    <section className="relative w-full pt-28 pb-16 bg-transparent border-b border-slate-200/80 overflow-hidden min-h-[640px]">
+                    {/* ── 1. HERO SECTION ── */}
+                    <section className="relative w-full pt-28 pb-12 overflow-hidden min-h-[640px]">
                         <div className="max-w-[1440px] mx-auto px-6 md:px-12 lg:px-16 relative">
                             
                             {/* Desktop Pixel-Perfect Layout (lg screens) */}
@@ -210,7 +210,7 @@ export default function Deportes() {
                                     className="absolute left-[0px] top-[0px] w-[720px] h-[550px] object-contain opacity-65 pointer-events-none"
                                 />
 
-                                {/* 2. Main Title Text with Degradé & Bigger Font Size, layered BEHIND player torso (z-10) */}
+                                {/* 2. Main Title Text with Degradé & Bigger Font Size */}
                                 <div className="absolute left-[130px] top-[75px] w-[500px] text-[68px] xl:text-[76px] font-black uppercase leading-[0.90] tracking-tighter font-sans z-10 select-none">
                                     <span className="text-[#262626]">MÁXIMO</span> <br />
                                     <span className="text-[#262626]">ANOTADOR</span> <br />
@@ -218,14 +218,14 @@ export default function Deportes() {
                                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#001659] via-[#08111F] to-slate-700">FINAL</span>
                                 </div>
 
-                                {/* 3. Player Cutout Image (Layered ON TOP of title so body & back cut across text) */}
+                                {/* 3. Player Cutout Image */}
                                 <img 
                                     src="/images/deportes/persona_basket_saltando.png" 
                                     alt="Jugador de Baloncesto Saltando" 
                                     className="absolute left-[260px] top-[20px] w-[720px] h-[580px] object-contain z-20 pointer-events-none drop-shadow-xl"
                                 />
 
-                                {/* 4. Description Paragraph & Button (Flex Container z-30, no overlap) */}
+                                {/* 4. Description Paragraph & Button */}
                                 <div className="absolute left-[560px] top-[445px] w-[360px] flex flex-col items-start gap-4 z-30">
                                     <p className="text-[#4A4A4A] text-[14px] xl:text-[15px] font-medium leading-[22px] font-['DM_Sans',sans-serif]">
                                         El premio al máximo anotador de las finales es la distinción individual otorgada al estudiante que obtuvo el mayor puntaje y rendimiento en el torneo intercolegiado.
@@ -238,7 +238,7 @@ export default function Deportes() {
                                     </a>
                                 </div>
 
-                                {/* 5. Today Badge (Top Right) */}
+                                {/* 5. Today Badge */}
                                 <div className="absolute left-[1040px] top-[75px] z-30 bg-[#EAEFF4]/90 backdrop-blur-sm px-4 py-1 rounded-sm text-center border border-slate-200/60">
                                     <span className="text-[#8E9CAE] text-xs font-semibold uppercase tracking-wider font-['DM_Sans',sans-serif]">
                                         Today
@@ -246,7 +246,6 @@ export default function Deportes() {
                                 </div>
 
                                 {/* 6. Stacked Right Cards */}
-                                {/* Card 1 */}
                                 <div className="absolute left-[1040px] top-[120px] w-[270px] h-[195px] rounded-xl overflow-hidden shadow-sm group cursor-pointer border border-slate-200/80 bg-white/90 backdrop-blur-md z-30">
                                     <img 
                                         src="https://images.unsplash.com/photo-1592656094267-764a45160876?auto=format&fit=crop&w=500&q=80" 
@@ -263,7 +262,6 @@ export default function Deportes() {
                                     </div>
                                 </div>
 
-                                {/* Card 2 */}
                                 <div className="absolute left-[1040px] top-[340px] w-[270px] h-[195px] rounded-xl overflow-hidden shadow-sm group cursor-pointer border border-slate-200/80 bg-white/90 backdrop-blur-md z-30">
                                     <img 
                                         src="https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=500&q=80" 
@@ -309,7 +307,7 @@ export default function Deportes() {
 
 
                     {/* ── 2. CATEGORY MOSAIC GRID ── */}
-                    <section className="py-16 md:py-24 bg-transparent border-b border-slate-200/70">
+                    <section className="py-12 md:py-20">
                         <div className="max-w-[1440px] mx-auto px-6 md:px-12 lg:px-16 space-y-8">
 
                             <div className="flex items-center justify-between">
@@ -422,8 +420,8 @@ export default function Deportes() {
                     </section>
 
 
-                    {/* ── 3. TRENDING NEWS ("Trending News") ── */}
-                    <section id="noticias-tendencia" className="py-20 md:py-28 bg-white/40 backdrop-blur-xs border-b border-slate-200/70">
+                    {/* ── 3. TRENDING NEWS ── */}
+                    <section id="noticias-tendencia" className="py-16 md:py-24">
                         <div className="max-w-[1440px] mx-auto px-6 md:px-12 lg:px-16 space-y-10">
 
                             <div className="flex items-center justify-between">
@@ -503,7 +501,7 @@ export default function Deportes() {
 
 
                     {/* ── 4. BIG FEATURED EVENT BANNER ── */}
-                    <section className="py-16 md:py-24 bg-transparent border-b border-slate-200/70">
+                    <section className="py-16 md:py-24">
                         <div className="max-w-[1440px] mx-auto px-6 md:px-12 lg:px-16 space-y-6">
 
                             <div className="relative rounded-3xl overflow-hidden shadow-2xl min-h-[420px] sm:min-h-[500px] flex items-end p-8 sm:p-14 group cursor-pointer border border-slate-900">
@@ -573,7 +571,7 @@ export default function Deportes() {
 
 
                     {/* ── 5. RECENT NEWS & CLUB RANKING ── */}
-                    <section className="py-20 md:py-28 bg-white/50 backdrop-blur-xs border-b border-slate-200/70">
+                    <section className="py-16 md:py-24">
                         <div className="max-w-[1440px] mx-auto px-6 md:px-12 lg:px-16 space-y-12">
 
                             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
@@ -619,7 +617,7 @@ export default function Deportes() {
 
                                 {/* Right Side: Clubs Ranking Table */}
                                 <div className="lg:col-span-7 space-y-6 text-left">
-                                    <div className="flex items-center justify-between border-b border-slate-200 pb-3">
+                                    <div className="flex items-center justify-between pb-1">
                                         <h3 className="text-2xl font-black text-[#262626] tracking-tight uppercase font-sans">
                                             Clubs Ranking
                                         </h3>
@@ -676,7 +674,7 @@ export default function Deportes() {
 
 
                     {/* ── 6. SPORTS ARTICLES ("Sports Article") ── */}
-                    <section className="py-20 md:py-28 bg-transparent border-b border-slate-200/70">
+                    <section className="py-16 md:py-24">
                         <div className="max-w-[1440px] mx-auto px-6 md:px-12 lg:px-16 space-y-12">
 
                             <div className="flex items-center justify-between">
@@ -749,7 +747,7 @@ export default function Deportes() {
 
 
                     {/* ── 7. NEWSLETTER SUBSCRIPTION BANNER ── */}
-                    <section className="py-20 md:py-28 bg-transparent">
+                    <section className="py-16 md:py-24">
                         <div className="max-w-[1440px] mx-auto px-6 md:px-12 lg:px-16 space-y-12">
 
                             <div className="relative rounded-3xl bg-[#EAEFF4]/90 backdrop-blur-md p-8 sm:p-14 overflow-hidden border border-slate-300/70 shadow-lg">
@@ -813,7 +811,7 @@ export default function Deportes() {
                             </div>
 
                             {/* Bottom Pagination & Social Bar */}
-                            <div className="flex flex-col sm:flex-row items-center justify-between gap-6 pt-4 border-t border-slate-200">
+                            <div className="flex flex-col sm:flex-row items-center justify-between gap-6 pt-4">
                                 <div className="flex items-center gap-3">
                                     <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-xl bg-slate-100/80 backdrop-blur-sm hover:bg-[#001659] hover:text-white transition-all flex items-center justify-center text-slate-700 font-black text-xs">
                                         f

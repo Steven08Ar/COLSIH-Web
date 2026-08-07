@@ -16,7 +16,7 @@ class DeportesAdminController extends Controller
         self::seedDefaultMatchesIfNeeded();
 
         return Inertia::render('Admin/Dashboard', [
-            'seccion'         => 'deportes',
+            'seccion'         => 'deportes-admin',
             'torneoPartidos'  => TorneoPartido::orderBy('id')->get(),
             'deportesBanners' => DeporteCarrusel::orderBy('orden')->get(),
         ]);

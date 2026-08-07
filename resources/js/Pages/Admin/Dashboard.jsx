@@ -3759,7 +3759,7 @@ export default function AdminDashboard({ seccion, carnets = [], equipo = [], tes
                         {/* ── Active Module Content Card ── */}
                         <div className="transition-all duration-300">
                             {(seccion === 'carnets' || seccion === 'carnets-admin') && <CarnetsAdminTab carnets={carnets} flash={flash} />}
-                            {seccion === 'deportes-admin' && <DeportesAdminTab torneoPartidos={torneoPartidos} deportesBanners={deportesBanners} flash={flash} />}
+                            {(seccion === 'deportes' || seccion === 'deportes-admin') && <DeportesAdminTab torneoPartidos={torneoPartidos} deportesBanners={deportesBanners} flash={flash} />}
                             {seccion === 'equipo'         && <EquipoTab        equipo={equipo}           flash={flash} />}
                             {seccion === 'testimonios'    && <TestimoniosTab   testimonios={testimonios} flash={flash} />}
                             {seccion === 'noticias'       && <NoticiasTab      noticias={noticias}       flash={flash} />}

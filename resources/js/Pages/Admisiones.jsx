@@ -184,13 +184,16 @@ export default function Admisiones() {
                                         <ArrowRight className="w-4 h-4 text-white" />
                                     </a>
 
-                                    <a
-                                        href="#proceso"
-                                        className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full bg-white hover:bg-slate-50 text-[#0B1F3A] text-sm font-bold border border-slate-200 shadow-xs hover:border-[#003C8F] transition-all duration-300 w-full sm:w-auto"
+                                    <button
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            document.getElementById('proceso')?.scrollIntoView({ behavior: 'smooth' });
+                                        }}
+                                        className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full bg-white hover:bg-slate-50 text-[#0B1F3A] text-sm font-bold border border-slate-200 shadow-xs hover:border-[#003C8F] transition-all duration-300 w-full sm:w-auto cursor-pointer"
                                     >
                                         <span>Conocer el proceso</span>
                                         <ChevronDown className="w-4 h-4 text-slate-400" />
-                                    </a>
+                                    </button>
                                 </div>
                             </ScrollReveal>
 

@@ -33,7 +33,7 @@ export default function Deportes() {
         { id: 'baloncesto-img', label: 'Baloncesto', type: 'image', img: 'https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=800&q=80' },
         { id: 'voleibol', label: 'VOLEIBOL', type: 'text', bg: 'bg-[#EAEFF4]' },
         { id: 'voleibol-img', label: 'Voleibol', type: 'image', img: 'https://images.unsplash.com/photo-1592656094267-764a45160876?auto=format&fit=crop&w=800&q=80' },
-        { id: 'microfutbol-img', label: 'Microfútbol', type: 'image', img: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80' },
+        { id: 'microfutbol-img', label: 'Microfútbol', type: 'image', img: 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=800&q=80' },
         { id: 'baloncesto', label: 'BALONCESTO', type: 'text', bg: 'bg-[#EAEFF4]' },
         { id: 'baloncesto-cancha', label: 'Cancha Baloncesto', type: 'image', img: 'https://images.unsplash.com/photo-1519861531473-9200262188bf?auto=format&fit=crop&w=800&q=80' },
         { id: 'torneos', label: 'TORNEOS COLSIH', type: 'text', bg: 'bg-[#EAEFF4]' },
@@ -47,7 +47,7 @@ export default function Deportes() {
             fecha: '03 Junio 2026',
             titulo: 'Selección de microfútbol asegura el pase a semifinales regionales',
             resumen: 'Destacada participación del equipo COLSIH tras una emocionante victoria 4-2 en el torneo intercolegiado.',
-            imagen: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80'
+            imagen: 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=800&q=80'
         },
         {
             id: 2,
@@ -74,7 +74,7 @@ export default function Deportes() {
             subtitulo: 'Deportes COLSIH • 03 Junio 2026',
             titulo: 'NUESTRO EQUIPO DE MICROFÚTBOL SE PROCLAMA CAMPEÓN DEL TORNEO REGIONAL',
             descripcion: 'El equipo representativo del Colegio Santa Isabel de Hungría conquistó el primer lugar tras una final emocionante donde prevalecieron la unión, la estrategia y el espíritu salesiano.',
-            imagen: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=1600&q=80'
+            imagen: 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=1600&q=80'
         },
         {
             tag: 'Voleibol Femenino',
@@ -117,7 +117,7 @@ export default function Deportes() {
         {
             id: 2,
             tag: 'Estrategia Táctica',
-            imagen: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80',
+            imagen: 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=800&q=80',
             autor: 'Prof. Carlos Gómez',
             autorFoto: 'https://media.colsih.edu.co/nuestro_colegio/equipo/docentes/Jeyson%20Eduardo%20Su%C3%A1rez%20Ardila.JPG',
             fecha: '22 Junio 2026',
@@ -148,66 +148,65 @@ export default function Deportes() {
 
             <div className="bg-[#FFFFFF] text-[#262626] overflow-x-hidden font-['DM_Sans',sans-serif] select-none">
 
-                {/* ── 1. HERO SECTION EXACT FIGMA MATCH ── */}
-                <section className="relative w-full pt-28 pb-16 bg-[#FFFFFF] border-b border-slate-200 overflow-hidden min-h-[640px]">
+                {/* ── 1. HERO SECTION EXACT FIGMA MATCH WITH OVERLAP & GRADIENT ── */}
+                <section className="relative w-full pt-28 pb-16 bg-[#FFFFFF] border-b border-slate-200/80 overflow-hidden min-h-[640px]">
                     <div className="max-w-[1440px] mx-auto px-6 md:px-12 lg:px-16 relative">
                         
-                        {/* Desktop Figma Pixel-Perfect Layout (lg screens) */}
+                        {/* Desktop Pixel-Perfect Layout (lg screens) */}
                         <div className="hidden lg:block relative w-full h-[620px]">
 
-                            {/* 1. Watermark Basketball Background */}
+                            {/* 1. Watermark Basketball Background (Clearly Visible) */}
                             <img 
                                 src="/deportes/balon_basket_fondo.png" 
                                 alt="Fondo Balón" 
-                                className="absolute left-0 top-0 w-[680px] h-[520px] object-contain opacity-40 mix-blend-luminosity pointer-events-none"
+                                className="absolute left-[0px] top-[0px] w-[720px] h-[550px] object-contain opacity-65 pointer-events-none"
                             />
 
-                            {/* 2. Main Title Text */}
-                            <div className="absolute left-[120px] top-[80px] w-[500px] text-[#262626] text-[76px] font-black uppercase leading-[0.92] tracking-tighter font-sans z-10">
-                                MÁXIMO ANOTADOR <br />
-                                <span className="text-[#001659]">DE LA GRAN FINAL</span>
+                            {/* 2. Main Title Text with Degradé & Larger Size (BEHIND player torso at z-10) */}
+                            <div className="absolute left-[130px] top-[75px] w-[500px] text-[68px] xl:text-[76px] font-black uppercase leading-[0.90] tracking-tighter font-sans z-10 select-none">
+                                <span className="text-[#262626]">MÁXIMO</span> <br />
+                                <span className="text-[#262626]">ANOTADOR</span> <br />
+                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#001659] to-[#08111F]">DE LA GRAN</span> <br />
+                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#001659] via-[#08111F] to-slate-700">FINAL</span>
                             </div>
 
-                            {/* 3. Player Cutout Image jumping in front */}
+                            {/* 3. Player Cutout Image (ON TOP at z-20 so player torso & legs cover right side of title) */}
                             <img 
                                 src="/deportes/persona_basket_saltando.png" 
                                 alt="Jugador de Baloncesto Saltando" 
-                                className="absolute left-[340px] top-[40px] w-[640px] h-[540px] object-contain z-20 pointer-events-none drop-shadow-xl"
+                                className="absolute left-[260px] top-[20px] w-[720px] h-[580px] object-contain z-20 pointer-events-none drop-shadow-xl"
                             />
 
-                            {/* 4. Description Paragraph */}
-                            <div className="absolute left-[590px] top-[430px] w-[380px] text-[#262626] text-[15px] font-medium leading-relaxed font-['DM_Sans',sans-serif] z-30">
-                                El premio al máximo anotador de las finales es la distinción individual otorgada al estudiante que obtuvo el mayor puntaje y rendimiento en el torneo intercolegiado.
-                            </div>
-
-                            {/* 5. Continue Reading Button */}
-                            <div className="absolute left-[590px] top-[515px] z-30">
+                            {/* 4. Description Paragraph & Button (Flex Container z-30, no overlap) */}
+                            <div className="absolute left-[560px] top-[445px] w-[360px] flex flex-col items-start gap-4 z-30">
+                                <p className="text-[#4A4A4A] text-[14px] xl:text-[15px] font-medium leading-[22px] font-['DM_Sans',sans-serif]">
+                                    El premio al máximo anotador de las finales es la distinción individual otorgada al estudiante que obtuvo el mayor puntaje y rendimiento en el torneo intercolegiado.
+                                </p>
                                 <a 
                                     href="#noticias-tendencia"
-                                    className="inline-flex items-center justify-center px-8 py-3.5 bg-[#262626] hover:bg-[#001659] text-[#E1E8F0] text-sm font-bold uppercase tracking-[1.8px] rounded-lg transition-all shadow-lg hover:scale-105 active:scale-95 cursor-pointer font-['DM_Sans',sans-serif]"
+                                    className="inline-flex items-center justify-center px-8 py-3.5 bg-[#262626] hover:bg-[#001659] text-white text-xs font-bold uppercase tracking-[1.8px] rounded-md transition-all shadow-md hover:scale-105 active:scale-95 cursor-pointer font-['DM_Sans',sans-serif]"
                                 >
                                     CONTINUAR LEYENDO
                                 </a>
                             </div>
 
-                            {/* 6. Today Badge (Top Right) */}
-                            <div className="absolute left-[1060px] top-[80px] z-30 bg-[#E1E8F0] px-4 py-1 rounded-sm text-center">
-                                <span className="text-[#5A6E85] text-xs font-semibold uppercase tracking-wider font-['DM_Sans',sans-serif]">
+                            {/* 5. Today Badge (Top Right) */}
+                            <div className="absolute left-[1040px] top-[75px] z-30 bg-[#EAEFF4] px-4 py-1 rounded-sm text-center">
+                                <span className="text-[#8E9CAE] text-xs font-semibold uppercase tracking-wider font-['DM_Sans',sans-serif]">
                                     Today
                                 </span>
                             </div>
 
-                            {/* 7. Stacked Right Cards */}
+                            {/* 6. Stacked Right Cards */}
                             {/* Card 1 */}
-                            <div className="absolute left-[1060px] top-[125px] w-[270px] h-[220px] rounded-xl overflow-hidden shadow-md group cursor-pointer border border-slate-200 z-30">
+                            <div className="absolute left-[1040px] top-[120px] w-[270px] h-[195px] rounded-xl overflow-hidden shadow-sm group cursor-pointer border border-slate-200/80 bg-white z-30">
                                 <img 
                                     src="https://images.unsplash.com/photo-1592656094267-764a45160876?auto=format&fit=crop&w=500&q=80" 
                                     alt="Voleibol" 
-                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+                                    className="w-full h-[120px] object-cover group-hover:scale-105 transition-transform duration-500" 
                                 />
-                                <div className="absolute inset-0 bg-gradient-to-t from-[#F2F2F2] via-[#F2F2F2]/60 to-transparent" />
-                                <div className="absolute bottom-3 left-4 right-4 text-left space-y-1">
-                                    <span className="text-[10px] font-bold text-[#666666] uppercase block font-['DM_Sans',sans-serif]">
+                                <div className="p-3 text-left space-y-1">
+                                    <span className="text-[10px] font-bold text-[#888888] uppercase block font-['DM_Sans',sans-serif]">
                                         Voleibol • 03 Junio 2026
                                     </span>
                                     <h4 className="text-xs font-black text-[#262626] leading-tight font-sans line-clamp-2">
@@ -217,15 +216,14 @@ export default function Deportes() {
                             </div>
 
                             {/* Card 2 */}
-                            <div className="absolute left-[1060px] top-[365px] w-[270px] h-[220px] rounded-xl overflow-hidden shadow-md group cursor-pointer border border-slate-200 z-30">
+                            <div className="absolute left-[1040px] top-[340px] w-[270px] h-[195px] rounded-xl overflow-hidden shadow-sm group cursor-pointer border border-slate-200/80 bg-white z-30">
                                 <img 
-                                    src="https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=500&q=80" 
+                                    src="https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=500&q=80" 
                                     alt="Microfútbol" 
-                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+                                    className="w-full h-[120px] object-cover group-hover:scale-105 transition-transform duration-500" 
                                 />
-                                <div className="absolute inset-0 bg-gradient-to-t from-[#F2F2F2] via-[#F2F2F2]/60 to-transparent" />
-                                <div className="absolute bottom-3 left-4 right-4 text-left space-y-1">
-                                    <span className="text-[10px] font-bold text-[#666666] uppercase block font-['DM_Sans',sans-serif]">
+                                <div className="p-3 text-left space-y-1">
+                                    <span className="text-[10px] font-bold text-[#888888] uppercase block font-['DM_Sans',sans-serif]">
                                         Microfútbol • 03 Junio 2026
                                     </span>
                                     <h4 className="text-xs font-black text-[#262626] leading-tight font-sans line-clamp-2">
@@ -242,7 +240,7 @@ export default function Deportes() {
                             <img 
                                 src="/deportes/balon_basket_fondo.png" 
                                 alt="Fondo Balón" 
-                                className="absolute top-0 left-1/2 -translate-x-1/2 w-[320px] h-[260px] object-contain opacity-30 pointer-events-none"
+                                className="absolute top-0 left-1/2 -translate-x-1/2 w-[320px] h-[260px] object-contain opacity-50 pointer-events-none"
                             />
 
                             <h1 className="text-3xl sm:text-5xl font-black text-[#262626] uppercase leading-none tracking-tighter font-sans z-10">
@@ -264,15 +262,15 @@ export default function Deportes() {
 
                             <a 
                                 href="#noticias-tendencia"
-                                className="inline-flex items-center justify-center px-8 py-3.5 bg-[#262626] hover:bg-[#001659] text-[#E1E8F0] text-sm font-bold uppercase tracking-[1.8px] rounded-lg transition-all shadow-md font-['DM_Sans',sans-serif]"
+                                className="inline-flex items-center justify-center px-8 py-3.5 bg-[#262626] hover:bg-[#001659] text-white text-sm font-bold uppercase tracking-[1.8px] rounded-lg transition-all shadow-md font-['DM_Sans',sans-serif]"
                             >
                                 CONTINUAR LEYENDO
                             </a>
 
                             {/* Today Sidebar Cards for Mobile */}
                             <div className="w-full pt-8 space-y-4 text-left">
-                                <div className="inline-block bg-[#E1E8F0] px-3.5 py-1 rounded-sm">
-                                    <span className="text-[#5A6E85] text-xs font-semibold uppercase tracking-wider font-['DM_Sans',sans-serif]">Today</span>
+                                <div className="inline-block bg-[#EAEFF4] px-3.5 py-1 rounded-sm">
+                                    <span className="text-[#8E9CAE] text-xs font-semibold uppercase tracking-wider font-['DM_Sans',sans-serif]">Today</span>
                                 </div>
 
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -284,7 +282,7 @@ export default function Deportes() {
                                         </div>
                                     </div>
                                     <div className="bg-white rounded-xl overflow-hidden shadow-sm border border-slate-200 p-3 flex items-center gap-3">
-                                        <img src="https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=300&q=80" className="w-20 h-20 rounded-lg object-cover" />
+                                        <img src="https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=300&q=80" className="w-20 h-20 rounded-lg object-cover" />
                                         <div>
                                             <span className="text-[10px] font-bold text-[#001659] uppercase block font-['DM_Sans',sans-serif]">Microfútbol • 03 Junio</span>
                                             <h4 className="text-xs font-black text-[#262626] font-sans">Microfútbol COLSIH: Gran victoria en segunda jornada</h4>
@@ -742,7 +740,7 @@ export default function Deportes() {
                                 <div className="lg:col-span-5 relative flex justify-center lg:justify-end">
                                     <div className="relative w-64 sm:w-80 aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl border-4 border-white transform hover:rotate-1 transition-transform">
                                         <img 
-                                            src="https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80" 
+                                            src="https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=800&q=80" 
                                             alt="Boletín Deportivo COLSIH" 
                                             className="w-full h-full object-cover" 
                                         />

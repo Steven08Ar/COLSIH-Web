@@ -19,6 +19,7 @@ import {
     HelpCircle,
     Copy,
     Check,
+    ChevronDown,
     ChevronRight,
     Users,
     BookmarkCheck,
@@ -26,7 +27,16 @@ import {
     Trophy,
     BookOpen,
     Award,
-    Briefcase
+    Briefcase,
+    Search,
+    ClipboardList,
+    PieChart,
+    Bus,
+    MessageSquare,
+    User,
+    X,
+    School,
+    CheckCircle
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -34,162 +44,155 @@ const LINK_INSCRIPCIONES = "https://e.plataformaintegra.net/sihungria/index.php/
 const CORREO_ADMISIONES = "admisionescolsihfloridablanca@gmail.com";
 
 const cuposGrados = [
-    { nivel: 'Preescolar', grados: ['Jardín', 'Transición'], bgBadge: 'bg-[#001659]', textBadge: 'text-white' },
-    { nivel: 'Primaria', grados: ['1°', '2°', '3°', '4°'], bgBadge: 'bg-[#800A15]', textBadge: 'text-white' },
-    { nivel: 'Bachillerato', grados: ['6°', '7°', '8°', '9°'], bgBadge: 'bg-[#001659]', textBadge: 'text-white' }
-];
-
-const beneficiosInstitucionales = [
-    {
-        titulo: 'Formación Espiritual y en Valores',
-        descripcion: 'Acompañamiento pastoral salesiano, desarrollo humano integral, vivencia activa de la fe y educación en valores cristianos basados en el Sistema Preventivo de San Juan Bosco.',
-        icono: Heart,
-        badge: 'Identidad Salesiana',
-        badgeBg: 'bg-[#800A15]',
-        badgeText: 'text-white'
-    },
-    {
-        titulo: 'Actividades Extraescolares',
-        descripcion: 'Escuelas deportivas (fútbol, voleibol, atletismo), expresiones artísticas, música, coro, robótica educativa y pertenencia activa al Movimiento Juvenil Salesiano (MJS).',
-        icono: Trophy,
-        badge: 'Deporte & Cultura',
-        badgeBg: 'bg-[#003C8F]',
-        badgeText: 'text-white'
-    },
-    {
-        titulo: 'Inglés desde Jardín',
-        descripcion: 'Aprendizaje del idioma inglés desde los primeros niveles de formación inicial mediante metodologías lúdicas, interactivas y continuas durante toda la etapa escolar.',
-        icono: BookOpen,
-        badge: 'Bilingüismo Inicial',
-        badgeBg: 'bg-[#0B1F3A]',
-        badgeText: 'text-white'
-    },
-    {
-        titulo: 'Becas UPB del 90%',
-        descripcion: 'Los mejores bachilleres de nuestra institución acceden a becas del 90% de matrícula para estudios superiores en la Universidad Pontificia Bolivariana.',
-        icono: Award,
-        badge: 'Convenio Universitario',
-        badgeBg: 'bg-emerald-700',
-        badgeText: 'text-white'
-    },
-    {
-        titulo: 'Técnico en Contabilización SENA',
-        descripcion: 'Articulación directa con el SENA para egresar con doble titulación oficial como Bachiller Técnico en Contabilización de Operaciones Comerciales y Financieras.',
-        icono: Briefcase,
-        badge: 'Doble Titulación SENA',
-        badgeBg: 'bg-amber-500',
-        badgeText: 'text-slate-950'
-    }
+    { nivel: 'Preescolar', grados: ['Prejardín', 'Jardín', 'Transición'], bgBadge: 'bg-[#003C8F]', textBadge: 'text-white' },
+    { nivel: 'Primaria', grados: ['Primero (1°)', 'Segundo (2°)', 'Tercero (3°)', 'Cuarto (4°)'], bgBadge: 'bg-[#800A15]', textBadge: 'text-white' },
+    { nivel: 'Bachillerato', grados: ['Sexto (6°)', 'Séptimo (7°)', 'Octavo (8°)', 'Noveno (9°)'], bgBadge: 'bg-[#003C8F]', textBadge: 'text-white' }
 ];
 
 const pasosProceso = [
     {
-        paso: '01',
-        titulo: 'Diligenciar Formulario de Inscripción',
-        subtitulo: 'Registro inicial en la plataforma web',
-        icono: FileText,
-        badge: 'PASO 1 · EN LÍNEA',
-        colorBadge: 'bg-[#003C8F] text-white',
+        paso: '1',
+        titulo: 'Conoce el colegio',
+        subtitulo: 'Explora nuestra propuesta educativa',
+        descripcion: 'Explora nuestra propuesta educativa, valores y todo lo que nos hace diferentes en la comunidad salesiana.',
+        icono: Search,
+        badge: 'PASO 1 · INICIAL',
         detalles: [
-            'Ingresa a la plataforma oficial de cupos e inicia el formulario de tu hijo(a).',
-            'Diligencia los datos completos del aspirante y los acudientes.'
+            'Conoce nuestras instalaciones y modelo pedagógico salesiano.',
+            'Identifica los cupos habilitados para el grado de tu interés.'
+        ]
+    },
+    {
+        paso: '2',
+        titulo: 'Consulta requisitos',
+        subtitulo: 'Documentos y papelería obligatoria',
+        descripcion: 'Revisa los requisitos y documentos necesarios para el proceso según el nivel académico.',
+        icono: ClipboardList,
+        badge: 'HASTA EL 10 DE SEPTIEMBRE',
+        detalles: [
+            'Envía al correo admisionescolsihfloridablanca@gmail.com en PDF.',
+            'Preescolar: Registro Civil de Nacimiento del aspirante.',
+            'Primaria y Bachillerato: Observador del estudiante, documento de identidad y boletines de los 3 periodos 2026.'
         ],
         asuntoCorreo: 'Admisiones 2027, [Nombre y Apellidos del Hijo/a], [Grado que solicita]'
     },
     {
-        paso: '02',
-        titulo: 'Envío de Documentación Obligatoria',
-        subtitulo: 'Requisito previo e indispensable a la entrevista',
-        icono: ShieldCheck,
-        badge: 'HASTA EL 10 DE SEPTIEMBRE',
-        colorBadge: 'bg-[#800A15] text-white',
-        detalles: [
-            'Envía al correo oficial admisionescolsihfloridablanca@gmail.com todos los documentos requeridos escaneados en PDF o imagen nítida.',
-            'La entrega oportuna habilita la cita con la psicóloga.'
-        ],
-        documentosPorNivel: [
-            {
-                nivel: 'PREESCOLAR (Jardín y Transición)',
-                requisitos: [
-                    'Registro Civil de Nacimiento del aspirante.'
-                ]
-            },
-            {
-                nivel: 'PRIMARIA Y BACHILLERATO (1° a 9°)',
-                requisitos: [
-                    'Fotocopia del observador del estudiante o constancia de comportamiento del año 2026.',
-                    'Registro Civil y/o Tarjeta de Identidad (mayores de 7 años).',
-                    'Boletines de calificaciones de los 3 periodos académicos del año 2026 cursados a la fecha.'
-                ]
-            }
-        ]
-    },
-    {
-        paso: '03',
-        titulo: 'Prueba Académica y Entrevista Presencial',
-        subtitulo: 'Evaluación presencial en la sede principal',
-        icono: UserCheck,
+        paso: '3',
+        titulo: 'Inscríbete',
+        subtitulo: 'Formulario web y entrevista',
+        descripcion: 'Diligencia el formulario en la plataforma y envía los documentos solicitados para la cita.',
+        icono: FileText,
         badge: 'PRESENCIAL Y OBLIGATORIO',
-        colorBadge: 'bg-[#003C8F] text-white',
         detalles: [
-            'Tanto la prueba académica como la entrevista se realizarán de manera presencial.',
-            'En la entrevista es de asistencia obligatoria: Papá, Mamá y el aspirante.',
-            'Tanto la prueba, la entrevista y los documentos serán evaluados por el Comité de Admisiones para la decisión final.'
+            'Diligencia el formulario oficial en línea (Costo: $70.000 COP en Banco Caja Social).',
+            'Presenta la prueba académica presencial y asiste a la entrevista con papá, mamá y aspirante.'
         ]
     },
     {
-        paso: '04',
-        titulo: 'Publicación de Lista de Admitidos',
-        subtitulo: 'Resultados finales en el portal oficial',
-        icono: GraduationCap,
+        paso: '4',
+        titulo: 'Bienvenido',
+        subtitulo: 'Publicación de admitidos',
+        descripcion: 'Te contactaremos para acompañarte en los siguientes pasos de la matrícula escolar 2027.',
+        icono: Sparkles,
         badge: '1 DE OCTUBRE DE 2026',
-        colorBadge: 'bg-emerald-600 text-white',
         detalles: [
-            'La lista de estudiantes admitidos será publicada el 1 de octubre de 2026 en colsih.edu.co/admisiones',
-            'Válido para las familias que completaron oportunamente el formulario, pago, documentos, prueba y entrevista.'
+            'Publicación oficial de admitidos en colsih.edu.co/admisiones.',
+            'Formalización de la matrícula y bienvenida a la familia COLSIH.'
         ]
     }
 ];
 
-const notasClave = [
+const cardsGuia = [
     {
-        titulo: 'Costo del Formulario',
-        valor: '$70.000 COP',
-        desc: 'El valor de la inscripción es de setenta mil pesos m/cte. Este valor no es reembolsable.',
-        icono: CreditCard,
-        destacado: true
+        id: 'oferta',
+        titulo: 'Oferta Académica',
+        descripcion: 'Programas de calidad para cada etapa de crecimiento escolar.',
+        icono: ClipboardList,
+        colorBg: 'bg-blue-50/80 text-[#003C8F]'
     },
     {
-        titulo: 'Pago Autorizado',
-        valor: 'BANCO CAJA SOCIAL',
-        desc: 'Único banco autorizado para el pago del recibo enviado el 26 de agosto al correo.',
-        icono: Building2,
-        destacado: false
+        id: 'costos',
+        titulo: 'Costos',
+        descripcion: 'Conoce nuestras tarifas, formas de pago y descuentos disponibles.',
+        icono: PieChart,
+        colorBg: 'bg-rose-50/80 text-[#800A15]'
     },
     {
-        titulo: 'Condición de Selección',
-        valor: 'Sujeto a Evaluación',
-        desc: 'El diligenciamiento y pago no aseguran el cupo; está sujeto a la prueba y entrevista.',
-        icono: AlertCircle,
-        destacado: false
+        id: 'becas',
+        titulo: 'Becas',
+        descripcion: 'Apoyamos el talento y el esfuerzo de nuestros estudiantes.',
+        icono: Award,
+        colorBg: 'bg-amber-50/80 text-amber-700'
     },
     {
-        titulo: 'Canal Oficial',
-        valor: 'Correo Electrónico',
-        desc: 'admisionescolsihfloridablanca@gmail.com para el envío de comprobantes y papelería.',
-        icono: Mail,
-        destacado: false
+        id: 'transporte',
+        titulo: 'Transporte',
+        descripcion: 'Rutas seguras y acompañamiento para tu tranquilidad.',
+        icono: Bus,
+        colorBg: 'bg-[#F0F4FA] text-[#003C8F]'
+    },
+    {
+        id: 'faq',
+        titulo: 'Preguntas frecuentes',
+        descripcion: 'Resuelve tus dudas sobre el proceso de admisión 2027.',
+        icono: MessageSquare,
+        colorBg: 'bg-[#FDF2F4] text-[#800A15]'
     }
 ];
 
-const horariosJornadas = [
-    { nivel: 'Preescolar', grados: 'Jardín y Transición', horario: '7:00 a.m. – 12:30 p.m.', badge: 'Jornada Mañana' },
-    { nivel: 'Básica Primaria', grados: '1° a 5° Grado', horario: '6:30 a.m. – 1:00 p.m.', badge: 'Jornada Única' },
-    { nivel: 'Bachillerato', grados: '6° a 11° Grado', horario: '6:30 a.m. – 2:00 p.m.', badge: 'Jornada Única' }
+const statsData = [
+    {
+        valor: '25+',
+        titulo: 'Años de experiencia',
+        desc: 'Formando generaciones con excelencia académica y humana.',
+        icono: User
+    },
+    {
+        valor: '100%',
+        titulo: 'Formación en valores',
+        desc: 'Educación integral que trasciende las aulas escolares.',
+        icono: Heart
+    },
+    {
+        valor: '1200+',
+        titulo: 'Estudiantes felices',
+        desc: 'Una comunidad educativa que inspira y acompaña.',
+        icono: Users
+    },
+    {
+        valor: '80+',
+        titulo: 'Docentes expertos',
+        desc: 'Profesionales comprometidos con cada estudiante.',
+        icono: GraduationCap
+    }
+];
+
+const faqsData = [
+    {
+        pregunta: '¿Cuál es el proceso de admisión?',
+        respuesta: 'El proceso consta de 4 pasos principales: 1) Conocer el colegio y cupos habilitados. 2) Consultar requisitos y enviar papelería a admisionescolsihfloridablanca@gmail.com. 3) Diligenciar formulario en la plataforma integra ($70.000 COP) y asistir a la prueba presencial con entrevista familiar. 4) Publicación de admitidos el 1 de octubre de 2026.'
+    },
+    {
+        pregunta: '¿Qué documentos necesito para inscribirme?',
+        respuesta: 'Para Preescolar (Jardín y Transición): Registro civil de nacimiento. Para Primaria y Bachillerato (1° a 9°): Fotocopia del observador del estudiante 2026, documento de identidad (Registro civil o Tarjeta de identidad) y boletines de calificaciones de los 3 periodos 2026 cursados a la fecha.'
+    },
+    {
+        pregunta: '¿Hay descuentos por hermanos?',
+        respuesta: 'Sí, la institución cuenta con beneficios e incentivos familiares por matriculación de hermanos, así como convenios especiales de Becas UPB del 90% para los mejores bachilleres y articulación SENA.'
+    },
+    {
+        pregunta: '¿Cuáles son las formas de pago?',
+        respuesta: 'El valor del formulario ($70.000 COP) se cancela únicamente en el Banco Caja Social a través del recibo enviado al correo tras el pre-registro en la plataforma oficial.'
+    },
+    {
+        pregunta: '¿Cuándo inician las clases?',
+        respuesta: 'El calendario académico 2027 inicia según las directrices oficiales del Ministerio de Educación y la Secretaría de Educación de Floridablanca en la última semana de enero o primera de febrero.'
+    }
 ];
 
 export default function Admisiones() {
-    const [pasoActivo, setPasoActivo] = useState(0);
+    const [faqAbierta, setFaqAbierta] = useState(0);
+    const [modalCard, setModalCard] = useState(null);
     const [asuntoCopiado, setAsuntoCopiado] = useState(false);
     const [correoCopiado, setCorreoCopiado] = useState(false);
 
@@ -206,353 +209,371 @@ export default function Admisiones() {
 
     return (
         <AppLayout>
-            <Head title="Inscripciones y Admisiones 2027 | COLSIH" />
+            <Head title="Admisiones e Inscripciones 2027 | Colegio Santa Isabel de Hungría" />
 
-            {/* 1. HERO LUMINOSO Y CLARO CON TIPOGRAFÍA GIGANTE */}
-            <section className="relative pt-36 pb-24 md:pt-48 md:pb-36 bg-[#FAFCFF] border-b border-slate-200 select-none overflow-hidden">
-                {/* Micro patrones limpios */}
-                <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: "radial-gradient(#003C8F 1.5px, transparent 1.5px)", backgroundSize: "28px 28px" }} />
-                
-                <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] relative z-10">
-                    <div className="max-w-4xl mx-auto text-center space-y-8">
+            {/* SECCIÓN 1: HERO (Limpio, blanco con acentos rojos y azules institucional) */}
+            <section className="relative pt-32 pb-20 md:pt-44 md:pb-28 bg-[#FFFFFF] border-b border-slate-100 select-none overflow-hidden">
+                {/* Patrón de Puntos de Fondo Fiel al Diseño */}
+                <div 
+                    className="absolute top-10 right-10 w-72 h-72 opacity-[0.08] pointer-events-none hidden lg:block"
+                    style={{ backgroundImage: "radial-gradient(#003C8F 2px, transparent 2px)", backgroundSize: "20px 20px" }} 
+                />
+                <div 
+                    className="absolute bottom-10 left-10 w-60 h-60 opacity-[0.06] pointer-events-none hidden lg:block"
+                    style={{ backgroundImage: "radial-gradient(#800A15 2px, transparent 2px)", backgroundSize: "20px 20px" }} 
+                />
+
+                {/* Forma decorativa superior izquierda en azul institucional */}
+                <div className="absolute top-0 left-0 w-32 h-32 md:w-44 md:h-44 bg-[#003C8F] rounded-br-[100px] opacity-95 pointer-events-none -translate-x-6 -translate-y-6" />
+
+                <div className="max-w-[1440px] mx-auto px-6 md:px-12 lg:px-16 relative z-10">
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
                         
-                        {/* Badge Gigante y Claro */}
-                        <ScrollReveal distance="translate-y-6">
-                            <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-[#800A15] text-white text-xs sm:text-sm md:text-base font-black tracking-widest uppercase shadow-lg shadow-[#800A15]/20">
-                                <Sparkles className="w-5 h-5 text-amber-300 shrink-0 animate-pulse" />
-                                <span>PROCESO DE INSCRIPCIÓN · ESTUDIANTES NUEVOS 2027</span>
-                            </div>
-                        </ScrollReveal>
-
-                        {/* Título Gigante Claro */}
-                        <ScrollReveal distance="translate-y-6" delay={150}>
-                            <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-[76px] font-black text-[#0B1F3A] leading-[0.95] tracking-tight font-sans">
-                                Proceso de Admisiones <br className="hidden sm:block" />
-                                <span className="text-[#003C8F]">
-                                    Año Escolar 2027
-                                </span>
-                            </h1>
-                        </ScrollReveal>
-
-                        {/* Subtítulo Grande con Grados con Cupos Disponibles */}
-                        <ScrollReveal distance="translate-y-6" delay={300}>
-                            <div className="space-y-4 max-w-3xl mx-auto">
-                                <p className="text-xl sm:text-2xl font-semibold text-slate-600 leading-relaxed font-sans">
-                                    Te damos la bienvenida al Colegio Santa Isabel de Hungría. Actualmente contamos con vacantes habilitadas exclusivamente para los siguientes grados:
-                                </p>
-
-                                <div className="flex flex-wrap items-center justify-center gap-2.5 pt-2">
-                                    {['Prejardín', 'Jardín', 'Transición', 'Primero (1°)', 'Sexto (6°)'].map((grado) => (
-                                        <span
-                                            key={grado}
-                                            className="px-4 py-2 rounded-xl bg-[#003C8F] text-white font-black text-sm sm:text-base shadow-sm border border-blue-900"
-                                        >
-                                            {grado}
-                                        </span>
-                                    ))}
+                        {/* Columna Izquierda: Textos y Botones */}
+                        <div className="lg:col-span-6 space-y-8 text-left">
+                            <ScrollReveal distance="translate-y-4">
+                                <div className="space-y-4">
+                                    <h1 className="text-4xl sm:text-5xl lg:text-[58px] font-extrabold text-[#0B1F3A] leading-[1.1] tracking-tight font-sans">
+                                        Comienza aquí <br />
+                                        el <span className="text-[#800A15] relative inline-block">
+                                            futuro
+                                            <span className="absolute left-0 bottom-1 w-full h-[4px] bg-[#800A15]/30 rounded-full" />
+                                        </span> de <br className="hidden sm:block" />
+                                        tu hijo.
+                                    </h1>
+                                    <p className="text-base sm:text-lg text-slate-600 font-medium max-w-lg leading-relaxed font-sans pt-2">
+                                        En el Colegio Santa Isabel formamos personas íntegras, felices y comprometidas con transformar su entorno.
+                                    </p>
                                 </div>
-                            </div>
-                        </ScrollReveal>
+                            </ScrollReveal>
 
-                        {/* BOTÓN GIGANTE LLAMATIVO SIN DEGRADADOS */}
-                        <ScrollReveal distance="translate-y-6" delay={450}>
-                            <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-5">
-                                <a
-                                    href={LINK_INSCRIPCIONES}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="group inline-flex items-center justify-center gap-4 px-10 py-5 rounded-2xl bg-[#003C8F] hover:bg-[#002e6e] text-white font-black text-lg md:text-xl shadow-xl shadow-[#003C8F]/30 hover:scale-[1.03] active:scale-[0.98] transition-all duration-300 border-2 border-[#003C8F] cursor-pointer"
-                                >
-                                    <FileText className="w-6 h-6 text-amber-300 group-hover:rotate-12 transition-transform duration-300" />
-                                    <span>ENTRAR A INSCRIPCIONES (SOLICITAR CUPO)</span>
-                                    <ExternalLink className="w-6 h-6 text-white group-hover:translate-x-1 transition-transform" />
-                                </a>
+                            {/* Botones estilo Píldora como la imagen de referencia */}
+                            <ScrollReveal distance="translate-y-4" delay={150}>
+                                <div className="flex flex-wrap items-center gap-4 pt-2">
+                                    <a
+                                        href={LINK_INSCRIPCIONES}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="inline-flex items-center gap-3 px-7 py-3.5 rounded-full bg-[#800A15] hover:bg-[#9E0D1C] text-white text-sm font-extrabold shadow-lg shadow-[#800A15]/30 hover:scale-[1.03] active:scale-[0.98] transition-all duration-300 cursor-pointer"
+                                    >
+                                        <span>Ir a inscripciones</span>
+                                        <ArrowRight className="w-4 h-4 text-white" />
+                                    </a>
 
-                                <a
-                                    href="#guia-pasos"
-                                    className="inline-flex items-center gap-2 px-8 py-5 rounded-2xl bg-white hover:bg-slate-100 text-[#0B1F3A] font-extrabold text-base md:text-lg border-2 border-slate-300 shadow-md hover:scale-[1.02] transition-all duration-300"
-                                >
-                                    <span>Ver Instrucciones</span>
-                                    <ArrowRight className="w-5 h-5 text-[#003C8F]" />
-                                </a>
-                            </div>
-                        </ScrollReveal>
+                                    <a
+                                        href="#proceso"
+                                        className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-white hover:bg-slate-50 text-[#0B1F3A] text-sm font-bold border-2 border-slate-200 shadow-xs hover:border-[#003C8F] transition-all duration-300"
+                                    >
+                                        <span>Conocer el proceso</span>
+                                        <ChevronDown className="w-4 h-4 text-slate-500" />
+                                    </a>
+                                </div>
+                            </ScrollReveal>
 
-                    </div>
-                </div>
-            </section>
-
-            {/* 2. BARRA DESTACADA DE CUPOS DISPONIBLES (CLARA Y MODERNA) */}
-            <section className="py-16 bg-white border-b border-slate-200 select-none">
-                <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px]">
-                    <div className="bg-[#F0F4FA] border-2 border-[#003C8F]/20 rounded-3xl p-8 md:p-10 shadow-sm space-y-6">
-                        
-                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b-2 border-slate-200/80 pb-6">
-                            <div className="space-y-1 text-left">
-                                <span className="text-xs font-black uppercase tracking-widest text-[#800A15] block font-sans">
-                                    DISPONIBILIDAD CONFIRMADA DE CUPOS
-                                </span>
-                                <h2 className="text-3xl md:text-4xl font-black text-[#0B1F3A] font-sans">
-                                    Cupos Disponibles para el Año 2027:
-                                </h2>
-                            </div>
-                            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-[#003C8F] text-white font-black text-sm tracking-wider uppercase self-start md:self-auto">
-                                <BookmarkCheck className="w-5 h-5 text-amber-300" />
-                                <span>Inscripciones Habilitadas</span>
-                            </div>
-                        </div>
-
-                        {/* Grid de Grados por Nivel */}
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
-                            {cuposGrados.map((item, idx) => (
-                                <div key={idx} className="bg-white p-6 rounded-2xl border-2 border-slate-200 space-y-3 hover:border-[#003C8F] transition-colors shadow-xs">
-                                    <span className="text-xs font-black uppercase tracking-wider text-slate-400 font-sans block">
-                                        {item.nivel}:
+                            {/* Badges de Grados Disponibles */}
+                            <ScrollReveal distance="translate-y-4" delay={300}>
+                                <div className="pt-4 border-t border-slate-100 space-y-2">
+                                    <span className="text-xs font-bold uppercase tracking-wider text-slate-400 block font-sans">
+                                        Cupos exclusivos 2027:
                                     </span>
-                                    <div className="flex flex-wrap gap-2.5">
-                                        {item.grados.map((grado, gIdx) => (
-                                            <span key={gIdx} className={`px-4 py-2 rounded-xl ${item.bgBadge} ${item.textBadge} font-black text-sm shadow-sm`}>
-                                                Grado {grado}
+                                    <div className="flex flex-wrap gap-2">
+                                        {['Prejardín', 'Jardín', 'Transición', 'Primero (1°)', 'Sexto (6°)'].map((grado) => (
+                                            <span 
+                                                key={grado}
+                                                className="px-3.5 py-1.5 rounded-lg bg-[#F0F4FA] text-[#003C8F] font-extrabold text-xs border border-blue-100"
+                                            >
+                                                {grado}
                                             </span>
                                         ))}
                                     </div>
                                 </div>
-                            ))}
+                            </ScrollReveal>
+
                         </div>
 
-                        {/* Banner del Costo */}
-                        <div className="p-5 rounded-2xl bg-white border-2 border-[#800A15]/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                            <div className="flex items-center gap-3 text-left">
-                                <div className="w-12 h-12 rounded-2xl bg-[#800A15] text-white flex items-center justify-center shrink-0 font-black">
-                                    $
+                        {/* Columna Derecha: Ilustración Compuesta 3D de Tarjetas Educativas */}
+                        <div className="lg:col-span-6 relative flex justify-center items-center py-6">
+                            
+                            {/* Círculo de Fondo Neumórfico Suave */}
+                            <div className="w-[340px] h-[340px] sm:w-[440px] sm:h-[440px] rounded-full bg-gradient-to-tr from-blue-50 via-slate-50 to-rose-50 border border-slate-100 absolute -z-10 animate-pulse opacity-80" />
+
+                            {/* Elementos Isométricos y Tarjetas Flotantes */}
+                            <div className="relative w-full max-w-[480px] h-[400px] sm:h-[460px] flex items-center justify-center">
+                                
+                                {/* 1. Tarjeta Diploma */}
+                                <div className="absolute top-4 left-6 sm:left-10 bg-white/90 backdrop-blur-md p-4 rounded-2xl shadow-xl border border-slate-100 flex items-center gap-3 animate-bounce [animation-duration:5s]">
+                                    <div className="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-600 flex items-center justify-center font-bold">
+                                        <Award className="w-6 h-6" />
+                                    </div>
+                                    <span className="text-xs font-black text-slate-800 uppercase">Diploma Oficial</span>
                                 </div>
-                                <div>
-                                    <span className="text-xs font-black uppercase text-[#800A15] tracking-wider block font-sans">COSTO DEL FORMULARIO</span>
-                                    <p className="text-lg font-black text-[#0B1F3A] font-sans">
-                                        SETENTA MIL PESOS ($70.000 COP) · <span className="text-slate-500 font-semibold text-sm">Valor no reembolsable</span>
-                                    </p>
+
+                                {/* 2. Tarjeta Colegio Grande Azul */}
+                                <div className="absolute top-2 right-4 bg-[#001E50] text-white p-6 rounded-3xl shadow-2xl border border-white/10 flex flex-col items-center justify-center w-36 sm:w-44 text-center transform rotate-3 hover:rotate-0 transition-transform duration-300">
+                                    <School className="w-12 h-12 text-blue-200 mb-2" />
+                                    <span className="text-xs font-extrabold uppercase tracking-wider text-blue-100">Colegio Salesiano</span>
                                 </div>
+
+                                {/* 3. Tarjeta Calendario */}
+                                <div className="absolute top-28 left-2 sm:left-6 bg-white p-4 rounded-2xl shadow-lg border border-slate-100 w-44">
+                                    <div className="flex items-center justify-between border-b border-slate-100 pb-2 mb-2">
+                                        <span className="text-[10px] font-black text-slate-400 uppercase">Calendario 2027</span>
+                                        <Calendar className="w-3.5 h-3.5 text-[#800A15]" />
+                                    </div>
+                                    <div className="grid grid-cols-4 gap-1 text-center text-[10px] font-bold text-slate-600">
+                                        <span className="bg-slate-100 rounded py-0.5">M</span>
+                                        <span className="bg-slate-100 rounded py-0.5">T</span>
+                                        <span className="bg-slate-100 rounded py-0.5">W</span>
+                                        <span className="bg-blue-600 text-white rounded py-0.5">F</span>
+                                    </div>
+                                </div>
+
+                                {/* 4. Libros Estacados */}
+                                <div className="absolute bottom-24 right-6 bg-[#800A15] text-white p-5 rounded-2xl shadow-2xl flex items-center gap-3 transform -rotate-6 hover:rotate-0 transition-transform duration-300">
+                                    <BookOpen className="w-8 h-8 text-amber-300" />
+                                    <div className="text-left">
+                                        <span className="text-xs font-black block">Excelencia</span>
+                                        <span className="text-[10px] font-medium text-rose-200">Académica SENA</span>
+                                    </div>
+                                </div>
+
+                                {/* 5. Birrete de Graduación Central */}
+                                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#003C8F] text-white p-6 rounded-3xl shadow-2xl border-2 border-white/20 flex flex-col items-center justify-center w-40 h-40 transform hover:scale-105 transition-transform duration-300 z-20">
+                                    <GraduationCap className="w-16 h-16 text-amber-300 mb-1" />
+                                    <span className="text-xs font-black uppercase tracking-wider text-white">Formación Integral</span>
+                                </div>
+
+                                {/* 6. Badge de Permiso Autorizado */}
+                                <div className="absolute bottom-6 left-12 bg-white p-3.5 rounded-2xl shadow-xl border border-slate-100 flex items-center gap-3">
+                                    <div className="w-8 h-8 rounded-full bg-amber-400 text-slate-950 flex items-center justify-center font-bold shrink-0">
+                                        <CheckCircle className="w-5 h-5 text-slate-950" />
+                                    </div>
+                                    <div className="text-left">
+                                        <span className="text-[10px] font-black text-slate-400 uppercase block">Inscripciones</span>
+                                        <span className="text-xs font-bold text-slate-800">Proceso Habilitado</span>
+                                    </div>
+                                </div>
+
+                                {/* Círculos decorativos flotantes */}
+                                <div className="absolute top-8 left-1/2 w-4 h-4 rounded-full bg-amber-400" />
+                                <div className="absolute bottom-16 right-2 w-3 h-3 rounded-full bg-[#800A15]" />
+                                <div className="absolute top-36 right-0 w-2.5 h-2.5 rounded-full bg-[#003C8F]" />
                             </div>
-                            <span className="text-xs font-bold text-slate-500 bg-slate-100 px-3 py-1.5 rounded-xl border border-slate-200">
-                                Pago en Banco Caja Social
-                            </span>
+
                         </div>
 
                     </div>
                 </div>
             </section>
 
-            {/* 3. BENEFICIOS INSTITUCIONALES (POR QUÉ ELEGIR COLSIH - TEMA CLARO CON TIPOGRAFÍA GIGANTE) */}
-            <section className="py-20 md:py-32 bg-[#F8FAFC] border-b border-slate-200 select-none">
-                <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] space-y-16">
+            {/* SECCIÓN 2: ASÍ ES NUESTRO PROCESO (4 Pasos con Stepper Horizontal) */}
+            <section id="proceso" className="py-20 md:py-28 bg-[#FFFFFF] border-b border-slate-100 select-none">
+                <div className="max-w-[1440px] mx-auto px-6 md:px-12 lg:px-16 space-y-16">
                     
-                    <div className="text-center max-w-4xl mx-auto space-y-4">
-                        <ScrollReveal distance="translate-y-6">
-                            <span className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#800A15] text-white font-black text-xs md:text-sm tracking-widest uppercase shadow-md">
-                                <Award className="w-4 h-4 text-amber-300" />
-                                BENEFICIOS INSTITUCIONALES
+                    {/* Encabezado de Sección */}
+                    <div className="text-center max-w-2xl mx-auto space-y-3">
+                        <ScrollReveal distance="translate-y-4">
+                            <span className="text-xs font-extrabold uppercase tracking-widest text-slate-400 block font-sans">
+                                ASÍ ES NUESTRO PROCESO
                             </span>
+                            <div className="w-10 h-[3px] bg-amber-400 mx-auto mt-1 rounded-full" />
                         </ScrollReveal>
-                        <ScrollReveal distance="translate-y-6" delay={150}>
-                            <h2 className="text-4xl sm:text-5xl lg:text-[56px] font-black text-[#0B1F3A] leading-[1.05] tracking-tight font-sans">
-                                ¿Por qué elegir COLSIH?
+                        <ScrollReveal distance="translate-y-4" delay={150}>
+                            <h2 className="text-3xl sm:text-4xl md:text-[44px] font-extrabold text-[#0B1F3A] tracking-tight font-sans">
+                                Admisiones en 4 pasos
                             </h2>
-                        </ScrollReveal>
-                        <ScrollReveal distance="translate-y-6" delay={300}>
-                            <p className="text-slate-600 font-semibold text-lg md:text-xl max-w-3xl mx-auto font-sans">
-                                Una propuesta educativa integral que combina la excelencia académica, la formación en valores cristianos salesianos y valiosas oportunidades para el futuro de tus hijos.
-                            </p>
                         </ScrollReveal>
                     </div>
 
-                    {/* Grid de 5 Beneficios Institucionales Grandes */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-left">
-                        {beneficiosInstitucionales.map((ben, bIdx) => {
-                            const IconoBen = ben.icono;
-                            return (
-                                <ScrollReveal key={bIdx} distance="translate-y-8" delay={bIdx * 100}>
-                                    <div className="bg-white rounded-3xl p-8 border-2 border-slate-200/80 hover:border-[#003C8F] hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 space-y-5 h-full flex flex-col justify-between group">
-                                        <div className="space-y-4">
-                                            <div className="flex items-center justify-between">
-                                                <div className="w-14 h-14 rounded-2xl bg-[#003C8F] text-white group-hover:bg-[#800A15] transition-colors duration-300 flex items-center justify-center shrink-0 shadow-md">
-                                                    <IconoBen className="w-7 h-7" />
+                    {/* Stepper Horizontal de 4 Pasos Conectados */}
+                    <div className="relative">
+                        {/* Línea Curva Conectora en Pantallas Grandes */}
+                        <div className="hidden lg:block absolute top-10 left-[12%] right-[12%] h-[2px] border-t-2 border-dashed border-slate-200 z-0" />
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative z-10">
+                            {pasosProceso.map((paso, idx) => {
+                                const IconoPaso = paso.icono;
+                                return (
+                                    <ScrollReveal key={idx} distance="translate-y-6" delay={idx * 120}>
+                                        <div className="bg-white rounded-3xl p-6 md:p-8 border border-slate-200/90 hover:border-[#003C8F] hover:shadow-xl transition-all duration-300 text-center space-y-4 group h-full flex flex-col justify-between">
+                                            
+                                            <div className="space-y-4">
+                                                {/* Círculo con Número e Ícono */}
+                                                <div className="relative mx-auto w-20 h-20 flex items-center justify-center">
+                                                    {/* Badge con el Número */}
+                                                    <span className={`absolute -top-1 -left-1 w-7 h-7 rounded-full ${idx % 2 === 0 ? 'bg-[#003C8F]' : 'bg-[#800A15]'} text-white text-xs font-black flex items-center justify-center shadow-md z-10`}>
+                                                        {paso.paso}
+                                                    </span>
+
+                                                    {/* Círculo Principal del Ícono */}
+                                                    <div className="w-16 h-16 rounded-full bg-slate-50 border-2 border-slate-200 group-hover:border-[#003C8F] group-hover:bg-[#F0F4FA] text-[#003C8F] group-hover:scale-110 transition-all duration-300 flex items-center justify-center shadow-xs">
+                                                        <IconoPaso className="w-7 h-7" />
+                                                    </div>
                                                 </div>
-                                                <span className={`px-3.5 py-1.5 rounded-xl font-black text-xs uppercase tracking-wider ${ben.badgeBg} ${ben.badgeText}`}>
-                                                    {ben.badge}
+
+                                                <h3 className="text-xl font-extrabold text-[#0B1F3A] font-sans group-hover:text-[#003C8F] transition-colors">
+                                                    {paso.titulo}
+                                                </h3>
+
+                                                <p className="text-sm text-slate-500 font-medium leading-relaxed font-sans">
+                                                    {paso.descripcion}
+                                                </p>
+                                            </div>
+
+                                            {/* Badge de Requisito/Fecha */}
+                                            <div className="pt-4 border-t border-slate-100">
+                                                <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#800A15] bg-rose-50 px-3 py-1 rounded-full border border-rose-100 inline-block">
+                                                    {paso.badge}
                                                 </span>
                                             </div>
 
-                                            <h3 className="text-2xl font-black text-[#0B1F3A] font-sans group-hover:text-[#003C8F] transition-colors">
-                                                {ben.titulo}
-                                            </h3>
-
-                                            <p className="text-base font-semibold text-slate-600 leading-relaxed font-sans">
-                                                {ben.descripcion}
-                                            </p>
                                         </div>
-
-                                        <div className="pt-4 border-t border-slate-100 flex items-center gap-2 text-xs font-black uppercase tracking-wider text-[#003C8F]">
-                                            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                                            <span>Componente Clave COLSIH</span>
-                                        </div>
-                                    </div>
-                                </ScrollReveal>
-                            );
-                        })}
+                                    </ScrollReveal>
+                                );
+                            })}
+                        </div>
                     </div>
 
                 </div>
             </section>
 
-            {/* 4. GUÍA PASO A PASO INTERACTIVA (MÁS GRANDE, DINÁMICA Y DETALLADA) */}
-            <section id="guia-pasos" className="py-20 md:py-36 bg-[#FAFCFF] border-b border-slate-200 select-none">
-                <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] space-y-16">
+            {/* SECCIÓN 3: TODO LO QUE NECESITAS SABER (Información que te guía) */}
+            <section className="py-20 md:py-28 bg-[#FAFCFF] border-b border-slate-100 select-none">
+                <div className="max-w-[1440px] mx-auto px-6 md:px-12 lg:px-16 space-y-12">
                     
-                    <div className="text-center max-w-4xl mx-auto space-y-4">
-                        <ScrollReveal distance="translate-y-6">
-                            <span className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#003C8F] text-white font-black text-xs md:text-sm tracking-widest uppercase shadow-md">
-                                <Calendar className="w-4 h-4 text-amber-300" />
-                                PASOS PARA SEGUIR
+                    {/* Encabezado */}
+                    <div className="text-left space-y-2">
+                        <ScrollReveal distance="translate-y-4">
+                            <span className="text-xs font-extrabold uppercase tracking-widest text-slate-400 block font-sans">
+                                Todo lo que necesitas saber
                             </span>
                         </ScrollReveal>
-                        <ScrollReveal distance="translate-y-6" delay={150}>
-                            <h2 className="text-4xl sm:text-5xl lg:text-[56px] font-black text-[#0B1F3A] leading-[1.05] tracking-tight font-sans">
-                                Instrucciones y Cronograma 2027
+                        <ScrollReveal distance="translate-y-4" delay={150}>
+                            <h2 className="text-3xl sm:text-4xl font-extrabold text-[#0B1F3A] font-sans">
+                                Información que te guía
                             </h2>
                         </ScrollReveal>
-                        <ScrollReveal distance="translate-y-6" delay={300}>
-                            <p className="text-slate-600 font-semibold text-lg md:text-xl max-w-2xl mx-auto">
-                                Haz clic en las etapas o desplázate para conocer en detalle las fechas, documentos obligatorios y requisitos presenciales.
-                            </p>
+                    </div>
+
+                    {/* Grid de Tarjetas Informativas + Tarjeta Calendario Horizontal */}
+                    <div className="space-y-6">
+                        
+                        {/* 5 Tarjetas Superiores */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {cardsGuia.map((card, idx) => {
+                                const IconoCard = card.icono;
+                                return (
+                                    <ScrollReveal key={card.id} distance="translate-y-6" delay={idx * 100}>
+                                        <div 
+                                            onClick={() => setModalCard(card.id)}
+                                            className="bg-white rounded-3xl p-7 border border-slate-200/80 hover:border-[#003C8F] hover:shadow-lg transition-all duration-300 text-left space-y-4 cursor-pointer group flex flex-col justify-between h-full"
+                                        >
+                                            <div className="space-y-3">
+                                                <div className={`w-12 h-12 rounded-2xl ${card.colorBg} flex items-center justify-center shrink-0`}>
+                                                    <IconoCard className="w-6 h-6" />
+                                                </div>
+                                                <h3 className="text-lg font-extrabold text-[#0B1F3A] font-sans group-hover:text-[#003C8F] transition-colors">
+                                                    {card.titulo}
+                                                </h3>
+                                                <p className="text-sm font-medium text-slate-500 leading-relaxed font-sans">
+                                                    {card.descripcion}
+                                                </p>
+                                            </div>
+
+                                            <div className="flex items-center gap-1 text-xs font-bold text-[#003C8F] pt-2 group-hover:translate-x-1 transition-transform">
+                                                <span>Ver más</span>
+                                                <ChevronRight className="w-4 h-4" />
+                                            </div>
+                                        </div>
+                                    </ScrollReveal>
+                                );
+                            })}
+                        </div>
+
+                        {/* Tarjeta Ancha Inferior: Calendario de Admisiones */}
+                        <ScrollReveal distance="translate-y-6" delay={500}>
+                            <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 hover:border-[#003C8F] hover:shadow-lg transition-all duration-300 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+                                
+                                <div className="flex items-start gap-4 text-left">
+                                    <div className="w-14 h-14 rounded-2xl bg-rose-50 text-[#800A15] border border-rose-100 flex items-center justify-center shrink-0">
+                                        <Calendar className="w-7 h-7" />
+                                    </div>
+                                    <div className="space-y-1">
+                                        <h3 className="text-xl font-extrabold text-[#0B1F3A] font-sans">
+                                            Calendario de admisiones
+                                        </h3>
+                                        <p className="text-sm font-medium text-slate-500 font-sans">
+                                            Fechas importantes para que no te pierdas ningún paso del proceso.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                {/* Banner Rosado Destacado con Fecha */}
+                                <div className="w-full md:w-auto bg-[#FDF2F4] border border-rose-200/60 rounded-2xl p-4 flex items-center justify-between md:justify-start gap-6 shrink-0">
+                                    <div className="text-left">
+                                        <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#800A15] block font-sans">
+                                            Próxima fecha importante
+                                        </span>
+                                        <div className="flex items-baseline gap-2">
+                                            <span className="text-3xl font-black text-[#800A15] font-sans">15</span>
+                                            <span className="text-xs font-bold uppercase text-[#800A15]">JUN</span>
+                                        </div>
+                                    </div>
+                                    <div className="h-10 w-[1px] bg-rose-200 hidden sm:block" />
+                                    <span className="text-xs font-bold text-slate-700 text-left max-w-[160px] font-sans">
+                                        Cierre de inscripciones primer periodo.
+                                    </span>
+                                </div>
+
+                            </div>
+                        </ScrollReveal>
+
+                    </div>
+
+                </div>
+            </section>
+
+            {/* SECCIÓN 4: ¿POR QUÉ ELEGIRNOS? (Líderes para el mañana - Stats Grid) */}
+            <section className="py-20 md:py-28 bg-[#FFFFFF] border-b border-slate-100 select-none">
+                <div className="max-w-[1440px] mx-auto px-6 md:px-12 lg:px-16 space-y-16">
+                    
+                    {/* Encabezado de Sección */}
+                    <div className="text-center max-w-2xl mx-auto space-y-3">
+                        <ScrollReveal distance="translate-y-4">
+                            <span className="text-xs font-extrabold uppercase tracking-widest text-slate-400 block font-sans">
+                                ¿POR QUÉ ELEGIRNOS?
+                            </span>
+                            <div className="w-10 h-[3px] bg-amber-400 mx-auto mt-1 rounded-full" />
+                        </ScrollReveal>
+                        <ScrollReveal distance="translate-y-4" delay={150}>
+                            <h2 className="text-3xl sm:text-4xl md:text-[44px] font-extrabold text-[#0B1F3A] tracking-tight font-sans">
+                                Formamos hoy <span className="text-[#800A15]">líderes</span> <br className="hidden sm:block" />
+                                para el mañana.
+                            </h2>
                         </ScrollReveal>
                     </div>
 
-                    {/* Selector Dinámico de Pasos */}
-                    <div className="flex justify-center gap-3 overflow-x-auto pb-4 no-scrollbar">
-                        {pasosProceso.map((p, idx) => (
-                            <button
-                                key={idx}
-                                onClick={() => setPasoActivo(idx)}
-                                className={`px-6 py-3.5 rounded-2xl font-black text-sm sm:text-base transition-all duration-300 flex items-center gap-3 whitespace-nowrap cursor-pointer border-2 ${
-                                    pasoActivo === idx
-                                        ? 'bg-[#003C8F] text-white border-[#003C8F] shadow-lg scale-105'
-                                        : 'bg-white text-slate-700 border-slate-300 hover:border-[#003C8F]'
-                                }`}
-                            >
-                                <span className={`w-7 h-7 rounded-lg text-xs font-black flex items-center justify-center ${pasoActivo === idx ? 'bg-amber-400 text-slate-950' : 'bg-slate-100 text-slate-800'}`}>
-                                    {p.paso}
-                                </span>
-                                <span>Etapa {p.paso}</span>
-                            </button>
-                        ))}
-                    </div>
-
-                    {/* Contenido Completo de Todos los Pasos */}
-                    <div className="space-y-10">
-                        {pasosProceso.map((paso, idx) => {
-                            const IconoPaso = paso.icono;
-                            const esSeleccionado = pasoActivo === idx;
+                    {/* Grid de 4 Estadísticas / Pilares */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                        {statsData.map((stat, idx) => {
+                            const IconoStat = stat.icono;
                             return (
-                                <ScrollReveal key={idx} distance="translate-y-8">
-                                    <div 
-                                        onClick={() => setPasoActivo(idx)}
-                                        className={`bg-white rounded-3xl p-8 sm:p-12 border-2 transition-all duration-300 text-left cursor-pointer ${
-                                            esSeleccionado
-                                                ? 'border-[#003C8F] shadow-2xl ring-4 ring-[#003C8F]/10 scale-[1.01]'
-                                                : 'border-slate-200 hover:border-slate-300 shadow-md'
-                                        }`}
-                                    >
-                                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-                                            
-                                            {/* Columna Izquierda: Título y Datos */}
-                                            <div className="lg:col-span-5 space-y-5 lg:border-r-2 lg:border-slate-100 lg:pr-8">
-                                                <div className="flex items-center justify-between">
-                                                    <span className="text-5xl font-black text-[#003C8F] font-sans">
-                                                        Paso {paso.paso}
-                                                    </span>
-                                                    <span className={`px-4 py-1.5 rounded-xl font-black text-xs uppercase tracking-wider ${paso.colorBadge}`}>
-                                                        {paso.badge}
-                                                    </span>
-                                                </div>
+                                <ScrollReveal key={idx} distance="translate-y-6" delay={idx * 100}>
+                                    <div className="bg-[#FAFCFF] rounded-3xl p-8 border border-slate-200/80 hover:border-[#003C8F] hover:bg-white hover:shadow-xl transition-all duration-300 text-left space-y-4 group">
+                                        <div className="w-12 h-12 rounded-2xl bg-blue-50 text-[#003C8F] flex items-center justify-center shrink-0 group-hover:bg-[#003C8F] group-hover:text-white transition-colors duration-300">
+                                            <IconoStat className="w-6 h-6" />
+                                        </div>
 
-                                                <div className="flex items-start gap-4">
-                                                    <div className="w-14 h-14 rounded-2xl bg-[#003C8F] text-white flex items-center justify-center shrink-0 shadow-md">
-                                                        <IconoPaso className="w-7 h-7" />
-                                                    </div>
-                                                    <div>
-                                                        <h3 className="text-2xl sm:text-3xl font-black text-[#0B1F3A] leading-snug font-sans">
-                                                            {paso.titulo}
-                                                        </h3>
-                                                        <p className="text-sm font-bold text-slate-400 uppercase tracking-wider mt-1">
-                                                            {paso.subtitulo}
-                                                        </p>
-                                                    </div>
-                                                </div>
-
-                                                {/* Asunto de correo interactivo */}
-                                                {paso.asuntoCorreo && (
-                                                    <div className="p-5 rounded-2xl bg-amber-50 border-2 border-amber-300 space-y-2">
-                                                        <span className="text-xs font-black uppercase tracking-wider text-amber-900 block font-sans">
-                                                            ASUNTO DEL CORREO (OBLIGATORIO):
-                                                        </span>
-                                                        <div className="flex items-center justify-between bg-white p-3 rounded-xl border border-amber-300">
-                                                            <code className="text-xs sm:text-sm font-extrabold text-slate-900 break-all">
-                                                                {paso.asuntoCorreo}
-                                                            </code>
-                                                            <button
-                                                                onClick={(e) => { e.stopPropagation(); copiarTexto(paso.asuntoCorreo, true); }}
-                                                                className="ml-3 px-3 py-1.5 rounded-lg bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs transition-colors shrink-0 flex items-center gap-1 cursor-pointer"
-                                                                title="Copiar asunto al portapapeles"
-                                                            >
-                                                                {asuntoCopiado ? <Check className="w-4 h-4 text-emerald-950" /> : <Copy className="w-4 h-4" />}
-                                                                <span>{asuntoCopiado ? '¡Copiado!' : 'Copiar'}</span>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                )}
-                                            </div>
-
-                                            {/* Columna Derecha: Requisitos y Fechas */}
-                                            <div className="lg:col-span-7 space-y-6">
-                                                <div className="space-y-3">
-                                                    <h4 className="text-xs font-black uppercase tracking-widest text-[#800A15] block font-sans">
-                                                        DETALLES DE ESTA ETAPA:
-                                                    </h4>
-                                                    <ul className="space-y-3">
-                                                        {paso.detalles.map((det, dIdx) => (
-                                                            <li key={dIdx} className="flex items-start gap-3 text-base sm:text-lg font-semibold text-slate-800 leading-relaxed font-sans">
-                                                                <CheckCircle2 className="w-6 h-6 text-emerald-600 shrink-0 mt-0.5" />
-                                                                <span>{det}</span>
-                                                            </li>
-                                                        ))}
-                                                    </ul>
-                                                </div>
-
-
-
-                                                {/* Documentos por Nivel (Paso 2) */}
-                                                {paso.documentosPorNivel && (
-                                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
-                                                        {paso.documentosPorNivel.map((doc, docIdx) => (
-                                                            <div key={docIdx} className="p-5 rounded-2xl bg-[#F0F4FA] border-2 border-[#003C8F]/30 space-y-3">
-                                                                <span className="text-xs font-black uppercase tracking-wider text-[#003C8F] block font-sans border-b border-blue-200 pb-2">
-                                                                    {doc.nivel}
-                                                                </span>
-                                                                <ul className="space-y-2">
-                                                                    {doc.requisitos.map((req, rIdx) => (
-                                                                        <li key={rIdx} className="flex items-start gap-2.5 text-xs sm:text-sm font-bold text-slate-800 leading-relaxed font-sans">
-                                                                            <span className="w-2 h-2 rounded-full bg-[#003C8F] mt-1.5 shrink-0" />
-                                                                            <span>{req}</span>
-                                                                        </li>
-                                                                    ))}
-                                                                </ul>
-                                                            </div>
-                                                        ))}
-                                                    </div>
-                                                )}
-
-                                            </div>
-
+                                        <div className="space-y-1">
+                                            <span className="text-4xl font-extrabold text-[#0B1F3A] font-sans block group-hover:text-[#003C8F] transition-colors">
+                                                {stat.valor}
+                                            </span>
+                                            <h3 className="text-base font-extrabold text-slate-800 font-sans">
+                                                {stat.titulo}
+                                            </h3>
+                                            <p className="text-xs font-medium text-slate-500 leading-relaxed font-sans pt-1">
+                                                {stat.desc}
+                                            </p>
                                         </div>
                                     </div>
                                 </ScrollReveal>
@@ -563,135 +584,155 @@ export default function Admisiones() {
                 </div>
             </section>
 
-            {/* 5. SECCIÓN INFORMACIÓN CLAVE & HORARIOS */}
-            <section className="py-20 bg-white select-none">
-                <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-[120px] space-y-16">
+            {/* SECCIÓN 5: PREGUNTAS FRECUENTES (Acordeón limpio) */}
+            <section className="py-20 md:py-28 bg-[#FAFCFF] border-b border-slate-100 select-none">
+                <div className="max-w-[1000px] mx-auto px-6 md:px-12 space-y-12">
                     
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-                        
-                        {/* Notas Clave */}
-                        <div className="lg:col-span-6 space-y-6 text-left">
-                            <div className="space-y-2">
-                                <span className="text-xs font-black uppercase tracking-widest text-[#800A15] block font-sans">
-                                    INFORMACIÓN GENERAL DE ADMISIÓN
-                                </span>
-                                <h3 className="text-3xl sm:text-4xl font-black text-[#0B1F3A] font-sans">
-                                    Aspectos Clave a Tener en Cuenta
-                                </h3>
-                            </div>
+                    {/* Encabezado */}
+                    <div className="text-left space-y-2 relative pl-6 border-l-4 border-[#003C8F]">
+                        <ScrollReveal distance="translate-y-4">
+                            <span className="text-xs font-extrabold uppercase tracking-widest text-slate-400 block font-sans">
+                                PREGUNTAS FRECUENTES
+                            </span>
+                        </ScrollReveal>
+                        <ScrollReveal distance="translate-y-4" delay={150}>
+                            <h2 className="text-3xl sm:text-4xl font-extrabold text-[#0B1F3A] font-sans">
+                                Resolvemos tus dudas
+                            </h2>
+                        </ScrollReveal>
+                    </div>
 
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                {notasClave.map((nota, idx) => {
-                                    const IconoNota = nota.icono;
-                                    return (
-                                        <div key={idx} className="p-6 rounded-2xl bg-[#F8FAFC] border-2 border-slate-200 space-y-2.5">
-                                            <div className="flex items-center gap-3">
-                                                <div className="w-10 h-10 rounded-xl bg-[#003C8F] text-white flex items-center justify-center shrink-0 font-bold">
-                                                    <IconoNota className="w-5 h-5" />
-                                                </div>
-                                                <div>
-                                                    <span className="text-xs font-bold text-slate-400 uppercase block">{nota.titulo}</span>
-                                                    <span className="text-sm font-black text-[#0B1F3A] font-sans">{nota.valor}</span>
-                                                </div>
+                    {/* Acordeón de FAQs */}
+                    <div className="space-y-4 text-left">
+                        {faqsData.map((faq, idx) => {
+                            const estaAbierto = faqAbierta === idx;
+                            return (
+                                <ScrollReveal key={idx} distance="translate-y-4" delay={idx * 80}>
+                                    <div 
+                                        className={`bg-white rounded-2xl border transition-all duration-300 overflow-hidden ${
+                                            estaAbierto ? 'border-[#003C8F] shadow-md ring-2 ring-blue-500/10' : 'border-slate-200 hover:border-slate-300'
+                                        }`}
+                                    >
+                                        <button
+                                            onClick={() => setFaqAbierta(estaAbierto ? null : idx)}
+                                            className="w-full p-6 text-left font-extrabold text-base sm:text-lg text-[#0B1F3A] flex items-center justify-between gap-4 cursor-pointer font-sans"
+                                        >
+                                            <span>{faq.pregunta}</span>
+                                            <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-transform duration-300 ${estaAbierto ? 'rotate-180 bg-[#003C8F] text-white' : 'bg-slate-100 text-slate-600'}`}>
+                                                <ChevronDown className="w-4 h-4" />
                                             </div>
-                                            <p className="text-xs font-semibold text-slate-600 leading-relaxed font-sans pt-1">
-                                                {nota.desc}
-                                            </p>
-                                        </div>
-                                    );
-                                })}
-                            </div>
-                        </div>
+                                        </button>
 
-                        {/* Horarios Escolares */}
-                        <div className="lg:col-span-6 space-y-6 text-left">
-                            <div className="space-y-2">
-                                <span className="text-xs font-black uppercase tracking-widest text-[#003C8F] block font-sans">
-                                    HORARIOS DE ATENCIÓN ESCOLAR
-                                </span>
-                                <h3 className="text-3xl sm:text-4xl font-black text-[#0B1F3A] font-sans">
-                                    Jornada Única e Inicial
-                                </h3>
-                            </div>
-
-                            <div className="space-y-4">
-                                {horariosJornadas.map((h, idx) => (
-                                    <div key={idx} className="p-6 rounded-2xl bg-white border-2 border-slate-200 hover:border-[#003C8F] transition-colors flex items-center justify-between gap-4 shadow-xs">
-                                        <div className="space-y-1">
-                                            <span className="px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-[#800A15] text-white inline-block mb-1">
-                                                {h.badge}
-                                            </span>
-                                            <h4 className="text-lg font-black text-[#0B1F3A] font-sans">
-                                                {h.nivel}
-                                            </h4>
-                                            <span className="text-xs font-bold text-slate-500 block">
-                                                Grados: {h.grados}
-                                            </span>
-                                        </div>
-                                        <div className="text-right">
-                                            <span className="text-xs font-bold text-slate-400 block uppercase">Horario:</span>
-                                            <span className="text-base sm:text-lg font-black text-[#003C8F] font-sans">
-                                                {h.horario}
-                                            </span>
-                                        </div>
+                                        {estaAbierto && (
+                                            <div className="px-6 pb-6 pt-1 text-sm font-medium text-slate-600 leading-relaxed border-t border-slate-100 font-sans">
+                                                {faq.respuesta}
+                                            </div>
+                                        )}
                                     </div>
-                                ))}
-                            </div>
-                        </div>
-
+                                </ScrollReveal>
+                            );
+                        })}
                     </div>
 
                 </div>
             </section>
 
-            {/* 6. LLAMADO A LA ACCIÓN FINAL GIGANTE Y CLARO */}
-            <section className="py-24 bg-[#003C8F] text-white select-none">
-                <div className="max-w-5xl mx-auto px-6 text-center space-y-8">
-                    
+            {/* SECCIÓN 6: BANNER FINAL CTA DE ADMISIÓN (Gradient Card Institucional) */}
+            <section className="py-16 md:py-24 bg-[#FFFFFF] select-none">
+                <div className="max-w-[1440px] mx-auto px-6 md:px-12 lg:px-16">
                     <ScrollReveal distance="translate-y-6">
-                        <div className="inline-flex items-center gap-2.5 px-6 py-2.5 rounded-full bg-[#800A15] text-amber-300 text-xs sm:text-sm font-black uppercase tracking-widest shadow-lg">
-                            <Sparkles className="w-4 h-4 text-amber-300" />
-                            <span>PLATAFORMA OFICIAL DE INSCRIPCIÓN 2027</span>
+                        <div className="relative rounded-[36px] bg-gradient-to-r from-[#001E50] via-[#003C8F] to-[#800A15] p-10 md:p-16 text-white overflow-hidden shadow-2xl flex flex-col lg:flex-row items-center justify-between gap-10">
+                            
+                            {/* Decoración de Puntos */}
+                            <div 
+                                className="absolute right-0 top-0 w-64 h-full opacity-10 pointer-events-none"
+                                style={{ backgroundImage: "radial-gradient(#FFFFFF 2px, transparent 2px)", backgroundSize: "18px 18px" }} 
+                            />
+
+                            {/* Contenido Izquierda */}
+                            <div className="space-y-3 text-left max-w-2xl relative z-10">
+                                <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight leading-tight font-sans">
+                                    El primer paso hacia <br />
+                                    un futuro extraordinario
+                                </h2>
+                                <p className="text-blue-100 text-base sm:text-lg font-medium font-sans">
+                                    Estamos listos para acompañarte en esta decisión tan importante.
+                                </p>
+                            </div>
+
+                            {/* Botón Derecha en Amarillo Institucional */}
+                            <div className="shrink-0 relative z-10 w-full lg:w-auto">
+                                <a
+                                    href={LINK_INSCRIPCIONES}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="group inline-flex items-center justify-between sm:justify-center gap-4 w-full sm:w-auto px-8 py-4.5 rounded-full bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-base shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer"
+                                >
+                                    <span>Comenzar inscripción</span>
+                                    <div className="w-8 h-8 rounded-full bg-slate-950 text-white flex items-center justify-center group-hover:translate-x-1 transition-transform">
+                                        <ArrowRight className="w-4 h-4" />
+                                    </div>
+                                </a>
+                            </div>
+
                         </div>
                     </ScrollReveal>
-
-                    <ScrollReveal distance="translate-y-6" delay={150}>
-                        <h2 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight leading-tight text-white font-sans">
-                            ¡Ingresa a la plataforma e inicia la solicitud de cupo!
-                        </h2>
-                    </ScrollReveal>
-
-                    <ScrollReveal distance="translate-y-6" delay={300}>
-                        <p className="text-blue-100 text-lg sm:text-2xl font-semibold max-w-3xl mx-auto font-sans leading-relaxed">
-                            Forma parte de nuestra comunidad educativa salesiana en Floridablanca. Registra la información de tu hijo(a) en pocos minutos.
-                        </p>
-                    </ScrollReveal>
-
-                    <ScrollReveal distance="translate-y-6" delay={450}>
-                        <div className="flex flex-col sm:flex-row items-center justify-center gap-5 pt-4">
-                            <a
-                                href={LINK_INSCRIPCIONES}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="group inline-flex items-center justify-center gap-4 px-10 py-5 rounded-2xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-lg md:text-xl shadow-2xl hover:scale-105 transition-all duration-300 cursor-pointer"
-                            >
-                                <FileText className="w-6 h-6 text-slate-950" />
-                                <span>ENTRAR A INSCRIPCIONES (SOLICITAR CUPO)</span>
-                                <ExternalLink className="w-6 h-6 text-slate-950 group-hover:translate-x-1 transition-transform" />
-                            </a>
-
-                            <button
-                                onClick={() => copiarTexto(CORREO_ADMISIONES, false)}
-                                className="inline-flex items-center gap-3 px-8 py-5 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-extrabold text-base border-2 border-white/20 backdrop-blur-md transition-all cursor-pointer"
-                            >
-                                <Mail className="w-5 h-5 text-amber-300" />
-                                <span>{correoCopiado ? '¡Correo Copiado!' : 'Copiar Correo de Admisiones'}</span>
-                            </button>
-                        </div>
-                    </ScrollReveal>
-
                 </div>
             </section>
+
+            {/* MODAL / DRAWER INFORMATIVO PARA TARJETAS GUÍA */}
+            {modalCard && (
+                <div className="fixed inset-0 z-[99999] bg-slate-950/60 backdrop-blur-sm flex items-center justify-center p-4">
+                    <div className="bg-white rounded-3xl p-8 max-w-lg w-full space-y-6 shadow-2xl relative animate-in fade-in zoom-in-95 duration-200">
+                        <button 
+                            onClick={() => setModalCard(null)}
+                            className="absolute top-6 right-6 p-2 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors"
+                        >
+                            <X className="w-5 h-5" />
+                        </button>
+
+                        <div className="space-y-3 text-left">
+                            <span className="text-xs font-black uppercase tracking-wider text-[#800A15] block">
+                                INFORMACIÓN DETALLADA
+                            </span>
+                            <h3 className="text-2xl font-extrabold text-[#0B1F3A] capitalize">
+                                {cardsGuia.find(c => c.id === modalCard)?.titulo}
+                            </h3>
+                            <p className="text-sm font-medium text-slate-600 leading-relaxed">
+                                {cardsGuia.find(c => c.id === modalCard)?.descripcion}
+                            </p>
+                        </div>
+
+                        {/* Contenido Modal Dinámico */}
+                        <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-left space-y-2 text-xs font-semibold text-slate-700">
+                            {modalCard === 'oferta' && (
+                                <p>Ofrecemos niveles educativos desde Preescolar (Prejardín, Jardín, Transición), Básica Primaria (1° a 5°) y Bachillerato Técnico SENA (6° a 11°) con formación integral en valores cristianos salesianos.</p>
+                            )}
+                            {modalCard === 'costos' && (
+                                <p>El costo del formulario de inscripción es de $70.000 COP (no reembolsable), pagaderos únicamente en el Banco Caja Social. Las tarifas de matrícula y pensión 2027 se socializarán tras la admisión.</p>
+                            )}
+                            {modalCard === 'becas' && (
+                                <p>Los mejores bachilleres graduados de nuestra institución acceden a Becas del 90% en la Universidad Pontificia Bolivariana (UPB) según convenio interinstitucional vigente.</p>
+                            )}
+                            {modalCard === 'transporte' && (
+                                <p>Contamos con servicio de rutas escolares seguras contratadas con empresas de transporte escolar autorizadas para Floridablanca y Bucaramanga.</p>
+                            )}
+                            {modalCard === 'faq' && (
+                                <p>Puedes enviar tus inquietudes adicionales al correo oficial: <strong className="text-[#003C8F]">admisionescolsihfloridablanca@gmail.com</strong></p>
+                            )}
+                        </div>
+
+                        <div className="pt-2">
+                            <button
+                                onClick={() => setModalCard(null)}
+                                className="w-full py-3 rounded-xl bg-[#003C8F] text-white font-extrabold text-sm hover:bg-[#002E6E] transition-colors"
+                            >
+                                Entendido
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
 
         </AppLayout>
     );

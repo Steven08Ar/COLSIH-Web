@@ -223,7 +223,7 @@ export default function Contacto() {
                                     <button 
                                         type="submit" 
                                         disabled={processing}
-                                        className="btn-colsih-3d-blue w-full text-xs py-4"
+                                        className="btn-pill-3d-blue w-full text-xs py-4"
                                     >
                                         {processing ? (
                                             <>

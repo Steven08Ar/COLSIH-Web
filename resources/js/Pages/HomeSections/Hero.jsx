@@ -117,7 +117,7 @@ export default function Hero({ setVideoOpen }) {
                                     href="https://e.plataformaintegra.net/sihungria/index.php/cupo"
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="btn-colsih-3d-blue text-base sm:text-lg px-9 py-4"
+                                    className="btn-pill-3d-blue text-base sm:text-lg px-9 py-4"
                                 >
                                     <svg className="w-5 h-5 text-amber-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />

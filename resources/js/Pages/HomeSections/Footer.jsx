@@ -152,7 +152,7 @@ export default function Footer() {
                             <button
                                 type="submit"
                                 disabled={processing}
-                                className="btn-colsih-3d-red w-full text-xs py-3"
+                                className="btn-pill-3d-red w-full text-xs py-3"
                             >
                                 {processing ? 'Enviando...' : 'Suscribirme'}
                             </button>

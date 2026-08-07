@@ -490,3 +490,92 @@ body {
     transform: translateY(2px) !important;
     box-shadow: inset 0 -2px 0 #001F4D, 0 2px 5px rgba(0, 0, 0, 0.2) !important;
 }
+
+/* =========================================================
+   SPLIT DIAGONAL BADGE BUTTONS (ESTILO CORTE DIAGONAL DE LA IMAGEN)
+   ========================================================= */
+.btn-split-badge-red {
+    display: inline-flex !important;
+    align-items: center !important;
+    border-radius: 9999px !important;
+    background-color: #800A15 !important;
+    color: #ffffff !important;
+    font-weight: 800 !important;
+    font-size: 0.75rem !important;
+    letter-spacing: 0.05em !important;
+    padding-left: 1.15rem !important;
+    padding-top: 0.2rem !important;
+    padding-bottom: 0.2rem !important;
+    padding-right: 0.2rem !important;
+    overflow: hidden !important;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3) !important;
+    transition: all 0.2s ease-in-out !important;
+    text-transform: uppercase !important;
+    user-select: none !important;
+    cursor: pointer !important;
+    text-decoration: none !important;
+}
+.btn-split-badge-red:hover {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.4) !important;
+    background-color: #9B0C1A !important;
+}
+.btn-split-badge-red:active {
+    transform: translateY(1px) !important;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2) !important;
+}
+.btn-split-badge-red .icon-badge-box {
+    background-color: #ffffff !important;
+    color: #800A15 !important;
+    padding: 0.4rem 0.75rem !important;
+    border-top-right-radius: 9999px !important;
+    border-bottom-right-radius: 9999px !important;
+    margin-left: 0.65rem !important;
+    clip-path: polygon(10px 0, 100% 0, 100% 100%, 0 100%) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.btn-split-badge-blue {
+    display: inline-flex !important;
+    align-items: center !important;
+    border-radius: 9999px !important;
+    background-color: #003C8F !important;
+    color: #ffffff !important;
+    font-weight: 800 !important;
+    font-size: 0.75rem !important;
+    letter-spacing: 0.05em !important;
+    padding-left: 1.15rem !important;
+    padding-top: 0.2rem !important;
+    padding-bottom: 0.2rem !important;
+    padding-right: 0.2rem !important;
+    overflow: hidden !important;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3) !important;
+    transition: all 0.2s ease-in-out !important;
+    text-transform: uppercase !important;
+    user-select: none !important;
+    cursor: pointer !important;
+    text-decoration: none !important;
+}
+.btn-split-badge-blue:hover {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.4) !important;
+    background-color: #0047B3 !important;
+}
+.btn-split-badge-blue:active {
+    transform: translateY(1px) !important;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2) !important;
+}
+.btn-split-badge-blue .icon-badge-box {
+    background-color: #ffffff !important;
+    color: #003C8F !important;
+    padding: 0.4rem 0.75rem !important;
+    border-top-right-radius: 9999px !important;
+    border-bottom-right-radius: 9999px !important;
+    margin-left: 0.65rem !important;
+    clip-path: polygon(10px 0, 100% 0, 100% 100%, 0 100%) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}

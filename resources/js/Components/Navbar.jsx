@@ -232,31 +232,35 @@ export default function Navbar() {
                             />
                         </Link>
                     ) : (
-                        <div className="hidden md:flex items-center gap-2.5">
+                        <div className="hidden md:flex items-center gap-3">
                             <a
                                 href="https://e.plataformaintegra.net/sihungria/"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="btn-pill-3d-red text-xs px-4 py-2"
+                                className="btn-split-badge-red"
                                 title="Ingreso a Plataforma Integra"
                             >
-                                <svg className="w-4 h-4 text-white shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" d="M12 14l9-5-9-5-9 5 9 5z" />
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0112 20.055a11.952 11.952 0 01-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
-                                </svg>
                                 <span>Plataforma</span>
+                                <span className="icon-badge-box">
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" d="M12 14l9-5-9-5-9 5 9 5z" />
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0112 20.055a11.952 11.952 0 01-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+                                    </svg>
+                                </span>
                             </a>
                             <a
                                 href="https://e.plataformaintegra.net/sihungria/index.php/cupo"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="btn-pill-3d-blue text-xs px-4 py-2"
+                                className="btn-split-badge-blue"
                                 title="Solicitud de Cupo e Inscripción 2027"
                             >
-                                <svg className="w-4 h-4 text-amber-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                </svg>
                                 <span>INSCRIPCIONES</span>
+                                <span className="icon-badge-box">
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                    </svg>
+                                </span>
                             </a>
                         </div>
                     )}

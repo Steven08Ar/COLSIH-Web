@@ -26,60 +26,16 @@ export default function Deportes({ noticias = [] }) {
         }
     }
 
-    // Default Fallback Trending News
-    const defaultTrendingNews = [
-        {
-            id: 1,
-            slug: 'seleccion-microfutbol-semifinales',
-            categoria: 'noticia',
-            seccion: 'general',
-            publicado_en: '2026-06-03',
-            titulo: 'Selección de microfútbol asegura el pase a semifinales regionales',
-            resumen: 'Destacada participación del equipo COLSIH tras una emocionante victoria 4-2 en el torneo intercolegiado.',
-            imagen: 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=800&q=80'
-        },
-        {
-            id: 2,
-            slug: 'equipo-baloncesto-preparacion',
-            categoria: 'noticia',
-            seccion: 'general',
-            publicado_en: '2026-06-03',
-            titulo: 'Equipo de baloncesto inicia fase de preparación de alta intensidad',
-            resumen: 'Nuestros basquetbolistas intensifican prácticas tácticas de tiro de tres puntos y defensa en zona.',
-            imagen: 'https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=800&q=80'
-        },
-        {
-            id: 3,
-            slug: 'voleibol-femenino-invicto',
-            categoria: 'noticia',
-            seccion: 'general',
-            publicado_en: '2026-06-03',
-            titulo: 'Voleibol femenino consigue invicto de 5 partidos seguidos',
-            resumen: 'Demostración magistral de saques y bloqueos defensivos en la copa intercolegiada metropolitana.',
-            imagen: 'https://images.unsplash.com/photo-1592656094267-764a45160876?auto=format&fit=crop&w=800&q=80'
-        }
-    ];
-
-    const defaultFeaturedHeroNews = {
-        id: 99,
-        slug: 'logros-deportistas-salesianos',
-        categoria: 'Voleibol',
-        publicado_en: '2026-06-03',
-        titulo: '¡DESCUBRE LOS BENEFICIOS Y LOGROS DE NUESTROS DEPORTISTAS SALESIANOS!',
-        resumen: 'El deporte escolar en microfútbol, baloncesto y voleibol fortalece la salud, el trabajo en equipo y los valores en nuestros estudiantes.',
-        imagen: 'https://images.unsplash.com/photo-1592656094267-764a45160876?auto=format&fit=crop&w=1200&q=80'
-    };
-
-    // Calculate actual lists from admin DB if available
-    const mainFeaturedNews = noticias.length > 0 ? noticias[0] : defaultFeaturedHeroNews;
-    const sideNewsList = noticias.length > 1 ? noticias.slice(1, 4) : defaultTrendingNews;
-
     // Helper for media URLs
-    const getNewsImageUrl = (img, fallback) => {
+    const getNewsImageUrl = (img, fallback = 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=800&q=80') => {
         if (!img) return fallback;
         if (img.startsWith('http')) return img;
         return `/storage/${img}`;
     };
+
+    // Calculate actual lists from admin DB ONLY (no fake mock data)
+    const mainFeaturedNews = noticias.length > 0 ? noticias[0] : null;
+    const sideNewsList = noticias.length > 1 ? noticias.slice(1, 4) : [];
 
     // Featured Full Width Event Banners
     const featuredBanners = [
@@ -224,45 +180,38 @@ export default function Deportes({ noticias = [] }) {
                                     </a>
                                 </div>
 
-                                {/* 5. Today Badge */}
-                                <div className="absolute left-[1040px] top-[75px] z-30 bg-[#EAEFF4]/90 backdrop-blur-sm px-4 py-1 rounded-sm text-center border border-slate-200/60">
-                                    <span className="text-[#8E9CAE] text-xs font-semibold uppercase tracking-wider font-['DM_Sans',sans-serif]">
-                                        Today
-                                    </span>
-                                </div>
+                                {/* 5. Stacked Right Cards (Dynamic from DB) */}
+                                {noticias.length > 0 && (
+                                    <>
+                                        <div className="absolute left-[1040px] top-[75px] z-30 bg-[#EAEFF4]/90 backdrop-blur-sm px-4 py-1 rounded-sm text-center border border-slate-200/60">
+                                            <span className="text-[#8E9CAE] text-xs font-semibold uppercase tracking-wider font-['DM_Sans',sans-serif]">
+                                                Destacados
+                                            </span>
+                                        </div>
 
-                                {/* 6. Stacked Right Cards */}
-                                <div className="absolute left-[1040px] top-[120px] w-[270px] h-[195px] rounded-xl overflow-hidden shadow-sm group cursor-pointer border border-slate-200/80 bg-white/90 backdrop-blur-md z-30">
-                                    <img 
-                                        src="https://images.unsplash.com/photo-1592656094267-764a45160876?auto=format&fit=crop&w=500&q=80" 
-                                        alt="Voleibol" 
-                                        className="w-full h-[120px] object-cover group-hover:scale-105 transition-transform duration-500" 
-                                    />
-                                    <div className="p-3 text-left space-y-1">
-                                        <span className="text-[10px] font-bold text-[#888888] uppercase block font-['DM_Sans',sans-serif]">
-                                            Voleibol • 03 Junio 2026
-                                        </span>
-                                        <h4 className="text-xs font-black text-[#262626] leading-tight font-sans line-clamp-2">
-                                            Selección de voleibol obtiene los primeros puestos en la copa escolar
-                                        </h4>
-                                    </div>
-                                </div>
-
-                                <div className="absolute left-[1040px] top-[340px] w-[270px] h-[195px] rounded-xl overflow-hidden shadow-sm group cursor-pointer border border-slate-200/80 bg-white/90 backdrop-blur-md z-30">
-                                    <img 
-                                        src="https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=500&q=80" 
-                                        alt="Microfútbol" 
-                                        className="w-full h-[120px] object-cover group-hover:scale-105 transition-transform duration-500" 
-                                    />
-                                    <div className="p-3 text-left space-y-1">
-                                        <span className="text-[10px] font-bold text-[#888888] uppercase block font-['DM_Sans',sans-serif]">
-                                            Microfútbol • 03 Junio 2026
-                                        </span>
-                                        <h4 className="text-xs font-black text-[#262626] leading-tight font-sans line-clamp-2">
-                                            Microfútbol COLSIH: Gran victoria en segunda jornada
-                                        </h4>
-                                    </div>
-                                </div>
+                                        {noticias.slice(0, 2).map((newsItem, idx) => (
+                                            <Link 
+                                                key={newsItem.id}
+                                                href={`/noticias/${newsItem.slug}`}
+                                                className={`absolute left-[1040px] ${idx === 0 ? 'top-[120px]' : 'top-[340px]'} w-[270px] h-[195px] rounded-xl overflow-hidden shadow-sm group cursor-pointer border border-slate-200/80 bg-white/90 backdrop-blur-md z-30`}
+                                            >
+                                                <img 
+                                                    src={getNewsImageUrl(newsItem.imagen)} 
+                                                    alt={newsItem.titulo} 
+                                                    className="w-full h-[120px] object-cover group-hover:scale-105 transition-transform duration-500" 
+                                                />
+                                                <div className="p-3 text-left space-y-1">
+                                                    <span className="text-[10px] font-bold text-[#888888] uppercase block font-['DM_Sans',sans-serif]">
+                                                        {newsItem.categoria || 'Deportes'} • {newsItem.publicado_en ? new Date(newsItem.publicado_en).toLocaleDateString('es-CO', { day: 'numeric', month: 'short' }) : 'Reciente'}
+                                                    </span>
+                                                    <h4 className="text-xs font-black text-[#262626] leading-tight font-sans line-clamp-2">
+                                                        {newsItem.titulo}
+                                                    </h4>
+                                                </div>
+                                            </Link>
+                                        ))}
+                                    </>
+                                )}
 
                             </div>
 
@@ -406,7 +355,7 @@ export default function Deportes({ noticias = [] }) {
                     </section>
 
 
-                    {/* ── 3. TRENDING NEWS (DINÁMICAS DESDE EL ADMIN PANEL) ── */}
+                    {/* ── 3. TRENDING NEWS (ÚNICAMENTE NOTICIAS REALES DE LA BASE DE DATOS) ── */}
                     <section id="noticias-tendencia" className="py-16 md:py-24">
                         <div className="max-w-[1440px] mx-auto px-6 md:px-12 lg:px-16 space-y-10">
 
@@ -419,74 +368,87 @@ export default function Deportes({ noticias = [] }) {
                                 </span>
                             </div>
 
-                            {/* Split 2-Column */}
-                            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+                            {noticias.length === 0 ? (
+                                <div className="w-full bg-slate-50/90 backdrop-blur-md border border-dashed border-slate-300 rounded-3xl p-12 text-center space-y-3">
+                                    <div className="w-14 h-14 rounded-full bg-blue-50 text-[#001659] flex items-center justify-center mx-auto text-2xl shadow-xs">
+                                        🏆
+                                    </div>
+                                    <h3 className="text-lg font-black text-[#262626] uppercase font-sans">No hay noticias deportivas publicadas aún</h3>
+                                    <p className="text-xs font-medium text-slate-500 max-w-md mx-auto font-['DM_Sans',sans-serif]">
+                                        Las publicaciones deportivas creadas por la administración aparecerán automáticamente en esta sección.
+                                    </p>
+                                </div>
+                            ) : (
+                                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
 
-                                {/* Left 3 Stacked Cards (Dynamic from DB) */}
-                                <div className="lg:col-span-6 space-y-5 flex flex-col justify-between">
-                                    {sideNewsList.map((news) => (
-                                        <Link 
-                                            key={news.id}
-                                            href={`/noticias/${news.slug}`}
-                                        >
-                                            <motion.div 
-                                                whileHover={{ x: 4 }}
-                                                className="bg-white/90 backdrop-blur-md border border-slate-200/80 rounded-2xl p-5 shadow-xs hover:shadow-md transition-all duration-300 flex flex-col sm:flex-row gap-5 items-center cursor-pointer group text-left h-full"
+                                    {/* Left Stacked Cards (Dynamic from DB) */}
+                                    <div className="lg:col-span-6 space-y-5 flex flex-col justify-between">
+                                        {sideNewsList.map((news) => (
+                                            <Link 
+                                                key={news.id}
+                                                href={`/noticias/${news.slug}`}
                                             >
+                                                <motion.div 
+                                                    whileHover={{ x: 4 }}
+                                                    className="bg-white/90 backdrop-blur-md border border-slate-200/80 rounded-2xl p-5 shadow-xs hover:shadow-md transition-all duration-300 flex flex-col sm:flex-row gap-5 items-center cursor-pointer group text-left h-full"
+                                                >
+                                                    <img 
+                                                        src={getNewsImageUrl(news.imagen)} 
+                                                        alt={news.titulo} 
+                                                        className="w-full sm:w-44 h-36 rounded-xl object-cover shrink-0 group-hover:scale-105 transition-transform duration-300"
+                                                    />
+                                                    <div className="space-y-2">
+                                                        <span className="text-[11px] font-black uppercase tracking-wider text-[#800A15] block font-['DM_Sans',sans-serif]">
+                                                            {news.categoria || 'Deportes'} • {news.publicado_en ? new Date(news.publicado_en).toLocaleDateString('es-CO', { day: 'numeric', month: 'short', year: 'numeric' }) : 'Reciente'}
+                                                        </span>
+                                                        <h3 className="text-base sm:text-lg font-black text-[#262626] group-hover:text-[#001659] transition-colors leading-snug font-sans">
+                                                            {news.titulo}
+                                                        </h3>
+                                                        <p className="text-xs font-medium text-slate-500 leading-relaxed font-['DM_Sans',sans-serif] line-clamp-2">
+                                                            {news.resumen || 'Haz clic para ver todos los detalles de esta publicación.'}
+                                                        </p>
+                                                    </div>
+                                                </motion.div>
+                                            </Link>
+                                        ))}
+                                    </div>
+
+                                    {/* Right 1 Large Full Overlay Card (Dynamic Main Featured News) */}
+                                    {mainFeaturedNews && (
+                                        <div className="lg:col-span-6 relative min-h-[460px] rounded-3xl overflow-hidden shadow-xl group cursor-pointer border border-slate-800">
+                                            <Link href={`/noticias/${mainFeaturedNews.slug}`}>
                                                 <img 
-                                                    src={getNewsImageUrl(news.imagen, 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=800&q=80')} 
-                                                    alt={news.titulo} 
-                                                    className="w-full sm:w-44 h-36 rounded-xl object-cover shrink-0 group-hover:scale-105 transition-transform duration-300"
+                                                    src={getNewsImageUrl(mainFeaturedNews.imagen)} 
+                                                    alt={mainFeaturedNews.titulo} 
+                                                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
                                                 />
-                                                <div className="space-y-2">
-                                                    <span className="text-[11px] font-black uppercase tracking-wider text-[#800A15] block font-['DM_Sans',sans-serif]">
-                                                        {news.categoria || 'Deportes'} • {news.publicado_en ? new Date(news.publicado_en).toLocaleDateString('es-CO', { day: 'numeric', month: 'short', year: 'numeric' }) : 'Reciente'}
-                                                    </span>
-                                                    <h3 className="text-base sm:text-lg font-black text-[#262626] group-hover:text-[#001659] transition-colors leading-snug font-sans">
-                                                        {news.titulo}
-                                                    </h3>
-                                                    <p className="text-xs font-medium text-slate-500 leading-relaxed font-['DM_Sans',sans-serif] line-clamp-2">
-                                                        {news.resumen || 'Haz clic para leer todos los detalles de esta publicación deportiva.'}
-                                                    </p>
+                                                <div className="absolute inset-0 bg-gradient-to-t from-[#262626] via-[#262626]/60 to-transparent" />
+                                                
+                                                <div className="absolute inset-0 p-8 sm:p-12 flex flex-col justify-between text-left relative z-10">
+                                                    <div className="inline-flex">
+                                                        <span className="px-4 py-1.5 rounded-full border border-white/40 bg-white/10 backdrop-blur-md text-white text-xs font-bold uppercase tracking-widest font-['DM_Sans',sans-serif]">
+                                                            {mainFeaturedNews.categoria || 'Noticia Deportiva'}
+                                                        </span>
+                                                    </div>
+
+                                                    <div className="space-y-4">
+                                                        <span className="text-xs font-bold text-amber-400 tracking-wider uppercase block font-['DM_Sans',sans-serif]">
+                                                            Destacado Principal • {mainFeaturedNews.publicado_en ? new Date(mainFeaturedNews.publicado_en).toLocaleDateString('es-CO', { day: 'numeric', month: 'short', year: 'numeric' }) : 'Reciente'}
+                                                        </span>
+                                                        <h3 className="text-2xl sm:text-4xl font-black text-white leading-tight uppercase font-sans tracking-tight drop-shadow-md">
+                                                            {mainFeaturedNews.titulo}
+                                                        </h3>
+                                                        <p className="text-xs sm:text-sm font-medium text-slate-300 max-w-lg leading-relaxed font-['DM_Sans',sans-serif] line-clamp-3">
+                                                            {mainFeaturedNews.resumen || 'Descubre los detalles de esta noticia destacada.'}
+                                                        </p>
+                                                    </div>
                                                 </div>
-                                            </motion.div>
-                                        </Link>
-                                    ))}
-                                </div>
-
-                                {/* Right 1 Large Full Overlay Card (Dynamic Main Featured News) */}
-                                <div className="lg:col-span-6 relative min-h-[460px] rounded-3xl overflow-hidden shadow-xl group cursor-pointer border border-slate-800">
-                                    <Link href={`/noticias/${mainFeaturedNews.slug}`}>
-                                        <img 
-                                            src={getNewsImageUrl(mainFeaturedNews.imagen, 'https://images.unsplash.com/photo-1592656094267-764a45160876?auto=format&fit=crop&w=1200&q=80')} 
-                                            alt={mainFeaturedNews.titulo} 
-                                            className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
-                                        />
-                                        <div className="absolute inset-0 bg-gradient-to-t from-[#262626] via-[#262626]/60 to-transparent" />
-                                        
-                                        <div className="absolute inset-0 p-8 sm:p-12 flex flex-col justify-between text-left relative z-10">
-                                            <div className="inline-flex">
-                                                <span className="px-4 py-1.5 rounded-full border border-white/40 bg-white/10 backdrop-blur-md text-white text-xs font-bold uppercase tracking-widest font-['DM_Sans',sans-serif]">
-                                                    {mainFeaturedNews.categoria || 'Noticias COLSIH'}
-                                                </span>
-                                            </div>
-
-                                            <div className="space-y-4">
-                                                <span className="text-xs font-bold text-amber-400 tracking-wider uppercase block font-['DM_Sans',sans-serif]">
-                                                    Destacado Principal • {mainFeaturedNews.publicado_en ? new Date(mainFeaturedNews.publicado_en).toLocaleDateString('es-CO', { day: 'numeric', month: 'short', year: 'numeric' }) : 'Reciente'}
-                                                </span>
-                                                <h3 className="text-2xl sm:text-4xl font-black text-white leading-tight uppercase font-sans tracking-tight drop-shadow-md">
-                                                    {mainFeaturedNews.titulo}
-                                                </h3>
-                                                <p className="text-xs sm:text-sm font-medium text-slate-300 max-w-lg leading-relaxed font-['DM_Sans',sans-serif] line-clamp-3">
-                                                    {mainFeaturedNews.resumen || 'Descubre todas las novedades y logros del talento deportivo del Colegio Santa Isabel de Hungría.'}
-                                                </p>
-                                            </div>
+                                            </Link>
                                         </div>
-                                    </Link>
-                                </div>
+                                    )}
 
-                            </div>
+                                </div>
+                            )}
 
                         </div>
                     </section>
@@ -568,43 +530,39 @@ export default function Deportes({ noticias = [] }) {
 
                             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
 
-                                {/* Left Side: Recent News Cards */}
+                                {/* Left Side: Recent News Cards (Dynamic from DB) */}
                                 <div className="lg:col-span-5 space-y-6 text-left">
                                     <h3 className="text-2xl font-black text-[#262626] tracking-tight uppercase font-sans">
-                                        Recent News
+                                        Noticias Recientes
                                     </h3>
 
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-5">
-                                        <div className="bg-white/90 backdrop-blur-md border border-slate-200 rounded-2xl overflow-hidden shadow-xs hover:shadow-md transition-all group cursor-pointer">
-                                            <img 
-                                                src="https://images.unsplash.com/photo-1592656094267-764a45160876?auto=format&fit=crop&w=800&q=80" 
-                                                alt="Voleibol" 
-                                                className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500" 
-                                            />
-                                            <div className="p-5 space-y-2">
-                                                <span className="text-[10px] font-black uppercase tracking-wider text-[#800A15] block font-['DM_Sans',sans-serif]">
-                                                    Voleibol • 03 Junio 2026
-                                                </span>
-                                                <h4 className="text-base font-black text-[#262626] group-hover:text-[#001659] transition-colors leading-snug font-sans">
-                                                    Torneo Intercolegiado de Voleibol Femenino y Masculino
-                                                </h4>
-                                            </div>
+                                    {noticias.length > 3 ? (
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-5">
+                                            {noticias.slice(3, 6).map((recNews) => (
+                                                <Link key={recNews.id} href={`/noticias/${recNews.slug}`}>
+                                                    <div className="bg-white/90 backdrop-blur-md border border-slate-200 rounded-2xl p-4 shadow-xs hover:shadow-md transition-all flex items-center gap-4 group cursor-pointer">
+                                                        <img 
+                                                            src={getNewsImageUrl(recNews.imagen)} 
+                                                            alt={recNews.titulo} 
+                                                            className="w-20 h-20 rounded-xl object-cover shrink-0 group-hover:scale-105 transition-transform" 
+                                                        />
+                                                        <div className="space-y-1">
+                                                            <span className="text-[9px] font-black uppercase text-[#001659] block font-['DM_Sans',sans-serif]">
+                                                                {recNews.categoria || 'Deportes'} • {recNews.publicado_en ? new Date(recNews.publicado_en).toLocaleDateString('es-CO', { day: 'numeric', month: 'short' }) : 'Reciente'}
+                                                            </span>
+                                                            <h5 className="text-xs font-black text-[#262626] group-hover:text-[#001659] transition-colors leading-snug font-sans">
+                                                                {recNews.titulo}
+                                                            </h5>
+                                                        </div>
+                                                    </div>
+                                                </Link>
+                                            ))}
                                         </div>
-
-                                        <div className="bg-white/90 backdrop-blur-md border border-slate-200 rounded-2xl p-4 shadow-xs flex items-center gap-4 group cursor-pointer">
-                                            <img 
-                                                src="https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=300&q=80" 
-                                                alt="Baloncesto" 
-                                                className="w-20 h-20 rounded-xl object-cover shrink-0 group-hover:scale-105 transition-transform" 
-                                            />
-                                            <div className="space-y-1">
-                                                <span className="text-[9px] font-black uppercase text-[#001659] block font-['DM_Sans',sans-serif]">Baloncesto • 02 Junio</span>
-                                                <h5 className="text-xs font-black text-[#262626] group-hover:text-[#001659] transition-colors leading-snug font-sans">
-                                                    Gran Torneo de Baloncesto Inter-Casas
-                                                </h5>
-                                            </div>
+                                    ) : (
+                                        <div className="p-6 bg-slate-50 border border-slate-200/80 rounded-2xl text-slate-500 text-xs font-semibold text-center font-['DM_Sans',sans-serif]">
+                                            No hay más publicaciones deportivas en este momento.
                                         </div>
-                                    </div>
+                                    )}
                                 </div>
 
                                 {/* Right Side: Clubs Ranking Table */}

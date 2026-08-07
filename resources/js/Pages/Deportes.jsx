@@ -13,7 +13,6 @@ export default function Deportes() {
     const [email, setEmail] = useState('');
     const [subscribed, setSubscribed] = useState(false);
     const [activePage, setActivePage] = useState(1);
-    const [selectedCategory, setSelectedCategory] = useState('ALL');
     const [sliderIndex, setSliderIndex] = useState(0);
 
     function handleSubscribe(e) {
@@ -26,18 +25,6 @@ export default function Deportes() {
             }, 4000);
         }
     }
-
-    // Categories grid strictly scoped to Microfútbol, Baloncesto, and Voleibol
-    const categories = [
-        { id: 'microfutbol', label: 'MICROFÚTBOL', type: 'text', bg: 'bg-[#EAEFF4]' },
-        { id: 'baloncesto-img', label: 'Baloncesto', type: 'image', img: 'https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=800&q=80' },
-        { id: 'voleibol', label: 'VOLEIBOL', type: 'text', bg: 'bg-[#EAEFF4]' },
-        { id: 'voleibol-img', label: 'Voleibol', type: 'image', img: 'https://images.unsplash.com/photo-1592656094267-764a45160876?auto=format&fit=crop&w=800&q=80' },
-        { id: 'microfutbol-img', label: 'Microfútbol', type: 'image', img: 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=800&q=80' },
-        { id: 'baloncesto', label: 'BALONCESTO', type: 'text', bg: 'bg-[#EAEFF4]' },
-        { id: 'baloncesto-cancha', label: 'Cancha Baloncesto', type: 'image', img: 'https://images.unsplash.com/photo-1519861531473-9200262188bf?auto=format&fit=crop&w=800&q=80' },
-        { id: 'torneos', label: 'TORNEOS COLSIH', type: 'text', bg: 'bg-[#EAEFF4]' },
-    ];
 
     // Trending News (Microfútbol, Baloncesto, Voleibol)
     const trendingNews = [
@@ -148,21 +135,21 @@ export default function Deportes() {
 
             <div className="bg-[#FFFFFF] text-[#262626] overflow-x-hidden font-['DM_Sans',sans-serif] select-none">
 
-                {/* ── 1. HERO SECTION EXACT FIGMA MATCH WITH OVERLAP & GRADIENT ── */}
+                {/* ── 1. HERO SECTION EXACT FIGMA MATCH ── */}
                 <section className="relative w-full pt-28 pb-16 bg-[#FFFFFF] border-b border-slate-200/80 overflow-hidden min-h-[640px]">
                     <div className="max-w-[1440px] mx-auto px-6 md:px-12 lg:px-16 relative">
                         
                         {/* Desktop Pixel-Perfect Layout (lg screens) */}
                         <div className="hidden lg:block relative w-full h-[620px]">
 
-                            {/* 1. Watermark Basketball Background (Clearly Visible) */}
+                            {/* 1. Watermark Basketball Background */}
                             <img 
                                 src="/deportes/balon_basket_fondo.png" 
                                 alt="Fondo Balón" 
                                 className="absolute left-[0px] top-[0px] w-[720px] h-[550px] object-contain opacity-65 pointer-events-none"
                             />
 
-                            {/* 2. Main Title Text with Degradé & Larger Size (BEHIND player torso at z-10) */}
+                            {/* 2. Main Title Text with Degradé & Bigger Font Size, layered BEHIND player torso (z-10) */}
                             <div className="absolute left-[130px] top-[75px] w-[500px] text-[68px] xl:text-[76px] font-black uppercase leading-[0.90] tracking-tighter font-sans z-10 select-none">
                                 <span className="text-[#262626]">MÁXIMO</span> <br />
                                 <span className="text-[#262626]">ANOTADOR</span> <br />
@@ -170,7 +157,7 @@ export default function Deportes() {
                                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#001659] via-[#08111F] to-slate-700">FINAL</span>
                             </div>
 
-                            {/* 3. Player Cutout Image (ON TOP at z-20 so player torso & legs cover right side of title) */}
+                            {/* 3. Player Cutout Image (Layered ON TOP of title so body & back cut across text) */}
                             <img 
                                 src="/deportes/persona_basket_saltando.png" 
                                 alt="Jugador de Baloncesto Saltando" 
@@ -234,70 +221,33 @@ export default function Deportes() {
 
                         </div>
 
-                        {/* Mobile & Tablet Responsive Layout (< lg screens) */}
+                        {/* Mobile Responsive Layout */}
                         <div className="lg:hidden flex flex-col items-center text-center space-y-6 relative py-6">
-
                             <img 
                                 src="/deportes/balon_basket_fondo.png" 
                                 alt="Fondo Balón" 
                                 className="absolute top-0 left-1/2 -translate-x-1/2 w-[320px] h-[260px] object-contain opacity-50 pointer-events-none"
                             />
-
                             <h1 className="text-3xl sm:text-5xl font-black text-[#262626] uppercase leading-none tracking-tighter font-sans z-10">
                                 MÁXIMO ANOTADOR <br />
                                 <span className="text-[#001659]">DE LA GRAN FINAL</span>
                             </h1>
-
                             <div className="relative w-full max-w-[380px] aspect-[4/3] z-20">
-                                <img 
-                                    src="/deportes/persona_basket_saltando.png" 
-                                    alt="Jugador de Baloncesto" 
-                                    className="w-full h-full object-contain drop-shadow-lg" 
-                                />
+                                <img src="/deportes/persona_basket_saltando.png" alt="Jugador de Baloncesto" className="w-full h-full object-contain drop-shadow-lg" />
                             </div>
-
                             <p className="text-sm font-medium text-[#666666] max-w-md leading-relaxed font-['DM_Sans',sans-serif]">
                                 El premio al máximo anotador de las finales es la distinción individual otorgada al estudiante que obtuvo el mayor puntaje y rendimiento en el torneo intercolegiado.
                             </p>
-
-                            <a 
-                                href="#noticias-tendencia"
-                                className="inline-flex items-center justify-center px-8 py-3.5 bg-[#262626] hover:bg-[#001659] text-white text-sm font-bold uppercase tracking-[1.8px] rounded-lg transition-all shadow-md font-['DM_Sans',sans-serif]"
-                            >
+                            <a href="#noticias-tendencia" className="inline-flex items-center justify-center px-8 py-3.5 bg-[#262626] hover:bg-[#001659] text-white text-sm font-bold uppercase tracking-[1.8px] rounded-lg transition-all shadow-md font-['DM_Sans',sans-serif]">
                                 CONTINUAR LEYENDO
                             </a>
-
-                            {/* Today Sidebar Cards for Mobile */}
-                            <div className="w-full pt-8 space-y-4 text-left">
-                                <div className="inline-block bg-[#EAEFF4] px-3.5 py-1 rounded-sm">
-                                    <span className="text-[#8E9CAE] text-xs font-semibold uppercase tracking-wider font-['DM_Sans',sans-serif]">Today</span>
-                                </div>
-
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                    <div className="bg-white rounded-xl overflow-hidden shadow-sm border border-slate-200 p-3 flex items-center gap-3">
-                                        <img src="https://images.unsplash.com/photo-1592656094267-764a45160876?auto=format&fit=crop&w=300&q=80" className="w-20 h-20 rounded-lg object-cover" />
-                                        <div>
-                                            <span className="text-[10px] font-bold text-[#800A15] uppercase block font-['DM_Sans',sans-serif]">Voleibol • 03 Junio</span>
-                                            <h4 className="text-xs font-black text-[#262626] font-sans">Selección de voleibol obtiene los primeros puestos</h4>
-                                        </div>
-                                    </div>
-                                    <div className="bg-white rounded-xl overflow-hidden shadow-sm border border-slate-200 p-3 flex items-center gap-3">
-                                        <img src="https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=300&q=80" className="w-20 h-20 rounded-lg object-cover" />
-                                        <div>
-                                            <span className="text-[10px] font-bold text-[#001659] uppercase block font-['DM_Sans',sans-serif]">Microfútbol • 03 Junio</span>
-                                            <h4 className="text-xs font-black text-[#262626] font-sans">Microfútbol COLSIH: Gran victoria en segunda jornada</h4>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
                         </div>
 
                     </div>
                 </section>
 
 
-                {/* ── 2. CATEGORY MOSAIC GRID ("Category") ── */}
+                {/* ── 2. CATEGORY MOSAIC GRID (EXACT FIGMA 4-COLUMN MASONRY ASYMMETRICAL MATCH) ── */}
                 <section className="py-16 md:py-24 bg-white border-b border-slate-200/70">
                     <div className="max-w-[1440px] mx-auto px-6 md:px-12 lg:px-16 space-y-8">
 
@@ -310,47 +260,109 @@ export default function Deportes() {
                             </span>
                         </div>
 
-                        {/* 4-Column x 2-Row Mosaic Grid matching Figma Layout */}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-                            {categories.map((cat) => {
-                                const isText = cat.type === 'text';
+                        {/* Exact Asymmetrical 4-Column Masonry Grid from Figma JSON & Image */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[20px] items-start text-center">
 
-                                return (
-                                    <motion.div
-                                        key={cat.id}
-                                        whileHover={{ scale: 1.02 }}
-                                        onClick={() => setSelectedCategory(cat.label)}
-                                        className={`relative rounded-2xl overflow-hidden shadow-xs hover:shadow-xl transition-all duration-300 cursor-pointer min-h-[140px] sm:min-h-[170px] flex items-center justify-center p-6 ${
-                                            isText ? `${cat.bg} border border-slate-200/80` : 'group'
-                                        }`}
-                                    >
-                                        {isText ? (
-                                            <div className="text-center space-y-1">
-                                                <h3 className="text-2xl sm:text-3xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-[#262626] via-[#001659] to-slate-600 uppercase font-sans">
-                                                    {cat.label}
-                                                </h3>
-                                                <span className="text-[10px] font-extrabold uppercase tracking-widest text-[#800A15] block font-['DM_Sans',sans-serif]">
-                                                    Explorar Selección
-                                                </span>
-                                            </div>
-                                        ) : (
-                                            <>
-                                                <img 
-                                                    src={cat.img} 
-                                                    alt={cat.label} 
-                                                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
-                                                />
-                                                <div className="absolute inset-0 bg-gradient-to-t from-[#262626]/85 via-[#262626]/30 to-transparent" />
-                                                <div className="relative z-10 text-center">
-                                                    <span className="text-white font-black text-lg sm:text-xl uppercase tracking-wider font-sans drop-shadow-md">
-                                                        {cat.label}
-                                                    </span>
-                                                </div>
-                                            </>
-                                        )}
-                                    </motion.div>
-                                );
-                            })}
+                            {/* Column 1 (w: 270px) */}
+                            <div className="flex flex-col gap-[20px]">
+                                {/* Top Text Tile: MICROFÚTBOL (h: 116px) */}
+                                <motion.div 
+                                    whileHover={{ scale: 1.02 }}
+                                    className="w-full h-[116px] bg-[#EBEEF3] rounded-[10px] flex items-center justify-center p-4 border border-slate-200/60 shadow-xs hover:shadow-md transition-all cursor-pointer group"
+                                >
+                                    <span className="text-[34px] font-black uppercase tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-[#262626] to-[#78889B] font-sans leading-none">
+                                        MICROFÚTBOL
+                                    </span>
+                                </motion.div>
+
+                                {/* Bottom Image Tile: Microfútbol / Balón en Red (h: 288px) */}
+                                <motion.div 
+                                    whileHover={{ scale: 1.02 }}
+                                    className="w-full h-[288px] rounded-[10px] overflow-hidden shadow-xs hover:shadow-xl transition-all cursor-pointer group border border-slate-200/60"
+                                >
+                                    <img 
+                                        src="https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=600&q=80" 
+                                        alt="Microfútbol en Red" 
+                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+                                    />
+                                </motion.div>
+                            </div>
+
+                            {/* Column 2 (w: 270px) */}
+                            <div className="flex flex-col gap-[20px]">
+                                {/* Top Image Tile: Balón de Baloncesto (h: 235px) */}
+                                <motion.div 
+                                    whileHover={{ scale: 1.02 }}
+                                    className="w-full h-[235px] rounded-[10px] overflow-hidden shadow-xs hover:shadow-xl transition-all cursor-pointer group border border-slate-200/60"
+                                >
+                                    <img 
+                                        src="https://images.unsplash.com/photo-1519861531473-9200262188bf?auto=format&fit=crop&w=600&q=80" 
+                                        alt="Balón de Baloncesto" 
+                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+                                    />
+                                </motion.div>
+
+                                {/* Bottom Text Tile: BALONCESTO (h: 169px) */}
+                                <motion.div 
+                                    whileHover={{ scale: 1.02 }}
+                                    className="w-full h-[169px] bg-[#EBEEF3] rounded-[10px] flex items-center justify-center p-4 border border-slate-200/60 shadow-xs hover:shadow-md transition-all cursor-pointer group"
+                                >
+                                    <span className="text-[34px] font-black uppercase tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-[#262626] to-[#78889B] font-sans leading-tight">
+                                        BALONCESTO
+                                    </span>
+                                </motion.div>
+                            </div>
+
+                            {/* Column 3 (w: 270px) */}
+                            <div className="flex flex-col gap-[20px]">
+                                {/* Top Text Tile: VOLEIBOL (h: 116px) */}
+                                <motion.div 
+                                    whileHover={{ scale: 1.02 }}
+                                    className="w-full h-[116px] bg-[#EBEEF3] rounded-[10px] flex items-center justify-center p-4 border border-slate-200/60 shadow-xs hover:shadow-md transition-all cursor-pointer group"
+                                >
+                                    <span className="text-[34px] font-black uppercase tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-[#262626] to-[#78889B] font-sans leading-none">
+                                        VOLEIBOL
+                                    </span>
+                                </motion.div>
+
+                                {/* Bottom Image Tile: Voleibol Cancha (h: 288px) */}
+                                <motion.div 
+                                    whileHover={{ scale: 1.02 }}
+                                    className="w-full h-[288px] rounded-[10px] overflow-hidden shadow-xs hover:shadow-xl transition-all cursor-pointer group border border-slate-200/60"
+                                >
+                                    <img 
+                                        src="https://images.unsplash.com/photo-1612872087720-bb876e2e67d1?auto=format&fit=crop&w=600&q=80" 
+                                        alt="Cancha Voleibol" 
+                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+                                    />
+                                </motion.div>
+                            </div>
+
+                            {/* Column 4 (w: 270px) */}
+                            <div className="flex flex-col gap-[20px]">
+                                {/* Top Image Tile: Remate Voleibol / Balón (h: 286px) */}
+                                <motion.div 
+                                    whileHover={{ scale: 1.02 }}
+                                    className="w-full h-[286px] rounded-[10px] overflow-hidden shadow-xs hover:shadow-xl transition-all cursor-pointer group border border-slate-200/60"
+                                >
+                                    <img 
+                                        src="https://images.unsplash.com/photo-1592656094267-764a45160876?auto=format&fit=crop&w=600&q=80" 
+                                        alt="Selección Voleibol" 
+                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+                                    />
+                                </motion.div>
+
+                                {/* Bottom Text Tile: TORNEOS COLSIH (h: 118px) */}
+                                <motion.div 
+                                    whileHover={{ scale: 1.02 }}
+                                    className="w-full h-[118px] bg-[#EBEEF3] rounded-[10px] flex items-center justify-center p-4 border border-slate-200/60 shadow-xs hover:shadow-md transition-all cursor-pointer group"
+                                >
+                                    <span className="text-[28px] font-black uppercase tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-[#262626] to-[#78889B] font-sans leading-none">
+                                        TORNEOS COLSIH
+                                    </span>
+                                </motion.div>
+                            </div>
+
                         </div>
 
                     </div>

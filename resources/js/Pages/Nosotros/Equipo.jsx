@@ -45,9 +45,9 @@ export default function Equipo({ equipo = [] }) {
 
     // Áreas de Administración
     const administracion = [
-        { area: 'Rectoría', encargado: 'Sor Beatriz Cortés Jerez', cargo: 'Rectora', tel: '(607) 637 1234', email: 'rectoria@colsih.edu.co' },
-        { area: 'Coordinación Académica', encargado: 'Jaime Manuel Ardila Parra', cargo: 'Coordinador Académico', tel: '(607) 637 1235', email: 'academica@colsih.edu.co' },
-        { area: 'Coordinación de Convivencia', encargado: 'Margarita María Valle Manrique', cargo: 'Coordinadora de Convivencia', tel: '(607) 637 1236', email: 'convivencia@colsih.edu.co' },
+        { area: 'Rectoría', encargado: 'Sor Beatriz Cortés Jerez', cargo: 'Rectora', tel: '6076849810', email: 'colsantaisabeldehungria.fblanca@gmail.com' },
+        { area: 'Coordinación Académica', encargado: 'Jaime Manuel Ardila Parra', cargo: 'Coordinador Académico', tel: '6076849810', email: 'coordinacionacademicacolsih@gmail.com' },
+        { area: 'Coordinación de Convivencia', encargado: 'Margarita María Valle Manrique', cargo: 'Coordinadora de Convivencia', tel: '6076849810', email: 'convivenciaisabeldehungria@gmail.com' },
         { area: 'Coordinación Pastoral', encargado: 'Erika Tatiana Delgadillo Avella', cargo: 'Coordinadora de Pastoral', tel: '(607) 637 1237', email: 'pastoral@colsih.edu.co' },
         { area: 'Psicoorientación y Apoyo', encargado: 'Mayra Alexandra Parada Ruiz', cargo: 'Psicoorientadora', tel: '(607) 637 1238', email: 'orientacion@colsih.edu.co' }
     ];

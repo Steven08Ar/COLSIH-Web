@@ -215,7 +215,7 @@ export default function Navbar() {
                     <Link href="/admisiones" className={`transition-colors ${url === '/admisiones' ? 'text-white font-extrabold' : 'hover:text-white'}`}>Admisiones</Link>
                     <Link href="/deportes" className={`transition-colors ${url === '/deportes' ? 'text-white font-extrabold' : 'hover:text-white'}`}>Deportes</Link>
                     <Link href="/noticias" className={`transition-colors ${url.startsWith('/noticias') ? 'text-white font-extrabold' : 'hover:text-white'}`}>Noticias</Link>
-                    <Link href="/contacto" className={`transition-colors ${url === '/contacto' ? 'text-[#800A15] font-extrabold' : 'hover:text-white'}`}>Contacto</Link>
+                    <Link href="/contacto" className={`transition-colors ${url === '/contacto' ? 'text-white font-extrabold' : 'hover:text-white'}`}>Contacto</Link>
                 </div>
 
                 <div className="flex items-center gap-3 shrink-0">

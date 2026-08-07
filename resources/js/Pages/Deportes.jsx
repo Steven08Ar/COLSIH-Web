@@ -3,8 +3,6 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import AppLayout from '@/Layouts/AppLayout';
 import { 
-    Trophy, 
-    ArrowRight, 
     Send,
     CheckCircle2,
     ChevronRight,
@@ -29,7 +27,7 @@ export default function Deportes() {
         }
     }
 
-    // Categories grid strictly scoped to Microfútbol, Baloncesto, and Voleibol per user request
+    // Categories grid strictly scoped to Microfútbol, Baloncesto, and Voleibol
     const categories = [
         { id: 'microfutbol', label: 'MICROFÚTBOL', type: 'text', bg: 'bg-[#EAEFF4]' },
         { id: 'baloncesto-img', label: 'Baloncesto', type: 'image', img: 'https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=800&q=80' },
@@ -41,7 +39,7 @@ export default function Deportes() {
         { id: 'torneos', label: 'TORNEOS COLSIH', type: 'text', bg: 'bg-[#EAEFF4]' },
     ];
 
-    // Trending News (Filtered for Microfútbol, Baloncesto, Voleibol)
+    // Trending News (Microfútbol, Baloncesto, Voleibol)
     const trendingNews = [
         {
             id: 1,
@@ -104,7 +102,7 @@ export default function Deportes() {
         { pos: 6, casa: 'Casa Ceferino Namuncurá', pj: 10, pg: 1, pe: 1, pp: 8, gf: 7, gc: 25, pts: 4, badge: '6°' },
     ];
 
-    // Sports Articles (Authors with Roboto font style as specified in Figma json)
+    // Sports Articles
     const sportsArticles = [
         {
             id: 1,
@@ -150,135 +148,153 @@ export default function Deportes() {
 
             <div className="bg-[#FFFFFF] text-[#262626] overflow-x-hidden font-['DM_Sans',sans-serif] select-none">
 
-                {/* ── 1. HERO SECTION (Top Scorer To The Final Match) ── */}
-                <section className="relative pt-32 pb-16 md:pt-40 md:pb-24 bg-[#F5F7FA] border-b border-[#E2E8F0] overflow-hidden">
-                    <div className="max-w-[1440px] mx-auto px-6 md:px-12 lg:px-16">
-                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+                {/* ── 1. HERO SECTION EXACT FIGMA MATCH ── */}
+                <section className="relative w-full pt-28 pb-16 bg-[#FFFFFF] border-b border-slate-200 overflow-hidden min-h-[640px]">
+                    <div className="max-w-[1440px] mx-auto px-6 md:px-12 lg:px-16 relative">
+                        
+                        {/* Desktop Figma Pixel-Perfect Layout (lg screens) */}
+                        <div className="hidden lg:block relative w-full h-[620px]">
 
-                            {/* Left Display Headline & Center Athlete Cutout (7 Cols) */}
-                            <div className="lg:col-span-7 relative z-10 flex flex-col items-center lg:items-start text-center lg:text-left space-y-6">
+                            {/* 1. Watermark Basketball Background */}
+                            <img 
+                                src="/deportes/balon_basket_fondo.png" 
+                                alt="Fondo Balón" 
+                                className="absolute left-0 top-0 w-[680px] h-[520px] object-contain opacity-40 mix-blend-luminosity pointer-events-none"
+                            />
 
-                                {/* Watermark Background Circle */}
-                                <div className="absolute top-1/2 left-1/2 lg:left-1/3 -translate-x-1/2 -translate-y-1/2 w-[340px] sm:w-[460px] lg:w-[540px] h-[340px] sm:h-[460px] lg:h-[540px] rounded-full border border-slate-200/80 bg-gradient-to-br from-slate-100/70 to-slate-200/40 -z-10 pointer-events-none flex items-center justify-center">
-                                    <div className="w-[86%] h-[86%] rounded-full border border-dashed border-slate-300/60" />
-                                </div>
-
-                                <motion.div 
-                                    initial={{ opacity: 0, y: 15 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ duration: 0.5 }}
-                                    className="space-y-1"
-                                >
-                                    <span className="text-[11px] font-bold tracking-[3px] uppercase text-[#800A15] block font-['DM_Sans',sans-serif]">
-                                        TALENTO DEPORTIVO COLSIH
-                                    </span>
-                                </motion.div>
-
-                                <motion.h1 
-                                    initial={{ opacity: 0, y: 20 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ duration: 0.6, delay: 0.1 }}
-                                    className="text-4xl sm:text-5xl lg:text-[66px] font-black text-[#262626] leading-[0.92] tracking-tighter uppercase font-sans"
-                                >
-                                    TOP SCORER TO <br />
-                                    <span className="text-[#001659]">THE FINAL MATCH</span>
-                                </motion.h1>
-
-                                {/* Action Cutout Athlete Image */}
-                                <motion.div 
-                                    initial={{ scale: 0.92, opacity: 0 }}
-                                    animate={{ scale: 1, opacity: 1 }}
-                                    transition={{ duration: 0.7, delay: 0.2 }}
-                                    className="relative w-full max-w-[420px] aspect-[4/3] my-2 cursor-pointer group"
-                                >
-                                    <img 
-                                        src="https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=1000&q=80" 
-                                        alt="Atleta Destacado COLSIH" 
-                                        className="w-full h-full object-cover rounded-3xl shadow-2xl group-hover:scale-[1.02] transition-transform duration-500 border-4 border-white"
-                                    />
-                                    <div className="absolute -bottom-4 right-4 bg-[#262626] text-white px-5 py-2.5 rounded-2xl shadow-xl flex items-center gap-3 border border-white/20">
-                                        <div className="w-3 h-3 rounded-full bg-amber-400 animate-ping" />
-                                        <span className="text-xs font-black uppercase tracking-wider font-['DM_Sans',sans-serif]">Máximo Anotador</span>
-                                    </div>
-                                </motion.div>
-
-                                <motion.p 
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    transition={{ duration: 0.6, delay: 0.3 }}
-                                    className="text-[#666666] text-sm sm:text-base font-medium max-w-lg leading-relaxed font-['DM_Sans',sans-serif]"
-                                >
-                                    El premio al máximo anotador de las finales intercolegiadas es la distinción individual otorgada al estudiante que obtuvo el mayor puntaje y liderazgo deportivo en microfútbol, baloncesto y voleibol.
-                                </motion.p>
-
-                                <motion.div 
-                                    initial={{ opacity: 0, y: 15 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ duration: 0.6, delay: 0.4 }}
-                                    className="pt-1"
-                                >
-                                    <a 
-                                        href="#noticias-tendencia" 
-                                        className="inline-flex items-center gap-3 px-8 py-4 bg-[#262626] hover:bg-[#001659] text-white font-black text-xs uppercase tracking-widest rounded-xl transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 cursor-pointer font-['DM_Sans',sans-serif]"
-                                    >
-                                        <span>CONTINUAR LEYENDO</span>
-                                        <ArrowRight className="w-4 h-4 text-amber-400" />
-                                    </a>
-                                </motion.div>
-
+                            {/* 2. Main Title Text */}
+                            <div className="absolute left-[120px] top-[80px] w-[500px] text-[#262626] text-[76px] font-black uppercase leading-[0.92] tracking-tighter font-sans z-10">
+                                MÁXIMO ANOTADOR <br />
+                                <span className="text-[#001659]">DE LA GRAN FINAL</span>
                             </div>
 
-                            {/* Right Side Stacked Cards ("Today" / "Hoy") (5 Cols) */}
-                            <div className="lg:col-span-5 space-y-5 text-left">
-                                <div className="flex items-center justify-between border-b border-slate-200 pb-2.5">
-                                    <span className="px-3.5 py-1 rounded-md bg-[#E2E8F0] text-slate-800 text-xs font-extrabold tracking-wider uppercase font-['DM_Sans',sans-serif]">
-                                        Today
+                            {/* 3. Player Cutout Image jumping in front */}
+                            <img 
+                                src="/deportes/persona_basket_saltando.png" 
+                                alt="Jugador de Baloncesto Saltando" 
+                                className="absolute left-[340px] top-[40px] w-[640px] h-[540px] object-contain z-20 pointer-events-none drop-shadow-xl"
+                            />
+
+                            {/* 4. Description Paragraph */}
+                            <div className="absolute left-[590px] top-[430px] w-[380px] text-[#262626] text-[15px] font-medium leading-relaxed font-['DM_Sans',sans-serif] z-30">
+                                El premio al máximo anotador de las finales es la distinción individual otorgada al estudiante que obtuvo el mayor puntaje y rendimiento en el torneo intercolegiado.
+                            </div>
+
+                            {/* 5. Continue Reading Button */}
+                            <div className="absolute left-[590px] top-[515px] z-30">
+                                <a 
+                                    href="#noticias-tendencia"
+                                    className="inline-flex items-center justify-center px-8 py-3.5 bg-[#262626] hover:bg-[#001659] text-[#E1E8F0] text-sm font-bold uppercase tracking-[1.8px] rounded-lg transition-all shadow-lg hover:scale-105 active:scale-95 cursor-pointer font-['DM_Sans',sans-serif]"
+                                >
+                                    CONTINUAR LEYENDO
+                                </a>
+                            </div>
+
+                            {/* 6. Today Badge (Top Right) */}
+                            <div className="absolute left-[1060px] top-[80px] z-30 bg-[#E1E8F0] px-4 py-1 rounded-sm text-center">
+                                <span className="text-[#5A6E85] text-xs font-semibold uppercase tracking-wider font-['DM_Sans',sans-serif]">
+                                    Today
+                                </span>
+                            </div>
+
+                            {/* 7. Stacked Right Cards */}
+                            {/* Card 1 */}
+                            <div className="absolute left-[1060px] top-[125px] w-[270px] h-[220px] rounded-xl overflow-hidden shadow-md group cursor-pointer border border-slate-200 z-30">
+                                <img 
+                                    src="https://images.unsplash.com/photo-1592656094267-764a45160876?auto=format&fit=crop&w=500&q=80" 
+                                    alt="Voleibol" 
+                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-[#F2F2F2] via-[#F2F2F2]/60 to-transparent" />
+                                <div className="absolute bottom-3 left-4 right-4 text-left space-y-1">
+                                    <span className="text-[10px] font-bold text-[#666666] uppercase block font-['DM_Sans',sans-serif]">
+                                        Voleibol • 03 Junio 2026
                                     </span>
-                                    <span className="text-xs font-bold text-slate-400 font-['DM_Sans',sans-serif]">Destacados de Hoy</span>
+                                    <h4 className="text-xs font-black text-[#262626] leading-tight font-sans line-clamp-2">
+                                        Selección de voleibol obtiene los primeros puestos en la copa escolar
+                                    </h4>
                                 </div>
+                            </div>
 
-                                {/* Sidebar Card 1 */}
-                                <motion.div 
-                                    whileHover={{ y: -3 }}
-                                    className="bg-white border border-slate-200/90 rounded-2xl p-4 shadow-xs hover:shadow-md transition-all duration-300 flex items-center gap-4 cursor-pointer group"
-                                >
-                                    <img 
-                                        src="https://images.unsplash.com/photo-1592656094267-764a45160876?auto=format&fit=crop&w=400&q=80" 
-                                        alt="Voleibol" 
-                                        className="w-24 h-24 sm:w-28 sm:h-28 rounded-xl object-cover shrink-0 group-hover:scale-105 transition-transform duration-300"
-                                    />
-                                    <div className="space-y-1.5">
-                                        <span className="text-[10px] font-black uppercase tracking-wider text-[#800A15] block font-['DM_Sans',sans-serif]">
-                                            Voleibol • 03 Junio 2026
-                                        </span>
-                                        <h4 className="text-sm font-black text-[#262626] group-hover:text-[#001659] transition-colors leading-snug font-sans">
-                                            Selección de voleibol obtiene los primeros cuatro puestos en la copa escolar
-                                        </h4>
-                                    </div>
-                                </motion.div>
-
-                                {/* Sidebar Card 2 */}
-                                <motion.div 
-                                    whileHover={{ y: -3 }}
-                                    className="bg-white border border-slate-200/90 rounded-2xl p-4 shadow-xs hover:shadow-md transition-all duration-300 flex items-center gap-4 cursor-pointer group"
-                                >
-                                    <img 
-                                        src="https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=400&q=80" 
-                                        alt="Microfútbol" 
-                                        className="w-24 h-24 sm:w-28 sm:h-28 rounded-xl object-cover shrink-0 group-hover:scale-105 transition-transform duration-300"
-                                    />
-                                    <div className="space-y-1.5">
-                                        <span className="text-[10px] font-black uppercase tracking-wider text-[#001659] block font-['DM_Sans',sans-serif]">
-                                            Microfútbol • 01 Junio 2026
-                                        </span>
-                                        <h4 className="text-sm font-black text-[#262626] group-hover:text-[#001659] transition-colors leading-snug font-sans">
-                                            Microfútbol COLSIH: Gran desempeño y victoria en la segunda jornada
-                                        </h4>
-                                    </div>
-                                </motion.div>
+                            {/* Card 2 */}
+                            <div className="absolute left-[1060px] top-[365px] w-[270px] h-[220px] rounded-xl overflow-hidden shadow-md group cursor-pointer border border-slate-200 z-30">
+                                <img 
+                                    src="https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=500&q=80" 
+                                    alt="Microfútbol" 
+                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-[#F2F2F2] via-[#F2F2F2]/60 to-transparent" />
+                                <div className="absolute bottom-3 left-4 right-4 text-left space-y-1">
+                                    <span className="text-[10px] font-bold text-[#666666] uppercase block font-['DM_Sans',sans-serif]">
+                                        Microfútbol • 03 Junio 2026
+                                    </span>
+                                    <h4 className="text-xs font-black text-[#262626] leading-tight font-sans line-clamp-2">
+                                        Microfútbol COLSIH: Gran victoria en segunda jornada
+                                    </h4>
+                                </div>
                             </div>
 
                         </div>
+
+                        {/* Mobile & Tablet Responsive Layout (< lg screens) */}
+                        <div className="lg:hidden flex flex-col items-center text-center space-y-6 relative py-6">
+
+                            <img 
+                                src="/deportes/balon_basket_fondo.png" 
+                                alt="Fondo Balón" 
+                                className="absolute top-0 left-1/2 -translate-x-1/2 w-[320px] h-[260px] object-contain opacity-30 pointer-events-none"
+                            />
+
+                            <h1 className="text-3xl sm:text-5xl font-black text-[#262626] uppercase leading-none tracking-tighter font-sans z-10">
+                                MÁXIMO ANOTADOR <br />
+                                <span className="text-[#001659]">DE LA GRAN FINAL</span>
+                            </h1>
+
+                            <div className="relative w-full max-w-[380px] aspect-[4/3] z-20">
+                                <img 
+                                    src="/deportes/persona_basket_saltando.png" 
+                                    alt="Jugador de Baloncesto" 
+                                    className="w-full h-full object-contain drop-shadow-lg" 
+                                />
+                            </div>
+
+                            <p className="text-sm font-medium text-[#666666] max-w-md leading-relaxed font-['DM_Sans',sans-serif]">
+                                El premio al máximo anotador de las finales es la distinción individual otorgada al estudiante que obtuvo el mayor puntaje y rendimiento en el torneo intercolegiado.
+                            </p>
+
+                            <a 
+                                href="#noticias-tendencia"
+                                className="inline-flex items-center justify-center px-8 py-3.5 bg-[#262626] hover:bg-[#001659] text-[#E1E8F0] text-sm font-bold uppercase tracking-[1.8px] rounded-lg transition-all shadow-md font-['DM_Sans',sans-serif]"
+                            >
+                                CONTINUAR LEYENDO
+                            </a>
+
+                            {/* Today Sidebar Cards for Mobile */}
+                            <div className="w-full pt-8 space-y-4 text-left">
+                                <div className="inline-block bg-[#E1E8F0] px-3.5 py-1 rounded-sm">
+                                    <span className="text-[#5A6E85] text-xs font-semibold uppercase tracking-wider font-['DM_Sans',sans-serif]">Today</span>
+                                </div>
+
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div className="bg-white rounded-xl overflow-hidden shadow-sm border border-slate-200 p-3 flex items-center gap-3">
+                                        <img src="https://images.unsplash.com/photo-1592656094267-764a45160876?auto=format&fit=crop&w=300&q=80" className="w-20 h-20 rounded-lg object-cover" />
+                                        <div>
+                                            <span className="text-[10px] font-bold text-[#800A15] uppercase block font-['DM_Sans',sans-serif]">Voleibol • 03 Junio</span>
+                                            <h4 className="text-xs font-black text-[#262626] font-sans">Selección de voleibol obtiene los primeros puestos</h4>
+                                        </div>
+                                    </div>
+                                    <div className="bg-white rounded-xl overflow-hidden shadow-sm border border-slate-200 p-3 flex items-center gap-3">
+                                        <img src="https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=300&q=80" className="w-20 h-20 rounded-lg object-cover" />
+                                        <div>
+                                            <span className="text-[10px] font-bold text-[#001659] uppercase block font-['DM_Sans',sans-serif]">Microfútbol • 03 Junio</span>
+                                            <h4 className="text-xs font-black text-[#262626] font-sans">Microfútbol COLSIH: Gran victoria en segunda jornada</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
                     </div>
                 </section>
 
@@ -641,7 +657,6 @@ export default function Deportes() {
                                                     className="w-8 h-8 rounded-full object-cover border border-slate-200" 
                                                 />
                                                 <div>
-                                                    {/* Roboto Medium font for author names as specified in Figma json */}
                                                     <span className="text-xs font-medium text-slate-800 block font-['Roboto',sans-serif]">{art.autor}</span>
                                                     <span className="text-[10px] font-semibold text-slate-400 block font-['DM_Sans',sans-serif]">{art.fecha}</span>
                                                 </div>

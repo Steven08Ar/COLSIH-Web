@@ -418,13 +418,13 @@ export default function Hero({ setVideoOpen }) {
                         </h1>
 
                         <div className="pt-2 space-y-4">
-                            {/* 1. Botón Principal de INSCRIPCIONES ABIERTAS 2027 (Ubicación Superior) */}
+                            {/* 1. Botón Principal de INSCRIPCIONES ABIERTAS 2027 (Estilo 3D Píldora Institucional) */}
                             <div className="flex justify-center md:justify-start">
                                 <a
                                     href="https://e.plataformaintegra.net/sihungria/index.php/cupo"
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="inline-flex items-center justify-center gap-3 px-8 py-4 rounded-2xl bg-[#001659] hover:bg-[#002680] text-white text-base sm:text-lg font-black transition-all duration-200 border-2 border-white/20 shadow-xl cursor-pointer active:scale-95 hover:scale-[1.02]"
+                                    className="btn-colsih-3d-blue text-base sm:text-lg px-9 py-4"
                                 >
                                     <svg className="w-5 h-5 text-amber-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />

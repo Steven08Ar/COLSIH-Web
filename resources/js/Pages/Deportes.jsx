@@ -11,7 +11,7 @@ import {
     Shield
 } from 'lucide-react';
 
-export default function Deportes({ noticias = [], torneoPartidos = [], deportesBanners = [] }) {
+export default function Deportes({ noticias = [], torneoPartidos = [], deportesBanners = [], cuadrangularesBloqueado = false }) {
     const [sliderIndex, setSliderIndex] = useState(0);
 
     // Helper for news media URLs
@@ -358,7 +358,26 @@ export default function Deportes({ noticias = [], torneoPartidos = [], deportesB
 
 
                     {/* ── 5. MAPA DE ELIMINATORIAS (CUADRANGULARES INTER-CLASES - LOGOS DE EQUIPOS SIN EMOJIS) ── */}
-                    <section id="cuadrangulares-mapa" className="py-16 md:py-24">
+                    <section id="cuadrangulares-mapa" className="relative overflow-hidden py-16 md:py-24">
+
+                        {cuadrangularesBloqueado && (
+                            <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-[#08111F]/96 backdrop-blur-md">
+                                <div className="text-center px-6 space-y-5">
+                                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 text-white/60 border border-white/20 text-xs font-black uppercase tracking-widest">
+                                        <Sparkles className="w-4 h-4 text-amber-400" />
+                                        <span>TEMPORADA EN RECESO</span>
+                                    </div>
+                                    <h2 className="text-5xl sm:text-7xl font-black text-white uppercase tracking-tight leading-none">
+                                        Nos veremos<br />
+                                        en <span className="text-amber-400">{new Date().getFullYear() + 1}</span>
+                                    </h2>
+                                    <p className="text-white/55 text-sm sm:text-base font-semibold max-w-sm mx-auto">
+                                        El torneo inter-clases regresará con más emoción y competencia el próximo año.
+                                    </p>
+                                </div>
+                            </div>
+                        )}
+
                         <div className="max-w-[1440px] mx-auto px-6 md:px-12 lg:px-16 space-y-10">
 
                             <div className="text-center space-y-2">

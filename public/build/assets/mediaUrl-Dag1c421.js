@@ -1,0 +1,1 @@
+function e(r){if(!r)return null;let t=r;return typeof t=="string"&&(t=t.replace(/https:\/\/[^/]+\.r2\.dev\//gi,"https://media.colsih.edu.co/")),t.startsWith("http")||t.startsWith("/")?t:`/storage/${t}`}export{e as m};

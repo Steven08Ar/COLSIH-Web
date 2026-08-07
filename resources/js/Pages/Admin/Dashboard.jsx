@@ -2951,7 +2951,7 @@ function MantenimientoTab({ flash, flash_error, command_output, basePath }) {
     );
 }
 
-function DeportesAdminTab({ torneoPartidos = [], deportesBanners = [], flash }) {
+function DeportesAdminTab({ torneoPartidos = [], deportesBanners = [], cuadrangularesBloqueado = false, flash }) {
     const [subTab, setSubTab] = useState('cuadrangulares');
     const [partidoEditar, setPartidoEditar] = useState(null);
     const [submittingPartido, setSubmittingPartido] = useState(false);
@@ -3112,6 +3112,27 @@ function DeportesAdminTab({ torneoPartidos = [], deportesBanners = [], flash }) 
                     <p className="text-xs font-medium text-slate-500 dark:text-slate-400 mt-1">
                         Administra el mapa interactivo de eliminatorias (Inter-Casas) y los banners deportivos.
                     </p>
+
+                    {/* Toggle Receso Cuadrangulares */}
+                    <div className="mt-4 flex items-center gap-3">
+                        <button
+                            type="button"
+                            onClick={() => router.post(`${basePath}/deportes-admin/toggle-bloqueo`, {}, { preserveScroll: true })}
+                            className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-extrabold border transition cursor-pointer ${
+                                cuadrangularesBloqueado
+                                    ? 'bg-amber-500 hover:bg-amber-600 text-white border-amber-500'
+                                    : 'bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-700'
+                            }`}
+                        >
+                            <Sparkles className="w-3.5 h-3.5" />
+                            {cuadrangularesBloqueado ? 'Receso activo — Mostrar cuadrangulares' : 'Activar receso de temporada'}
+                        </button>
+                        {cuadrangularesBloqueado && (
+                            <span className="text-[11px] font-semibold text-amber-500">
+                                El Cuadrangulares está oculto con el mensaje "Nos veremos en {new Date().getFullYear() + 1}".
+                            </span>
+                        )}
+                    </div>
                 </div>
 
                 {/* SubTab Selector */}
@@ -3520,7 +3541,7 @@ const TABS = [
     { key: 'mantenimiento',   label: 'Servidor / cPanel' },
 ];
 
-export default function AdminDashboard({ seccion, carnets = [], equipo = [], testimonios = [], noticias = [], preguntas = [], tour, scenes = [], torneoPartidos = [], deportesBanners = [], flash, adminCounts }) {
+export default function AdminDashboard({ seccion, carnets = [], equipo = [], testimonios = [], noticias = [], preguntas = [], tour, scenes = [], torneoPartidos = [], deportesBanners = [], cuadrangularesBloqueado = false, flash, adminCounts }) {
     const pageProps = usePage().props;
     const flash_error = pageProps.flash_error;
     const command_output = pageProps.command_output;
@@ -3759,7 +3780,7 @@ export default function AdminDashboard({ seccion, carnets = [], equipo = [], tes
                         {/* ── Active Module Content Card ── */}
                         <div className="transition-all duration-300">
                             {(seccion === 'carnets' || seccion === 'carnets-admin') && <CarnetsAdminTab carnets={carnets} flash={flash} />}
-                            {(seccion === 'deportes' || seccion === 'deportes-admin') && <DeportesAdminTab torneoPartidos={torneoPartidos} deportesBanners={deportesBanners} flash={flash} />}
+                            {(seccion === 'deportes' || seccion === 'deportes-admin') && <DeportesAdminTab torneoPartidos={torneoPartidos} deportesBanners={deportesBanners} cuadrangularesBloqueado={cuadrangularesBloqueado} flash={flash} />}
                             {seccion === 'equipo'         && <EquipoTab        equipo={equipo}           flash={flash} />}
                             {seccion === 'testimonios'    && <TestimoniosTab   testimonios={testimonios} flash={flash} />}
                             {seccion === 'noticias'       && <NoticiasTab      noticias={noticias}       flash={flash} />}

@@ -154,18 +154,18 @@ export default function Admisiones() {
                 <div className="absolute top-0 left-0 w-32 h-32 md:w-40 md:h-40 bg-[#003C8F] rounded-br-[100px] opacity-90 pointer-events-none -translate-x-6 -translate-y-6" />
 
                 <div className="max-w-[1440px] mx-auto px-6 md:px-12 lg:px-16 relative z-10">
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-6 items-center">
                         
-                        {/* Columna Izquierda: Tipografía y Botones Planos */}
-                        <div className="lg:col-span-6 space-y-8 text-left">
+                        {/* Columna Izquierda: Tipografía y Botones Planos (Centrados en móvil, a la izquierda en desktop) */}
+                        <div className="lg:col-span-5 space-y-8 text-center lg:text-left">
                             <ScrollReveal distance="translate-y-4">
                                 <div className="space-y-4">
-                                    <h1 className="text-4xl sm:text-5xl lg:text-[62px] font-extrabold text-[#0B1F3A] leading-[1.08] tracking-tight font-sans">
+                                    <h1 className="text-4xl sm:text-5xl lg:text-[58px] xl:text-[64px] font-extrabold text-[#0B1F3A] leading-[1.08] tracking-tight font-sans text-center lg:text-left">
                                         Comienza aquí <br />
                                         el <span className="text-[#800A15]">futuro</span> de <br className="hidden sm:block" />
                                         tu hijo.
                                     </h1>
-                                    <p className="text-base sm:text-lg text-slate-500 font-medium max-w-lg leading-relaxed font-sans pt-1">
+                                    <p className="text-base sm:text-lg text-slate-500 font-medium max-w-lg leading-relaxed font-sans pt-1 text-center lg:text-left mx-auto lg:mx-0">
                                         En el Colegio Santa Isabel formamos personas íntegras, felices y comprometidas con transformar su entorno.
                                     </p>
                                 </div>
@@ -173,12 +173,12 @@ export default function Admisiones() {
 
                             {/* Botones estilo Píldora Planos */}
                             <ScrollReveal distance="translate-y-4" delay={150}>
-                                <div className="flex flex-wrap items-center gap-4 pt-2">
+                                <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
                                     <a
                                         href={LINK_INSCRIPCIONES}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="inline-flex items-center gap-3 px-8 py-3.5 rounded-full bg-[#800A15] hover:bg-[#9E0D1C] text-white text-sm font-bold shadow-md hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 cursor-pointer"
+                                        className="inline-flex items-center justify-center gap-3 px-8 py-3.5 rounded-full bg-[#800A15] hover:bg-[#9E0D1C] text-white text-sm font-bold shadow-md hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 cursor-pointer w-full sm:w-auto"
                                     >
                                         <span>Ir a inscripciones</span>
                                         <ArrowRight className="w-4 h-4 text-white" />
@@ -186,7 +186,7 @@ export default function Admisiones() {
 
                                     <a
                                         href="#proceso"
-                                        className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-white hover:bg-slate-50 text-[#0B1F3A] text-sm font-bold border border-slate-200 shadow-xs hover:border-[#003C8F] transition-all duration-300"
+                                        className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full bg-white hover:bg-slate-50 text-[#0B1F3A] text-sm font-bold border border-slate-200 shadow-xs hover:border-[#003C8F] transition-all duration-300 w-full sm:w-auto"
                                     >
                                         <span>Conocer el proceso</span>
                                         <ChevronDown className="w-4 h-4 text-slate-400" />
@@ -196,11 +196,11 @@ export default function Admisiones() {
 
                             {/* Badges de Grados Disponibles */}
                             <ScrollReveal distance="translate-y-4" delay={300}>
-                                <div className="pt-4 border-t border-slate-100 space-y-2">
+                                <div className="pt-4 border-t border-slate-100 space-y-2 text-center lg:text-left">
                                     <span className="text-xs font-bold uppercase tracking-wider text-slate-400 block font-sans">
                                         Cupos exclusivos 2027:
                                     </span>
-                                    <div className="flex flex-wrap gap-2">
+                                    <div className="flex flex-wrap justify-center lg:justify-start gap-2">
                                         {['Prejardín', 'Jardín', 'Transición', 'Primero (1°)', 'Sexto (6°)'].map((grado) => (
                                             <span 
                                                 key={grado}
@@ -215,46 +215,18 @@ export default function Admisiones() {
 
                         </div>
 
-                        {/* Columna Derecha: Composición Pop-Out exacta de Figma usando archivos de /figma */}
-                        <div className="lg:col-span-6 relative flex justify-center items-center py-4 select-none">
+                        {/* Columna Derecha: Imagen destacada de gran tamaño de admisiones */}
+                        <div className="lg:col-span-7 relative flex justify-center items-center py-2 select-none">
                             
-                            {/* Resplandor decorativo ambiental */}
-                            <div className="w-[340px] h-[340px] sm:w-[440px] sm:h-[440px] rounded-full bg-gradient-to-tr from-blue-100/30 via-slate-50 to-rose-100/30 blur-2xl absolute -z-10" />
+                            {/* Resplandor decorativo ambiental ampliado */}
+                            <div className="w-[450px] h-[450px] sm:w-[600px] sm:h-[600px] rounded-full bg-gradient-to-tr from-blue-100/40 via-slate-50 to-rose-100/40 blur-3xl absolute -z-10" />
 
-                            {/* Contenedor relativo proporcional basado en Figma (4921.66 x 4150.89) */}
-                            <div className="relative w-full max-w-[520px] aspect-[4921.66/4150.89] flex items-center justify-center">
-                                
-                                {/* Imagen 1: Forma de fondo orgánica de Figma (Vector 9.png) */}
-                                <img 
-                                    src="/figma/Vector%209.png" 
-                                    alt="Fondo Inscripciones COLSIH"
-                                    className="transition-transform duration-500 hover:scale-[1.01]"
-                                    style={{
-                                        width: '95.60%',
-                                        height: '87.19%',
-                                        left: '3.65%',
-                                        top: '12.81%',
-                                        position: 'absolute',
-                                        objectFit: 'contain'
-                                    }}
-                                />
-
-                                {/* Imagen 2: Foto sin fondo superpuesta exactamente de Figma (Inscripciones sin fondo 1.png) */}
-                                <img 
-                                    src="/figma/Inscripciones%20sin%20fondo%201.png" 
-                                    alt="Estudiantes COLSIH"
-                                    className="pointer-events-none drop-shadow-[0_15px_25px_rgba(0,0,0,0.2)] transition-transform duration-500 hover:scale-[1.02]"
-                                    style={{
-                                        width: '131.91%',
-                                        height: '104.24%',
-                                        left: '-3.10%',
-                                        top: '-4.24%',
-                                        position: 'absolute',
-                                        maxWidth: 'none'
-                                    }}
-                                />
-
-                            </div>
+                            {/* Imagen Admisiones.png en tamano grande */}
+                            <img 
+                                src="/admisiones/Imagen%20Admisiones.png" 
+                                alt="Estudiantes COLSIH - Admisiones 2027" 
+                                className="w-full max-w-[650px] sm:max-w-[720px] lg:max-w-[780px] xl:max-w-[850px] h-auto object-contain drop-shadow-2xl transition-transform duration-500 hover:scale-[1.02]"
+                            />
 
                         </div>
 

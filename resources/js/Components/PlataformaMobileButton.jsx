@@ -25,7 +25,8 @@ export default function PlataformaMobileButton() {
 
     return (
         <div 
-            className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-[99995] md:hidden select-none pointer-events-auto transition-all duration-500 ${
+            id="floating-plataforma-btn"
+            className={`floating-mobile-btn fixed bottom-6 left-1/2 -translate-x-1/2 z-[99995] md:hidden select-none pointer-events-auto transition-all duration-500 ${
                 hideForFooter ? 'opacity-0 pointer-events-none translate-y-10' : 'opacity-100 translate-y-0'
             }`}
         >

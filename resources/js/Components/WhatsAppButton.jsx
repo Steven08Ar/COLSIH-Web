@@ -24,7 +24,8 @@ export default function WhatsAppButton() {
 
     return (
         <div 
-            className={`fixed bottom-4 right-3 sm:bottom-8 sm:right-8 z-[99990] flex items-center gap-3 select-none pointer-events-auto transition-all duration-500 ${
+            id="floating-whatsapp-btn"
+            className={`floating-mobile-btn fixed bottom-4 right-3 sm:bottom-8 sm:right-8 z-[99990] flex items-center gap-3 select-none pointer-events-auto transition-all duration-500 ${
                 hideForFooter ? 'opacity-0 pointer-events-none translate-y-10' : 'opacity-100 translate-y-0'
             }`}
         >

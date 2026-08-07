@@ -41,6 +41,17 @@ export default function Navbar() {
     }, []);
 
     useEffect(() => {
+        if (mobileOpen) {
+            document.body.classList.add('mobile-menu-open');
+        } else {
+            document.body.classList.remove('mobile-menu-open');
+        }
+        return () => {
+            document.body.classList.remove('mobile-menu-open');
+        };
+    }, [mobileOpen]);
+
+    useEffect(() => {
         return () => {
             clearTimeout(closeDelayTimer.current);
             clearTimeout(unmountTimer.current);
@@ -363,7 +374,7 @@ export default function Navbar() {
                                     <span>INSCRIPCIONES 2027</span>
                                     <span className="icon-badge-box">
                                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                         </svg>
                                     </span>
                                 </a>

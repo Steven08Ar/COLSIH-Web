@@ -579,3 +579,17 @@ body {
     align-items: center !important;
     justify-content: center !important;
 }
+
+/* =========================================================
+   OCULTAR ELEMENTOS FLOTANTES MÓVILES (MJS, PLATAFORMA, WHATSAPP)
+   CUANDO SE ABRE EL MENÚ MÓVIL DESPLEGABLE
+   ========================================================= */
+body.mobile-menu-open .floating-mobile-btn,
+body.mobile-menu-open #floating-mjs-btn,
+body.mobile-menu-open #floating-plataforma-btn,
+body.mobile-menu-open #floating-whatsapp-btn {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transform: translateY(35px) scale(0.9) !important;
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}

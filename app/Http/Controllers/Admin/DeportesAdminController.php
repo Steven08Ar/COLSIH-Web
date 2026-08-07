@@ -7,6 +7,7 @@ use App\Models\DeporteCarrusel;
 use App\Models\TorneoPartido;
 use App\Services\ImageOptimizer;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class DeportesAdminController extends Controller
 {

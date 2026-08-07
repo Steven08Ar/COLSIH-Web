@@ -2983,6 +2983,10 @@ function DeportesAdminTab({ torneoPartidos = [], deportesBanners = [], flash }) 
     const [partidoForm, setPartidoForm] = useState({
         equipo_local: '',
         equipo_visitante: '',
+        escudo_local: '',
+        escudo_visitante: '',
+        escudo_local_file: null,
+        escudo_visitante_file: null,
         goles_local: '',
         goles_visitante: '',
         ganador: '',
@@ -2994,6 +2998,10 @@ function DeportesAdminTab({ torneoPartidos = [], deportesBanners = [], flash }) 
         setPartidoForm({
             equipo_local: p.equipo_local || '',
             equipo_visitante: p.equipo_visitante || '',
+            escudo_local: p.escudo_local || '',
+            escudo_visitante: p.escudo_visitante || '',
+            escudo_local_file: null,
+            escudo_visitante_file: null,
             goles_local: p.goles_local ?? '',
             goles_visitante: p.goles_visitante ?? '',
             ganador: p.ganador || '',
@@ -3012,6 +3020,10 @@ function DeportesAdminTab({ torneoPartidos = [], deportesBanners = [], flash }) 
         fd.append('_method', 'PUT');
         fd.append('equipo_local', partidoForm.equipo_local);
         fd.append('equipo_visitante', partidoForm.equipo_visitante);
+        if (partidoForm.escudo_local) fd.append('escudo_local', partidoForm.escudo_local);
+        if (partidoForm.escudo_visitante) fd.append('escudo_visitante', partidoForm.escudo_visitante);
+        if (partidoForm.escudo_local_file) fd.append('escudo_local_file', partidoForm.escudo_local_file);
+        if (partidoForm.escudo_visitante_file) fd.append('escudo_visitante_file', partidoForm.escudo_visitante_file);
         if (partidoForm.goles_local !== '') fd.append('goles_local', partidoForm.goles_local);
         if (partidoForm.goles_visitante !== '') fd.append('goles_visitante', partidoForm.goles_visitante);
         fd.append('ganador', partidoForm.ganador);
@@ -3257,7 +3269,7 @@ function DeportesAdminTab({ torneoPartidos = [], deportesBanners = [], flash }) 
 
                         <form onSubmit={guardarPartido} className="space-y-4">
                             {/* Equipo Local */}
-                            <div className="space-y-1.5">
+                            <div className="space-y-2">
                                 <label className="text-slate-500 text-[10px] font-bold uppercase tracking-wider block">Equipo Local (Izquierda/Arriba)</label>
                                 <div className="flex gap-2">
                                     <input
@@ -3277,8 +3289,28 @@ function DeportesAdminTab({ torneoPartidos = [], deportesBanners = [], flash }) 
                                     />
                                 </div>
 
+                                {/* Logo / Escudo Oficial del Equipo Local */}
+                                <div className="space-y-1">
+                                    <label className="text-slate-400 text-[10px] font-bold block">Logo del Equipo Local (Imagen)</label>
+                                    <div className="flex items-center gap-2">
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            onChange={e => setPartidoForm({ ...partidoForm, escudo_local_file: e.target.files[0] })}
+                                            className="text-[10px] text-slate-500 file:mr-2 file:py-1 file:px-2.5 file:rounded-lg file:border-0 file:text-[10px] file:font-black file:bg-blue-50 file:text-[#001659]"
+                                        />
+                                        <input
+                                            type="text"
+                                            value={partidoForm.escudo_local}
+                                            onChange={e => setPartidoForm({ ...partidoForm, escudo_local: e.target.value })}
+                                            placeholder="O URL del logo/escudo"
+                                            className="flex-1 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-lg px-2.5 py-1 text-[11px] font-semibold"
+                                        />
+                                    </div>
+                                </div>
+
                                 {/* Selección Rápida de Equipos/Grados */}
-                                <div className="flex flex-wrap gap-1 pt-1 max-h-24 overflow-y-auto">
+                                <div className="flex flex-wrap gap-1 pt-1 max-h-20 overflow-y-auto">
                                     {equiposInterclases.map(eq => (
                                         <button
                                             type="button"
@@ -3293,7 +3325,7 @@ function DeportesAdminTab({ torneoPartidos = [], deportesBanners = [], flash }) 
                             </div>
 
                             {/* Equipo Visitante */}
-                            <div className="space-y-1.5 pt-2">
+                            <div className="space-y-2 pt-2">
                                 <label className="text-slate-500 text-[10px] font-bold uppercase tracking-wider block">Equipo Visitante (Derecha/Abajo)</label>
                                 <div className="flex gap-2">
                                     <input
@@ -3313,7 +3345,27 @@ function DeportesAdminTab({ torneoPartidos = [], deportesBanners = [], flash }) 
                                     />
                                 </div>
 
-                                <div className="flex flex-wrap gap-1 pt-1 max-h-24 overflow-y-auto">
+                                {/* Logo / Escudo Oficial del Equipo Visitante */}
+                                <div className="space-y-1">
+                                    <label className="text-slate-400 text-[10px] font-bold block">Logo del Equipo Visitante (Imagen)</label>
+                                    <div className="flex items-center gap-2">
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            onChange={e => setPartidoForm({ ...partidoForm, escudo_visitante_file: e.target.files[0] })}
+                                            className="text-[10px] text-slate-500 file:mr-2 file:py-1 file:px-2.5 file:rounded-lg file:border-0 file:text-[10px] file:font-black file:bg-blue-50 file:text-[#001659]"
+                                        />
+                                        <input
+                                            type="text"
+                                            value={partidoForm.escudo_visitante}
+                                            onChange={e => setPartidoForm({ ...partidoForm, escudo_visitante: e.target.value })}
+                                            placeholder="O URL del logo/escudo"
+                                            className="flex-1 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-lg px-2.5 py-1 text-[11px] font-semibold"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="flex flex-wrap gap-1 pt-1 max-h-20 overflow-y-auto">
                                     {equiposInterclases.map(eq => (
                                         <button
                                             type="button"

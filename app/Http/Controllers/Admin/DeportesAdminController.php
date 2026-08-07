@@ -60,14 +60,28 @@ class DeportesAdminController extends Controller
     public function actualizarPartido(Request $request, TorneoPartido $partido)
     {
         $data = $request->validate([
-            'equipo_local'     => 'required|string|max:100',
-            'equipo_visitante' => 'required|string|max:100',
-            'goles_local'      => 'nullable|integer',
-            'goles_visitante'  => 'nullable|integer',
-            'ganador'          => 'nullable|string|in:local,visitante,empate',
-            'estado'           => 'nullable|string|in:programado,en_curso,finalizado',
-            'fecha_partido'    => 'nullable|string|max:100',
+            'equipo_local'         => 'required|string|max:100',
+            'equipo_visitante'     => 'required|string|max:100',
+            'escudo_local'         => 'nullable|string|max:255',
+            'escudo_visitante'     => 'nullable|string|max:255',
+            'escudo_local_file'    => 'nullable|file|mimes:jpeg,png,jpg,gif,svg,webp,heic,heif|max:10240',
+            'escudo_visitante_file'=> 'nullable|file|mimes:jpeg,png,jpg,gif,svg,webp,heic,heif|max:10240',
+            'goles_local'          => 'nullable|integer',
+            'goles_visitante'      => 'nullable|integer',
+            'ganador'              => 'nullable|string|in:local,visitante,empate',
+            'estado'               => 'nullable|string|in:programado,en_curso,finalizado',
+            'fecha_partido'        => 'nullable|string|max:100',
         ]);
+
+        if ($request->hasFile('escudo_local_file')) {
+            $data['escudo_local'] = ImageOptimizer::guardar($request->file('escudo_local_file'), 'escudos');
+        }
+
+        if ($request->hasFile('escudo_visitante_file')) {
+            $data['escudo_visitante'] = ImageOptimizer::guardar($request->file('escudo_visitante_file'), 'escudos');
+        }
+
+        unset($data['escudo_local_file'], $data['escudo_visitante_file']);
 
         $partido->update($data);
 
@@ -82,22 +96,41 @@ class DeportesAdminController extends Controller
         if (!$partido->ganador) return;
 
         $nombreGanador = $partido->ganador === 'local' ? $partido->equipo_local : $partido->equipo_visitante;
+        $escudoGanador = $partido->ganador === 'local' ? $partido->escudo_local : $partido->escudo_visitante;
 
         if ($partido->fase === 'cuartos') {
             if ($partido->posicion_llave === 1) {
-                TorneoPartido::where('fase', 'semifinal')->where('posicion_llave', 1)->update(['equipo_local' => $nombreGanador]);
+                TorneoPartido::where('fase', 'semifinal')->where('posicion_llave', 1)->update([
+                    'equipo_local' => $nombreGanador,
+                    'escudo_local' => $escudoGanador
+                ]);
             } else if ($partido->posicion_llave === 2) {
-                TorneoPartido::where('fase', 'semifinal')->where('posicion_llave', 1)->update(['equipo_visitante' => $nombreGanador]);
+                TorneoPartido::where('fase', 'semifinal')->where('posicion_llave', 1)->update([
+                    'equipo_visitante' => $nombreGanador,
+                    'escudo_visitante' => $escudoGanador
+                ]);
             } else if ($partido->posicion_llave === 3) {
-                TorneoPartido::where('fase', 'semifinal')->where('posicion_llave', 2)->update(['equipo_local' => $nombreGanador]);
+                TorneoPartido::where('fase', 'semifinal')->where('posicion_llave', 2)->update([
+                    'equipo_local' => $nombreGanador,
+                    'escudo_local' => $escudoGanador
+                ]);
             } else if ($partido->posicion_llave === 4) {
-                TorneoPartido::where('fase', 'semifinal')->where('posicion_llave', 2)->update(['equipo_visitante' => $nombreGanador]);
+                TorneoPartido::where('fase', 'semifinal')->where('posicion_llave', 2)->update([
+                    'equipo_visitante' => $nombreGanador,
+                    'escudo_visitante' => $escudoGanador
+                ]);
             }
         } else if ($partido->fase === 'semifinal') {
             if ($partido->posicion_llave === 1) {
-                TorneoPartido::where('fase', 'final')->where('posicion_llave', 1)->update(['equipo_local' => $nombreGanador]);
+                TorneoPartido::where('fase', 'final')->where('posicion_llave', 1)->update([
+                    'equipo_local' => $nombreGanador,
+                    'escudo_local' => $escudoGanador
+                ]);
             } else if ($partido->posicion_llave === 2) {
-                TorneoPartido::where('fase', 'final')->where('posicion_llave', 1)->update(['equipo_visitante' => $nombreGanador]);
+                TorneoPartido::where('fase', 'final')->where('posicion_llave', 1)->update([
+                    'equipo_visitante' => $nombreGanador,
+                    'escudo_visitante' => $escudoGanador
+                ]);
             }
         }
     }

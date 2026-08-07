@@ -7,17 +7,28 @@ import {
     ChevronLeft,
     Trophy,
     Flame,
-    Sparkles
+    Sparkles,
+    Shield
 } from 'lucide-react';
 
 export default function Deportes({ noticias = [], torneoPartidos = [], deportesBanners = [] }) {
     const [sliderIndex, setSliderIndex] = useState(0);
 
-    // Helper for media URLs
+    // Helper for news media URLs
     const getNewsImageUrl = (img, fallback = 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=800&q=80') => {
         if (!img) return fallback;
         if (img.startsWith('http')) return img;
         return `/storage/${img}`;
+    };
+
+    // Helper for rendering team escudos / logos (NO emojis, official logo images or minimalist shield icon)
+    const renderEscudo = (escudo) => {
+        if (!escudo) return <Shield className="w-4 h-4 text-[#001659] shrink-0" />;
+        if (escudo.startsWith('http') || escudo.startsWith('/') || escudo.includes('.')) {
+            const src = escudo.startsWith('http') ? escudo : `/storage/${escudo}`;
+            return <img src={src} alt="Logo de Equipo" className="w-5 h-5 object-contain rounded shrink-0 shadow-xs" />;
+        }
+        return <Shield className="w-4 h-4 text-[#001659] shrink-0" />;
     };
 
     // Calculate actual lists from admin DB ONLY (No fake data)
@@ -28,10 +39,10 @@ export default function Deportes({ noticias = [], torneoPartidos = [], deportesB
     const currentBanner = deportesBanners.length > 0 ? deportesBanners[sliderIndex % deportesBanners.length] : null;
 
     // Partidos para el Mapa de Eliminatorias (Inter-Clases)
-    const cuartos1 = torneoPartidos.find(p => p.fase === 'cuartos' && p.posicion_llave === 1) || { equipo_local: 'Grado 6°A', equipo_visitante: 'Grado 7°B', goles_local: null, goles_visitante: null };
-    const cuartos2 = torneoPartidos.find(p => p.fase === 'cuartos' && p.posicion_llave === 2) || { equipo_local: 'Grado 8°A', equipo_visitante: 'Grado 9°B', goles_local: null, goles_visitante: null };
-    const cuartos3 = torneoPartidos.find(p => p.fase === 'cuartos' && p.posicion_llave === 3) || { equipo_local: 'Grado 10°A', equipo_visitante: 'Grado 11°A', goles_local: null, goles_visitante: null };
-    const cuartos4 = torneoPartidos.find(p => p.fase === 'cuartos' && p.posicion_llave === 4) || { equipo_local: 'Docentes', equipo_visitante: 'Estudiantes', goles_local: null, goles_visitante: null };
+    const cuartos1 = torneoPartidos.find(p => p.fase === 'cuartos' && p.posicion_llave === 1) || { equipo_local: 'Grado 6°A', equipo_visitante: 'Grado 7°B', escudo_local: null, escudo_visitante: null, goles_local: null, goles_visitante: null };
+    const cuartos2 = torneoPartidos.find(p => p.fase === 'cuartos' && p.posicion_llave === 2) || { equipo_local: 'Grado 8°A', equipo_visitante: 'Grado 9°B', escudo_local: null, escudo_visitante: null, goles_local: null, goles_visitante: null };
+    const cuartos3 = torneoPartidos.find(p => p.fase === 'cuartos' && p.posicion_llave === 3) || { equipo_local: 'Grado 10°A', equipo_visitante: 'Grado 11°A', escudo_local: null, escudo_visitante: null, goles_local: null, goles_visitante: null };
+    const cuartos4 = torneoPartidos.find(p => p.fase === 'cuartos' && p.posicion_llave === 4) || { equipo_local: 'Docentes', equipo_visitante: 'Estudiantes', escudo_local: null, escudo_visitante: null, goles_local: null, goles_visitante: null };
 
     const semifinal1 = torneoPartidos.find(p => p.fase === 'semifinal' && p.posicion_llave === 1) || { equipo_local: 'Ganador Llave 1', equipo_visitante: 'Ganador Llave 2', goles_local: null, goles_visitante: null };
     const semifinal2 = torneoPartidos.find(p => p.fase === 'semifinal' && p.posicion_llave === 2) || { equipo_local: 'Ganador Llave 3', equipo_visitante: 'Ganador Llave 4', goles_local: null, goles_visitante: null };
@@ -40,6 +51,10 @@ export default function Deportes({ noticias = [], torneoPartidos = [], deportesB
 
     const campeon = finalMatch.ganador 
         ? (finalMatch.ganador === 'local' ? finalMatch.equipo_local : finalMatch.equipo_visitante)
+        : null;
+
+    const campeonEscudo = finalMatch.ganador
+        ? (finalMatch.ganador === 'local' ? finalMatch.escudo_local : finalMatch.escudo_visitante)
         : null;
 
     return (
@@ -342,7 +357,7 @@ export default function Deportes({ noticias = [], torneoPartidos = [], deportesB
                     )}
 
 
-                    {/* ── 5. MAPA DE ELIMINATORIAS (CUADRANGULARES INTER-CLASES - MINIMALISTA BLANCO E INSTITUCIONAL) ── */}
+                    {/* ── 5. MAPA DE ELIMINATORIAS (CUADRANGULARES INTER-CLASES - LOGOS DE EQUIPOS SIN EMOJIS) ── */}
                     <section id="cuadrangulares-mapa" className="py-16 md:py-24">
                         <div className="max-w-[1440px] mx-auto px-6 md:px-12 lg:px-16 space-y-10">
 
@@ -355,11 +370,11 @@ export default function Deportes({ noticias = [], torneoPartidos = [], deportesB
                                     CUADRANGULARES INTER-CLASES 2026
                                 </h2>
                                 <p className="text-xs sm:text-sm font-semibold text-slate-500 max-w-xl mx-auto font-['DM_Sans',sans-serif]">
-                                    Sigue la tabla interactiva de llaves, marcadores en vivo y posiciones camino al título institucional.
+                                    Sigue la tabla interactiva con nombres y logos oficiales de los equipos representativos.
                                 </p>
                             </div>
 
-                            {/* MINIMALIST WHITE & INSTITUTIONAL BRACKET BOARD WITH ANIMATIONS */}
+                            {/* MINIMALIST WHITE & INSTITUTIONAL BRACKET BOARD WITH LOGOS */}
                             <motion.div 
                                 initial={{ opacity: 0, y: 20 }}
                                 whileInView={{ opacity: 1, y: 0 }}
@@ -392,11 +407,17 @@ export default function Deportes({ noticias = [], torneoPartidos = [], deportesB
                                             </div>
                                             <div className="space-y-2 text-sm font-bold">
                                                 <div className={`flex justify-between items-center p-2.5 rounded-xl transition ${cuartos1.ganador === 'local' ? 'bg-emerald-500 text-white font-black shadow-xs' : 'bg-white border border-slate-100 text-slate-800'}`}>
-                                                    <span className="truncate">{cuartos1.equipo_local}</span>
+                                                    <div className="flex items-center gap-2 truncate">
+                                                        {renderEscudo(cuartos1.escudo_local)}
+                                                        <span className="truncate">{cuartos1.equipo_local}</span>
+                                                    </div>
                                                     <span className={`px-2.5 py-0.5 rounded text-xs font-mono font-black ${cuartos1.ganador === 'local' ? 'bg-white/20 text-white' : 'bg-slate-100 text-[#001659]'}`}>{cuartos1.goles_local ?? '-'}</span>
                                                 </div>
                                                 <div className={`flex justify-between items-center p-2.5 rounded-xl transition ${cuartos1.ganador === 'visitante' ? 'bg-emerald-500 text-white font-black shadow-xs' : 'bg-white border border-slate-100 text-slate-800'}`}>
-                                                    <span className="truncate">{cuartos1.equipo_visitante}</span>
+                                                    <div className="flex items-center gap-2 truncate">
+                                                        {renderEscudo(cuartos1.escudo_visitante)}
+                                                        <span className="truncate">{cuartos1.equipo_visitante}</span>
+                                                    </div>
                                                     <span className={`px-2.5 py-0.5 rounded text-xs font-mono font-black ${cuartos1.ganador === 'visitante' ? 'bg-white/20 text-white' : 'bg-slate-100 text-[#001659]'}`}>{cuartos1.goles_visitante ?? '-'}</span>
                                                 </div>
                                             </div>
@@ -413,11 +434,17 @@ export default function Deportes({ noticias = [], torneoPartidos = [], deportesB
                                             </div>
                                             <div className="space-y-2 text-sm font-bold">
                                                 <div className={`flex justify-between items-center p-2.5 rounded-xl transition ${cuartos2.ganador === 'local' ? 'bg-emerald-500 text-white font-black shadow-xs' : 'bg-white border border-slate-100 text-slate-800'}`}>
-                                                    <span className="truncate">{cuartos2.equipo_local}</span>
+                                                    <div className="flex items-center gap-2 truncate">
+                                                        {renderEscudo(cuartos2.escudo_local)}
+                                                        <span className="truncate">{cuartos2.equipo_local}</span>
+                                                    </div>
                                                     <span className={`px-2.5 py-0.5 rounded text-xs font-mono font-black ${cuartos2.ganador === 'local' ? 'bg-white/20 text-white' : 'bg-slate-100 text-[#001659]'}`}>{cuartos2.goles_local ?? '-'}</span>
                                                 </div>
                                                 <div className={`flex justify-between items-center p-2.5 rounded-xl transition ${cuartos2.ganador === 'visitante' ? 'bg-emerald-500 text-white font-black shadow-xs' : 'bg-white border border-slate-100 text-slate-800'}`}>
-                                                    <span className="truncate">{cuartos2.equipo_visitante}</span>
+                                                    <div className="flex items-center gap-2 truncate">
+                                                        {renderEscudo(cuartos2.escudo_visitante)}
+                                                        <span className="truncate">{cuartos2.equipo_visitante}</span>
+                                                    </div>
                                                     <span className={`px-2.5 py-0.5 rounded text-xs font-mono font-black ${cuartos2.ganador === 'visitante' ? 'bg-white/20 text-white' : 'bg-slate-100 text-[#001659]'}`}>{cuartos2.goles_visitante ?? '-'}</span>
                                                 </div>
                                             </div>
@@ -435,11 +462,17 @@ export default function Deportes({ noticias = [], torneoPartidos = [], deportesB
                                             >
                                                 <div className="space-y-2 text-sm font-bold">
                                                     <div className={`flex justify-between items-center p-3 rounded-xl transition ${semifinal1.ganador === 'local' ? 'bg-[#001659] text-white font-black shadow-sm' : 'bg-white border border-slate-200 text-slate-800'}`}>
-                                                        <span className="truncate">{semifinal1.equipo_local}</span>
+                                                        <div className="flex items-center gap-2 truncate">
+                                                            {renderEscudo(semifinal1.escudo_local)}
+                                                            <span className="truncate">{semifinal1.equipo_local}</span>
+                                                        </div>
                                                         <span className={`px-3 py-1 rounded text-xs font-mono font-black ${semifinal1.ganador === 'local' ? 'bg-white/20 text-white' : 'bg-blue-50 text-[#001659]'}`}>{semifinal1.goles_local ?? '-'}</span>
                                                     </div>
                                                     <div className={`flex justify-between items-center p-3 rounded-xl transition ${semifinal1.ganador === 'visitante' ? 'bg-[#001659] text-white font-black shadow-sm' : 'bg-white border border-slate-200 text-slate-800'}`}>
-                                                        <span className="truncate">{semifinal1.equipo_visitante}</span>
+                                                        <div className="flex items-center gap-2 truncate">
+                                                            {renderEscudo(semifinal1.escudo_visitante)}
+                                                            <span className="truncate">{semifinal1.equipo_visitante}</span>
+                                                        </div>
                                                         <span className={`px-3 py-1 rounded text-xs font-mono font-black ${semifinal1.ganador === 'visitante' ? 'bg-white/20 text-white' : 'bg-blue-50 text-[#001659]'}`}>{semifinal1.goles_visitante ?? '-'}</span>
                                                     </div>
                                                 </div>
@@ -477,14 +510,20 @@ export default function Deportes({ noticias = [], torneoPartidos = [], deportesB
                                                 <div className="absolute top-0 right-0 w-24 h-24 bg-[#FFC107]/10 rounded-bl-full pointer-events-none" />
 
                                                 <div className={`flex justify-between items-center p-3 rounded-2xl transition ${finalMatch.ganador === 'local' ? 'bg-[#001659] text-white font-black shadow-md' : 'bg-slate-50 border border-slate-200 text-slate-900'}`}>
-                                                    <span className="text-base font-black truncate">{finalMatch.equipo_local}</span>
+                                                    <div className="flex items-center gap-2 truncate">
+                                                        {renderEscudo(finalMatch.escudo_local)}
+                                                        <span className="text-base font-black truncate">{finalMatch.equipo_local}</span>
+                                                    </div>
                                                     <span className={`px-3.5 py-1 rounded-xl font-mono text-lg font-black ${finalMatch.ganador === 'local' ? 'bg-white/20 text-white' : 'bg-slate-200 text-[#001659]'}`}>{finalMatch.goles_local ?? '-'}</span>
                                                 </div>
 
                                                 <div className="text-center text-[10px] font-black text-slate-400 uppercase tracking-widest">VS</div>
 
                                                 <div className={`flex justify-between items-center p-3 rounded-2xl transition ${finalMatch.ganador === 'visitante' ? 'bg-[#001659] text-white font-black shadow-md' : 'bg-slate-50 border border-slate-200 text-slate-900'}`}>
-                                                    <span className="text-base font-black truncate">{finalMatch.equipo_visitante}</span>
+                                                    <div className="flex items-center gap-2 truncate">
+                                                        {renderEscudo(finalMatch.escudo_visitante)}
+                                                        <span className="text-base font-black truncate">{finalMatch.equipo_visitante}</span>
+                                                    </div>
                                                     <span className={`px-3.5 py-1 rounded-xl font-mono text-lg font-black ${finalMatch.ganador === 'visitante' ? 'bg-white/20 text-white' : 'bg-slate-200 text-[#001659]'}`}>{finalMatch.goles_visitante ?? '-'}</span>
                                                 </div>
                                             </motion.div>
@@ -496,7 +535,10 @@ export default function Deportes({ noticias = [], torneoPartidos = [], deportesB
                                                     className="p-4 rounded-2xl bg-gradient-to-r from-[#001659] to-[#800A15] text-amber-300 font-black text-sm uppercase tracking-wider shadow-xl flex items-center justify-center gap-2 border border-amber-400/40"
                                                 >
                                                     <Sparkles className="w-5 h-5 text-amber-400 animate-pulse" />
-                                                    <span>CAMPEÓN INTER-CLASES 2026: {campeon}</span>
+                                                    <div className="flex items-center gap-2">
+                                                        {renderEscudo(campeonEscudo)}
+                                                        <span>CAMPEÓN INTER-CLASES 2026: {campeon}</span>
+                                                    </div>
                                                 </motion.div>
                                             )}
                                         </div>
@@ -521,11 +563,17 @@ export default function Deportes({ noticias = [], torneoPartidos = [], deportesB
                                             </div>
                                             <div className="space-y-2 text-sm font-bold">
                                                 <div className={`flex justify-between items-center p-2.5 rounded-xl transition ${cuartos3.ganador === 'local' ? 'bg-emerald-500 text-white font-black shadow-xs' : 'bg-white border border-slate-100 text-slate-800'}`}>
-                                                    <span className="truncate">{cuartos3.equipo_local}</span>
+                                                    <div className="flex items-center gap-2 truncate">
+                                                        {renderEscudo(cuartos3.escudo_local)}
+                                                        <span className="truncate">{cuartos3.equipo_local}</span>
+                                                    </div>
                                                     <span className={`px-2.5 py-0.5 rounded text-xs font-mono font-black ${cuartos3.ganador === 'local' ? 'bg-white/20 text-white' : 'bg-slate-100 text-[#001659]'}`}>{cuartos3.goles_local ?? '-'}</span>
                                                 </div>
                                                 <div className={`flex justify-between items-center p-2.5 rounded-xl transition ${cuartos3.ganador === 'visitante' ? 'bg-emerald-500 text-white font-black shadow-xs' : 'bg-white border border-slate-100 text-slate-800'}`}>
-                                                    <span className="truncate">{cuartos3.equipo_visitante}</span>
+                                                    <div className="flex items-center gap-2 truncate">
+                                                        {renderEscudo(cuartos3.escudo_visitante)}
+                                                        <span className="truncate">{cuartos3.equipo_visitante}</span>
+                                                    </div>
                                                     <span className={`px-2.5 py-0.5 rounded text-xs font-mono font-black ${cuartos3.ganador === 'visitante' ? 'bg-white/20 text-white' : 'bg-slate-100 text-[#001659]'}`}>{cuartos3.goles_visitante ?? '-'}</span>
                                                 </div>
                                             </div>
@@ -542,11 +590,17 @@ export default function Deportes({ noticias = [], torneoPartidos = [], deportesB
                                             </div>
                                             <div className="space-y-2 text-sm font-bold">
                                                 <div className={`flex justify-between items-center p-2.5 rounded-xl transition ${cuartos4.ganador === 'local' ? 'bg-emerald-500 text-white font-black shadow-xs' : 'bg-white border border-slate-100 text-slate-800'}`}>
-                                                    <span className="truncate">{cuartos4.equipo_local}</span>
+                                                    <div className="flex items-center gap-2 truncate">
+                                                        {renderEscudo(cuartos4.escudo_local)}
+                                                        <span className="truncate">{cuartos4.equipo_local}</span>
+                                                    </div>
                                                     <span className={`px-2.5 py-0.5 rounded text-xs font-mono font-black ${cuartos4.ganador === 'local' ? 'bg-white/20 text-white' : 'bg-slate-100 text-[#001659]'}`}>{cuartos4.goles_local ?? '-'}</span>
                                                 </div>
                                                 <div className={`flex justify-between items-center p-2.5 rounded-xl transition ${cuartos4.ganador === 'visitante' ? 'bg-emerald-500 text-white font-black shadow-xs' : 'bg-white border border-slate-100 text-slate-800'}`}>
-                                                    <span className="truncate">{cuartos4.equipo_visitante}</span>
+                                                    <div className="flex items-center gap-2 truncate">
+                                                        {renderEscudo(cuartos4.escudo_visitante)}
+                                                        <span className="truncate">{cuartos4.equipo_visitante}</span>
+                                                    </div>
                                                     <span className={`px-2.5 py-0.5 rounded text-xs font-mono font-black ${cuartos4.ganador === 'visitante' ? 'bg-white/20 text-white' : 'bg-slate-100 text-[#001659]'}`}>{cuartos4.goles_visitante ?? '-'}</span>
                                                 </div>
                                             </div>
@@ -564,11 +618,17 @@ export default function Deportes({ noticias = [], torneoPartidos = [], deportesB
                                             >
                                                 <div className="space-y-2 text-sm font-bold">
                                                     <div className={`flex justify-between items-center p-3 rounded-xl transition ${semifinal2.ganador === 'local' ? 'bg-[#001659] text-white font-black shadow-sm' : 'bg-white border border-slate-200 text-slate-800'}`}>
-                                                        <span className="truncate">{semifinal2.equipo_local}</span>
+                                                        <div className="flex items-center gap-2 truncate">
+                                                            {renderEscudo(semifinal2.escudo_local)}
+                                                            <span className="truncate">{semifinal2.equipo_local}</span>
+                                                        </div>
                                                         <span className={`px-3 py-1 rounded text-xs font-mono font-black ${semifinal2.ganador === 'local' ? 'bg-white/20 text-white' : 'bg-blue-50 text-[#001659]'}`}>{semifinal2.goles_local ?? '-'}</span>
                                                     </div>
                                                     <div className={`flex justify-between items-center p-3 rounded-xl transition ${semifinal2.ganador === 'visitante' ? 'bg-[#001659] text-white font-black shadow-sm' : 'bg-white border border-slate-200 text-slate-800'}`}>
-                                                        <span className="truncate">{semifinal2.equipo_visitante}</span>
+                                                        <div className="flex items-center gap-2 truncate">
+                                                            {renderEscudo(semifinal2.escudo_visitante)}
+                                                            <span className="truncate">{semifinal2.equipo_visitante}</span>
+                                                        </div>
                                                         <span className={`px-3 py-1 rounded text-xs font-mono font-black ${semifinal2.ganador === 'visitante' ? 'bg-white/20 text-white' : 'bg-blue-50 text-[#001659]'}`}>{semifinal2.goles_visitante ?? '-'}</span>
                                                     </div>
                                                 </div>

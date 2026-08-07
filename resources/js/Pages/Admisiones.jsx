@@ -215,64 +215,47 @@ export default function Admisiones() {
 
                         </div>
 
-                        {/* Columna Derecha: Ilustración Plana de Tarjetas Isométricas */}
-                        <div className="lg:col-span-6 relative flex justify-center items-center py-6">
+                        {/* Columna Derecha: Composición de Doble Capa (Efecto Pop-Out con Forma Orgánica) */}
+                        <div className="lg:col-span-6 relative flex justify-center items-center py-6 select-none">
                             
-                            <div className="w-[340px] h-[340px] sm:w-[440px] sm:h-[440px] rounded-full bg-slate-50 border border-slate-100 absolute -z-10 opacity-70" />
+                            {/* Resplandor suave de fondo en azul y rojo institucional */}
+                            <div className="w-[340px] h-[340px] sm:w-[440px] sm:h-[440px] rounded-full bg-gradient-to-tr from-blue-100/50 via-slate-50 to-rose-100/50 blur-xl absolute -z-10 animate-pulse" />
 
-                            <div className="relative w-full max-w-[480px] h-[400px] sm:h-[460px] flex items-center justify-center">
+                            {/* Contenedor Principal de la Imagen */}
+                            <div className="relative w-full max-w-[460px] sm:max-w-[500px] h-[400px] sm:h-[460px] flex items-center justify-center">
                                 
-                                {/* 1. Tarjeta Diploma */}
-                                <div className="absolute top-4 left-6 sm:left-10 bg-white p-4 rounded-2xl shadow-md border border-slate-100 flex items-center gap-3">
-                                    <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold">
-                                        <Award className="w-6 h-6" />
-                                    </div>
-                                    <span className="text-xs font-bold text-slate-800 uppercase">Diploma Oficial</span>
+                                {/* CAPA 1: Fondo con la foto original recortada dentro de una forma orgánica no perfectamente circular */}
+                                <div 
+                                    className="w-[300px] h-[300px] sm:w-[380px] sm:h-[380px] overflow-hidden shadow-2xl border-4 border-white transition-all duration-700 hover:rotate-1"
+                                    style={{
+                                        borderRadius: '44% 56% 62% 38% / 48% 52% 48% 52%',
+                                        backgroundColor: '#003C8F'
+                                    }}
+                                >
+                                    <img 
+                                        src="https://media.colsih.edu.co/admisiones/inscripciones.JPG" 
+                                        alt="Fondo Inscripciones COLSIH"
+                                        className="w-full h-full object-cover object-center transform scale-105"
+                                    />
                                 </div>
 
-                                {/* 2. Tarjeta Colegio Grande Azul */}
-                                <div className="absolute top-2 right-4 bg-[#001E50] text-white p-6 rounded-3xl shadow-xl border border-white/10 flex flex-col items-center justify-center w-36 sm:w-44 text-center transform rotate-2 hover:rotate-0 transition-transform duration-300">
-                                    <School className="w-12 h-12 text-blue-200 mb-2" />
-                                    <span className="text-xs font-bold uppercase tracking-wider text-blue-100">Colegio Salesiano</span>
+                                {/* CAPA 2: Foto sin fondo superpuesta en la misma posición que sobresale de la forma orgánica (Efecto Pop-Out) */}
+                                <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
+                                    <img 
+                                        src="https://media.colsih.edu.co/admisiones/Inscripciones%20sin%20fondo.png" 
+                                        alt="Estudiantes COLSIH"
+                                        className="w-[300px] sm:w-[380px] h-auto object-contain transform translate-y-[-8px] sm:translate-y-[-12px] drop-shadow-[0_20px_35px_rgba(0,0,0,0.35)] transition-transform duration-500 hover:scale-105"
+                                    />
                                 </div>
 
-                                {/* 3. Tarjeta Calendario */}
-                                <div className="absolute top-28 left-2 sm:left-6 bg-white p-4 rounded-2xl shadow-md border border-slate-100 w-44">
-                                    <div className="flex items-center justify-between border-b border-slate-100 pb-2 mb-2">
-                                        <span className="text-[10px] font-bold text-slate-400 uppercase">Proceso 2027</span>
-                                        <Calendar className="w-3.5 h-3.5 text-[#800A15]" />
-                                    </div>
-                                    <div className="grid grid-cols-4 gap-1 text-center text-[10px] font-bold text-slate-600">
-                                        <span className="bg-slate-100 rounded py-0.5">M</span>
-                                        <span className="bg-slate-100 rounded py-0.5">T</span>
-                                        <span className="bg-slate-100 rounded py-0.5">W</span>
-                                        <span className="bg-[#003C8F] text-white rounded py-0.5">F</span>
-                                    </div>
-                                </div>
-
-                                {/* 4. Libros Estacados */}
-                                <div className="absolute bottom-24 right-6 bg-[#800A15] text-white p-5 rounded-2xl shadow-xl flex items-center gap-3 transform -rotate-3 hover:rotate-0 transition-transform duration-300">
-                                    <BookOpen className="w-8 h-8 text-amber-300" />
-                                    <div className="text-left">
-                                        <span className="text-xs font-bold block">Excelencia</span>
-                                        <span className="text-[10px] font-medium text-rose-200">Técnica SENA</span>
-                                    </div>
-                                </div>
-
-                                {/* 5. Birrete de Graduación Central */}
-                                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#003C8F] text-white p-6 rounded-3xl shadow-2xl border border-white/20 flex flex-col items-center justify-center w-40 h-40 transform hover:scale-105 transition-transform duration-300 z-20">
-                                    <GraduationCap className="w-16 h-16 text-amber-300 mb-1" />
-                                    <span className="text-xs font-bold uppercase tracking-wider text-white">Formación Integral</span>
-                                </div>
-
-                                {/* 6. Badge de Permiso Autorizado */}
-                                <div className="absolute bottom-6 left-12 bg-white p-3.5 rounded-2xl shadow-md border border-slate-100 flex items-center gap-3">
-                                    <div className="w-8 h-8 rounded-full bg-amber-400 text-slate-950 flex items-center justify-center font-bold shrink-0">
-                                        <CheckCircle className="w-5 h-5 text-slate-950" />
+                                {/* Badge flotante decorativo institucional */}
+                                <div className="absolute bottom-2 right-2 sm:right-6 bg-white/95 backdrop-blur-md p-3.5 rounded-2xl shadow-2xl border border-slate-100 flex items-center gap-3 z-20 animate-bounce [animation-duration:6s]">
+                                    <div className="w-9 h-9 rounded-xl bg-[#800A15] text-amber-300 flex items-center justify-center font-bold shrink-0">
+                                        <Sparkles className="w-5 h-5" />
                                     </div>
                                     <div className="text-left">
-                                        <span className="text-[10px] font-bold text-slate-400 uppercase block">Inscripciones</span>
-                                        <span className="text-xs font-bold text-slate-800">Proceso Habilitado</span>
+                                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block font-sans">Comunidad COLSIH</span>
+                                        <span className="text-xs font-bold text-[#0B1F3A] font-sans">¡Inscripciones 2027!</span>
                                     </div>
                                 </div>
 

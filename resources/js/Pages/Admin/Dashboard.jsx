@@ -3031,6 +3031,8 @@ function DeportesAdminTab({ torneoPartidos = [], deportesBanners = [], cuadrangu
         fd.append('fecha_partido', partidoForm.fecha_partido);
 
         router.post(`${basePath}/deportes-admin/partidos/${partidoEditar.id}`, fd, {
+            preserveState: true,
+            preserveScroll: true,
             onSuccess: () => {
                 setSubmittingPartido(false);
                 setPartidoEditar(null);
@@ -3079,6 +3081,8 @@ function DeportesAdminTab({ torneoPartidos = [], deportesBanners = [], cuadrangu
             bannerEditar ? `${basePath}/deportes-admin/banners/${bannerEditar.id}` : `${basePath}/deportes-admin/banners`,
             fd,
             {
+                preserveState: true,
+                preserveScroll: true,
                 onSuccess: () => {
                     setSubmittingBanner(false);
                     setCreandoBanner(false);
@@ -3091,7 +3095,7 @@ function DeportesAdminTab({ torneoPartidos = [], deportesBanners = [], cuadrangu
 
     function eliminarBanner(id) {
         if (confirm('¿Eliminar este banner deportivo?')) {
-            router.delete(`${basePath}/deportes-admin/banners/${id}`);
+            router.delete(`${basePath}/deportes-admin/banners/${id}`, { preserveState: true, preserveScroll: true });
         }
     }
 

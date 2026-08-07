@@ -13,6 +13,7 @@ use App\Http\Controllers\InscripcionController;
 use App\Http\Controllers\NoticiasController;
 use App\Http\Controllers\NosotrosController;
 use App\Http\Controllers\OfertaAcademicaController;
+use App\Http\Controllers\DeportesController;
 use Illuminate\Support\Facades\Route;
 
 // Home
@@ -60,7 +61,7 @@ Route::prefix('noticias')->name('noticias.')->group(function () {
 });
 
 // Zona Deportiva
-Route::get('/deportes', [\App\Http\Controllers\DeportesController::class, 'index'])->name('deportes');
+Route::get('/deportes', [DeportesController::class, 'index'])->name('deportes');
 
 // Recorrido virtual 360
 Route::get('/recorrido-virtual/{slug?}', [TourController::class, 'show'])->name('tour.show');

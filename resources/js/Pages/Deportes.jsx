@@ -144,7 +144,7 @@ export default function Deportes() {
 
                             {/* 1. Watermark Basketball Background */}
                             <img 
-                                src="/deportes/balon_basket_fondo.png" 
+                                src="/images/deportes/balon_basket_fondo.png" 
                                 alt="Fondo Balón" 
                                 className="absolute left-[0px] top-[0px] w-[720px] h-[550px] object-contain opacity-65 pointer-events-none"
                             />
@@ -159,7 +159,7 @@ export default function Deportes() {
 
                             {/* 3. Player Cutout Image (Layered ON TOP of title so body & back cut across text) */}
                             <img 
-                                src="/deportes/persona_basket_saltando.png" 
+                                src="/images/deportes/persona_basket_saltando.png" 
                                 alt="Jugador de Baloncesto Saltando" 
                                 className="absolute left-[260px] top-[20px] w-[720px] h-[580px] object-contain z-20 pointer-events-none drop-shadow-xl"
                             />
@@ -224,7 +224,7 @@ export default function Deportes() {
                         {/* Mobile Responsive Layout */}
                         <div className="lg:hidden flex flex-col items-center text-center space-y-6 relative py-6">
                             <img 
-                                src="/deportes/balon_basket_fondo.png" 
+                                src="/images/deportes/balon_basket_fondo.png" 
                                 alt="Fondo Balón" 
                                 className="absolute top-0 left-1/2 -translate-x-1/2 w-[320px] h-[260px] object-contain opacity-50 pointer-events-none"
                             />
@@ -233,7 +233,7 @@ export default function Deportes() {
                                 <span className="text-[#001659]">DE LA GRAN FINAL</span>
                             </h1>
                             <div className="relative w-full max-w-[380px] aspect-[4/3] z-20">
-                                <img src="/deportes/persona_basket_saltando.png" alt="Jugador de Baloncesto" className="w-full h-full object-contain drop-shadow-lg" />
+                                <img src="/images/deportes/persona_basket_saltando.png" alt="Jugador de Baloncesto" className="w-full h-full object-contain drop-shadow-lg" />
                             </div>
                             <p className="text-sm font-medium text-[#666666] max-w-md leading-relaxed font-['DM_Sans',sans-serif]">
                                 El premio al máximo anotador de las finales es la distinción individual otorgada al estudiante que obtuvo el mayor puntaje y rendimiento en el torneo intercolegiado.

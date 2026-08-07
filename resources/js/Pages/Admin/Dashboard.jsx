@@ -3687,6 +3687,37 @@ export default function AdminDashboard({ seccion, carnets = [], equipo = [], tes
                         </div>
                     </header>
 
+                    {/* Main Area Plano Minimalista (Fondo Blanco Suave #F8FAFC) */}
+                    <main className="flex-1 p-4 sm:p-6 lg:p-8 bg-[#F8FAFC] dark:bg-[#090D16] overflow-y-auto">
+                        
+                        {/* ── Dashboard Overview (Cuando no hay seccion o es dashboard) ── */}
+                        {(!seccion || seccion === 'dashboard') && (
+                            <DashboardOverview 
+                                adminCounts={adminCounts}
+                                carnets={carnets}
+                                torneoPartidos={torneoPartidos}
+                                equipo={equipo}
+                                noticias={noticias}
+                                basePath={basePath}
+                            />
+                        )}
+
+                        {/* ── Contenedores de Tarjeta Blanca Plana para los Módulos ── */}
+                        {seccion && seccion !== 'dashboard' && (
+                            <div className="bg-white dark:bg-slate-900 border border-slate-100/90 dark:border-slate-800/80 rounded-2xl p-4 sm:p-6 lg:p-8 shadow-[0_1px_3px_rgba(0,0,0,0.01)] transition-all duration-300">
+                                {(seccion === 'carnets' || seccion === 'carnets-admin') && <CarnetsAdminTab carnets={carnets} flash={flash} />}
+                                {(seccion === 'deportes' || seccion === 'deportes-admin') && <DeportesAdminTab torneoPartidos={torneoPartidos} deportesBanners={deportesBanners} cuadrangularesBloqueado={cuadrangularesBloqueado} flash={flash} />}
+                                {seccion === 'equipo'         && <EquipoTab        equipo={equipo}           flash={flash} />}
+                                {seccion === 'testimonios'    && <TestimoniosTab   testimonios={testimonios} flash={flash} />}
+                                {seccion === 'noticias'       && <NoticiasTab      noticias={noticias}       flash={flash} />}
+                                {seccion === 'preguntas'      && <PreguntasTab     preguntas={preguntas}     flash={flash} />}
+                                {seccion === 'recorrido'      && <RecorridoTab     tour={tour} scenes={scenes} flash={flash} basePath={basePath} />}
+                                {seccion === 'mantenimiento'  && <MantenimientoTab flash={flash} flash_error={flash_error} command_output={command_output} basePath={basePath} />}
+                            </div>
+                        )}
+
+                    </main>
+
                     {/* Footer branding */}
                     <footer className="py-4 px-4 sm:px-8 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-400 font-semibold select-none">
                         <span>Colegio Santa Isabel de Hungría &copy; {new Date().getFullYear()}</span>

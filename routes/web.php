@@ -141,6 +141,13 @@ Route::prefix($adminPath)->name('admin.')->group(function () {
         Route::delete('/carnets-admin/{carnet}',       [App\Http\Controllers\Admin\CarnetsAdminController::class, 'destroy'])->name('carnets-admin.destroy');
         Route::post('/carnets-admin/probar',           [App\Http\Controllers\Admin\CarnetsAdminController::class, 'probar'])->name('carnets-admin.probar');
 
+        // Deportes & Cuadrangulares
+        Route::get('/deportes-admin',                         [App\Http\Controllers\Admin\DeportesAdminController::class, 'index'])->name('deportes-admin');
+        Route::match(['post', 'put'], '/deportes-admin/partidos/{partido}', [App\Http\Controllers\Admin\DeportesAdminController::class, 'actualizarPartido'])->name('deportes-admin.partidos.update');
+        Route::post('/deportes-admin/banners',                [App\Http\Controllers\Admin\DeportesAdminController::class, 'storeBanner'])->name('deportes-admin.banners.store');
+        Route::match(['post', 'put'], '/deportes-admin/banners/{banner}', [App\Http\Controllers\Admin\DeportesAdminController::class, 'updateBanner'])->name('deportes-admin.banners.update');
+        Route::delete('/deportes-admin/banners/{banner}',     [App\Http\Controllers\Admin\DeportesAdminController::class, 'destroyBanner'])->name('deportes-admin.banners.destroy');
+
         // Redirect raíz → testimonios
         Route::get('/', fn() => redirect()->route('admin.testimonios'))->name('dashboard');
     });

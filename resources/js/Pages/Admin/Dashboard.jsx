@@ -2951,18 +2951,524 @@ function MantenimientoTab({ flash, flash_error, command_output, basePath }) {
     );
 }
 
+function DeportesAdminTab({ torneoPartidos = [], deportesBanners = [], flash }) {
+    const [subTab, setSubTab] = useState('cuadrangulares');
+    const [partidoEditar, setPartidoEditar] = useState(null);
+    const [submittingPartido, setSubmittingPartido] = useState(false);
+
+    // Form para Banners
+    const [bannerEditar, setBannerEditar] = useState(null);
+    const [creandoBanner, setCreandoBanner] = useState(false);
+    const [bannerTitulo, setBannerTitulo] = useState('');
+    const [bannerTag, setBannerTag] = useState('Microfútbol Intercolegiado');
+    const [bannerSubtitulo, setBannerSubtitulo] = useState('');
+    const [bannerDescripcion, setBannerDescripcion] = useState('');
+    const [bannerPortada, setBannerPortada] = useState(null);
+    const [bannerPortadaPreview, setBannerPortadaPreview] = useState(null);
+    const [submittingBanner, setSubmittingBanner] = useState(false);
+
+    const basePath = getAdminBasePath();
+    const casasSalesianas = [
+        'Casa Don Bosco',
+        'Casa María Auxiliadora',
+        'Casa Domingo Savio',
+        'Casa Santa Isabel',
+        'Casa Laura Vicuña',
+        'Casa Ceferino Namuncurá',
+        'Selección Docentes',
+        'Selección Estudiantes'
+    ];
+
+    // Formulario de edición de partido
+    const [partidoForm, setPartidoForm] = useState({
+        equipo_local: '',
+        equipo_visitante: '',
+        goles_local: '',
+        goles_visitante: '',
+        ganador: '',
+        estado: 'programado',
+        fecha_partido: ''
+    });
+
+    function abrirEditarPartido(p) {
+        setPartidoForm({
+            equipo_local: p.equipo_local || '',
+            equipo_visitante: p.equipo_visitante || '',
+            goles_local: p.goles_local ?? '',
+            goles_visitante: p.goles_visitante ?? '',
+            ganador: p.ganador || '',
+            estado: p.estado || 'programado',
+            fecha_partido: p.fecha_partido || ''
+        });
+        setPartidoEditar(p);
+    }
+
+    function guardarPartido(e) {
+        e.preventDefault();
+        if (!partidoEditar) return;
+        setSubmittingPartido(true);
+
+        const fd = new FormData();
+        fd.append('_method', 'PUT');
+        fd.append('equipo_local', partidoForm.equipo_local);
+        fd.append('equipo_visitante', partidoForm.equipo_visitante);
+        if (partidoForm.goles_local !== '') fd.append('goles_local', partidoForm.goles_local);
+        if (partidoForm.goles_visitante !== '') fd.append('goles_visitante', partidoForm.goles_visitante);
+        fd.append('ganador', partidoForm.ganador);
+        fd.append('estado', partidoForm.estado);
+        fd.append('fecha_partido', partidoForm.fecha_partido);
+
+        router.post(`${basePath}/deportes-admin/partidos/${partidoEditar.id}`, fd, {
+            onSuccess: () => {
+                setSubmittingPartido(false);
+                setPartidoEditar(null);
+            },
+            onError: () => setSubmittingPartido(false)
+        });
+    }
+
+    // Funciones para Banners
+    function abrirCrearBanner() {
+        setBannerTitulo('');
+        setBannerTag('Microfútbol Intercolegiado');
+        setBannerSubtitulo('');
+        setBannerDescripcion('');
+        setBannerPortada(null);
+        setBannerPortadaPreview(null);
+        setBannerEditar(null);
+        setCreandoBanner(true);
+    }
+
+    function abrirEditarBanner(b) {
+        setBannerTitulo(b.titulo);
+        setBannerTag(b.tag || '');
+        setBannerSubtitulo(b.subtitulo || '');
+        setBannerDescripcion(b.descripcion || '');
+        setBannerPortada(null);
+        setBannerPortadaPreview(b.imagen ? mediaUrl(b.imagen) : null);
+        setBannerEditar(b);
+        setCreandoBanner(false);
+    }
+
+    function guardarBanner(e) {
+        e.preventDefault();
+        setSubmittingBanner(true);
+        const fd = new FormData();
+        fd.append('titulo', bannerTitulo);
+        fd.append('tag', bannerTag);
+        fd.append('subtitulo', bannerSubtitulo);
+        fd.append('descripcion', bannerDescripcion);
+        fd.append('activo', '1');
+        if (bannerPortada) fd.append('portada', bannerPortada);
+
+        if (bannerEditar) fd.append('_method', 'PUT');
+
+        router.post(
+            bannerEditar ? `${basePath}/deportes-admin/banners/${bannerEditar.id}` : `${basePath}/deportes-admin/banners`,
+            fd,
+            {
+                onSuccess: () => {
+                    setSubmittingBanner(false);
+                    setCreandoBanner(false);
+                    setBannerEditar(null);
+                },
+                onError: () => setSubmittingBanner(false)
+            }
+        );
+    }
+
+    function eliminarBanner(id) {
+        if (confirm('¿Eliminar este banner deportivo?')) {
+            router.delete(`${basePath}/deportes-admin/banners/${id}`);
+        }
+    }
+
+    // Partidos clasificados por fase
+    const cuartos = torneoPartidos.filter(p => p.fase === 'cuartos');
+    const semifinales = torneoPartidos.filter(p => p.fase === 'semifinal');
+    const finalMatch = torneoPartidos.find(p => p.fase === 'final');
+
+    return (
+        <div className="space-y-6 animate-fadeIn">
+            {/* Header del Tab */}
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-sm">
+                <div>
+                    <h2 className="text-xl font-black text-slate-900 dark:text-white flex items-center gap-2.5">
+                        <Trophy className="w-6 h-6 text-amber-500" />
+                        <span>Gestión de Deportes y Cuadrangulares</span>
+                    </h2>
+                    <p className="text-xs font-medium text-slate-500 dark:text-slate-400 mt-1">
+                        Administra el mapa interactivo de eliminatorias (Inter-Casas) y los banners deportivos.
+                    </p>
+                </div>
+
+                {/* SubTab Selector */}
+                <div className="flex bg-slate-100 dark:bg-slate-800 p-1.5 rounded-2xl border border-slate-200/60 dark:border-slate-700">
+                    <button
+                        type="button"
+                        onClick={() => setSubTab('cuadrangulares')}
+                        className={`px-4 py-2 text-xs font-bold rounded-xl transition cursor-pointer ${subTab === 'cuadrangulares' ? 'bg-white dark:bg-slate-900 text-[#001659] dark:text-blue-400 shadow-sm' : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'}`}
+                    >
+                        🏆 Mapa Cuadrangulares
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => setSubTab('banners')}
+                        className={`px-4 py-2 text-xs font-bold rounded-xl transition cursor-pointer ${subTab === 'banners' ? 'bg-white dark:bg-slate-900 text-[#001659] dark:text-blue-400 shadow-sm' : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'}`}
+                    >
+                        🖼️ Banners Deportivo
+                    </button>
+                </div>
+            </div>
+
+            {/* SubTab 1: Mapa Cuadrangulares */}
+            {subTab === 'cuadrangulares' && (
+                <div className="space-y-6">
+                    <div className="bg-slate-900 text-white rounded-3xl p-6 sm:p-8 shadow-xl border border-slate-800 relative overflow-hidden">
+                        <div className="relative z-10 space-y-2 mb-8">
+                            <span className="text-[10px] font-black uppercase tracking-widest text-amber-400 bg-amber-400/10 px-3 py-1 rounded-full border border-amber-400/20">
+                                Árbol de Eliminatorias Inter-Casas
+                            </span>
+                            <h3 className="text-2xl font-black tracking-tight text-white uppercase font-sans">
+                                Mapa de Eliminatorias (Haz clic en un partido para editar)
+                            </h3>
+                            <p className="text-xs text-slate-400 max-w-xl">
+                                Selecciona el ganador de cada partido. El sistema avanzará automáticamente a la Casa ganadora a la siguiente ronda (Semifinal o Final) en tiempo real.
+                            </p>
+                        </div>
+
+                        {/* Visual Bracket Diagram */}
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10 items-center">
+                            
+                            {/* Cuartos de Final */}
+                            <div className="space-y-4">
+                                <div className="text-center text-xs font-extrabold text-amber-400 uppercase tracking-wider py-1 bg-slate-800/80 rounded-lg border border-slate-700">
+                                    Cuartos de Final
+                                </div>
+                                {cuartos.map((p, idx) => (
+                                    <div
+                                        key={p.id}
+                                        onClick={() => abrirEditarPartido(p)}
+                                        className="bg-slate-800/90 hover:bg-slate-800 border border-slate-700 hover:border-amber-500/60 rounded-2xl p-3 cursor-pointer transition shadow-md group relative"
+                                    >
+                                        <div className="text-[9px] font-extrabold text-slate-400 uppercase tracking-widest mb-1.5 flex justify-between">
+                                            <span>Llave {idx + 1}</span>
+                                            <span className="text-amber-400 font-bold">{p.estado}</span>
+                                        </div>
+
+                                        <div className="space-y-1.5 text-xs font-bold">
+                                            <div className={`flex items-center justify-between p-1.5 rounded-lg ${p.ganador === 'local' ? 'bg-emerald-500/20 text-emerald-300 font-black border border-emerald-500/40' : 'text-slate-200'}`}>
+                                                <span className="truncate">{p.equipo_local}</span>
+                                                <span className="bg-slate-900/60 px-2 py-0.5 rounded text-amber-400 font-mono">{p.goles_local ?? '-'}</span>
+                                            </div>
+
+                                            <div className={`flex items-center justify-between p-1.5 rounded-lg ${p.ganador === 'visitante' ? 'bg-emerald-500/20 text-emerald-300 font-black border border-emerald-500/40' : 'text-slate-200'}`}>
+                                                <span className="truncate">{p.equipo_visitante}</span>
+                                                <span className="bg-slate-900/60 px-2 py-0.5 rounded text-amber-400 font-mono">{p.goles_visitante ?? '-'}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+
+                            {/* Semifinales */}
+                            <div className="space-y-6">
+                                <div className="text-center text-xs font-extrabold text-blue-400 uppercase tracking-wider py-1 bg-slate-800/80 rounded-lg border border-slate-700">
+                                    Semifinales
+                                </div>
+                                {semifinales.map((p, idx) => (
+                                    <div
+                                        key={p.id}
+                                        onClick={() => abrirEditarPartido(p)}
+                                        className="bg-slate-800/90 hover:bg-slate-800 border border-blue-500/30 hover:border-blue-500 rounded-2xl p-4 cursor-pointer transition shadow-lg group relative my-4"
+                                    >
+                                        <div className="text-[9px] font-extrabold text-blue-400 uppercase tracking-widest mb-1.5 flex justify-between">
+                                            <span>Semifinal {idx + 1}</span>
+                                            <span className="text-blue-300 font-bold">{p.estado}</span>
+                                        </div>
+
+                                        <div className="space-y-2 text-xs font-bold">
+                                            <div className={`flex items-center justify-between p-2 rounded-xl ${p.ganador === 'local' ? 'bg-emerald-500/20 text-emerald-300 font-black border border-emerald-500/40' : 'text-slate-200'}`}>
+                                                <span className="truncate">{p.equipo_local}</span>
+                                                <span className="bg-slate-900/60 px-2.5 py-1 rounded-md text-amber-400 font-mono text-sm">{p.goles_local ?? '-'}</span>
+                                            </div>
+
+                                            <div className={`flex items-center justify-between p-2 rounded-xl ${p.ganador === 'visitante' ? 'bg-emerald-500/20 text-emerald-300 font-black border border-emerald-500/40' : 'text-slate-200'}`}>
+                                                <span className="truncate">{p.equipo_visitante}</span>
+                                                <span className="bg-slate-900/60 px-2.5 py-1 rounded-md text-amber-400 font-mono text-sm">{p.goles_visitante ?? '-'}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+
+                            {/* Gran Final */}
+                            <div className="space-y-4">
+                                <div className="text-center text-xs font-extrabold text-amber-300 uppercase tracking-wider py-1 bg-amber-500/20 rounded-lg border border-amber-500/40">
+                                    🏆 Gran Final
+                                </div>
+                                {finalMatch && (
+                                    <div
+                                        onClick={() => abrirEditarPartido(finalMatch)}
+                                        className="bg-gradient-to-b from-slate-800 to-slate-900 hover:from-slate-700 hover:to-slate-800 border-2 border-amber-500/70 rounded-3xl p-5 cursor-pointer transition shadow-2xl group relative"
+                                    >
+                                        <div className="text-[10px] font-black text-amber-400 uppercase tracking-widest mb-2 text-center flex items-center justify-center gap-1.5">
+                                            <Trophy className="w-4 h-4" />
+                                            <span>Partido por el Título</span>
+                                        </div>
+
+                                        <div className="space-y-2.5 text-sm font-bold">
+                                            <div className={`flex items-center justify-between p-2.5 rounded-xl ${finalMatch.ganador === 'local' ? 'bg-amber-500/30 text-amber-300 font-black border border-amber-400' : 'text-white'}`}>
+                                                <span className="truncate">{finalMatch.equipo_local}</span>
+                                                <span className="bg-slate-950 px-3 py-1 rounded-md text-amber-400 font-mono text-base font-black">{finalMatch.goles_local ?? '-'}</span>
+                                            </div>
+
+                                            <div className={`flex items-center justify-between p-2.5 rounded-xl ${finalMatch.ganador === 'visitante' ? 'bg-amber-500/30 text-amber-300 font-black border border-amber-400' : 'text-white'}`}>
+                                                <span className="truncate">{finalMatch.equipo_visitante}</span>
+                                                <span className="bg-slate-950 px-3 py-1 rounded-md text-amber-400 font-mono text-base font-black">{finalMatch.goles_visitante ?? '-'}</span>
+                                            </div>
+                                        </div>
+
+                                        {finalMatch.ganador && (
+                                            <div className="mt-3 text-center bg-amber-400 text-slate-950 text-xs font-black py-1.5 rounded-xl uppercase tracking-wider">
+                                                🥇 Campeón: {finalMatch.ganador === 'local' ? finalMatch.equipo_local : finalMatch.equipo_visitante}
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Modal Editar Partido */}
+            {partidoEditar && (
+                <div className="fixed inset-0 z-[100] bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
+                    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl space-y-5 animate-scaleIn">
+                        <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4">
+                            <h3 className="text-lg font-black text-slate-900 dark:text-white flex items-center gap-2">
+                                <Trophy className="w-5 h-5 text-amber-500" />
+                                <span>Editar Partido: {partidoEditar.fecha_partido || partidoEditar.fase}</span>
+                            </h3>
+                            <button type="button" onClick={() => setPartidoEditar(null)} className="text-slate-400 hover:text-slate-600 font-black text-xl">✕</button>
+                        </div>
+
+                        <form onSubmit={guardarPartido} className="space-y-4">
+                            {/* Equipo Local */}
+                            <div className="space-y-1.5">
+                                <label className="text-slate-500 text-[10px] font-bold uppercase tracking-wider block">Equipo Local (Izquierda/Arriba)</label>
+                                <div className="flex gap-2">
+                                    <input
+                                        type="text"
+                                        value={partidoForm.equipo_local}
+                                        onChange={e => setPartidoForm({ ...partidoForm, equipo_local: e.target.value })}
+                                        className="flex-1 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-xl px-3.5 py-2 text-xs font-bold focus:outline-none"
+                                        placeholder="Nombre del equipo"
+                                    />
+                                    <input
+                                        type="number"
+                                        min="0"
+                                        value={partidoForm.goles_local}
+                                        onChange={e => setPartidoForm({ ...partidoForm, goles_local: e.target.value })}
+                                        className="w-16 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-center font-bold text-sm rounded-xl px-2 py-2"
+                                        placeholder="Goles"
+                                    />
+                                </div>
+
+                                {/* Selección Rápida de Casas */}
+                                <div className="flex flex-wrap gap-1 pt-1">
+                                    {casasSalesianas.map(casa => (
+                                        <button
+                                            type="button"
+                                            key={casa}
+                                            onClick={() => setPartidoForm({ ...partidoForm, equipo_local: casa })}
+                                            className="text-[10px] font-semibold bg-slate-100 hover:bg-blue-100 text-slate-600 hover:text-blue-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 px-2 py-0.5 rounded-lg border border-slate-200/60 dark:border-slate-700 transition"
+                                        >
+                                            {casa}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Equipo Visitante */}
+                            <div className="space-y-1.5 pt-2">
+                                <label className="text-slate-500 text-[10px] font-bold uppercase tracking-wider block">Equipo Visitante (Derecha/Abajo)</label>
+                                <div className="flex gap-2">
+                                    <input
+                                        type="text"
+                                        value={partidoForm.equipo_visitante}
+                                        onChange={e => setPartidoForm({ ...partidoForm, equipo_visitante: e.target.value })}
+                                        className="flex-1 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-xl px-3.5 py-2 text-xs font-bold focus:outline-none"
+                                        placeholder="Nombre del equipo"
+                                    />
+                                    <input
+                                        type="number"
+                                        min="0"
+                                        value={partidoForm.goles_visitante}
+                                        onChange={e => setPartidoForm({ ...partidoForm, goles_visitante: e.target.value })}
+                                        className="w-16 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-center font-bold text-sm rounded-xl px-2 py-2"
+                                        placeholder="Goles"
+                                    />
+                                </div>
+
+                                <div className="flex flex-wrap gap-1 pt-1">
+                                    {casasSalesianas.map(casa => (
+                                        <button
+                                            type="button"
+                                            key={casa}
+                                            onClick={() => setPartidoForm({ ...partidoForm, equipo_visitante: casa })}
+                                            className="text-[10px] font-semibold bg-slate-100 hover:bg-blue-100 text-slate-600 hover:text-blue-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 px-2 py-0.5 rounded-lg border border-slate-200/60 dark:border-slate-700 transition"
+                                        >
+                                            {casa}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Ganador & Estado */}
+                            <div className="grid grid-cols-2 gap-3 pt-2">
+                                <div>
+                                    <label className="text-slate-500 text-[10px] font-bold uppercase tracking-wider block mb-1">Declarar Ganador *</label>
+                                    <select
+                                        value={partidoForm.ganador}
+                                        onChange={e => setPartidoForm({ ...partidoForm, ganador: e.target.value })}
+                                        className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-xl px-3 py-2 text-xs font-bold"
+                                    >
+                                        <option value="">Por definir (Sin Ganador)</option>
+                                        <option value="local">Ganador: Local ({partidoForm.equipo_local || 'Local'})</option>
+                                        <option value="visitante">Ganador: Visitante ({partidoForm.equipo_visitante || 'Visitante'})</option>
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label className="text-slate-500 text-[10px] font-bold uppercase tracking-wider block mb-1">Estado del Partido</label>
+                                    <select
+                                        value={partidoForm.estado}
+                                        onChange={e => setPartidoForm({ ...partidoForm, estado: e.target.value })}
+                                        className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-xl px-3 py-2 text-xs font-bold"
+                                    >
+                                        <option value="programado">Programado</option>
+                                        <option value="en_curso">En Curso / En Vivo</option>
+                                        <option value="finalizado">Finalizado</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div className="flex gap-3 pt-4 border-t border-slate-100 dark:border-slate-800 justify-end">
+                                <button type="button" onClick={() => setPartidoEditar(null)} className="px-4 py-2.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-bold rounded-xl cursor-pointer">
+                                    Cancelar
+                                </button>
+                                <button type="submit" disabled={submittingPartido} className="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs rounded-xl shadow-md cursor-pointer transition">
+                                    {submittingPartido ? 'Guardando...' : 'Guardar y Avanzar Ganador'}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+
+            {/* SubTab 2: Gestor de Banners Deportivos */}
+            {subTab === 'banners' && (
+                <div className="space-y-6">
+                    <div className="flex items-center justify-between bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800">
+                        <div>
+                            <h3 className="text-base font-extrabold text-slate-900 dark:text-white">Banners y Destacados Deportivos</h3>
+                            <p className="text-xs text-slate-500">Publica anuncios de alta visibilidad para eventos y torneos escolares.</p>
+                        </div>
+                        <button type="button" onClick={abrirCrearBanner} className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl shadow-md cursor-pointer flex items-center gap-1.5">
+                            <span>+ Nuevo Banner</span>
+                        </button>
+                    </div>
+
+                    {/* Lista de Banners */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        {deportesBanners.map(b => (
+                            <div key={b.id} className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-xs hover:shadow-md transition">
+                                {b.imagen && (
+                                    <img src={mediaUrl(b.imagen)} alt={b.titulo} className="w-full h-40 object-cover" />
+                                )}
+                                <div className="p-5 space-y-2">
+                                    <span className="text-[10px] font-black uppercase text-amber-600 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
+                                        {b.tag || 'Deportes'}
+                                    </span>
+                                    <h4 className="text-sm font-black text-slate-900 dark:text-white line-clamp-1">{b.titulo}</h4>
+                                    <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2">{b.descripcion}</p>
+
+                                    <div className="flex items-center justify-end gap-2 pt-3 border-t border-slate-100 dark:border-slate-800">
+                                        <button type="button" onClick={() => abrirEditarBanner(b)} className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-bold rounded-lg cursor-pointer">
+                                            Editar
+                                        </button>
+                                        <button type="button" onClick={() => eliminarBanner(b.id)} className="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-bold rounded-lg cursor-pointer">
+                                            Eliminar
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
+
+            {/* Modal Crear/Editar Banner */}
+            {(creandoBanner || bannerEditar) && (
+                <div className="fixed inset-0 z-[100] bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
+                    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl space-y-4">
+                        <h3 className="text-lg font-black text-slate-900 dark:text-white">
+                            {bannerEditar ? 'Editar Banner Deportivo' : 'Nuevo Banner Deportivo'}
+                        </h3>
+
+                        <form onSubmit={guardarBanner} className="space-y-3">
+                            <div>
+                                <label className="text-slate-500 text-[10px] font-bold uppercase tracking-wider block mb-1">Etiqueta / Tag</label>
+                                <input type="text" value={bannerTag} onChange={e => setBannerTag(e.target.value)} className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-xl px-3 py-2 text-xs font-bold" placeholder="Ej: Microfútbol Intercolegiado" />
+                            </div>
+
+                            <div>
+                                <label className="text-slate-500 text-[10px] font-bold uppercase tracking-wider block mb-1">Título *</label>
+                                <input type="text" required value={bannerTitulo} onChange={e => setBannerTitulo(e.target.value)} className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-xl px-3 py-2 text-xs font-bold" placeholder="Título del evento deportivo" />
+                            </div>
+
+                            <div>
+                                <label className="text-slate-500 text-[10px] font-bold uppercase tracking-wider block mb-1">Descripción</label>
+                                <textarea rows={3} value={bannerDescripcion} onChange={e => setBannerDescripcion(e.target.value)} className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-xl px-3 py-2 text-xs font-bold resize-none" placeholder="Breve descripción..." />
+                            </div>
+
+                            <div>
+                                <label className="text-slate-500 text-[10px] font-bold uppercase tracking-wider block mb-1">Imagen de Banner</label>
+                                <input type="file" accept="image/*" onChange={e => setBannerPortada(e.target.files[0])} className="text-xs font-bold text-slate-600" />
+                            </div>
+
+                            <div className="flex gap-3 pt-3 justify-end">
+                                <button type="button" onClick={() => { setCreandoBanner(false); setBannerEditar(null); }} className="px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-bold rounded-xl cursor-pointer">
+                                    Cancelar
+                                </button>
+                                <button type="submit" disabled={submittingBanner} className="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-black rounded-xl shadow-md cursor-pointer">
+                                    {submittingBanner ? 'Guardando...' : 'Guardar Banner'}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+}
+
 /* ── Dashboard principal ── */
 const TABS = [
-    { key: 'carnets-admin', label: 'Tarjetas NFC & Carnets' },
-    { key: 'equipo',        label: 'Equipo Institucional' },
-    { key: 'testimonios',   label: 'Testimonios' },
-    { key: 'noticias',      label: 'Noticias y Eventos' },
-    { key: 'preguntas',     label: 'Preguntas Frecuentes' },
-    { key: 'recorrido',     label: 'Recorrido 360°' },
-    { key: 'mantenimiento', label: 'Servidor / cPanel' },
+    { key: 'carnets-admin',   label: 'Tarjetas NFC & Carnets' },
+    { key: 'deportes-admin',  label: '⚽ Deportes & Cuadrangulares' },
+    { key: 'equipo',          label: 'Equipo Institucional' },
+    { key: 'testimonios',     label: 'Testimonios' },
+    { key: 'noticias',        label: 'Noticias y Eventos' },
+    { key: 'preguntas',       label: 'Preguntas Frecuentes' },
+    { key: 'recorrido',       label: 'Recorrido 360°' },
+    { key: 'mantenimiento',   label: 'Servidor / cPanel' },
 ];
 
-export default function AdminDashboard({ seccion, carnets = [], equipo = [], testimonios = [], noticias = [], preguntas = [], tour, scenes = [], flash, adminCounts }) {
+export default function AdminDashboard({ seccion, carnets = [], equipo = [], testimonios = [], noticias = [], preguntas = [], tour, scenes = [], torneoPartidos = [], deportesBanners = [], flash, adminCounts }) {
     const pageProps = usePage().props;
     const flash_error = pageProps.flash_error;
     const command_output = pageProps.command_output;
@@ -3066,6 +3572,9 @@ export default function AdminDashboard({ seccion, carnets = [], equipo = [], tes
                                             {tab.key === 'carnets-admin' && (
                                                 <CreditCard className="w-5 h-5 text-[#800A15]" />
                                             )}
+                                            {tab.key === 'deportes-admin' && (
+                                                <Trophy className="w-5 h-5 text-amber-500" />
+                                            )}
                                             {tab.key === 'equipo' && (
                                                 <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
                                                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
@@ -3102,6 +3611,7 @@ export default function AdminDashboard({ seccion, carnets = [], equipo = [], tes
                                             isActive ? 'bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300' : 'bg-slate-100 dark:bg-slate-800 text-slate-500'
                                         }`}>
                                             {tab.key === 'carnets-admin' && (adminCounts?.carnets     ?? carnets.length)}
+                                            {tab.key === 'deportes-admin' && (torneoPartidos.length || 7)}
                                             {tab.key === 'equipo'        && (adminCounts?.equipo      ?? equipo.length)}
                                             {tab.key === 'testimonios'   && (adminCounts?.testimonios ?? testimonios.length)}
                                             {tab.key === 'noticias'      && (adminCounts?.noticias    ?? noticias.length)}
@@ -3197,12 +3707,13 @@ export default function AdminDashboard({ seccion, carnets = [], equipo = [], tes
                         {/* ── Active Module Content Card ── */}
                         <div className="transition-all duration-300">
                             {(seccion === 'carnets' || seccion === 'carnets-admin') && <CarnetsAdminTab carnets={carnets} flash={flash} />}
-                            {seccion === 'equipo'        && <EquipoTab        equipo={equipo}           flash={flash} />}
-                            {seccion === 'testimonios'   && <TestimoniosTab   testimonios={testimonios} flash={flash} />}
-                            {seccion === 'noticias'      && <NoticiasTab      noticias={noticias}       flash={flash} />}
-                            {seccion === 'preguntas'     && <PreguntasTab     preguntas={preguntas}     flash={flash} />}
-                            {seccion === 'recorrido'     && <RecorridoTab     tour={tour} scenes={scenes} flash={flash} basePath={basePath} />}
-                            {seccion === 'mantenimiento' && <MantenimientoTab flash={flash} flash_error={flash_error} command_output={command_output} basePath={basePath} />}
+                            {seccion === 'deportes-admin' && <DeportesAdminTab torneoPartidos={torneoPartidos} deportesBanners={deportesBanners} flash={flash} />}
+                            {seccion === 'equipo'         && <EquipoTab        equipo={equipo}           flash={flash} />}
+                            {seccion === 'testimonios'    && <TestimoniosTab   testimonios={testimonios} flash={flash} />}
+                            {seccion === 'noticias'       && <NoticiasTab      noticias={noticias}       flash={flash} />}
+                            {seccion === 'preguntas'      && <PreguntasTab     preguntas={preguntas}     flash={flash} />}
+                            {seccion === 'recorrido'      && <RecorridoTab     tour={tour} scenes={scenes} flash={flash} basePath={basePath} />}
+                            {seccion === 'mantenimiento'  && <MantenimientoTab flash={flash} flash_error={flash_error} command_output={command_output} basePath={basePath} />}
                         </div>
 
                     </main>

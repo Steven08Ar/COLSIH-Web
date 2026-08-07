@@ -112,8 +112,8 @@ export default function Navbar() {
                     )}
                 </Link>
 
-                {/* Navigation Centrada en la Pantalla (Restaurada a Texto Original) */}
-                <div className="hidden lg:flex items-center gap-8 xl:gap-10 text-[15px] font-semibold text-white/80 absolute left-1/2 -translate-x-1/2">
+                {/* Navigation Centrada en la Pantalla (Visible solo a partir de 1680px) */}
+                <div className="hidden min-[1680px]:flex items-center gap-6 2xl:gap-8 text-[15px] font-semibold text-white/80 absolute left-1/2 -translate-x-1/2 whitespace-nowrap">
                     <Link href="/" className={`transition-colors ${url === '/' ? 'text-white font-extrabold' : 'hover:text-white'}`}>
                         Inicio
                     </Link>
@@ -232,7 +232,7 @@ export default function Navbar() {
                             />
                         </Link>
                     ) : (
-                        <div className="hidden md:flex items-center gap-3">
+                        <div className="hidden min-[1680px]:flex items-center gap-3">
                             <a
                                 href="https://e.plataformaintegra.net/sihungria/"
                                 target="_blank"
@@ -267,7 +267,7 @@ export default function Navbar() {
 
                     <button
                         onClick={() => setMobileOpen(!mobileOpen)}
-                        className="lg:hidden p-2 rounded-xl text-white/80 hover:text-white hover:bg-white/10 transition-colors focus:outline-none cursor-pointer"
+                        className="min-[1680px]:hidden p-2 rounded-xl text-white/80 hover:text-white hover:bg-white/10 transition-colors focus:outline-none cursor-pointer"
                         aria-label="Abrir menú"
                     >
                         {mobileOpen ? (
@@ -283,9 +283,9 @@ export default function Navbar() {
                 </div>
             </div>
 
-            {/* Mobile panel */}
+            {/* Mobile / Tablet / Mid-screen Drawer panel */}
             {mobileOpen && (
-                <div className="lg:hidden mt-2 mx-6 md:mx-12 bg-[#08111F]/95 backdrop-blur-md border border-white/15 rounded-2xl shadow-2xl overflow-hidden max-h-[85vh] overflow-y-auto">
+                <div className="min-[1680px]:hidden mt-2 mx-4 sm:mx-8 md:mx-12 bg-[#08111F]/95 backdrop-blur-md border border-white/15 rounded-2xl shadow-2xl overflow-hidden max-h-[85vh] overflow-y-auto">
                     <div className="px-4 py-4 space-y-1">
                         <Link href="/" onClick={() => setMobileOpen(false)} className={`block px-3 py-2 text-sm font-semibold rounded-lg ${url === '/' ? 'text-white bg-white/10' : 'text-white/85'}`}>Inicio</Link>
                         

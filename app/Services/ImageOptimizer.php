@@ -60,7 +60,11 @@ class ImageOptimizer
         // Subir a Cloudflare R2 si está configurado
         if (env('R2_ACCESS_KEY_ID') && env('R2_ENDPOINT')) {
             Storage::disk('r2')->put($ruta, $contenido, ['ContentType' => $mime]);
-            return rtrim(env('R2_PUBLIC_URL', ''), '/') . '/' . $ruta;
+            $baseUrl = env('R2_PUBLIC_URL', 'https://media.colsih.edu.co');
+            if (str_contains($baseUrl, 'r2.dev') || empty($baseUrl)) {
+                $baseUrl = 'https://media.colsih.edu.co';
+            }
+            return rtrim($baseUrl, '/') . '/' . $ruta;
         }
 
         // Fallback: guardar en disco público local
@@ -86,7 +90,11 @@ class ImageOptimizer
 
         if (env('R2_ACCESS_KEY_ID') && env('R2_ENDPOINT')) {
             Storage::disk('r2')->put($ruta, $contenido, ['ContentType' => $mime]);
-            return rtrim(env('R2_PUBLIC_URL', ''), '/') . '/' . $ruta;
+            $baseUrl = env('R2_PUBLIC_URL', 'https://media.colsih.edu.co');
+            if (str_contains($baseUrl, 'r2.dev') || empty($baseUrl)) {
+                $baseUrl = 'https://media.colsih.edu.co';
+            }
+            return rtrim($baseUrl, '/') . '/' . $ruta;
         }
 
         Storage::disk('public')->makeDirectory($carpeta);

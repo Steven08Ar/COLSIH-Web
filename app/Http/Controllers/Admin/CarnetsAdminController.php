@@ -32,7 +32,7 @@ class CarnetsAdminController extends Controller
                 'apellido' => 'Camacho Corzo',
                 'rol' => 'Docente',
                 'info' => 'Docente de Primaria y Preescolar',
-                'foto' => 'https://pub-c4ddb3fb75904158bbda5fbc35d6963e.r2.dev/equipo/Yoleida_Patricia_Camacho_Corzo.jpg',
+                'foto' => 'https://media.colsih.edu.co/equipo/Yoleida_Patricia_Camacho_Corzo.jpg',
             ]);
 
             Carnet::create([

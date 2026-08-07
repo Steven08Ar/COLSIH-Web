@@ -6,6 +6,10 @@
  */
 export function mediaUrl(path) {
     if (!path) return null;
-    if (path.startsWith('http') || path.startsWith('/')) return path;
-    return `/storage/${path}`;
+    let url = path;
+    if (typeof url === 'string') {
+        url = url.replace(/https:\/\/[^/]+\.r2\.dev\//gi, 'https://media.colsih.edu.co/');
+    }
+    if (url.startsWith('http') || url.startsWith('/')) return url;
+    return `/storage/${url}`;
 }

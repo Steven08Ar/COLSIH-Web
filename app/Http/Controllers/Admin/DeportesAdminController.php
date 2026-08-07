@@ -15,11 +15,32 @@ class DeportesAdminController extends Controller
     {
         self::seedDefaultMatchesIfNeeded();
 
+        $configMatch = TorneoPartido::where('fase', 'config')->first();
+        $cuadrangularesBloqueado = $configMatch ? ($configMatch->estado === 'bloqueado') : false;
+
         return Inertia::render('Admin/Dashboard', [
-            'seccion'         => 'deportes-admin',
-            'torneoPartidos'  => TorneoPartido::orderBy('id')->get(),
-            'deportesBanners' => DeporteCarrusel::orderBy('orden')->get(),
+            'seccion'                 => 'deportes-admin',
+            'torneoPartidos'          => TorneoPartido::where('fase', '!=', 'config')->orderBy('id')->get(),
+            'deportesBanners'         => DeporteCarrusel::orderBy('orden')->get(),
+            'cuadrangularesBloqueado' => $cuadrangularesBloqueado,
         ]);
+    }
+
+    public function toggleBloqueo(Request $request)
+    {
+        $config = TorneoPartido::firstOrCreate(
+            ['fase' => 'config', 'posicion_llave' => 0],
+            ['equipo_local' => 'Configuracion', 'equipo_visitante' => 'Torneo', 'estado' => 'activo']
+        );
+
+        $nuevoEstado = $config->estado === 'bloqueado' ? 'activo' : 'bloqueado';
+        $config->update(['estado' => $nuevoEstado]);
+
+        $msg = $nuevoEstado === 'bloqueado'
+            ? 'Cuadrangulares bloqueados (Receso de temporada activado).'
+            : 'Cuadrangulares desbloqueados (Llaves visibles).';
+
+        return back()->with('flash', $msg);
     }
 
     public static function seedDefaultMatchesIfNeeded()

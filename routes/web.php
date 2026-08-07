@@ -143,6 +143,7 @@ Route::prefix($adminPath)->name('admin.')->group(function () {
 
         // Deportes & Cuadrangulares
         Route::get('/deportes-admin',                         [App\Http\Controllers\Admin\DeportesAdminController::class, 'index'])->name('deportes-admin');
+        Route::post('/deportes-admin/toggle-bloqueo',         [App\Http\Controllers\Admin\DeportesAdminController::class, 'toggleBloqueo'])->name('deportes-admin.toggle-bloqueo');
         Route::match(['post', 'put'], '/deportes-admin/partidos/{partido}', [App\Http\Controllers\Admin\DeportesAdminController::class, 'actualizarPartido'])->name('deportes-admin.partidos.update');
         Route::post('/deportes-admin/banners',                [App\Http\Controllers\Admin\DeportesAdminController::class, 'storeBanner'])->name('deportes-admin.banners.store');
         Route::match(['post', 'put'], '/deportes-admin/banners/{banner}', [App\Http\Controllers\Admin\DeportesAdminController::class, 'updateBanner'])->name('deportes-admin.banners.update');

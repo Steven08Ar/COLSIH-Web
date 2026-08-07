@@ -20,13 +20,17 @@ class DeportesController extends Controller
             ->latest()
             ->get(['id', 'titulo', 'slug', 'resumen', 'imagen', 'categoria', 'seccion', 'publicado_en']);
 
-        $torneoPartidos = TorneoPartido::orderBy('id')->get();
+        $configMatch = TorneoPartido::where('fase', 'config')->first();
+        $cuadrangularesBloqueado = $configMatch ? ($configMatch->estado === 'bloqueado') : false;
+
+        $torneoPartidos = TorneoPartido::where('fase', '!=', 'config')->orderBy('id')->get();
         $deportesBanners = DeporteCarrusel::where('activo', true)->orderBy('orden')->get();
 
         return Inertia::render('Deportes', [
-            'noticias'        => $noticiasDeportivas,
-            'torneoPartidos'  => $torneoPartidos,
-            'deportesBanners' => $deportesBanners,
+            'noticias'                => $noticiasDeportivas,
+            'torneoPartidos'          => $torneoPartidos,
+            'deportesBanners'         => $deportesBanners,
+            'cuadrangularesBloqueado' => $cuadrangularesBloqueado,
         ]);
     }
 }

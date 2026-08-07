@@ -417,19 +417,46 @@ export default function Hero({ setVideoOpen }) {
                             </span>
                         </h1>
 
-                        {/* Botón Suave, Minimalista y Plano de INSCRIPCIONES 2027 */}
-                        <div className="pt-3 flex justify-center md:justify-start">
-                            <a
-                                href="https://e.plataformaintegra.net/sihungria/index.php/cupo"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-full bg-[#001659] hover:bg-[#002B80] text-white text-sm sm:text-base font-bold transition-all duration-200 shadow-md border border-white/20 active:scale-95 cursor-pointer"
-                            >
-                                <svg className="w-4 h-4 text-amber-300 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                </svg>
-                                <span className="tracking-wide uppercase">INSCRIPCIONES 2027</span>
-                            </a>
+                        {/* Bloque Destacado de Grados con Cupos Disponibles 2027 */}
+                        <div className="pt-4 space-y-3.5">
+                            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-amber-400/25 via-rose-500/25 to-amber-500/25 border border-amber-300/40 backdrop-blur-md shadow-lg shadow-amber-500/10">
+                                <span className="w-2.5 h-2.5 rounded-full bg-amber-300 animate-ping shrink-0" />
+                                <span className="text-amber-200 text-xs sm:text-sm font-black tracking-widest uppercase font-sans drop-shadow-sm">
+                                    🔥 INSCRIPCIONES ABIERTAS 2027 • CUPOS DISPONIBLES
+                                </span>
+                            </div>
+
+                            {/* Grados Específicos con Vacantes */}
+                            <div className="space-y-1.5">
+                                <span className="text-xs font-bold text-slate-300 uppercase tracking-wider block text-center md:text-left">
+                                    Grados Habilitados para Solicitud de Cupo:
+                                </span>
+                                <div className="flex flex-wrap items-center justify-center md:justify-start gap-2">
+                                    {['Prejardín', 'Jardín', 'Transición', 'Primero (1°)', 'Sexto (6°)'].map((grado) => (
+                                        <span
+                                            key={grado}
+                                            className="px-3.5 py-1.5 rounded-xl bg-white/15 hover:bg-white/25 border border-white/25 text-white text-xs sm:text-sm font-black shadow-md backdrop-blur-md transition-all duration-200 hover:scale-105"
+                                        >
+                                            ✨ {grado}
+                                        </span>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Botón Suave, Minimalista y Plano de INSCRIPCIONES 2027 */}
+                            <div className="pt-2 flex justify-center md:justify-start">
+                                <a
+                                    href="https://e.plataformaintegra.net/sihungria/index.php/cupo"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-flex items-center justify-center gap-3 px-7 py-3.5 rounded-full bg-gradient-to-r from-[#800A15] via-rose-700 to-[#001659] hover:from-rose-700 hover:to-[#002B80] text-white text-sm sm:text-base font-black transition-all duration-300 shadow-xl shadow-rose-900/40 border border-white/25 hover:scale-105 active:scale-95 cursor-pointer"
+                                >
+                                    <svg className="w-5 h-5 text-amber-300 shrink-0 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                    </svg>
+                                    <span className="tracking-wide uppercase">SOLICITAR CUPO E INSCRIPCIÓN 2027</span>
+                                </a>
+                            </div>
                         </div>
                     </div>
 

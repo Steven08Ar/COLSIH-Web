@@ -2,6 +2,7 @@ import { Head, Link } from '@inertiajs/react';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import AppLayout from '@/Layouts/AppLayout';
+import { mediaUrl } from '@/utils/mediaUrl';
 import { 
     ChevronRight,
     ChevronLeft,
@@ -17,15 +18,14 @@ export default function Deportes({ noticias = [], torneoPartidos = [], deportesB
     // Helper for news media URLs
     const getNewsImageUrl = (img, fallback = 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=800&q=80') => {
         if (!img) return fallback;
-        if (img.startsWith('http')) return img;
-        return `/storage/${img}`;
+        return mediaUrl(img) || fallback;
     };
 
-    // Helper for rendering team escudos / logos (NO emojis, official logo images or minimalist shield icon)
+// Helper for rendering team escudos / logos (NO emojis, official logo images or minimalist shield icon)
     const renderEscudo = (escudo) => {
         if (!escudo) return <Shield className="w-4 h-4 text-[#001659] shrink-0" />;
-        if (escudo.startsWith('http') || escudo.startsWith('/') || escudo.includes('.')) {
-            const src = escudo.startsWith('http') ? escudo : `/storage/${escudo}`;
+        const src = mediaUrl(escudo);
+        if (src) {
             return <img src={src} alt="Logo de Equipo" className="w-5 h-5 object-contain rounded shrink-0 shadow-xs" />;
         }
         return <Shield className="w-4 h-4 text-[#001659] shrink-0" />;

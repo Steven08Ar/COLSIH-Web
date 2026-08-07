@@ -219,7 +219,7 @@ export default function Admisiones() {
                         {/* Badge Gigante y Claro */}
                         <ScrollReveal distance="translate-y-6">
                             <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-[#800A15] text-white text-xs sm:text-sm md:text-base font-black tracking-widest uppercase shadow-lg shadow-[#800A15]/20">
-                                <Sparkles className="w-5 h-5 text-amber-300 shrink-0" />
+                                <Sparkles className="w-5 h-5 text-amber-300 shrink-0 animate-pulse" />
                                 <span>PROCESO DE INSCRIPCIÓN · ESTUDIANTES NUEVOS 2027</span>
                             </div>
                         </ScrollReveal>
@@ -234,11 +234,24 @@ export default function Admisiones() {
                             </h1>
                         </ScrollReveal>
 
-                        {/* Subtítulo Grande */}
+                        {/* Subtítulo Grande con Grados con Cupos Disponibles */}
                         <ScrollReveal distance="translate-y-6" delay={300}>
-                            <p className="text-xl sm:text-2xl font-semibold text-slate-600 leading-relaxed font-sans max-w-3xl mx-auto">
-                                Te damos la bienvenida al Colegio Santa Isabel de Hungría. Revisa los grados disponibles, sigue la guía paso a paso e inicia la solicitud de cupo en la plataforma oficial.
-                            </p>
+                            <div className="space-y-4 max-w-3xl mx-auto">
+                                <p className="text-xl sm:text-2xl font-semibold text-slate-600 leading-relaxed font-sans">
+                                    Te damos la bienvenida al Colegio Santa Isabel de Hungría. Actualmente contamos con vacantes habilitadas exclusivamente para los siguientes grados:
+                                </p>
+
+                                <div className="flex flex-wrap items-center justify-center gap-2.5 pt-2">
+                                    {['Prejardín', 'Jardín', 'Transición', 'Primero (1°)', 'Sexto (6°)'].map((grado) => (
+                                        <span
+                                            key={grado}
+                                            className="px-4 py-2 rounded-2xl bg-gradient-to-r from-[#003C8F] to-[#800A15] text-white font-black text-sm sm:text-base shadow-md border border-white/20 hover:scale-105 transition-transform"
+                                        >
+                                            ✨ {grado}
+                                        </span>
+                                    ))}
+                                </div>
+                            </div>
                         </ScrollReveal>
 
                         {/* BOTÓN GIGANTE LLAMATIVO SIN DEGRADADOS */}

@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import PageBuilder from './PageBuilder/PageBuilder';
 import CarnetsAdminTab from './CarnetsAdminTab';
-import { Sun, Moon, Eye, Move, ZoomIn, Camera, User, X, Check, Upload, ArrowUp, ArrowDown, ArrowLeft, ArrowRight, Plus, Minus, Trash2, Terminal, Server, RefreshCw, Database, HardDrive, ShieldAlert, Cpu, Copy, Play, CreditCard, GitBranch } from 'lucide-react';
+import { Sun, Moon, Eye, Move, ZoomIn, Camera, User, X, Check, Upload, ArrowUp, ArrowDown, ArrowLeft, ArrowRight, Plus, Minus, Trash2, Terminal, Server, RefreshCw, Database, HardDrive, ShieldAlert, Cpu, Copy, Play, CreditCard, GitBranch, Trophy, Flame, Sparkles, Shield } from 'lucide-react';
 import { processImageFile } from '@/utils/heicConverter';
 import { mediaUrl } from '@/utils/mediaUrl';
 

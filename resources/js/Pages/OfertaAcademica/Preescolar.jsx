@@ -18,25 +18,25 @@ const LINK_INSCRIPCIONES = "https://e.plataformaintegra.net/sihungria/index.php/
 
 const docentesPreescolar = [
     {
-        nombre: 'Lic. Daniela Villamizar',
+        nombre: 'Daniela Villamizar',
         cargo: 'Docente de Preescolar',
         colorCircle: 'bg-[#FFD25D]',
         foto: 'https://media.colsih.edu.co/nuestro_colegio/equipo/docentes/Daniela%20Villamizar%20Villamizar.JPG'
     },
     {
-        nombre: 'Lic. Lady Diana Osorio',
+        nombre: 'Lady Diana Osorio',
         cargo: 'Docente de Desarrollo Infantil',
         colorCircle: 'bg-[#F3E3D4]',
         foto: 'https://media.colsih.edu.co/nuestro_colegio/equipo/docentes/Lady%20Diana%20Osorio%20Fonseca.JPG'
     },
     {
-        nombre: 'Lic. Paula Lorena Cuadros',
+        nombre: 'Paula Lorena Cuadros',
         cargo: 'Docente de Dimensión Comunicativa',
         colorCircle: 'bg-[#ADA3DA]',
         foto: 'https://media.colsih.edu.co/nuestro_colegio/equipo/docentes/Paula%20Lorena%20Cuadros%20Ballesteros.JPG'
     },
     {
-        nombre: 'Lic. Diana Soidé Villamizar',
+        nombre: 'Diana Soidé Villamizar',
         cargo: 'Docente de Lectoescritura Inicial',
         colorCircle: 'bg-[#90C5DE]',
         foto: 'https://media.colsih.edu.co/nuestro_colegio/equipo/docentes/Diana%20Soid%C3%A9%20Villamizar%20Bautista.JPG'

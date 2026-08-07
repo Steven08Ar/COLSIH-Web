@@ -85,8 +85,10 @@ export default function Navbar() {
     const ofertaActive = ofertaLinks.some(l => url === l.href || url.startsWith(l.href));
 
     return (
-        <header className={`fixed top-0 left-0 w-full z-50 py-4 transition-all duration-300 bg-gradient-to-b from-[#08111F]/60 to-transparent ${
-            scrolled ? 'bg-[#08111F]/40 backdrop-blur-md' : 'backdrop-blur-[2px]'
+        <header className={`fixed top-0 left-0 w-full z-50 py-3.5 transition-all duration-300 ${
+            scrolled
+                ? 'bg-[#08111F]/95 backdrop-blur-md shadow-xl border-b border-white/10'
+                : 'bg-[#08111F]/85 backdrop-blur-md border-b border-white/10'
         }`}>
             <div className="w-full px-6 md:px-10 lg:px-16 flex items-center justify-between relative">
 
@@ -286,15 +288,15 @@ export default function Navbar() {
                             />
                         </Link>
                     ) : (
-                        <div className="hidden md:flex items-center gap-2">
+                        <div className="hidden md:flex items-center gap-2.5">
                             <a
                                 href="https://e.plataformaintegra.net/sihungria/"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="btn-colsih-3d-red text-xs px-4 py-2"
+                                className="btn-pill-3d-red text-xs px-4 py-2"
                                 title="Ingreso a Plataforma Integra"
                             >
-                                <svg className="w-3.5 h-3.5 text-white shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg className="w-4 h-4 text-white shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" d="M12 14l9-5-9-5-9 5 9 5z" />
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0112 20.055a11.952 11.952 0 01-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
                                 </svg>
@@ -304,10 +306,10 @@ export default function Navbar() {
                                 href="https://e.plataformaintegra.net/sihungria/index.php/cupo"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="btn-colsih-3d-blue text-xs px-4 py-2"
+                                className="btn-pill-3d-blue text-xs px-4 py-2"
                                 title="Solicitud de Cupo e Inscripción 2027"
                             >
-                                <svg className="w-3.5 h-3.5 text-amber-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg className="w-4 h-4 text-amber-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                 </svg>
                                 <span>INSCRIPCIONES</span>

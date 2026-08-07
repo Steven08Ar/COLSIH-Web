@@ -112,27 +112,36 @@ export default function Navbar() {
                     )}
                 </Link>
 
-                {/* Navigation Centrada en la Pantalla */}
-                <div className="hidden lg:flex items-center gap-8 xl:gap-10 text-[15px] font-semibold text-white/80 absolute left-1/2 -translate-x-1/2">
-                    <Link href="/" className={`transition-colors ${url === '/' ? 'text-white font-extrabold' : 'hover:text-white'}`}>
+                {/* Navigation Centrada en la Pantalla con Estilo Píldora 3D */}
+                <div className="hidden lg:flex items-center gap-2 xl:gap-3 text-xs font-bold text-white absolute left-1/2 -translate-x-1/2">
+                    <Link
+                        href="/"
+                        className={`px-3.5 py-1.5 rounded-full transition-all duration-150 ${
+                            url === '/'
+                                ? 'bg-white text-[#001659] font-black border-b-[3px] border-slate-300 shadow-md'
+                                : 'bg-white/10 hover:bg-white/20 text-white/90 border border-white/15'
+                        }`}
+                    >
                         Inicio
                     </Link>
 
                     {/* Nuestro Colegio */}
                     <div
-                        className="relative py-2"
+                        className="relative"
                         onMouseEnter={handleDropdownEnter}
                         onMouseLeave={handleDropdownLeave}
                     >
                         <button
-                            className={`flex items-center gap-1 transition-colors focus:outline-none cursor-pointer ${
-                                nosotrosActive ? 'text-white font-extrabold' : 'hover:text-white'
+                            className={`px-3.5 py-1.5 rounded-full transition-all duration-150 inline-flex items-center gap-1 focus:outline-none cursor-pointer ${
+                                nosotrosActive
+                                    ? 'bg-white text-[#001659] font-black border-b-[3px] border-slate-300 shadow-md'
+                                    : 'bg-white/10 hover:bg-white/20 text-white/90 border border-white/15'
                             }`}
                             aria-expanded={dropdownOpen}
                         >
                             Nuestro Colegio
                             <svg
-                                className={`w-3.5 h-3.5 transition-transform duration-300 ${dropdownOpen ? 'rotate-180' : ''}`}
+                                className={`w-3 h-3 transition-transform duration-300 ${dropdownOpen ? 'rotate-180' : ''}`}
                                 fill="none" stroke="currentColor" viewBox="0 0 24 24"
                             >
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" />
@@ -141,20 +150,22 @@ export default function Navbar() {
 
                         {dropdownVisible && (
                             <div
-                                className={`absolute left-1/2 -translate-x-1/2 top-full mt-1.5 w-52 bg-gradient-to-b from-[#08111F]/95 to-[#08111F]/85 backdrop-blur-xl border border-white/10 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.4)] py-2.5 z-50 origin-top
+                                className={`absolute left-1/2 -translate-x-1/2 top-full mt-2 w-52 bg-[#08111F]/95 backdrop-blur-xl border border-white/15 rounded-2xl shadow-2xl py-2.5 z-50 origin-top
                                     transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]
                                     ${dropdownOpen
                                         ? 'opacity-100 translate-y-0 scale-100'
                                         : 'opacity-0 -translate-y-2 scale-[0.98]'
                                     }`}
                             >
-                                <div className="relative">
+                                <div className="relative space-y-1">
                                     {nosotrosLinks.map((item) => (
                                         <Link
                                             key={item.href}
                                             href={item.href}
-                                            className={`block px-4 py-2.5 mx-1.5 text-[14px] font-semibold rounded-xl transition-all duration-200 hover:bg-white/[0.08] hover:text-white ${
-                                                url === item.href ? 'text-white bg-white/[0.06]' : 'text-white/70'
+                                            className={`block px-4 py-2 mx-1.5 text-xs font-bold rounded-full transition-all duration-150 ${
+                                                url === item.href
+                                                    ? 'bg-[#001659] text-white font-black border-b-2 border-[#00092B]'
+                                                    : 'text-slate-300 hover:bg-white/10 hover:text-white'
                                             }`}
                                         >
                                             {item.label}
@@ -167,19 +178,21 @@ export default function Navbar() {
 
                     {/* Oferta Académica Dropdown */}
                     <div
-                        className="relative py-2"
+                        className="relative"
                         onMouseEnter={handleOfertaEnter}
                         onMouseLeave={handleOfertaLeave}
                     >
                         <Link
                             href="/oferta-academica"
-                            className={`flex items-center gap-1 transition-colors focus:outline-none cursor-pointer ${
-                                ofertaActive ? 'text-white font-extrabold' : 'hover:text-white'
+                            className={`px-3.5 py-1.5 rounded-full transition-all duration-150 inline-flex items-center gap-1 focus:outline-none cursor-pointer ${
+                                ofertaActive
+                                    ? 'bg-white text-[#001659] font-black border-b-[3px] border-slate-300 shadow-md'
+                                    : 'bg-white/10 hover:bg-white/20 text-white/90 border border-white/15'
                             }`}
                         >
                             Oferta Académica
                             <svg
-                                className={`w-3.5 h-3.5 transition-transform duration-300 ${ofertaOpenState ? 'rotate-180' : ''}`}
+                                className={`w-3 h-3 transition-transform duration-300 ${ofertaOpenState ? 'rotate-180' : ''}`}
                                 fill="none" stroke="currentColor" viewBox="0 0 24 24"
                             >
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" />
@@ -188,20 +201,22 @@ export default function Navbar() {
 
                         {ofertaVisible && (
                             <div
-                                className={`absolute left-1/2 -translate-x-1/2 top-full mt-1.5 w-56 bg-gradient-to-b from-[#08111F]/95 to-[#08111F]/85 backdrop-blur-xl border border-white/10 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.4)] py-2.5 z-50 origin-top
+                                className={`absolute left-1/2 -translate-x-1/2 top-full mt-2 w-56 bg-[#08111F]/95 backdrop-blur-xl border border-white/15 rounded-2xl shadow-2xl py-2.5 z-50 origin-top
                                     transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]
                                     ${ofertaOpenState
                                         ? 'opacity-100 translate-y-0 scale-100'
                                         : 'opacity-0 -translate-y-2 scale-[0.98]'
                                     }`}
                             >
-                                <div className="relative">
+                                <div className="relative space-y-1">
                                     {ofertaLinks.map((item) => (
                                         <Link
                                             key={item.href}
                                             href={item.href}
-                                            className={`block px-4 py-2.5 mx-1.5 text-[14px] font-semibold rounded-xl transition-all duration-200 hover:bg-white/[0.08] hover:text-white ${
-                                                url === item.href ? 'text-white bg-white/[0.06]' : 'text-white/70'
+                                            className={`block px-4 py-2 mx-1.5 text-xs font-bold rounded-full transition-all duration-150 ${
+                                                url === item.href
+                                                    ? 'bg-[#001659] text-white font-black border-b-2 border-[#00092B]'
+                                                    : 'text-slate-300 hover:bg-white/10 hover:text-white'
                                             }`}
                                         >
                                             {item.label}
@@ -212,10 +227,49 @@ export default function Navbar() {
                         )}
                     </div>
 
-                    <Link href="/admisiones" className={`transition-colors ${url === '/admisiones' ? 'text-white font-extrabold' : 'hover:text-white'}`}>Admisiones</Link>
-                    <Link href="/deportes" className={`transition-colors ${url === '/deportes' ? 'text-white font-extrabold' : 'hover:text-white'}`}>Deportes</Link>
-                    <Link href="/noticias" className={`transition-colors ${url.startsWith('/noticias') ? 'text-white font-extrabold' : 'hover:text-white'}`}>Noticias</Link>
-                    <Link href="/contacto" className={`transition-colors ${url === '/contacto' ? 'text-[#800A15] font-extrabold' : 'hover:text-white'}`}>Contacto</Link>
+                    <Link
+                        href="/admisiones"
+                        className={`px-3.5 py-1.5 rounded-full transition-all duration-150 ${
+                            url === '/admisiones'
+                                ? 'bg-white text-[#001659] font-black border-b-[3px] border-slate-300 shadow-md'
+                                : 'bg-white/10 hover:bg-white/20 text-white/90 border border-white/15'
+                        }`}
+                    >
+                        Admisiones
+                    </Link>
+
+                    <Link
+                        href="/deportes"
+                        className={`px-3.5 py-1.5 rounded-full transition-all duration-150 ${
+                            url === '/deportes'
+                                ? 'bg-white text-[#001659] font-black border-b-[3px] border-slate-300 shadow-md'
+                                : 'bg-white/10 hover:bg-white/20 text-white/90 border border-white/15'
+                        }`}
+                    >
+                        Deportes
+                    </Link>
+
+                    <Link
+                        href="/noticias"
+                        className={`px-3.5 py-1.5 rounded-full transition-all duration-150 ${
+                            url.startsWith('/noticias')
+                                ? 'bg-white text-[#001659] font-black border-b-[3px] border-slate-300 shadow-md'
+                                : 'bg-white/10 hover:bg-white/20 text-white/90 border border-white/15'
+                        }`}
+                    >
+                        Noticias
+                    </Link>
+
+                    <Link
+                        href="/contacto"
+                        className={`px-3.5 py-1.5 rounded-full transition-all duration-150 ${
+                            url === '/contacto'
+                                ? 'bg-[#800A15] text-white font-black border-b-[3px] border-[#4A050C] shadow-md'
+                                : 'bg-white/10 hover:bg-white/20 text-white/90 border border-white/15'
+                        }`}
+                    >
+                        Contacto
+                    </Link>
                 </div>
 
                 <div className="flex items-center gap-3 shrink-0">

@@ -112,7 +112,7 @@ export default function Navbar() {
                     )}
                 </Link>
 
-                {/* Navigation Centrada en la Pantalla (Visible solo a partir de 1680px) */}
+                {/* Navigation Centrada en la Pantalla (Visible solo en escritorio grande >= 1680px) */}
                 <div className="hidden min-[1680px]:flex items-center gap-6 2xl:gap-8 text-[15px] font-semibold text-white/80 absolute left-1/2 -translate-x-1/2 whitespace-nowrap">
                     <Link href="/" className={`transition-colors ${url === '/' ? 'text-white font-extrabold' : 'hover:text-white'}`}>
                         Inicio
@@ -218,6 +218,41 @@ export default function Navbar() {
                     <Link href="/contacto" className={`transition-colors ${url === '/contacto' ? 'text-white font-extrabold' : 'hover:text-white'}`}>Contacto</Link>
                 </div>
 
+                {/* Botones de Plataforma e Inscripciones al Centro (Solo cuando aparece el menu hamburguesa en pantallas intermedias md a < 1680px) */}
+                {url !== '/mjs' && (
+                    <div className="hidden md:flex min-[1680px]:!hidden items-center gap-3 absolute left-1/2 -translate-x-1/2">
+                        <a
+                            href="https://e.plataformaintegra.net/sihungria/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="btn-split-badge-red"
+                            title="Ingreso a Plataforma Integra"
+                        >
+                            <span>Plataforma</span>
+                            <span className="icon-badge-box">
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" d="M12 14l9-5-9-5-9 5 9 5z" />
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0112 20.055a11.952 11.952 0 01-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+                                </svg>
+                            </span>
+                        </a>
+                        <a
+                            href="https://e.plataformaintegra.net/sihungria/index.php/cupo"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="btn-split-badge-blue"
+                            title="Solicitud de Cupo e Inscripción 2027"
+                        >
+                            <span>INSCRIPCIONES</span>
+                            <span className="icon-badge-box">
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                </svg>
+                            </span>
+                        </a>
+                    </div>
+                )}
+
                 <div className="flex items-center gap-3 shrink-0">
                     {url === '/mjs' ? (
                         <Link
@@ -317,31 +352,35 @@ export default function Navbar() {
                         <Link href="/contacto" onClick={() => setMobileOpen(false)} className={`block px-3 py-2 text-sm font-semibold rounded-lg ${url === '/contacto' ? 'text-white bg-white/10' : 'text-white/85'}`}>Contacto</Link>
 
                         {url !== '/mjs' ? (
-                            <div className="pt-2 border-t border-white/10 space-y-2.5">
+                            <div className="pt-3 border-t border-white/10 flex flex-col gap-2.5">
                                 <a
                                     href="https://e.plataformaintegra.net/sihungria/index.php/cupo"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     onClick={() => setMobileOpen(false)}
-                                    className="btn-pill-3d-blue w-full text-xs py-3"
+                                    className="btn-split-badge-blue w-full justify-between"
                                 >
-                                    <svg className="w-4 h-4 text-amber-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                    </svg>
                                     <span>INSCRIPCIONES 2027</span>
+                                    <span className="icon-badge-box">
+                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                        </svg>
+                                    </span>
                                 </a>
                                 <a
                                     href="https://e.plataformaintegra.net/sihungria/"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     onClick={() => setMobileOpen(false)}
-                                    className="btn-pill-3d-red w-full text-xs py-3"
+                                    className="btn-split-badge-red w-full justify-between"
                                 >
-                                    <svg className="w-4 h-4 text-white shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" d="M12 14l9-5-9-5-9 5 9 5z" />
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0112 20.055a11.952 11.952 0 01-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
-                                    </svg>
                                     <span>Ingreso a Plataforma</span>
+                                    <span className="icon-badge-box">
+                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" d="M12 14l9-5-9-5-9 5 9 5z" />
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0112 20.055a11.952 11.952 0 01-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+                                        </svg>
+                                    </span>
                                 </a>
                             </div>
                         ) : (

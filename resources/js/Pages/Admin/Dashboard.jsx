@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import PageBuilder from './PageBuilder/PageBuilder';
 import CarnetsAdminTab from './CarnetsAdminTab';
+import AdminSidebar from '@/Components/AdminSidebar';
 import { Sun, Moon, Eye, Move, ZoomIn, Camera, User, X, Check, Upload, ArrowUp, ArrowDown, ArrowLeft, ArrowRight, Plus, Minus, Trash2, Terminal, Server, RefreshCw, Database, HardDrive, ShieldAlert, Cpu, Copy, Play, CreditCard, GitBranch, Trophy, Flame, Sparkles, Shield } from 'lucide-react';
 import { processImageFile } from '@/utils/heicConverter';
 import { mediaUrl } from '@/utils/mediaUrl';
@@ -3553,6 +3554,7 @@ export default function AdminDashboard({ seccion, carnets = [], equipo = [], tes
     const basePath = window.location.pathname.replace(/\/[^/]+$/, '');
     const [darkMode, setDarkMode] = useState(() => localStorage.getItem('sih-dark-mode') === 'true');
     const [sidebarOpen, setSidebarOpen] = useState(false);
+    const [isCollapsed, setIsCollapsed] = useState(() => localStorage.getItem('sih-sidebar-collapsed') === 'true');
 
     useEffect(() => {
         if (darkMode) {
@@ -3563,6 +3565,10 @@ export default function AdminDashboard({ seccion, carnets = [], equipo = [], tes
             localStorage.setItem('sih-dark-mode', 'false');
         }
     }, [darkMode]);
+
+    useEffect(() => {
+        localStorage.setItem('sih-sidebar-collapsed', isCollapsed ? 'true' : 'false');
+    }, [isCollapsed]);
 
     // Search bar shortcut placeholder hook
     useEffect(() => {
@@ -3589,134 +3595,21 @@ export default function AdminDashboard({ seccion, carnets = [], equipo = [], tes
                     />
                 )}
 
-                {/* ── Sidebar Izquierda (Able Pro layout, 100% Responsive) ── */}
-                <aside className={`w-72 bg-white dark:bg-slate-900 border-r border-slate-100 dark:border-slate-800/80 h-screen fixed left-0 top-0 z-50 flex flex-col justify-between transition-transform duration-300 ease-in-out ${
-                    sidebarOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full lg:translate-x-0'
+                {/* ── Sidebar Izquierda Minimalista (AdminSidebar) ── */}
+                <AdminSidebar
+                    seccion={seccion}
+                    basePath={basePath}
+                    sidebarOpen={sidebarOpen}
+                    setSidebarOpen={setSidebarOpen}
+                    isCollapsed={isCollapsed}
+                    setIsCollapsed={setIsCollapsed}
+                    adminCounts={adminCounts}
+                />
+
+                {/* ── Right Content Container (Ajustable segun isCollapsed) ── */}
+                <div className={`flex-1 flex flex-col min-h-screen w-full transition-all duration-300 ${
+                    isCollapsed ? 'pl-0 lg:pl-20' : 'pl-0 lg:pl-72'
                 }`}>
-                    <div>
-                        {/* Sidebar Header Brand */}
-                        <div className="h-20 px-6 sm:px-8 flex items-center justify-between border-b border-slate-100 dark:border-slate-800/80">
-                            <div className="flex items-center gap-3">
-                                <img src="/marca/logo-colsih.svg" alt="COLSIH" className="h-10 w-auto object-contain" />
-                                <div className="flex flex-col">
-                                    <span className="font-black text-slate-800 dark:text-white text-sm leading-tight uppercase tracking-wide">COLSIH</span>
-                                    <span className="text-[10px] font-bold text-blue-600 uppercase">Admin Panel</span>
-                                </div>
-                            </div>
-                            <button
-                                type="button"
-                                onClick={() => setSidebarOpen(false)}
-                                className="lg:hidden p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
-                            >
-                                ✕
-                            </button>
-                        </div>
-
-                        {/* User profile card inside sidebar */}
-                        <div className="m-4 sm:m-5 p-4 bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800/60 rounded-2xl flex items-center justify-between shadow-sm">
-                            <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-full bg-blue-600 text-white font-extrabold flex items-center justify-center text-sm shadow-md shadow-blue-500/10">
-                                    A
-                                </div>
-                                <div className="flex flex-col">
-                                    <span className="text-xs font-extrabold text-slate-800 dark:text-slate-200 leading-tight">Administrador</span>
-                                    <span className="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase mt-0.5">Gestor Portal</span>
-                                </div>
-                            </div>
-                            <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse border-2 border-white dark:border-slate-800 shadow-sm"></div>
-                        </div>
-
-                        {/* Sidebar Nav Links */}
-                        <div className="mt-4 space-y-1.5">
-                            <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 tracking-[1.5px] uppercase block px-8 mb-3">
-                                Módulos de Gestión
-                            </span>
-
-                            {TABS.map(tab => {
-                                const isActive = seccion === tab.key;
-                                return (
-                                    <Link
-                                        key={tab.key}
-                                        href={`${basePath}/${tab.key}`}
-                                        onClick={() => setSidebarOpen(false)}
-                                        className={`flex items-center justify-between px-7 py-3.5 mx-3 rounded-xl font-bold text-sm transition-all duration-200 ${
-                                            isActive
-                                                ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 border-l-4 border-blue-600 pl-6'
-                                                : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800/30'
-                                        }`}
-                                    >
-                                        <div className="flex items-center gap-3">
-                                            {tab.key === 'carnets-admin' && (
-                                                <CreditCard className="w-5 h-5 text-[#800A15]" />
-                                            )}
-                                            {tab.key === 'deportes-admin' && (
-                                                <Trophy className="w-5 h-5 text-amber-500" />
-                                            )}
-                                            {tab.key === 'equipo' && (
-                                                <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                                                </svg>
-                                            )}
-                                            {tab.key === 'testimonios' && (
-                                                <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
-                                                </svg>
-                                            )}
-                                            {tab.key === 'noticias' && (
-                                                <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
-                                                </svg>
-                                            )}
-                                            {tab.key === 'preguntas' && (
-                                                <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                                </svg>
-                                            )}
-                                            {tab.key === 'recorrido' && (
-                                                <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                                                </svg>
-                                            )}
-                                            {tab.key === 'mantenimiento' && (
-                                                <Terminal className="w-5 h-5 text-blue-500" />
-                                            )}
-                                            {tab.label}
-                                        </div>
-                                        
-                                        {/* Count badge */}
-                                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${
-                                            isActive ? 'bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300' : 'bg-slate-100 dark:bg-slate-800 text-slate-500'
-                                        }`}>
-                                            {tab.key === 'carnets-admin' && (adminCounts?.carnets     ?? carnets.length)}
-                                            {tab.key === 'deportes-admin' && (torneoPartidos.length || 7)}
-                                            {tab.key === 'equipo'        && (adminCounts?.equipo      ?? equipo.length)}
-                                            {tab.key === 'testimonios'   && (adminCounts?.testimonios ?? testimonios.length)}
-                                            {tab.key === 'noticias'      && (adminCounts?.noticias    ?? noticias.length)}
-                                            {tab.key === 'preguntas'     && (adminCounts?.preguntas   ?? preguntas.length)}
-                                            {tab.key === 'recorrido'     && (adminCounts?.scenes      ?? scenes.length)}
-                                            {tab.key === 'mantenimiento' && 'PHP'}
-                                        </span>
-                                    </Link>
-                                );
-                            })}
-                        </div>
-                    </div>
-
-                    {/* Sidebar Footer */}
-                    <div className="p-5 border-t border-slate-100 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-900/50">
-                        <form method="POST" action={`${basePath}/logout`} onSubmit={e => { e.preventDefault(); router.post(`${basePath}/logout`); }}>
-                            <button type="submit" className="w-full flex items-center justify-center gap-2 text-xs font-bold text-rose-600 dark:text-rose-400 hover:text-rose-800 dark:hover:text-rose-300 bg-rose-50 dark:bg-rose-900/20 hover:bg-rose-100/60 dark:hover:bg-rose-900/30 border border-rose-100 dark:border-rose-900/30 px-4 py-3 rounded-xl transition duration-200 cursor-pointer shadow-sm active:scale-[0.98]">
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                                </svg>
-                                Cerrar Sesión
-                            </button>
-                        </form>
-                    </div>
-                </aside>
-
-                {/* ── Right Content Container ── */}
-                <div className="flex-1 pl-0 lg:pl-72 flex flex-col min-h-screen w-full">
                     
                     {/* Header Top Navbar (Sticky Normal Flow to Never Overlap Main Content) */}
                     <header className="h-16 sm:h-20 bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800/80 sticky top-0 z-30 flex items-center justify-between px-4 sm:px-8 shadow-[0_1px_3px_rgba(0,0,0,0.01)] shrink-0">

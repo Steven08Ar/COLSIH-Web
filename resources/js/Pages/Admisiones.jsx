@@ -12,31 +12,25 @@ import {
     Mail, 
     UserCheck, 
     GraduationCap, 
-    AlertCircle, 
     Clock, 
     Building2, 
     ShieldCheck, 
-    HelpCircle,
-    Copy,
-    Check,
-    ChevronDown,
-    ChevronRight,
-    Users,
-    BookmarkCheck,
-    Heart,
-    Trophy,
-    BookOpen,
-    Award,
-    Briefcase,
-    Search,
-    ClipboardList,
-    PieChart,
-    Bus,
-    MessageSquare,
-    User,
-    School,
-    CheckCircle,
-    X
+    Copy, 
+    Check, 
+    ChevronDown, 
+    Users, 
+    Heart, 
+    BookOpen, 
+    Award, 
+    Briefcase, 
+    Search, 
+    ClipboardList, 
+    PieChart, 
+    Bus, 
+    MessageSquare, 
+    User, 
+    School, 
+    CheckCircle
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -62,88 +56,21 @@ const pasosProceso = [
         titulo: 'Consulta requisitos',
         descripcion: 'Revisa los requisitos y documentos necesarios para el proceso.',
         icono: ClipboardList,
-        badge: 'HASTA EL 10 DE SEPTIEMBRE'
+        badge: 'DOCUMENTACIÓN Y PAPELERÍA'
     },
     {
         paso: '3',
         titulo: 'Inscríbete',
         descripcion: 'Diligencia el formulario y envía los documentos solicitados.',
         icono: FileText,
-        badge: 'PRESENCIAL Y OBLIGATORIO'
+        badge: 'PRUEBA Y ENTREVISTA'
     },
     {
         paso: '4',
         titulo: 'Bienvenido',
         descripcion: 'Te contactaremos para acompañarte en los siguientes pasos.',
         icono: Sparkles,
-        badge: '1 DE OCTUBRE DE 2026'
-    }
-];
-
-const cardsGuia = [
-    {
-        id: 'oferta',
-        titulo: 'Oferta Académica',
-        descripcion: 'Programas de calidad para cada etapa de crecimiento.',
-        icono: ClipboardList,
-        colorIcon: 'text-[#003C8F]',
-        bgIcon: 'bg-blue-50',
-        detalles: [
-            'Preescolar: Prejardín, Jardín y Transición (Jornada 7:00 a.m. – 12:30 p.m.)',
-            'Primaria: Grados 1° a 5° (Jornada 6:30 a.m. – 1:00 p.m.)',
-            'Bachillerato: Grados 6° a 11° + Doble Titulación SENA (6:30 a.m. – 2:00 p.m.)',
-            'Inglés intensivo desde la etapa inicial de formación.'
-        ]
-    },
-    {
-        id: 'costos',
-        titulo: 'Costos',
-        descripcion: 'Conoce nuestras tarifas, formas de pago y descuentos disponibles.',
-        icono: PieChart,
-        colorIcon: 'text-[#800A15]',
-        bgIcon: 'bg-rose-50',
-        detalles: [
-            'Formulario de Inscripción: $70.000 COP (Valor único no reembolsable).',
-            'Único banco autorizado para el pago: Banco Caja Social.',
-            'Matrícula y mensualidades con tarifas accesibles aprobadas oficialmente.'
-        ]
-    },
-    {
-        id: 'becas',
-        titulo: 'Becas',
-        descripcion: 'Apoyamos el talento y el esfuerzo de nuestros estudiantes.',
-        icono: Award,
-        colorIcon: 'text-amber-600',
-        bgIcon: 'bg-amber-50',
-        detalles: [
-            'Becas UPB del 90%: Para los mejores bachilleres graduados en la Universidad Pontificia Bolivariana.',
-            'Doble Titulación SENA: Técnico en Contabilización de Operaciones Comerciales y Financieras.'
-        ]
-    },
-    {
-        id: 'transporte',
-        titulo: 'Transporte',
-        descripcion: 'Rutas seguras y acompañamiento para tu tranquilidad.',
-        icono: Bus,
-        colorIcon: 'text-[#003C8F]',
-        bgIcon: 'bg-slate-100',
-        detalles: [
-            'Rutas escolares seguras con cobertura en Floridablanca y Bucaramanga.',
-            'Vehículos reglamentados con acompañante y monitores de seguridad.'
-        ]
-    },
-    {
-        id: 'faq',
-        titulo: 'Preguntas frecuentes',
-        descripcion: 'Resuelve tus dudas sobre el proceso de admisión.',
-        icono: MessageSquare,
-        colorIcon: 'text-[#800A15]',
-        bgIcon: 'bg-rose-50',
-        detalles: [
-            'Atención directa vía correo: admisionescolsihfloridablanca@gmail.com',
-            'Horario de atención: Lunes a Viernes de 7:00 a.m. a 2:00 p.m.',
-            'Revisa la sección de Preguntas Frecuentes al final de la página.'
-        ]
+        badge: 'MATRÍCULA 2027'
     }
 ];
 
@@ -177,11 +104,11 @@ const statsData = [
 const faqsData = [
     {
         pregunta: '¿Cuál es el proceso de admisión?',
-        respuesta: 'El proceso consta de 4 pasos: 1) Conocer el colegio y cupos habilitados. 2) Consultar requisitos y enviar la papelería en PDF al correo admisionescolsihfloridablanca@gmail.com. 3) Diligenciar el formulario en la plataforma integra ($70.000 COP en Banco Caja Social) y asistir a la prueba presencial con entrevista familiar. 4) Publicación de admitidos el 1 de octubre de 2026.'
+        respuesta: 'El proceso consta de 4 pasos sencillos: 1) Conocer el colegio y cupos habilitados. 2) Consultar requisitos y enviar la papelería en PDF al correo admisionescolsihfloridablanca@gmail.com. 3) Diligenciar el formulario en la plataforma integra ($70.000 COP en Banco Caja Social) y asistir a la prueba presencial con entrevista familiar. 4) Publicación de admitidos y formalización de matrícula.'
     },
     {
         pregunta: '¿Qué documentos necesito para inscribirme?',
-        respuesta: 'Para Preescolar (Jardín y Transición): Fotocopia del Registro civil de nacimiento. Para Primaria y Bachillerato (1° a 9°): Fotocopia del observador del estudiante 2026, documento de identidad (Registro civil o Tarjeta de identidad) y boletines de calificaciones de los 3 periodos del año 2026 cursados a la fecha.'
+        respuesta: 'Para Preescolar (Jardín y Transición): Fotocopia del Registro civil de nacimiento. Para Primaria y Bachillerato (1° a 9°): Fotocopia del observador del estudiante 2026, documento de identidad (Registro civil o Tarjeta de identidad) y boletines de calificaciones del año en curso.'
     },
     {
         pregunta: '¿Hay descuentos por hermanos o convenios?',
@@ -193,28 +120,19 @@ const faqsData = [
     },
     {
         pregunta: '¿Cuándo inician las clases?',
-        respuesta: 'El calendario académico 2027 iniciará oficialmente en la última semana de enero de 2027.'
+        respuesta: 'El calendario académico 2027 iniciará oficialmente según los lineamientos del Ministerio de Educación Nacional y la Secretaría de Educación de Floridablanca.'
     }
 ];
 
 export default function Admisiones() {
     const [faqAbierta, setFaqAbierta] = useState(0);
-    const [cardActivaModal, setCardActivaModal] = useState(null);
-    const [asuntoCopiado, setAsuntoCopiado] = useState(false);
     const [correoCopiado, setCorreoCopiado] = useState(false);
 
-    const copiarTexto = (texto, esAsunto = true) => {
-        navigator.clipboard.writeText(texto);
-        if (esAsunto) {
-            setAsuntoCopiado(true);
-            setTimeout(() => setAsuntoCopiado(false), 2500);
-        } else {
-            setCorreoCopiado(true);
-            setTimeout(() => setCorreoCopiado(false), 2500);
-        }
+    const copiarCorreo = () => {
+        navigator.clipboard.writeText(CORREO_ADMISIONES);
+        setCorreoCopiado(true);
+        setTimeout(() => setCorreoCopiado(false), 2500);
     };
-
-    const cardSeleccionadaObj = cardsGuia.find(c => c.id === cardActivaModal);
 
     return (
         <AppLayout>
@@ -321,7 +239,7 @@ export default function Admisiones() {
                                 {/* 3. Tarjeta Calendario */}
                                 <div className="absolute top-28 left-2 sm:left-6 bg-white p-4 rounded-2xl shadow-md border border-slate-100 w-44">
                                     <div className="flex items-center justify-between border-b border-slate-100 pb-2 mb-2">
-                                        <span className="text-[10px] font-bold text-slate-400 uppercase">Calendario 2027</span>
+                                        <span className="text-[10px] font-bold text-slate-400 uppercase">Proceso 2027</span>
                                         <Calendar className="w-3.5 h-3.5 text-[#800A15]" />
                                     </div>
                                     <div className="grid grid-cols-4 gap-1 text-center text-[10px] font-bold text-slate-600">
@@ -379,7 +297,7 @@ export default function Admisiones() {
                             <div className="w-8 h-[2.5px] bg-amber-400 mx-auto mt-1 rounded-full" />
                         </ScrollReveal>
                         <ScrollReveal distance="translate-y-4" delay={150}>
-                            <h2 className="text-3xl sm:text-4xl font-extrabold text-[#0B1F3A] tracking-tight font-sans">
+                            <h2 className="text-3xl sm:text-4xl md:text-[44px] font-extrabold text-[#0B1F3A] tracking-tight font-sans">
                                 Admisiones en 4 pasos
                             </h2>
                         </ScrollReveal>
@@ -432,7 +350,7 @@ export default function Admisiones() {
                 </div>
             </section>
 
-            {/* SECCIÓN 3: TODO LO QUE NECESITAS SABER (Información que te guía - Tarjetas Planas Fieles al Diseño) */}
+            {/* SECCIÓN 3: INFORMACIÓN QUE TE GUÍA (INFORMACIÓN 100% DIRECTA Y VISIBLE EN CADA TARJETA) */}
             <section className="py-20 md:py-28 bg-[#FAFCFF] border-b border-slate-100 select-none font-sans">
                 <div className="max-w-[1440px] mx-auto px-6 md:px-12 lg:px-16 space-y-12">
                     
@@ -450,80 +368,246 @@ export default function Admisiones() {
                         </ScrollReveal>
                     </div>
 
-                    {/* Grid de 5 Tarjetas Planas + Tarjeta Calendario Ancha */}
-                    <div className="space-y-6">
+                    {/* Grid de Tarjetas Planas con Toda la Información Directamente Visible (0 Ventanas Emergentes) */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-left">
                         
-                        {/* 5 Tarjetas en Cuadrícula */}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {cardsGuia.map((card, idx) => {
-                                const IconoCard = card.icono;
-                                return (
-                                    <ScrollReveal key={card.id} distance="translate-y-6" delay={idx * 80}>
-                                        <div 
-                                            onClick={() => setCardActivaModal(card.id)}
-                                            className="bg-white rounded-3xl p-7 border border-slate-100 hover:border-[#003C8F] hover:shadow-xl transition-all duration-300 text-left space-y-4 cursor-pointer group flex flex-col justify-between h-full"
-                                        >
-                                            <div className="space-y-3">
-                                                <div className={`w-12 h-12 rounded-2xl ${card.bgIcon} ${card.colorIcon} flex items-center justify-center shrink-0`}>
-                                                    <IconoCard className="w-6 h-6" />
-                                                </div>
-                                                <h3 className="text-lg font-bold text-[#0B1F3A] font-sans group-hover:text-[#003C8F] transition-colors">
-                                                    {card.titulo}
-                                                </h3>
-                                                <p className="text-sm font-medium text-slate-500 leading-relaxed font-sans">
-                                                    {card.descripcion}
-                                                </p>
-                                            </div>
-
-                                            <div className="flex items-center gap-1 text-xs font-bold text-[#003C8F] pt-2 group-hover:translate-x-1 transition-transform">
-                                                <span>Ver más</span>
-                                                <ChevronRight className="w-4 h-4" />
-                                            </div>
+                        {/* TARJETA 1: Oferta Académica */}
+                        <ScrollReveal distance="translate-y-6">
+                            <div className="bg-white rounded-3xl p-7 md:p-8 border border-slate-200/80 hover:border-[#003C8F] hover:shadow-lg transition-all duration-300 space-y-5 h-full flex flex-col justify-between">
+                                <div className="space-y-4">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-12 h-12 rounded-2xl bg-blue-50 text-[#003C8F] flex items-center justify-center shrink-0">
+                                            <ClipboardList className="w-6 h-6" />
                                         </div>
-                                    </ScrollReveal>
-                                );
-                            })}
-                        </div>
-
-                        {/* Tarjeta Ancha Inferior: Calendario de Admisiones */}
-                        <ScrollReveal distance="translate-y-6" delay={450}>
-                            <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-100 hover:border-[#003C8F] hover:shadow-xl transition-all duration-300 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-                                
-                                <div className="flex items-start gap-4 text-left">
-                                    <div className="w-14 h-14 rounded-2xl bg-rose-50 text-[#800A15] border border-rose-100 flex items-center justify-center shrink-0">
-                                        <Calendar className="w-7 h-7" />
-                                    </div>
-                                    <div className="space-y-1">
                                         <h3 className="text-xl font-bold text-[#0B1F3A] font-sans">
-                                            Calendario de admisiones
+                                            Oferta Académica
                                         </h3>
-                                        <p className="text-sm font-medium text-slate-500 font-sans">
-                                            Fechas importantes para que no te pierdas ningún paso.
-                                        </p>
                                     </div>
+
+                                    <p className="text-sm font-medium text-slate-500 leading-relaxed font-sans">
+                                        Programas de calidad para cada etapa de crecimiento:
+                                    </p>
+
+                                    <ul className="space-y-2.5 pt-1 text-xs font-semibold text-slate-700 font-sans">
+                                        <li className="flex items-start gap-2">
+                                            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                                            <span><strong>Preescolar:</strong> Prejardín, Jardín y Transición.</span>
+                                        </li>
+                                        <li className="flex items-start gap-2">
+                                            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                                            <span><strong>Primaria:</strong> Grados 1° a 5° (Jornada Única).</span>
+                                        </li>
+                                        <li className="flex items-start gap-2">
+                                            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                                            <span><strong>Bachillerato:</strong> Grados 6° a 11° + Titulación SENA.</span>
+                                        </li>
+                                    </ul>
                                 </div>
 
-                                {/* Banner Destacado Rosado con Fecha */}
-                                <div className="w-full md:w-auto bg-[#FDF2F4] border border-rose-100 rounded-2xl p-4 flex items-center justify-between md:justify-start gap-6 shrink-0">
-                                    <div className="text-left">
-                                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#800A15] block font-sans">
-                                            Próxima fecha importante
-                                        </span>
-                                        <div className="flex items-baseline gap-2">
-                                            <span className="text-3xl font-extrabold text-[#800A15] font-sans">15</span>
-                                            <span className="text-xs font-bold uppercase text-[#800A15]">JUN</span>
-                                        </div>
-                                    </div>
-                                    <div className="h-10 w-[1px] bg-rose-200 hidden sm:block" />
-                                    <span className="text-xs font-medium text-slate-700 text-left max-w-[160px] font-sans">
-                                        Cierre de inscripciones primer periodo.
+                                <div className="pt-3 border-t border-slate-100">
+                                    <span className="text-xs font-bold text-[#003C8F]">
+                                        Formación bilingüe e integral
                                     </span>
                                 </div>
+                            </div>
+                        </ScrollReveal>
 
+                        {/* TARJETA 2: Costos */}
+                        <ScrollReveal distance="translate-y-6" delay={100}>
+                            <div className="bg-white rounded-3xl p-7 md:p-8 border border-slate-200/80 hover:border-[#800A15] hover:shadow-lg transition-all duration-300 space-y-5 h-full flex flex-col justify-between">
+                                <div className="space-y-4">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-12 h-12 rounded-2xl bg-rose-50 text-[#800A15] flex items-center justify-center shrink-0">
+                                            <PieChart className="w-6 h-6" />
+                                        </div>
+                                        <h3 className="text-xl font-bold text-[#0B1F3A] font-sans">
+                                            Costos y Pago
+                                        </h3>
+                                    </div>
+
+                                    <div className="p-3.5 rounded-2xl bg-rose-50/70 border border-rose-100 space-y-0.5">
+                                        <span className="text-[10px] font-bold uppercase text-[#800A15] block">Formulario de Inscripción:</span>
+                                        <span className="text-xl font-extrabold text-[#800A15] font-sans block">$70.000 COP</span>
+                                    </div>
+
+                                    <ul className="space-y-2 text-xs font-semibold text-slate-700 font-sans">
+                                        <li className="flex items-start gap-2">
+                                            <Building2 className="w-4 h-4 text-[#003C8F] shrink-0 mt-0.5" />
+                                            <span><strong>Pago:</strong> Banco Caja Social (único canal autorizado).</span>
+                                        </li>
+                                        <li className="flex items-start gap-2">
+                                            <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                                            <span>Tarifas aprobadas oficialmente.</span>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div className="pt-3 border-t border-slate-100">
+                                    <span className="text-xs font-bold text-[#800A15]">
+                                        Valor único no reembolsable
+                                    </span>
+                                </div>
+                            </div>
+                        </ScrollReveal>
+
+                        {/* TARJETA 3: Becas */}
+                        <ScrollReveal distance="translate-y-6" delay={200}>
+                            <div className="bg-white rounded-3xl p-7 md:p-8 border border-slate-200/80 hover:border-amber-500 hover:shadow-lg transition-all duration-300 space-y-5 h-full flex flex-col justify-between">
+                                <div className="space-y-4">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0">
+                                            <Award className="w-6 h-6" />
+                                        </div>
+                                        <h3 className="text-xl font-bold text-[#0B1F3A] font-sans">
+                                            Becas y Convenios
+                                        </h3>
+                                    </div>
+
+                                    <p className="text-sm font-medium text-slate-500 leading-relaxed font-sans">
+                                        Apoyamos el talento y futuro de nuestros estudiantes:
+                                    </p>
+
+                                    <ul className="space-y-2.5 pt-1 text-xs font-semibold text-slate-700 font-sans">
+                                        <li className="flex items-start gap-2">
+                                            <Award className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                                            <span><strong>Becas UPB del 90%:</strong> Para mejores bachilleres.</span>
+                                        </li>
+                                        <li className="flex items-start gap-2">
+                                            <Briefcase className="w-4 h-4 text-[#003C8F] shrink-0 mt-0.5" />
+                                            <span><strong>Doble Titulación SENA:</strong> Técnico en Contabilización.</span>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div className="pt-3 border-t border-slate-100">
+                                    <span className="text-xs font-bold text-amber-700">
+                                        Convenios universitarios vigentes
+                                    </span>
+                                </div>
+                            </div>
+                        </ScrollReveal>
+
+                        {/* TARJETA 4: Transporte */}
+                        <ScrollReveal distance="translate-y-6" delay={300}>
+                            <div className="bg-white rounded-3xl p-7 md:p-8 border border-slate-200/80 hover:border-[#003C8F] hover:shadow-lg transition-all duration-300 space-y-5 h-full flex flex-col justify-between">
+                                <div className="space-y-4">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-12 h-12 rounded-2xl bg-blue-50 text-[#003C8F] flex items-center justify-center shrink-0">
+                                            <Bus className="w-6 h-6" />
+                                        </div>
+                                        <h3 className="text-xl font-bold text-[#0B1F3A] font-sans">
+                                            Transporte Escolar
+                                        </h3>
+                                    </div>
+
+                                    <p className="text-sm font-medium text-slate-500 leading-relaxed font-sans">
+                                        Rutas seguras y acompañamiento para tu tranquilidad:
+                                    </p>
+
+                                    <ul className="space-y-2.5 pt-1 text-xs font-semibold text-slate-700 font-sans">
+                                        <li className="flex items-start gap-2">
+                                            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                                            <span>Cobertura en Floridablanca y Bucaramanga.</span>
+                                        </li>
+                                        <li className="flex items-start gap-2">
+                                            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                                            <span>Monitores de acompañamiento autorizados.</span>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div className="pt-3 border-t border-slate-100">
+                                    <span className="text-xs font-bold text-[#003C8F]">
+                                        Seguridad en cada desplazamiento
+                                    </span>
+                                </div>
+                            </div>
+                        </ScrollReveal>
+
+                        {/* TARJETA 5: Atención y Correo Oficial (Con Botón de Copiar Directo) */}
+                        <ScrollReveal distance="translate-y-6" delay={400} className="md:col-span-2 lg:col-span-2">
+                            <div className="bg-white rounded-3xl p-7 md:p-8 border border-slate-200/80 hover:border-[#800A15] hover:shadow-lg transition-all duration-300 space-y-5 h-full flex flex-col justify-between">
+                                <div className="space-y-4">
+                                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-12 h-12 rounded-2xl bg-rose-50 text-[#800A15] flex items-center justify-center shrink-0">
+                                                <Mail className="w-6 h-6" />
+                                            </div>
+                                            <div>
+                                                <span className="text-[10px] font-bold uppercase text-[#800A15] tracking-wider block">CANAL ÚNICO DE ADMISIONES</span>
+                                                <h3 className="text-xl font-bold text-[#0B1F3A] font-sans">Recepción de Documentos y Consultas</h3>
+                                            </div>
+                                        </div>
+
+                                        <button
+                                            onClick={copiarCorreo}
+                                            className="px-4 py-2 rounded-xl bg-[#800A15] hover:bg-[#9E0D1C] text-white font-bold text-xs transition-colors flex items-center gap-2 shrink-0 cursor-pointer self-start sm:self-auto"
+                                        >
+                                            {correoCopiado ? <Check className="w-4 h-4 text-emerald-300" /> : <Copy className="w-4 h-4" />}
+                                            <span>{correoCopiado ? '¡Correo Copiado!' : 'Copiar Correo'}</span>
+                                        </button>
+                                    </div>
+
+                                    <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200">
+                                        <span className="text-xs font-bold text-slate-800 font-sans break-all">{CORREO_ADMISIONES}</span>
+                                    </div>
+
+                                    <p className="text-xs font-medium text-slate-500 leading-relaxed font-sans">
+                                        Envía aquí todos tus documentos escaneados en PDF e inquietudes. Atención presencial y virtual de Lunes a Viernes (7:00 a.m. – 2:00 p.m.).
+                                    </p>
+                                </div>
+
+                                <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-slate-500">
+                                    <span>Atención Oficial COLSIH</span>
+                                    <span className="text-[#003C8F]">Floridablanca, Santander</span>
+                                </div>
                             </div>
                         </ScrollReveal>
 
                     </div>
+
+                    {/* Tarjeta Ancha Inferior: Calendario y Etapas (Sin fechas específicas) */}
+                    <ScrollReveal distance="translate-y-6" delay={500}>
+                        <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 hover:border-[#003C8F] hover:shadow-lg transition-all duration-300 space-y-6">
+                            
+                            <div className="flex items-center gap-4 text-left border-b border-slate-100 pb-4">
+                                <div className="w-12 h-12 rounded-2xl bg-rose-50 text-[#800A15] border border-rose-100 flex items-center justify-center shrink-0">
+                                    <Calendar className="w-6 h-6" />
+                                </div>
+                                <div className="space-y-0.5">
+                                    <h3 className="text-xl font-bold text-[#0B1F3A] font-sans">
+                                        Calendario de Admisiones
+                                    </h3>
+                                    <p className="text-xs font-medium text-slate-500 font-sans">
+                                        Etapas continuas para la asignación de cupos escolares 2027.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-left">
+                                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-1">
+                                    <span className="text-xs font-bold text-[#003C8F] uppercase block font-sans">1. Solicitud Web</span>
+                                    <p className="text-xs font-medium text-slate-600">Formulario inicial en la plataforma oficial.</p>
+                                </div>
+
+                                <div className="p-4 rounded-2xl bg-rose-50/60 border border-rose-100 space-y-1">
+                                    <span className="text-xs font-bold text-[#800A15] uppercase block font-sans">2. Documentos</span>
+                                    <p className="text-xs font-medium text-slate-600">Recepción de papelería en PDF al correo.</p>
+                                </div>
+
+                                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-1">
+                                    <span className="text-xs font-bold text-[#003C8F] uppercase block font-sans">3. Entrevista</span>
+                                    <p className="text-xs font-medium text-slate-600">Prueba presencial y entrevista familiar.</p>
+                                </div>
+
+                                <div className="p-4 rounded-2xl bg-emerald-50/70 border border-emerald-100 space-y-1">
+                                    <span className="text-xs font-bold text-emerald-900 uppercase block font-sans">4. Admitidos</span>
+                                    <p className="text-xs font-medium text-emerald-950">Notificación oficial y matrícula.</p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </ScrollReveal>
 
                 </div>
             </section>
@@ -674,64 +758,6 @@ export default function Admisiones() {
                     </ScrollReveal>
                 </div>
             </section>
-
-            {/* MODAL INFORMATIVO ACCESIBLE Y DIRECTO */}
-            {cardSeleccionadaObj && (
-                <div className="fixed inset-0 z-[99999] bg-slate-950/60 backdrop-blur-sm flex items-center justify-center p-4">
-                    <div className="bg-white rounded-3xl p-8 max-w-lg w-full space-y-6 shadow-2xl relative animate-in fade-in zoom-in-95 duration-200 text-left font-sans">
-                        <button 
-                            onClick={() => setCardActivaModal(null)}
-                            className="absolute top-6 right-6 p-2 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors cursor-pointer"
-                        >
-                            <X className="w-5 h-5" />
-                        </button>
-
-                        <div className="space-y-2">
-                            <span className="text-[11px] font-bold uppercase tracking-wider text-[#800A15] block">
-                                INFORMACIÓN CLARA Y DIRECTA
-                            </span>
-                            <h3 className="text-2xl font-bold text-[#0B1F3A]">
-                                {cardSeleccionadaObj.titulo}
-                            </h3>
-                            <p className="text-sm font-medium text-slate-500">
-                                {cardSeleccionadaObj.descripcion}
-                            </p>
-                        </div>
-
-                        {/* Puntos Informativos Clares */}
-                        <div className="space-y-3 p-4 rounded-2xl bg-slate-50 border border-slate-200">
-                            {cardSeleccionadaObj.detalles.map((det, dIdx) => (
-                                <div key={dIdx} className="flex items-start gap-2.5 text-xs font-bold text-slate-800 leading-relaxed font-sans">
-                                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                                    <span>{det}</span>
-                                </div>
-                            ))}
-                        </div>
-
-                        {/* Botón Copiar Correo si es la tarjeta FAQ o Contacto */}
-                        {cardSeleccionadaObj.id === 'faq' && (
-                            <div className="p-3.5 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-between gap-3">
-                                <span className="text-xs font-extrabold text-slate-900 truncate">{CORREO_ADMISIONES}</span>
-                                <button
-                                    onClick={() => copiarTexto(CORREO_ADMISIONES, false)}
-                                    className="px-3 py-1.5 rounded-lg bg-[#800A15] text-white font-bold text-xs shrink-0 cursor-pointer"
-                                >
-                                    {correoCopiado ? '¡Copiado!' : 'Copiar Correo'}
-                                </button>
-                            </div>
-                        )}
-
-                        <div>
-                            <button
-                                onClick={() => setCardActivaModal(null)}
-                                className="w-full py-3 rounded-xl bg-[#003C8F] hover:bg-[#002E6E] text-white font-bold text-sm transition-colors cursor-pointer"
-                            >
-                                Entendido / Cerrar
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
 
         </AppLayout>
     );

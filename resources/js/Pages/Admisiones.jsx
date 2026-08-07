@@ -215,49 +215,44 @@ export default function Admisiones() {
 
                         </div>
 
-                        {/* Columna Derecha: Composición de Doble Capa (Efecto Pop-Out con Forma Orgánica) */}
-                        <div className="lg:col-span-6 relative flex justify-center items-center py-6 select-none">
+                        {/* Columna Derecha: Composición Pop-Out exacta de Figma usando archivos de /figma */}
+                        <div className="lg:col-span-6 relative flex justify-center items-center py-4 select-none">
                             
-                            {/* Resplandor suave de fondo en azul y rojo institucional */}
-                            <div className="w-[340px] h-[340px] sm:w-[440px] sm:h-[440px] rounded-full bg-gradient-to-tr from-blue-100/50 via-slate-50 to-rose-100/50 blur-xl absolute -z-10 animate-pulse" />
+                            {/* Resplandor decorativo ambiental */}
+                            <div className="w-[340px] h-[340px] sm:w-[440px] sm:h-[440px] rounded-full bg-gradient-to-tr from-blue-100/30 via-slate-50 to-rose-100/30 blur-2xl absolute -z-10" />
 
-                            {/* Contenedor Principal de la Imagen */}
-                            <div className="relative w-full max-w-[460px] sm:max-w-[500px] h-[400px] sm:h-[460px] flex items-center justify-center">
+                            {/* Contenedor relativo proporcional basado en Figma (4921.66 x 4150.89) */}
+                            <div className="relative w-full max-w-[520px] aspect-[4921.66/4150.89] flex items-center justify-center">
                                 
-                                {/* CAPA 1: Fondo con la foto original recortada dentro de una forma orgánica no perfectamente circular */}
-                                <div 
-                                    className="w-[300px] h-[300px] sm:w-[380px] sm:h-[380px] overflow-hidden shadow-2xl border-4 border-white transition-all duration-700 hover:rotate-1"
+                                {/* Imagen 1: Forma de fondo orgánica de Figma (Vector 9.png) */}
+                                <img 
+                                    src="/figma/Vector%209.png" 
+                                    alt="Fondo Inscripciones COLSIH"
+                                    className="transition-transform duration-500 hover:scale-[1.01]"
                                     style={{
-                                        borderRadius: '44% 56% 62% 38% / 48% 52% 48% 52%',
-                                        backgroundColor: '#003C8F'
+                                        width: '95.60%',
+                                        height: '87.19%',
+                                        left: '3.65%',
+                                        top: '12.81%',
+                                        position: 'absolute',
+                                        objectFit: 'contain'
                                     }}
-                                >
-                                    <img 
-                                        src="https://media.colsih.edu.co/admisiones/inscripciones.JPG" 
-                                        alt="Fondo Inscripciones COLSIH"
-                                        className="w-full h-full object-cover object-center transform scale-105"
-                                    />
-                                </div>
+                                />
 
-                                {/* CAPA 2: Foto sin fondo superpuesta en la misma posición que sobresale de la forma orgánica (Efecto Pop-Out) */}
-                                <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
-                                    <img 
-                                        src="https://media.colsih.edu.co/admisiones/Inscripciones%20sin%20fondo.png" 
-                                        alt="Estudiantes COLSIH"
-                                        className="w-[300px] sm:w-[380px] h-auto object-contain transform translate-y-[-8px] sm:translate-y-[-12px] drop-shadow-[0_20px_35px_rgba(0,0,0,0.35)] transition-transform duration-500 hover:scale-105"
-                                    />
-                                </div>
-
-                                {/* Badge flotante decorativo institucional */}
-                                <div className="absolute bottom-2 right-2 sm:right-6 bg-white/95 backdrop-blur-md p-3.5 rounded-2xl shadow-2xl border border-slate-100 flex items-center gap-3 z-20 animate-bounce [animation-duration:6s]">
-                                    <div className="w-9 h-9 rounded-xl bg-[#800A15] text-amber-300 flex items-center justify-center font-bold shrink-0">
-                                        <Sparkles className="w-5 h-5" />
-                                    </div>
-                                    <div className="text-left">
-                                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block font-sans">Comunidad COLSIH</span>
-                                        <span className="text-xs font-bold text-[#0B1F3A] font-sans">¡Inscripciones 2027!</span>
-                                    </div>
-                                </div>
+                                {/* Imagen 2: Foto sin fondo superpuesta exactamente de Figma (Inscripciones sin fondo 1.png) */}
+                                <img 
+                                    src="/figma/Inscripciones%20sin%20fondo%201.png" 
+                                    alt="Estudiantes COLSIH"
+                                    className="pointer-events-none drop-shadow-[0_15px_25px_rgba(0,0,0,0.2)] transition-transform duration-500 hover:scale-[1.02]"
+                                    style={{
+                                        width: '131.91%',
+                                        height: '104.24%',
+                                        left: '-3.10%',
+                                        top: '-4.24%',
+                                        position: 'absolute',
+                                        maxWidth: 'none'
+                                    }}
+                                />
 
                             </div>
 

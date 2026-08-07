@@ -2968,15 +2968,15 @@ function DeportesAdminTab({ torneoPartidos = [], deportesBanners = [], flash }) 
     const [submittingBanner, setSubmittingBanner] = useState(false);
 
     const basePath = getAdminBasePath();
-    const casasSalesianas = [
-        'Casa Don Bosco',
-        'Casa María Auxiliadora',
-        'Casa Domingo Savio',
-        'Casa Santa Isabel',
-        'Casa Laura Vicuña',
-        'Casa Ceferino Namuncurá',
-        'Selección Docentes',
-        'Selección Estudiantes'
+    const equiposInterclases = [
+        'Grado 6°A', 'Grado 6°B',
+        'Grado 7°A', 'Grado 7°B',
+        'Grado 8°A', 'Grado 8°B',
+        'Grado 9°A', 'Grado 9°B',
+        'Grado 10°A', 'Grado 10°B',
+        'Grado 11°A', 'Grado 11°B',
+        'Docentes', 'Estudiantes',
+        'Casa Don Bosco', 'Casa María Auxiliadora'
     ];
 
     // Formulario de edición de partido
@@ -3277,16 +3277,16 @@ function DeportesAdminTab({ torneoPartidos = [], deportesBanners = [], flash }) 
                                     />
                                 </div>
 
-                                {/* Selección Rápida de Casas */}
-                                <div className="flex flex-wrap gap-1 pt-1">
-                                    {casasSalesianas.map(casa => (
+                                {/* Selección Rápida de Equipos/Grados */}
+                                <div className="flex flex-wrap gap-1 pt-1 max-h-24 overflow-y-auto">
+                                    {equiposInterclases.map(eq => (
                                         <button
                                             type="button"
-                                            key={casa}
-                                            onClick={() => setPartidoForm({ ...partidoForm, equipo_local: casa })}
+                                            key={eq}
+                                            onClick={() => setPartidoForm({ ...partidoForm, equipo_local: eq })}
                                             className="text-[10px] font-semibold bg-slate-100 hover:bg-blue-100 text-slate-600 hover:text-blue-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 px-2 py-0.5 rounded-lg border border-slate-200/60 dark:border-slate-700 transition"
                                         >
-                                            {casa}
+                                            {eq}
                                         </button>
                                     ))}
                                 </div>
@@ -3313,15 +3313,15 @@ function DeportesAdminTab({ torneoPartidos = [], deportesBanners = [], flash }) 
                                     />
                                 </div>
 
-                                <div className="flex flex-wrap gap-1 pt-1">
-                                    {casasSalesianas.map(casa => (
+                                <div className="flex flex-wrap gap-1 pt-1 max-h-24 overflow-y-auto">
+                                    {equiposInterclases.map(eq => (
                                         <button
                                             type="button"
-                                            key={casa}
-                                            onClick={() => setPartidoForm({ ...partidoForm, equipo_visitante: casa })}
+                                            key={eq}
+                                            onClick={() => setPartidoForm({ ...partidoForm, equipo_visitante: eq })}
                                             className="text-[10px] font-semibold bg-slate-100 hover:bg-blue-100 text-slate-600 hover:text-blue-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 px-2 py-0.5 rounded-lg border border-slate-200/60 dark:border-slate-700 transition"
                                         >
-                                            {casa}
+                                            {eq}
                                         </button>
                                     ))}
                                 </div>

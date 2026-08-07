@@ -25,11 +25,11 @@ class DeportesAdminController extends Controller
     {
         if (TorneoPartido::count() === 0) {
             $defaultMatches = [
-                // Cuartos de Final (4 Partidos)
-                ['fase' => 'cuartos', 'posicion_llave' => 1, 'equipo_local' => 'Casa Don Bosco', 'equipo_visitante' => 'Casa Domingo Savio', 'fecha_partido' => 'Cuartos 1'],
-                ['fase' => 'cuartos', 'posicion_llave' => 2, 'equipo_local' => 'Casa María Auxiliadora', 'equipo_visitante' => 'Casa Santa Isabel', 'fecha_partido' => 'Cuartos 2'],
-                ['fase' => 'cuartos', 'posicion_llave' => 3, 'equipo_local' => 'Casa Laura Vicuña', 'equipo_visitante' => 'Casa Ceferino Namuncurá', 'fecha_partido' => 'Cuartos 3'],
-                ['fase' => 'cuartos', 'posicion_llave' => 4, 'equipo_local' => 'Selección Docentes', 'equipo_visitante' => 'Selección Estudiantes', 'fecha_partido' => 'Cuartos 4'],
+                // Cuartos de Final (4 Partidos Inter-clases)
+                ['fase' => 'cuartos', 'posicion_llave' => 1, 'equipo_local' => 'Grado 6°A', 'equipo_visitante' => 'Grado 7°B', 'fecha_partido' => 'Cuartos 1'],
+                ['fase' => 'cuartos', 'posicion_llave' => 2, 'equipo_local' => 'Grado 8°A', 'equipo_visitante' => 'Grado 9°B', 'fecha_partido' => 'Cuartos 2'],
+                ['fase' => 'cuartos', 'posicion_llave' => 3, 'equipo_local' => 'Grado 10°A', 'equipo_visitante' => 'Grado 11°A', 'fecha_partido' => 'Cuartos 3'],
+                ['fase' => 'cuartos', 'posicion_llave' => 4, 'equipo_local' => 'Docentes', 'equipo_visitante' => 'Estudiantes', 'fecha_partido' => 'Cuartos 4'],
                 
                 // Semifinales (2 Partidos)
                 ['fase' => 'semifinal', 'posicion_llave' => 1, 'equipo_local' => 'Ganador Cuartos 1', 'equipo_visitante' => 'Ganador Cuartos 2', 'fecha_partido' => 'Semifinal 1'],

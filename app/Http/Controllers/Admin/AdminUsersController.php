@@ -57,7 +57,7 @@ class AdminUsersController extends Controller
             'password' => 'required|string|min:8',
             'email'    => 'nullable|email|max:150',
             'contacto' => 'nullable|string|max:50',
-            'foto'     => 'nullable|file|mimes:jpg,jpeg,png,webp,gif,heic,heif|max:10240',
+            'foto'     => 'nullable|image|mimes:jpg,jpeg,png|max:5120',
             'rol'      => 'required|in:admin,deportes,marketing',
             'activo'   => 'boolean',
         ]);
@@ -95,7 +95,7 @@ class AdminUsersController extends Controller
             'password' => 'nullable|string|min:8',
             'email'    => 'nullable|email|max:150',
             'contacto' => 'nullable|string|max:50',
-            'foto'     => 'nullable|file|mimes:jpg,jpeg,png,webp,gif,heic,heif|max:10240',
+            'foto'     => 'nullable|image|mimes:jpg,jpeg,png|max:5120',
             'rol'      => 'required|in:admin,deportes,marketing',
             'activo'   => 'boolean',
         ]);
@@ -147,55 +147,4 @@ class AdminUsersController extends Controller
         return back()->with('flash', $msg);
     }
 
-    /**
-     * Convierte HEIC/HEIF a JPEG usando Python + pillow-heif.
-     * Los archivos temporales se eliminan siempre al finalizar la petición.
-     */
-    public function convertirHeic(Request $request)
-    {
-        $request->validate([
-            'imagen' => 'required|file|max:51200',
-        ]);
-
-        $file   = $request->file('imagen');
-        $tmpOut = sys_get_temp_dir() . DIRECTORY_SEPARATOR . uniqid('heic2jpg_') . '.jpg';
-
-        // Garantizar limpieza aunque ocurra una excepción
-        register_shutdown_function(function () use ($tmpOut) {
-            if (file_exists($tmpOut)) @unlink($tmpOut);
-        });
-
-        $script = base_path('scripts/heic_to_jpg.py');
-        if (! file_exists($script)) {
-            return response()->json(['error' => 'Script de conversión no encontrado en el servidor.'], 500);
-        }
-
-        $python = config('admin.python_path', 'python3');
-        $cmd = sprintf(
-            '%s %s %s %s 2>&1',
-            escapeshellcmd($python),
-            escapeshellarg($script),
-            escapeshellarg($file->getPathname()),
-            escapeshellarg($tmpOut)
-        );
-
-        exec($cmd, $output, $exitCode);
-
-        if ($exitCode !== 0 || ! file_exists($tmpOut) || filesize($tmpOut) === 0) {
-            $detalle = implode(' | ', array_filter($output));
-            return response()->json([
-                'error'   => 'No se pudo convertir el archivo HEIC.',
-                'detalle' => $detalle,
-            ], 422);
-        }
-
-        // Leer en memoria y borrar el temporal antes de responder
-        $contenido = file_get_contents($tmpOut);
-        @unlink($tmpOut);
-
-        return response($contenido, 200)
-            ->header('Content-Type', 'image/jpeg')
-            ->header('Content-Length', \strlen($contenido))
-            ->header('Cache-Control', 'no-store');
-    }
 }

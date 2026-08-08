@@ -149,9 +149,6 @@ Route::prefix($adminPath)->name('admin.')->group(function () {
         Route::match(['post', 'put'], '/deportes-admin/banners/{banner}', [App\Http\Controllers\Admin\DeportesAdminController::class, 'updateBanner'])->name('deportes-admin.banners.update');
         Route::delete('/deportes-admin/banners/{banner}',     [App\Http\Controllers\Admin\DeportesAdminController::class, 'destroyBanner'])->name('deportes-admin.banners.destroy');
 
-        // Conversión HEIC → JPEG (Python) — disponible para cualquier admin autenticado
-        Route::post('/convert-heic', [App\Http\Controllers\Admin\AdminUsersController::class, 'convertirHeic'])->name('convert-heic');
-
         // Gestión de Usuarios del Panel (solo superadmin .env)
         Route::prefix('usuarios')->name('usuarios.')->group(function () {
             Route::get('/',                          [App\Http\Controllers\Admin\AdminUsersController::class, 'index'])->name('index');

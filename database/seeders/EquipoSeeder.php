@@ -20,7 +20,7 @@ class EquipoSeeder extends Seeder
             ['nombre' => 'Jaime Manuel Ardila Parra', 'cargo' => 'Coordinador Académico', 'area' => 'Equipo Directivo', 'tipo' => 'directivo', 'foto' => $r2DocentesBase . rawurlencode('Jaime Manuel Ardila Parra.JPG'), 'foto_posicion' => 20, 'foto_posicion_x' => 50, 'foto_posicion_y' => 20, 'foto_zoom' => 100, 'orden' => 2],
             ['nombre' => 'Margarita María Valle Manrique', 'cargo' => 'Coordinadora de Convivencia', 'area' => 'Equipo Directivo', 'tipo' => 'directivo', 'foto' => $r2DocentesBase . rawurlencode('Margarita María Valle Manrique.JPG'), 'foto_posicion' => 20, 'foto_posicion_x' => 50, 'foto_posicion_y' => 20, 'foto_zoom' => 100, 'orden' => 3],
             ['nombre' => 'Erika Tatiana Delgadillo Avella', 'cargo' => 'Coordinadora de Pastoral', 'area' => 'Equipo Directivo', 'tipo' => 'directivo', 'foto' => $r2DocentesBase . rawurlencode('Erika Tatiana Delgadillo Avella.JPG'), 'foto_posicion' => 20, 'foto_posicion_x' => 50, 'foto_posicion_y' => 20, 'foto_zoom' => 100, 'orden' => 4],
-            ['nombre' => 'Mayra Alexandra Parada Ruiz', 'cargo' => 'Psicoorientación / Apoyo Administrativo', 'area' => 'Equipo Directivo', 'tipo' => 'directivo', 'foto' => $r2AdminsBase . rawurlencode('Mayra Alexandra Parada Ruiz.JPG'), 'foto_posicion' => 20, 'foto_posicion_x' => 50, 'foto_posicion_y' => 20, 'foto_zoom' => 100, 'orden' => 5],
+            ['nombre' => 'Mayra Alexandra Parada Ruiz', 'cargo' => 'Psicoorientadora', 'area' => 'Equipo Directivo', 'tipo' => 'directivo', 'foto' => $r2AdminsBase . rawurlencode('Mayra Alexandra Parada Ruiz.JPG'), 'foto_posicion' => 20, 'foto_posicion_x' => 50, 'foto_posicion_y' => 20, 'foto_zoom' => 100, 'orden' => 5],
         ];
 
         $docentes = [

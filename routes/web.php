@@ -91,7 +91,7 @@ Route::prefix($adminPath)->name('admin.')->group(function () {
         Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
 
         // Recorrido Virtual 360° — admin
-        Route::middleware('admin.rol:admin')->group(function () use ($adminPath) {
+        Route::middleware('admin.rol:admin')->group(function () {
             Route::get('/recorrido',                      [TourAdminController::class, 'index'])->name('recorrido');
             Route::post('/recorrido/toggle-construccion', [TourAdminController::class, 'toggleConstruccion'])->name('recorrido.toggle-construccion');
             Route::post('/recorrido/scenes',             [TourAdminController::class, 'storeScene'])->name('recorrido.scenes.store');

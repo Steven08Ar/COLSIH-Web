@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\AdminUser;
+use App\Services\ImageOptimizer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class AdminUsersController extends Controller
@@ -16,6 +16,13 @@ class AdminUsersController extends Controller
         if ($request->session()->get('colsih_admin_tipo') !== 'superenv') {
             abort(403, 'Solo el superadministrador puede gestionar usuarios.');
         }
+    }
+
+    private function fotoUrl(?string $foto): ?string
+    {
+        if (!$foto) return null;
+        // ImageOptimizer devuelve URL completa para R2 o ruta relativa para local
+        return str_starts_with($foto, 'http') ? $foto : \Illuminate\Support\Facades\Storage::url($foto);
     }
 
     public function index(Request $request)
@@ -28,7 +35,7 @@ class AdminUsersController extends Controller
             'usuario'    => $u->usuario,
             'email'      => $u->email,
             'contacto'   => $u->contacto,
-            'foto'       => $u->foto ? Storage::url($u->foto) : null,
+            'foto'       => $this->fotoUrl($u->foto),
             'rol'        => $u->rol,
             'activo'     => $u->activo,
             'created_at' => $u->created_at?->format('d/m/Y'),
@@ -55,9 +62,13 @@ class AdminUsersController extends Controller
             'activo'   => 'boolean',
         ]);
 
-        $fotoPath = null;
+        $foto = null;
         if ($request->hasFile('foto')) {
-            $fotoPath = $request->file('foto')->store('admin-fotos', 'public');
+            $foto = ImageOptimizer::guardar(
+                $request->file('foto'),
+                'usuarios_panel/' . $data['rol'],
+                800
+            );
         }
 
         AdminUser::create([
@@ -66,7 +77,7 @@ class AdminUsersController extends Controller
             'clave'    => Hash::make($data['password']),
             'email'    => $data['email'] ?? null,
             'contacto' => $data['contacto'] ?? null,
-            'foto'     => $fotoPath,
+            'foto'     => $foto,
             'rol'      => $data['rol'],
             'activo'   => $data['activo'] ?? true,
         ]);
@@ -103,10 +114,12 @@ class AdminUsersController extends Controller
         }
 
         if ($request->hasFile('foto')) {
-            if ($adminUser->foto) {
-                Storage::disk('public')->delete($adminUser->foto);
-            }
-            $updates['foto'] = $request->file('foto')->store('admin-fotos', 'public');
+            ImageOptimizer::eliminar($adminUser->foto);
+            $updates['foto'] = ImageOptimizer::guardar(
+                $request->file('foto'),
+                'usuarios_panel/' . $data['rol'],
+                800
+            );
         }
 
         $adminUser->update($updates);
@@ -118,9 +131,7 @@ class AdminUsersController extends Controller
     {
         $this->requireSuperenv($request);
 
-        if ($adminUser->foto) {
-            Storage::disk('public')->delete($adminUser->foto);
-        }
+        ImageOptimizer::eliminar($adminUser->foto);
         $adminUser->delete();
 
         return back()->with('flash', 'Usuario eliminado.');

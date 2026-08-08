@@ -63,11 +63,17 @@ class HandleInertiaRequests extends Middleware
                 if ($userId) {
                     $user = AdminUser::find($userId);
                     if ($user) {
+                        $fotoUrl = null;
+                        if ($user->foto) {
+                            $fotoUrl = str_starts_with($user->foto, 'http')
+                                ? $user->foto
+                                : Storage::url($user->foto);
+                        }
                         return [
                             'tipo'    => 'usuario',
                             'nombre'  => $user->nombre,
                             'usuario' => $user->usuario,
-                            'foto'    => $user->foto ? Storage::url($user->foto) : null,
+                            'foto'    => $fotoUrl,
                             'id'      => $user->id,
                         ];
                     }

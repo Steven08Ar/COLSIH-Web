@@ -189,9 +189,13 @@ class AdminUsersController extends Controller
             ], 422);
         }
 
-        // deleteFileAfterSend + shutdown_function = doble garantía de limpieza
-        return response()->download($tmpOut, 'convertida.jpg', [
-            'Content-Type' => 'image/jpeg',
-        ])->deleteFileAfterSend(true);
+        // Leer en memoria y borrar el temporal antes de responder
+        $contenido = file_get_contents($tmpOut);
+        @unlink($tmpOut);
+
+        return response($contenido, 200)
+            ->header('Content-Type', 'image/jpeg')
+            ->header('Content-Length', \strlen($contenido))
+            ->header('Cache-Control', 'no-store');
     }
 }

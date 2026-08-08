@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useRef } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import Cropper from 'react-easy-crop';
 import { X, ZoomIn, ZoomOut, Check, RotateCcw } from 'lucide-react';
@@ -50,14 +50,14 @@ export default function ImageCropper({ file, aspectRatio = 1, onConfirm, onCance
     const [zoom, setZoom] = useState(1);
     const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
     const [procesando, setProcesando] = useState(false);
-    const objectUrlRef = useRef(null);
 
     useEffect(() => {
         if (!file) return;
-        const url = URL.createObjectURL(file);
-        objectUrlRef.current = url;
-        setImageSrc(url);
-        return () => URL.revokeObjectURL(url);
+        let cancelado = false;
+        const reader = new FileReader();
+        reader.onload = (e) => { if (!cancelado) setImageSrc(e.target.result); };
+        reader.readAsDataURL(file);
+        return () => { cancelado = true; };
     }, [file]);
 
     const onCropComplete = useCallback((_, pixels) => setCroppedAreaPixels(pixels), []);

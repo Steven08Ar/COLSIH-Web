@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import Cropper from 'react-easy-crop';
 import { X, ZoomIn, ZoomOut, Check, RotateCcw, AlertCircle } from 'lucide-react';
 
@@ -151,8 +152,7 @@ export default function ImageCropper({ file, aspectRatio = 1, onConfirm, onCance
         setZoom(1);
     };
 
-    return (
-        // z-[99999] para estar por encima de cualquier modal (modales usan z-[9999])
+    const contenido = (
         <div className="fixed inset-0 z-[99999] flex items-stretch sm:items-center justify-center bg-black/90 backdrop-blur-sm">
             <div
                 className="relative w-full sm:w-[480px] sm:max-w-[95vw] bg-[#111] sm:rounded-2xl overflow-hidden flex flex-col shadow-2xl"
@@ -268,4 +268,7 @@ export default function ImageCropper({ file, aspectRatio = 1, onConfirm, onCance
             </div>
         </div>
     );
+
+    if (typeof document === 'undefined') return null;
+    return createPortal(contenido, document.body);
 }

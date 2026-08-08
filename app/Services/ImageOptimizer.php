@@ -6,6 +6,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Intervention\Image\Drivers\Gd\Driver;
+use Intervention\Image\Drivers\Imagick\Driver as ImagickDriver;
 use Intervention\Image\ImageManager;
 
 class ImageOptimizer
@@ -35,8 +36,10 @@ class ImageOptimizer
         $nombre     = $nombreBase . '.' . $ext;
         $ruta       = $carpeta . '/' . $nombre;
 
-        $manager = new ImageManager(new Driver());
-        $imagen  = $manager->read($file->getPathname());
+        $manager = \extension_loaded('imagick')
+            ? new ImageManager(new ImagickDriver())
+            : new ImageManager(new Driver());
+        $imagen = $manager->read($file->getPathname());
         $imagen->orient();
 
         if ($imagen->width() > $ladoMaximo || $imagen->height() > $ladoMaximo) {

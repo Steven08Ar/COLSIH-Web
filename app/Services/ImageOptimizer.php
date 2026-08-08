@@ -36,28 +36,36 @@ class ImageOptimizer
         $nombre     = $nombreBase . '.' . $ext;
         $ruta       = $carpeta . '/' . $nombre;
 
-        $manager = \extension_loaded('imagick')
-            ? new ImageManager(new ImagickDriver())
-            : new ImageManager(new Driver());
-        $imagen = $manager->read($file->getPathname());
-        $imagen->orient();
+        // Intentar optimizar con Intervention Image; si el entorno no tiene GD/Imagick
+        // configurados correctamente (p. ej. en dev local Windows) se sube el original.
+        try {
+            $manager = \extension_loaded('imagick')
+                ? new ImageManager(new ImagickDriver())
+                : new ImageManager(new Driver());
+            $imagen = $manager->read($file->getPathname());
+            $imagen->orient();
 
-        if ($imagen->width() > $ladoMaximo || $imagen->height() > $ladoMaximo) {
-            $imagen->scaleDown($ladoMaximo, $ladoMaximo);
-        }
+            if ($imagen->width() > $ladoMaximo || $imagen->height() > $ladoMaximo) {
+                $imagen->scaleDown($ladoMaximo, $ladoMaximo);
+            }
 
-        if ($ext === 'png') {
-            $contenido = (string) $imagen->toPng();
-            $mime      = 'image/png';
-        } elseif ($ext === 'gif') {
-            $contenido = (string) $imagen->toGif();
-            $mime      = 'image/gif';
-        } elseif ($ext === 'webp') {
-            $contenido = (string) $imagen->toWebp(self::CALIDAD_JPG);
-            $mime      = 'image/webp';
-        } else {
-            $contenido = (string) $imagen->toJpeg(self::CALIDAD_JPG);
-            $mime      = 'image/jpeg';
+            if ($ext === 'png') {
+                $contenido = (string) $imagen->toPng();
+                $mime      = 'image/png';
+            } elseif ($ext === 'gif') {
+                $contenido = (string) $imagen->toGif();
+                $mime      = 'image/gif';
+            } elseif ($ext === 'webp') {
+                $contenido = (string) $imagen->toWebp(self::CALIDAD_JPG);
+                $mime      = 'image/webp';
+            } else {
+                $contenido = (string) $imagen->toJpeg(self::CALIDAD_JPG);
+                $mime      = 'image/jpeg';
+            }
+        } catch (\Throwable) {
+            // Sin driver de imagen disponible: subir el archivo tal como llegó
+            $contenido = file_get_contents($file->getPathname());
+            $mime      = $file->getMimeType() ?: 'image/jpeg';
         }
 
         // Subir a Cloudflare R2 si está configurado

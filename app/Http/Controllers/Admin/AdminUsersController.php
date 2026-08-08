@@ -57,7 +57,7 @@ class AdminUsersController extends Controller
             'password' => 'required|string|min:8',
             'email'    => 'nullable|email|max:150',
             'contacto' => 'nullable|string|max:50',
-            'foto'     => 'nullable|image|max:5120',
+            'foto'     => 'nullable|file|mimes:jpg,jpeg,png,webp,gif,heic,heif|max:10240',
             'rol'      => 'required|in:admin,deportes,marketing',
             'activo'   => 'boolean',
         ]);
@@ -95,7 +95,7 @@ class AdminUsersController extends Controller
             'password' => 'nullable|string|min:8',
             'email'    => 'nullable|email|max:150',
             'contacto' => 'nullable|string|max:50',
-            'foto'     => 'nullable|image|max:5120',
+            'foto'     => 'nullable|file|mimes:jpg,jpeg,png,webp,gif,heic,heif|max:10240',
             'rol'      => 'required|in:admin,deportes,marketing',
             'activo'   => 'boolean',
         ]);

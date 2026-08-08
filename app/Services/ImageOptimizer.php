@@ -6,6 +6,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Intervention\Image\Drivers\Gd\Driver;
+use Intervention\Image\Drivers\Imagick\Driver as ImagickDriver;
 use Intervention\Image\ImageManager;
 
 class ImageOptimizer
@@ -35,9 +36,23 @@ class ImageOptimizer
         $nombre     = $nombreBase . '.' . $ext;
         $ruta       = $carpeta . '/' . $nombre;
 
-        $manager = new ImageManager(new Driver());
-        $imagen  = $manager->read($file->getPathname());
+        $esHeic = \in_array($ext, ['heic', 'heif']) ||
+            \in_array($file->getMimeType(), ['image/heic', 'image/heif']);
+
+        if ($esHeic && \extension_loaded('imagick')) {
+            $manager = new ImageManager(new ImagickDriver());
+        } else {
+            $manager = new ImageManager(new Driver());
+        }
+
+        $imagen = $manager->read($file->getPathname());
         $imagen->orient();
+        // HEIC siempre se convierte a JPG
+        if ($esHeic) {
+            $ext = 'jpg';
+            $nombre = $nombreBase . '.jpg';
+            $ruta   = $carpeta . '/' . $nombre;
+        }
 
         if ($imagen->width() > $ladoMaximo || $imagen->height() > $ladoMaximo) {
             $imagen->scaleDown($ladoMaximo, $ladoMaximo);

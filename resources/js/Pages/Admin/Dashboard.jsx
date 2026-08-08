@@ -5,6 +5,7 @@ import PageBuilder from './PageBuilder/PageBuilder';
 import CarnetsAdminTab from './CarnetsAdminTab';
 import AdminSidebar from '@/Components/AdminSidebar';
 import DashboardOverview from '@/Components/DashboardOverview';
+import ImageCropper from '@/Components/ImageCropper';
 import { Sun, Moon, Eye, Move, ZoomIn, Camera, User, X, Check, Upload, ArrowUp, ArrowDown, ArrowLeft, ArrowRight, Plus, Minus, Trash2, Terminal, Server, RefreshCw, Database, HardDrive, ShieldAlert, Cpu, Copy, Play, CreditCard, GitBranch, Trophy, Flame, Sparkles, Shield, Star, Bell, Search, PanelLeft, UserCheck, UserX, Mail, Phone, AtSign, Lock, Image } from 'lucide-react';
 import { processImageFile } from '@/utils/heicConverter';
 import { mediaUrl } from '@/utils/mediaUrl';
@@ -3725,6 +3726,7 @@ function UsuariosAdminTab({ adminUsuarios = [], flash }) {
     const [editando, setEditando] = useState(null);
     const [confirmEliminar, setConfirmEliminar] = useState(null);
     const [fotoPreview, setFotoPreview] = useState(null);
+    const [cropFile, setCropFile] = useState(null);
     const [form, setForm] = useState({ nombre: '', usuario: '', password: '', email: '', contacto: '', foto: null, rol: 'admin', activo: true });
 
     const resetForm = () => {
@@ -3746,8 +3748,14 @@ function UsuariosAdminTab({ adminUsuarios = [], flash }) {
     const handleFoto = (e) => {
         const file = e.target.files[0];
         if (!file) return;
-        setForm(f => ({ ...f, foto: file }));
-        setFotoPreview(URL.createObjectURL(file));
+        e.target.value = '';
+        setCropFile(file);
+    };
+
+    const handleCropConfirm = (croppedFile) => {
+        setCropFile(null);
+        setForm(f => ({ ...f, foto: croppedFile }));
+        setFotoPreview(URL.createObjectURL(croppedFile));
     };
 
     const guardar = () => {
@@ -3895,7 +3903,7 @@ function UsuariosAdminTab({ adminUsuarios = [], flash }) {
                                 <label className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-bold cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-700 transition">
                                     <Upload className="w-3.5 h-3.5" />
                                     {fotoPreview ? 'Cambiar foto' : 'Subir foto'}
-                                    <input type="file" accept="image/*" className="hidden" onChange={handleFoto} />
+                                    <input type="file" accept="image/*,.heic,.heif,image/heic,image/heif" className="hidden" onChange={handleFoto} />
                                 </label>
                                 <p className="text-[10px] text-slate-400 mt-1">JPG, PNG, WebP · máx 5 MB · opcional</p>
                             </div>
@@ -4010,6 +4018,17 @@ function UsuariosAdminTab({ adminUsuarios = [], flash }) {
                         </div>
                     </div>
                 </Modal>
+            )}
+
+            {/* Cropper de foto de perfil */}
+            {cropFile && (
+                <ImageCropper
+                    file={cropFile}
+                    aspectRatio={1}
+                    titulo="Ajustar foto de perfil"
+                    onConfirm={handleCropConfirm}
+                    onCancel={() => setCropFile(null)}
+                />
             )}
 
             {/* Modal confirmar eliminación */}

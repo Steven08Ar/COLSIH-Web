@@ -146,4 +146,48 @@ class AdminUsersController extends Controller
 
         return back()->with('flash', $msg);
     }
+
+    /**
+     * Convierte un archivo HEIC/HEIF a JPEG usando Python + pillow-heif.
+     * Disponible para cualquier usuario autenticado del panel.
+     */
+    public function convertirHeic(Request $request)
+    {
+        $request->validate([
+            'imagen' => 'required|file|max:51200',
+        ]);
+
+        $file   = $request->file('imagen');
+        $tmpOut = sys_get_temp_dir() . DIRECTORY_SEPARATOR . uniqid('heic2jpg_') . '.jpg';
+        $script = base_path('scripts/heic_to_jpg.py');
+
+        if (! file_exists($script)) {
+            return response()->json(['error' => 'Script de conversión no encontrado en el servidor.'], 500);
+        }
+
+        $python = config('admin.python_path', 'python3');
+
+        $cmd = sprintf(
+            '%s %s %s %s 2>&1',
+            escapeshellcmd($python),
+            escapeshellarg($script),
+            escapeshellarg($file->getPathname()),
+            escapeshellarg($tmpOut)
+        );
+
+        exec($cmd, $output, $exitCode);
+
+        if ($exitCode !== 0 || ! file_exists($tmpOut) || filesize($tmpOut) === 0) {
+            @unlink($tmpOut);
+            $detalle = implode(' | ', array_filter($output));
+            return response()->json([
+                'error'   => 'No se pudo convertir el archivo HEIC.',
+                'detalle' => $detalle,
+            ], 422);
+        }
+
+        return response()->download($tmpOut, 'convertida.jpg', [
+            'Content-Type' => 'image/jpeg',
+        ])->deleteFileAfterSend(true);
+    }
 }

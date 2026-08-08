@@ -3727,6 +3727,7 @@ function UsuariosAdminTab({ adminUsuarios = [], flash }) {
     const [confirmEliminar, setConfirmEliminar] = useState(null);
     const [fotoPreview, setFotoPreview] = useState(null);
     const [cropFile, setCropFile] = useState(null);
+    const [convirtiendo, setConvirtiendo] = useState(false);
     const [form, setForm] = useState({ nombre: '', usuario: '', password: '', email: '', contacto: '', foto: null, rol: 'admin', activo: true });
 
     const resetForm = () => {
@@ -3745,11 +3746,47 @@ function UsuariosAdminTab({ adminUsuarios = [], flash }) {
 
     const cerrar = () => { setModal(null); setEditando(null); resetForm(); };
 
-    const handleFoto = (e) => {
+    const handleFoto = async (e) => {
         const file = e.target.files[0];
         if (!file) return;
         e.target.value = '';
-        setCropFile(file);
+
+        const nombre = file.name.toLowerCase();
+        const esHeic = nombre.endsWith('.heic') || nombre.endsWith('.heif') ||
+            file.type === 'image/heic' || file.type === 'image/heif';
+
+        if (!esHeic) {
+            setCropFile(file);
+            return;
+        }
+
+        // Conversión HEIC → JPEG vía Python en el servidor
+        setConvirtiendo(true);
+        try {
+            const fd = new FormData();
+            fd.append('imagen', file);
+            const csrf = document.querySelector('meta[name="csrf-token"]')?.content ?? '';
+            const res = await fetch(`${basePath}/convert-heic`, {
+                method: 'POST',
+                headers: { 'X-CSRF-TOKEN': csrf },
+                body: fd,
+            });
+            if (!res.ok) {
+                const json = await res.json().catch(() => ({}));
+                throw new Error(json.error ?? 'Error de conversión');
+            }
+            const blob = await res.blob();
+            const convertido = new File(
+                [blob],
+                file.name.replace(/\.(heic|heif)$/i, '.jpg'),
+                { type: 'image/jpeg' }
+            );
+            setCropFile(convertido);
+        } catch (err) {
+            alert(`No se pudo convertir el archivo HEIC: ${err.message}\n\nIntenta exportarlo como JPG desde la galería del celular.`);
+        } finally {
+            setConvirtiendo(false);
+        }
     };
 
     const handleCropConfirm = (croppedFile) => {
@@ -3900,12 +3937,19 @@ function UsuariosAdminTab({ adminUsuarios = [], flash }) {
                                 )}
                             </div>
                             <div>
-                                <label className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-bold cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-700 transition">
-                                    <Upload className="w-3.5 h-3.5" />
-                                    {fotoPreview ? 'Cambiar foto' : 'Subir foto'}
-                                    <input type="file" accept="image/*,.heic,.heif,image/heic,image/heif" className="hidden" onChange={handleFoto} />
-                                </label>
-                                <p className="text-[10px] text-slate-400 mt-1">JPG, PNG, WebP · máx 5 MB · opcional</p>
+                                {convirtiendo ? (
+                                    <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 text-amber-700 dark:text-amber-400 text-xs font-bold">
+                                        <div className="w-3 h-3 border-2 border-amber-400 border-t-amber-700 rounded-full animate-spin shrink-0" />
+                                        Convirtiendo imagen…
+                                    </div>
+                                ) : (
+                                    <label className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-bold cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-700 transition">
+                                        <Upload className="w-3.5 h-3.5" />
+                                        {fotoPreview ? 'Cambiar foto' : 'Subir foto'}
+                                        <input type="file" accept="image/*,.heic,.heif,image/heic,image/heif" className="hidden" onChange={handleFoto} disabled={convirtiendo} />
+                                    </label>
+                                )}
+                                <p className="text-[10px] text-slate-400 mt-1">JPG, PNG, WebP, HEIC · máx 10 MB · opcional</p>
                             </div>
                         </div>
 

@@ -149,6 +149,15 @@ Route::prefix($adminPath)->name('admin.')->group(function () {
         Route::match(['post', 'put'], '/deportes-admin/banners/{banner}', [App\Http\Controllers\Admin\DeportesAdminController::class, 'updateBanner'])->name('deportes-admin.banners.update');
         Route::delete('/deportes-admin/banners/{banner}',     [App\Http\Controllers\Admin\DeportesAdminController::class, 'destroyBanner'])->name('deportes-admin.banners.destroy');
 
+        // Gestión de Usuarios del Panel (solo superadmin .env)
+        Route::prefix('usuarios')->name('usuarios.')->group(function () {
+            Route::get('/',                          [App\Http\Controllers\Admin\AdminUsersController::class, 'index'])->name('index');
+            Route::post('/',                         [App\Http\Controllers\Admin\AdminUsersController::class, 'store'])->name('store');
+            Route::match(['post', 'put'], '/{adminUser}', [App\Http\Controllers\Admin\AdminUsersController::class, 'update'])->name('update');
+            Route::delete('/{adminUser}',            [App\Http\Controllers\Admin\AdminUsersController::class, 'destroy'])->name('destroy');
+            Route::post('/{adminUser}/toggle',       [App\Http\Controllers\Admin\AdminUsersController::class, 'toggleActivo'])->name('toggle');
+        });
+
         // Redirect raíz → testimonios
         Route::get('/', fn() => redirect()->route('admin.testimonios'))->name('dashboard');
     });

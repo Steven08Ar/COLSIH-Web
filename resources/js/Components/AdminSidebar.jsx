@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import { Link, router } from '@inertiajs/react';
+import { Link, router, usePage } from '@inertiajs/react';
 import { 
     LayoutDashboard, 
     Users, 
@@ -31,8 +31,8 @@ export default function AdminSidebar({
     isCollapsed,
     setIsCollapsed,
     adminCounts = {},
-    user = { name: 'Administrador', role: 'Gestor del Portal' }
 }) {
+    const adminSesion = usePage().props.adminSesion;
     // Estado para controlar qué acordeones/grupos están expandidos en modo desplegado
     const [openGroups, setOpenGroups] = useState({
         contenido: true,
@@ -155,7 +155,14 @@ export default function AdminSidebar({
                     icon: Terminal,
                     href: `${basePath}/mantenimiento`,
                     count: 'PHP'
-                }
+                },
+                ...(adminSesion?.tipo === 'superenv' ? [{
+                    key: 'usuarios',
+                    label: 'Gestión de Usuarios',
+                    icon: Settings,
+                    href: `${basePath}/usuarios`,
+                    count: null
+                }] : [])
             ]
         }
     ];
@@ -188,9 +195,13 @@ export default function AdminSidebar({
                         <div className="flex items-center gap-3.5">
                             <div className="relative shrink-0">
                                 <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#800A15] to-[#003C8F] p-0.5 shadow-md">
-                                    <div className="w-full h-full rounded-full bg-slate-100 dark:bg-slate-900 flex items-center justify-center font-black text-sm text-[#800A15] dark:text-blue-400">
-                                        {user.name.charAt(0)}
-                                    </div>
+                                    {adminSesion?.foto ? (
+                                        <img src={adminSesion.foto} alt={adminSesion.nombre} className="w-full h-full rounded-full object-cover" />
+                                    ) : (
+                                        <div className="w-full h-full rounded-full bg-slate-100 dark:bg-slate-900 flex items-center justify-center font-black text-sm text-[#800A15] dark:text-blue-400">
+                                            {(adminSesion?.nombre ?? 'A').charAt(0).toUpperCase()}
+                                        </div>
+                                    )}
                                 </div>
                                 <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-white dark:ring-slate-900"></span>
                             </div>
@@ -198,10 +209,10 @@ export default function AdminSidebar({
                             {!isCollapsed && (
                                 <div className="flex flex-col min-w-0">
                                     <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider truncate">
-                                        {user.role}
+                                        {adminSesion?.tipo === 'superenv' ? 'Super Admin' : 'Administrador'}
                                     </span>
                                     <span className="text-sm font-extrabold text-slate-900 dark:text-white truncate">
-                                        {user.name}
+                                        {adminSesion?.nombre ?? 'Admin'}
                                     </span>
                                 </div>
                             )}

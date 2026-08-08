@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\AdminUser;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
 use Inertia\Inertia;
 
@@ -48,13 +50,27 @@ class AuthController extends Controller
             'password' => 'required|string',
         ]);
 
-        $validUser  = hash_equals(config('admin.usuario'), $request->usuario);
-        $validPass  = hash_equals(config('admin.clave'),   $request->password);
+        $validUser = hash_equals(config('admin.usuario'), (string) $request->usuario);
+        $validPass = hash_equals(config('admin.clave'),   (string) $request->password);
 
         if ($validUser && $validPass) {
             RateLimiter::clear($key);
             $request->session()->regenerate();
             $request->session()->put('colsih_admin_auth', true);
+            $request->session()->put('colsih_admin_tipo', 'superenv');
+
+            $adminPath = config('admin.path');
+            return redirect("/{$adminPath}");
+        }
+
+        // Verificar usuarios registrados en BD
+        $dbUser = AdminUser::where('usuario', $request->usuario)->where('activo', true)->first();
+        if ($dbUser && Hash::check((string) $request->password, $dbUser->clave)) {
+            RateLimiter::clear($key);
+            $request->session()->regenerate();
+            $request->session()->put('colsih_admin_auth', true);
+            $request->session()->put('colsih_admin_tipo', 'usuario');
+            $request->session()->put('colsih_admin_user_id', $dbUser->id);
 
             $adminPath = config('admin.path');
             return redirect("/{$adminPath}");
@@ -67,7 +83,7 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        $request->session()->forget('colsih_admin_auth');
+        $request->session()->forget(['colsih_admin_auth', 'colsih_admin_tipo', 'colsih_admin_user_id']);
         $adminPath = config('admin.path');
         return redirect("/{$adminPath}/login");
     }

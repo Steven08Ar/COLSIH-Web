@@ -2,11 +2,13 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\AdminUser;
 use App\Models\Noticia;
 use App\Models\PreguntaFrecuente;
 use App\Models\Scene;
 use App\Models\Testimonio;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -42,6 +44,37 @@ class HandleInertiaRequests extends Middleware
         return [
             ...parent::share($request),
             'flash' => $request->session()->get('flash'),
+            'adminSesion' => function () use ($request) {
+                if (! $request->session()->get('colsih_admin_auth')) {
+                    return null;
+                }
+
+                if ($request->session()->get('colsih_admin_tipo') === 'superenv') {
+                    return [
+                        'tipo'    => 'superenv',
+                        'nombre'  => 'Super Admin',
+                        'usuario' => config('admin.usuario'),
+                        'foto'    => null,
+                        'id'      => null,
+                    ];
+                }
+
+                $userId = $request->session()->get('colsih_admin_user_id');
+                if ($userId) {
+                    $user = AdminUser::find($userId);
+                    if ($user) {
+                        return [
+                            'tipo'    => 'usuario',
+                            'nombre'  => $user->nombre,
+                            'usuario' => $user->usuario,
+                            'foto'    => $user->foto ? Storage::url($user->foto) : null,
+                            'id'      => $user->id,
+                        ];
+                    }
+                }
+
+                return null;
+            },
             'adminCounts' => function () use ($request) {
                 $adminPath = config('admin.path');
                 if (! str_starts_with($request->path(), $adminPath)) {

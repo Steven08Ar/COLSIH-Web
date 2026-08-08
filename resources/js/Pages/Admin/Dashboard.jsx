@@ -5,7 +5,7 @@ import PageBuilder from './PageBuilder/PageBuilder';
 import CarnetsAdminTab from './CarnetsAdminTab';
 import AdminSidebar from '@/Components/AdminSidebar';
 import DashboardOverview from '@/Components/DashboardOverview';
-import { Sun, Moon, Eye, Move, ZoomIn, Camera, User, X, Check, Upload, ArrowUp, ArrowDown, ArrowLeft, ArrowRight, Plus, Minus, Trash2, Terminal, Server, RefreshCw, Database, HardDrive, ShieldAlert, Cpu, Copy, Play, CreditCard, GitBranch, Trophy, Flame, Sparkles, Shield, Star, Bell, Search, PanelLeft } from 'lucide-react';
+import { Sun, Moon, Eye, Move, ZoomIn, Camera, User, X, Check, Upload, ArrowUp, ArrowDown, ArrowLeft, ArrowRight, Plus, Minus, Trash2, Terminal, Server, RefreshCw, Database, HardDrive, ShieldAlert, Cpu, Copy, Play, CreditCard, GitBranch, Trophy, Flame, Sparkles, Shield, Star, Bell, Search, PanelLeft, UserCheck, UserX, Mail, Phone, AtSign, Lock, Image } from 'lucide-react';
 import { processImageFile } from '@/utils/heicConverter';
 import { mediaUrl } from '@/utils/mediaUrl';
 
@@ -3718,10 +3718,289 @@ const TABS = [
     { key: 'mantenimiento',   label: 'Servidor / cPanel' },
 ];
 
-export default function AdminDashboard({ seccion, carnets = [], equipo = [], testimonios = [], noticias = [], preguntas = [], tour, scenes = [], torneoPartidos = [], deportesBanners = [], cuadrangularesBloqueado = false, flash, adminCounts }) {
+/* ── Usuarios Admin Tab ── */
+function UsuariosAdminTab({ adminUsuarios = [], flash }) {
+    const basePath = getAdminBasePath();
+    const [modal, setModal] = useState(null);
+    const [editando, setEditando] = useState(null);
+    const [confirmEliminar, setConfirmEliminar] = useState(null);
+    const [fotoPreview, setFotoPreview] = useState(null);
+    const [form, setForm] = useState({ nombre: '', usuario: '', password: '', email: '', contacto: '', foto: null, activo: true });
+
+    const resetForm = () => {
+        setForm({ nombre: '', usuario: '', password: '', email: '', contacto: '', foto: null, activo: true });
+        setFotoPreview(null);
+    };
+
+    const abrirCrear = () => { resetForm(); setEditando(null); setModal('form'); };
+
+    const abrirEditar = (u) => {
+        setForm({ nombre: u.nombre, usuario: u.usuario, password: '', email: u.email || '', contacto: u.contacto || '', foto: null, activo: u.activo });
+        setFotoPreview(u.foto || null);
+        setEditando(u);
+        setModal('form');
+    };
+
+    const cerrar = () => { setModal(null); setEditando(null); resetForm(); };
+
+    const handleFoto = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        setForm(f => ({ ...f, foto: file }));
+        setFotoPreview(URL.createObjectURL(file));
+    };
+
+    const guardar = () => {
+        const payload = { nombre: form.nombre, usuario: form.usuario, email: form.email, contacto: form.contacto, activo: form.activo };
+        if (form.password) payload.password = form.password;
+        if (form.foto) payload.foto = form.foto;
+
+        const opts = { preserveScroll: true, preserveState: true, onSuccess: cerrar };
+        if (editando) {
+            router.post(`${basePath}/usuarios/${editando.id}`, { ...payload, _method: 'PUT' }, opts);
+        } else {
+            router.post(`${basePath}/usuarios`, payload, opts);
+        }
+    };
+
+    const toggleActivo = (u) => {
+        router.post(`${basePath}/usuarios/${u.id}/toggle`, {}, { preserveScroll: true, preserveState: true });
+    };
+
+    const eliminar = () => {
+        router.delete(`${basePath}/usuarios/${confirmEliminar.id}`, {
+            preserveScroll: true, preserveState: true,
+            onSuccess: () => setConfirmEliminar(null),
+        });
+    };
+
+    const initials = (nombre) => nombre ? nombre.split(' ').map(p => p[0]).join('').toUpperCase().slice(0, 2) : 'U';
+
+    return (
+        <div>
+            <Flash message={flash} />
+
+            {/* Header */}
+            <div className="flex items-center justify-between mb-6 gap-4 flex-wrap">
+                <div>
+                    <h2 className="text-xl font-black text-slate-900 dark:text-white">Usuarios del Panel</h2>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Cuentas con acceso al panel administrativo</p>
+                </div>
+                <button
+                    onClick={abrirCrear}
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl text-xs font-extrabold hover:opacity-90 transition cursor-pointer shrink-0"
+                >
+                    <Plus className="w-3.5 h-3.5" />
+                    Nuevo usuario
+                </button>
+            </div>
+
+            {/* Grid de usuarios */}
+            {adminUsuarios.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-20 text-slate-400 dark:text-slate-600 gap-3">
+                    <User className="w-10 h-10 opacity-30" />
+                    <p className="text-sm font-semibold">No hay usuarios creados aún.</p>
+                </div>
+            ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {adminUsuarios.map(u => (
+                        <div key={u.id} className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 p-5 flex flex-col gap-4 shadow-sm hover:shadow-md transition">
+                            {/* Avatar + nombre */}
+                            <div className="flex items-center gap-3">
+                                <div className="relative shrink-0">
+                                    {u.foto ? (
+                                        <img src={u.foto} alt={u.nombre} className="w-12 h-12 rounded-full object-cover ring-2 ring-slate-200 dark:ring-slate-700" />
+                                    ) : (
+                                        <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-[#800A15] to-[#003C8F] flex items-center justify-center text-white font-black text-sm select-none">
+                                            {initials(u.nombre)}
+                                        </div>
+                                    )}
+                                    <span className={`absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full ring-2 ring-white dark:ring-slate-900 ${u.activo ? 'bg-emerald-500' : 'bg-slate-400'}`} />
+                                </div>
+                                <div className="min-w-0">
+                                    <p className="text-sm font-extrabold text-slate-900 dark:text-white truncate">{u.nombre}</p>
+                                    <p className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1">
+                                        <AtSign className="w-3 h-3 shrink-0" />
+                                        <span className="truncate">{u.usuario}</span>
+                                    </p>
+                                </div>
+                            </div>
+
+                            {/* Datos opcionales */}
+                            <div className="space-y-1">
+                                {u.email && (
+                                    <p className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1.5 truncate">
+                                        <Mail className="w-3 h-3 shrink-0" /> {u.email}
+                                    </p>
+                                )}
+                                {u.contacto && (
+                                    <p className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1.5 truncate">
+                                        <Phone className="w-3 h-3 shrink-0" /> {u.contacto}
+                                    </p>
+                                )}
+                                <p className="text-[10px] text-slate-400 dark:text-slate-600">Creado {u.created_at}</p>
+                            </div>
+
+                            {/* Acciones */}
+                            <div className="flex items-center gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+                                <button
+                                    onClick={() => abrirEditar(u)}
+                                    className="flex-1 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-bold hover:bg-slate-200 dark:hover:bg-slate-700 transition cursor-pointer"
+                                >
+                                    Editar
+                                </button>
+                                <button
+                                    onClick={() => toggleActivo(u)}
+                                    title={u.activo ? 'Desactivar' : 'Activar'}
+                                    className={`p-1.5 rounded-xl text-xs font-bold transition cursor-pointer ${u.activo ? 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 hover:bg-amber-200' : 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-200'}`}
+                                >
+                                    {u.activo ? <UserX className="w-4 h-4" /> : <UserCheck className="w-4 h-4" />}
+                                </button>
+                                <button
+                                    onClick={() => setConfirmEliminar(u)}
+                                    title="Eliminar"
+                                    className="p-1.5 rounded-xl bg-red-50 dark:bg-red-900/20 text-red-500 hover:bg-red-100 transition cursor-pointer"
+                                >
+                                    <Trash2 className="w-4 h-4" />
+                                </button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
+
+            {/* Modal crear / editar */}
+            {modal === 'form' && (
+                <Modal title={editando ? 'Editar Usuario' : 'Nuevo Usuario'} onClose={cerrar}>
+                    <div className="space-y-4">
+                        {/* Foto */}
+                        <div className="flex items-center gap-4">
+                            <div className="w-16 h-16 rounded-full overflow-hidden bg-slate-100 dark:bg-slate-800 flex items-center justify-center shrink-0">
+                                {fotoPreview ? (
+                                    <img src={fotoPreview} alt="preview" className="w-full h-full object-cover" />
+                                ) : (
+                                    <Image className="w-6 h-6 text-slate-400" />
+                                )}
+                            </div>
+                            <div>
+                                <label className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-bold cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-700 transition">
+                                    <Upload className="w-3.5 h-3.5" />
+                                    {fotoPreview ? 'Cambiar foto' : 'Subir foto'}
+                                    <input type="file" accept="image/*" className="hidden" onChange={handleFoto} />
+                                </label>
+                                <p className="text-[10px] text-slate-400 mt-1">JPG, PNG, WebP · máx 5 MB · opcional</p>
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            {[
+                                { label: 'Nombre completo *', field: 'nombre', icon: User, placeholder: 'Ej: Juan Pérez' },
+                                { label: 'Usuario (login) *', field: 'usuario', icon: AtSign, placeholder: 'Ej: jperez' },
+                            ].map(({ label, field, icon: Icon, placeholder }) => (
+                                <div key={field}>
+                                    <label className="block text-xs font-bold text-slate-600 dark:text-slate-300 mb-1">{label}</label>
+                                    <div className="flex items-center gap-2 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 bg-slate-50 dark:bg-slate-800 focus-within:ring-2 focus-within:ring-blue-500">
+                                        <Icon className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                                        <input
+                                            type="text"
+                                            value={form[field]}
+                                            onChange={e => setForm(f => ({ ...f, [field]: e.target.value }))}
+                                            placeholder={placeholder}
+                                            className="bg-transparent text-xs text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:outline-none w-full"
+                                        />
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Contraseña */}
+                        <div>
+                            <label className="block text-xs font-bold text-slate-600 dark:text-slate-300 mb-1">
+                                Contraseña {editando ? '(dejar vacío para no cambiar)' : '*'}
+                            </label>
+                            <div className="flex items-center gap-2 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 bg-slate-50 dark:bg-slate-800 focus-within:ring-2 focus-within:ring-blue-500">
+                                <Lock className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                                <input
+                                    type="password"
+                                    value={form.password}
+                                    onChange={e => setForm(f => ({ ...f, password: e.target.value }))}
+                                    placeholder="Mínimo 8 caracteres"
+                                    className="bg-transparent text-xs text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:outline-none w-full"
+                                />
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            {[
+                                { label: 'Correo (opcional)', field: 'email', icon: Mail, placeholder: 'correo@ejemplo.com', type: 'email' },
+                                { label: 'Contacto (opcional)', field: 'contacto', icon: Phone, placeholder: 'Ej: +57 300 000 0000' },
+                            ].map(({ label, field, icon: Icon, placeholder, type = 'text' }) => (
+                                <div key={field}>
+                                    <label className="block text-xs font-bold text-slate-600 dark:text-slate-300 mb-1">{label}</label>
+                                    <div className="flex items-center gap-2 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 bg-slate-50 dark:bg-slate-800 focus-within:ring-2 focus-within:ring-blue-500">
+                                        <Icon className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                                        <input
+                                            type={type}
+                                            value={form[field]}
+                                            onChange={e => setForm(f => ({ ...f, [field]: e.target.value }))}
+                                            placeholder={placeholder}
+                                            className="bg-transparent text-xs text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:outline-none w-full"
+                                        />
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Activo toggle */}
+                        <label className="flex items-center gap-3 cursor-pointer select-none">
+                            <div
+                                onClick={() => setForm(f => ({ ...f, activo: !f.activo }))}
+                                className={`w-10 h-5 rounded-full transition-colors relative ${form.activo ? 'bg-emerald-500' : 'bg-slate-300 dark:bg-slate-600'}`}
+                            >
+                                <span className={`absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform ${form.activo ? 'translate-x-5' : 'translate-x-0'}`} />
+                            </div>
+                            <span className="text-xs font-bold text-slate-700 dark:text-slate-300">
+                                {form.activo ? 'Usuario activo' : 'Usuario inactivo'}
+                            </span>
+                        </label>
+
+                        <div className="flex gap-3 pt-2">
+                            <button onClick={cerrar} className="flex-1 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition cursor-pointer">
+                                Cancelar
+                            </button>
+                            <button onClick={guardar} className="flex-1 py-2 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-xs font-extrabold hover:opacity-90 transition cursor-pointer">
+                                {editando ? 'Guardar cambios' : 'Crear usuario'}
+                            </button>
+                        </div>
+                    </div>
+                </Modal>
+            )}
+
+            {/* Modal confirmar eliminación */}
+            {confirmEliminar && (
+                <Modal title="Eliminar usuario" onClose={() => setConfirmEliminar(null)}>
+                    <p className="text-sm text-slate-600 dark:text-slate-300 mb-6">
+                        ¿Eliminar a <span className="font-extrabold text-slate-900 dark:text-white">{confirmEliminar.nombre}</span>? Esta acción no se puede deshacer.
+                    </p>
+                    <div className="flex gap-3">
+                        <button onClick={() => setConfirmEliminar(null)} className="flex-1 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition cursor-pointer">
+                            Cancelar
+                        </button>
+                        <button onClick={eliminar} className="flex-1 py-2 rounded-xl bg-red-600 text-white text-xs font-extrabold hover:bg-red-700 transition cursor-pointer">
+                            Eliminar
+                        </button>
+                    </div>
+                </Modal>
+            )}
+        </div>
+    );
+}
+
+export default function AdminDashboard({ seccion, carnets = [], equipo = [], testimonios = [], noticias = [], preguntas = [], tour, scenes = [], torneoPartidos = [], deportesBanners = [], cuadrangularesBloqueado = false, flash, adminCounts, adminUsuarios = [] }) {
     const pageProps = usePage().props;
     const flash_error = pageProps.flash_error;
     const command_output = pageProps.command_output;
+    const adminSesion = pageProps.adminSesion;
 
     const basePath = window.location.pathname.replace(/\/[^/]+$/, '');
     const [darkMode, setDarkMode] = useState(() => localStorage.getItem('sih-dark-mode') === 'true');
@@ -3851,8 +4130,14 @@ export default function AdminDashboard({ seccion, carnets = [], equipo = [], tes
                             
                             {/* Avatar Administrador */}
                             <div className="flex items-center gap-2">
-                                <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#800A15] to-[#003C8F] text-white font-extrabold flex items-center justify-center text-xs shadow-xs">
-                                    A
+                                <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#800A15] to-[#003C8F] p-0.5 shadow-xs">
+                                    {adminSesion?.foto ? (
+                                        <img src={adminSesion.foto} alt={adminSesion.nombre} className="w-full h-full rounded-full object-cover" />
+                                    ) : (
+                                        <div className="w-full h-full rounded-full bg-white/10 text-white font-extrabold flex items-center justify-center text-xs">
+                                            {(adminSesion?.nombre ?? 'A').charAt(0).toUpperCase()}
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -3884,6 +4169,7 @@ export default function AdminDashboard({ seccion, carnets = [], equipo = [], tes
                                 {seccion === 'preguntas'      && <PreguntasTab     preguntas={preguntas}     flash={flash} />}
                                 {seccion === 'recorrido'      && <RecorridoTab     tour={tour} scenes={scenes} flash={flash} basePath={basePath} />}
                                 {seccion === 'mantenimiento'  && <MantenimientoTab flash={flash} flash_error={flash_error} command_output={command_output} basePath={basePath} />}
+                                {seccion === 'usuarios'       && <UsuariosAdminTab adminUsuarios={adminUsuarios} flash={flash} />}
                             </div>
                         )}
 

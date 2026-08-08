@@ -33,6 +33,20 @@ export default function AdminSidebar({
     adminCounts = {},
 }) {
     const adminSesion = usePage().props.adminSesion;
+
+    // Claves de sección accesibles según el rol del usuario
+    const PERMISOS = {
+        superenv: null, // null = acceso total, no filtrar
+        admin:    ['dashboard', 'noticias', 'testimonios', 'preguntas', 'builder', 'equipo', 'recorrido', 'deportes-admin'],
+        deportes: ['dashboard', 'deportes-admin'],
+        marketing:['dashboard', 'noticias', 'testimonios', 'preguntas', 'builder'],
+    };
+
+    const rol = adminSesion?.tipo === 'superenv' ? 'superenv' : (adminSesion?.rol ?? 'marketing');
+    const permitidos = PERMISOS[rol] ?? PERMISOS.marketing;
+
+    const tieneAcceso = (key) => permitidos === null || permitidos.includes(key);
+
     // Estado para controlar qué acordeones/grupos están expandidos en modo desplegado
     const [openGroups, setOpenGroups] = useState({
         contenido: true,
@@ -105,7 +119,7 @@ export default function AdminSidebar({
         setTooltipData(null);
     };
 
-    // Estructura de navegación con categorías y submenús (Estilo Figma Referencia)
+    // Estructura de navegación con categorías y submenús
     const menuStructure = [
         {
             category: 'MAIN',
@@ -117,7 +131,7 @@ export default function AdminSidebar({
                     href: `${basePath}`,
                     count: null
                 }
-            ]
+            ].filter(i => tieneAcceso(i.key))
         },
         {
             category: 'GESTIÓN',
@@ -127,35 +141,35 @@ export default function AdminSidebar({
                     label: 'Contenido Web',
                     icon: FolderKanban,
                     subItems: [
-                        { key: 'noticias', label: 'Noticias y Eventos', icon: Newspaper, href: `${basePath}/noticias`, count: adminCounts?.noticias },
-                        { key: 'testimonios', label: 'Testimonios', icon: MessageSquareQuote, href: `${basePath}/testimonios`, count: adminCounts?.testimonios },
-                        { key: 'preguntas', label: 'Preguntas Frecuentes', icon: HelpCircle, href: `${basePath}/preguntas`, count: adminCounts?.preguntas },
-                        { key: 'builder', label: 'Editor de Páginas', icon: Layout, href: `${basePath}/builder`, count: null },
-                    ]
+                        { key: 'noticias',     label: 'Noticias y Eventos',    icon: Newspaper,          href: `${basePath}/noticias`,     count: adminCounts?.noticias },
+                        { key: 'testimonios',  label: 'Testimonios',            icon: MessageSquareQuote, href: `${basePath}/testimonios`,  count: adminCounts?.testimonios },
+                        { key: 'preguntas',    label: 'Preguntas Frecuentes',   icon: HelpCircle,         href: `${basePath}/preguntas`,    count: adminCounts?.preguntas },
+                        { key: 'builder',      label: 'Editor de Páginas',      icon: Layout,             href: `${basePath}/builder`,      count: null },
+                    ].filter(s => tieneAcceso(s.key))
                 },
                 {
                     groupKey: 'modulos',
                     label: 'Módulos Institucionales',
                     icon: Layers,
                     subItems: [
-                        { key: 'carnets-admin', label: 'Tarjetas NFC & Carnets', icon: CreditCard, href: `${basePath}/carnets-admin`, count: adminCounts?.carnets },
-                        { key: 'deportes-admin', label: 'Deportes & Torneos', icon: Trophy, href: `${basePath}/deportes-admin`, count: 7 },
-                        { key: 'recorrido', label: 'Recorrido Virtual 360°', icon: Compass, href: `${basePath}/recorrido`, count: adminCounts?.scenes },
-                        { key: 'equipo', label: 'Equipo Institucional', icon: Users, href: `${basePath}/equipo`, count: adminCounts?.equipo },
-                    ]
-                }
-            ]
+                        { key: 'carnets-admin', label: 'Tarjetas NFC & Carnets',  icon: CreditCard, href: `${basePath}/carnets-admin`, count: adminCounts?.carnets },
+                        { key: 'deportes-admin', label: 'Deportes & Torneos',     icon: Trophy,     href: `${basePath}/deportes-admin`, count: 7 },
+                        { key: 'recorrido',     label: 'Recorrido Virtual 360°',  icon: Compass,    href: `${basePath}/recorrido`,     count: adminCounts?.scenes },
+                        { key: 'equipo',        label: 'Equipo Institucional',    icon: Users,      href: `${basePath}/equipo`,        count: adminCounts?.equipo },
+                    ].filter(s => tieneAcceso(s.key))
+                },
+            ].filter(i => !i.subItems || i.subItems.length > 0)
         },
         {
             category: 'SISTEMA',
             items: [
-                {
+                ...(tieneAcceso('mantenimiento') ? [{
                     key: 'mantenimiento',
                     label: 'Servidor / cPanel',
                     icon: Terminal,
                     href: `${basePath}/mantenimiento`,
                     count: 'PHP'
-                },
+                }] : []),
                 ...(adminSesion?.tipo === 'superenv' ? [{
                     key: 'usuarios',
                     label: 'Gestión de Usuarios',
@@ -165,7 +179,7 @@ export default function AdminSidebar({
                 }] : [])
             ]
         }
-    ];
+    ].filter(section => section.items.length > 0);
 
     return (
         <>

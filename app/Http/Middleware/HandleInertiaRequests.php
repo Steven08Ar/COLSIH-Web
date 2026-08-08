@@ -75,6 +75,7 @@ class HandleInertiaRequests extends Middleware
                             'usuario' => $user->usuario,
                             'foto'    => $fotoUrl,
                             'id'      => $user->id,
+                            'rol'     => $user->rol,
                         ];
                     }
                 }

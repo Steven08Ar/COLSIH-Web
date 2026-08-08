@@ -71,6 +71,7 @@ class AuthController extends Controller
             $request->session()->put('colsih_admin_auth', true);
             $request->session()->put('colsih_admin_tipo', 'usuario');
             $request->session()->put('colsih_admin_user_id', $dbUser->id);
+            $request->session()->put('colsih_admin_rol', $dbUser->rol);
 
             $adminPath = config('admin.path');
             return redirect("/{$adminPath}");
@@ -83,7 +84,7 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        $request->session()->forget(['colsih_admin_auth', 'colsih_admin_tipo', 'colsih_admin_user_id']);
+        $request->session()->forget(['colsih_admin_auth', 'colsih_admin_tipo', 'colsih_admin_user_id', 'colsih_admin_rol']);
         $adminPath = config('admin.path');
         return redirect("/{$adminPath}/login");
     }

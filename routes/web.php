@@ -90,64 +90,72 @@ Route::prefix($adminPath)->name('admin.')->group(function () {
     Route::middleware('admin.auth')->group(function () {
         Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
 
-        // Recorrido Virtual 360°
-        Route::get('/recorrido',                      [TourAdminController::class, 'index'])->name('recorrido');
-        Route::post('/recorrido/toggle-construccion', [TourAdminController::class, 'toggleConstruccion'])->name('recorrido.toggle-construccion');
-        Route::post('/recorrido/scenes',             [TourAdminController::class, 'storeScene'])->name('recorrido.scenes.store');
-        Route::post('/recorrido/scenes/batch',       [TourAdminController::class, 'storeBatchScenes'])->name('recorrido.scenes.batch');
-        Route::put('/recorrido/scenes/{scene}',       [TourAdminController::class, 'updateScene'])->name('recorrido.scenes.update');
-        Route::post('/recorrido/scenes/{scene}/principal', [TourAdminController::class, 'setInitialScene'])->name('recorrido.scenes.principal');
-        Route::delete('/recorrido/scenes/{scene}',    [TourAdminController::class, 'destroyScene'])->name('recorrido.scenes.destroy');
-        Route::get('/recorrido/scenes/{scene}/editor', [TourAdminController::class, 'editor'])->name('recorrido.editor');
+        // Recorrido Virtual 360° — admin
+        Route::middleware('admin.rol:admin')->group(function () use ($adminPath) {
+            Route::get('/recorrido',                      [TourAdminController::class, 'index'])->name('recorrido');
+            Route::post('/recorrido/toggle-construccion', [TourAdminController::class, 'toggleConstruccion'])->name('recorrido.toggle-construccion');
+            Route::post('/recorrido/scenes',             [TourAdminController::class, 'storeScene'])->name('recorrido.scenes.store');
+            Route::post('/recorrido/scenes/batch',       [TourAdminController::class, 'storeBatchScenes'])->name('recorrido.scenes.batch');
+            Route::put('/recorrido/scenes/{scene}',       [TourAdminController::class, 'updateScene'])->name('recorrido.scenes.update');
+            Route::post('/recorrido/scenes/{scene}/principal', [TourAdminController::class, 'setInitialScene'])->name('recorrido.scenes.principal');
+            Route::delete('/recorrido/scenes/{scene}',    [TourAdminController::class, 'destroyScene'])->name('recorrido.scenes.destroy');
+            Route::get('/recorrido/scenes/{scene}/editor', [TourAdminController::class, 'editor'])->name('recorrido.editor');
 
-        // Hotspots (puntos de ruta e información)
-        Route::post('/hotspots',                      [HotspotController::class, 'store'])->name('hotspots.store');
-        Route::put('/hotspots/{hotspot}',             [HotspotController::class, 'update'])->name('hotspots.update');
-        Route::delete('/hotspots/{hotspot}',          [HotspotController::class, 'destroy'])->name('hotspots.destroy');
+            // Hotspots (puntos de ruta e información)
+            Route::post('/hotspots',                      [HotspotController::class, 'store'])->name('hotspots.store');
+            Route::put('/hotspots/{hotspot}',             [HotspotController::class, 'update'])->name('hotspots.update');
+            Route::delete('/hotspots/{hotspot}',          [HotspotController::class, 'destroy'])->name('hotspots.destroy');
 
-        // Testimonios
-        Route::get('/testimonios',                    [TestimonioController::class, 'index'])->name('testimonios');
-        Route::post('/testimonios',                   [TestimonioController::class, 'store'])->name('testimonios.store');
-        Route::match(['post', 'put'], '/testimonios/{testimonio}', [TestimonioController::class, 'update'])->name('testimonios.update');
-        Route::delete('/testimonios/{testimonio}',    [TestimonioController::class, 'destroy'])->name('testimonios.destroy');
+            // Equipo Institucional
+            Route::get('/equipo',                         [App\Http\Controllers\Admin\EquipoAdminController::class, 'index'])->name('equipo');
+            Route::post('/equipo',                        [App\Http\Controllers\Admin\EquipoAdminController::class, 'store'])->name('equipo.store');
+            Route::match(['post', 'put'], '/equipo/{member}', [App\Http\Controllers\Admin\EquipoAdminController::class, 'update'])->name('equipo.update');
+            Route::delete('/equipo/{member}',             [App\Http\Controllers\Admin\EquipoAdminController::class, 'destroy'])->name('equipo.destroy');
+            Route::get('/equipo/{member}',                fn() => redirect()->route('admin.equipo'));
+        });
 
-        // Noticias / Eventos
-        Route::get('/noticias',                       [NoticiaAdminController::class, 'index'])->name('noticias');
-        Route::post('/noticias',                      [NoticiaAdminController::class, 'store'])->name('noticias.store');
-        Route::match(['post', 'put'], '/noticias/{noticia}', [NoticiaAdminController::class, 'update'])->name('noticias.update');
-        Route::delete('/noticias/{noticia}',          [NoticiaAdminController::class, 'destroy'])->name('noticias.destroy');
+        // Contenido Web — admin y marketing
+        Route::middleware('admin.rol:admin,marketing')->group(function () {
+            Route::get('/testimonios',                    [TestimonioController::class, 'index'])->name('testimonios');
+            Route::post('/testimonios',                   [TestimonioController::class, 'store'])->name('testimonios.store');
+            Route::match(['post', 'put'], '/testimonios/{testimonio}', [TestimonioController::class, 'update'])->name('testimonios.update');
+            Route::delete('/testimonios/{testimonio}',    [TestimonioController::class, 'destroy'])->name('testimonios.destroy');
 
-        // Preguntas frecuentes
-        Route::get('/preguntas',                      [PreguntaController::class, 'index'])->name('preguntas');
-        Route::post('/preguntas',                     [PreguntaController::class, 'store'])->name('preguntas.store');
-        Route::match(['post', 'put'], '/preguntas/{pregunta}', [PreguntaController::class, 'update'])->name('preguntas.update');
-        Route::delete('/preguntas/{pregunta}',        [PreguntaController::class, 'destroy'])->name('preguntas.destroy');
+            Route::get('/noticias',                       [NoticiaAdminController::class, 'index'])->name('noticias');
+            Route::post('/noticias',                      [NoticiaAdminController::class, 'store'])->name('noticias.store');
+            Route::match(['post', 'put'], '/noticias/{noticia}', [NoticiaAdminController::class, 'update'])->name('noticias.update');
+            Route::delete('/noticias/{noticia}',          [NoticiaAdminController::class, 'destroy'])->name('noticias.destroy');
 
-        // Equipo Institucional
-        Route::get('/equipo',                         [App\Http\Controllers\Admin\EquipoAdminController::class, 'index'])->name('equipo');
-        Route::post('/equipo',                        [App\Http\Controllers\Admin\EquipoAdminController::class, 'store'])->name('equipo.store');
-        Route::match(['post', 'put'], '/equipo/{member}', [App\Http\Controllers\Admin\EquipoAdminController::class, 'update'])->name('equipo.update');
-        Route::delete('/equipo/{member}',             [App\Http\Controllers\Admin\EquipoAdminController::class, 'destroy'])->name('equipo.destroy');
-        Route::get('/equipo/{member}',                fn() => redirect()->route('admin.equipo'));
+            Route::get('/preguntas',                      [PreguntaController::class, 'index'])->name('preguntas');
+            Route::post('/preguntas',                     [PreguntaController::class, 'store'])->name('preguntas.store');
+            Route::match(['post', 'put'], '/preguntas/{pregunta}', [PreguntaController::class, 'update'])->name('preguntas.update');
+            Route::delete('/preguntas/{pregunta}',        [PreguntaController::class, 'destroy'])->name('preguntas.destroy');
+        });
 
-        // Mantenimiento y Comandos del Sistema (Artisan / cPanel)
-        Route::get('/mantenimiento',                  [App\Http\Controllers\Admin\SystemAdminController::class, 'index'])->name('mantenimiento');
-        Route::post('/sistema/ejecutar-comando',      [App\Http\Controllers\Admin\SystemAdminController::class, 'runCommand'])->name('sistema.comando');
+        // Deportes & Cuadrangulares — admin y deportes
+        Route::middleware('admin.rol:admin,deportes')->group(function () {
+            Route::get('/deportes-admin',                         [App\Http\Controllers\Admin\DeportesAdminController::class, 'index'])->name('deportes-admin');
+            Route::post('/deportes-admin/toggle-bloqueo',         [App\Http\Controllers\Admin\DeportesAdminController::class, 'toggleBloqueo'])->name('deportes-admin.toggle-bloqueo');
+            Route::match(['post', 'put'], '/deportes-admin/partidos/{partido}', [App\Http\Controllers\Admin\DeportesAdminController::class, 'actualizarPartido'])->name('deportes-admin.partidos.update');
+            Route::post('/deportes-admin/banners',                [App\Http\Controllers\Admin\DeportesAdminController::class, 'storeBanner'])->name('deportes-admin.banners.store');
+            Route::match(['post', 'put'], '/deportes-admin/banners/{banner}', [App\Http\Controllers\Admin\DeportesAdminController::class, 'updateBanner'])->name('deportes-admin.banners.update');
+            Route::delete('/deportes-admin/banners/{banner}',     [App\Http\Controllers\Admin\DeportesAdminController::class, 'destroyBanner'])->name('deportes-admin.banners.destroy');
+        });
 
-        // Gestión y Prueba de Carnets / Tarjetas NFC
-        Route::get('/carnets-admin',                   [App\Http\Controllers\Admin\CarnetsAdminController::class, 'index'])->name('carnets-admin');
-        Route::post('/carnets-admin',                  [App\Http\Controllers\Admin\CarnetsAdminController::class, 'store'])->name('carnets-admin.store');
-        Route::match(['post', 'put'], '/carnets-admin/{carnet}', [App\Http\Controllers\Admin\CarnetsAdminController::class, 'update'])->name('carnets-admin.update');
-        Route::delete('/carnets-admin/{carnet}',       [App\Http\Controllers\Admin\CarnetsAdminController::class, 'destroy'])->name('carnets-admin.destroy');
-        Route::post('/carnets-admin/probar',           [App\Http\Controllers\Admin\CarnetsAdminController::class, 'probar'])->name('carnets-admin.probar');
+        // Mantenimiento y Comandos del Sistema — solo superenv (sin admin.rol = ningún usuario de BD)
+        Route::middleware('admin.rol')->group(function () {
+            Route::get('/mantenimiento',                  [App\Http\Controllers\Admin\SystemAdminController::class, 'index'])->name('mantenimiento');
+            Route::post('/sistema/ejecutar-comando',      [App\Http\Controllers\Admin\SystemAdminController::class, 'runCommand'])->name('sistema.comando');
+        });
 
-        // Deportes & Cuadrangulares
-        Route::get('/deportes-admin',                         [App\Http\Controllers\Admin\DeportesAdminController::class, 'index'])->name('deportes-admin');
-        Route::post('/deportes-admin/toggle-bloqueo',         [App\Http\Controllers\Admin\DeportesAdminController::class, 'toggleBloqueo'])->name('deportes-admin.toggle-bloqueo');
-        Route::match(['post', 'put'], '/deportes-admin/partidos/{partido}', [App\Http\Controllers\Admin\DeportesAdminController::class, 'actualizarPartido'])->name('deportes-admin.partidos.update');
-        Route::post('/deportes-admin/banners',                [App\Http\Controllers\Admin\DeportesAdminController::class, 'storeBanner'])->name('deportes-admin.banners.store');
-        Route::match(['post', 'put'], '/deportes-admin/banners/{banner}', [App\Http\Controllers\Admin\DeportesAdminController::class, 'updateBanner'])->name('deportes-admin.banners.update');
-        Route::delete('/deportes-admin/banners/{banner}',     [App\Http\Controllers\Admin\DeportesAdminController::class, 'destroyBanner'])->name('deportes-admin.banners.destroy');
+        // Carnets / NFC — solo superenv
+        Route::middleware('admin.rol')->group(function () {
+            Route::get('/carnets-admin',                   [App\Http\Controllers\Admin\CarnetsAdminController::class, 'index'])->name('carnets-admin');
+            Route::post('/carnets-admin',                  [App\Http\Controllers\Admin\CarnetsAdminController::class, 'store'])->name('carnets-admin.store');
+            Route::match(['post', 'put'], '/carnets-admin/{carnet}', [App\Http\Controllers\Admin\CarnetsAdminController::class, 'update'])->name('carnets-admin.update');
+            Route::delete('/carnets-admin/{carnet}',       [App\Http\Controllers\Admin\CarnetsAdminController::class, 'destroy'])->name('carnets-admin.destroy');
+            Route::post('/carnets-admin/probar',           [App\Http\Controllers\Admin\CarnetsAdminController::class, 'probar'])->name('carnets-admin.probar');
+        });
 
         // Gestión de Usuarios del Panel (solo superadmin .env)
         Route::prefix('usuarios')->name('usuarios.')->group(function () {

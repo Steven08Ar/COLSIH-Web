@@ -9,6 +9,12 @@ class AdminUser extends Model
 {
     protected $table = 'admin_users';
 
+    const ROLES = [
+        'admin'     => 'Administrador',
+        'deportes'  => 'Deportes',
+        'marketing' => 'Marketing',
+    ];
+
     protected $fillable = [
         'nombre',
         'usuario',
@@ -16,6 +22,7 @@ class AdminUser extends Model
         'email',
         'contacto',
         'foto',
+        'rol',
         'activo',
     ];
 

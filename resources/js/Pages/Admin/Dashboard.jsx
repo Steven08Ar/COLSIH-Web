@@ -3725,17 +3725,17 @@ function UsuariosAdminTab({ adminUsuarios = [], flash }) {
     const [editando, setEditando] = useState(null);
     const [confirmEliminar, setConfirmEliminar] = useState(null);
     const [fotoPreview, setFotoPreview] = useState(null);
-    const [form, setForm] = useState({ nombre: '', usuario: '', password: '', email: '', contacto: '', foto: null, activo: true });
+    const [form, setForm] = useState({ nombre: '', usuario: '', password: '', email: '', contacto: '', foto: null, rol: 'admin', activo: true });
 
     const resetForm = () => {
-        setForm({ nombre: '', usuario: '', password: '', email: '', contacto: '', foto: null, activo: true });
+        setForm({ nombre: '', usuario: '', password: '', email: '', contacto: '', foto: null, rol: 'admin', activo: true });
         setFotoPreview(null);
     };
 
     const abrirCrear = () => { resetForm(); setEditando(null); setModal('form'); };
 
     const abrirEditar = (u) => {
-        setForm({ nombre: u.nombre, usuario: u.usuario, password: '', email: u.email || '', contacto: u.contacto || '', foto: null, activo: u.activo });
+        setForm({ nombre: u.nombre, usuario: u.usuario, password: '', email: u.email || '', contacto: u.contacto || '', foto: null, rol: u.rol || 'admin', activo: u.activo });
         setFotoPreview(u.foto || null);
         setEditando(u);
         setModal('form');
@@ -3751,7 +3751,7 @@ function UsuariosAdminTab({ adminUsuarios = [], flash }) {
     };
 
     const guardar = () => {
-        const payload = { nombre: form.nombre, usuario: form.usuario, email: form.email, contacto: form.contacto, activo: form.activo };
+        const payload = { nombre: form.nombre, usuario: form.usuario, email: form.email, contacto: form.contacto, rol: form.rol, activo: form.activo };
         if (form.password) payload.password = form.password;
         if (form.foto) payload.foto = form.foto;
 
@@ -3838,7 +3838,16 @@ function UsuariosAdminTab({ adminUsuarios = [], flash }) {
                                         <Phone className="w-3 h-3 shrink-0" /> {u.contacto}
                                     </p>
                                 )}
-                                <p className="text-[10px] text-slate-400 dark:text-slate-600">Creado {u.created_at}</p>
+                                <div className="flex items-center gap-2 flex-wrap">
+                                    <span className={`inline-block px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wide ${
+                                        u.rol === 'deportes'  ? 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400' :
+                                        u.rol === 'marketing' ? 'bg-violet-100 dark:bg-violet-900/30 text-violet-700 dark:text-violet-400' :
+                                                                'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400'
+                                    }`}>
+                                        {u.rol === 'deportes' ? 'Deportes' : u.rol === 'marketing' ? 'Marketing' : 'Administrador'}
+                                    </span>
+                                    <p className="text-[10px] text-slate-400 dark:text-slate-600">· {u.created_at}</p>
+                                </div>
                             </div>
 
                             {/* Acciones */}
@@ -3949,6 +3958,33 @@ function UsuariosAdminTab({ adminUsuarios = [], flash }) {
                                     </div>
                                 </div>
                             ))}
+                        </div>
+
+                        {/* Rol */}
+                        <div>
+                            <label className="block text-xs font-bold text-slate-600 dark:text-slate-300 mb-1">Rol *</label>
+                            <div className="grid grid-cols-3 gap-2">
+                                {[
+                                    { value: 'admin',     label: 'Administrador', color: 'blue' },
+                                    { value: 'deportes',  label: 'Deportes',      color: 'emerald' },
+                                    { value: 'marketing', label: 'Marketing',     color: 'violet' },
+                                ].map(({ value, label, color }) => (
+                                    <button
+                                        key={value}
+                                        type="button"
+                                        onClick={() => setForm(f => ({ ...f, rol: value }))}
+                                        className={`py-2 rounded-xl text-xs font-extrabold border-2 transition cursor-pointer ${
+                                            form.rol === value
+                                                ? color === 'blue'    ? 'bg-blue-600 border-blue-600 text-white'
+                                                : color === 'emerald' ? 'bg-emerald-600 border-emerald-600 text-white'
+                                                :                       'bg-violet-600 border-violet-600 text-white'
+                                                : 'bg-transparent border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:border-slate-400'
+                                        }`}
+                                    >
+                                        {label}
+                                    </button>
+                                ))}
+                            </div>
                         </div>
 
                         {/* Activo toggle */}

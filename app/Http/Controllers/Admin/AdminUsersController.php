@@ -29,6 +29,7 @@ class AdminUsersController extends Controller
             'email'      => $u->email,
             'contacto'   => $u->contacto,
             'foto'       => $u->foto ? Storage::url($u->foto) : null,
+            'rol'        => $u->rol,
             'activo'     => $u->activo,
             'created_at' => $u->created_at?->format('d/m/Y'),
         ]);
@@ -50,6 +51,7 @@ class AdminUsersController extends Controller
             'email'    => 'nullable|email|max:150',
             'contacto' => 'nullable|string|max:50',
             'foto'     => 'nullable|image|max:5120',
+            'rol'      => 'required|in:admin,deportes,marketing',
             'activo'   => 'boolean',
         ]);
 
@@ -65,6 +67,7 @@ class AdminUsersController extends Controller
             'email'    => $data['email'] ?? null,
             'contacto' => $data['contacto'] ?? null,
             'foto'     => $fotoPath,
+            'rol'      => $data['rol'],
             'activo'   => $data['activo'] ?? true,
         ]);
 
@@ -82,6 +85,7 @@ class AdminUsersController extends Controller
             'email'    => 'nullable|email|max:150',
             'contacto' => 'nullable|string|max:50',
             'foto'     => 'nullable|image|max:5120',
+            'rol'      => 'required|in:admin,deportes,marketing',
             'activo'   => 'boolean',
         ]);
 
@@ -90,6 +94,7 @@ class AdminUsersController extends Controller
             'usuario'  => $data['usuario'],
             'email'    => $data['email'] ?? null,
             'contacto' => $data['contacto'] ?? null,
+            'rol'      => $data['rol'],
             'activo'   => $data['activo'] ?? $adminUser->activo,
         ];
 

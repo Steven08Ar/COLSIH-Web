@@ -38,7 +38,7 @@ export default function Equipo({ equipo = [] }) {
         { nombre: 'Jaime Manuel Ardila Parra', cargo: 'Coordinador Académico', foto: getDocenteR2Url('Jaime Manuel Ardila Parra'), foto_posicion: 20, foto_zoom: 100 },
         { nombre: 'Margarita María Valle Manrique', cargo: 'Coordinadora de Convivencia', foto: getDocenteR2Url('Margarita María Valle Manrique'), foto_posicion: 20, foto_zoom: 100 },
         { nombre: 'Erika Tatiana Delgadillo Avella', cargo: 'Coordinadora de Pastoral', foto: getDocenteR2Url('Erika Tatiana Delgadillo Avella'), foto_posicion: 20, foto_zoom: 100 },
-        { nombre: 'Mayra Alexandra Parada Ruiz', cargo: 'Psicoorientación / Apoyo Administrativo', foto: getAdminR2Url('Mayra Alexandra Parada Ruiz'), foto_posicion: 20, foto_zoom: 100 }
+        { nombre: 'Mayra Alexandra Parada Ruiz', cargo: 'Psicoorientadora', foto: getAdminR2Url('Mayra Alexandra Parada Ruiz'), foto_posicion: 20, foto_zoom: 100 }
     ];
 
     const directivos = directivosFromDb.length > 0 ? directivosFromDb : defaultDirectivos;
@@ -49,7 +49,7 @@ export default function Equipo({ equipo = [] }) {
         { area: 'Coordinación Académica', encargado: 'Jaime Manuel Ardila Parra', cargo: 'Coordinador Académico', tel: '6076849810', email: 'coordinacionacademicacolsih@gmail.com' },
         { area: 'Coordinación de Convivencia', encargado: 'Margarita María Valle Manrique', cargo: 'Coordinadora de Convivencia', tel: '6076849810', email: 'convivenciaisabeldehungria@gmail.com' },
         { area: 'Coordinación Pastoral', encargado: 'Erika Tatiana Delgadillo Avella', cargo: 'Coordinadora de Pastoral', tel: '(607) 637 1237', email: 'pastoral@colsih.edu.co' },
-        { area: 'Psicoorientación y Apoyo', encargado: 'Mayra Alexandra Parada Ruiz', cargo: 'Psicoorientadora', tel: '(607) 637 1238', email: 'orientacion@colsih.edu.co' }
+        { area: 'Psicoorientación y Apoyo', encargado: 'Mayra Alexandra Parada Ruiz', cargo: 'Psicoorientadora', tel: '6076849810', email: 'psicologia.sih@gmail.com' }
     ];
 
     const defaultDocentes = [

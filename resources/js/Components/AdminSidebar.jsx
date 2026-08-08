@@ -36,14 +36,15 @@ export default function AdminSidebar({
 
     // Claves de sección accesibles según el rol del usuario
     const PERMISOS = {
-        superenv: null, // null = acceso total, no filtrar
         admin:    ['dashboard', 'noticias', 'testimonios', 'preguntas', 'builder', 'equipo', 'recorrido', 'deportes-admin'],
         deportes: ['dashboard', 'deportes-admin'],
         marketing:['dashboard', 'noticias', 'testimonios', 'preguntas', 'builder'],
     };
 
-    const rol = adminSesion?.tipo === 'superenv' ? 'superenv' : (adminSesion?.rol ?? 'marketing');
-    const permitidos = PERMISOS[rol] ?? PERMISOS.marketing;
+    const esSuperenv = adminSesion?.tipo === 'superenv';
+    const rol = esSuperenv ? null : (adminSesion?.rol ?? 'marketing');
+    // null = acceso total; array = claves permitidas
+    const permitidos = rol === null ? null : (PERMISOS[rol] ?? PERMISOS.marketing);
 
     const tieneAcceso = (key) => permitidos === null || permitidos.includes(key);
 

@@ -148,8 +148,8 @@ class AdminUsersController extends Controller
     }
 
     /**
-     * Convierte un archivo HEIC/HEIF a JPEG usando Python + pillow-heif.
-     * Disponible para cualquier usuario autenticado del panel.
+     * Convierte HEIC/HEIF a JPEG usando Python + pillow-heif.
+     * Los archivos temporales se eliminan siempre al finalizar la petición.
      */
     public function convertirHeic(Request $request)
     {
@@ -159,14 +159,18 @@ class AdminUsersController extends Controller
 
         $file   = $request->file('imagen');
         $tmpOut = sys_get_temp_dir() . DIRECTORY_SEPARATOR . uniqid('heic2jpg_') . '.jpg';
-        $script = base_path('scripts/heic_to_jpg.py');
 
+        // Garantizar limpieza aunque ocurra una excepción
+        register_shutdown_function(function () use ($tmpOut) {
+            if (file_exists($tmpOut)) @unlink($tmpOut);
+        });
+
+        $script = base_path('scripts/heic_to_jpg.py');
         if (! file_exists($script)) {
             return response()->json(['error' => 'Script de conversión no encontrado en el servidor.'], 500);
         }
 
         $python = config('admin.python_path', 'python3');
-
         $cmd = sprintf(
             '%s %s %s %s 2>&1',
             escapeshellcmd($python),
@@ -178,7 +182,6 @@ class AdminUsersController extends Controller
         exec($cmd, $output, $exitCode);
 
         if ($exitCode !== 0 || ! file_exists($tmpOut) || filesize($tmpOut) === 0) {
-            @unlink($tmpOut);
             $detalle = implode(' | ', array_filter($output));
             return response()->json([
                 'error'   => 'No se pudo convertir el archivo HEIC.',
@@ -186,6 +189,7 @@ class AdminUsersController extends Controller
             ], 422);
         }
 
+        // deleteFileAfterSend + shutdown_function = doble garantía de limpieza
         return response()->download($tmpOut, 'convertida.jpg', [
             'Content-Type' => 'image/jpeg',
         ])->deleteFileAfterSend(true);

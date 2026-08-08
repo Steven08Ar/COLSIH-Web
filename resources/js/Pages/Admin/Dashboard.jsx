@@ -3765,10 +3765,15 @@ function UsuariosAdminTab({ adminUsuarios = [], flash }) {
         try {
             const fd = new FormData();
             fd.append('imagen', file);
-            const csrf = document.querySelector('meta[name="csrf-token"]')?.content ?? '';
+            // Laravel no usa <meta csrf-token>, usa la cookie XSRF-TOKEN
+            const xsrf = document.cookie
+                .split('; ')
+                .find(c => c.startsWith('XSRF-TOKEN='))
+                ?.split('=').slice(1).join('=') ?? '';
+            const token = decodeURIComponent(xsrf);
             const res = await fetch(`${basePath}/convert-heic`, {
                 method: 'POST',
-                headers: { 'X-CSRF-TOKEN': csrf },
+                headers: { 'X-XSRF-TOKEN': token },
                 body: fd,
             });
             if (!res.ok) {

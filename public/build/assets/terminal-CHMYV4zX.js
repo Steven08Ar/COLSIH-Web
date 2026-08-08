@@ -1,1 +1,0 @@
-import{c as e}from"./createLucideIcon-Du2iqcap.js";const o=[["path",{d:"m16 18 6-6-6-6",key:"eg8j8"}],["path",{d:"m8 6-6 6 6 6",key:"ppft3o"}]],c=e("code",o);const t=[["path",{d:"M12 19h8",key:"baeox8"}],["path",{d:"m4 17 6-6-6-6",key:"1yngyt"}]],n=e("terminal",t);export{c as C,n as T};

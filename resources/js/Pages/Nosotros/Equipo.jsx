@@ -10,10 +10,23 @@ import {
     Phone, 
     Award,
     Sparkles,
-    User
+    User,
+    ShieldCheck,
+    Heart,
+    HeartHandshake
 } from 'lucide-react';
 
 import { mediaUrl } from '@/utils/mediaUrl';
+
+const getAreaIcon = (area) => {
+    const areaLower = (area || '').toLowerCase();
+    if (areaLower.includes('rector')) return Award;
+    if (areaLower.includes('académic') || areaLower.includes('academic')) return GraduationCap;
+    if (areaLower.includes('convivencia')) return ShieldCheck;
+    if (areaLower.includes('pastoral')) return Heart;
+    if (areaLower.includes('psico') || areaLower.includes('orientación') || areaLower.includes('apoyo')) return HeartHandshake;
+    return Briefcase;
+};
 
 const R2_DOCENTES_BASE = "https://media.colsih.edu.co/nuestro_colegio/equipo/docentes/";
 const R2_ADMINS_BASE   = "https://media.colsih.edu.co/nuestro_colegio/equipo/administrativos/";
@@ -250,10 +263,14 @@ export default function Equipo({ equipo = [] }) {
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
                         {administracion.map((item, idx) => {
                             const isVino = idx % 2 === 0;
-                            const borderHover = isVino ? 'hover:border-t-[#800A15]' : 'hover:border-t-[#001659]';
+                            const borderClass = isVino ? 'border-l-4 border-l-[#800A15]' : 'border-l-4 border-l-[#001659]';
+                            const badgeBg = isVino 
+                                ? 'bg-[#800A15]/10 text-[#800A15] dark:bg-rose-950/40 dark:text-rose-400' 
+                                : 'bg-[#001659]/10 text-[#001659] dark:bg-blue-950/40 dark:text-blue-400';
+                            const IconComponent = item.icon || getAreaIcon(item.area);
 
                             return (
                                 <motion.div 
@@ -262,31 +279,33 @@ export default function Equipo({ equipo = [] }) {
                                     whileInView={{ opacity: 1, y: 0 }}
                                     viewport={{ once: true }}
                                     transition={{ duration: 0.4, delay: idx * 0.08 }}
-                                    className={`bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800/80 rounded-2xl p-6 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 border-t-4 border-t-transparent ${borderHover} flex flex-col justify-between`}
+                                    className={`bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800/80 rounded-3xl p-6 shadow-sm flex flex-col justify-between hover:shadow-md hover:-translate-y-1 transition-all duration-300 relative overflow-hidden h-full ${borderClass}`}
                                 >
-                                    <div>
-                                        <div className="w-9 h-9 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-300 mb-4 font-bold text-xs">
-                                            0{idx + 1}
+                                    <div className="space-y-4">
+                                        <div className="flex items-center justify-between">
+                                            <h4 className="text-lg font-black text-slate-800 dark:text-white font-sans">
+                                                {item.area}
+                                            </h4>
+                                            <div className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 shadow-2xs ${badgeBg}`}>
+                                                <IconComponent className="w-4.5 h-4.5" />
+                                            </div>
                                         </div>
-                                        <h4 className="font-extrabold text-slate-800 dark:text-slate-100 text-sm leading-tight mb-2">
-                                            {item.area}
-                                        </h4>
-                                        <div className="space-y-0.5">
-                                            <p className="text-xs font-bold text-slate-700 dark:text-slate-300">
+                                        <div className="space-y-1">
+                                            <p className="text-sm font-bold text-slate-700 dark:text-slate-300 leading-tight font-sans">
                                                 {item.encargado}
                                             </p>
-                                            <span className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest block">
+                                            <span className="text-[9.5px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest block font-sans">
                                                 {item.cargo}
                                             </span>
                                         </div>
                                     </div>
 
                                     <div className="mt-5 pt-4 border-t border-slate-100 dark:border-slate-800/80 space-y-2 text-left">
-                                        <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 dark:text-slate-400">
+                                        <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 dark:text-slate-400 font-sans">
                                             <Phone className="w-3.5 h-3.5 text-slate-400 shrink-0" />
                                             {item.tel}
                                         </div>
-                                        <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 dark:text-slate-400 break-all">
+                                        <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 dark:text-slate-400 break-all font-sans">
                                             <Mail className="w-3.5 h-3.5 text-slate-400 shrink-0" />
                                             {item.email}
                                         </div>

@@ -2,7 +2,26 @@ import { Head } from '@inertiajs/react';
 import { useForm } from '@inertiajs/react';
 import AppLayout from '@/Layouts/AppLayout';
 import ScrollReveal from './HomeSections/ScrollReveal';
-import { Briefcase, Phone, Mail, Award } from 'lucide-react';
+import { 
+    Briefcase, 
+    Phone, 
+    Mail, 
+    Award,
+    GraduationCap,
+    ShieldCheck,
+    Heart,
+    HeartHandshake 
+} from 'lucide-react';
+
+const getAreaIcon = (area) => {
+    const areaLower = (area || '').toLowerCase();
+    if (areaLower.includes('rector')) return Award;
+    if (areaLower.includes('académic') || areaLower.includes('academic')) return GraduationCap;
+    if (areaLower.includes('convivencia')) return ShieldCheck;
+    if (areaLower.includes('pastoral')) return Heart;
+    if (areaLower.includes('psico') || areaLower.includes('orientación') || areaLower.includes('apoyo')) return HeartHandshake;
+    return Briefcase;
+};
 
 export default function Contacto() {
     const { data, setData, post, processing, errors, reset, wasSuccessful } = useForm({
@@ -277,6 +296,7 @@ export default function Contacto() {
                             const isVino = idx % 2 === 0;
                             const borderClass = isVino ? 'border-l-4 border-l-[#800A15]' : 'border-l-4 border-l-[#001659]';
                             const badgeBg = isVino ? 'bg-[#800A15]/10 text-[#800A15]' : 'bg-[#001659]/10 text-[#001659]';
+                            const IconComponent = item.icon || getAreaIcon(item.area);
 
                             return (
                                 <ScrollReveal key={idx} distance="translate-y-6" delay={idx * 100}>
@@ -288,8 +308,8 @@ export default function Contacto() {
                                                 <h4 className="text-lg font-black text-slate-800 dark:text-white font-sans">
                                                     {item.area}
                                                 </h4>
-                                                <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${badgeBg}`}>
-                                                    <Briefcase className="w-4 h-4" />
+                                                <div className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 ${badgeBg}`}>
+                                                    <IconComponent className="w-4.5 h-4.5" />
                                                 </div>
                                             </div>
                                             <div className="space-y-1">

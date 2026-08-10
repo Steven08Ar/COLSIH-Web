@@ -49,7 +49,7 @@ function ImagenPanel({ block, onUpdateContent }) {
                         type="button"
                         onClick={() => onUpdateContent({ url: '', dbPath: '', _pendingFile: null })}
                         className="absolute top-2 right-2 w-6 h-6 bg-black/60 hover:bg-black/80 text-white rounded-full flex items-center justify-center text-[10px] cursor-pointer transition"
-                    >✕</button>
+                    ><X className="w-3.5 h-3.5" /></button>
                 </div>
             )}
 

@@ -668,9 +668,9 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
                                 </div>
                                 <button 
                                     onClick={() => setActiveModal(false)}
-                                    className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-400 hover:text-slate-600 dark:hover:text-white flex items-center justify-center text-sm transition cursor-pointer"
+                                    className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-400 hover:text-slate-600 dark:hover:text-white flex items-center justify-center transition cursor-pointer"
                                 >
-                                    ✕
+                                    <X className="w-4 h-4" />
                                 </button>
                             </div>
 
@@ -744,9 +744,9 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
                                                     <button
                                                         type="button"
                                                         onClick={() => setSceneSearchQuery('')}
-                                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-white text-xs font-bold"
+                                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-white"
                                                     >
-                                                        ✕
+                                                        <X className="w-3.5 h-3.5" />
                                                     </button>
                                                 )}
                                             </div>

@@ -4,7 +4,9 @@
     "type": "module",
     "scripts": {
         "build": "vite build",
-        "dev": "vite"
+        "dev": "vite",
+        "test": "vitest",
+        "test:run": "vitest run"
     },
     "devDependencies": {
         "@tailwindcss/vite": "^4.0.0",
@@ -12,7 +14,8 @@
         "concurrently": "^9.0.1",
         "laravel-vite-plugin": "^2.0.0",
         "tailwindcss": "^4.0.0",
-        "vite": "^7.0.7"
+        "vite": "^7.0.7",
+        "vitest": "^4.1.10"
     },
     "dependencies": {
         "@inertiajs/react": "^3.6.1",
@@ -21,6 +24,7 @@
         "heic2any": "^0.0.4",
         "lucide-react": "^1.24.0",
         "pannellum": "^2.5.7",
-        "react-easy-crop": "^6.2.3"
+        "react-easy-crop": "^6.2.3",
+        "uuid": "^14.0.1"
     }
 }

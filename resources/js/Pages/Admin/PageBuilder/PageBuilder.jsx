@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { mediaUrl } from '@/utils/mediaUrl';
 import EditorToolbar from './EditorToolbar';
 import EditorCanvas from './EditorCanvas';
@@ -215,8 +216,10 @@ export default function PageBuilder({
         });
     };
 
-    return (
-        <div className="fixed inset-0 bg-[#F5F7FA] z-[100] flex flex-col overflow-hidden text-slate-800 font-sans">
+    if (typeof document === 'undefined') return null;
+
+    return createPortal(
+        <div className="fixed inset-0 top-0 left-0 w-screen h-screen bg-[#F5F7FA] dark:bg-slate-950 z-[99999] flex flex-col overflow-hidden text-slate-800 dark:text-slate-100 font-sans">
             
             <EditorToolbar
                 pageTitle={pageTitle}
@@ -269,7 +272,7 @@ export default function PageBuilder({
                 </div>
 
                 {sidebarOpen && activeBlock && !previewMode && (
-                    <div className="shrink-0 border-l border-slate-200/80 bg-white w-[350px] h-full flex flex-col shadow-xl z-20">
+                    <div className="shrink-0 border-l border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 w-[350px] h-full flex flex-col shadow-xl z-20">
                         <PropertyPanel
                             block={activeBlock}
                             onUpdateStyles={(styles) => updateBlockStyles(activeBlock.id, styles)}
@@ -280,6 +283,7 @@ export default function PageBuilder({
                 )}
 
             </div>
-        </div>
+        </div>,
+        document.body
     );
 }

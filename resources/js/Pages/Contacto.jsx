@@ -13,11 +13,13 @@ export default function Contacto() {
         mensaje: '',
     });
 
-    // Same administrative contact card records
+    // Official administrative contact card records matching Equipo.jsx
     const administracion = [
-        { area: 'Rectoría', encargado: 'Sor María Eugenia', cargo: 'Rectora', tel: '(601) 123 4567', email: 'rectoria@santaisabel.edu.co' },
-        { area: 'Contabilidad', encargado: 'Paola Andrea Silva', cargo: 'Contadora', tel: '(601) 123 4568', email: 'contabilidad@santaisabel.edu.co' },
-        { area: 'Secretaría', encargado: 'Carolina Martínez', cargo: 'Secretaria', tel: '(601) 123 4569', email: 'secretaria@santaisabel.edu.co' }
+        { area: 'Rectoría', encargado: 'Sor Beatriz Cortés Jerez', cargo: 'Rectora', tel: '(607) 684 9810', email: 'colsantaisabeldehungria.fblanca@gmail.com' },
+        { area: 'Coordinación Académica', encargado: 'Jaime Manuel Ardila Parra', cargo: 'Coordinador Académico', tel: '(607) 684 9810', email: 'coordinacionacademicacolsih@gmail.com' },
+        { area: 'Coordinación de Convivencia', encargado: 'Margarita María Valle Manrique', cargo: 'Coordinadora de Convivencia', tel: '(607) 684 9810', email: 'convivenciaisabeldehungria@gmail.com' },
+        { area: 'Coordinación Pastoral', encargado: 'Erika Tatiana Delgadillo Avella', cargo: 'Coordinadora de Pastoral', tel: '(607) 637 1237', email: 'pastoral@colsih.edu.co' },
+        { area: 'Psicoorientación y Apoyo', encargado: 'Mayra Alexandra Parada Ruiz', cargo: 'Psicoorientadora', tel: '(607) 684 9810', email: 'psicologia.sih@gmail.com' }
     ];
 
     function handleSubmit(e) {
@@ -100,7 +102,16 @@ export default function Contacto() {
                                     <div className="p-6 border border-slate-100 bg-slate-50/50 rounded-2xl space-y-2">
                                         <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#800A15] font-sans">Correo electrónico</span>
                                         <p className="text-sm font-semibold text-slate-600 font-sans leading-relaxed">
-                                            santaisabeldehungria@hotmail.com
+                                            colsantaisabeldehungria.fblanca@gmail.com
+                                        </p>
+                                    </div>
+                                </ScrollReveal>
+
+                                <ScrollReveal distance="translate-y-6" delay={400}>
+                                    <div className="p-6 border border-slate-100 bg-slate-50/50 rounded-2xl space-y-2">
+                                        <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#001659] font-sans">Teléfono / PBX</span>
+                                        <p className="text-sm font-semibold text-slate-600 font-sans leading-relaxed">
+                                            (607) 684 9810
                                         </p>
                                     </div>
                                 </ScrollReveal>
@@ -261,7 +272,7 @@ export default function Contacto() {
                     </div>
 
                     {/* Cards Grid */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 items-stretch max-w-[1240px] mx-auto">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch max-w-[1240px] mx-auto">
                         {administracion.map((item, idx) => {
                             const isVino = idx % 2 === 0;
                             const borderClass = isVino ? 'border-l-4 border-l-[#800A15]' : 'border-l-4 border-l-[#001659]';

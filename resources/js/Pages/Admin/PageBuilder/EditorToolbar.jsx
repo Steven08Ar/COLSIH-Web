@@ -39,34 +39,34 @@ export default function EditorToolbar({
     onAddBlock, onClose, onSave 
 }) {
     return (
-        <header className="sticky top-0 bg-white border-b border-slate-200/80 px-6 py-3 flex items-center justify-between shadow-xs z-50 select-none h-[76px] shrink-0">
+        <header className="sticky top-0 bg-white dark:bg-slate-900 border-b border-slate-200/80 dark:border-slate-800 px-6 py-3 flex items-center justify-between shadow-xs z-50 select-none h-[76px] shrink-0">
             
             {/* Left section: Volver + editable title + Status badge */}
             <div className="flex items-center gap-4 shrink-0">
                 <button 
                     onClick={onClose} 
-                    className="group flex items-center justify-center w-10 h-10 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200/50 transition duration-200 cursor-pointer"
+                    className="group flex items-center justify-center w-10 h-10 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-xl border border-slate-200/50 dark:border-slate-700 transition duration-200 cursor-pointer"
                     title="Volver al Listado"
                 >
-                    <ArrowLeft className="w-4 h-4 text-slate-500 group-hover:text-slate-800 transition duration-150" />
+                    <ArrowLeft className="w-4 h-4 text-slate-500 dark:text-slate-400 group-hover:text-slate-800 dark:group-hover:text-white transition duration-150" />
                 </button>
-                <div className="h-6 w-px bg-slate-200"></div>
+                <div className="h-6 w-px bg-slate-200 dark:bg-slate-800"></div>
                 <div>
                     <input 
                         type="text" 
                         value={pageTitle}
                         onChange={(e) => setPageTitle(e.target.value)}
                         placeholder="Sin título de página"
-                        className="text-slate-800 font-extrabold text-sm border-b border-transparent hover:border-slate-300 focus:border-blue-600 focus:outline-none bg-transparent transition py-0.5 px-1 truncate max-w-[200px] lg:max-w-[280px]"
+                        className="text-slate-800 dark:text-white font-extrabold text-sm border-b border-transparent hover:border-slate-300 dark:hover:border-slate-600 focus:border-blue-600 focus:outline-none bg-transparent transition py-0.5 px-1 truncate max-w-[200px] lg:max-w-[280px]"
                     />
                     <div className="flex items-center gap-2 mt-0.5 px-1">
                         <select 
                             value={status}
                             onChange={(e) => setStatus(e.target.value)}
-                            className="text-[10px] text-slate-500 font-bold bg-transparent focus:outline-none cursor-pointer hover:text-slate-800"
+                            className="text-[10px] text-slate-500 dark:text-slate-400 font-bold bg-transparent focus:outline-none cursor-pointer hover:text-slate-800 dark:hover:text-slate-200"
                         >
-                            <option value="draft">Borrador</option>
-                            <option value="published">Publicado</option>
+                            <option value="draft" className="bg-white dark:bg-slate-900 text-slate-800 dark:text-white">Borrador</option>
+                            <option value="published" className="bg-white dark:bg-slate-900 text-slate-800 dark:text-white">Publicado</option>
                         </select>
                         <span className={`w-1.5 h-1.5 rounded-full ${status === 'published' ? 'bg-emerald-500 animate-pulse' : 'bg-amber-400'}`}></span>
                     </div>
@@ -80,7 +80,7 @@ export default function EditorToolbar({
                         key={tipo}
                         type="button"
                         onClick={() => onAddBlock(tipo)}
-                        className={`group shrink-0 flex items-center gap-1.5 bg-white border border-slate-200 px-3.5 py-2 text-[11px] font-bold text-slate-600 rounded-full transition duration-150 active:scale-95 cursor-pointer shadow-2xs ${color}`}
+                        className={`group shrink-0 flex items-center gap-1.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-3.5 py-2 text-[11px] font-bold text-slate-600 dark:text-slate-300 rounded-full transition duration-150 active:scale-95 cursor-pointer shadow-2xs ${color}`}
                         title={`Agregar bloque de ${label}`}
                     >
                         <Icon className="w-3.5 h-3.5" />
@@ -93,24 +93,24 @@ export default function EditorToolbar({
             <div className="flex items-center gap-2.5 shrink-0">
                 
                 {/* Viewport controls */}
-                <div className="bg-slate-100 p-0.5 rounded-lg flex items-center border border-slate-200/50">
+                <div className="bg-slate-100 dark:bg-slate-800 p-0.5 rounded-lg flex items-center border border-slate-200/50 dark:border-slate-700">
                     <button 
                         onClick={() => setCanvasWidth('desktop')} 
-                        className={`p-1.5 rounded-md transition duration-200 cursor-pointer ${canvasWidth === 'desktop' ? 'bg-white text-slate-800 shadow-2xs' : 'text-slate-400 hover:text-slate-600'}`}
+                        className={`p-1.5 rounded-md transition duration-200 cursor-pointer ${canvasWidth === 'desktop' ? 'bg-white dark:bg-slate-700 text-slate-800 dark:text-white shadow-2xs' : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-200'}`}
                         title="Escritorio (1200px)"
                     >
                         <Monitor className="w-4 h-4" />
                     </button>
                     <button 
                         onClick={() => setCanvasWidth('tablet')} 
-                        className={`p-1.5 rounded-md transition duration-200 cursor-pointer ${canvasWidth === 'tablet' ? 'bg-white text-slate-800 shadow-2xs' : 'text-slate-400 hover:text-slate-600'}`}
+                        className={`p-1.5 rounded-md transition duration-200 cursor-pointer ${canvasWidth === 'tablet' ? 'bg-white dark:bg-slate-700 text-slate-800 dark:text-white shadow-2xs' : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-200'}`}
                         title="Tablet (768px)"
                     >
                         <Tablet className="w-4 h-4" />
                     </button>
                     <button 
                         onClick={() => setCanvasWidth('mobile')} 
-                        className={`p-1.5 rounded-md transition duration-200 cursor-pointer ${canvasWidth === 'mobile' ? 'bg-white text-slate-800 shadow-2xs' : 'text-slate-400 hover:text-slate-600'}`}
+                        className={`p-1.5 rounded-md transition duration-200 cursor-pointer ${canvasWidth === 'mobile' ? 'bg-white dark:bg-slate-700 text-slate-800 dark:text-white shadow-2xs' : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-200'}`}
                         title="Móvil (390px)"
                     >
                         <Phone className="w-4 h-4" />
@@ -120,14 +120,14 @@ export default function EditorToolbar({
                 {/* Preview toggle */}
                 <button 
                     onClick={() => setPreviewMode(!previewMode)}
-                    className={`p-2 border border-slate-200/50 rounded-xl transition duration-200 cursor-pointer flex items-center gap-1.5 text-xs font-bold ${previewMode ? 'bg-[#003C8F] text-white' : 'bg-slate-50 hover:bg-slate-100 text-slate-600'}`}
+                    className={`p-2 border border-slate-200/50 dark:border-slate-700 rounded-xl transition duration-200 cursor-pointer flex items-center gap-1.5 text-xs font-bold ${previewMode ? 'bg-[#003C8F] text-white' : 'bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300'}`}
                     title={previewMode ? 'Salir de Vista Previa' : 'Vista Previa'}
                 >
                     {previewMode ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                     <span className="hidden sm:inline">{previewMode ? 'Editar' : 'Previsualizar'}</span>
                 </button>
 
-                <div className="h-6 w-px bg-slate-200"></div>
+                <div className="h-6 w-px bg-slate-200 dark:bg-slate-800"></div>
 
                 {/* Save main CTA */}
                 <button 

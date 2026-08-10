@@ -5,6 +5,11 @@ import react from '@vitejs/plugin-react';
 import { resolve } from 'path';
 
 export default defineConfig({
+    test: {
+        environment: 'node',
+        globals: true,
+        include: ['resources/js/**/*.test.{js,jsx}'],
+    },
     plugins: [
         laravel({
             input: ['resources/css/app.css', 'resources/js/app.jsx'],

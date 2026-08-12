@@ -226,7 +226,7 @@ export default function Admisiones() {
 
                             {/* Imagen Admisiones.png en tamano grande */}
                             <img 
-                                src="/images/admisiones/Imagen%20Admisiones.png" 
+                                src="https://media.colsih.edu.co/admisiones/Imagen%20Admisiones.png" 
                                 alt="Estudiantes COLSIH - Admisiones 2027" 
                                 className="w-full max-w-[650px] sm:max-w-[720px] lg:max-w-[780px] xl:max-w-[850px] h-auto object-contain drop-shadow-2xl transition-transform duration-500 hover:scale-[1.02]"
                             />

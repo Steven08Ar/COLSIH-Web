@@ -39,7 +39,7 @@ const CORREO_ADMISIONES = "admisionescolsihfloridablanca@gmail.com";
 
 const cuposGrados = [
     { nivel: 'Preescolar', grados: ['Prejardín', 'Jardín', 'Transición'] },
-    { nivel: 'Primaria', grados: ['Primero (1°)', 'Segundo (2°)', 'Tercero (3°)', 'Cuarto (4°)'] },
+    { nivel: 'Primaria', grados: ['Primero (1°)', 'Segundo (2°)', 'Tercero (3°)', 'Cuarto (4°)', 'Quinto (5°)'] },
     { nivel: 'Bachillerato', grados: ['Sexto (6°)', 'Séptimo (7°)', 'Octavo (8°)', 'Noveno (9°)'] }
 ];
 
@@ -204,7 +204,7 @@ export default function Admisiones() {
                                         Cupos exclusivos 2027:
                                     </span>
                                     <div className="flex flex-wrap justify-center lg:justify-start gap-2">
-                                        {['Prejardín', 'Jardín', 'Transición', 'Primero (1°)', 'Sexto (6°)'].map((grado) => (
+                                        {['Prejardín', 'Jardín', 'Transición', 'Primero (1°)', 'Segundo (2°)', 'Tercero (3°)', 'Cuarto (4°)', 'Quinto (5°)', 'Sexto (6°)'].map((grado) => (
                                             <span 
                                                 key={grado}
                                                 className="px-3.5 py-1.5 rounded-lg bg-slate-100 text-[#003C8F] font-bold text-xs"

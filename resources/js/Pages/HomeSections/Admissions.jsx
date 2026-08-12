@@ -103,7 +103,7 @@ export default function Admissions() {
                             
                             {/* Badges de Grados (Plano Minimalista) */}
                             <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
-                                {['Prejardín', 'Jardín', 'Transición', 'Primero (1°)', 'Sexto (6°)'].map((grado) => (
+                                {['Prejardín', 'Jardín', 'Transición', 'Primero (1°)', 'Segundo (2°)', 'Tercero (3°)', 'Cuarto (4°)', 'Quinto (5°)', 'Sexto (6°)'].map((grado) => (
                                     <span
                                         key={grado}
                                         className="px-4 py-2 rounded-lg bg-white text-[#001659] text-xs sm:text-sm font-black shadow-sm border border-slate-200"

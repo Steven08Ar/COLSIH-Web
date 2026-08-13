@@ -46,31 +46,38 @@ const cuposGrados = [
 const pasosProceso = [
     {
         paso: '1',
-        titulo: 'Conoce el colegio',
-        descripcion: 'Explora nuestra propuesta educativa, valores y todo lo que nos hace diferentes.',
-        icono: Search,
-        badge: 'PASO 1 · INICIAL'
+        titulo: 'Inscripción en la página web',
+        descripcion: 'Diligenciamiento del formulario digital de admisión en nuestra plataforma web oficial.',
+        icono: FileText,
+        badge: 'PASO 1 · INSCRIPCIÓN WEB'
     },
     {
         paso: '2',
-        titulo: 'Consulta requisitos',
-        descripcion: 'Revisa los requisitos y documentos necesarios para el proceso.',
-        icono: ClipboardList,
-        badge: 'DOCUMENTACIÓN Y PAPELERÍA'
+        titulo: 'Recibo de pago y prueba académica',
+        descripcion: 'El 31 de agosto recibirán en el correo electrónico el recibo de pago de la inscripción, junto con la fecha y hora de la prueba académica.',
+        icono: Calendar,
+        badge: '31 DE AGOSTO · NOTIFICACIÓN POR CORREO'
     },
     {
         paso: '3',
-        titulo: 'Inscríbete',
-        descripcion: 'Diligencia el formulario y envía los documentos solicitados.',
-        icono: FileText,
-        badge: 'PRUEBA Y ENTREVISTA'
+        titulo: 'Entrevista familiar con la psicóloga',
+        descripcion: 'Presentación de la prueba académica presencial y espacio de entrevista familiar con la psicóloga institucional.',
+        icono: UserCheck,
+        badge: 'PASO 3 · PRUEBA Y ENTREVISTA'
     },
     {
         paso: '4',
-        titulo: 'Bienvenido',
-        descripcion: 'Te contactaremos para acompañarte en los siguientes pasos.',
-        icono: Sparkles,
-        badge: 'MATRÍCULA 2027'
+        titulo: 'Publicación de admitidos',
+        descripcion: 'Publicación oficial del listado de estudiantes seleccionados para el ciclo escolar 2027.',
+        icono: Award,
+        badge: 'PASO 4 · RESULTADOS'
+    },
+    {
+        paso: '5',
+        titulo: 'Matrícula',
+        descripcion: 'Pago del cupo escolar, entrega final de documentos y formalización del contrato de matrícula.',
+        icono: CheckCircle2,
+        badge: 'PASO 5 · MATRÍCULA OFICIAL'
     }
 ];
 
@@ -104,7 +111,7 @@ const statsData = [
 const faqsData = [
     {
         pregunta: '¿Cuál es el proceso de admisión?',
-        respuesta: 'El proceso consta de 4 pasos sencillos: 1) Conocer el colegio y cupos habilitados. 2) Consultar requisitos y enviar la papelería en PDF al correo admisionescolsihfloridablanca@gmail.com. 3) Diligenciar el formulario en la plataforma integra ($70.000 COP en Banco Caja Social) y asistir a la prueba presencial con entrevista familiar. 4) Publicación de admitidos y formalización de matrícula.'
+        respuesta: 'El proceso consta de 5 pasos sencillos: 1) Inscripción en la página web. 2) El 31 de agosto recibirán en su correo electrónico el recibo de pago por el valor de la inscripción, además de la fecha y hora de la prueba académica. 3) Entrevista familiar con la psicóloga e instancia de prueba. 4) Publicación de admitidos. 5) Matrícula.'
     },
     {
         pregunta: '¿Qué documentos necesito para inscribirme?',
@@ -242,25 +249,25 @@ export default function Admisiones() {
                 <div className="max-w-[1440px] mx-auto px-6 md:px-12 lg:px-16 space-y-16">
                     
                     {/* Encabezado de Sección */}
-                    <div className="text-center max-w-2xl mx-auto space-y-3">
+                    <div className="text-center max-w-3xl mx-auto space-y-3">
                         <ScrollReveal distance="translate-y-4">
                             <span className="text-xs font-bold uppercase tracking-widest text-slate-400 block font-sans">
-                                ASÍ ES NUESTRO PROCESO
+                                PROCESO DE ADMISIÓN
                             </span>
                             <div className="w-8 h-[2.5px] bg-amber-400 mx-auto mt-1 rounded-full" />
                         </ScrollReveal>
                         <ScrollReveal distance="translate-y-4" delay={150}>
                             <h2 className="text-3xl sm:text-4xl md:text-[44px] font-extrabold text-[#0B1F3A] tracking-tight font-sans">
-                                Admisiones en 4 pasos
+                                Pasos a seguir después de hacer la inscripción
                             </h2>
                         </ScrollReveal>
                     </div>
 
-                    {/* Stepper Horizontal de 4 Pasos Conectados */}
+                    {/* Stepper Horizontal de 5 Pasos Conectados */}
                     <div className="relative">
-                        <div className="hidden lg:block absolute top-10 left-[12%] right-[12%] h-[2px] border-t-2 border-dashed border-slate-200 z-0" />
+                        <div className="hidden lg:block absolute top-10 left-[10%] right-[10%] h-[2px] border-t-2 border-dashed border-slate-200 z-0" />
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative z-10">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 relative z-10">
                             {pasosProceso.map((paso, idx) => {
                                 const IconoPaso = paso.icono;
                                 return (
@@ -537,25 +544,30 @@ export default function Admisiones() {
                                 </div>
                             </div>
 
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-left">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 text-left">
                                 <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-1">
-                                    <span className="text-xs font-bold text-[#003C8F] uppercase block font-sans">1. Solicitud Web</span>
-                                    <p className="text-xs font-medium text-slate-600">Formulario inicial en la plataforma oficial.</p>
+                                    <span className="text-xs font-bold text-[#003C8F] uppercase block font-sans">1. Inscripción Web</span>
+                                    <p className="text-xs font-medium text-slate-600">Registro en la página web oficial.</p>
+                                </div>
+
+                                <div className="p-4 rounded-2xl bg-amber-50/80 border border-amber-200 space-y-1">
+                                    <span className="text-xs font-bold text-amber-800 uppercase block font-sans">2. Recibo (31 de Agosto)</span>
+                                    <p className="text-xs font-medium text-slate-600">Envío por correo de recibo de pago y fecha/hora de prueba.</p>
                                 </div>
 
                                 <div className="p-4 rounded-2xl bg-rose-50/60 border border-rose-100 space-y-1">
-                                    <span className="text-xs font-bold text-[#800A15] uppercase block font-sans">2. Documentos</span>
-                                    <p className="text-xs font-medium text-slate-600">Recepción de papelería en PDF al correo.</p>
+                                    <span className="text-xs font-bold text-[#800A15] uppercase block font-sans">3. Prueba y Entrevista</span>
+                                    <p className="text-xs font-medium text-slate-600">Prueba académica y entrevista familiar con la psicóloga.</p>
                                 </div>
 
-                                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-1">
-                                    <span className="text-xs font-bold text-[#003C8F] uppercase block font-sans">3. Entrevista</span>
-                                    <p className="text-xs font-medium text-slate-600">Prueba presencial y entrevista familiar.</p>
+                                <div className="p-4 rounded-2xl bg-blue-50/70 border border-blue-100 space-y-1">
+                                    <span className="text-xs font-bold text-[#003C8F] uppercase block font-sans">4. Publicación Admitidos</span>
+                                    <p className="text-xs font-medium text-slate-600">Publicación oficial de admitidos.</p>
                                 </div>
 
                                 <div className="p-4 rounded-2xl bg-emerald-50/70 border border-emerald-100 space-y-1">
-                                    <span className="text-xs font-bold text-emerald-900 uppercase block font-sans">4. Admitidos</span>
-                                    <p className="text-xs font-medium text-emerald-950">Notificación oficial y matrícula.</p>
+                                    <span className="text-xs font-bold text-emerald-900 uppercase block font-sans">5. Matrícula</span>
+                                    <p className="text-xs font-medium text-emerald-950">Pago y formalización de matrícula.</p>
                                 </div>
                             </div>
 

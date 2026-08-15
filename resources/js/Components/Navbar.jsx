@@ -17,6 +17,13 @@ const ofertaLinks = [
     { label: 'Convenio SENA', href: '/oferta-academica/sena' },
 ];
 
+const actividadesLinks = [
+    { label: 'Deportes', href: '/deportes' },
+    { label: 'Catequesis', href: '/catequesis' },
+    { label: 'MJS', href: '/mjs' },
+    { label: 'MJC', href: '/mjc' },
+];
+
 export default function Navbar() {
     const { url } = usePage();
     const [scrolled, setScrolled] = useState(false);
@@ -33,6 +40,12 @@ export default function Navbar() {
     const [ofertaOpenState, setOfertaOpenState] = useState(false);
     const ofertaCloseTimer = useRef(null);
     const ofertaUnmountTimer = useRef(null);
+
+    // Actividades Dropdown
+    const [actividadesVisible, setActividadesVisible] = useState(false);
+    const [actividadesOpenState, setActividadesOpenState] = useState(false);
+    const actividadesCloseTimer = useRef(null);
+    const actividadesUnmountTimer = useRef(null);
 
     useEffect(() => {
         const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -57,6 +70,8 @@ export default function Navbar() {
             clearTimeout(unmountTimer.current);
             clearTimeout(ofertaCloseTimer.current);
             clearTimeout(ofertaUnmountTimer.current);
+            clearTimeout(actividadesCloseTimer.current);
+            clearTimeout(actividadesUnmountTimer.current);
         };
     }, []);
 
@@ -92,8 +107,25 @@ export default function Navbar() {
         }, 100);
     }
 
+    function handleActividadesEnter() {
+        clearTimeout(actividadesCloseTimer.current);
+        clearTimeout(actividadesUnmountTimer.current);
+        setActividadesVisible(true);
+        requestAnimationFrame(() => setActividadesOpenState(true));
+    }
+
+    function handleActividadesLeave() {
+        actividadesCloseTimer.current = setTimeout(() => {
+            setActividadesOpenState(false);
+            actividadesUnmountTimer.current = setTimeout(() => {
+                setActividadesVisible(false);
+            }, 150);
+        }, 100);
+    }
+
     const nosotrosActive = nosotrosLinks.some(l => url === l.href || url.startsWith(l.href + '/'));
     const ofertaActive = ofertaLinks.some(l => url === l.href || url.startsWith(l.href));
+    const actividadesActive = actividadesLinks.some(l => url === l.href || url.startsWith(l.href) || url.startsWith('/actividades/'));
 
     return (
         <header className={`fixed top-0 left-0 w-full z-50 py-4 transition-all duration-300 bg-gradient-to-b from-[#08111F]/60 to-transparent ${
@@ -224,7 +256,54 @@ export default function Navbar() {
                     </div>
 
                     <Link href="/admisiones" className={`transition-colors ${url === '/admisiones' ? 'text-white font-extrabold' : 'hover:text-white'}`}>Admisiones</Link>
-                    <Link href="/deportes" className={`transition-colors ${url === '/deportes' ? 'text-white font-extrabold' : 'hover:text-white'}`}>Deportes</Link>
+
+                    {/* Actividades Dropdown */}
+                    <div
+                        className="relative py-2"
+                        onMouseEnter={handleActividadesEnter}
+                        onMouseLeave={handleActividadesLeave}
+                    >
+                        <button
+                            className={`flex items-center gap-1 transition-colors focus:outline-none cursor-pointer ${
+                                actividadesActive ? 'text-white font-extrabold' : 'hover:text-white'
+                            }`}
+                            aria-expanded={actividadesOpenState}
+                        >
+                            Actividades
+                            <svg
+                                className={`w-3.5 h-3.5 transition-transform duration-300 ${actividadesOpenState ? 'rotate-180' : ''}`}
+                                fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            >
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+
+                        {actividadesVisible && (
+                            <div
+                                className={`absolute left-1/2 -translate-x-1/2 top-full mt-1.5 w-48 bg-gradient-to-b from-[#08111F]/95 to-[#08111F]/85 backdrop-blur-xl border border-white/10 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.4)] py-2.5 z-50 origin-top
+                                    transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]
+                                    ${actividadesOpenState
+                                        ? 'opacity-100 translate-y-0 scale-100'
+                                        : 'opacity-0 -translate-y-2 scale-[0.98]'
+                                    }`}
+                            >
+                                <div className="relative">
+                                    {actividadesLinks.map((item) => (
+                                        <Link
+                                            key={item.href}
+                                            href={item.href}
+                                            className={`block px-4 py-2.5 mx-1.5 text-[14px] font-semibold rounded-xl transition-all duration-200 hover:bg-white/[0.08] hover:text-white ${
+                                                url === item.href ? 'text-[#003C8F] bg-white/[0.06]' : 'text-white/70'
+                                            }`}
+                                        >
+                                            {item.label}
+                                        </Link>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
                     <Link href="/noticias" className={`transition-colors ${url.startsWith('/noticias') ? 'text-white font-extrabold' : 'hover:text-white'}`}>Noticias</Link>
                     <Link href="/contacto" className={`transition-colors ${url === '/contacto' ? 'text-white font-extrabold' : 'hover:text-white'}`}>Contacto</Link>
                 </div>
@@ -358,7 +437,18 @@ export default function Navbar() {
                         </div>
 
                         <Link href="/admisiones" onClick={() => setMobileOpen(false)} className={`block px-3 py-2 text-sm font-semibold rounded-lg ${url === '/admisiones' ? 'text-white bg-white/10' : 'text-white/85'}`}>Admisiones</Link>
-                        <Link href="/deportes" onClick={() => setMobileOpen(false)} className={`block px-3 py-2 text-sm font-semibold rounded-lg ${url === '/deportes' ? 'text-white bg-white/10' : 'text-white/85'}`}>Zona Deportiva</Link>
+
+                        <div>
+                            <span className="block px-3 py-2 text-xs font-bold text-white/40 uppercase tracking-wider">Actividades</span>
+                            <div className="ml-3 border-l border-white/20 pl-3 space-y-1">
+                                {actividadesLinks.map((item) => (
+                                    <Link key={item.href} href={item.href} onClick={() => setMobileOpen(false)} className={`block px-3 py-1.5 text-sm font-medium rounded-lg ${url === item.href ? 'text-white bg-white/10' : 'text-white/75'}`}>
+                                        {item.label}
+                                    </Link>
+                                ))}
+                            </div>
+                        </div>
+
                         <Link href="/noticias" onClick={() => setMobileOpen(false)} className={`block px-3 py-2 text-sm font-semibold rounded-lg ${url.startsWith('/noticias') ? 'text-white bg-white/10' : 'text-white/85'}`}>Noticias</Link>
                         <Link href="/contacto" onClick={() => setMobileOpen(false)} className={`block px-3 py-2 text-sm font-semibold rounded-lg ${url === '/contacto' ? 'text-white bg-white/10' : 'text-white/85'}`}>Contacto</Link>
 

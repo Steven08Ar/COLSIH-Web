@@ -19,11 +19,6 @@ use Illuminate\Support\Facades\Route;
 // Home
 Route::get('/', HomeController::class)->name('home');
 
-// MJS
-Route::get('/mjs', function () {
-    return inertia('Mjs');
-})->name('mjs');
-
 // Nosotros
 Route::prefix('nosotros')->name('nosotros.')->group(function () {
     Route::get('/', [NosotrosController::class, 'index'])->name('index');
@@ -43,6 +38,32 @@ Route::prefix('oferta-academica')->name('oferta-academica.')->group(function () 
 });
 Route::get('/oferta-academica', [OfertaAcademicaController::class, 'index'])->name('oferta-academica');
 
+// Actividades (Deportes, Catequesis, MJS, MJC)
+Route::prefix('actividades')->name('actividades.')->group(function () {
+    Route::get('/deportes', [DeportesController::class, 'index'])->name('deportes');
+    Route::get('/catequesis', function () {
+        return inertia('Actividades/Catequesis');
+    })->name('catequesis');
+    Route::get('/mjs', function () {
+        return inertia('Actividades/Mjs');
+    })->name('mjs');
+    Route::get('/mjc', function () {
+        return inertia('Actividades/Mjc');
+    })->name('mjc');
+});
+
+// Rutas directas
+Route::get('/deportes', [DeportesController::class, 'index'])->name('deportes');
+Route::get('/catequesis', function () {
+    return inertia('Actividades/Catequesis');
+})->name('catequesis');
+Route::get('/mjs', function () {
+    return inertia('Actividades/Mjs');
+})->name('mjs');
+Route::get('/mjc', function () {
+    return inertia('Actividades/Mjc');
+})->name('mjc');
+
 // Admisiones
 Route::get('/admisiones', AdmisionesController::class)->name('admisiones');
 
@@ -59,9 +80,6 @@ Route::prefix('noticias')->name('noticias.')->group(function () {
     Route::get('/', [NoticiasController::class, 'index'])->name('index');
     Route::get('/{noticia:slug}', [NoticiasController::class, 'show'])->name('show');
 });
-
-// Zona Deportiva
-Route::get('/deportes', [DeportesController::class, 'index'])->name('deportes');
 
 // Recorrido virtual 360
 Route::get('/recorrido-virtual/{slug?}', [TourController::class, 'show'])->name('tour.show');

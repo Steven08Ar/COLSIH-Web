@@ -48,8 +48,7 @@ export async function processImageFile(file, options = {}) {
 
                 const isWebpSupported = canvas.toDataURL('image/webp').startsWith('data:image/webp');
                 const targetType  = (format === 'image/webp' && isWebpSupported) ? 'image/webp' : 'image/jpeg';
-                const extension   = targetType === 'image/webp' ? '.webp' : '.jpg';
-                const outputName  = file.name.replace(/\.[^/.]+$/, '') + extension;
+                const outputName  = file.name;
 
                 canvas.toBlob(
                     (blob) => {

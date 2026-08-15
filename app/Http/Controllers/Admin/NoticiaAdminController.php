@@ -239,7 +239,8 @@ class NoticiaAdminController extends Controller
                     if (!empty($bloque['videoFile'])) {
                         Storage::disk('public')->delete($bloque['videoFile']);
                     }
-                    $bloque['videoFile'] = $request->file($videoKey)->store('noticias/videos', 'public');
+                    $videoName = basename($request->file($videoKey)->getClientOriginalName());
+                    $bloque['videoFile'] = $request->file($videoKey)->storeAs('noticias/videos', $videoName, 'public');
                     $bloque['url'] = '';
                 }
             }

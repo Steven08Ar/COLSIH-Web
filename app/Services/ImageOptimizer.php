@@ -25,16 +25,16 @@ class ImageOptimizer
         string $carpeta,
         int $ladoMaximo = self::LADO_NORMAL
     ): string {
-        $ext = strtolower($file->getClientOriginalExtension());
-        $ext = ($ext === 'jpeg') ? 'jpg' : $ext;
-        if (!in_array($ext, ['jpg', 'png', 'webp', 'gif'])) {
-            $ext = 'jpg';
+        $nombre = basename($file->getClientOriginalName());
+        if (empty($nombre)) {
+            $ext = strtolower($file->getClientOriginalExtension()) ?: 'jpg';
+            $nombre = Str::random(12) . '.' . $ext;
         }
 
-        $nombreBase = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-        $nombreBase = Str::slug($nombreBase) ?: Str::random(8);
-        $nombre     = $nombreBase . '.' . $ext;
-        $ruta       = $carpeta . '/' . $nombre;
+        $ext = strtolower(pathinfo($nombre, PATHINFO_EXTENSION));
+        $ext = ($ext === 'jpeg') ? 'jpg' : $ext;
+
+        $ruta = $carpeta . '/' . $nombre;
 
         // Intentar optimizar con Intervention Image; si el entorno no tiene GD/Imagick
         // configurados correctamente (p. ej. en dev local Windows) se sube el original.
@@ -90,12 +90,14 @@ class ImageOptimizer
      */
     public static function guardarRaw(UploadedFile $file, string $carpeta): string
     {
-        $ext        = strtolower($file->getClientOriginalExtension()) ?: 'jpg';
-        $nombreBase = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-        $nombreBase = Str::slug($nombreBase) ?: Str::random(8);
-        $nombre     = $nombreBase . '.' . $ext;
-        $ruta       = $carpeta . '/' . $nombre;
-        $mime   = $file->getMimeType() ?: 'image/jpeg';
+        $nombre = basename($file->getClientOriginalName());
+        if (empty($nombre)) {
+            $ext = strtolower($file->getClientOriginalExtension()) ?: 'jpg';
+            $nombre = Str::random(12) . '.' . $ext;
+        }
+
+        $ruta = $carpeta . '/' . $nombre;
+        $mime = $file->getMimeType() ?: 'image/jpeg';
 
         $contenido = file_get_contents($file->getPathname());
 

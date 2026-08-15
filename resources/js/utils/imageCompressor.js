@@ -53,7 +53,7 @@ export async function compressImageClientSide(file, maxSide = 4096, quality = 0.
                             resolve(file); // Si la compresión resultó igual o mayor, enviar el original
                             return;
                         }
-                        const compressedFile = new File([blob], file.name.replace(/\.[^/.]+$/, "") + ".jpg", {
+                        const compressedFile = new File([blob], file.name, {
                             type: 'image/jpeg',
                             lastModified: Date.now(),
                         });

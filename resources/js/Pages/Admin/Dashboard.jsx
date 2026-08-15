@@ -9,6 +9,7 @@ import ImageCropper from '@/Components/ImageCropper';
 import { Sun, Moon, Eye, Move, ZoomIn, Camera, User, X, Check, Upload, ArrowUp, ArrowDown, ArrowLeft, ArrowRight, Plus, Minus, Trash2, Terminal, Server, RefreshCw, Database, HardDrive, ShieldAlert, Cpu, Copy, Play, CreditCard, GitBranch, Trophy, Flame, Sparkles, Shield, Star, Bell, Search, PanelLeft, UserCheck, UserX, Mail, Phone, AtSign, Lock, Image, HardHat, ChevronUp, ChevronDown, Award, Image as ImageIcon, MoveHorizontal, MoveVertical } from 'lucide-react';
 import { processImageFile } from '@/utils/heicConverter';
 import { mediaUrl } from '@/utils/mediaUrl';
+import { compressImageClientSide } from '@/utils/imageCompressor';
 
 const getAdminBasePath = () => {
     if (typeof window === 'undefined') return '/sih-panel-308';
@@ -1585,9 +1586,19 @@ function RecorridoTab({ tour, scenes = [], flash, basePath }) {
         setBatchItems((prev) => prev.filter((item) => item.id !== id));
     };
 
-    const guardarEscena = (e) => {
+    const guardarEscena = async (e) => {
         e.preventDefault();
-        form.post(`${basePath}/recorrido/scenes`, {
+        let imagenOptimazada = form.imagen;
+        if (form.imagen instanceof File) {
+            imagenOptimazada = await compressImageClientSide(form.imagen);
+        }
+
+        const formData = new FormData();
+        formData.append('nombre', form.nombre || '');
+        if (imagenOptimazada) formData.append('imagen', imagenOptimazada);
+        if (form.imagen_url_manual) formData.append('imagen_url_manual', form.imagen_url_manual);
+
+        router.post(`${basePath}/recorrido/scenes`, formData, {
             forceFormData: true,
             onSuccess: () => {
                 setCreando(false);
@@ -1596,7 +1607,7 @@ function RecorridoTab({ tour, scenes = [], flash, basePath }) {
         });
     };
 
-    // Carga Secuencial 1 a 1 usando Inertia Router (Evita errores 419 CSRF y Timeouts de PHP)
+    // Carga Secuencial 1 a 1 con Optimizador de Imagen en Cliente (Evita errores 413 Payload Too Large y Timeouts de PHP)
     const guardarEscenasMasa = (e) => {
         if (e) e.preventDefault();
         if (batchItems.length === 0 || batchUploading) return;
@@ -1607,7 +1618,7 @@ function RecorridoTab({ tour, scenes = [], flash, basePath }) {
 
         const itemsToUpload = [...batchItems];
 
-        const procesarSiguiente = (index) => {
+        const procesarSiguiente = async (index) => {
             if (index >= itemsToUpload.length) {
                 setBatchUploading(false);
                 setTimeout(() => {
@@ -1634,9 +1645,12 @@ function RecorridoTab({ tour, scenes = [], flash, basePath }) {
                 prev.map((it) => (it.id === item.id ? { ...it, status: 'uploading' } : it))
             );
 
+            // Optimizar/comprimir la imagen 360 en el cliente si es gigante (> 2MB)
+            const compressedFile = await compressImageClientSide(item.file);
+
             const formData = new FormData();
             formData.append('nombre', item.nombre || `Espacio ${index + 1}`);
-            formData.append('imagen', item.file);
+            formData.append('imagen', compressedFile);
 
             router.post(`${basePath}/recorrido/scenes`, formData, {
                 forceFormData: true,

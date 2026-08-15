@@ -7,9 +7,8 @@ import AdminSidebar from '@/Components/AdminSidebar';
 import DashboardOverview from '@/Components/DashboardOverview';
 import ImageCropper from '@/Components/ImageCropper';
 import { Sun, Moon, Eye, Move, ZoomIn, Camera, User, X, Check, Upload, ArrowUp, ArrowDown, ArrowLeft, ArrowRight, Plus, Minus, Trash2, Terminal, Server, RefreshCw, Database, HardDrive, ShieldAlert, Cpu, Copy, Play, CreditCard, GitBranch, Trophy, Flame, Sparkles, Shield, Star, Bell, Search, PanelLeft, UserCheck, UserX, Mail, Phone, AtSign, Lock, Image, HardHat, ChevronUp, ChevronDown, Award, Image as ImageIcon, MoveHorizontal, MoveVertical } from 'lucide-react';
-import { processImageFile } from '@/utils/heicConverter';
+import { processImageFile } from '@/utils/heicConverter'; // solo para noticias/testimonios/equipo — NUNCA para imágenes 360°
 import { mediaUrl } from '@/utils/mediaUrl';
-import { compressImageClientSide } from '@/utils/imageCompressor';
 
 const getAdminBasePath = () => {
     if (typeof window === 'undefined') return '/sih-panel-308';
@@ -1804,7 +1803,7 @@ function RecorridoTab({ tour, scenes = [], flash, basePath }) {
                     </div>
 
                     <a
-                        href={`/recorrido-virtual/${tour?.slug || 'colsih'}`}
+                        href={`/recorrido-virtual/${tour?.slug || 'colsih'}?preview=1`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="bg-[#800A15] hover:bg-[#600710] text-white text-xs font-bold px-4 py-2.5 rounded-xl transition duration-200 cursor-pointer flex items-center justify-center gap-1.5 shadow-md shadow-rose-950/20"
@@ -2046,10 +2045,11 @@ function RecorridoTab({ tour, scenes = [], flash, basePath }) {
                                 <label className="text-slate-500 text-[11px] font-bold uppercase tracking-wider block mb-2">O Subir archivo de Imagen Equirrectangular 360°</label>
                                 <input
                                     type="file"
-                                    accept="image/*,.heic,.heif,image/heic,image/heif"
+                                    accept="image/jpeg,image/jpg,image/png,image/webp"
                                     onChange={(e) => {
                                         const f = e.target.files[0];
                                         if (!f) return;
+                                        // Las imágenes 360° NO se comprimen — se envían tal como el usuario las subió
                                         form.setData('imagen', f);
                                     }}
                                     className="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer"

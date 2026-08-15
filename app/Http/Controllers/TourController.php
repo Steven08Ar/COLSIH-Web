@@ -38,8 +38,11 @@ class TourController extends Controller
         ->where('activo', true)
         ->first();
 
+        $isPreview = request()->boolean('preview') || request()->session()->get('colsih_admin_auth');
+
         return Inertia::render('Tours/Show', [
-            'tour' => $tour,
+            'tour'       => $tour,
+            'is_preview' => (bool) $isPreview,
         ]);
     }
 }

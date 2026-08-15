@@ -143,8 +143,8 @@ const DEFAULT_SCENES = [
     }
 ];
 
-export default function Show({ tour = null }) {
-    if (tour?.en_construccion) {
+export default function Show({ tour = null, is_preview = false }) {
+    if (tour?.en_construccion && !is_preview) {
         return (
             <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-6 text-center select-none font-sans relative overflow-hidden">
                 <Head title="Recorrido 360° en Construcción | COLSIH" />

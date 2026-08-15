@@ -1,6 +1,7 @@
 /**
  * Redimensiona y comprime imágenes JPG/PNG/WebP usando Canvas.
- * Solo acepta formatos estándar — HEIC no es soportado.
+ * Usar SOLO para fotos de testimonios, equipo, portadas de noticias y bloques de imagen.
+ * NUNCA llamar esta función para imágenes 360° equirrectangulares.
  */
 export async function processImageFile(file, options = {}) {
     if (!file || !(file instanceof File)) return file;

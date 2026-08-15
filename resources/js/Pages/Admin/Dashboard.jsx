@@ -205,19 +205,36 @@ const TestimonioModal = React.memo(function TestimonioModal({ editando, creando,
 
     function guardar(e) {
         e.preventDefault();
+        const basePath = getAdminBasePath();
+        const fd = new FormData();
+        fd.append('nombre', form.data.nombre || '');
+        fd.append('cargo', form.data.cargo || '');
+        fd.append('texto', form.data.texto || '');
+        fd.append('foto_posicion', form.data.foto_posicion ?? 50);
+        fd.append('video_url', form.data.video_url || '');
+        fd.append('video_activo', form.data.video_activo ? '1' : '0');
+        fd.append('activo', form.data.activo ? '1' : '0');
+        fd.append('orden', form.data.orden ?? 0);
+
+        if (form.data.imagen instanceof File) {
+            fd.append('imagen', form.data.imagen);
+        }
+
         if (editando) {
-            router.post(`${basePath}/testimonios/${editando.id}`, {
-                _method: 'PUT',
-                ...form.data
-            }, {
-                forceFormData: true,
+            fd.append('_method', 'PUT');
+            router.post(`${basePath}/testimonios/${editando.id}`, fd, {
                 onSuccess: cerrar,
                 onError: (errs) => {
                     Object.keys(errs).forEach(key => form.setError(key, errs[key]));
                 }
             });
         } else {
-            form.post(`${basePath}/testimonios`, { onSuccess: cerrar });
+            router.post(`${basePath}/testimonios`, fd, {
+                onSuccess: cerrar,
+                onError: (errs) => {
+                    Object.keys(errs).forEach(key => form.setError(key, errs[key]));
+                }
+            });
         }
     }
 
@@ -2368,19 +2385,37 @@ function EquipoTab({ equipo = [], flash }) {
     function guardar(e) {
         e.preventDefault();
         const basePath = getAdminBasePath();
+        const fd = new FormData();
+        fd.append('nombre', form.data.nombre || '');
+        fd.append('cargo', form.data.cargo || '');
+        fd.append('tipo', form.data.tipo || 'docente');
+        fd.append('area', form.data.area || 'Preescolar');
+        fd.append('foto_posicion', form.data.foto_posicion ?? 20);
+        fd.append('foto_posicion_x', form.data.foto_posicion_x ?? 50);
+        fd.append('foto_posicion_y', form.data.foto_posicion_y ?? 20);
+        fd.append('foto_zoom', form.data.foto_zoom ?? 100);
+        fd.append('orden', form.data.orden ?? 0);
+        fd.append('activo', form.data.activo ? '1' : '0');
+
+        if (form.data.foto instanceof File) {
+            fd.append('foto', form.data.foto);
+        }
+
         if (editando) {
-            router.post(`${basePath}/equipo/${editando.id}`, {
-                _method: 'PUT',
-                ...form.data
-            }, {
-                forceFormData: true,
+            fd.append('_method', 'PUT');
+            router.post(`${basePath}/equipo/${editando.id}`, fd, {
                 onSuccess: cerrar,
                 onError: (errs) => {
                     Object.keys(errs).forEach(key => form.setError(key, errs[key]));
                 }
             });
         } else {
-            form.post(`${basePath}/equipo`, { onSuccess: cerrar });
+            router.post(`${basePath}/equipo`, fd, {
+                onSuccess: cerrar,
+                onError: (errs) => {
+                    Object.keys(errs).forEach(key => form.setError(key, errs[key]));
+                }
+            });
         }
     }
 

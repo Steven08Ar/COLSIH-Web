@@ -1588,14 +1588,10 @@ function RecorridoTab({ tour, scenes = [], flash, basePath }) {
 
     const guardarEscena = async (e) => {
         e.preventDefault();
-        let imagenOptimazada = form.imagen;
-        if (form.imagen instanceof File) {
-            imagenOptimazada = await compressImageClientSide(form.imagen);
-        }
 
         const formData = new FormData();
         formData.append('nombre', form.nombre || '');
-        if (imagenOptimazada) formData.append('imagen', imagenOptimazada);
+        if (form.imagen) formData.append('imagen', form.imagen);
         if (form.imagen_url_manual) formData.append('imagen_url_manual', form.imagen_url_manual);
 
         router.post(`${basePath}/recorrido/scenes`, formData, {
@@ -1607,7 +1603,7 @@ function RecorridoTab({ tour, scenes = [], flash, basePath }) {
         });
     };
 
-    // Carga Secuencial 1 a 1 con Optimizador de Imagen en Cliente (Evita errores 413 Payload Too Large y Timeouts de PHP)
+    // Carga Secuencial 1 a 1 de Imágenes 360° Originales (RAW sin compresión)
     const guardarEscenasMasa = (e) => {
         if (e) e.preventDefault();
         if (batchItems.length === 0 || batchUploading) return;
@@ -1645,12 +1641,10 @@ function RecorridoTab({ tour, scenes = [], flash, basePath }) {
                 prev.map((it) => (it.id === item.id ? { ...it, status: 'uploading' } : it))
             );
 
-            // Optimizar/comprimir la imagen 360 en el cliente si es gigante (> 2MB)
-            const compressedFile = await compressImageClientSide(item.file);
-
+            // Las imágenes 360° JAMÁS se comprimen para evitar distorsiones o pérdida de nitidez equirectangular.
             const formData = new FormData();
             formData.append('nombre', item.nombre || `Espacio ${index + 1}`);
-            formData.append('imagen', compressedFile);
+            formData.append('imagen', item.file);
 
             router.post(`${basePath}/recorrido/scenes`, formData, {
                 forceFormData: true,

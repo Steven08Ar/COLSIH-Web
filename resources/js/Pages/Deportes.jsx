@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import AppLayout from '@/Layouts/AppLayout';
 import { mediaUrl } from '@/utils/mediaUrl';
-import { 
+import {
     ChevronRight,
     ChevronLeft,
     Trophy,
@@ -21,7 +21,7 @@ export default function Deportes({ noticias = [], torneoPartidos = [], deportesB
         return mediaUrl(img) || fallback;
     };
 
-// Helper for rendering team escudos / logos (NO emojis, official logo images or minimalist shield icon)
+    // Helper for rendering team escudos / logos (NO emojis, official logo images or minimalist shield icon)
     const renderEscudo = (escudo) => {
         if (!escudo) return <Shield className="w-4 h-4 text-[#001659] shrink-0" />;
         const src = mediaUrl(escudo);
@@ -49,7 +49,7 @@ export default function Deportes({ noticias = [], torneoPartidos = [], deportesB
 
     const finalMatch = torneoPartidos.find(p => p.fase === 'final') || { equipo_local: 'Ganador Semi 1', equipo_visitante: 'Ganador Semi 2', goles_local: null, goles_visitante: null };
 
-    const campeon = finalMatch.ganador 
+    const campeon = finalMatch.ganador
         ? (finalMatch.ganador === 'local' ? finalMatch.equipo_local : finalMatch.equipo_visitante)
         : null;
 
@@ -69,25 +69,25 @@ export default function Deportes({ noticias = [], torneoPartidos = [], deportesB
 
                 {/* ── AMBIENT INSTITUTIONAL COLOR BACKGROUND GLOWS (50% TRANSPARENCY) ── */}
                 <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
-                    <motion.div 
+                    <motion.div
                         animate={{ scale: [1, 1.1, 1], y: [0, 20, 0] }}
                         transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
-                        className="absolute -top-[120px] -left-[120px] w-[600px] h-[600px] bg-[#001659]/50 rounded-full blur-[140px]" 
+                        className="absolute -top-[120px] -left-[120px] w-[600px] h-[600px] bg-[#001659]/50 rounded-full blur-[140px]"
                     />
-                    <motion.div 
+                    <motion.div
                         animate={{ scale: [1, 1.15, 1], y: [0, -25, 0] }}
                         transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
-                        className="absolute top-[80px] -right-[120px] w-[500px] h-[500px] bg-[#4DB6FF]/50 rounded-full blur-[140px]" 
+                        className="absolute top-[80px] -right-[120px] w-[500px] h-[500px] bg-[#4DB6FF]/50 rounded-full blur-[140px]"
                     />
-                    <motion.div 
+                    <motion.div
                         animate={{ scale: [1, 1.1, 1], x: [0, -20, 0] }}
                         transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
-                        className="absolute top-[22%] -right-[100px] w-[550px] h-[550px] bg-[#800A15]/50 rounded-full blur-[150px]" 
+                        className="absolute top-[22%] -right-[100px] w-[550px] h-[550px] bg-[#800A15]/50 rounded-full blur-[150px]"
                     />
-                    <motion.div 
+                    <motion.div
                         animate={{ scale: [1, 1.2, 1], x: [0, 25, 0] }}
                         transition={{ duration: 15, repeat: Infinity, ease: 'easeInOut' }}
-                        className="absolute top-[35%] -left-[100px] w-[450px] h-[450px] bg-[#FFC107]/50 rounded-full blur-[140px]" 
+                        className="absolute top-[35%] -left-[100px] w-[450px] h-[450px] bg-[#FFC107]/50 rounded-full blur-[140px]"
                     />
                 </div>
 
@@ -96,33 +96,32 @@ export default function Deportes({ noticias = [], torneoPartidos = [], deportesB
                     {/* ── 1. HERO SECTION ── */}
                     <section className="relative w-full pt-28 pb-12 overflow-hidden min-h-[640px]">
                         <div className="max-w-[1440px] mx-auto px-6 md:px-12 lg:px-16 relative">
-                            
+
                             {/* Desktop Pixel-Perfect Layout */}
                             <div className="hidden lg:block relative w-full h-[620px]">
-                                <img 
-                                    src="/images/deportes/balon_basket_fondo.png" 
-                                    alt="Fondo Balón" 
+                                <img
+                                    src="/images/deportes/balon_basket_fondo.png"
+                                    alt="Fondo Balón"
                                     className="absolute left-[0px] top-[0px] w-[720px] h-[550px] object-contain opacity-65 pointer-events-none"
                                 />
 
-                                <div className="absolute left-[130px] top-[75px] w-[500px] text-[68px] xl:text-[76px] font-black uppercase leading-[0.90] tracking-tighter font-sans z-10 select-none">
-                                    <span className="text-[#262626]">MÁXIMO</span> <br />
-                                    <span className="text-[#262626]">ANOTADOR</span> <br />
-                                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#001659] to-[#08111F]">DE LA GRAN</span> <br />
-                                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#001659] via-[#08111F] to-slate-700">FINAL</span>
+                                <div className="absolute left-[130px] top-[60px] w-[540px] text-[56px] xl:text-[66px] font-black uppercase leading-[0.92] tracking-tighter font-sans z-10 select-none">
+                                    <span className="text-[#262626]">PRÓXIMAMENTE</span> <br />
+                                    <span className="text-[#001659]">GANADORES</span> <br />
+                                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#001659] to-[#08111F]">INTER-CLASES Y</span> <br />
                                 </div>
 
-                                <img 
-                                    src="/images/deportes/persona_basket_saltando.png" 
-                                    alt="Jugador de Baloncesto Saltando" 
+                                <img
+                                    src="/images/deportes/persona_basket_saltando.png"
+                                    alt="Jugador de Baloncesto Saltando"
                                     className="absolute left-[260px] top-[20px] w-[720px] h-[580px] object-contain z-20 pointer-events-none drop-shadow-xl"
                                 />
 
-                                <div className="absolute left-[560px] top-[445px] w-[360px] flex flex-col items-start gap-4 z-30">
+                                <div className="absolute left-[560px] top-[445px] w-[380px] flex flex-col items-start gap-4 z-30">
                                     <p className="text-[#4A4A4A] text-[14px] xl:text-[15px] font-medium leading-[22px] font-['DM_Sans',sans-serif]">
-                                        El premio al máximo anotador de las finales es la distinción individual otorgada al estudiante que obtuvo el mayor puntaje y rendimiento en el torneo intercolegiado.
+                                        Próximamente en esta sección se darán a conocer los ganadores de los torneos inter-clases y se destacará a nuestros estudiantes atletas de diferentes deportes.
                                     </p>
-                                    <a 
+                                    <a
                                         href="#cuadrangulares-mapa"
                                         className="inline-flex items-center justify-center px-8 py-3.5 bg-[#262626] hover:bg-[#001659] text-white text-xs font-bold uppercase tracking-[1.8px] rounded-md transition-all shadow-md hover:scale-105 active:scale-95 cursor-pointer font-['DM_Sans',sans-serif]"
                                     >
@@ -140,15 +139,15 @@ export default function Deportes({ noticias = [], torneoPartidos = [], deportesB
                                         </div>
 
                                         {noticias.slice(0, 2).map((newsItem, idx) => (
-                                            <Link 
+                                            <Link
                                                 key={newsItem.id}
                                                 href={`/noticias/${newsItem.slug}`}
                                                 className={`absolute left-[1040px] ${idx === 0 ? 'top-[120px]' : 'top-[340px]'} w-[270px] h-[195px] rounded-xl overflow-hidden shadow-sm group cursor-pointer border border-slate-200/80 bg-white/90 backdrop-blur-md z-30`}
                                             >
-                                                <img 
-                                                    src={getNewsImageUrl(newsItem.imagen)} 
-                                                    alt={newsItem.titulo} 
-                                                    className="w-full h-[120px] object-cover group-hover:scale-105 transition-transform duration-500" 
+                                                <img
+                                                    src={getNewsImageUrl(newsItem.imagen)}
+                                                    alt={newsItem.titulo}
+                                                    className="w-full h-[120px] object-cover group-hover:scale-105 transition-transform duration-500"
                                                 />
                                                 <div className="p-3 text-left space-y-1">
                                                     <span className="text-[10px] font-bold text-[#888888] uppercase block font-['DM_Sans',sans-serif]">
@@ -166,10 +165,13 @@ export default function Deportes({ noticias = [], torneoPartidos = [], deportesB
 
                             {/* Mobile Responsive Layout */}
                             <div className="lg:hidden flex flex-col items-center text-center space-y-6 relative py-6">
-                                <h1 className="text-3xl sm:text-5xl font-black text-[#262626] uppercase leading-none tracking-tighter font-sans z-10">
-                                    MÁXIMO ANOTADOR <br />
-                                    <span className="text-[#001659]">DE LA GRAN FINAL</span>
+                                <h1 className="text-2xl sm:text-4xl font-black text-[#262626] uppercase leading-tight tracking-tighter font-sans z-10">
+                                    PRÓXIMAMENTE GANADORES <br />
+                                    <span className="text-[#001659]">INTER-CLASES Y ATLETAS COLSIH</span>
                                 </h1>
+                                <p className="text-[#4A4A4A] text-sm font-medium leading-relaxed max-w-md px-2">
+                                    Próximamente en esta sección se darán a conocer los ganadores de los torneos inter-clases y se destacará a nuestros estudiantes atletas de diferentes deportes.
+                                </p>
                                 <div className="relative w-full max-w-[380px] aspect-[4/3] z-20">
                                     <img src="/images/deportes/persona_basket_saltando.png" alt="Jugador de Baloncesto" className="w-full h-full object-contain drop-shadow-lg" />
                                 </div>
@@ -394,14 +396,14 @@ export default function Deportes({ noticias = [], torneoPartidos = [], deportesB
                             </div>
 
                             {/* MINIMALIST WHITE & INSTITUTIONAL BRACKET BOARD WITH LOGOS */}
-                            <motion.div 
+                            <motion.div
                                 initial={{ opacity: 0, y: 20 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.6 }}
                                 className="relative rounded-3xl bg-white/95 backdrop-blur-md p-6 sm:p-12 shadow-xl border border-slate-200/90 overflow-hidden text-[#262626]"
                             >
-                                
+
                                 {/* Ambient Colors Subtle Watermarks */}
                                 <div className="absolute -top-24 -left-24 w-72 h-72 bg-[#001659]/5 rounded-full blur-3xl pointer-events-none" />
                                 <div className="absolute -bottom-24 -right-24 w-72 h-72 bg-[#800A15]/5 rounded-full blur-3xl pointer-events-none" />
@@ -416,7 +418,7 @@ export default function Deportes({ noticias = [], torneoPartidos = [], deportesB
                                         </div>
 
                                         {/* Match 1 */}
-                                        <motion.div 
+                                        <motion.div
                                             whileHover={{ y: -3, scale: 1.01 }}
                                             className={`p-4 rounded-2xl border transition-all ${cuartos1.ganador ? 'bg-white border-emerald-400 shadow-md ring-2 ring-emerald-400/20' : 'bg-slate-50/90 border-slate-200'}`}
                                         >
@@ -443,7 +445,7 @@ export default function Deportes({ noticias = [], torneoPartidos = [], deportesB
                                         </motion.div>
 
                                         {/* Match 2 */}
-                                        <motion.div 
+                                        <motion.div
                                             whileHover={{ y: -3, scale: 1.01 }}
                                             className={`p-4 rounded-2xl border transition-all ${cuartos2.ganador ? 'bg-white border-emerald-400 shadow-md ring-2 ring-emerald-400/20' : 'bg-slate-50/90 border-slate-200'}`}
                                         >
@@ -475,7 +477,7 @@ export default function Deportes({ noticias = [], torneoPartidos = [], deportesB
                                                 <Sparkles className="w-3.5 h-3.5 text-[#FFC107]" />
                                                 <span>Semifinal 1 (Ganadores L1 vs L2)</span>
                                             </div>
-                                            <motion.div 
+                                            <motion.div
                                                 whileHover={{ y: -3, scale: 1.01 }}
                                                 className={`p-4 rounded-2xl border-2 transition-all ${semifinal1.ganador ? 'bg-white border-[#001659] shadow-lg ring-4 ring-[#001659]/10' : 'bg-slate-50 border-blue-200'}`}
                                             >
@@ -501,8 +503,8 @@ export default function Deportes({ noticias = [], torneoPartidos = [], deportesB
 
                                     {/* CENTER: TROPHY & FINAL MATCH */}
                                     <div className="lg:col-span-4 flex flex-col items-center justify-center space-y-6 text-center py-6">
-                                        
-                                        <motion.div 
+
+                                        <motion.div
                                             animate={campeon ? { scale: [1, 1.08, 1], rotate: [0, 2, -2, 0] } : {}}
                                             transition={{ duration: 2.5, repeat: Infinity }}
                                             className="relative"
@@ -522,7 +524,7 @@ export default function Deportes({ noticias = [], torneoPartidos = [], deportesB
                                                 🏆 GRAN FINAL INTER-CLASES
                                             </span>
 
-                                            <motion.div 
+                                            <motion.div
                                                 whileHover={{ scale: 1.02 }}
                                                 className="bg-white border-2 border-[#001659] rounded-3xl p-6 shadow-2xl space-y-3 text-left relative overflow-hidden"
                                             >
@@ -548,7 +550,7 @@ export default function Deportes({ noticias = [], torneoPartidos = [], deportesB
                                             </motion.div>
 
                                             {campeon && (
-                                                <motion.div 
+                                                <motion.div
                                                     initial={{ opacity: 0, scale: 0.9 }}
                                                     animate={{ opacity: 1, scale: 1 }}
                                                     className="p-4 rounded-2xl bg-gradient-to-r from-[#001659] to-[#800A15] text-amber-300 font-black text-sm uppercase tracking-wider shadow-xl flex items-center justify-center gap-2 border border-amber-400/40"
@@ -572,7 +574,7 @@ export default function Deportes({ noticias = [], torneoPartidos = [], deportesB
                                         </div>
 
                                         {/* Match 3 */}
-                                        <motion.div 
+                                        <motion.div
                                             whileHover={{ y: -3, scale: 1.01 }}
                                             className={`p-4 rounded-2xl border transition-all ${cuartos3.ganador ? 'bg-white border-emerald-400 shadow-md ring-2 ring-emerald-400/20' : 'bg-slate-50/90 border-slate-200'}`}
                                         >
@@ -599,7 +601,7 @@ export default function Deportes({ noticias = [], torneoPartidos = [], deportesB
                                         </motion.div>
 
                                         {/* Match 4 */}
-                                        <motion.div 
+                                        <motion.div
                                             whileHover={{ y: -3, scale: 1.01 }}
                                             className={`p-4 rounded-2xl border transition-all ${cuartos4.ganador ? 'bg-white border-emerald-400 shadow-md ring-2 ring-emerald-400/20' : 'bg-slate-50/90 border-slate-200'}`}
                                         >
@@ -631,7 +633,7 @@ export default function Deportes({ noticias = [], torneoPartidos = [], deportesB
                                                 <span>Semifinal 2 (Ganadores L3 vs L4)</span>
                                                 <Sparkles className="w-3.5 h-3.5 text-[#FFC107]" />
                                             </div>
-                                            <motion.div 
+                                            <motion.div
                                                 whileHover={{ y: -3, scale: 1.01 }}
                                                 className={`p-4 rounded-2xl border-2 transition-all ${semifinal2.ganador ? 'bg-white border-[#001659] shadow-lg ring-4 ring-[#001659]/10' : 'bg-slate-50 border-blue-200'}`}
                                             >

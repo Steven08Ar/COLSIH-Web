@@ -185,7 +185,7 @@ export default function Deportes({ noticias = [], torneoPartidos = [], deportesB
                                         <span className="text-[34px] font-black uppercase tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-[#262626] to-[#78889B] font-sans">MICROFÚTBOL</span>
                                     </motion.div>
                                     <motion.div whileHover={{ scale: 1.02 }} className="w-full h-[288px] rounded-[10px] overflow-hidden shadow-xs border border-slate-200/60">
-                                        <img src="https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=600&q=80" alt="Microfútbol" className="w-full h-full object-cover" />
+                                        <img src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=800&q=80" alt="Microfútbol" className="w-full h-full object-cover" />
                                     </motion.div>
                                 </div>
 

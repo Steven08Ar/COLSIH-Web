@@ -293,7 +293,7 @@ export default function Navbar() {
                                             key={item.href}
                                             href={item.href}
                                             className={`block px-4 py-2.5 mx-1.5 text-[14px] font-semibold rounded-xl transition-all duration-200 hover:bg-white/[0.08] hover:text-white ${
-                                                url === item.href ? 'text-[#003C8F] bg-white/[0.06]' : 'text-white/70'
+                                                url === item.href ? 'text-white bg-white/[0.06]' : 'text-white/70'
                                             }`}
                                         >
                                             {item.label}

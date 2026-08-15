@@ -66,8 +66,13 @@ export default function Deportes({ noticias = [], torneoPartidos = [], deportesB
             </Head>
 
             <div className="relative bg-[#FFFFFF] text-[#262626] overflow-hidden font-['DM_Sans',sans-serif] select-none">
-                {/* ── CLEAN STATIC LIGHTWEIGHT BACKGROUND ── */}
-                <div className="absolute inset-0 pointer-events-none z-0 bg-gradient-to-b from-slate-50/50 via-transparent to-slate-100/30" />
+                {/* ── AMBIENT INSTITUTIONAL COLOR BACKGROUND GLOWS (HIGH PERFORMANCE STATIC) ── */}
+                <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
+                    <div className="absolute -top-[120px] -left-[120px] w-[600px] h-[600px] bg-[#001659]/35 rounded-full blur-[140px]" />
+                    <div className="absolute top-[80px] -right-[120px] w-[500px] h-[500px] bg-[#4DB6FF]/40 rounded-full blur-[140px]" />
+                    <div className="absolute top-[22%] -right-[100px] w-[550px] h-[550px] bg-[#800A15]/30 rounded-full blur-[150px]" />
+                    <div className="absolute top-[35%] -left-[100px] w-[450px] h-[450px] bg-[#FFC107]/25 rounded-full blur-[140px]" />
+                </div>
 
                 <div className="relative z-10">
 
@@ -83,22 +88,16 @@ export default function Deportes({ noticias = [], torneoPartidos = [], deportesB
                                     className="absolute left-[0px] top-[0px] w-[720px] h-[550px] object-contain opacity-65 pointer-events-none"
                                 />
 
-                                <div className="absolute left-[50px] xl:left-[70px] top-[75px] w-[580px] font-sans z-30 select-none">
-                                    <span className="block text-[44px] xl:text-[54px] font-black text-[#262626] uppercase leading-[0.92] tracking-tighter">
-                                        PRÓXIMAMENTE
-                                    </span>
-                                    <span className="block text-[54px] xl:text-[66px] font-black text-[#001659] uppercase leading-[0.92] tracking-tighter">
-                                        GANADORES
-                                    </span>
-                                    <span className="block text-[44px] xl:text-[54px] font-black text-transparent bg-clip-text bg-gradient-to-r from-[#001659] via-[#08111F] to-slate-700 uppercase leading-[0.92] tracking-tighter">
-                                        INTER-CLASES
-                                    </span>
+                                <div className="absolute left-[130px] top-[60px] w-[540px] text-[56px] xl:text-[66px] font-black uppercase leading-[0.92] tracking-tighter font-sans z-10 select-none">
+                                    <span className="text-[#262626]">PRÓXIMAMENTE</span> <br />
+                                    <span className="text-[#001659]">GANADORES</span> <br />
+                                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#001659] via-[#08111F] to-slate-700">INTER-CLASES</span>
                                 </div>
 
                                 <img 
                                     src="/images/deportes/persona_basket_saltando.png" 
                                     alt="Jugador de Baloncesto Saltando" 
-                                    className="absolute left-[300px] xl:left-[340px] top-[20px] w-[700px] h-[580px] object-contain z-20 pointer-events-none drop-shadow-xl"
+                                    className="absolute left-[260px] top-[20px] w-[720px] h-[580px] object-contain z-20 pointer-events-none drop-shadow-xl"
                                 />
 
                                 <div className="absolute left-[560px] top-[445px] w-[380px] flex flex-col items-start gap-4 z-30">

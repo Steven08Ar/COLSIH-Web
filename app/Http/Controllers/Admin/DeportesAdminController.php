@@ -68,10 +68,10 @@ class DeportesAdminController extends Controller
 
         if (DeporteCarrusel::count() === 0) {
             DeporteCarrusel::create([
-                'tag' => 'Microfútbol Intercolegiado',
-                'subtitulo' => 'Deportes COLSIH • Temporada 2026',
-                'titulo' => 'GRAN COPA SALESIANA DE MICROFÚTBOL INTER-CASAS',
-                'descripcion' => 'Nuestros estudiantes compiten en un torneo lleno de espíritu deportivo, valores e integración institucional.',
+                'tag' => 'Deportes COLSIH',
+                'subtitulo' => 'Colegio Santa Isabel de Hungría',
+                'titulo' => 'PRÓXIMAMENTE NOTICIAS DEPORTIVAS INSTITUCIONALES',
+                'descripcion' => 'Próximamente en esta sección se publicarán todas las noticias, resultados y torneos deportivos destacados de la institución.',
                 'imagen' => 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=1600&q=80',
                 'orden' => 1,
                 'activo' => true,

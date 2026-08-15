@@ -6,11 +6,10 @@ import {
 } from 'lucide-react';
 import { processImageFile } from '@/utils/heicConverter';
 
+import { getYouTubeEmbedUrl } from '@/utils/youtube';
+
 function toEmbedUrl(url) {
-    if (!url) return null;
-    if (url.includes('/embed/')) return url;
-    const m = url.match(/(?:v=|youtu\.be\/)([A-Za-z0-9_-]{11})/);
-    return m ? `https://www.youtube-nocookie.com/embed/${m[1]}` : null;
+    return getYouTubeEmbedUrl(url);
 }
 
 /* ── Imagen ── */

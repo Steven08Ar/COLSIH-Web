@@ -2,18 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import ScrollReveal from './ScrollReveal';
 import { mediaUrl } from '@/utils/mediaUrl';
-
-function toEmbedUrl(url) {
-    if (!url) return null;
-    let clean = url.trim();
-    if (clean.includes('watch?v=')) {
-        clean = clean.replace('watch?v=', 'embed/');
-    } else if (clean.includes('youtu.be/')) {
-        clean = clean.replace('youtu.be/', 'youtube.com/embed/');
-    }
-    const baseUrl = clean.split('?')[0];
-    return `${baseUrl}?autoplay=1&modestbranding=1&rel=0&playsinline=1&enablejsapi=1`;
-}
+import { getYouTubeEmbedUrl, getYouTubeWatchUrl } from '@/utils/youtube';
 
 export default function Testimonials({ testimonios }) {
     if (!testimonios || testimonios.length === 0) return null;
@@ -26,11 +15,12 @@ export default function Testimonials({ testimonios }) {
         image: mediaUrl(t.imagen),
         fotoPos: Number(t.foto_posicion ?? 50),
         videoActivo: !!t.video_activo,
-        videoUrl: t.video_activo ? (toEmbedUrl(t.video_url || t.videoUrl) || null) : null,
+        videoEmbedUrl: t.video_activo ? (getYouTubeEmbedUrl(t.video_url || t.videoUrl) || null) : null,
+        videoWatchUrl: t.video_activo ? (getYouTubeWatchUrl(t.video_url || t.videoUrl) || null) : null,
     }));
 
     const [activeIndex, setActiveIndex] = useState(0);
-    const [activeVideoUrl, setActiveVideoUrl] = useState(null);
+    const [activeVideo, setActiveVideo] = useState(null);
     const [isMobile, setIsMobile] = useState(false);
 
     // Touch swipe refs
@@ -79,16 +69,16 @@ export default function Testimonials({ testimonios }) {
 
     // Auto rotate every 7 seconds (paused when video modal is open)
     useEffect(() => {
-        if (activeVideoUrl || list.length <= 1) return;
+        if (activeVideo || list.length <= 1) return;
         const interval = setInterval(handleNext, 7000);
         return () => clearInterval(interval);
-    }, [activeIndex, activeVideoUrl, list.length]);
+    }, [activeIndex, activeVideo, list.length]);
 
     // Escape key listener to close modal
     useEffect(() => {
         const handleKeyDown = (e) => {
             if (e.key === 'Escape') {
-                setActiveVideoUrl(null);
+                setActiveVideo(null);
             }
         };
         window.addEventListener('keydown', handleKeyDown);
@@ -97,7 +87,7 @@ export default function Testimonials({ testimonios }) {
 
     // Prevent background scrolling on html & body when video modal is open
     useEffect(() => {
-        if (activeVideoUrl) {
+        if (activeVideo) {
             document.body.style.overflow = 'hidden';
             document.documentElement.style.overflow = 'hidden';
         } else {
@@ -108,7 +98,7 @@ export default function Testimonials({ testimonios }) {
             document.body.style.overflow = '';
             document.documentElement.style.overflow = '';
         };
-    }, [activeVideoUrl]);
+    }, [activeVideo]);
 
     // Absolute positioned style configurations for smooth infinite 3D slide transitions
     const getCardStyle = (index) => {
@@ -239,8 +229,12 @@ export default function Testimonials({ testimonios }) {
                                     <div
                                         key={idx}
                                         style={getCardStyle(idx)}
-                                        onClick={() => isCenter && item.videoActivo && item.videoUrl && setActiveVideoUrl(item.videoUrl)}
-                                        className={`absolute top-1/2 -translate-y-1/2 flex flex-col justify-between min-h-[400px] md:min-h-[420px] rounded-3xl overflow-hidden shadow-lg border border-slate-800/80 bg-slate-900/50 group ${isCenter && item.videoActivo && item.videoUrl ? 'cursor-pointer' : 'cursor-default'}`}
+                                        onClick={() => isCenter && item.videoActivo && item.videoEmbedUrl && setActiveVideo({
+                                            embedUrl: item.videoEmbedUrl,
+                                            watchUrl: item.videoWatchUrl,
+                                            nombre: item.nombre,
+                                        })}
+                                        className={`absolute top-1/2 -translate-y-1/2 flex flex-col justify-between min-h-[400px] md:min-h-[420px] rounded-3xl overflow-hidden shadow-lg border border-slate-800/80 bg-slate-900/50 group ${isCenter && item.videoActivo && item.videoEmbedUrl ? 'cursor-pointer' : 'cursor-default'}`}
                                     >
                                         {/* Background Image */}
                                         <img
@@ -361,19 +355,42 @@ export default function Testimonials({ testimonios }) {
                 </ScrollReveal>
 
                 {/* Floating Video Modal mounted to document.body via Portal */}
-                {activeVideoUrl && typeof document !== 'undefined' && createPortal(
+                {activeVideo && typeof document !== 'undefined' && createPortal(
                     <div
-                        className="fixed inset-0 z-[999999] flex items-center justify-center p-4 sm:p-6 md:p-10 bg-slate-950/95 transform-gpu transition-opacity duration-200 animate-fadeIn"
-                        onClick={() => setActiveVideoUrl(null)}
+                        className="fixed inset-0 z-[999999] flex flex-col items-center justify-center p-4 sm:p-6 md:p-10 bg-slate-950/95 backdrop-blur-md transform-gpu transition-opacity duration-200 animate-fadeIn"
+                        onClick={() => setActiveVideo(null)}
                     >
-                        {/* Sleek Floating Close Button */}
-                        <button
-                            onClick={() => setActiveVideoUrl(null)}
-                            className="absolute top-5 right-5 sm:top-8 sm:right-8 w-12 h-12 bg-white/15 hover:bg-white/25 active:scale-95 hover:scale-110 text-white rounded-full flex items-center justify-center text-lg font-bold transition-all duration-200 cursor-pointer border border-white/25 backdrop-blur-md shadow-2xl z-[1000000]"
-                            aria-label="Cerrar video"
+                        {/* Header bar inside modal */}
+                        <div 
+                            className="w-full max-w-4xl flex items-center justify-between pb-3 px-1 z-[1000000]"
+                            onClick={(e) => e.stopPropagation()}
                         >
-                            ✕
-                        </button>
+                            <span className="text-white/80 text-xs sm:text-sm font-bold truncate pr-4">
+                                {activeVideo.nombre ? `Testimonio — ${activeVideo.nombre}` : 'Testimonio COLSIH'}
+                            </span>
+                            <div className="flex items-center gap-3 shrink-0">
+                                {activeVideo.watchUrl && (
+                                    <a
+                                        href={activeVideo.watchUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-red-600/90 hover:bg-red-600 text-white text-xs font-bold transition-all shadow-lg hover:scale-105 active:scale-95 cursor-pointer"
+                                    >
+                                        <span>Abrir en YouTube</span>
+                                        <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
+                                            <path d="M14 3h7v7h-2V6.41l-9.29 9.3-1.42-1.42 9.3-9.29H14V3zM5 5h6v2H5v12h12v-6h2v6c0 1.1-.9 2-2 2H5c-1.1 0-2-.9-2-2V7c0-1.1.9-2 2-2z"/>
+                                        </svg>
+                                    </a>
+                                )}
+                                <button
+                                    onClick={() => setActiveVideo(null)}
+                                    className="w-9 h-9 bg-white/15 hover:bg-white/30 active:scale-95 hover:scale-110 text-white rounded-full flex items-center justify-center text-sm font-bold transition-all cursor-pointer border border-white/25 shadow-lg"
+                                    aria-label="Cerrar video"
+                                >
+                                    ✕
+                                </button>
+                            </div>
+                        </div>
 
                         {/* Isolated Responsive Video Frame */}
                         <div
@@ -381,11 +398,12 @@ export default function Testimonials({ testimonios }) {
                             onClick={(e) => e.stopPropagation()}
                         >
                             <iframe
-                                src={activeVideoUrl}
+                                src={activeVideo.embedUrl}
                                 title="Testimonio de Video COLSIH"
                                 className="w-full h-full border-0 rounded-2xl sm:rounded-3xl transform-gpu"
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                                 allowFullScreen
+                                referrerPolicy="strict-origin-when-cross-origin"
                                 loading="eager"
                             />
                         </div>
@@ -403,3 +421,4 @@ export default function Testimonials({ testimonios }) {
         </section>
     );
 }
+

@@ -357,7 +357,7 @@ export default function Testimonials({ testimonios }) {
                 {/* Floating Video Modal mounted to document.body via Portal */}
                 {activeVideo && typeof document !== 'undefined' && createPortal(
                     <div
-                        className="fixed inset-0 z-[999999] flex flex-col items-center justify-center p-4 sm:p-6 md:p-10 bg-slate-950/95 backdrop-blur-md transform-gpu transition-opacity duration-200 animate-fadeIn"
+                        className="fixed inset-0 z-[999999] flex flex-col items-center justify-center p-4 sm:p-6 md:p-10 bg-[#030712]/95 transition-opacity duration-200 animate-fadeIn"
                         onClick={() => setActiveVideo(null)}
                     >
                         {/* Header bar inside modal */}
@@ -365,7 +365,7 @@ export default function Testimonials({ testimonios }) {
                             className="w-full max-w-4xl flex items-center justify-between pb-3 px-1 z-[1000000]"
                             onClick={(e) => e.stopPropagation()}
                         >
-                            <span className="text-white/80 text-xs sm:text-sm font-bold truncate pr-4">
+                            <span className="text-white/90 text-xs sm:text-sm font-bold truncate pr-4">
                                 {activeVideo.nombre ? `Testimonio — ${activeVideo.nombre}` : 'Testimonio COLSIH'}
                             </span>
                             <div className="flex items-center gap-3 shrink-0">
@@ -374,7 +374,7 @@ export default function Testimonials({ testimonios }) {
                                         href={activeVideo.watchUrl}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-red-600/90 hover:bg-red-600 text-white text-xs font-bold transition-all shadow-lg hover:scale-105 active:scale-95 cursor-pointer"
+                                        className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-red-600 hover:bg-red-500 text-white text-xs font-bold transition-colors shadow-md cursor-pointer"
                                     >
                                         <span>Abrir en YouTube</span>
                                         <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
@@ -384,7 +384,7 @@ export default function Testimonials({ testimonios }) {
                                 )}
                                 <button
                                     onClick={() => setActiveVideo(null)}
-                                    className="w-9 h-9 bg-white/15 hover:bg-white/30 active:scale-95 hover:scale-110 text-white rounded-full flex items-center justify-center text-sm font-bold transition-all cursor-pointer border border-white/25 shadow-lg"
+                                    className="w-9 h-9 bg-white/15 hover:bg-white/30 text-white rounded-full flex items-center justify-center text-sm font-bold transition-colors cursor-pointer border border-white/25 shadow-md"
                                     aria-label="Cerrar video"
                                 >
                                     ✕
@@ -392,15 +392,15 @@ export default function Testimonials({ testimonios }) {
                             </div>
                         </div>
 
-                        {/* Isolated Responsive Video Frame */}
+                        {/* Isolated Responsive Video Frame optimized for GPU hardware acceleration */}
                         <div
-                            className="relative bg-black rounded-2xl sm:rounded-3xl overflow-hidden max-w-4xl w-full aspect-video shadow-[0_25px_80px_rgba(0,0,0,0.98)] border border-white/20 ring-1 ring-white/15 transform-gpu transition-all duration-300 z-[1000000]"
+                            className="relative bg-black rounded-2xl sm:rounded-3xl overflow-hidden max-w-4xl w-full aspect-video shadow-2xl border border-white/20 ring-1 ring-white/15 z-[1000000]"
                             onClick={(e) => e.stopPropagation()}
                         >
                             <iframe
                                 src={activeVideo.embedUrl}
                                 title="Testimonio de Video COLSIH"
-                                className="w-full h-full border-0 rounded-2xl sm:rounded-3xl transform-gpu"
+                                className="w-full h-full border-0 rounded-2xl sm:rounded-3xl"
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                                 allowFullScreen
                                 referrerPolicy="strict-origin-when-cross-origin"

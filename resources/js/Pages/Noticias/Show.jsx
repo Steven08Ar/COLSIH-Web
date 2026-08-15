@@ -239,11 +239,11 @@ export default function NoticiasShow({ noticia, relacionadas }) {
 
             {/* Modal video */}
             {activeVideoUrl && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm" onClick={() => setActiveVideoUrl(null)}>
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#030712]/95" onClick={() => setActiveVideoUrl(null)}>
                     <button onClick={() => setActiveVideoUrl(null)} className="absolute top-6 right-6 w-12 h-12 bg-white/10 hover:bg-white/20 text-white rounded-full flex items-center justify-center text-xl cursor-pointer border border-white/10">✕</button>
                     <div className="relative bg-black rounded-3xl overflow-hidden max-w-4xl w-full aspect-video shadow-2xl border border-white/10" onClick={e => e.stopPropagation()}>
-                        <iframe src={`${activeVideoUrl}?autoplay=1`} title="Video" className="w-full h-full"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
+                        <iframe src={`${activeVideoUrl}?autoplay=1`} title="Video" className="w-full h-full border-0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen referrerPolicy="strict-origin-when-cross-origin"></iframe>
                     </div>
                 </div>
             )}

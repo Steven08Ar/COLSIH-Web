@@ -66,30 +66,8 @@ export default function Deportes({ noticias = [], torneoPartidos = [], deportesB
             </Head>
 
             <div className="relative bg-[#FFFFFF] text-[#262626] overflow-hidden font-['DM_Sans',sans-serif] select-none">
-
-                {/* ── AMBIENT INSTITUTIONAL COLOR BACKGROUND GLOWS (50% TRANSPARENCY) ── */}
-                <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
-                    <motion.div
-                        animate={{ scale: [1, 1.1, 1], y: [0, 20, 0] }}
-                        transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
-                        className="absolute -top-[120px] -left-[120px] w-[600px] h-[600px] bg-[#001659]/50 rounded-full blur-[140px]"
-                    />
-                    <motion.div
-                        animate={{ scale: [1, 1.15, 1], y: [0, -25, 0] }}
-                        transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
-                        className="absolute top-[80px] -right-[120px] w-[500px] h-[500px] bg-[#4DB6FF]/50 rounded-full blur-[140px]"
-                    />
-                    <motion.div
-                        animate={{ scale: [1, 1.1, 1], x: [0, -20, 0] }}
-                        transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
-                        className="absolute top-[22%] -right-[100px] w-[550px] h-[550px] bg-[#800A15]/50 rounded-full blur-[150px]"
-                    />
-                    <motion.div
-                        animate={{ scale: [1, 1.2, 1], x: [0, 25, 0] }}
-                        transition={{ duration: 15, repeat: Infinity, ease: 'easeInOut' }}
-                        className="absolute top-[35%] -left-[100px] w-[450px] h-[450px] bg-[#FFC107]/50 rounded-full blur-[140px]"
-                    />
-                </div>
+                {/* ── CLEAN STATIC LIGHTWEIGHT BACKGROUND ── */}
+                <div className="absolute inset-0 pointer-events-none z-0 bg-gradient-to-b from-slate-50/50 via-transparent to-slate-100/30" />
 
                 <div className="relative z-10">
 
@@ -99,21 +77,21 @@ export default function Deportes({ noticias = [], torneoPartidos = [], deportesB
 
                             {/* Desktop Pixel-Perfect Layout */}
                             <div className="hidden lg:block relative w-full h-[620px]">
-                                <img
-                                    src="/images/deportes/balon_basket_fondo.png"
-                                    alt="Fondo Balón"
+                                <img 
+                                    src="/images/deportes/balon_basket_fondo.png" 
+                                    alt="Fondo Balón" 
                                     className="absolute left-[0px] top-[0px] w-[720px] h-[550px] object-contain opacity-65 pointer-events-none"
                                 />
 
-                                <div className="absolute left-[130px] top-[60px] w-[540px] text-[56px] xl:text-[66px] font-black uppercase leading-[0.92] tracking-tighter font-sans z-10 select-none">
+                                <div className="absolute left-[130px] top-[75px] w-[540px] text-[60px] xl:text-[72px] font-black uppercase leading-[0.92] tracking-tighter font-sans z-10 select-none">
                                     <span className="text-[#262626]">PRÓXIMAMENTE</span> <br />
                                     <span className="text-[#001659]">GANADORES</span> <br />
-                                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#001659] to-[#08111F]">INTER-CLASES Y</span> <br />
+                                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#001659] via-[#08111F] to-slate-700">INTER-CLASES</span>
                                 </div>
 
-                                <img
-                                    src="/images/deportes/persona_basket_saltando.png"
-                                    alt="Jugador de Baloncesto Saltando"
+                                <img 
+                                    src="/images/deportes/persona_basket_saltando.png" 
+                                    alt="Jugador de Baloncesto Saltando" 
                                     className="absolute left-[260px] top-[20px] w-[720px] h-[580px] object-contain z-20 pointer-events-none drop-shadow-xl"
                                 />
 
@@ -121,7 +99,7 @@ export default function Deportes({ noticias = [], torneoPartidos = [], deportesB
                                     <p className="text-[#4A4A4A] text-[14px] xl:text-[15px] font-medium leading-[22px] font-['DM_Sans',sans-serif]">
                                         Próximamente en esta sección se darán a conocer los ganadores de los torneos inter-clases y se destacará a nuestros estudiantes atletas de diferentes deportes.
                                     </p>
-                                    <a
+                                    <a 
                                         href="#cuadrangulares-mapa"
                                         className="inline-flex items-center justify-center px-8 py-3.5 bg-[#262626] hover:bg-[#001659] text-white text-xs font-bold uppercase tracking-[1.8px] rounded-md transition-all shadow-md hover:scale-105 active:scale-95 cursor-pointer font-['DM_Sans',sans-serif]"
                                     >
@@ -139,15 +117,15 @@ export default function Deportes({ noticias = [], torneoPartidos = [], deportesB
                                         </div>
 
                                         {noticias.slice(0, 2).map((newsItem, idx) => (
-                                            <Link
+                                            <Link 
                                                 key={newsItem.id}
                                                 href={`/noticias/${newsItem.slug}`}
                                                 className={`absolute left-[1040px] ${idx === 0 ? 'top-[120px]' : 'top-[340px]'} w-[270px] h-[195px] rounded-xl overflow-hidden shadow-sm group cursor-pointer border border-slate-200/80 bg-white/90 backdrop-blur-md z-30`}
                                             >
-                                                <img
-                                                    src={getNewsImageUrl(newsItem.imagen)}
-                                                    alt={newsItem.titulo}
-                                                    className="w-full h-[120px] object-cover group-hover:scale-105 transition-transform duration-500"
+                                                <img 
+                                                    src={getNewsImageUrl(newsItem.imagen)} 
+                                                    alt={newsItem.titulo} 
+                                                    className="w-full h-[120px] object-cover group-hover:scale-105 transition-transform duration-500" 
                                                 />
                                                 <div className="p-3 text-left space-y-1">
                                                     <span className="text-[10px] font-bold text-[#888888] uppercase block font-['DM_Sans',sans-serif]">
@@ -165,9 +143,9 @@ export default function Deportes({ noticias = [], torneoPartidos = [], deportesB
 
                             {/* Mobile Responsive Layout */}
                             <div className="lg:hidden flex flex-col items-center text-center space-y-6 relative py-6">
-                                <h1 className="text-2xl sm:text-4xl font-black text-[#262626] uppercase leading-tight tracking-tighter font-sans z-10">
-                                    PRÓXIMAMENTE GANADORES <br />
-                                    <span className="text-[#001659]">INTER-CLASES Y ATLETAS COLSIH</span>
+                                <h1 className="text-3xl sm:text-4xl font-black text-[#262626] uppercase leading-tight tracking-tighter font-sans z-10">
+                                    PRÓXIMAMENTE <br />
+                                    <span className="text-[#001659]">GANADORES INTER-CLASES</span>
                                 </h1>
                                 <p className="text-[#4A4A4A] text-sm font-medium leading-relaxed max-w-md px-2">
                                     Próximamente en esta sección se darán a conocer los ganadores de los torneos inter-clases y se destacará a nuestros estudiantes atletas de diferentes deportes.
@@ -363,7 +341,7 @@ export default function Deportes({ noticias = [], torneoPartidos = [], deportesB
                     <section id="cuadrangulares-mapa" className="relative overflow-hidden py-16 md:py-24">
 
                         {cuadrangularesBloqueado && (
-                            <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-[#08111F]/96 backdrop-blur-md">
+                            <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-[#08111F]">
                                 <div className="text-center px-6 space-y-5">
                                     <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 text-white/60 border border-white/20 text-xs font-black uppercase tracking-widest">
                                         <Sparkles className="w-4 h-4 text-amber-400" />
@@ -373,7 +351,7 @@ export default function Deportes({ noticias = [], torneoPartidos = [], deportesB
                                         Nos veremos<br />
                                         en <span className="text-amber-400">{new Date().getFullYear() + 1}</span>
                                     </h2>
-                                    <p className="text-white/55 text-sm sm:text-base font-semibold max-w-sm mx-auto">
+                                    <p className="text-white/70 text-sm sm:text-base font-semibold max-w-sm mx-auto">
                                         El torneo inter-clases regresará con más emoción y competencia el próximo año.
                                     </p>
                                 </div>

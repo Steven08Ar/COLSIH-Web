@@ -235,8 +235,8 @@ export default function Deportes({ noticias = [], torneoPartidos = [], deportesB
 
                             {noticias.length === 0 ? (
                                 <div className="w-full bg-slate-50/90 backdrop-blur-md border border-dashed border-slate-300 rounded-3xl p-12 text-center space-y-3">
-                                    <div className="w-14 h-14 rounded-full bg-blue-50 text-[#001659] flex items-center justify-center mx-auto text-2xl shadow-xs">
-                                        🏆
+                                    <div className="w-14 h-14 rounded-full bg-blue-50 text-[#001659] flex items-center justify-center mx-auto shadow-xs">
+                                        <Trophy className="w-7 h-7 text-[#001659]" />
                                     </div>
                                     <h3 className="text-lg font-black text-[#262626] uppercase font-sans">No hay noticias deportivas publicadas aún</h3>
                                     <p className="text-xs font-medium text-slate-500 max-w-md mx-auto font-['DM_Sans',sans-serif]">
@@ -504,7 +504,10 @@ export default function Deportes({ noticias = [], torneoPartidos = [], deportesB
 
                                         <div className="w-full space-y-3">
                                             <span className="text-xs font-black text-[#001659] uppercase tracking-widest block bg-blue-50 py-1.5 rounded-xl border border-blue-200">
-                                                🏆 GRAN FINAL INTER-CLASES
+                                                <span className="inline-flex items-center justify-center gap-1.5">
+                                                    <Trophy className="w-4 h-4 text-amber-500 shrink-0" />
+                                                    <span>GRAN FINAL INTER-CLASES</span>
+                                                </span>
                                             </span>
 
                                             <motion.div

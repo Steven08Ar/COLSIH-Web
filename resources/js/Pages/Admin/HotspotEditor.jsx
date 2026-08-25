@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useRef, useMemo, memo, startTransition } from 'react';
 import { Head, Link, useForm, router } from '@inertiajs/react';
 import { mediaUrl } from '@/utils/mediaUrl';
 import 'pannellum/src/css/pannellum.css';
@@ -7,8 +7,44 @@ import 'pannellum/src/js/pannellum.js';
 import { 
     Globe, Image as ImageIcon, MousePointer, MapPin, Sun, Moon, 
     Eye, Save, Trash2, Link as LinkIcon, Info, RotateCcw, RotateCw, 
-    MoreVertical, X, Check, Settings, Compass, Layers, Sparkles, Camera, Search
+    MoreVertical, X, Check, Settings, Compass, Layers, Sparkles, Camera, Search, ArrowLeft
 } from 'lucide-react';
+
+// Carga la imagen solo cuando entra en el área visible del contenedor scroll.
+// Evita que 38 imágenes 360° (hasta 50MB c/u) se descarguen simultáneamente al abrir el modal.
+const SceneThumbnail = memo(function SceneThumbnail({ src, alt, imgClassName, containerRef }) {
+    const wrapRef = useRef(null);
+    const [show, setShow] = useState(false);
+    const [loaded, setLoaded] = useState(false);
+
+    useEffect(() => {
+        const el = wrapRef.current;
+        if (!el || !src) return;
+        const obs = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) { setShow(true); obs.disconnect(); }
+            },
+            { root: containerRef?.current ?? null, rootMargin: '80px', threshold: 0 }
+        );
+        obs.observe(el);
+        return () => obs.disconnect();
+    }, [src, containerRef]);
+
+    return (
+        <div ref={wrapRef} className="absolute inset-0 bg-slate-900">
+            {!loaded && <div className="absolute inset-0 bg-slate-800 animate-pulse" />}
+            {show && (
+                <img
+                    src={src}
+                    alt={alt}
+                    decoding="async"
+                    onLoad={() => setLoaded(true)}
+                    className={`${imgClassName} transition-opacity duration-300 ${loaded ? 'opacity-100' : 'opacity-0'}`}
+                />
+            )}
+        </div>
+    );
+});
 
 const safeRoute = (name, params) => {
     if (typeof window !== 'undefined' && typeof window.route === 'function') {
@@ -38,6 +74,8 @@ const safeRoute = (name, params) => {
 export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = [], flash }) {
     const containerRef = useRef(null);
     const viewerRef = useRef(null);
+    const imageListScrollRef = useRef(null);
+    const sceneGridScrollRef = useRef(null);
 
     const [isLoading, setIsLoading] = useState(true);
     const [localHotspots, setLocalHotspots] = useState(hotspots);
@@ -267,7 +305,7 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
             texto: '',
             scene_destino_id: '', // NO preseleccionar entrada principal por defecto
         });
-        setActiveModal(true);
+        startTransition(() => setActiveModal(true));
     };
 
     // Abrir modal para editar hotspot existente
@@ -282,7 +320,7 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
             texto: hs.texto || '',
             scene_destino_id: hs.scene_destino_id || '',
         });
-        setActiveModal(true);
+        startTransition(() => setActiveModal(true));
     };
 
     // Guardar / Actualizar
@@ -607,7 +645,7 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
                                 </button>
                             </div>
 
-                            <div className="flex-1 overflow-y-auto space-y-2 pr-1 custom-scrollbar">
+                            <div ref={imageListScrollRef} className="flex-1 overflow-y-auto space-y-2 pr-1 custom-scrollbar">
                                 {allScenes.map((s) => {
                                     const isActive = s.id === scene.id;
 
@@ -622,12 +660,11 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
                                             }`}
                                         >
                                             <div className="relative h-16 w-full bg-slate-900">
-                                                <img
-                                                    src={s.imagen_url || `/storage/${s.imagen_path}`}
+                                                <SceneThumbnail
+                                                    src={s.thumbnail_url || s.imagen_url || `/storage/${s.imagen_path}`}
                                                     alt={s.nombre}
-                                                    loading="lazy"
-                                                    decoding="async"
-                                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                                    imgClassName="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                                    containerRef={imageListScrollRef}
                                                 />
                                                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent p-2 flex items-end justify-between">
                                                     <span className="text-xs font-bold text-white truncate max-w-[200px]">
@@ -761,10 +798,10 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
                                                 No se encontró ninguna escena que coincida con "{sceneSearchQuery}".
                                             </div>
                                         ) : (
-                                            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 max-h-64 overflow-y-auto pr-1 custom-scrollbar p-0.5">
+                                            <div ref={sceneGridScrollRef} className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 max-h-64 overflow-y-auto pr-1 custom-scrollbar p-0.5">
                                                 {filteredScenes.map((s) => {
                                                     const isSelected = String(form.data.scene_destino_id) === String(s.id);
-                                                    const sImg = s.imagen_url || `/storage/${s.imagen_path}`;
+                                                    const sImg = s.thumbnail_url || s.imagen_url || `/storage/${s.imagen_path}`;
 
                                                     return (
                                                         <div
@@ -777,12 +814,11 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
                                                             }`}
                                                         >
                                                             <div className="relative h-24 w-full bg-slate-900 overflow-hidden">
-                                                                <img
+                                                                <SceneThumbnail
                                                                     src={sImg}
                                                                     alt={s.nombre}
-                                                                    loading="lazy"
-                                                                    decoding="async"
-                                                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                                                    imgClassName="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                                                    containerRef={sceneGridScrollRef}
                                                                 />
                                                                 {isSelected && (
                                                                     <div className="absolute top-2 right-2 w-6 h-6 rounded-full bg-[#800A15] text-white flex items-center justify-center text-xs font-black shadow-lg border border-white/40">

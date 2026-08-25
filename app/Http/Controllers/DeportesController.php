@@ -16,7 +16,10 @@ class DeportesController extends Controller
         DeportesAdminController::seedDefaultMatchesIfNeeded();
 
         $noticiasDeportivas = Noticia::publicadas()
-            ->where('es_deporte', true)
+            ->where(function ($q) {
+                $q->where('es_deporte', true)
+                  ->orWhere('seccion', 'deportes');
+            })
             ->latest()
             ->get(['id', 'titulo', 'slug', 'resumen', 'imagen', 'categoria', 'seccion', 'publicado_en']);
 

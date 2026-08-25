@@ -82,7 +82,7 @@ class AdminUsersController extends Controller
             'activo'   => $data['activo'] ?? true,
         ]);
 
-        return back()->with('flash', 'Usuario creado correctamente.');
+        return redirect()->route('admin.usuarios.index')->with('flash', 'Usuario creado correctamente.');
     }
 
     public function update(Request $request, AdminUser $adminUser)
@@ -124,7 +124,7 @@ class AdminUsersController extends Controller
 
         $adminUser->update($updates);
 
-        return back()->with('flash', 'Usuario actualizado correctamente.');
+        return redirect()->route('admin.usuarios.index')->with('flash', 'Usuario actualizado correctamente.');
     }
 
     public function destroy(Request $request, AdminUser $adminUser)
@@ -134,7 +134,7 @@ class AdminUsersController extends Controller
         ImageOptimizer::eliminar($adminUser->foto);
         $adminUser->delete();
 
-        return back()->with('flash', 'Usuario eliminado.');
+        return redirect()->route('admin.usuarios.index')->with('flash', 'Usuario eliminado.');
     }
 
     public function toggleActivo(Request $request, AdminUser $adminUser)
@@ -144,7 +144,7 @@ class AdminUsersController extends Controller
         $adminUser->update(['activo' => !$adminUser->activo]);
         $msg = $adminUser->activo ? 'Usuario activado.' : 'Usuario desactivado.';
 
-        return back()->with('flash', $msg);
+        return redirect()->route('admin.usuarios.index')->with('flash', $msg);
     }
 
 }

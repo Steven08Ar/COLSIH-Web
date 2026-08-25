@@ -103,7 +103,7 @@ class SystemAdminController extends Controller
         $actionKey = $request->input('action');
 
         if (!isset($this->allowedCommands[$actionKey])) {
-            return back()->with('flash_error', 'Comando no permitido o no encontrado.');
+            return redirect()->route('admin.mantenimiento')->with('flash_error', 'Comando no permitido o no encontrado.');
         }
 
         $cmdInfo = $this->allowedCommands[$actionKey];
@@ -125,7 +125,7 @@ class SystemAdminController extends Controller
                 'output'   => $output,
             ]);
 
-            return back()->with([
+            return redirect()->route('admin.mantenimiento')->with([
                 'flash' => "Comando '{$cmdInfo['label']}' ejecutado correctamente.",
                 'command_output' => [
                     'action'      => $actionKey,
@@ -139,7 +139,7 @@ class SystemAdminController extends Controller
         } catch (\Throwable $e) {
             Log::error("Error al ejecutar comando Artisan desde panel: " . $e->getMessage());
 
-            return back()->with([
+            return redirect()->route('admin.mantenimiento')->with([
                 'flash_error' => "Error al ejecutar '{$cmdInfo['label']}': " . $e->getMessage(),
                 'command_output' => [
                     'action'      => $actionKey,
@@ -185,7 +185,7 @@ class SystemAdminController extends Controller
 
         Log::info("Admin ejecutó deploy desde panel.", ['output' => $outputStr]);
 
-        return back()->with([
+        return redirect()->route('admin.mantenimiento')->with([
             'flash'          => $exitCode === 0 ? 'Deploy ejecutado correctamente.' : 'Deploy finalizado con advertencias — revisa el log.',
             'command_output' => [
                 'action'      => $actionKey,

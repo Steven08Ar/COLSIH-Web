@@ -73,15 +73,21 @@ class TourAdminController extends Controller
         $tour = Tour::firstOrCreate(['slug' => 'colsih'], ['nombre' => 'Recorrido Virtual 360°']);
 
         $imagenPath = null;
+        $thumbnailPath = null;
 
         if ($request->hasFile('imagen')) {
             $imagenPath = ImageOptimizer::guardarRaw($request->file('imagen'), 'recorrido_360');
+            try {
+                $thumbnailPath = ImageOptimizer::guardar($request->file('imagen'), 'recorrido_360/thumbs', 600);
+            } catch (\Throwable) {
+                // Si falla el thumbnail, no bloquear la subida
+            }
         } elseif ($request->filled('imagen_url_manual')) {
             $imagenPath = ltrim($request->imagen_url_manual, '/storage/');
         }
 
         if (!$imagenPath) {
-            return back()->with('flash', 'Debe adjuntar una imagen 360° o especificar la ruta del archivo.');
+            return redirect()->route('admin.recorrido')->with('flash', 'Debe adjuntar una imagen 360° o especificar la ruta del archivo.');
         }
 
         $baseSlug = Str::slug($request->nombre);
@@ -96,6 +102,7 @@ class TourAdminController extends Controller
             'nombre' => $request->nombre,
             'slug' => $slug,
             'imagen_path' => $imagenPath,
+            'thumbnail_path' => $thumbnailPath,
             'yaw_inicial' => 0,
             'pitch_inicial' => 0,
             'hfov_inicial' => 100,
@@ -103,7 +110,7 @@ class TourAdminController extends Controller
             'orden' => $tour->scenes()->count() + 1,
         ]);
 
-        return back()->with('flash', 'Escena 360° agregada exitosamente.');
+        return redirect()->route('admin.recorrido')->with('flash', 'Escena 360° agregada exitosamente.');
     }
 
     /**
@@ -125,7 +132,14 @@ class TourAdminController extends Controller
             if (isset($item['imagen']) && $item['imagen']->isValid()) {
                 $nombre = $request->input("escenas.{$index}.nombre") ?: ('Espacio ' . ($currentCount + $savedCount + 1));
                 $imagenPath = ImageOptimizer::guardarRaw($item['imagen'], 'recorrido_360');
-                
+
+                $thumbnailPath = null;
+                try {
+                    $thumbnailPath = ImageOptimizer::guardar($item['imagen'], 'recorrido_360/thumbs', 600);
+                } catch (\Throwable) {
+                    // Si falla el thumbnail, no bloquear la subida en masa
+                }
+
                 $baseSlug = Str::slug($nombre);
                 $slug = $baseSlug;
                 if (Scene::where('slug', $slug)->exists()) {
@@ -138,6 +152,7 @@ class TourAdminController extends Controller
                     'nombre' => $nombre,
                     'slug' => $slug,
                     'imagen_path' => $imagenPath,
+                    'thumbnail_path' => $thumbnailPath,
                     'yaw_inicial' => 0,
                     'pitch_inicial' => 0,
                     'hfov_inicial' => 100,
@@ -149,7 +164,7 @@ class TourAdminController extends Controller
             }
         }
 
-        return back()->with('flash', "¡Se agregaron {$savedCount} escenas 360° en masa exitosamente!");
+        return redirect()->route('admin.recorrido')->with('flash', "¡Se agregaron {$savedCount} escenas 360° en masa exitosamente!");
     }
 
     /**
@@ -160,7 +175,7 @@ class TourAdminController extends Controller
         Scene::where('tour_id', $scene->tour_id)->update(['es_escena_inicial' => false]);
         $scene->update(['es_escena_inicial' => true]);
 
-        return back()->with('flash', "¡'{$scene->nombre}' fue configurada como la imagen principal del recorrido 360°!");
+        return redirect()->route('admin.recorrido')->with('flash', "¡'{$scene->nombre}' fue configurada como la imagen principal del recorrido 360°!");
     }
 
     /**
@@ -182,7 +197,7 @@ class TourAdminController extends Controller
 
         $scene->update(array_filter($validated, fn($val) => !is_null($val)));
 
-        return back()->with('flash', '¡Configuración de la escena guardada exitosamente!');
+        return redirect()->route('admin.recorrido')->with('flash', '¡Configuración de la escena guardada exitosamente!');
     }
 
     /**
@@ -192,7 +207,7 @@ class TourAdminController extends Controller
     {
         $scene->delete();
 
-        return back()->with('flash', 'Escena eliminada correctamente.');
+        return redirect()->route('admin.recorrido')->with('flash', 'Escena eliminada correctamente.');
     }
 
     /**
@@ -209,6 +224,6 @@ class TourAdminController extends Controller
             ? "El modo 'En construcción' del Recorrido 360° ha sido ACTIVADO para los usuarios."
             : "El modo 'En construcción' del Recorrido 360° ha sido DESACTIVADO. El recorrido está disponible públicamente.";
 
-        return back()->with('flash', $mensaje);
+        return redirect()->route('admin.recorrido')->with('flash', $mensaje);
     }
 }

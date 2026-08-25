@@ -170,49 +170,49 @@ export default function Deportes({ noticias = [], torneoPartidos = [], deportesB
                     {/* ── 2. CATEGORY MOSAIC GRID ── */}
                     <section className="py-12 md:py-20">
                         <div className="max-w-[1440px] mx-auto px-6 md:px-12 lg:px-16 space-y-8">
-                            <div className="flex items-center justify-between">
-                                <h2 className="text-3xl sm:text-4xl font-black text-[#262626] tracking-tight uppercase font-sans">
+                            <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1.5 sm:gap-4 text-left">
+                                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-[#262626] tracking-tight uppercase font-sans">
                                     Category
                                 </h2>
-                                <span className="text-xs font-extrabold text-slate-400 uppercase tracking-widest font-['DM_Sans',sans-serif]">
+                                <span className="text-[11px] sm:text-xs font-extrabold text-slate-400 uppercase tracking-widest font-['DM_Sans',sans-serif]">
                                     Microfútbol • Baloncesto • Voleibol
                                 </span>
                             </div>
 
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[20px] items-start text-center">
                                 <div className="flex flex-col gap-[20px]">
-                                    <motion.div whileHover={{ scale: 1.02 }} className="w-full h-[116px] bg-[#EBEEF3]/90 backdrop-blur-sm rounded-[10px] flex items-center justify-center p-4 border border-slate-200/60 shadow-xs">
-                                        <span className="text-[34px] font-black uppercase tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-[#262626] to-[#78889B] font-sans">MICROFÚTBOL</span>
+                                    <motion.div whileHover={{ scale: 1.02 }} className="w-full h-[100px] sm:h-[116px] bg-[#EBEEF3]/90 backdrop-blur-sm rounded-[10px] flex items-center justify-center p-4 border border-slate-200/60 shadow-xs">
+                                        <span className="text-2xl sm:text-[30px] lg:text-[34px] font-black uppercase tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-[#262626] to-[#78889B] font-sans">MICROFÚTBOL</span>
                                     </motion.div>
-                                    <motion.div whileHover={{ scale: 1.02 }} className="w-full h-[288px] rounded-[10px] overflow-hidden shadow-xs border border-slate-200/60">
+                                    <motion.div whileHover={{ scale: 1.02 }} className="w-full h-[240px] sm:h-[288px] rounded-[10px] overflow-hidden shadow-xs border border-slate-200/60">
                                         <img src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=800&q=80" alt="Microfútbol" className="w-full h-full object-cover" />
                                     </motion.div>
                                 </div>
 
                                 <div className="flex flex-col gap-[20px]">
-                                    <motion.div whileHover={{ scale: 1.02 }} className="w-full h-[235px] rounded-[10px] overflow-hidden shadow-xs border border-slate-200/60">
+                                    <motion.div whileHover={{ scale: 1.02 }} className="w-full h-[200px] sm:h-[235px] rounded-[10px] overflow-hidden shadow-xs border border-slate-200/60">
                                         <img src="https://images.unsplash.com/photo-1519861531473-9200262188bf?auto=format&fit=crop&w=600&q=80" alt="Baloncesto" className="w-full h-full object-cover" />
                                     </motion.div>
-                                    <motion.div whileHover={{ scale: 1.02 }} className="w-full h-[169px] bg-[#EBEEF3]/90 backdrop-blur-sm rounded-[10px] flex items-center justify-center p-4 border border-slate-200/60 shadow-xs">
-                                        <span className="text-[34px] font-black uppercase tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-[#262626] to-[#78889B] font-sans">BALONCESTO</span>
+                                    <motion.div whileHover={{ scale: 1.02 }} className="w-full h-[140px] sm:h-[169px] bg-[#EBEEF3]/90 backdrop-blur-sm rounded-[10px] flex items-center justify-center p-4 border border-slate-200/60 shadow-xs">
+                                        <span className="text-2xl sm:text-[30px] lg:text-[34px] font-black uppercase tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-[#262626] to-[#78889B] font-sans">BALONCESTO</span>
                                     </motion.div>
                                 </div>
 
                                 <div className="flex flex-col gap-[20px]">
-                                    <motion.div whileHover={{ scale: 1.02 }} className="w-full h-[116px] bg-[#EBEEF3]/90 backdrop-blur-sm rounded-[10px] flex items-center justify-center p-4 border border-slate-200/60 shadow-xs">
-                                        <span className="text-[34px] font-black uppercase tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-[#262626] to-[#78889B] font-sans">VOLEIBOL</span>
+                                    <motion.div whileHover={{ scale: 1.02 }} className="w-full h-[100px] sm:h-[116px] bg-[#EBEEF3]/90 backdrop-blur-sm rounded-[10px] flex items-center justify-center p-4 border border-slate-200/60 shadow-xs">
+                                        <span className="text-2xl sm:text-[30px] lg:text-[34px] font-black uppercase tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-[#262626] to-[#78889B] font-sans">VOLEIBOL</span>
                                     </motion.div>
-                                    <motion.div whileHover={{ scale: 1.02 }} className="w-full h-[288px] rounded-[10px] overflow-hidden shadow-xs border border-slate-200/60">
+                                    <motion.div whileHover={{ scale: 1.02 }} className="w-full h-[240px] sm:h-[288px] rounded-[10px] overflow-hidden shadow-xs border border-slate-200/60">
                                         <img src="https://images.unsplash.com/photo-1612872087720-bb876e2e67d1?auto=format&fit=crop&w=600&q=80" alt="Voleibol" className="w-full h-full object-cover" />
                                     </motion.div>
                                 </div>
 
                                 <div className="flex flex-col gap-[20px]">
-                                    <motion.div whileHover={{ scale: 1.02 }} className="w-full h-[286px] rounded-[10px] overflow-hidden shadow-xs border border-slate-200/60">
+                                    <motion.div whileHover={{ scale: 1.02 }} className="w-full h-[240px] sm:h-[286px] rounded-[10px] overflow-hidden shadow-xs border border-slate-200/60">
                                         <img src="https://images.unsplash.com/photo-1592656094267-764a45160876?auto=format&fit=crop&w=600&q=80" alt="Torneos" className="w-full h-full object-cover" />
                                     </motion.div>
-                                    <motion.div whileHover={{ scale: 1.02 }} className="w-full h-[118px] bg-[#EBEEF3]/90 backdrop-blur-sm rounded-[10px] flex items-center justify-center p-4 border border-slate-200/60 shadow-xs">
-                                        <span className="text-[28px] font-black uppercase tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-[#262626] to-[#78889B] font-sans">TORNEOS COLSIH</span>
+                                    <motion.div whileHover={{ scale: 1.02 }} className="w-full h-[100px] sm:h-[118px] bg-[#EBEEF3]/90 backdrop-blur-sm rounded-[10px] flex items-center justify-center p-4 border border-slate-200/60 shadow-xs">
+                                        <span className="text-xl sm:text-[24px] lg:text-[28px] font-black uppercase tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-[#262626] to-[#78889B] font-sans">TORNEOS COLSIH</span>
                                     </motion.div>
                                 </div>
                             </div>
@@ -224,11 +224,11 @@ export default function Deportes({ noticias = [], torneoPartidos = [], deportesB
                     <section id="noticias-tendencia" className="py-16 md:py-24">
                         <div className="max-w-[1440px] mx-auto px-6 md:px-12 lg:px-16 space-y-10">
 
-                            <div className="flex items-center justify-between">
-                                <h2 className="text-3xl sm:text-4xl font-black text-[#262626] tracking-tight uppercase font-sans">
+                            <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1.5 sm:gap-4 text-left">
+                                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-[#262626] tracking-tight uppercase font-sans">
                                     Trending News
                                 </h2>
-                                <span className="text-xs font-extrabold text-[#001659] uppercase tracking-wider font-['DM_Sans',sans-serif]">
+                                <span className="text-[11px] sm:text-xs font-extrabold text-[#001659] uppercase tracking-wider font-['DM_Sans',sans-serif]">
                                     Actualidad Deportiva COLSIH
                                 </span>
                             </div>
@@ -245,47 +245,109 @@ export default function Deportes({ noticias = [], torneoPartidos = [], deportesB
                                 </div>
                             ) : (
                                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-                                    <div className="lg:col-span-6 space-y-5 flex flex-col justify-between">
-                                        {sideNewsList.map((news) => (
-                                            <Link key={news.id} href={`/noticias/${news.slug}`}>
-                                                <motion.div whileHover={{ x: 4 }} className="bg-white/90 backdrop-blur-md border border-slate-200/80 rounded-2xl p-5 shadow-xs hover:shadow-md transition duration-300 flex flex-col sm:flex-row gap-5 items-center cursor-pointer group text-left h-full">
-                                                    <img src={getNewsImageUrl(news.imagen)} alt={news.titulo} className="w-full sm:w-44 h-36 rounded-xl object-cover shrink-0 group-hover:scale-105 transition-transform duration-300" />
-                                                    <div className="space-y-2">
-                                                        <span className="text-[11px] font-black uppercase text-[#800A15] block font-['DM_Sans',sans-serif]">
-                                                            {news.categoria || 'Deportes'} • {news.publicado_en ? new Date(news.publicado_en).toLocaleDateString('es-CO', { day: 'numeric', month: 'short' }) : 'Reciente'}
-                                                        </span>
-                                                        <h3 className="text-base sm:text-lg font-black text-[#262626] group-hover:text-[#001659] transition-colors leading-snug font-sans">
-                                                            {news.titulo}
-                                                        </h3>
-                                                        <p className="text-xs font-medium text-slate-500 leading-relaxed font-['DM_Sans',sans-serif] line-clamp-2">
-                                                            {news.resumen || 'Haz clic para ver todos los detalles.'}
-                                                        </p>
-                                                    </div>
-                                                </motion.div>
-                                            </Link>
-                                        ))}
-                                    </div>
+                                    
+                                    {/* Lista Lateral de Noticias Secundarias (solo si existen) */}
+                                    {sideNewsList.length > 0 && (
+                                        <div className="lg:col-span-5 space-y-4 flex flex-col justify-between order-2 lg:order-1">
+                                            {sideNewsList.map((news) => (
+                                                <Link key={news.id} href={`/noticias/${news.slug}`} className="block h-full">
+                                                    <motion.div 
+                                                        whileHover={{ y: -3, scale: 1.01 }} 
+                                                        className="bg-white/95 dark:bg-slate-900/90 backdrop-blur-md border border-slate-200/80 dark:border-slate-800 rounded-2xl p-4 sm:p-5 shadow-xs hover:shadow-lg transition duration-300 flex flex-col sm:flex-row gap-4 items-center cursor-pointer group text-left h-full"
+                                                    >
+                                                        <div className="w-full sm:w-36 h-28 rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-800 shrink-0 relative">
+                                                            <img 
+                                                                src={getNewsImageUrl(news.imagen)} 
+                                                                alt={news.titulo} 
+                                                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+                                                            />
+                                                        </div>
+                                                        <div className="space-y-1.5 flex-1 min-w-0">
+                                                            <div className="flex items-center gap-2">
+                                                                <span className="text-[10px] font-black uppercase tracking-wider text-[#800A15] bg-red-50 dark:bg-red-950/40 px-2 py-0.5 rounded border border-red-200/60 dark:border-red-900/40 font-['DM_Sans',sans-serif]">
+                                                                    {news.seccion || news.categoria || 'Deportes'}
+                                                                </span>
+                                                                <span className="text-[11px] font-semibold text-slate-400">
+                                                                    {news.publicado_en ? new Date(news.publicado_en).toLocaleDateString('es-CO', { day: 'numeric', month: 'short' }) : 'Reciente'}
+                                                                </span>
+                                                            </div>
+                                                            <h3 className="text-sm sm:text-base font-black text-[#262626] dark:text-white group-hover:text-[#800A15] dark:group-hover:text-rose-400 transition-colors leading-snug font-sans line-clamp-2">
+                                                                {news.titulo}
+                                                            </h3>
+                                                            {news.resumen && (
+                                                                <p className="text-xs font-medium text-slate-500 dark:text-slate-400 leading-relaxed font-['DM_Sans',sans-serif] line-clamp-2">
+                                                                    {news.resumen}
+                                                                </p>
+                                                            )}
+                                                        </div>
+                                                    </motion.div>
+                                                </Link>
+                                            ))}
+                                        </div>
+                                    )}
 
+                                    {/* Noticia Principal Destacada */}
                                     {mainFeaturedNews && (
-                                        <div className="lg:col-span-6 relative min-h-[460px] rounded-3xl overflow-hidden shadow-xl group cursor-pointer border border-slate-800">
-                                            <Link href={`/noticias/${mainFeaturedNews.slug}`}>
-                                                <img src={getNewsImageUrl(mainFeaturedNews.imagen)} alt={mainFeaturedNews.titulo} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-                                                <div className="absolute inset-0 bg-gradient-to-t from-[#262626] via-[#262626]/60 to-transparent" />
-                                                <div className="absolute inset-0 p-8 sm:p-12 flex flex-col justify-between text-left relative z-10">
-                                                    <div>
-                                                        <span className="px-4 py-1.5 rounded-full border border-white/40 bg-white/10 backdrop-blur-md text-white text-xs font-bold uppercase tracking-widest">
-                                                            {mainFeaturedNews.categoria || 'Noticia Deportiva'}
+                                        <div className={`${sideNewsList.length > 0 ? 'lg:col-span-7 order-1 lg:order-2' : 'lg:col-span-12'} relative min-h-[480px] sm:min-h-[520px] rounded-[28px] overflow-hidden shadow-2xl group cursor-pointer border border-slate-800/80 flex flex-col justify-between`}>
+                                            <Link href={`/noticias/${mainFeaturedNews.slug}`} className="absolute inset-0 flex flex-col justify-between">
+                                                
+                                                {/* Imagen de fondo con zoom suave */}
+                                                <img 
+                                                    src={getNewsImageUrl(mainFeaturedNews.imagen)} 
+                                                    alt={mainFeaturedNews.titulo} 
+                                                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" 
+                                                />
+                                                
+                                                {/* Capa de degradado cinematográfico para legibilidad impecable */}
+                                                <div className="absolute inset-0 bg-gradient-to-t from-[#08111F] via-[#08111F]/70 via-50% to-[#08111F]/20 transition-opacity" />
+
+                                                {/* Cabecera Superior: Badges organizados */}
+                                                <div className="relative z-10 p-6 sm:p-8 flex flex-wrap items-center justify-between gap-3">
+                                                    <div className="flex items-center gap-2.5">
+                                                        <span className="px-3.5 py-1.5 rounded-full bg-[#800A15] text-white text-[10px] font-black uppercase tracking-widest shadow-md">
+                                                            Destacado Principal
+                                                        </span>
+                                                        <span className="px-3 py-1.5 rounded-full border border-white/30 bg-white/15 backdrop-blur-md text-white text-[10px] font-bold uppercase tracking-wider">
+                                                            {mainFeaturedNews.seccion || mainFeaturedNews.categoria || 'Deportes'}
                                                         </span>
                                                     </div>
-                                                    <div className="space-y-4">
-                                                        <span className="text-xs font-bold text-amber-400 tracking-wider uppercase block font-['DM_Sans',sans-serif]">Destacado Principal</span>
-                                                        <h3 className="text-2xl sm:text-4xl font-black text-white leading-tight uppercase font-sans tracking-tight drop-shadow-md">{mainFeaturedNews.titulo}</h3>
-                                                        <p className="text-xs sm:text-sm font-medium text-slate-300 max-w-lg leading-relaxed line-clamp-3">{mainFeaturedNews.resumen}</p>
+
+                                                    {mainFeaturedNews.publicado_en && (
+                                                        <span className="text-[11px] font-bold text-slate-200/90 backdrop-blur-md bg-black/40 px-3 py-1.5 rounded-full border border-white/10">
+                                                            {new Date(mainFeaturedNews.publicado_en).toLocaleDateString('es-CO', { day: 'numeric', month: 'long', year: 'numeric' })}
+                                                        </span>
+                                                    )}
+                                                </div>
+
+                                                {/* Contenido Inferior: Título, Resumen y CTA */}
+                                                <div className="relative z-10 p-6 sm:p-10 space-y-4 text-left max-w-3xl">
+                                                    <div className="space-y-2">
+                                                        <span className="text-xs font-black text-amber-400 tracking-widest uppercase block font-sans">
+                                                            Actualidad Deportiva COLSIH
+                                                        </span>
+                                                        <h3 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white leading-tight uppercase font-sans tracking-tight drop-shadow-md group-hover:text-amber-300 transition-colors">
+                                                            {mainFeaturedNews.titulo}
+                                                        </h3>
+                                                    </div>
+
+                                                    {mainFeaturedNews.resumen && (
+                                                        <p className="text-xs sm:text-sm md:text-base font-medium text-slate-200/90 leading-relaxed line-clamp-3 font-['DM_Sans',sans-serif]">
+                                                            {mainFeaturedNews.resumen}
+                                                        </p>
+                                                    )}
+
+                                                    <div className="pt-2">
+                                                        <span className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/15 hover:bg-white/25 backdrop-blur-md border border-white/25 text-white text-xs font-black uppercase tracking-wider transition-all duration-300 group-hover:border-amber-400 group-hover:text-amber-300 shadow-sm">
+                                                            Leer noticia completa
+                                                            <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                                                        </span>
                                                     </div>
                                                 </div>
+
                                             </Link>
                                         </div>
                                     )}
+
                                 </div>
                             )}
 

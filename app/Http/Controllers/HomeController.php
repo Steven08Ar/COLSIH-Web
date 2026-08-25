@@ -24,6 +24,13 @@ class HomeController extends Controller
 
         $scenes = $tour->scenes;
 
+        $testimonios = Testimonio::activos()->get(['id', 'nombre', 'cargo', 'texto', 'imagen', 'foto_posicion', 'video_url', 'video_activo']);
+        
+        // Incrementar contador de visualizaciones de testimonios mostrados
+        if ($testimonios->isNotEmpty()) {
+            Testimonio::whereIn('id', $testimonios->pluck('id'))->increment('vistas');
+        }
+
         return Inertia::render('Home', [
             'tour'        => $tour,
             'scenes'      => $scenes,
@@ -31,7 +38,7 @@ class HomeController extends Controller
                                 ->latest('publicado_en')
                                 ->limit(3)
                                 ->get(['id', 'titulo', 'slug', 'resumen', 'imagen', 'publicado_en', 'categoria']),
-            'testimonios' => Testimonio::activos()->get(['id', 'nombre', 'cargo', 'texto', 'imagen', 'foto_posicion', 'video_url', 'video_activo']),
+            'testimonios' => $testimonios,
             'preguntas'   => PreguntaFrecuente::activas()->get(['id', 'pregunta', 'respuesta']),
         ]);
     }

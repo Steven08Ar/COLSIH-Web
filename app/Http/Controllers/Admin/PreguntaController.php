@@ -29,7 +29,7 @@ class PreguntaController extends Controller
         ]);
 
         PreguntaFrecuente::create($data);
-        return back()->with('flash', 'Pregunta creada.');
+        return redirect()->route('admin.preguntas')->with('flash', 'Pregunta creada.');
     }
 
     public function update(Request $request, PreguntaFrecuente $pregunta)
@@ -42,12 +42,12 @@ class PreguntaController extends Controller
         ]);
 
         $pregunta->update($data);
-        return back()->with('flash', 'Pregunta actualizada.');
+        return redirect()->route('admin.preguntas')->with('flash', 'Pregunta actualizada.');
     }
 
     public function destroy(PreguntaFrecuente $pregunta)
     {
         $pregunta->delete();
-        return back()->with('flash', 'Pregunta eliminada.');
+        return redirect()->route('admin.preguntas')->with('flash', 'Pregunta eliminada.');
     }
 }

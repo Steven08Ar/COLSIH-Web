@@ -6,7 +6,7 @@ import CarnetsAdminTab from './CarnetsAdminTab';
 import AdminSidebar from '@/Components/AdminSidebar';
 import DashboardOverview from '@/Components/DashboardOverview';
 import ImageCropper from '@/Components/ImageCropper';
-import { Sun, Moon, Eye, Move, ZoomIn, Camera, User, X, Check, Upload, ArrowUp, ArrowDown, ArrowLeft, ArrowRight, Plus, Minus, Trash2, Terminal, Server, RefreshCw, Database, HardDrive, ShieldAlert, Cpu, Copy, Play, CreditCard, GitBranch, Trophy, Flame, Sparkles, Shield, Star, Bell, Search, PanelLeft, UserCheck, UserX, Mail, Phone, AtSign, Lock, Image, HardHat, ChevronUp, ChevronDown, Award, Image as ImageIcon, MoveHorizontal, MoveVertical } from 'lucide-react';
+import { Sun, Moon, Eye, Move, ZoomIn, Camera, User, X, Check, Upload, ArrowUp, ArrowDown, ArrowLeft, ArrowRight, Plus, Minus, Trash2, Terminal, Server, RefreshCw, Database, HardDrive, ShieldAlert, Cpu, Copy, Play, CreditCard, GitBranch, Trophy, Flame, Sparkles, Shield, Star, Bell, Search, PanelLeft, UserCheck, UserX, Mail, Phone, AtSign, Lock, Image, HardHat, ChevronUp, ChevronDown, Award, Image as ImageIcon, MoveHorizontal, MoveVertical, Activity } from 'lucide-react';
 import { processImageFile } from '@/utils/heicConverter'; // solo para noticias/testimonios/equipo — NUNCA para imágenes 360°
 import { mediaUrl } from '@/utils/mediaUrl';
 
@@ -847,6 +847,37 @@ function NoticiasTab({ noticias, flash }) {
     const basePath = window.location.pathname.replace(/\/[^/]+$/, '');
     const categoriaLabel = { noticia: 'Noticia', evento: 'Evento', comunicado: 'Comunicado', preescolar: 'Preescolar' };
 
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const params = new URLSearchParams(window.location.search);
+            const crearParam = params.get('crear');
+            const editarId = params.get('editar');
+
+            if (crearParam === 'deportes' || params.get('seccion') === 'deportes' || params.get('categoria') === 'deportes') {
+                resetForm();
+                setEditando(null);
+                setSeccionNoticia('deportes');
+                setEsDeporte(true);
+                setCategoria('noticia');
+                setCreando(true);
+                
+                const url = new URL(window.location.href);
+                url.searchParams.delete('crear');
+                url.searchParams.delete('seccion');
+                url.searchParams.delete('categoria');
+                window.history.replaceState({}, '', url.pathname + (url.searchParams.toString() ? '?' + url.searchParams.toString() : ''));
+            } else if (editarId) {
+                const item = noticias.find(n => String(n.id) === String(editarId));
+                if (item) {
+                    abrirEditar(item);
+                    const url = new URL(window.location.href);
+                    url.searchParams.delete('editar');
+                    window.history.replaceState({}, '', url.pathname + (url.searchParams.toString() ? '?' + url.searchParams.toString() : ''));
+                }
+            }
+        }
+    }, [noticias]);
+
     const formatDate = (dateStr) => {
         try {
             return new Date(dateStr).toLocaleDateString('es-CO', {
@@ -1049,6 +1080,11 @@ function NoticiasTab({ noticias, flash }) {
                                 }`}>
                                     {categoriaLabel[n.categoria]}
                                 </span>
+                                {(n.es_deporte || n.seccion === 'deportes') && (
+                                    <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-md border uppercase tracking-wider bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 border-amber-200 dark:border-amber-800">
+                                        Deportes
+                                    </span>
+                                )}
                                 <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${n.activo ? 'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 border-emerald-100 dark:border-emerald-900/30' : 'bg-rose-50 dark:bg-rose-900/20 text-rose-600 dark:text-rose-400 border-rose-100 dark:border-rose-900/30'}`}>
                                     {n.activo ? 'Visible' : 'Oculto'}
                                 </span>
@@ -1188,18 +1224,23 @@ function NoticiasTab({ noticias, flash }) {
 
                                     <div>
                                         <label className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block mb-1.5">
-                                            SECCIÓN ACADÉMICA
+                                            SECCIÓN / DESTINO
                                         </label>
                                         <select 
                                             value={seccionNoticia} 
                                             onChange={e => {
                                                 const val = e.target.value;
                                                 setSeccionNoticia(val);
-                                                if (val === 'sena') setEsDeporte(false);
+                                                if (val === 'deportes') {
+                                                    setEsDeporte(true);
+                                                } else if (val === 'sena') {
+                                                    setEsDeporte(false);
+                                                }
                                             }} 
                                             className="w-full bg-[#E5E7EB] dark:bg-slate-800 text-slate-900 dark:text-white rounded-md px-3 py-2 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 transition cursor-pointer border-none"
                                         >
-                                            <option value="general">Toda la Institución</option>
+                                            <option value="general">Toda la Institución (General)</option>
+                                            <option value="deportes">Deportes (Torneos y Actividades)</option>
                                             <option value="preescolar">Preescolar</option>
                                             <option value="primaria">Primaria</option>
                                             <option value="bachillerato">Bachillerato</option>
@@ -1255,8 +1296,8 @@ function NoticiasTab({ noticias, flash }) {
                                 <label className={`flex items-center gap-2.5 select-none ${seccionNoticia === 'sena' ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}>
                                     <input 
                                         type="checkbox" 
-                                        checked={seccionNoticia === 'sena' ? false : esDeporte} 
-                                        disabled={seccionNoticia === 'sena'}
+                                        checked={seccionNoticia === 'sena' ? false : (seccionNoticia === 'deportes' || esDeporte)} 
+                                        disabled={seccionNoticia === 'sena' || seccionNoticia === 'deportes'}
                                         onChange={e => setEsDeporte(e.target.checked)} 
                                         className="w-5 h-5 text-blue-600 border-slate-300 rounded focus:ring-blue-500 cursor-pointer accent-blue-600" 
                                     />
@@ -1265,6 +1306,11 @@ function NoticiasTab({ noticias, flash }) {
                                         {seccionNoticia === 'sena' && (
                                             <span className="text-[10px] font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200">
                                                 (SENA no aplica)
+                                            </span>
+                                        )}
+                                        {seccionNoticia === 'deportes' && (
+                                            <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                                                (Activo por Sección)
                                             </span>
                                         )}
                                     </span>
@@ -1838,8 +1884,10 @@ function RecorridoTab({ tour, scenes = [], flash, basePath }) {
                                 {/* Thumbnail */}
                                 <div className="relative w-28 h-20 rounded-xl overflow-hidden shrink-0 border border-slate-200 dark:border-slate-700 bg-slate-900 shadow-sm">
                                     <img
-                                        src={s.imagen_url || mediaUrl(s.imagen_path)}
+                                        src={s.thumbnail_url || s.imagen_url || mediaUrl(s.imagen_path)}
                                         alt={s.nombre}
+                                        loading="lazy"
+                                        decoding="async"
                                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                                     />
                                     {s.es_escena_inicial && (
@@ -1922,8 +1970,10 @@ function RecorridoTab({ tour, scenes = [], flash, basePath }) {
                                 {/* Thumbnail Preview */}
                                 <div className="relative w-full h-40 rounded-xl overflow-hidden mb-3 border border-slate-200 dark:border-slate-700 bg-slate-900">
                                     <img
-                                        src={s.imagen_url || mediaUrl(s.imagen_path)}
+                                        src={s.thumbnail_url || s.imagen_url || mediaUrl(s.imagen_path)}
                                         alt={s.nombre}
+                                        loading="lazy"
+                                        decoding="async"
                                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                                     />
                                     {s.es_escena_inicial && (
@@ -3177,7 +3227,7 @@ function MantenimientoTab({ flash, flash_error, command_output, basePath }) {
     );
 }
 
-function DeportesAdminTab({ torneoPartidos = [], deportesBanners = [], cuadrangularesBloqueado = false, flash }) {
+function DeportesAdminTab({ torneoPartidos = [], deportesBanners = [], cuadrangularesBloqueado = false, noticiasDeportivas = [], flash }) {
     const [subTab, setSubTab] = useState('cuadrangulares');
     const [partidoEditar, setPartidoEditar] = useState(null);
     const [submittingPartido, setSubmittingPartido] = useState(false);
@@ -3191,7 +3241,80 @@ function DeportesAdminTab({ torneoPartidos = [], deportesBanners = [], cuadrangu
     const [bannerDescripcion, setBannerDescripcion] = useState('');
     const [bannerPortada, setBannerPortada] = useState(null);
     const [bannerPortadaPreview, setBannerPortadaPreview] = useState(null);
+    const [bannerEliminarImagen, setBannerEliminarImagen] = useState(false);
     const [submittingBanner, setSubmittingBanner] = useState(false);
+
+    // Form para Noticias Deportivas / Nuestros Deportistas
+    const [noticiaEditar, setNoticiaEditar] = useState(null);
+    const [creandoNoticia, setCreandoNoticia] = useState(false);
+    const [noticiaTitulo, setNoticiaTitulo] = useState('');
+    const [noticiaResumen, setNoticiaResumen] = useState('');
+    const [noticiaSeccion, setNoticiaSeccion] = useState('General');
+    const [noticiaActivo, setNoticiaActivo] = useState(true);
+    const [noticiaFecha, setNoticiaFecha] = useState('');
+    const [noticiaPortada, setNoticiaPortada] = useState(null);
+    const [noticiaPortadaPreview, setNoticiaPortadaPreview] = useState(null);
+    const [noticiaEliminarImagen, setNoticiaEliminarImagen] = useState(false);
+    const [submittingNoticia, setSubmittingNoticia] = useState(false);
+
+    const DEPORTES_TAGS = ['General', 'Microfútbol', 'Baloncesto', 'Atletismo', 'Voleibol', 'Natación', 'Ciclismo', 'Logro Deportivo', 'Torneo', 'Intercolegiado', 'Destacado'];
+
+    function abrirCrearNoticia() {
+        setNoticiaEditar(null);
+        setNoticiaTitulo('');
+        setNoticiaResumen('');
+        setNoticiaSeccion('General');
+        setNoticiaActivo(true);
+        setNoticiaFecha('');
+        setNoticiaPortada(null);
+        setNoticiaPortadaPreview(null);
+        setNoticiaEliminarImagen(false);
+        setCreandoNoticia(true);
+    }
+
+    function abrirEditarNoticia(n) {
+        setNoticiaEditar(n);
+        setNoticiaTitulo(n.titulo || '');
+        setNoticiaResumen(n.resumen || '');
+        setNoticiaSeccion(n.seccion || 'General');
+        setNoticiaActivo(n.activo ?? true);
+        setNoticiaFecha(n.publicado_en ? n.publicado_en.substring(0, 10) : '');
+        setNoticiaPortada(null);
+        setNoticiaPortadaPreview(n.imagen ? mediaUrl(n.imagen) : null);
+        setNoticiaEliminarImagen(false);
+        setCreandoNoticia(true);
+    }
+
+    function guardarNoticia(e) {
+        e.preventDefault();
+        setSubmittingNoticia(true);
+        const fd = new FormData();
+        if (noticiaEditar) fd.append('_method', 'PUT');
+        fd.append('titulo', noticiaTitulo);
+        fd.append('resumen', noticiaResumen);
+        fd.append('seccion', noticiaSeccion);
+        fd.append('activo', noticiaActivo ? '1' : '0');
+        if (noticiaFecha) fd.append('publicado_en', noticiaFecha);
+        if (noticiaPortada) fd.append('portada', noticiaPortada);
+        if (noticiaEliminarImagen) fd.append('eliminar_imagen', '1');
+
+        const url = noticiaEditar
+            ? `${basePath}/deportes-admin/noticias/${noticiaEditar.id}`
+            : `${basePath}/deportes-admin/noticias`;
+
+        router.post(url, fd, {
+            preserveState: true,
+            preserveScroll: true,
+            onSuccess: () => { setCreandoNoticia(false); setNoticiaEditar(null); setSubmittingNoticia(false); },
+            onError: () => setSubmittingNoticia(false),
+        });
+    }
+
+    function eliminarNoticia(id) {
+        if (confirm('¿Eliminar esta publicación deportiva?')) {
+            router.delete(`${basePath}/deportes-admin/noticias/${id}`, { preserveState: true, preserveScroll: true });
+        }
+    }
 
     const basePath = getAdminBasePath();
     const equiposInterclases = [
@@ -3275,17 +3398,19 @@ function DeportesAdminTab({ torneoPartidos = [], deportesBanners = [], cuadrangu
         setBannerDescripcion('');
         setBannerPortada(null);
         setBannerPortadaPreview(null);
+        setBannerEliminarImagen(false);
         setBannerEditar(null);
         setCreandoBanner(true);
     }
 
     function abrirEditarBanner(b) {
-        setBannerTitulo(b.titulo);
+        setBannerTitulo(b.titulo || '');
         setBannerTag(b.tag || '');
         setBannerSubtitulo(b.subtitulo || '');
         setBannerDescripcion(b.descripcion || '');
         setBannerPortada(null);
         setBannerPortadaPreview(b.imagen ? mediaUrl(b.imagen) : null);
+        setBannerEliminarImagen(false);
         setBannerEditar(b);
         setCreandoBanner(false);
     }
@@ -3300,6 +3425,7 @@ function DeportesAdminTab({ torneoPartidos = [], deportesBanners = [], cuadrangu
         fd.append('descripcion', bannerDescripcion);
         fd.append('activo', '1');
         if (bannerPortada) fd.append('portada', bannerPortada);
+        if (bannerEliminarImagen) fd.append('eliminar_imagen', '1');
 
         if (bannerEditar) fd.append('_method', 'PUT');
 
@@ -3366,20 +3492,30 @@ function DeportesAdminTab({ torneoPartidos = [], deportesBanners = [], cuadrangu
                 </div>
 
                 {/* SubTab Selector */}
-                <div className="flex bg-slate-100 dark:bg-slate-800 p-1.5 rounded-2xl border border-slate-200/60 dark:border-slate-700">
+                <div className="flex flex-wrap bg-slate-100 dark:bg-slate-800 p-1.5 rounded-2xl border border-slate-200/60 dark:border-slate-700 gap-1">
                     <button
                         type="button"
                         onClick={() => setSubTab('cuadrangulares')}
-                        className={`px-4 py-2 text-xs font-bold rounded-xl transition cursor-pointer ${subTab === 'cuadrangulares' ? 'bg-white dark:bg-slate-900 text-[#001659] dark:text-blue-400 shadow-sm' : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'}`}
+                        className={`px-4 py-2 text-xs font-bold rounded-xl transition cursor-pointer flex items-center gap-1.5 ${subTab === 'cuadrangulares' ? 'bg-white dark:bg-slate-900 text-[#001659] dark:text-blue-400 shadow-sm' : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'}`}
                     >
-                        🏆 Mapa Cuadrangulares
+                        <Trophy className="w-3.5 h-3.5 text-amber-500" />
+                        Mapa Cuadrangulares
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => setSubTab('deportistas')}
+                        className={`px-4 py-2 text-xs font-bold rounded-xl transition cursor-pointer flex items-center gap-1.5 ${subTab === 'deportistas' ? 'bg-white dark:bg-slate-900 text-[#001659] dark:text-blue-400 shadow-sm' : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'}`}
+                    >
+                        <Activity className="w-3.5 h-3.5 text-emerald-500" />
+                        Nuestros Deportistas
                     </button>
                     <button
                         type="button"
                         onClick={() => setSubTab('banners')}
-                        className={`px-4 py-2 text-xs font-bold rounded-xl transition cursor-pointer ${subTab === 'banners' ? 'bg-white dark:bg-slate-900 text-[#001659] dark:text-blue-400 shadow-sm' : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'}`}
+                        className={`px-4 py-2 text-xs font-bold rounded-xl transition cursor-pointer flex items-center gap-1.5 ${subTab === 'banners' ? 'bg-white dark:bg-slate-900 text-[#001659] dark:text-blue-400 shadow-sm' : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'}`}
                     >
-                        🖼️ Banners Deportivo
+                        <ImageIcon className="w-3.5 h-3.5 text-blue-500" />
+                        Banners Deportivos
                     </button>
                 </div>
             </div>
@@ -3467,8 +3603,8 @@ function DeportesAdminTab({ torneoPartidos = [], deportesBanners = [], cuadrangu
 
                             {/* Gran Final */}
                             <div className="space-y-4">
-                                <div className="text-center text-xs font-extrabold text-amber-300 uppercase tracking-wider py-1 bg-amber-500/20 rounded-lg border border-amber-500/40">
-                                    🏆 Gran Final
+                                <div className="text-center text-xs font-extrabold text-amber-300 uppercase tracking-wider py-1 bg-amber-500/20 rounded-lg border border-amber-500/40 flex items-center justify-center gap-1.5">
+                                    <Trophy className="w-3.5 h-3.5" /> Gran Final
                                 </div>
                                 {finalMatch && (
                                     <div
@@ -3493,8 +3629,9 @@ function DeportesAdminTab({ torneoPartidos = [], deportesBanners = [], cuadrangu
                                         </div>
 
                                         {finalMatch.ganador && (
-                                            <div className="mt-3 text-center bg-amber-400 text-slate-950 text-xs font-black py-1.5 rounded-xl uppercase tracking-wider">
-                                                🥇 Campeón: {finalMatch.ganador === 'local' ? finalMatch.equipo_local : finalMatch.equipo_visitante}
+                                            <div className="mt-3 text-center bg-amber-400 text-slate-950 text-xs font-black py-1.5 rounded-xl uppercase tracking-wider flex items-center justify-center gap-1.5">
+                                                <Trophy className="w-3.5 h-3.5" />
+                                                <span>Campeón: {finalMatch.ganador === 'local' ? finalMatch.equipo_local : finalMatch.equipo_visitante}</span>
                                             </div>
                                         )}
                                     </div>
@@ -3507,9 +3644,9 @@ function DeportesAdminTab({ torneoPartidos = [], deportesBanners = [], cuadrangu
             )}
 
             {/* Modal Editar Partido */}
-            {partidoEditar && (
-                <div className="fixed inset-0 z-[100] bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
-                    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl space-y-5 animate-scaleIn">
+            {partidoEditar && typeof document !== 'undefined' && createPortal(
+                <div className="fixed inset-0 z-[9999] bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto animate-fadeIn">
+                    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl space-y-5 my-auto">
                         <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4">
                             <h3 className="text-lg font-black text-slate-900 dark:text-white flex items-center gap-2">
                                 <Trophy className="w-5 h-5 text-amber-500" />
@@ -3671,91 +3808,639 @@ function DeportesAdminTab({ torneoPartidos = [], deportesBanners = [], cuadrangu
                             </div>
                         </form>
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
 
-            {/* SubTab 2: Gestor de Banners Deportivos */}
-            {subTab === 'banners' && (
+            {/* SubTab 2: Nuestros Deportistas */}
+            {subTab === 'deportistas' && (
                 <div className="space-y-6">
+                    {/* Header */}
                     <div className="flex items-center justify-between bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800">
                         <div>
-                            <h3 className="text-base font-extrabold text-slate-900 dark:text-white">Banners y Destacados Deportivos</h3>
-                            <p className="text-xs text-slate-500">Publica anuncios de alta visibilidad para eventos y torneos escolares.</p>
+                            <h3 className="text-base font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
+                                <Activity className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+                                Nuestros Deportistas
+                            </h3>
+                            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                                Publica noticias de logros, torneos y destacados de los estudiantes deportistas COLSIH.
+                            </p>
                         </div>
-                        <button type="button" onClick={abrirCrearBanner} className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl shadow-md cursor-pointer flex items-center gap-1.5">
-                            <span>+ Nuevo Banner</span>
+                        <button
+                            type="button"
+                            onClick={() => router.visit(`${basePath}/noticias?crear=deportes`)}
+                            className="px-4 py-2 bg-[#800A15] hover:bg-[#9b0f1a] text-white text-xs font-bold rounded-xl shadow-md cursor-pointer flex items-center gap-1.5 transition"
+                        >
+                            <Plus className="w-3.5 h-3.5" />
+                            Nueva Publicación
                         </button>
                     </div>
 
-                    {/* Lista de Banners */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                        {deportesBanners.map(b => (
-                            <div key={b.id} className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-xs hover:shadow-md transition">
-                                {b.imagen && (
-                                    <img src={mediaUrl(b.imagen)} alt={b.titulo} className="w-full h-40 object-cover" />
-                                )}
-                                <div className="p-5 space-y-2">
-                                    <span className="text-[10px] font-black uppercase text-amber-600 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
-                                        {b.tag || 'Deportes'}
-                                    </span>
-                                    <h4 className="text-sm font-black text-slate-900 dark:text-white line-clamp-1">{b.titulo}</h4>
-                                    <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2">{b.descripcion}</p>
-
-                                    <div className="flex items-center justify-end gap-2 pt-3 border-t border-slate-100 dark:border-slate-800">
-                                        <button type="button" onClick={() => abrirEditarBanner(b)} className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-bold rounded-lg cursor-pointer">
-                                            Editar
-                                        </button>
-                                        <button type="button" onClick={() => eliminarBanner(b.id)} className="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-bold rounded-lg cursor-pointer">
-                                            Eliminar
-                                        </button>
+                    {/* Lista de noticias deportivas */}
+                    {noticiasDeportivas.length === 0 ? (
+                        <div className="text-center py-16 bg-slate-50 dark:bg-slate-800/30 border border-dashed border-slate-300 dark:border-slate-700 rounded-2xl">
+                            <div className="w-12 h-12 rounded-full bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 flex items-center justify-center mx-auto mb-4">
+                                <Trophy className="w-6 h-6" />
+                            </div>
+                            <p className="text-sm font-bold text-slate-500 dark:text-slate-400">Aún no hay publicaciones deportivas</p>
+                            <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">Haz clic en "Nueva Publicación" para empezar</p>
+                            <button
+                                type="button"
+                                onClick={() => router.visit(`${basePath}/noticias?crear=deportes`)}
+                                className="mt-3 inline-flex items-center gap-1.5 px-4 py-2 bg-[#800A15] hover:bg-[#9b0f1a] text-white text-xs font-bold rounded-xl shadow-sm transition cursor-pointer"
+                            >
+                                <Plus className="w-3.5 h-3.5" />
+                                Nueva Publicación
+                            </button>
+                        </div>
+                    ) : (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                            {noticiasDeportivas.map(n => (
+                                <div key={n.id} className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-xs hover:shadow-md transition group">
+                                    {n.imagen ? (
+                                        <div className="h-40 overflow-hidden bg-slate-100 dark:bg-slate-800">
+                                            <img src={mediaUrl(n.imagen)} alt={n.titulo} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
+                                        </div>
+                                    ) : (
+                                        <div className="h-40 bg-gradient-to-br from-[#001659]/10 to-[#800A15]/10 flex items-center justify-center text-slate-400">
+                                            <Activity className="w-8 h-8" />
+                                        </div>
+                                    )}
+                                    <div className="p-4 space-y-2">
+                                        <div className="flex items-center justify-between gap-2">
+                                            <span className="text-[10px] font-black uppercase tracking-wider text-[#800A15] bg-red-50 dark:bg-red-950/30 px-2 py-0.5 rounded border border-red-200 dark:border-red-900/40">
+                                                {n.seccion || 'Deportes'}
+                                            </span>
+                                            <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${n.activo ? 'bg-emerald-50 text-emerald-600 border border-emerald-200' : 'bg-slate-100 text-slate-500 border border-slate-200 dark:bg-slate-800 dark:border-slate-700'}`}>
+                                                {n.activo ? 'Publicado' : 'Borrador'}
+                                            </span>
+                                        </div>
+                                        <h4 className="text-sm font-black text-slate-900 dark:text-white line-clamp-2 leading-snug">{n.titulo}</h4>
+                                        {n.resumen && (
+                                            <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">{n.resumen}</p>
+                                        )}
+                                        <div className="flex items-center justify-between pt-3 border-t border-slate-100 dark:border-slate-800">
+                                            <span className="text-[10px] text-slate-400 font-medium">
+                                                {n.publicado_en ? new Date(n.publicado_en).toLocaleDateString('es-CO', { day: '2-digit', month: 'short', year: 'numeric' }) : '—'}
+                                            </span>
+                                            <div className="flex items-center gap-2">
+                                                <button type="button" onClick={() => router.visit(`${basePath}/noticias?editar=${n.id}`)} className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold rounded-lg cursor-pointer transition">
+                                                    Editar
+                                                </button>
+                                                <button type="button" onClick={() => eliminarNoticia(n.id)} className="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/30 text-rose-600 text-xs font-bold rounded-lg cursor-pointer transition">
+                                                    Eliminar
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        ))}
-                    </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
             )}
 
-            {/* Modal Crear/Editar Banner */}
-            {(creandoBanner || bannerEditar) && (
-                <div className="fixed inset-0 z-[100] bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
-                    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl space-y-4">
-                        <h3 className="text-lg font-black text-slate-900 dark:text-white">
-                            {bannerEditar ? 'Editar Banner Deportivo' : 'Nuevo Banner Deportivo'}
-                        </h3>
+            {/* Modal Crear/Editar Noticia Deportiva */}
+            {creandoNoticia && typeof document !== 'undefined' && createPortal(
+                <div className="fixed inset-0 z-[9999] bg-slate-950/80 backdrop-blur-md overflow-y-auto flex items-center justify-center p-3 sm:p-6 animate-fadeIn" onClick={() => { setCreandoNoticia(false); setNoticiaEditar(null); }}>
+                    <div
+                        className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl w-full max-w-2xl shadow-2xl overflow-hidden my-auto"
+                        onClick={e => e.stopPropagation()}
+                    >
+                        {/* Header */}
+                        <div className="flex items-center justify-between px-6 py-5 border-b border-slate-100 dark:border-slate-800">
+                            <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 rounded-2xl bg-[#800A15]/10 text-[#800A15] dark:text-rose-400 flex items-center justify-center shrink-0">
+                                    <Trophy className="w-5 h-5" />
+                                </div>
+                                <div>
+                                    <h3 className="text-base font-black text-slate-900 dark:text-white tracking-tight leading-tight">
+                                        {noticiaEditar ? 'Editar Publicación' : 'Nueva Publicación Deportiva'}
+                                    </h3>
+                                    <p className="text-[11px] text-slate-400 font-medium">Nuestros Deportistas · COLSIH</p>
+                                </div>
+                            </div>
+                            <button
+                                type="button"
+                                onClick={() => { setCreandoNoticia(false); setNoticiaEditar(null); }}
+                                className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-500 hover:text-slate-700 dark:hover:text-white flex items-center justify-center transition cursor-pointer shrink-0"
+                            >
+                                <X className="w-4 h-4" />
+                            </button>
+                        </div>
 
-                        <form onSubmit={guardarBanner} className="space-y-3">
-                            <div>
-                                <label className="text-slate-500 text-[10px] font-bold uppercase tracking-wider block mb-1">Etiqueta / Tag</label>
-                                <input type="text" value={bannerTag} onChange={e => setBannerTag(e.target.value)} className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-xl px-3 py-2 text-xs font-bold" placeholder="Ej: Microfútbol Intercolegiado" />
+                        <form onSubmit={guardarNoticia}>
+                            <div className="p-6 grid grid-cols-1 sm:grid-cols-5 gap-6">
+
+                                {/* Columna izquierda — Imagen */}
+                                <div className="sm:col-span-2 flex flex-col gap-3">
+                                    <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Imagen de portada</p>
+                                    <label className="group relative flex-1 min-h-[200px] flex flex-col items-center justify-center rounded-2xl overflow-hidden border-2 border-dashed border-slate-200 dark:border-slate-700 hover:border-[#800A15] dark:hover:border-rose-700 bg-slate-50 dark:bg-slate-800/50 cursor-pointer transition-all duration-200">
+                                        {noticiaPortadaPreview || noticiaEditar?.imagen ? (
+                                            <>
+                                                <img
+                                                    src={noticiaPortadaPreview || mediaUrl(noticiaEditar.imagen)}
+                                                    alt="Portada"
+                                                    className="w-full h-full object-cover absolute inset-0"
+                                                />
+                                                <div className="absolute inset-0 bg-slate-900/60 flex items-center justify-center">
+                                                    <span className="opacity-0 group-hover:opacity-100 text-white text-xs font-bold bg-slate-900/70 px-3 py-1.5 rounded-xl flex items-center gap-1.5 transition-opacity duration-200">
+                                                        <Upload className="w-3.5 h-3.5" /> Cambiar imagen
+                                                    </span>
+                                                </div>
+                                            </>
+                                        ) : (
+                                            <div className="flex flex-col items-center gap-2 p-4 text-center">
+                                                <div className="w-10 h-10 rounded-xl bg-slate-200 dark:bg-slate-700 flex items-center justify-center mb-1">
+                                                    <Image className="w-5 h-5 text-slate-400" />
+                                                </div>
+                                                <span className="text-xs font-bold text-slate-500 dark:text-slate-400">Haz clic para subir</span>
+                                                <span className="text-[10px] text-slate-400">JPG, PNG, WebP</span>
+                                            </div>
+                                        )}
+                                        <input type="file" accept="image/*" className="hidden" onChange={e => {
+                                            const f = e.target.files[0];
+                                            if (!f) return;
+                                            setNoticiaPortada(f);
+                                            setNoticiaPortadaPreview(URL.createObjectURL(f));
+                                        }} />
+                                    </label>
+                                    {(noticiaPortadaPreview || noticiaEditar?.imagen) && (
+                                        <button type="button" onClick={() => { setNoticiaPortada(null); setNoticiaPortadaPreview(null); setNoticiaEliminarImagen(true); }} className="text-[11px] text-slate-400 hover:text-rose-500 font-bold text-center transition cursor-pointer">
+                                            Quitar imagen
+                                        </button>
+                                    )}
+                                </div>
+
+                                {/* Columna derecha — Campos */}
+                                <div className="sm:col-span-3 flex flex-col gap-4">
+                                    {/* Categoría chips */}
+                                    <div>
+                                        <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Categoría deportiva</p>
+                                        <div className="flex flex-wrap gap-1.5 mb-2">
+                                            {DEPORTES_TAGS.map(tag => (
+                                                <button
+                                                    key={tag}
+                                                    type="button"
+                                                    onClick={() => setNoticiaSeccion(tag)}
+                                                    className={`px-2.5 py-1 text-[11px] font-bold rounded-full border transition cursor-pointer ${
+                                                        noticiaSeccion === tag
+                                                            ? 'bg-[#800A15] text-white border-[#800A15] shadow-sm'
+                                                            : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-[#800A15]/60 hover:text-[#800A15]'
+                                                    }`}
+                                                >
+                                                    {tag}
+                                                </button>
+                                            ))}
+                                        </div>
+                                        <input
+                                            type="text"
+                                            value={noticiaSeccion}
+                                            onChange={e => setNoticiaSeccion(e.target.value)}
+                                            className="w-full bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-xl px-3 py-2 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-[#800A15]/30 focus:border-[#800A15] transition"
+                                            placeholder="O escribe una personalizada..."
+                                        />
+                                    </div>
+
+                                    {/* Título */}
+                                    <div>
+                                        <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Título *</p>
+                                        <input
+                                            type="text"
+                                            required
+                                            value={noticiaTitulo}
+                                            onChange={e => setNoticiaTitulo(e.target.value)}
+                                            className="w-full bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-xl px-3 py-2.5 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-[#800A15]/30 focus:border-[#800A15] transition"
+                                            placeholder="Ej: Campeones del torneo de atletismo 2026"
+                                        />
+                                    </div>
+
+                                    {/* Resumen */}
+                                    <div className="flex-1">
+                                        <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Descripción</p>
+                                        <textarea
+                                            rows={3}
+                                            value={noticiaResumen}
+                                            onChange={e => setNoticiaResumen(e.target.value)}
+                                            className="w-full bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-xl px-3 py-2.5 text-xs font-medium resize-none focus:outline-none focus:ring-2 focus:ring-[#800A15]/30 focus:border-[#800A15] transition"
+                                            placeholder="Describe el logro, torneo o noticia del deportista..."
+                                        />
+                                    </div>
+
+                                    {/* Fecha + Estado */}
+                                    <div className="grid grid-cols-2 gap-3">
+                                        <div>
+                                            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Fecha</p>
+                                            <input
+                                                type="date"
+                                                value={noticiaFecha}
+                                                onChange={e => setNoticiaFecha(e.target.value)}
+                                                className="w-full bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-xl px-3 py-2 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-[#800A15]/30 focus:border-[#800A15] transition"
+                                            />
+                                        </div>
+                                        <div>
+                                            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Estado</p>
+                                            <button
+                                                type="button"
+                                                onClick={() => setNoticiaActivo(!noticiaActivo)}
+                                                className={`w-full h-[34px] rounded-xl border text-xs font-bold transition cursor-pointer flex items-center justify-center gap-1.5 ${
+                                                    noticiaActivo
+                                                        ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-300 dark:border-emerald-800 text-emerald-700 dark:text-emerald-400'
+                                                        : 'bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400'
+                                                }`}
+                                            >
+                                                <span className={`w-1.5 h-1.5 rounded-full ${noticiaActivo ? 'bg-emerald-500' : 'bg-slate-400'}`} />
+                                                {noticiaActivo ? 'Publicado' : 'Borrador'}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
-                            <div>
-                                <label className="text-slate-500 text-[10px] font-bold uppercase tracking-wider block mb-1">Título *</label>
-                                <input type="text" required value={bannerTitulo} onChange={e => setBannerTitulo(e.target.value)} className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-xl px-3 py-2 text-xs font-bold" placeholder="Título del evento deportivo" />
-                            </div>
-
-                            <div>
-                                <label className="text-slate-500 text-[10px] font-bold uppercase tracking-wider block mb-1">Descripción</label>
-                                <textarea rows={3} value={bannerDescripcion} onChange={e => setBannerDescripcion(e.target.value)} className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-xl px-3 py-2 text-xs font-bold resize-none" placeholder="Breve descripción..." />
-                            </div>
-
-                            <div>
-                                <label className="text-slate-500 text-[10px] font-bold uppercase tracking-wider block mb-1">Imagen de Banner</label>
-                                <input type="file" accept="image/*" onChange={e => setBannerPortada(e.target.files[0])} className="text-xs font-bold text-slate-600" />
-                            </div>
-
-                            <div className="flex gap-3 pt-3 justify-end">
-                                <button type="button" onClick={() => { setCreandoBanner(false); setBannerEditar(null); }} className="px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-bold rounded-xl cursor-pointer">
+                            {/* Footer */}
+                            <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-slate-100 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-800/30">
+                                <button
+                                    type="button"
+                                    onClick={() => { setCreandoNoticia(false); setNoticiaEditar(null); }}
+                                    className="px-4 py-2 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold rounded-xl cursor-pointer transition"
+                                >
                                     Cancelar
                                 </button>
-                                <button type="submit" disabled={submittingBanner} className="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-black rounded-xl shadow-md cursor-pointer">
-                                    {submittingBanner ? 'Guardando...' : 'Guardar Banner'}
+                                <button
+                                    type="submit"
+                                    disabled={submittingNoticia}
+                                    className="px-6 py-2 bg-[#800A15] hover:bg-[#9b0f1a] disabled:opacity-50 text-white text-xs font-black rounded-xl shadow-sm cursor-pointer transition flex items-center gap-2"
+                                >
+                                    {submittingNoticia ? (
+                                        <>
+                                            <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                                            Guardando...
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Check className="w-3.5 h-3.5" />
+                                            {noticiaEditar ? 'Actualizar' : 'Publicar'}
+                                        </>
+                                    )}
                                 </button>
                             </div>
                         </form>
                     </div>
+                </div>,
+                document.body
+            )}
+
+            {/* SubTab: Gestor de Banners Deportivos */}
+            {subTab === 'banners' && (
+                <div className="space-y-6">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-5 sm:p-6 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs">
+                        <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
+                                <ImageIcon className="w-5 h-5" />
+                            </div>
+                            <div>
+                                <h3 className="text-base font-extrabold text-slate-900 dark:text-white">Banners y Destacados Deportivos</h3>
+                                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                                    Publica banners y anuncios visuales de alta visibilidad para la sección de deportes.
+                                </p>
+                            </div>
+                        </div>
+                        <button
+                            type="button"
+                            onClick={abrirCrearBanner}
+                            className="px-4 py-2.5 bg-[#001659] hover:bg-[#002b80] text-white text-xs font-bold rounded-xl shadow-md cursor-pointer flex items-center gap-2 transition"
+                        >
+                            <Plus className="w-4 h-4" />
+                            Nuevo Banner
+                        </button>
+                    </div>
+
+                    {/* Lista de Banners */}
+                    {deportesBanners.length === 0 ? (
+                        <div className="text-center py-16 bg-slate-50 dark:bg-slate-800/30 border border-dashed border-slate-300 dark:border-slate-700 rounded-2xl space-y-3">
+                            <div className="w-12 h-12 rounded-full bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 flex items-center justify-center mx-auto">
+                                <ImageIcon className="w-6 h-6" />
+                            </div>
+                            <p className="text-sm font-bold text-slate-600 dark:text-slate-300">Aún no hay banners deportivos creados</p>
+                            <p className="text-xs text-slate-400">Haz clic en "Nuevo Banner" para crear el primero</p>
+                            <button
+                                type="button"
+                                onClick={abrirCrearBanner}
+                                className="mt-2 inline-flex items-center gap-1.5 px-4 py-2 bg-[#001659] text-white text-xs font-bold rounded-xl shadow-xs hover:bg-[#002b80] transition"
+                            >
+                                <Plus className="w-3.5 h-3.5" />
+                                Crear Banner
+                            </button>
+                        </div>
+                    ) : (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            {deportesBanners.map(b => (
+                                <div key={b.id} className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-xs hover:shadow-lg transition duration-300 flex flex-col justify-between group">
+                                    <div>
+                                        {b.imagen ? (
+                                            <div className="h-48 overflow-hidden bg-slate-100 dark:bg-slate-800 relative">
+                                                <img 
+                                                    src={mediaUrl(b.imagen)} 
+                                                    alt={b.titulo} 
+                                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+                                                />
+                                                <div className="absolute top-3 left-3">
+                                                    <span className="text-[10px] font-black uppercase tracking-wider text-white bg-[#800A15]/90 backdrop-blur-md px-2.5 py-1 rounded-md shadow-xs">
+                                                        {b.tag || 'Deportes'}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <div className="h-48 bg-gradient-to-br from-[#001659]/15 to-[#800A15]/15 flex items-center justify-center text-slate-400">
+                                                <ImageIcon className="w-10 h-10" />
+                                            </div>
+                                        )}
+                                        <div className="p-5 space-y-2">
+                                            {b.subtitulo && (
+                                                <span className="text-xs font-bold text-slate-400 block">
+                                                    {b.subtitulo}
+                                                </span>
+                                            )}
+                                            <h4 className="text-base font-black text-slate-900 dark:text-white line-clamp-1 group-hover:text-[#001659] dark:group-hover:text-blue-400 transition-colors">
+                                                {b.titulo}
+                                            </h4>
+                                            {b.descripcion && (
+                                                <p className="text-xs font-medium text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">
+                                                    {b.descripcion}
+                                                </p>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    <div className="flex items-center justify-end gap-2 p-4 pt-3 border-t border-slate-100 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-800/20">
+                                        <button 
+                                            type="button" 
+                                            onClick={() => abrirEditarBanner(b)} 
+                                            className="px-3.5 py-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold rounded-xl transition cursor-pointer flex items-center gap-1.5"
+                                        >
+                                            Editar
+                                        </button>
+                                        <button 
+                                            type="button" 
+                                            onClick={() => eliminarBanner(b.id)} 
+                                            className="px-3.5 py-1.5 bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/30 dark:hover:bg-rose-950/60 text-rose-600 dark:text-rose-400 text-xs font-bold rounded-xl transition cursor-pointer flex items-center gap-1.5"
+                                        >
+                                            <Trash2 className="w-3.5 h-3.5" />
+                                            Eliminar
+                                        </button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
+            )}
+
+            {/* Modal Crear/Editar Banner Deportivo */}
+            {(creandoBanner || bannerEditar) && typeof document !== 'undefined' && createPortal(
+                <div className="fixed inset-0 z-[9999] bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 overflow-y-auto animate-fadeIn" onClick={() => { setCreandoBanner(false); setBannerEditar(null); }}>
+                    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-4xl w-full shadow-2xl overflow-hidden my-auto" onClick={e => e.stopPropagation()}>
+                        
+                        {/* Cabecera del Modal */}
+                        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-800/40">
+                            <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
+                                    <ImageIcon className="w-5 h-5" />
+                                </div>
+                                <div>
+                                    <h3 className="text-base font-black text-slate-900 dark:text-white">
+                                        {bannerEditar ? 'Editar Banner Deportivo' : 'Nuevo Banner Deportivo'}
+                                    </h3>
+                                    <p className="text-xs text-slate-500 dark:text-slate-400">
+                                        Configura el banner panorámico principal para la sección de deportes.
+                                    </p>
+                                </div>
+                            </div>
+                            <button
+                                type="button"
+                                onClick={() => { setCreandoBanner(false); setBannerEditar(null); }}
+                                className="w-8 h-8 rounded-full bg-slate-200/70 dark:bg-slate-700 text-slate-500 hover:text-slate-800 dark:hover:text-white flex items-center justify-center transition cursor-pointer"
+                            >
+                                <X className="w-4 h-4" />
+                            </button>
+                        </div>
+
+                        {/* Formulario */}
+                        <form onSubmit={guardarBanner}>
+                            <div className="p-6 sm:p-8 space-y-6">
+                                
+                                {/* ── VISTA PREVIA DEL BANNER HORIZONTAL / PANORÁMICO ── */}
+                                <div>
+                                    <div className="flex items-center justify-between mb-2">
+                                        <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">
+                                            Vista Previa Panorámica del Banner (Horizontal)
+                                        </p>
+                                        {bannerPortadaPreview && (
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    setBannerPortada(null);
+                                                    setBannerPortadaPreview(null);
+                                                    setBannerEliminarImagen(true);
+                                                }}
+                                                className="inline-flex items-center gap-1.5 text-xs text-rose-500 hover:text-rose-600 dark:hover:text-rose-400 font-bold transition cursor-pointer"
+                                            >
+                                                <Trash2 className="w-3.5 h-3.5" />
+                                                Quitar imagen
+                                            </button>
+                                        )}
+                                    </div>
+
+                                    <label className="relative flex flex-col items-center justify-center w-full h-48 sm:h-60 rounded-2xl border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-blue-500 bg-slate-900 transition cursor-pointer overflow-hidden group shadow-inner">
+                                        {bannerPortadaPreview ? (
+                                            <>
+                                                {/* Imagen de fondo */}
+                                                <img 
+                                                    src={bannerPortadaPreview} 
+                                                    alt="Vista previa banner" 
+                                                    className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-500" 
+                                                />
+                                                {/* Sombra / Gradiente simulador del banner real */}
+                                                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-black/20" />
+                                                
+                                                {/* Contenido en vivo sobre el banner */}
+                                                <div className="absolute inset-0 p-5 sm:p-7 flex flex-col justify-between select-none pointer-events-none">
+                                                    <div>
+                                                        <span className="inline-block px-3 py-1 bg-[#800A15] text-white text-[10px] font-black uppercase tracking-wider rounded-md shadow-md">
+                                                            {bannerTag || 'Deportes COLSIH'}
+                                                        </span>
+                                                    </div>
+                                                    <div className="space-y-1 max-w-2xl">
+                                                        {bannerSubtitulo && (
+                                                            <p className="text-blue-300 text-xs font-bold tracking-wide">
+                                                                {bannerSubtitulo}
+                                                            </p>
+                                                        )}
+                                                        <h4 className="text-white text-base sm:text-xl md:text-2xl font-black uppercase tracking-tight line-clamp-1 drop-shadow-md">
+                                                            {bannerTitulo || 'Título del Banner Deportivo'}
+                                                        </h4>
+                                                        {bannerDescripcion && (
+                                                            <p className="text-slate-300 text-xs font-medium line-clamp-1 max-w-xl opacity-90">
+                                                                {bannerDescripcion}
+                                                            </p>
+                                                        )}
+                                                    </div>
+                                                </div>
+
+                                                {/* Hover Overlay para reemplazar */}
+                                                <div className="absolute inset-0 bg-slate-950/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 p-3 text-center">
+                                                    <span className="px-4 py-2 bg-white/20 hover:bg-white/30 backdrop-blur-md text-white text-xs font-bold rounded-xl flex items-center gap-2 border border-white/30 shadow-lg">
+                                                        <Upload className="w-4 h-4" />
+                                                        Haz clic para cambiar imagen panorámica
+                                                    </span>
+                                                </div>
+                                            </>
+                                        ) : (
+                                            <div className="flex flex-col items-center gap-2.5 p-6 text-center">
+                                                <div className="w-14 h-14 rounded-2xl bg-blue-500/10 text-blue-400 flex items-center justify-center mb-1 border border-blue-500/20 shadow-sm">
+                                                    <ImageIcon className="w-7 h-7" />
+                                                </div>
+                                                <div className="space-y-1">
+                                                    <span className="text-sm font-bold text-slate-200 block">
+                                                        Haz clic o arrastra una imagen panorámica
+                                                    </span>
+                                                    <span className="text-xs text-slate-400 block">
+                                                        Recomendado: Imagen horizontal 1920x800 px (JPG, PNG, WEBP hasta 20MB)
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        )}
+                                        <input 
+                                            type="file" 
+                                            accept="image/*" 
+                                            className="hidden" 
+                                            onChange={e => {
+                                                const f = e.target.files[0];
+                                                if (!f) return;
+                                                setBannerPortada(f);
+                                                setBannerPortadaPreview(URL.createObjectURL(f));
+                                                setBannerEliminarImagen(false);
+                                            }} 
+                                        />
+                                    </label>
+                                </div>
+
+                                {/* ── CAMPOS DE CONFIGURACIÓN DEL BANNER (2 Columnas) ── */}
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2 border-t border-slate-100 dark:border-slate-800/80">
+                                    
+                                    {/* Columna Izquierda */}
+                                    <div className="space-y-4">
+                                        {/* Etiqueta / Tag */}
+                                        <div>
+                                            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1.5">
+                                                Etiqueta / Tag
+                                            </p>
+                                            <div className="flex flex-wrap gap-1.5 mb-2">
+                                                {['Deportes COLSIH', 'Microfútbol', 'Baloncesto', 'Voleibol', 'Intercolegiado', 'Torneo 2026'].map(tag => (
+                                                    <button
+                                                        key={tag}
+                                                        type="button"
+                                                        onClick={() => setBannerTag(tag)}
+                                                        className={`px-2.5 py-1 text-[11px] font-bold rounded-full border transition cursor-pointer ${
+                                                            bannerTag === tag
+                                                                ? 'bg-[#001659] text-white border-[#001659] shadow-xs'
+                                                                : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:text-[#001659]'
+                                                        }`}
+                                                    >
+                                                        {tag}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                            <input 
+                                                type="text" 
+                                                value={bannerTag} 
+                                                onChange={e => setBannerTag(e.target.value)} 
+                                                className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-xl px-3.5 py-2 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-[#001659]/30 focus:border-[#001659] transition" 
+                                                placeholder="Ej: Microfútbol Intercolegiado" 
+                                            />
+                                        </div>
+
+                                        {/* Título */}
+                                        <div>
+                                            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1.5">
+                                                Título Principal *
+                                            </p>
+                                            <input 
+                                                type="text" 
+                                                required 
+                                                value={bannerTitulo} 
+                                                onChange={e => setBannerTitulo(e.target.value)} 
+                                                className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-xl px-3.5 py-2.5 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-[#001659]/30 focus:border-[#001659] transition" 
+                                                placeholder="Ej: GRAN INAUGURACIÓN TORNEO INTER-CLASES 2026" 
+                                            />
+                                        </div>
+                                    </div>
+
+                                    {/* Columna Derecha */}
+                                    <div className="space-y-4">
+                                        {/* Subtítulo */}
+                                        <div>
+                                            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1.5">
+                                                Subtítulo / Bajada (Opcional)
+                                            </p>
+                                            <input 
+                                                type="text" 
+                                                value={bannerSubtitulo} 
+                                                onChange={e => setBannerSubtitulo(e.target.value)} 
+                                                className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-xl px-3.5 py-2 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-[#001659]/30 focus:border-[#001659] transition" 
+                                                placeholder="Ej: Jornada deportiva de inauguración" 
+                                            />
+                                        </div>
+
+                                        {/* Descripción */}
+                                        <div>
+                                            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1.5">
+                                                Descripción Detallada
+                                            </p>
+                                            <textarea 
+                                                rows={3} 
+                                                value={bannerDescripcion} 
+                                                onChange={e => setBannerDescripcion(e.target.value)} 
+                                                className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-xl px-3.5 py-2.5 text-xs font-medium resize-none focus:outline-none focus:ring-2 focus:ring-[#001659]/30 focus:border-[#001659] transition" 
+                                                placeholder="Detalla fechas, categorías o información relevante..." 
+                                            />
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            {/* Botones de Acción */}
+                            <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-slate-100 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-800/40">
+                                <button 
+                                    type="button" 
+                                    onClick={() => { setCreandoBanner(false); setBannerEditar(null); }} 
+                                    className="px-4 py-2.5 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold rounded-xl cursor-pointer transition"
+                                >
+                                    Cancelar
+                                </button>
+                                <button 
+                                    type="submit" 
+                                    disabled={submittingBanner} 
+                                    className="px-6 py-2.5 bg-[#001659] hover:bg-[#002b80] disabled:opacity-50 text-white text-xs font-black rounded-xl shadow-md cursor-pointer transition flex items-center gap-2"
+                                >
+                                    {submittingBanner ? (
+                                        <>
+                                            <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                                            Guardando...
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Check className="w-3.5 h-3.5" />
+                                            {bannerEditar ? 'Actualizar Banner' : 'Guardar Banner'}
+                                        </>
+                                    )}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>,
+                document.body
             )}
         </div>
     );
@@ -4105,13 +4790,13 @@ function UsuariosAdminTab({ adminUsuarios = [], flash }) {
     );
 }
 
-export default function AdminDashboard({ seccion, carnets = [], equipo = [], testimonios = [], noticias = [], preguntas = [], tour, scenes = [], torneoPartidos = [], deportesBanners = [], cuadrangularesBloqueado = false, flash, adminCounts, adminUsuarios = [] }) {
+export default function AdminDashboard({ seccion, carnets = [], equipo = [], testimonios = [], noticias = [], preguntas = [], tour, scenes = [], torneoPartidos = [], deportesBanners = [], cuadrangularesBloqueado = false, noticiasDeportivas = [], flash, adminCounts, adminUsuarios = [], analytics = {} }) {
     const pageProps = usePage().props;
     const flash_error = pageProps.flash_error;
     const command_output = pageProps.command_output;
     const adminSesion = pageProps.adminSesion;
 
-    const basePath = window.location.pathname.replace(/\/[^/]+$/, '');
+    const basePath = getAdminBasePath();
     const [darkMode, setDarkMode] = useState(() => localStorage.getItem('sih-dark-mode') === 'true');
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [isCollapsed, setIsCollapsed] = useState(() => localStorage.getItem('sih-sidebar-collapsed') === 'true');
@@ -4263,6 +4948,8 @@ export default function AdminDashboard({ seccion, carnets = [], equipo = [], tes
                                 torneoPartidos={torneoPartidos}
                                 equipo={equipo}
                                 noticias={noticias}
+                                testimonios={testimonios}
+                                analytics={analytics}
                                 basePath={basePath}
                             />
                         )}
@@ -4271,7 +4958,7 @@ export default function AdminDashboard({ seccion, carnets = [], equipo = [], tes
                         {seccion && seccion !== 'dashboard' && (
                             <div className="w-full animate-fadeIn">
                                 {(seccion === 'carnets' || seccion === 'carnets-admin') && <CarnetsAdminTab carnets={carnets} flash={flash} />}
-                                {(seccion === 'deportes' || seccion === 'deportes-admin') && <DeportesAdminTab torneoPartidos={torneoPartidos} deportesBanners={deportesBanners} cuadrangularesBloqueado={cuadrangularesBloqueado} flash={flash} />}
+                                {(seccion === 'deportes' || seccion === 'deportes-admin') && <DeportesAdminTab torneoPartidos={torneoPartidos} deportesBanners={deportesBanners} cuadrangularesBloqueado={cuadrangularesBloqueado} noticiasDeportivas={noticiasDeportivas} flash={flash} />}
                                 {seccion === 'equipo'         && <EquipoTab        equipo={equipo}           flash={flash} />}
                                 {seccion === 'testimonios'    && <TestimoniosTab   testimonios={testimonios} flash={flash} />}
                                 {seccion === 'noticias'       && <NoticiasTab      noticias={noticias}       flash={flash} />}

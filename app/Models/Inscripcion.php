@@ -9,6 +9,8 @@ class Inscripcion extends Model
 {
     use SoftDeletes;
 
+    protected $table = 'inscripciones';
+
     protected $fillable = [
         'estudiante_nombres',
         'estudiante_apellidos',

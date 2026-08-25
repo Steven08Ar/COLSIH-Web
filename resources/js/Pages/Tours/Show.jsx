@@ -1,7 +1,41 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef, memo } from 'react';
 import { Head, Link } from '@inertiajs/react';
 import TourViewer from '@/Components/Tour360/TourViewer';
 import { ChevronLeft, Grid, Compass, Info, MapPin } from 'lucide-react';
+
+const SceneThumbnail = memo(function SceneThumbnail({ src, alt, imgClassName, containerRef }) {
+    const wrapRef = useRef(null);
+    const [show, setShow] = useState(false);
+    const [loaded, setLoaded] = useState(false);
+
+    useEffect(() => {
+        const el = wrapRef.current;
+        if (!el || !src) return;
+        const obs = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) { setShow(true); obs.disconnect(); }
+            },
+            { root: containerRef?.current ?? null, rootMargin: '80px', threshold: 0 }
+        );
+        obs.observe(el);
+        return () => obs.disconnect();
+    }, [src, containerRef]);
+
+    return (
+        <div ref={wrapRef} className="absolute inset-0 bg-slate-900">
+            {!loaded && <div className="absolute inset-0 bg-slate-800 animate-pulse" />}
+            {show && (
+                <img
+                    src={src}
+                    alt={alt}
+                    decoding="async"
+                    onLoad={() => setLoaded(true)}
+                    className={`${imgClassName} transition-opacity duration-300 ${loaded ? 'opacity-100' : 'opacity-0'}`}
+                />
+            )}
+        </div>
+    );
+});
 
 const R2_RECORRIDO_BASE = "https://media.colsih.edu.co/recorrido_360/";
 const getRecorridoR2Url = (file) => `${R2_RECORRIDO_BASE}${encodeURIComponent(file)}`;
@@ -192,6 +226,7 @@ export default function Show({ tour = null, is_preview = false }) {
     const initialSlug = rawScenes.find(s => s.es_escena_inicial)?.slug || rawScenes[0]?.slug;
     const [activeSceneSlug, setActiveSceneSlug] = useState(initialSlug);
     const [showSceneList, setShowSceneList] = useState(false);
+    const sceneListScrollRef = useRef(null);
 
     const activeScene = rawScenes.find(s => s.slug === activeSceneSlug) || rawScenes[0];
 
@@ -282,7 +317,7 @@ export default function Show({ tour = null, is_preview = false }) {
                             </button>
                         </div>
 
-                        <div className="flex-1 overflow-y-auto space-y-2.5 pr-1 custom-scrollbar">
+                        <div ref={sceneListScrollRef} className="flex-1 overflow-y-auto space-y-2.5 pr-1 custom-scrollbar">
                             {rawScenes.map((scene, idx) => {
                                 const isActive = scene.slug === activeSceneSlug;
 
@@ -300,10 +335,11 @@ export default function Show({ tour = null, is_preview = false }) {
                                         }`}
                                     >
                                         <div className="relative w-14 h-10 rounded-xl overflow-hidden shrink-0 border border-white/10 bg-slate-900">
-                                            <img
-                                                src={scene.imagen_url}
+                                            <SceneThumbnail
+                                                src={scene.thumbnail_url || scene.imagen_url}
                                                 alt={scene.nombre}
-                                                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                                                imgClassName="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                                                containerRef={sceneListScrollRef}
                                             />
                                             {isActive && (
                                                 <div className="absolute inset-0 bg-blue-600/40 flex items-center justify-center">

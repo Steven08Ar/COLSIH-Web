@@ -16,6 +16,9 @@ use App\Http\Controllers\OfertaAcademicaController;
 use App\Http\Controllers\DeportesController;
 use Illuminate\Support\Facades\Route;
 
+// Fast handler para Chrome Devtools y requests automáticas del navegador
+Route::get('/.well-known/{any}', fn() => response()->noContent())->where('any', '.*');
+
 // Home
 Route::get('/', HomeController::class)->name('home');
 
@@ -96,6 +99,7 @@ Route::post('/suscripcion', [SuscripcionController::class, 'store'])->name('susc
 // Panel administrativo — URL oculta definida en .env (ADMIN_PATH)
 $adminPath = config('admin.path');
 
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\HotspotController;
 use App\Http\Controllers\Admin\TourAdminController;
 
@@ -158,6 +162,10 @@ Route::prefix($adminPath)->name('admin.')->group(function () {
             Route::post('/deportes-admin/banners',                [App\Http\Controllers\Admin\DeportesAdminController::class, 'storeBanner'])->name('deportes-admin.banners.store');
             Route::match(['post', 'put'], '/deportes-admin/banners/{banner}', [App\Http\Controllers\Admin\DeportesAdminController::class, 'updateBanner'])->name('deportes-admin.banners.update');
             Route::delete('/deportes-admin/banners/{banner}',     [App\Http\Controllers\Admin\DeportesAdminController::class, 'destroyBanner'])->name('deportes-admin.banners.destroy');
+
+            Route::post('/deportes-admin/noticias',               [App\Http\Controllers\Admin\DeportesAdminController::class, 'storeNoticiaDeportiva'])->name('deportes-admin.noticias.store');
+            Route::match(['post', 'put'], '/deportes-admin/noticias/{noticia}', [App\Http\Controllers\Admin\DeportesAdminController::class, 'updateNoticiaDeportiva'])->name('deportes-admin.noticias.update');
+            Route::delete('/deportes-admin/noticias/{noticia}',   [App\Http\Controllers\Admin\DeportesAdminController::class, 'destroyNoticiaDeportiva'])->name('deportes-admin.noticias.destroy');
         });
 
         // Mantenimiento y Comandos del Sistema — solo superenv (sin admin.rol = ningún usuario de BD)
@@ -184,8 +192,9 @@ Route::prefix($adminPath)->name('admin.')->group(function () {
             Route::post('/{adminUser}/toggle',       [App\Http\Controllers\Admin\AdminUsersController::class, 'toggleActivo'])->name('toggle');
         });
 
-        // Redirect raíz → testimonios
-        Route::get('/', fn() => redirect()->route('admin.testimonios'))->name('dashboard');
+        // Dashboard Principal con métricas y gráficas
+        Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.tab');
     });
 
     // Carnets — Sistema de Control de Ingreso Kiosco (Autenticado por PIN o Admin)

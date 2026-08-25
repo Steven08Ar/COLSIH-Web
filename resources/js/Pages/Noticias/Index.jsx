@@ -8,6 +8,7 @@ const CATEGORIAS = [
     { value: 'noticia', label: 'Noticias' },
     { value: 'evento', label: 'Eventos' },
     { value: 'comunicado', label: 'Comunicados' },
+    { value: 'deportes', label: 'Deportes' },
 ];
 
 export default function NoticiasIndex({ noticias, categoriaActual }) {
@@ -151,11 +152,15 @@ export default function NoticiasIndex({ noticias, categoriaActual }) {
                                                         <img src="/marca/logo-colsih.svg" alt="Logo COLSIH" className="w-14 h-auto opacity-10 absolute" />
                                                     </div>
                                                 )}
-                                                {noticia.categoria && (
+                                                {noticia.es_deporte || noticia.seccion === 'deportes' ? (
+                                                    <span className="absolute top-4 left-4 bg-amber-500 text-slate-950 font-black text-[10px] uppercase tracking-widest px-3.5 py-1.5 rounded-full shadow-md">
+                                                        Deportes
+                                                    </span>
+                                                ) : noticia.categoria ? (
                                                     <span className="absolute top-4 left-4 bg-white/90 dark:bg-slate-900/90 backdrop-blur-xs text-[#08111F] dark:text-slate-200 font-extrabold text-[10px] uppercase tracking-widest px-3.5 py-1.5 rounded-full shadow-xs">
                                                         {noticia.categoria}
                                                     </span>
-                                                )}
+                                                ) : null}
                                             </div>
 
                                             {/* Body */}

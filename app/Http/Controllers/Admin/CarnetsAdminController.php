@@ -90,7 +90,7 @@ class CarnetsAdminController extends Controller
             'activo'   => $request->boolean('activo', true),
         ]);
 
-        return back()->with('flash', 'Tarjeta Carnet/NFC registrada exitosamente.');
+        return redirect()->route('admin.carnets-admin')->with('flash', 'Tarjeta Carnet/NFC registrada exitosamente.');
     }
 
     /**
@@ -120,7 +120,7 @@ class CarnetsAdminController extends Controller
             'activo'   => $request->boolean('activo', true),
         ]);
 
-        return back()->with('flash', 'Tarjeta Carnet/NFC actualizada correctamente.');
+        return redirect()->route('admin.carnets-admin')->with('flash', 'Tarjeta Carnet/NFC actualizada correctamente.');
     }
 
     /**
@@ -129,7 +129,7 @@ class CarnetsAdminController extends Controller
     public function destroy(Carnet $carnet)
     {
         $carnet->delete();
-        return back()->with('flash', 'Tarjeta Carnet/NFC eliminada del sistema.');
+        return redirect()->route('admin.carnets-admin')->with('flash', 'Tarjeta Carnet/NFC eliminada del sistema.');
     }
 
     /**

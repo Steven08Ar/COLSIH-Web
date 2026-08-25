@@ -28,7 +28,7 @@ class NoticiaAdminController extends Controller
             'titulo'       => 'required|string|max:200',
             'resumen'      => 'nullable|string|max:500',
             'categoria'    => 'required|in:noticia,evento,comunicado,preescolar',
-            'seccion'      => 'nullable|string|in:general,preescolar,primaria,bachillerato,sena',
+            'seccion'      => 'nullable|string|in:general,preescolar,primaria,bachillerato,sena,deportes',
             'es_deporte'   => 'nullable',
             'activo'       => 'nullable',
             'publicado_en' => 'nullable|date',
@@ -37,21 +37,21 @@ class NoticiaAdminController extends Controller
 
         $data = $request->only(['titulo', 'resumen', 'categoria', 'seccion', 'publicado_en']);
         $data['seccion']      = $data['seccion'] ?? 'general';
-        $data['es_deporte']   = $data['seccion'] === 'sena' ? false : $request->boolean('es_deporte');
+        $data['es_deporte']   = $data['seccion'] === 'sena' ? false : ($data['seccion'] === 'deportes' || $request->boolean('es_deporte'));
         $data['activo']       = $request->boolean('activo');
         $data['publicado_en'] = $data['publicado_en'] ?: now()->toDateTimeString();
         $data['contenido']    = '';
         $data['slug']         = $this->uniqueSlug(Str::slug($data['titulo']));
 
         if ($request->hasFile('portada')) {
-            $data['imagen'] = ImageOptimizer::guardar($request->file('portada'), $this->carpetaCategoria($data['categoria']));
+            $data['imagen'] = ImageOptimizer::guardar($request->file('portada'), $this->carpetaImagen($data['categoria'], $data['es_deporte']));
         }
 
-        $data['bloques'] = $this->procesarBloques($request, []);
+        $data['bloques'] = $this->procesarBloques($request, [], $data['es_deporte']);
         $data['contenido'] = $this->compileBlocksToHtml($data['bloques']);
 
         Noticia::create($data);
-        return back()->with('flash', 'Publicacion creada.');
+        return redirect()->route('admin.noticias')->with('flash', 'Publicacion creada.');
     }
 
     public function update(Request $request, Noticia $noticia)
@@ -60,7 +60,7 @@ class NoticiaAdminController extends Controller
             'titulo'       => 'required|string|max:200',
             'resumen'      => 'nullable|string|max:500',
             'categoria'    => 'required|in:noticia,evento,comunicado,preescolar',
-            'seccion'      => 'nullable|string|in:general,preescolar,primaria,bachillerato,sena',
+            'seccion'      => 'nullable|string|in:general,preescolar,primaria,bachillerato,sena,deportes',
             'es_deporte'   => 'nullable',
             'activo'       => 'nullable',
             'publicado_en' => 'nullable|date',
@@ -69,20 +69,20 @@ class NoticiaAdminController extends Controller
 
         $data = $request->only(['titulo', 'resumen', 'categoria', 'seccion', 'publicado_en']);
         $data['seccion']      = $data['seccion'] ?? 'general';
-        $data['es_deporte']   = $data['seccion'] === 'sena' ? false : $request->boolean('es_deporte');
+        $data['es_deporte']   = $data['seccion'] === 'sena' ? false : ($data['seccion'] === 'deportes' || $request->boolean('es_deporte'));
         $data['activo']       = $request->boolean('activo');
         $data['publicado_en'] = $data['publicado_en'] ?: ($noticia->publicado_en?->toDateTimeString() ?? now()->toDateTimeString());
 
         if ($request->hasFile('portada')) {
             ImageOptimizer::eliminar($noticia->imagen);
-            $data['imagen'] = ImageOptimizer::guardar($request->file('portada'), $this->carpetaCategoria($data['categoria']));
+            $data['imagen'] = ImageOptimizer::guardar($request->file('portada'), $this->carpetaImagen($data['categoria'], $data['es_deporte']));
         }
 
-        $data['bloques'] = $this->procesarBloques($request, $noticia->bloques ?? []);
+        $data['bloques'] = $this->procesarBloques($request, $noticia->bloques ?? [], $data['es_deporte']);
         $data['contenido'] = $this->compileBlocksToHtml($data['bloques']);
 
         $noticia->update($data);
-        return back()->with('flash', 'Publicacion actualizada.');
+        return redirect()->route('admin.noticias')->with('flash', 'Publicacion actualizada.');
     }
 
     public function destroy(Noticia $noticia)
@@ -99,7 +99,15 @@ class NoticiaAdminController extends Controller
             }
         }
         $noticia->forceDelete();
-        return back()->with('flash', 'Publicacion eliminada.');
+        return redirect()->route('admin.noticias')->with('flash', 'Publicacion eliminada.');
+    }
+
+    private function carpetaImagen(string $categoria, bool $esDeporte): string
+    {
+        if ($esDeporte) {
+            return 'noticias/deportes';
+        }
+        return $this->carpetaCategoria($categoria);
     }
 
     private function carpetaCategoria(string $categoria): string
@@ -206,7 +214,7 @@ class NoticiaAdminController extends Controller
         return $html;
     }
 
-    private function procesarBloques(Request $request, array $bloquesActuales): array
+    private function procesarBloques(Request $request, array $bloquesActuales, bool $esDeporte = false): array
     {
         $raw = $request->input('bloques', '[]');
         $bloques = json_decode($raw, true) ?? [];
@@ -228,7 +236,7 @@ class NoticiaAdminController extends Controller
                     if (!empty($bloque['imagen'])) {
                         ImageOptimizer::eliminar($bloque['imagen']);
                     }
-                    $bloque['imagen'] = ImageOptimizer::guardar($request->file($fileKey), $this->carpetaCategoria($request->input('categoria', 'noticia')));
+                    $bloque['imagen'] = ImageOptimizer::guardar($request->file($fileKey), $this->carpetaImagen($request->input('categoria', 'noticia'), $esDeporte));
                 } elseif (empty($bloque['imagen']) && !empty($bloque['_key']) && isset($existentes[$bloque['_key']])) {
                     $bloque['imagen'] = $existentes[$bloque['_key']];
                 }

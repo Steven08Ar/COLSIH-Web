@@ -21,12 +21,14 @@ class Noticia extends Model
         'seccion',
         'es_deporte',
         'activo',
+        'vistas',
         'publicado_en',
     ];
 
     protected $casts = [
         'activo'       => 'boolean',
         'es_deporte'   => 'boolean',
+        'vistas'       => 'integer',
         'publicado_en' => 'datetime',
         'bloques'      => 'array',
     ];

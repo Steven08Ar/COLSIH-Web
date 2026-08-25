@@ -38,7 +38,7 @@ class TestimonioController extends Controller
         $data['imagen'] = ImageOptimizer::guardar($request->file('imagen'), 'testimonios');
 
         Testimonio::create($data);
-        return back()->with('flash', 'Testimonio creado.');
+        return redirect()->route('admin.testimonios')->with('flash', 'Testimonio creado.');
     }
 
     public function update(Request $request, Testimonio $testimonio)
@@ -63,13 +63,13 @@ class TestimonioController extends Controller
         }
 
         $testimonio->update($data);
-        return back()->with('flash', 'Testimonio actualizado.');
+        return redirect()->route('admin.testimonios')->with('flash', 'Testimonio actualizado.');
     }
 
     public function destroy(Testimonio $testimonio)
     {
         ImageOptimizer::eliminar($testimonio->imagen);
         $testimonio->delete();
-        return back()->with('flash', 'Testimonio eliminado.');
+        return redirect()->route('admin.testimonios')->with('flash', 'Testimonio eliminado.');
     }
 }

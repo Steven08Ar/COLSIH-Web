@@ -14,6 +14,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->trustProxies(at: '*');
         $middleware->web(append: [
             \App\Http\Middleware\HandleInertiaRequests::class,
+            \App\Http\Middleware\TrackVisits::class,
         ]);
         $middleware->alias([
             'admin.auth' => \App\Http\Middleware\AdminAuth::class,

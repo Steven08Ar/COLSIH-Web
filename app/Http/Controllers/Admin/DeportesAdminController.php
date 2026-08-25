@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\DeporteCarrusel;
+use App\Models\Noticia;
 use App\Models\TorneoPartido;
 use App\Services\ImageOptimizer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 
 class DeportesAdminController extends Controller
@@ -23,6 +25,7 @@ class DeportesAdminController extends Controller
             'torneoPartidos'          => TorneoPartido::where('fase', '!=', 'config')->orderBy('id')->get(),
             'deportesBanners'         => DeporteCarrusel::orderBy('orden')->get(),
             'cuadrangularesBloqueado' => $cuadrangularesBloqueado,
+            'noticiasDeportivas'      => Noticia::where('es_deporte', true)->latest()->get(['id', 'titulo', 'slug', 'resumen', 'imagen', 'seccion', 'activo', 'publicado_en']),
         ]);
     }
 
@@ -40,7 +43,7 @@ class DeportesAdminController extends Controller
             ? 'Cuadrangulares bloqueados (Receso de temporada activado).'
             : 'Cuadrangulares desbloqueados (Llaves visibles).';
 
-        return back()->with('flash', $msg);
+        return redirect()->route('admin.deportes-admin')->with('flash', $msg);
     }
 
     public static function seedDefaultMatchesIfNeeded()
@@ -110,7 +113,7 @@ class DeportesAdminController extends Controller
         // Auto-advance winners to next round bracket slot
         $this->avanzarGanador($partido);
 
-        return back()->with('flash', 'Partido actualizado y llaves sincronizadas.');
+        return redirect()->route('admin.deportes-admin')->with('flash', 'Partido actualizado y llaves sincronizadas.');
     }
 
     private function avanzarGanador(TorneoPartido $partido)
@@ -175,7 +178,7 @@ class DeportesAdminController extends Controller
         }
 
         DeporteCarrusel::create($data);
-        return back()->with('flash', 'Banner deportivo agregado.');
+        return redirect()->route('admin.deportes-admin')->with('flash', 'Banner deportivo agregado.');
     }
 
     public function updateBanner(Request $request, DeporteCarrusel $banner)
@@ -191,6 +194,13 @@ class DeportesAdminController extends Controller
         $data = $request->only(['titulo', 'tag', 'subtitulo', 'descripcion']);
         $data['activo'] = $request->boolean('activo');
 
+        if ($request->boolean('eliminar_imagen') && !$request->hasFile('portada')) {
+            if ($banner->imagen && !str_starts_with($banner->imagen, 'http')) {
+                ImageOptimizer::eliminar($banner->imagen);
+            }
+            $data['imagen'] = null;
+        }
+
         if ($request->hasFile('portada')) {
             if ($banner->imagen && !str_starts_with($banner->imagen, 'http')) {
                 ImageOptimizer::eliminar($banner->imagen);
@@ -199,7 +209,7 @@ class DeportesAdminController extends Controller
         }
 
         $banner->update($data);
-        return back()->with('flash', 'Banner deportivo actualizado.');
+        return redirect()->route('admin.deportes-admin')->with('flash', 'Banner deportivo actualizado.');
     }
 
     public function destroyBanner(DeporteCarrusel $banner)
@@ -208,6 +218,87 @@ class DeportesAdminController extends Controller
             ImageOptimizer::eliminar($banner->imagen);
         }
         $banner->delete();
-        return back()->with('flash', 'Banner eliminado.');
+        return redirect()->route('admin.deportes-admin')->with('flash', 'Banner eliminado.');
+    }
+
+    public function storeNoticiaDeportiva(Request $request)
+    {
+        $request->validate([
+            'titulo'       => 'required|string|max:200',
+            'resumen'      => 'nullable|string|max:600',
+            'seccion'      => 'nullable|string|max:80',
+            'activo'       => 'nullable',
+            'publicado_en' => 'nullable|date',
+            'portada'      => 'nullable|file|mimes:jpeg,png,jpg,gif,svg,webp,heic,heif|max:20480',
+        ]);
+
+        $slug = Str::slug($request->titulo);
+        $base = $slug;
+        $i = 1;
+        while (Noticia::where('slug', $slug)->exists()) {
+            $slug = "{$base}-{$i}";
+            $i++;
+        }
+
+        $data = [
+            'titulo'       => $request->titulo,
+            'slug'         => $slug,
+            'resumen'      => $request->resumen,
+            'seccion'      => $request->seccion ?: 'deportes',
+            'categoria'    => 'noticia',
+            'es_deporte'   => true,
+            'activo'       => $request->boolean('activo'),
+            'publicado_en' => $request->publicado_en ?: now()->toDateTimeString(),
+            'contenido'    => '',
+            'bloques'      => [],
+        ];
+
+        if ($request->hasFile('portada')) {
+            $data['imagen'] = ImageOptimizer::guardar($request->file('portada'), 'noticias/deportes');
+        }
+
+        Noticia::create($data);
+        return redirect()->route('admin.deportes-admin')->with('flash', 'Publicación deportiva creada.');
+    }
+
+    public function updateNoticiaDeportiva(Request $request, Noticia $noticia)
+    {
+        $request->validate([
+            'titulo'       => 'required|string|max:200',
+            'resumen'      => 'nullable|string|max:600',
+            'seccion'      => 'nullable|string|max:80',
+            'activo'       => 'nullable',
+            'publicado_en' => 'nullable|date',
+            'portada'      => 'nullable|file|mimes:jpeg,png,jpg,gif,svg,webp,heic,heif|max:20480',
+        ]);
+
+        $data = [
+            'titulo'       => $request->titulo,
+            'resumen'      => $request->resumen,
+            'seccion'      => $request->seccion ?: 'deportes',
+            'es_deporte'   => true,
+            'activo'       => $request->boolean('activo'),
+            'publicado_en' => $request->publicado_en ?: ($noticia->publicado_en?->toDateTimeString() ?? now()->toDateTimeString()),
+        ];
+
+        if ($request->boolean('eliminar_imagen') && !$request->hasFile('portada')) {
+            ImageOptimizer::eliminar($noticia->imagen);
+            $data['imagen'] = null;
+        }
+
+        if ($request->hasFile('portada')) {
+            ImageOptimizer::eliminar($noticia->imagen);
+            $data['imagen'] = ImageOptimizer::guardar($request->file('portada'), 'noticias/deportes');
+        }
+
+        $noticia->update($data);
+        return redirect()->route('admin.deportes-admin')->with('flash', 'Publicación deportiva actualizada.');
+    }
+
+    public function destroyNoticiaDeportiva(Noticia $noticia)
+    {
+        ImageOptimizer::eliminar($noticia->imagen);
+        $noticia->forceDelete();
+        return redirect()->route('admin.deportes-admin')->with('flash', 'Publicación deportiva eliminada.');
     }
 }

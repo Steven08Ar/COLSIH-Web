@@ -224,7 +224,13 @@ export default function AdminSidebar({
 
                                 <div className={`flex flex-col min-w-0 ${isCollapsed ? 'lg:hidden' : 'flex'}`}>
                                     <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider truncate">
-                                        {adminSesion?.tipo === 'superenv' ? 'Super Admin' : 'Administrador'}
+                                        {adminSesion?.tipo === 'superenv'
+                                            ? 'Super Admin'
+                                            : adminSesion?.rol === 'deportes'
+                                                ? 'Deportes'
+                                                : adminSesion?.rol === 'marketing'
+                                                    ? 'Marketing'
+                                                    : 'Administrador'}
                                     </span>
                                     <span className="text-sm font-extrabold text-slate-900 dark:text-white truncate">
                                         {adminSesion?.nombre ?? 'Admin'}

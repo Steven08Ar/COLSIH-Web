@@ -71,11 +71,7 @@ class ImageOptimizer
         // Subir a Cloudflare R2 si está configurado
         if (env('R2_ACCESS_KEY_ID') && env('R2_ENDPOINT')) {
             Storage::disk('r2')->put($ruta, $contenido, ['ContentType' => $mime]);
-            $baseUrl = env('R2_PUBLIC_URL', 'https://media.colsih.edu.co');
-            if (str_contains($baseUrl, 'r2.dev') || empty($baseUrl)) {
-                $baseUrl = 'https://media.colsih.edu.co';
-            }
-            return rtrim($baseUrl, '/') . '/' . $ruta;
+            return self::r2BaseUrl() . '/' . $ruta;
         }
 
         // Fallback: guardar en disco público local
@@ -103,16 +99,24 @@ class ImageOptimizer
 
         if (env('R2_ACCESS_KEY_ID') && env('R2_ENDPOINT')) {
             Storage::disk('r2')->put($ruta, $contenido, ['ContentType' => $mime]);
-            $baseUrl = env('R2_PUBLIC_URL', 'https://media.colsih.edu.co');
-            if (str_contains($baseUrl, 'r2.dev') || empty($baseUrl)) {
-                $baseUrl = 'https://media.colsih.edu.co';
-            }
-            return rtrim($baseUrl, '/') . '/' . $ruta;
+            return self::r2BaseUrl() . '/' . $ruta;
         }
 
         Storage::disk('public')->makeDirectory($carpeta);
         file_put_contents(Storage::disk('public')->path($ruta), $contenido);
         return $ruta;
+    }
+
+    /**
+     * Devuelve la URL base canónica de R2, igual que guardar().
+     */
+    private static function r2BaseUrl(): string
+    {
+        $base = env('R2_PUBLIC_URL', 'https://media.colsih.edu.co');
+        if (str_contains($base, 'r2.dev') || empty($base)) {
+            $base = 'https://media.colsih.edu.co';
+        }
+        return rtrim($base, '/');
     }
 
     /**
@@ -123,7 +127,7 @@ class ImageOptimizer
         if (!$ruta) return;
 
         if (str_starts_with($ruta, 'http')) {
-            $base = rtrim(env('R2_PUBLIC_URL', ''), '/');
+            $base = self::r2BaseUrl();
             if ($base && str_starts_with($ruta, $base)) {
                 $relPath = ltrim(substr($ruta, strlen($base)), '/');
                 Storage::disk('r2')->delete($relPath);

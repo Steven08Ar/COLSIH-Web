@@ -6,7 +6,7 @@ import CarnetsAdminTab from './CarnetsAdminTab';
 import AdminSidebar from '@/Components/AdminSidebar';
 import DashboardOverview from '@/Components/DashboardOverview';
 import ImageCropper from '@/Components/ImageCropper';
-import { Sun, Moon, Eye, Move, ZoomIn, Camera, User, X, Check, Upload, ArrowUp, ArrowDown, ArrowLeft, ArrowRight, Plus, Minus, Trash2, Terminal, Server, RefreshCw, Database, HardDrive, ShieldAlert, Cpu, Copy, Play, CreditCard, GitBranch, Trophy, Flame, Sparkles, Shield, Star, Bell, Search, PanelLeft, UserCheck, UserX, Mail, Phone, AtSign, Lock, Image, HardHat, ChevronUp, ChevronDown, Award, Image as ImageIcon, MoveHorizontal, MoveVertical, Activity } from 'lucide-react';
+import { Sun, Moon, Eye, Move, ZoomIn, Camera, User, X, Check, Upload, ArrowUp, ArrowDown, ArrowLeft, ArrowRight, Plus, Minus, Trash2, Terminal, Server, RefreshCw, Database, HardDrive, ShieldAlert, Cpu, Copy, Play, CreditCard, GitBranch, Trophy, Flame, Sparkles, Shield, Star, Bell, Search, PanelLeft, UserCheck, UserX, Mail, Phone, AtSign, Lock, Image, HardHat, ChevronUp, ChevronDown, Award, Image as ImageIcon, MoveHorizontal, MoveVertical, Activity, Newspaper } from 'lucide-react';
 import { processImageFile } from '@/utils/heicConverter'; // solo para noticias/testimonios/equipo — NUNCA para imágenes 360°
 import { mediaUrl } from '@/utils/mediaUrl';
 

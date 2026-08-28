@@ -20,7 +20,8 @@ import {
     Layers, 
     Sparkles, 
     User,
-    Settings
+    Settings,
+    X
 } from 'lucide-react';
 
 export default function AdminSidebar({
@@ -62,12 +63,11 @@ export default function AdminSidebar({
     const popoverTimeoutRef = useRef(null);
 
     const toggleGroup = (groupKey) => {
-        if (isCollapsed) return;
         setOpenGroups(prev => ({ ...prev, [groupKey]: !prev[groupKey] }));
     };
 
     const handleGroupClick = (e, item) => {
-        if (isCollapsed) {
+        if (isCollapsed && typeof window !== 'undefined' && window.innerWidth >= 1024) {
             const rect = e.currentTarget.getBoundingClientRect();
             if (popoverGroup?.groupKey === item.groupKey) {
                 closePopoverImmediately();
@@ -81,7 +81,7 @@ export default function AdminSidebar({
     };
 
     const handleGroupMouseEnter = (e, item) => {
-        if (!isCollapsed) return;
+        if (!isCollapsed || typeof window === 'undefined' || window.innerWidth < 1024) return;
         if (popoverTimeoutRef.current) clearTimeout(popoverTimeoutRef.current);
         const rect = e.currentTarget.getBoundingClientRect();
         setPopoverPos({ top: rect.top, left: rect.right + 10 });
@@ -89,7 +89,7 @@ export default function AdminSidebar({
     };
 
     const handleGroupMouseLeave = () => {
-        if (!isCollapsed) return;
+        if (!isCollapsed || typeof window === 'undefined' || window.innerWidth < 1024) return;
         popoverTimeoutRef.current = setTimeout(() => {
             setPopoverGroup(null);
             setPopoverPos(null);
@@ -107,7 +107,7 @@ export default function AdminSidebar({
     };
 
     const showTooltip = (e, label) => {
-        if (!isCollapsed) return;
+        if (!isCollapsed || typeof window === 'undefined' || window.innerWidth < 1024) return;
         const rect = e.currentTarget.getBoundingClientRect();
         setTooltipData({
             label,
@@ -184,11 +184,11 @@ export default function AdminSidebar({
 
     return (
         <>
-            <aside className={`bg-white dark:bg-[#0E1726] border-r border-slate-200/80 dark:border-slate-800/80 h-screen fixed left-0 top-0 z-50 flex flex-col justify-between transition-all duration-300 ease-in-out ${
-                isCollapsed ? 'w-[84px]' : 'w-[260px]'
+            <aside className={`bg-white dark:bg-[#0E1726] border-r border-slate-200/80 dark:border-slate-800/80 h-screen fixed left-0 top-0 z-50 flex flex-col justify-between transition-all duration-300 ease-in-out w-[280px] sm:w-[300px] max-w-[85vw] ${
+                isCollapsed ? 'lg:w-[84px]' : 'lg:w-[260px]'
             } ${sidebarOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full lg:translate-x-0'}`}>
                 
-                {/* ── Botón flotante para colapsar/expandir en el borde derecho (Cuadrado redondeado) ── */}
+                {/* ── Botón flotante para colapsar/expandir en el borde derecho (Solo en escritorio) ── */}
                 <button
                     type="button"
                     onClick={() => {
@@ -203,26 +203,26 @@ export default function AdminSidebar({
 
                 <div className="flex-1 overflow-y-auto custom-scrollbar flex flex-col">
                     
-                    {/* ── Header Perfil (Avatar 44x44 + Info + Rol) ── */}
-                    <div className={`pt-6 pb-4 border-b border-slate-100 dark:border-slate-800/80 transition-all duration-300 ${
-                        isCollapsed ? 'px-2 text-center flex justify-center' : 'px-6'
+                    {/* ── Header Perfil (Avatar + Info + Rol + Botón Cerrar en móvil) ── */}
+                    <div className={`pt-6 pb-4 border-b border-slate-100 dark:border-slate-800/80 transition-all duration-300 px-5 ${
+                        isCollapsed ? 'lg:px-2 lg:text-center lg:flex lg:justify-center' : 'lg:px-6'
                     }`}>
-                        <div className="flex items-center gap-3.5">
-                            <div className="relative shrink-0">
-                                <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#800A15] to-[#003C8F] p-0.5 shadow-md">
-                                    {adminSesion?.foto ? (
-                                        <img src={adminSesion.foto} alt={adminSesion.nombre} className="w-full h-full rounded-full object-cover" />
-                                    ) : (
-                                        <div className="w-full h-full rounded-full bg-slate-100 dark:bg-slate-900 flex items-center justify-center font-black text-sm text-[#800A15] dark:text-blue-400">
-                                            {(adminSesion?.nombre ?? 'A').charAt(0).toUpperCase()}
-                                        </div>
-                                    )}
+                        <div className="flex items-center justify-between gap-3 w-full">
+                            <div className="flex items-center gap-3.5 min-w-0">
+                                <div className="relative shrink-0">
+                                    <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#800A15] to-[#003C8F] p-0.5 shadow-md">
+                                        {adminSesion?.foto ? (
+                                            <img src={adminSesion.foto} alt={adminSesion.nombre} className="w-full h-full rounded-full object-cover" />
+                                        ) : (
+                                            <div className="w-full h-full rounded-full bg-slate-100 dark:bg-slate-900 flex items-center justify-center font-black text-sm text-[#800A15] dark:text-blue-400">
+                                                {(adminSesion?.nombre ?? 'A').charAt(0).toUpperCase()}
+                                            </div>
+                                        )}
+                                    </div>
+                                    <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-white dark:ring-slate-900"></span>
                                 </div>
-                                <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-white dark:ring-slate-900"></span>
-                            </div>
 
-                            {!isCollapsed && (
-                                <div className="flex flex-col min-w-0">
+                                <div className={`flex flex-col min-w-0 ${isCollapsed ? 'lg:hidden' : 'flex'}`}>
                                     <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider truncate">
                                         {adminSesion?.tipo === 'superenv' ? 'Super Admin' : 'Administrador'}
                                     </span>
@@ -230,7 +230,17 @@ export default function AdminSidebar({
                                         {adminSesion?.nombre ?? 'Admin'}
                                     </span>
                                 </div>
-                            )}
+                            </div>
+
+                            {/* Botón Cerrar en Móvil */}
+                            <button
+                                type="button"
+                                onClick={() => setSidebarOpen(false)}
+                                className="lg:hidden p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white transition cursor-pointer"
+                                aria-label="Cerrar Menú"
+                            >
+                                <X className="w-4 h-4" />
+                            </button>
                         </div>
                     </div>
 
@@ -240,9 +250,10 @@ export default function AdminSidebar({
                             <div key={idx} className="space-y-1">
                                 {/* Cabecera de Categoría */}
                                 <span className={`text-[10px] font-bold text-slate-400 dark:text-slate-500 tracking-[1.5px] uppercase block px-3 mb-2 transition-all duration-300 ${
-                                    isCollapsed ? 'text-center opacity-60 text-[9px]' : ''
+                                    isCollapsed ? 'lg:text-center lg:opacity-60 lg:text-[9px]' : ''
                                 }`}>
-                                    {isCollapsed ? '•••' : section.category}
+                                    <span className={isCollapsed ? 'lg:hidden' : 'inline'}>{section.category}</span>
+                                    <span className={isCollapsed ? 'hidden lg:inline' : 'hidden'}>•••</span>
                                 </span>
 
                                 {/* Ítems de la categoría */}
@@ -262,7 +273,9 @@ export default function AdminSidebar({
                                                     }}
                                                     onMouseEnter={e => showTooltip(e, item.label)}
                                                     onMouseLeave={hideTooltip}
-                                                    className={`flex items-center justify-between ${isCollapsed ? 'justify-center px-0' : 'px-3'} py-2.5 rounded-xl font-medium text-xs transition-all duration-200 ${
+                                                    className={`flex items-center justify-between px-3 py-2.5 rounded-xl font-medium text-xs transition-all duration-200 ${
+                                                        isCollapsed ? 'lg:justify-center lg:px-0' : 'px-3'
+                                                    } ${
                                                         isActive
                                                             ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-md font-bold'
                                                             : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100/80 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-white'
@@ -270,11 +283,13 @@ export default function AdminSidebar({
                                                 >
                                                     <div className="flex items-center gap-3 min-w-0">
                                                         <Icon className={`w-5 h-5 shrink-0 ${isActive ? 'text-white dark:text-slate-900' : 'text-slate-500 dark:text-slate-400'}`} />
-                                                        {!isCollapsed && <span className="truncate">{item.label}</span>}
+                                                        <span className={`truncate ${isCollapsed ? 'lg:hidden' : 'inline'}`}>{item.label}</span>
                                                     </div>
 
-                                                    {!isCollapsed && item.count !== null && (
+                                                    {item.count !== null && (
                                                         <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${
+                                                            isCollapsed ? 'lg:hidden' : 'inline-block'
+                                                        } ${
                                                             isActive 
                                                                 ? 'bg-white/20 text-white dark:bg-slate-900/20 dark:text-slate-900' 
                                                                 : 'bg-slate-100 dark:bg-slate-800 text-slate-500'
@@ -301,7 +316,9 @@ export default function AdminSidebar({
                                                 onClick={e => handleGroupClick(e, item)}
                                                 onMouseEnter={e => handleGroupMouseEnter(e, item)}
                                                 onMouseLeave={handleGroupMouseLeave}
-                                                className={`w-full flex items-center justify-between ${isCollapsed ? 'justify-center px-0' : 'px-3'} py-2.5 rounded-xl font-medium text-xs transition-all duration-200 cursor-pointer ${
+                                                className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl font-medium text-xs transition-all duration-200 cursor-pointer ${
+                                                    isCollapsed ? 'lg:justify-center lg:px-0' : 'px-3'
+                                                } ${
                                                     (hasActiveSubItem || (isCollapsed && isPopoverOpen))
                                                         ? 'bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white font-bold shadow-xs'
                                                         : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100/60 dark:hover:bg-slate-800/40 hover:text-slate-900 dark:hover:text-white'
@@ -313,19 +330,21 @@ export default function AdminSidebar({
                                                             ? 'text-slate-900 dark:text-white' 
                                                             : 'text-slate-500 dark:text-slate-400'
                                                     }`} />
-                                                    {!isCollapsed && <span className="truncate">{item.label}</span>}
+                                                    <span className={`truncate ${isCollapsed ? 'lg:hidden' : 'inline'}`}>{item.label}</span>
                                                 </div>
 
-                                                {!isCollapsed && (
-                                                    <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-200 ${
-                                                        isGroupOpen ? 'rotate-180' : ''
-                                                    }`} />
-                                                )}
+                                                <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-200 ${
+                                                    isCollapsed ? 'lg:hidden' : 'inline-block'
+                                                } ${
+                                                    isGroupOpen ? 'rotate-180' : ''
+                                                }`} />
                                             </button>
 
                                             {/* Submenú en estado Expandido (Árbol vertical) */}
-                                            {!isCollapsed && isGroupOpen && (
-                                                <div className="border-l border-slate-200 dark:border-slate-800 ml-5 pl-3 space-y-1 my-1">
+                                            {isGroupOpen && (
+                                                <div className={`border-l border-slate-200 dark:border-slate-800 ml-5 pl-3 space-y-1 my-1 ${
+                                                    isCollapsed ? 'lg:hidden' : 'block'
+                                                }`}>
                                                     {item.subItems.map(sub => {
                                                         const SubIcon = sub.icon;
                                                         const isSubActive = seccion === sub.key;
@@ -366,7 +385,7 @@ export default function AdminSidebar({
                     </nav>
                 </div>
 
-                {/* ── Sidebar Footer (Ayuda & Logout en estilo Figma) ── */}
+                {/* ── Sidebar Footer (Ayuda & Logout) ── */}
                 <div className="p-2.5 border-t border-slate-100 dark:border-slate-800/80 space-y-1 bg-slate-50/50 dark:bg-slate-900/50">
                     {/* Botón Ayuda */}
                     <button
@@ -374,11 +393,13 @@ export default function AdminSidebar({
                         onClick={() => alert("Soporte Técnico COLSIH: Contacte a soporte@colsih.edu.co")}
                         onMouseEnter={e => showTooltip(e, 'Ayuda y Soporte')}
                         onMouseLeave={hideTooltip}
-                        className={`w-full flex items-center gap-3 ${isCollapsed ? 'justify-center px-0' : 'px-3'} py-2 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer`}
+                        className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer ${
+                            isCollapsed ? 'lg:justify-center lg:px-0' : 'px-3'
+                        }`}
                         title="Ayuda y Soporte"
                     >
                         <HelpCircle className="w-5 h-5 text-slate-400 shrink-0" />
-                        {!isCollapsed && <span>Ayuda y Soporte</span>}
+                        <span className={isCollapsed ? 'lg:hidden' : 'inline'}>Ayuda y Soporte</span>
                     </button>
 
                     {/* Botón Cerrar Sesión */}
@@ -387,11 +408,13 @@ export default function AdminSidebar({
                             type="submit"
                             onMouseEnter={e => showTooltip(e, 'Cerrar Sesión')}
                             onMouseLeave={hideTooltip}
-                            className={`w-full flex items-center gap-3 ${isCollapsed ? 'justify-center px-0' : 'px-3'} py-2 rounded-xl text-xs font-bold text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition cursor-pointer`}
+                            className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-bold text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition cursor-pointer ${
+                                isCollapsed ? 'lg:justify-center lg:px-0' : 'px-3'
+                            }`}
                             title="Cerrar Sesión"
                         >
                             <LogOut className="w-5 h-5 text-rose-500 shrink-0" />
-                            {!isCollapsed && <span>Cerrar Sesión</span>}
+                            <span className={isCollapsed ? 'lg:hidden' : 'inline'}>Cerrar Sesión</span>
                         </button>
                     </form>
                 </div>

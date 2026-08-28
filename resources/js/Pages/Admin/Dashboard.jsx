@@ -1062,44 +1062,44 @@ function NoticiasTab({ noticias, flash }) {
                     </div>
                 )}
                 {noticias.map(n => (
-                    <div key={n.id} className="bg-slate-50/50 dark:bg-slate-800/20 hover:bg-slate-50 dark:hover:bg-slate-800/40 border border-slate-200/60 dark:border-slate-800/60 hover:border-slate-300/80 rounded-2xl p-4 flex items-center gap-4 transition duration-200">
-                        {n.imagen ? (
-                            <img src={mediaUrl(n.imagen)} alt={n.titulo} className="w-16 h-16 rounded-xl object-cover shrink-0 border border-slate-200 dark:border-slate-700" />
-                        ) : (
-                            <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-blue-100 to-indigo-100 shrink-0 border border-slate-200 dark:border-slate-700 flex items-center justify-center">
-                                <svg className="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
-                                </svg>
-                            </div>
-                        )}
-                        <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-2 flex-wrap">
-                                <span className="font-bold text-slate-800 dark:text-slate-200 text-sm truncate">{n.titulo}</span>
-                                <span className={`text-[10px] font-extrabold px-2 py-0.5 rounded-md border uppercase tracking-wider ${
-                                    n.categoria === 'evento' ? 'bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 border-amber-100 dark:border-amber-900/30' :
-                                    n.categoria === 'comunicado' ? 'bg-rose-50 dark:bg-rose-900/20 text-rose-600 dark:text-rose-400 border-rose-100 dark:border-rose-900/30' :
-                                    'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 border-blue-100 dark:border-blue-900/30'
-                                }`}>
-                                    {categoriaLabel[n.categoria]}
-                                </span>
-                                {(n.es_deporte || n.seccion === 'deportes') && (
-                                    <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-md border uppercase tracking-wider bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 border-amber-200 dark:border-amber-800">
-                                        Deportes
-                                    </span>
-                                )}
-                                <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${n.activo ? 'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 border-emerald-100 dark:border-emerald-900/30' : 'bg-rose-50 dark:bg-rose-900/20 text-rose-600 dark:text-rose-400 border-rose-100 dark:border-rose-900/30'}`}>
-                                    {n.activo ? 'Visible' : 'Oculto'}
-                                </span>
-                            </div>
-                            {n.resumen && <p className="text-slate-500 dark:text-slate-400 text-xs mt-1 line-clamp-1">{n.resumen}</p>}
-                            {n.publicado_en && (
-                                <p className="text-slate-400 dark:text-slate-500 text-[10px] font-semibold mt-1 flex items-center gap-1">
-                                    <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                                    {new Date(n.publicado_en).toLocaleDateString('es-CO', { year: 'numeric', month: 'short', day: 'numeric' })}
-                                </p>
+                    <div key={n.id} className="bg-white dark:bg-slate-900 hover:bg-slate-50/70 dark:hover:bg-slate-800/40 border border-slate-200/80 dark:border-slate-800/80 hover:border-slate-300 dark:hover:border-slate-700 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center gap-4 transition duration-200 shadow-xs">
+                        <div className="flex items-start sm:items-center gap-3.5 w-full sm:w-auto flex-1 min-w-0">
+                            {n.imagen ? (
+                                <img src={mediaUrl(n.imagen)} alt={n.titulo} className="w-16 h-16 rounded-xl object-cover shrink-0 border border-slate-100 dark:border-slate-700 shadow-2xs" />
+                            ) : (
+                                <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-blue-100 to-indigo-100 dark:from-slate-800 dark:to-slate-700 shrink-0 border border-slate-200 dark:border-slate-700 flex items-center justify-center">
+                                    <Newspaper className="w-6 h-6 text-blue-500" />
+                                </div>
                             )}
+                            <div className="flex-1 min-w-0 space-y-1">
+                                <div className="flex items-center gap-1.5 flex-wrap">
+                                    <span className="font-extrabold text-slate-900 dark:text-slate-100 text-sm leading-snug break-words">{n.titulo}</span>
+                                    <span className={`text-[10px] font-extrabold px-2 py-0.5 rounded-md border uppercase tracking-wider ${
+                                        n.categoria === 'evento' ? 'bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 border-amber-100 dark:border-amber-900/30' :
+                                        n.categoria === 'comunicado' ? 'bg-rose-50 dark:bg-rose-900/20 text-rose-600 dark:text-rose-400 border-rose-100 dark:border-rose-900/30' :
+                                        'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 border-blue-100 dark:border-blue-900/30'
+                                    }`}>
+                                        {categoriaLabel[n.categoria]}
+                                    </span>
+                                    {(n.es_deporte || n.seccion === 'deportes') && (
+                                        <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-md border uppercase tracking-wider bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 border-amber-200 dark:border-amber-800">
+                                            Deportes
+                                        </span>
+                                    )}
+                                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${n.activo ? 'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 border-emerald-100 dark:border-emerald-900/30' : 'bg-rose-50 dark:bg-rose-900/20 text-rose-600 dark:text-rose-400 border-rose-100 dark:border-rose-900/30'}`}>
+                                        {n.activo ? 'Visible' : 'Oculto'}
+                                    </span>
+                                </div>
+                                {n.resumen && <p className="text-slate-500 dark:text-slate-400 text-xs line-clamp-2 leading-relaxed">{n.resumen}</p>}
+                                {n.publicado_en && (
+                                    <p className="text-slate-400 dark:text-slate-500 text-[10px] font-semibold flex items-center gap-1">
+                                        <svg className="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                                        <span>{new Date(n.publicado_en).toLocaleDateString('es-CO', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
+                                    </p>
+                                )}
+                            </div>
                         </div>
-                        <div className="flex gap-2 shrink-0 w-full sm:w-auto justify-end border-t sm:border-t-0 pt-3 sm:pt-0 border-slate-200/60 dark:border-slate-800/60">
+                        <div className="flex items-center gap-2 shrink-0 w-full sm:w-auto justify-end border-t sm:border-t-0 pt-2.5 sm:pt-0 border-slate-100 dark:border-slate-800">
                             <button onClick={() => abrirEditar(n)} className="text-xs font-bold text-blue-600 dark:text-blue-400 hover:text-blue-800 hover:bg-blue-50 dark:hover:bg-slate-800 px-3 py-1.5 rounded-lg transition cursor-pointer">Editar</button>
                             {deletingId === n.id ? (
                                 <div className="flex items-center gap-1.5">
@@ -4865,15 +4865,20 @@ export default function AdminDashboard({ seccion, carnets = [], equipo = [], tes
                     <header className="h-16 bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800/80 sticky top-0 z-30 flex items-center justify-between px-4 sm:px-6 shadow-[0_1px_2px_rgba(0,0,0,0.02)] shrink-0">
                         
                         {/* Izquierda: Drawer Móvil + Breadcrumbs estilo SnowUI */}
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
                             <button
                                 type="button"
                                 onClick={() => setSidebarOpen(!sidebarOpen)}
-                                className="lg:hidden p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 transition cursor-pointer"
+                                className="lg:hidden p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 transition cursor-pointer shrink-0"
                                 aria-label="Abrir Menú"
                             >
                                 <PanelLeft className="w-4 h-4" />
                             </button>
+
+                            {/* Título en Móvil */}
+                            <div className="sm:hidden font-extrabold text-xs text-slate-900 dark:text-white capitalize truncate max-w-[130px]">
+                                {seccion ? seccion.replace('-admin', '') : 'Dashboard'}
+                            </div>
 
                             {/* Breadcrumbs de Navegación */}
                             <div className="hidden sm:flex items-center gap-2 text-xs font-medium text-slate-400 dark:text-slate-500">

@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef, useEffect } from 'react';
 import {
     TrendingUp, TrendingDown, CreditCard, Trophy, Newspaper, Users,
     Eye, Globe, Activity, Calendar,
@@ -98,6 +98,8 @@ export default function DashboardOverview({
 }) {
     const [chartMode, setChartMode] = useState('dias');
     const [hoveredIndex, setHoveredIndex] = useState(null);
+    const lineRef = useRef(null);
+    const [barAnimated, setBarAnimated] = useState(false);
 
     // ── Métricas principales ──
     const totalVisitas    = analytics?.total_visitas   ?? 0;
@@ -154,6 +156,32 @@ export default function DashboardOverview({
     }, [points, linePath]);
 
     const activePoint = hoveredIndex !== null ? points[hoveredIndex] : null;
+
+    // Animación de trazado de línea al cambiar datos/modo
+    useEffect(() => {
+        if (chartMode !== 'dias' || !linePath) return;
+        const raf = requestAnimationFrame(() => {
+            const el = lineRef.current;
+            if (!el) return;
+            const len = el.getTotalLength();
+            el.style.transition = 'none';
+            el.style.strokeDasharray = `${len}`;
+            el.style.strokeDashoffset = `${len}`;
+            requestAnimationFrame(() => {
+                el.style.transition = 'stroke-dashoffset 1.4s cubic-bezier(0.4, 0, 0.2, 1)';
+                el.style.strokeDashoffset = '0';
+            });
+        });
+        return () => cancelAnimationFrame(raf);
+    }, [linePath, chartMode]);
+
+    // Animación de barras mensuales
+    useEffect(() => {
+        if (chartMode !== 'meses') return;
+        setBarAnimated(false);
+        const t = setTimeout(() => setBarAnimated(true), 60);
+        return () => clearTimeout(t);
+    }, [chartMode, traficoMensual]);
 
     // Accesos rápidos
     const quickLinks = [
@@ -263,128 +291,163 @@ export default function DashboardOverview({
             </div>
 
             {/* ── Gráfico de Tráfico ── */}
-            <div className="bg-white dark:bg-slate-900 border border-slate-200/70 dark:border-slate-800/80 rounded-2xl p-5 sm:p-6 shadow-xs">
+            <div className="bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800/70 rounded-2xl overflow-hidden shadow-xs">
 
-                {/* Header gráfico */}
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-5 border-b border-slate-100 dark:border-slate-800/80">
-                    <div>
+                {/* Header minimalista */}
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 px-5 sm:px-6 pt-5 sm:pt-6 pb-5">
+                    <div className="space-y-2.5">
                         <div className="flex items-center gap-2">
-                            <h2 className="text-base font-black text-slate-900 dark:text-white">Tráfico del Portal</h2>
-                            <span className="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 border border-emerald-200/50 dark:border-emerald-800/50">
-                                Tiempo real
+                            <h2 className="text-sm font-black text-slate-900 dark:text-white tracking-tight">Tráfico del Portal</h2>
+                            <span className="flex items-center gap-1 text-[10px] font-bold text-emerald-600 dark:text-emerald-400">
+                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+                                En vivo
                             </span>
                         </div>
-                        <div className="flex items-center gap-5 mt-2 text-xs">
+                        <div className="flex items-center gap-4">
                             <div>
-                                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Total período</span>
-                                <span className="font-black text-slate-900 dark:text-white">{sumPeriodo.toLocaleString()} <span className="text-[10px] text-slate-400 font-medium">visitas</span></span>
+                                <span className="text-xl font-black text-slate-900 dark:text-white tabular-nums">{sumPeriodo.toLocaleString()}</span>
+                                <span className="text-[11px] text-slate-400 font-medium ml-1.5">visitas</span>
                             </div>
+                            <div className="h-5 w-px bg-slate-200 dark:bg-slate-700" />
                             <div>
-                                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Promedio / día</span>
-                                <span className="font-black text-slate-900 dark:text-white">{avgPeriodo} <span className="text-[10px] text-slate-400 font-medium">/ día</span></span>
+                                <span className="text-sm font-bold text-slate-600 dark:text-slate-300 tabular-nums">{avgPeriodo}</span>
+                                <span className="text-[11px] text-slate-400 font-medium ml-1">/ día</span>
                             </div>
+                            <div className="h-5 w-px bg-slate-200 dark:bg-slate-700" />
                             <div>
-                                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Pico máximo</span>
-                                <span className="font-black text-indigo-600 dark:text-indigo-400">{maxDailyVal} <span className="text-[10px] text-slate-400 font-medium">visitas</span></span>
+                                <span className="text-sm font-bold text-indigo-600 dark:text-indigo-400 tabular-nums">{maxDailyVal}</span>
+                                <span className="text-[11px] text-slate-400 font-medium ml-1">pico</span>
                             </div>
                         </div>
                     </div>
-                    <div className="inline-flex bg-slate-100 dark:bg-slate-800 p-1 rounded-xl text-xs font-bold border border-slate-200/50 dark:border-slate-700/50 self-start sm:self-auto shrink-0">
+                    <div className="flex items-center bg-slate-100 dark:bg-slate-800 p-0.5 rounded-xl shrink-0 self-start sm:self-auto">
                         {['dias', 'meses'].map(mode => (
                             <button key={mode} type="button" onClick={() => setChartMode(mode)}
-                                className={`px-3.5 py-1.5 rounded-lg transition-all cursor-pointer ${chartMode === mode ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-xs font-black' : 'text-slate-500 dark:text-slate-400 font-medium'}`}>
-                                {mode === 'dias' ? 'Últimos 14 días' : 'Mes a mes'}
+                                className={`px-3.5 py-1.5 text-[11px] font-bold rounded-[10px] transition-all duration-200 cursor-pointer ${chartMode === mode ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-xs' : 'text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'}`}>
+                                {mode === 'dias' ? '14 días' : 'Mensual'}
                             </button>
                         ))}
                     </div>
                 </div>
 
-                {/* Línea SVG */}
-                {chartMode === 'dias' ? (
-                    <div className="select-none">
-                        <div className="w-full h-56 sm:h-64 relative cursor-crosshair" onMouseLeave={() => setHoveredIndex(null)}>
-                            <svg className="w-full h-full overflow-visible" viewBox={`0 0 ${svgWidth} ${svgHeight}`} preserveAspectRatio="none">
-                                <defs>
-                                    <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
-                                        <stop offset="0%" stopColor="#6366F1" stopOpacity="0.18" />
-                                        <stop offset="100%" stopColor="#6366F1" stopOpacity="0" />
-                                    </linearGradient>
-                                    <linearGradient id="lineGrad" x1="0" y1="0" x2="1" y2="0">
-                                        <stop offset="0%" stopColor="#818CF8" />
-                                        <stop offset="100%" stopColor="#4F46E5" />
-                                    </linearGradient>
-                                </defs>
-                                {/* Guías */}
-                                {[0, 0.33, 0.66, 1].map((f, i) => (
-                                    <line key={i} x1={px} y1={pt + ch * f} x2={svgWidth - px} y2={pt + ch * f}
-                                        stroke="currentColor" className="text-slate-100 dark:text-slate-800/60"
-                                        strokeDasharray={f === 1 ? undefined : "4 4"} strokeWidth="1" />
-                                ))}
-                                {/* Área */}
-                                {areaPath && <path d={areaPath} fill="url(#areaGrad)" />}
-                                {/* Línea */}
-                                {linePath && <path d={linePath} fill="none" stroke="url(#lineGrad)" strokeWidth="2.5" strokeLinecap="round" />}
-                                {/* Hover */}
+                {/* Chart area */}
+                <div className="px-3 sm:px-4 pb-5">
+                    {chartMode === 'dias' ? (
+                        <div className="select-none">
+                            <div className="w-full h-52 sm:h-60 relative cursor-crosshair" onMouseLeave={() => setHoveredIndex(null)}>
+                                <svg className="w-full h-full overflow-visible" viewBox={`0 0 ${svgWidth} ${svgHeight}`} preserveAspectRatio="none">
+                                    <defs>
+                                        <linearGradient id="areaGradMin" x1="0" y1="0" x2="0" y2="1">
+                                            <stop offset="0%" stopColor="#6366F1" stopOpacity="0.09" />
+                                            <stop offset="85%" stopColor="#6366F1" stopOpacity="0" />
+                                        </linearGradient>
+                                    </defs>
+                                    {/* Guías horizontales — ultra sutiles */}
+                                    {[0.25, 0.5, 0.75].map((f, i) => (
+                                        <line key={i}
+                                            x1={px} y1={pt + ch * f} x2={svgWidth - px} y2={pt + ch * f}
+                                            stroke="currentColor" className="text-slate-100 dark:text-slate-800"
+                                            strokeWidth="1" />
+                                    ))}
+                                    {/* Área suave */}
+                                    {areaPath && <path d={areaPath} fill="url(#areaGradMin)" />}
+                                    {/* Línea con animación de trazado */}
+                                    {linePath && (
+                                        <path
+                                            ref={lineRef}
+                                            d={linePath}
+                                            fill="none"
+                                            stroke="#6366F1"
+                                            strokeWidth="2"
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                        />
+                                    )}
+                                    {/* Indicador de hover */}
+                                    {activePoint && (
+                                        <g>
+                                            <line
+                                                x1={activePoint.x} y1={pt} x2={activePoint.x} y2={svgHeight - pb}
+                                                stroke="#6366F1" strokeWidth="1" strokeOpacity="0.25"
+                                            />
+                                            <circle cx={activePoint.x} cy={activePoint.y} r="10" fill="#6366F1" fillOpacity="0.07" />
+                                            <circle cx={activePoint.x} cy={activePoint.y} r="4.5" fill="#fff" stroke="#6366F1" strokeWidth="2" />
+                                        </g>
+                                    )}
+                                    {/* Zonas de hover invisibles */}
+                                    {points.map((p, i) => {
+                                        const w = svgWidth / points.length;
+                                        return <rect key={i} x={p.x - w / 2} y={0} width={w} height={svgHeight} fill="transparent" onMouseEnter={() => setHoveredIndex(i)} />;
+                                    })}
+                                </svg>
+
+                                {/* Tooltip minimalista */}
                                 {activePoint && (
-                                    <g>
-                                        <line x1={activePoint.x} y1={pt} x2={activePoint.x} y2={svgHeight - pb}
-                                            stroke="#6366F1" strokeWidth="1" strokeDasharray="3 3" strokeOpacity="0.4" />
-                                        <circle cx={activePoint.x} cy={activePoint.y} r="9" fill="#6366F1" fillOpacity="0.15" className="animate-ping" />
-                                        <circle cx={activePoint.x} cy={activePoint.y} r="4" fill="#fff" stroke="#6366F1" strokeWidth="2.5" />
-                                    </g>
-                                )}
-                                {/* Zonas invisibles de hover */}
-                                {points.map((p, i) => {
-                                    const w = svgWidth / points.length;
-                                    return <rect key={i} x={p.x - w / 2} y={0} width={w} height={svgHeight} fill="transparent" onMouseEnter={() => setHoveredIndex(i)} />;
-                                })}
-                            </svg>
-
-                            {/* Tooltip */}
-                            {activePoint && (
-                                <div className="absolute z-30 pointer-events-none -translate-x-1/2 -translate-y-full -top-1 transition-all duration-100"
-                                    style={{ left: `${(activePoint.x / svgWidth) * 100}%` }}>
-                                    <div className="bg-slate-900/95 dark:bg-white/95 text-white dark:text-slate-900 px-3 py-2 rounded-xl shadow-2xl border border-slate-700/50 dark:border-slate-200/50 min-w-[120px]">
-                                        <div className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase mb-1">{activePoint.label}</div>
-                                        <div className="text-base font-black">{activePoint.visitas} <span className="text-[10px] font-normal text-slate-400 dark:text-slate-500">visitas</span></div>
-                                        <div className="text-[11px] font-semibold text-emerald-400 dark:text-emerald-600">{activePoint.unicos} únicos</div>
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-
-                        {/* Eje X */}
-                        <div className="flex justify-between text-[10px] font-semibold text-slate-400 pt-2.5 border-t border-slate-100 dark:border-slate-800/80">
-                            {diasTrafico.map((d, i) => (
-                                <span key={i} className={`px-1 transition-colors ${activePoint?.fecha === d.fecha ? 'text-indigo-600 dark:text-indigo-400 font-extrabold' : (i % 2 === 0 || i === diasTrafico.length - 1 ? '' : 'opacity-0 sm:opacity-40')}`}>
-                                    {d.label}
-                                </span>
-                            ))}
-                        </div>
-                    </div>
-                ) : (
-                    /* Barras mensuales */
-                    <div className="pt-2">
-                        <div className="grid grid-cols-12 gap-1.5 sm:gap-2 items-end h-52">
-                            {traficoMensual.map((m, i) => {
-                                const maxM = Math.max(...traficoMensual.map(x => x.visitas), 1);
-                                const h = maxM > 0 ? Math.max(4, Math.round((m.visitas / maxM) * 100)) : 4;
-                                return (
-                                    <div key={i} className="flex flex-col items-center gap-1.5 h-full justify-end group cursor-default">
-                                        <span className="text-[9px] font-black text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity">
-                                            {m.visitas > 0 ? m.visitas.toLocaleString() : '—'}
-                                        </span>
-                                        <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-lg overflow-hidden flex items-end" style={{ height: '176px' }}>
-                                            <div className={`w-full rounded-md transition-all duration-500 ${m.activo ? 'bg-indigo-600 dark:bg-indigo-500' : m.visitas > 0 ? 'bg-indigo-200 dark:bg-indigo-900 group-hover:bg-indigo-400 dark:group-hover:bg-indigo-700' : 'bg-slate-100 dark:bg-slate-800'}`}
-                                                style={{ height: `${h}%` }} />
+                                    <div
+                                        className="absolute z-30 pointer-events-none -translate-x-1/2 -translate-y-full -top-1 transition-[left] duration-100"
+                                        style={{ left: `${(activePoint.x / svgWidth) * 100}%` }}
+                                    >
+                                        <div className="bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-3 py-2 rounded-xl shadow-xl border border-white/5 dark:border-black/5 whitespace-nowrap">
+                                            <div className="text-[10px] font-medium text-slate-400 dark:text-slate-500 mb-0.5">{activePoint.label}</div>
+                                            <div className="text-sm font-black tabular-nums">
+                                                {activePoint.visitas.toLocaleString()}
+                                                <span className="text-[10px] font-normal text-slate-400 dark:text-slate-500 ml-1">vis.</span>
+                                            </div>
+                                            {activePoint.unicos !== undefined && activePoint.unicos > 0 && (
+                                                <div className="text-[10px] text-emerald-400 dark:text-emerald-600 font-semibold mt-0.5">{activePoint.unicos} únicos</div>
+                                            )}
                                         </div>
-                                        <span className={`text-[10px] font-bold ${m.activo ? 'text-indigo-600 dark:text-indigo-400 font-extrabold' : 'text-slate-400'}`}>{m.mes}</span>
                                     </div>
-                                );
-                            })}
+                                )}
+                            </div>
+
+                            {/* Eje X */}
+                            <div className="flex justify-between px-1 pt-2 text-[9px] font-medium text-slate-400">
+                                {diasTrafico.map((d, i) => (
+                                    <span key={i} className={`transition-colors duration-150 ${activePoint?.fecha === d.fecha ? 'text-indigo-500 dark:text-indigo-400 font-bold' : (i % 2 === 0 || i === diasTrafico.length - 1 ? '' : 'opacity-0 sm:opacity-40')}`}>
+                                        {d.label}
+                                    </span>
+                                ))}
+                            </div>
                         </div>
-                    </div>
-                )}
+                    ) : (
+                        /* Barras mensuales con animación de entrada */
+                        <div className="pt-1">
+                            <div className="grid grid-cols-12 gap-1 sm:gap-1.5 items-end" style={{ height: '196px' }}>
+                                {traficoMensual.map((m, i) => {
+                                    const maxM = Math.max(...traficoMensual.map(x => x.visitas), 1);
+                                    const h = maxM > 0 ? Math.max(3, Math.round((m.visitas / maxM) * 100)) : 3;
+                                    return (
+                                        <div key={i} className="flex flex-col items-center gap-1 h-full justify-end group cursor-default">
+                                            <span className="text-[8px] sm:text-[9px] font-bold text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200 tabular-nums">
+                                                {m.visitas > 0 ? m.visitas.toLocaleString() : '—'}
+                                            </span>
+                                            <div className="w-full flex items-end" style={{ height: '160px' }}>
+                                                <div
+                                                    className={`w-full rounded-t-sm transition-all ease-out ${
+                                                        m.activo
+                                                            ? 'bg-indigo-500 dark:bg-indigo-500'
+                                                            : m.visitas > 0
+                                                                ? 'bg-indigo-200 dark:bg-indigo-900/60 group-hover:bg-indigo-400 dark:group-hover:bg-indigo-700'
+                                                                : 'bg-slate-100 dark:bg-slate-800'
+                                                    }`}
+                                                    style={{
+                                                        height: barAnimated ? `${h}%` : '0%',
+                                                        transitionDuration: '600ms',
+                                                        transitionDelay: `${i * 35}ms`
+                                                    }}
+                                                />
+                                            </div>
+                                            <span className={`text-[9px] font-semibold ${m.activo ? 'text-indigo-500 dark:text-indigo-400' : 'text-slate-400'}`}>
+                                                {m.mes}
+                                            </span>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    )}
+                </div>
             </div>
 
             {/* ── Fila: Noticias + Testimonios ── */}

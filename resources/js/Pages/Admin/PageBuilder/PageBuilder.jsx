@@ -309,7 +309,7 @@ export default function PageBuilder({
 
             <div className="flex-1 flex overflow-hidden relative">
                 
-                <div className="flex-1 overflow-y-auto px-4 py-8">
+                <div className="flex-1 overflow-y-auto px-2 sm:px-6 py-4 sm:py-8">
                     <div className="w-full min-h-full flex flex-col items-center">
                         <EditorCanvas
                             blocks={blocks}
@@ -336,8 +336,17 @@ export default function PageBuilder({
                     </div>
                 </div>
 
+                {/* Backdrop en móviles cuando se abre el panel de propiedades */}
                 {sidebarOpen && activeBlock && !previewMode && (
-                    <div className="shrink-0 border-l border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 w-[350px] h-full flex flex-col shadow-xl z-20">
+                    <div 
+                        className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-40 lg:hidden transition-opacity"
+                        onClick={() => setSelectedBlockId(null)}
+                    />
+                )}
+
+                {/* Panel de Propiedades: Drawer inferior en móvil / Barra lateral en escritorio */}
+                {sidebarOpen && activeBlock && !previewMode && (
+                    <div className="fixed inset-x-0 bottom-0 top-auto lg:top-0 lg:bottom-0 lg:left-auto lg:right-0 lg:relative border-t lg:border-t-0 lg:border-l border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 w-full lg:w-[350px] max-h-[85vh] lg:max-h-full h-auto lg:h-full flex flex-col shadow-2xl lg:shadow-xl z-50 rounded-t-3xl lg:rounded-none">
                         <PropertyPanel
                             block={activeBlock}
                             onUpdateStyles={(styles) => updateBlockStyles(activeBlock.id, styles)}

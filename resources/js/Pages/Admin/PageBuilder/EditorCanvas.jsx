@@ -77,14 +77,14 @@ export default function EditorCanvas({
 
     return (
         <div 
-            className={`transition-all duration-300 min-h-[calc(100vh-160px)] bg-white shadow-xl rounded-[36px] border border-slate-200/60 p-10 flex flex-col h-fit relative ${widthClasses[canvasWidth]}`}
+            className={`transition-all duration-300 min-h-[calc(100vh-160px)] bg-white shadow-xl rounded-2xl sm:rounded-[36px] border border-slate-200/60 p-4 sm:p-8 md:p-10 flex flex-col h-fit relative ${widthClasses[canvasWidth]}`}
         >
             {/* Header: Replicating Show.jsx faithfully */}
-            <header className="space-y-4 text-left border-b border-slate-100 pb-6 mb-8 select-none">
-                <span className={`inline-block text-[11px] font-extrabold uppercase tracking-widest px-4 py-2 rounded-full border ${getCategoryStyles(metaCategoria)}`}>
+            <header className="space-y-3 sm:space-y-4 text-left border-b border-slate-100 pb-5 sm:pb-6 mb-6 sm:mb-8 select-none">
+                <span className={`inline-block text-[10px] sm:text-[11px] font-extrabold uppercase tracking-widest px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border ${getCategoryStyles(metaCategoria)}`}>
                     {categoryLabel[metaCategoria] || 'Noticia'}
                 </span>
-                <h1 className="text-4xl sm:text-5xl font-black text-[#08111F] leading-tight">
+                <h1 className="text-2xl sm:text-4xl md:text-5xl font-black text-[#08111F] leading-tight break-words">
                     {metaTitle || 'Título de la Publicación'}
                 </h1>
                 <div className="flex items-center gap-2 text-xs text-slate-400 font-bold">

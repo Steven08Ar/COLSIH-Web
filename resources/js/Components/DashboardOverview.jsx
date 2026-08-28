@@ -6,6 +6,7 @@ import {
     ClipboardList, Mail
 } from 'lucide-react';
 import { Link } from '@inertiajs/react';
+import { mediaUrl } from '@/utils/mediaUrl';
 
 /* ── Fritsch–Carlson monotone cubic spline ── */
 function getMonotoneSplinePath(points) {
@@ -468,7 +469,7 @@ export default function DashboardOverview({
                                 <div className="flex items-center justify-between gap-3">
                                     <div className="flex items-center gap-2.5 min-w-0">
                                         <div className="w-7 h-7 rounded-full bg-purple-100 dark:bg-purple-900/50 flex items-center justify-center text-[11px] font-black text-purple-700 dark:text-purple-300 shrink-0 overflow-hidden">
-                                            {t.imagen ? <img src={t.imagen} alt={t.nombre} className="w-full h-full object-cover" /> : (t.nombre?.charAt(0)?.toUpperCase() ?? 'T')}
+                                            {t.imagen ? <img src={mediaUrl(t.imagen)} alt={t.nombre} className="w-full h-full object-cover" /> : (t.nombre?.charAt(0)?.toUpperCase() ?? 'T')}
                                         </div>
                                         <div className="min-w-0">
                                             <p className="text-xs font-bold text-slate-800 dark:text-slate-200 truncate">{t.nombre}</p>

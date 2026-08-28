@@ -49,3 +49,9 @@ export function getYouTubeWatchUrl(url) {
     const videoId = extractYouTubeVideoId(url);
     return videoId ? `https://www.youtube.com/watch?v=${videoId}` : url;
 }
+
+export function getYouTubeThumbnailUrl(url) {
+    const videoId = extractYouTubeVideoId(url);
+    if (!videoId) return null;
+    return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+}

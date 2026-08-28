@@ -6,7 +6,7 @@ import {
 } from 'lucide-react';
 import { processImageFile } from '@/utils/heicConverter';
 
-import { getYouTubeEmbedUrl } from '@/utils/youtube';
+import { getYouTubeEmbedUrl, getYouTubeThumbnailUrl } from '@/utils/youtube';
 
 function toEmbedUrl(url) {
     return getYouTubeEmbedUrl(url);
@@ -108,9 +108,16 @@ function ImagenPanel({ block, onUpdateContent }) {
 /* ── Video ── */
 function VideoPanel({ block, onUpdateContent }) {
     const videoFileRef = useRef();
+    const posterFileRef = useRef();
+    const [isDraggingPoster, setIsDraggingPoster] = useState(false);
     const embedUrl = toEmbedUrl(block.content.url || '');
     const directVideoSrc = block.content._videoPreviewUrl
         || (block.content.videoFile ? `/storage/${block.content.videoFile}` : null);
+
+    const ytThumbnail = !block.content.poster && !block.content._pendingPosterFile
+        ? getYouTubeThumbnailUrl(block.content.url || '')
+        : null;
+    const posterPreview = block.content.poster || (ytThumbnail ? ytThumbnail : null);
 
     function handleVideoFile(file) {
         if (!file) return;
@@ -118,6 +125,16 @@ function VideoPanel({ block, onUpdateContent }) {
             _pendingVideoFile: file,
             _videoPreviewUrl: URL.createObjectURL(file),
             url: '',
+        });
+    }
+
+    async function handlePosterFile(file) {
+        if (!file) return;
+        const processed = await processImageFile(file);
+        onUpdateContent({
+            poster: URL.createObjectURL(processed),
+            posterDbPath: '',
+            _pendingPosterFile: processed,
         });
     }
 
@@ -198,6 +215,58 @@ function VideoPanel({ block, onUpdateContent }) {
                     <p className="text-[10px] text-slate-400 text-center mt-2">MP4, WebM u OGG · Se guardará en el servidor</p>
                 </div>
             )}
+
+            {/* ── Poster / Portada ── */}
+            <div className="h-px bg-slate-100" />
+
+            <div className="space-y-3">
+                <div className="flex items-center gap-2 text-slate-400">
+                    <Image className="w-4 h-4" />
+                    <span className="text-[10px] font-black uppercase tracking-wider">Imagen de Portada</span>
+                </div>
+
+                {/* Auto-thumbnail badge for YouTube */}
+                {ytThumbnail && (
+                    <div className="flex items-center gap-2 bg-amber-50 border border-amber-200 rounded-xl px-3 py-2">
+                        <span className="text-[10px] text-amber-700 font-bold">Portada automática de YouTube detectada</span>
+                    </div>
+                )}
+
+                {/* Current poster preview */}
+                {posterPreview && (
+                    <div className="relative rounded-xl overflow-hidden border border-slate-200 aspect-video bg-slate-50">
+                        <img src={posterPreview} alt="Portada" className="w-full h-full object-cover" />
+                        {!ytThumbnail && (
+                            <button
+                                type="button"
+                                onClick={() => onUpdateContent({ poster: '', posterDbPath: '', _pendingPosterFile: null })}
+                                className="absolute top-2 right-2 w-6 h-6 bg-black/60 hover:bg-black/80 text-white rounded-full flex items-center justify-center cursor-pointer transition"
+                            ><X className="w-3.5 h-3.5" /></button>
+                        )}
+                        {ytThumbnail && (
+                            <div className="absolute bottom-2 left-2 bg-black/60 text-white text-[9px] font-bold px-2 py-0.5 rounded-full">Auto YouTube</div>
+                        )}
+                    </div>
+                )}
+
+                {/* Custom poster upload */}
+                <div
+                    onDragOver={(e) => { e.preventDefault(); setIsDraggingPoster(true); }}
+                    onDragLeave={() => setIsDraggingPoster(false)}
+                    onDrop={(e) => { e.preventDefault(); setIsDraggingPoster(false); handlePosterFile(e.dataTransfer.files[0]); }}
+                    onClick={() => posterFileRef.current?.click()}
+                    className={`border-2 border-dashed rounded-xl p-4 text-center cursor-pointer transition-all select-none ${
+                        isDraggingPoster ? 'border-blue-500 bg-blue-50 scale-[1.01]' : 'border-slate-200 hover:border-blue-400 hover:bg-blue-50/30 bg-slate-50/80'
+                    }`}
+                >
+                    <div className="flex flex-col items-center gap-1.5 pointer-events-none">
+                        <Image className="w-4 h-4 text-slate-300" />
+                        <span className="text-[10px] font-bold text-slate-600">{posterPreview ? 'Cambiar portada personalizada' : 'Subir portada personalizada'}</span>
+                        <span className="text-[9px] text-slate-400">PNG, JPG, WebP · Reemplaza la automática</span>
+                    </div>
+                    <input ref={posterFileRef} type="file" accept="image/*,.heic,.heif,image/heic,image/heif" className="hidden" onChange={(e) => handlePosterFile(e.target.files[0])} />
+                </div>
+            </div>
 
             <div className="space-y-1.5">
                 <label className="text-[11px] font-extrabold text-slate-500 uppercase tracking-wide">Título del Video</label>
@@ -448,6 +517,271 @@ function CitaPanel({ block, onUpdateContent }) {
     );
 }
 
+/* ── Hero ── */
+function HeroPanel({ block, onUpdateContent }) {
+    return (
+        <div className="space-y-4">
+            <div className="flex items-center gap-2 text-slate-400">
+                <span className="text-base font-black text-indigo-400 leading-none">★</span>
+                <span className="text-[10px] font-black uppercase tracking-wider">Sección Hero</span>
+            </div>
+
+            <div className="space-y-1.5">
+                <label className="text-[11px] font-extrabold text-slate-500 uppercase tracking-wide">Etiqueta Superior (Tagline)</label>
+                <input
+                    type="text"
+                    value={block.content.tagline || ''}
+                    onChange={(e) => onUpdateContent({ tagline: e.target.value })}
+                    placeholder="Ej: Institución Educativa"
+                    className="w-full bg-slate-50 border border-slate-200 text-slate-700 text-xs font-medium rounded-xl px-3 py-2.5 focus:outline-none focus:bg-white focus:border-blue-600 transition"
+                />
+            </div>
+
+            <div className="space-y-1.5">
+                <label className="text-[11px] font-extrabold text-slate-500 uppercase tracking-wide">Título Principal</label>
+                <input
+                    type="text"
+                    value={block.content.title || ''}
+                    onChange={(e) => onUpdateContent({ title: e.target.value })}
+                    placeholder="Ej: Bienvenidos a COLSIH"
+                    className="w-full bg-slate-50 border border-slate-200 text-slate-800 text-sm font-black rounded-xl px-3 py-2.5 focus:outline-none focus:bg-white focus:border-blue-600 transition"
+                />
+            </div>
+
+            <div className="space-y-1.5">
+                <label className="text-[11px] font-extrabold text-slate-500 uppercase tracking-wide">Subtítulo</label>
+                <textarea
+                    value={block.content.subtitle || ''}
+                    onChange={(e) => onUpdateContent({ subtitle: e.target.value })}
+                    rows={3}
+                    placeholder="Descripción del hero..."
+                    className="w-full bg-slate-50 border border-slate-200 text-slate-700 text-xs font-medium rounded-xl px-3 py-2.5 focus:outline-none focus:bg-white focus:border-blue-600 transition resize-none"
+                />
+            </div>
+
+            <div className="h-px bg-slate-100" />
+
+            <div className="space-y-1.5">
+                <label className="text-[11px] font-extrabold text-slate-500 uppercase tracking-wide">Texto del Botón (opcional)</label>
+                <input
+                    type="text"
+                    value={block.content.buttonText || ''}
+                    onChange={(e) => onUpdateContent({ buttonText: e.target.value })}
+                    placeholder="Ej: Ver más"
+                    className="w-full bg-slate-50 border border-slate-200 text-slate-700 text-xs font-medium rounded-xl px-3 py-2.5 focus:outline-none focus:bg-white focus:border-blue-600 transition"
+                />
+            </div>
+
+            {block.content.buttonText && (
+                <>
+                    <div className="space-y-1.5">
+                        <label className="text-[11px] font-extrabold text-slate-500 uppercase tracking-wide">URL del Botón</label>
+                        <input
+                            type="url"
+                            value={block.content.buttonUrl || ''}
+                            onChange={(e) => onUpdateContent({ buttonUrl: e.target.value })}
+                            placeholder="https://..."
+                            className="w-full bg-slate-50 border border-slate-200 text-slate-700 text-xs font-medium rounded-xl px-3 py-2.5 focus:outline-none focus:bg-white focus:border-blue-600 transition"
+                        />
+                    </div>
+                    <div className="space-y-1.5">
+                        <label className="text-[11px] font-extrabold text-slate-500 uppercase tracking-wide">Color del Botón</label>
+                        <div className="flex gap-2">
+                            <input
+                                type="color"
+                                value={block.content.buttonColor || '#003C8F'}
+                                onChange={(e) => onUpdateContent({ buttonColor: e.target.value })}
+                                className="w-10 h-10 border border-slate-200 rounded-xl overflow-hidden cursor-pointer"
+                            />
+                            <input
+                                type="text"
+                                value={block.content.buttonColor || '#003C8F'}
+                                onChange={(e) => onUpdateContent({ buttonColor: e.target.value })}
+                                className="flex-1 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-bold rounded-xl px-3 py-2 focus:outline-none"
+                            />
+                        </div>
+                    </div>
+                </>
+            )}
+        </div>
+    );
+}
+
+/* ── Lista ── */
+function ListaPanel({ block, onUpdateContent }) {
+    const items = (block.content.items || '').split('\n').filter(l => l.trim());
+    return (
+        <div className="space-y-4">
+            <div className="flex items-center gap-2 text-slate-400">
+                <List className="w-4 h-4" />
+                <span className="text-[10px] font-black uppercase tracking-wider">Lista de Ítems</span>
+            </div>
+
+            <div className="space-y-1.5">
+                <label className="text-[11px] font-extrabold text-slate-500 uppercase tracking-wide">Título de la Lista (opcional)</label>
+                <input
+                    type="text"
+                    value={block.content.title || ''}
+                    onChange={(e) => onUpdateContent({ title: e.target.value })}
+                    placeholder="Ej: Documentos requeridos"
+                    className="w-full bg-slate-50 border border-slate-200 text-slate-700 text-xs font-bold rounded-xl px-3 py-2.5 focus:outline-none focus:bg-white focus:border-blue-600 transition"
+                />
+            </div>
+
+            <div className="space-y-1.5">
+                <label className="text-[11px] font-extrabold text-slate-500 uppercase tracking-wide">Ítems (uno por línea)</label>
+                <textarea
+                    value={block.content.items || ''}
+                    onChange={(e) => onUpdateContent({ items: e.target.value })}
+                    rows={6}
+                    placeholder={"Primer ítem\nSegundo ítem\nTercer ítem"}
+                    className="w-full bg-slate-50 border border-slate-200 text-slate-700 text-xs font-medium rounded-xl px-3 py-2.5 focus:outline-none focus:bg-white focus:border-blue-600 transition resize-none font-mono"
+                />
+                <p className="text-[10px] text-slate-400 font-medium">Cada línea se convierte en un punto de la lista</p>
+            </div>
+
+            {items.length > 0 && (
+                <div className="bg-slate-50 border border-slate-200 rounded-xl p-4">
+                    {block.content.title && <p className="font-bold text-slate-700 text-xs mb-2">{block.content.title}</p>}
+                    <ul className="space-y-1 list-disc list-inside">
+                        {items.map((item, i) => <li key={i} className="text-[10px] text-slate-600 font-semibold">{item}</li>)}
+                    </ul>
+                </div>
+            )}
+        </div>
+    );
+}
+
+/* ── Boton ── */
+function BotonPanel({ block, onUpdateContent }) {
+    return (
+        <div className="space-y-4">
+            <div className="flex items-center gap-2 text-slate-400">
+                <span className="text-xs font-black text-indigo-400">CTA</span>
+                <span className="text-[10px] font-black uppercase tracking-wider">Botón de Acción</span>
+            </div>
+
+            <div className="space-y-1.5">
+                <label className="text-[11px] font-extrabold text-slate-500 uppercase tracking-wide">Texto del Botón</label>
+                <input
+                    type="text"
+                    value={block.content.text || ''}
+                    onChange={(e) => onUpdateContent({ text: e.target.value })}
+                    placeholder="Ej: Ver más"
+                    className="w-full bg-slate-50 border border-slate-200 text-slate-700 text-xs font-medium rounded-xl px-3 py-2.5 focus:outline-none focus:bg-white focus:border-blue-600 transition"
+                />
+            </div>
+
+            <div className="space-y-1.5">
+                <label className="text-[11px] font-extrabold text-slate-500 uppercase tracking-wide">URL de Destino</label>
+                <input
+                    type="url"
+                    value={block.content.url || ''}
+                    onChange={(e) => onUpdateContent({ url: e.target.value })}
+                    placeholder="https://..."
+                    className="w-full bg-slate-50 border border-slate-200 text-slate-700 text-xs font-medium rounded-xl px-3 py-2.5 focus:outline-none focus:bg-white focus:border-blue-600 transition"
+                />
+            </div>
+
+            <div className="space-y-1.5">
+                <label className="text-[11px] font-extrabold text-slate-500 uppercase tracking-wide">Color de Fondo del Botón</label>
+                <div className="flex gap-2">
+                    <input
+                        type="color"
+                        value={block.content.color || '#003C8F'}
+                        onChange={(e) => onUpdateContent({ color: e.target.value })}
+                        className="w-10 h-10 border border-slate-200 rounded-xl overflow-hidden cursor-pointer"
+                    />
+                    <input
+                        type="text"
+                        value={block.content.color || '#003C8F'}
+                        onChange={(e) => onUpdateContent({ color: e.target.value })}
+                        className="flex-1 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-bold rounded-xl px-3 py-2 focus:outline-none"
+                    />
+                </div>
+            </div>
+
+            <div className="space-y-1.5">
+                <label className="text-[11px] font-extrabold text-slate-500 uppercase tracking-wide">Color del Texto del Botón</label>
+                <div className="flex gap-2">
+                    <input
+                        type="color"
+                        value={block.content.textColor || '#ffffff'}
+                        onChange={(e) => onUpdateContent({ textColor: e.target.value })}
+                        className="w-10 h-10 border border-slate-200 rounded-xl overflow-hidden cursor-pointer"
+                    />
+                    <input
+                        type="text"
+                        value={block.content.textColor || '#ffffff'}
+                        onChange={(e) => onUpdateContent({ textColor: e.target.value })}
+                        className="flex-1 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-bold rounded-xl px-3 py-2 focus:outline-none"
+                    />
+                </div>
+                <div className="grid grid-cols-4 gap-1.5 mt-1">
+                    {['#ffffff', '#000000', '#003C8F', '#800A15'].map(c => (
+                        <button key={c} type="button"
+                            onClick={() => onUpdateContent({ textColor: c })}
+                            className={`h-7 rounded-lg border-2 transition cursor-pointer ${(block.content.textColor || '#ffffff') === c ? 'border-blue-500 scale-110' : 'border-slate-200 hover:border-slate-400'}`}
+                            style={{ backgroundColor: c }}
+                            title={c}
+                        />
+                    ))}
+                </div>
+            </div>
+
+            {block.content.text && (
+                <div className="flex justify-center py-2">
+                    <button
+                        type="button"
+                        className="px-6 py-2.5 rounded-xl font-bold text-xs cursor-default shadow-md"
+                        style={{
+                            backgroundColor: block.content.color || '#003C8F',
+                            color: block.content.textColor || '#ffffff',
+                        }}
+                    >
+                        {block.content.text}
+                    </button>
+                </div>
+            )}
+        </div>
+    );
+}
+
+/* ── Espaciador ── */
+function EspaciadorPanel({ block, onUpdateContent }) {
+    const h = parseInt(block.content.height || '40');
+    return (
+        <div className="space-y-4">
+            <div className="flex items-center gap-2 text-slate-400">
+                <span className="text-[10px] font-black uppercase tracking-wider">Espacio en Blanco</span>
+            </div>
+
+            <div className="space-y-1.5">
+                <label className="text-[11px] font-extrabold text-slate-500 uppercase tracking-wide">Altura del Espacio</label>
+                <div className="flex items-center gap-3">
+                    <input
+                        type="range" min="8" max="200"
+                        value={h}
+                        onChange={(e) => onUpdateContent({ height: e.target.value })}
+                        className="flex-1 accent-blue-600 h-1 bg-slate-200 rounded-lg cursor-pointer"
+                    />
+                    <span className="text-xs font-extrabold text-slate-600 bg-slate-100 px-2.5 py-1 rounded-md shrink-0 w-14 text-center">{h}px</span>
+                </div>
+                <div className="grid grid-cols-4 gap-1.5 mt-2">
+                    {[20, 40, 80, 120].map((v) => (
+                        <button
+                            key={v}
+                            type="button"
+                            onClick={() => onUpdateContent({ height: String(v) })}
+                            className={`py-1.5 rounded-lg border text-[10px] font-bold transition cursor-pointer ${h === v ? 'bg-blue-600 border-blue-600 text-white' : 'bg-slate-50 border-slate-200 text-slate-600 hover:border-blue-300'}`}
+                        >{v}px</button>
+                    ))}
+                </div>
+            </div>
+        </div>
+    );
+}
+
 /* ── Ficha ── */
 function FichaPanel({ block, onUpdateContent }) {
     const items = (block.content.items || '').split('\n').filter(l => l.trim());
@@ -498,13 +832,17 @@ function FichaPanel({ block, onUpdateContent }) {
 
 /* ── PropertyPanel Principal ── */
 const BLOCK_LABELS = {
-    texto: 'Párrafo de Texto',
-    titulo: 'Título de Sección',
-    imagen: 'Imagen',
-    video: 'Video Embebido',
-    separador: 'Separador',
-    cita: 'Cita Destacada',
-    ficha: 'Ficha Técnica',
+    hero:      'Sección Hero',
+    texto:     'Párrafo de Texto',
+    titulo:    'Título de Sección',
+    imagen:    'Imagen',
+    video:     'Video Embebido',
+    separador: 'Separador Visual',
+    cita:      'Cita Destacada',
+    ficha:     'Ficha Técnica',
+    lista:     'Lista de Ítems',
+    boton:     'Botón de Acción',
+    espaciador:'Espacio en Blanco',
 };
 
 export default function PropertyPanel({ block, onUpdateStyles, onUpdateContent, onClose }) {
@@ -519,14 +857,18 @@ export default function PropertyPanel({ block, onUpdateStyles, onUpdateContent, 
 
     function renderContentTab() {
         switch (block.tipo) {
-            case 'imagen':    return <ImagenPanel block={block} onUpdateContent={onUpdateContent} />;
-            case 'video':     return <VideoPanel block={block} onUpdateContent={onUpdateContent} />;
-            case 'texto':     return <TextoPanel block={block} onUpdateContent={onUpdateContent} onUpdateStyles={onUpdateStyles} />;
-            case 'titulo':    return <TituloPanel block={block} onUpdateContent={onUpdateContent} onUpdateStyles={onUpdateStyles} />;
-            case 'separador': return <SeparadorPanel block={block} onUpdateStyles={onUpdateStyles} />;
-            case 'cita':      return <CitaPanel block={block} onUpdateContent={onUpdateContent} />;
-            case 'ficha':     return <FichaPanel block={block} onUpdateContent={onUpdateContent} />;
-            default:          return <p className="text-xs text-slate-400 italic text-center py-4">No hay opciones para este tipo de bloque.</p>;
+            case 'hero':       return <HeroPanel block={block} onUpdateContent={onUpdateContent} />;
+            case 'imagen':     return <ImagenPanel block={block} onUpdateContent={onUpdateContent} />;
+            case 'video':      return <VideoPanel block={block} onUpdateContent={onUpdateContent} />;
+            case 'texto':      return <TextoPanel block={block} onUpdateContent={onUpdateContent} onUpdateStyles={onUpdateStyles} />;
+            case 'titulo':     return <TituloPanel block={block} onUpdateContent={onUpdateContent} onUpdateStyles={onUpdateStyles} />;
+            case 'separador':  return <SeparadorPanel block={block} onUpdateStyles={onUpdateStyles} />;
+            case 'cita':       return <CitaPanel block={block} onUpdateContent={onUpdateContent} />;
+            case 'ficha':      return <FichaPanel block={block} onUpdateContent={onUpdateContent} />;
+            case 'lista':      return <ListaPanel block={block} onUpdateContent={onUpdateContent} />;
+            case 'boton':      return <BotonPanel block={block} onUpdateContent={onUpdateContent} />;
+            case 'espaciador': return <EspaciadorPanel block={block} onUpdateContent={onUpdateContent} />;
+            default:           return <p className="text-xs text-slate-400 italic text-center py-4">No hay opciones para este tipo de bloque.</p>;
         }
     }
 
@@ -735,7 +1077,12 @@ export default function PropertyPanel({ block, onUpdateStyles, onUpdateContent, 
                                     <span className="block text-[9px] text-slate-400 font-semibold">Ocultar este bloque en pantallas pequeñas</span>
                                 </div>
                                 <label className="relative inline-flex items-center cursor-pointer select-none">
-                                    <input type="checkbox" defaultChecked className="sr-only peer" />
+                                    <input
+                                        type="checkbox"
+                                        checked={!(styles.hiddenOnMobile || false)}
+                                        onChange={(e) => handleStyleChange('hiddenOnMobile', !e.target.checked)}
+                                        className="sr-only peer"
+                                    />
                                     <div className="w-9 h-5 bg-slate-200 rounded-full peer peer-focus:ring-2 peer-focus:ring-blue-300 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
                                 </label>
                             </div>

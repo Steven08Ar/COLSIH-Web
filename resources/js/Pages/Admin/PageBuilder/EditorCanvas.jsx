@@ -8,6 +8,7 @@ export default function EditorCanvas({
     selectedBlockId,
     onSelectBlock,
     onUpdateBlock,
+    onUpdateBlockStyles,
     onDeleteBlock,
     onDuplicateBlock,
     onMoveBlock,
@@ -124,7 +125,7 @@ export default function EditorCanvas({
                                 className={`transition-all duration-200 ${
                                     dragOverIdx === idx ? 'border-2 border-dashed border-blue-400 opacity-60' : ''
                                 } ${
-                                    bloque.width === 'estrecho' ? 'w-full md:w-1/3 px-3 mb-6' : (bloque.width === 'mediano' ? 'w-full md:w-1/2 px-3 mb-6' : 'w-full px-3 mb-6')
+                                    bloque.width === 'cuarto' ? 'w-full md:w-1/4 px-3 mb-6' : (bloque.width === 'mediano' ? 'w-full md:w-1/2 px-3 mb-6' : (bloque.width === 'tres-cuartos' ? 'w-full md:w-3/4 px-3 mb-6' : 'w-full px-3 mb-6'))
                                 }`}
                             >
                                 <EditorBlock
@@ -133,6 +134,7 @@ export default function EditorCanvas({
                                     isSelected={selectedBlockId === bloque.id}
                                     onSelect={() => !previewMode && onSelectBlock(bloque.id)}
                                     onUpdate={onUpdateBlock}
+                                    onUpdateStyles={onUpdateBlockStyles}
                                     onDelete={onDeleteBlock}
                                     onDuplicate={onDuplicateBlock}
                                     onMove={onMoveBlock}

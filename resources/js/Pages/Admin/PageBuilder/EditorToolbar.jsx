@@ -1,34 +1,30 @@
 import React from 'react';
-import { 
-    ArrowLeft, Type, Heading, Image, Video, Grid, Play, Quote, Minus, 
-    Box, Columns, ChevronDown, HelpCircle, MapPin, Code, FileText, 
-    Terminal, Star, CreditCard, PlaySquare, Clock, List, ArrowUpDown, 
-    Monitor, Tablet, Phone, Eye, EyeOff, Save, CheckCircle
+import {
+    ArrowLeft, Type, Heading, Image, Video, Quote, Minus,
+    PlaySquare, List, ArrowUpDown, Star,
+    Monitor, Tablet, Phone, Eye, EyeOff, Save
 } from 'lucide-react';
 
+function HeroIcon(props) {
+    return (
+        <svg {...props} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 10h10M4 14h7M4 18h5" />
+        </svg>
+    );
+}
+
 const ADD_BUTTONS = [
-    { tipo: 'texto', label: 'Texto', icon: Type, color: 'hover:text-blue-600 hover:bg-blue-50/50 border-blue-100' },
-    { tipo: 'titulo', label: 'Título', icon: Heading, color: 'hover:text-amber-600 hover:bg-amber-50/50 border-amber-100' },
-    { tipo: 'imagen', label: 'Imagen', icon: Image, color: 'hover:text-emerald-600 hover:bg-emerald-50/50 border-emerald-100' },
-    { tipo: 'video', label: 'Video', icon: Video, color: 'hover:text-purple-600 hover:bg-purple-50/50 border-purple-100' },
-    { tipo: 'galeria', label: 'Galería', icon: Grid, color: 'hover:text-cyan-600 hover:bg-cyan-50/50 border-cyan-100' },
-    { tipo: 'boton', label: 'Botón', icon: PlaySquare, color: 'hover:text-indigo-600 hover:bg-indigo-50/50 border-indigo-100' },
-    { tipo: 'cita', label: 'Cita', icon: Quote, color: 'hover:text-rose-600 hover:bg-rose-50/50 border-rose-100' },
-    { tipo: 'separador', label: 'Línea', icon: Minus, color: 'hover:text-slate-600 hover:bg-slate-50 border-slate-100' },
-    { tipo: 'contenedor', label: 'Contenedor', icon: Box, color: 'hover:text-violet-600 hover:bg-violet-50 border-violet-100' },
-    { tipo: 'columnas', label: 'Columnas', icon: Columns, color: 'hover:text-orange-600 hover:bg-orange-50 border-orange-100' },
-    { tipo: 'acordeon', label: 'Acordeón', icon: ChevronDown, color: 'hover:text-sky-600 hover:bg-sky-50 border-sky-100' },
-    { tipo: 'faq', label: 'Preguntas', icon: HelpCircle, color: 'hover:text-teal-600 hover:bg-teal-50 border-teal-100' },
-    { tipo: 'mapa', label: 'Mapa', icon: MapPin, color: 'hover:text-pink-600 hover:bg-pink-50 border-pink-100' },
-    { tipo: 'html', label: 'HTML', icon: Code, color: 'hover:text-yellow-600 hover:bg-yellow-50 border-yellow-100' },
-    { tipo: 'formulario', label: 'Formulario', icon: FileText, color: 'hover:text-lime-600 hover:bg-lime-50 border-lime-100' },
-    { tipo: 'codigo', label: 'Código', icon: Terminal, color: 'hover:text-zinc-600 hover:bg-zinc-50 border-zinc-100' },
-    { tipo: 'icono', label: 'Ícono', icon: Star, color: 'hover:text-red-600 hover:bg-red-50 border-red-100' },
-    { tipo: 'tarjeta', label: 'Tarjeta', icon: CreditCard, color: 'hover:text-teal-600 hover:bg-teal-50 border-teal-100' },
-    { tipo: 'carrusel', label: 'Carrusel', icon: Play, color: 'hover:text-indigo-600 hover:bg-indigo-50 border-indigo-100' },
-    { tipo: 'timeline', label: 'Línea Temporal', icon: Clock, color: 'hover:text-fuchsia-600 hover:bg-fuchsia-50 border-fuchsia-100' },
-    { tipo: 'lista', label: 'Lista', icon: List, color: 'hover:text-blue-600 hover:bg-blue-50 border-blue-100' },
-    { tipo: 'espaciador', label: 'Espacio', icon: ArrowUpDown, color: 'hover:text-stone-600 hover:bg-stone-50 border-stone-100' }
+    { tipo: 'hero',      label: 'Hero',    icon: HeroIcon,   color: 'hover:text-indigo-600 hover:bg-indigo-50/50 border-indigo-100' },
+    { tipo: 'texto',     label: 'Texto',   icon: Type,       color: 'hover:text-blue-600 hover:bg-blue-50/50 border-blue-100' },
+    { tipo: 'titulo',    label: 'Título',  icon: Heading,    color: 'hover:text-amber-600 hover:bg-amber-50/50 border-amber-100' },
+    { tipo: 'imagen',    label: 'Imagen',  icon: Image,      color: 'hover:text-emerald-600 hover:bg-emerald-50/50 border-emerald-100' },
+    { tipo: 'video',     label: 'Video',   icon: Video,      color: 'hover:text-purple-600 hover:bg-purple-50/50 border-purple-100' },
+    { tipo: 'boton',     label: 'Botón',   icon: PlaySquare, color: 'hover:text-indigo-600 hover:bg-indigo-50/50 border-indigo-100' },
+    { tipo: 'cita',      label: 'Cita',    icon: Quote,      color: 'hover:text-rose-600 hover:bg-rose-50/50 border-rose-100' },
+    { tipo: 'lista',     label: 'Lista',   icon: List,       color: 'hover:text-cyan-600 hover:bg-cyan-50/50 border-cyan-100' },
+    { tipo: 'ficha',     label: 'Ficha',   icon: Star,       color: 'hover:text-teal-600 hover:bg-teal-50 border-teal-100' },
+    { tipo: 'separador', label: 'Línea',   icon: Minus,      color: 'hover:text-slate-600 hover:bg-slate-50 border-slate-100' },
+    { tipo: 'espaciador',label: 'Espacio', icon: ArrowUpDown,color: 'hover:text-stone-600 hover:bg-stone-50 border-stone-100' },
 ];
 
 export default function EditorToolbar({ 

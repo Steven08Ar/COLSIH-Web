@@ -34,10 +34,10 @@ export default function BlockToolbar({
             <div className="flex items-center gap-1">
                 <button
                     type="button"
-                    onClick={() => onUpdateWidth('estrecho')}
-                    className={`px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-wider transition ${bloque.width === 'estrecho' ? 'bg-blue-50 text-blue-600 border border-blue-100' : 'text-slate-400 hover:text-slate-700'}`}
+                    onClick={() => onUpdateWidth('cuarto')}
+                    className={`px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-wider transition ${bloque.width === 'cuarto' ? 'bg-blue-50 text-blue-600 border border-blue-100' : 'text-slate-400 hover:text-slate-700'}`}
                 >
-                    33%
+                    25%
                 </button>
                 <button
                     type="button"
@@ -45,6 +45,13 @@ export default function BlockToolbar({
                     className={`px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-wider transition ${bloque.width === 'mediano' ? 'bg-blue-50 text-blue-600 border border-blue-100' : 'text-slate-400 hover:text-slate-700'}`}
                 >
                     50%
+                </button>
+                <button
+                    type="button"
+                    onClick={() => onUpdateWidth('tres-cuartos')}
+                    className={`px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-wider transition ${bloque.width === 'tres-cuartos' ? 'bg-blue-50 text-blue-600 border border-blue-100' : 'text-slate-400 hover:text-slate-700'}`}
+                >
+                    75%
                 </button>
                 <button
                     type="button"

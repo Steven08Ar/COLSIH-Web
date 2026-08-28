@@ -10,38 +10,62 @@ function mapDbBlockToEditorBlock(dbBlock) {
     const id = dbBlock.id || 'block_' + Math.random().toString(36).substring(2, 9);
     const tipo = dbBlock.tipo;
     const width = dbBlock.width || 'completo';
-    
-    // Extract content fields
+
     const content = {};
-    if (tipo === 'texto' || tipo === 'titulo') {
+    if (tipo === 'texto') {
         content.text = dbBlock.contenido || '';
+    } else if (tipo === 'titulo') {
+        content.text = dbBlock.contenido || '';
+        content.level = dbBlock.level || 'h3';
     } else if (tipo === 'cita') {
         content.quote = dbBlock.contenido || '';
         content.author = dbBlock.autor || '';
     } else if (tipo === 'imagen') {
         content.url = mediaUrl(dbBlock.imagen) ?? '';
         content.caption = dbBlock.leyenda || '';
-        content.dbPath = dbBlock.imagen || ''; // preserve original storage path
+        content.dbPath = dbBlock.imagen || '';
     } else if (tipo === 'video') {
-        content.url = dbBlock.url || '';
-        content.title = dbBlock.titulo || '';
-        content.videoFile = dbBlock.videoFile || '';
+        content.url         = dbBlock.url       || '';
+        content.title       = dbBlock.titulo    || '';
+        content.videoFile   = dbBlock.videoFile || '';
+        content.posterDbPath= dbBlock.poster    || '';
+        content.poster      = dbBlock.poster    ? (dbBlock.poster.startsWith('http') ? dbBlock.poster : `/storage/${dbBlock.poster}`) : '';
     } else if (tipo === 'ficha') {
         content.title = dbBlock.titulo || 'Ficha Técnica';
         content.items = dbBlock.items || '';
+    } else if (tipo === 'hero') {
+        content.tagline    = dbBlock.tagline    || '';
+        content.title      = dbBlock.contenido  || '';
+        content.subtitle   = dbBlock.subtitulo  || '';
+        content.buttonText = dbBlock.texto_boton || '';
+        content.buttonUrl  = dbBlock.url_boton  || '';
+        content.buttonColor= dbBlock.color_boton || '#003C8F';
+    } else if (tipo === 'lista') {
+        content.title = dbBlock.titulo || '';
+        content.items = dbBlock.items  || '';
+    } else if (tipo === 'boton') {
+        content.text      = dbBlock.texto       || 'Ver más';
+        content.url       = dbBlock.url         || '';
+        content.color     = dbBlock.color       || '#003C8F';
+        content.textColor = dbBlock.texto_color || '#ffffff';
+    } else if (tipo === 'espaciador') {
+        content.height = dbBlock.altura || '40';
+    } else if (tipo === 'separador') {
+        // no content fields
     } else {
         content.text = dbBlock.contenido || '';
     }
 
-    // Extract styles
     const styles = dbBlock.styles || {};
-    // Fallback mapping from legacy formatting if present
-    if (dbBlock.formato) {
-        styles.fontSize = dbBlock.formato.size === 'muy-grande' ? '28px' : (dbBlock.formato.size === 'grande' ? '20px' : '16px');
-        styles.fontWeight = dbBlock.formato.bold ? '700' : '400';
-        styles.fontStyle = dbBlock.formato.italic ? 'italic' : 'normal';
+    // PageBuilder blocks always have padding/margin/borderRadius/shadow in styles.
+    // Only apply legacy `formato` translation for old blocks that have no styles yet.
+    const isLegacyBlock = Object.keys(styles).length === 0;
+    if (dbBlock.formato && isLegacyBlock) {
+        styles.fontSize       = dbBlock.formato.size === 'muy-grande' ? '28px' : (dbBlock.formato.size === 'grande' ? '20px' : '16px');
+        styles.fontWeight     = dbBlock.formato.bold ? '700' : '400';
+        styles.fontStyle      = dbBlock.formato.italic ? 'italic' : 'normal';
         styles.textDecoration = dbBlock.formato.underline ? 'underline' : 'none';
-        styles.textColor = dbBlock.formato.color === 'rojo' ? '#800A15' : (dbBlock.formato.color === 'azul' ? '#003C8F' : '#475569');
+        styles.textColor      = dbBlock.formato.color === 'rojo' ? '#800A15' : (dbBlock.formato.color === 'azul' ? '#003C8F' : '#475569');
     }
 
     return { id, tipo, width, content, styles };
@@ -50,38 +74,60 @@ function mapDbBlockToEditorBlock(dbBlock) {
 // Map local builder format blocks back to database structures on save
 function mapEditorBlockToDbBlock(editorBlock) {
     const dbBlock = {
-        tipo: editorBlock.tipo,
-        width: editorBlock.width || 'completo',
+        tipo:   editorBlock.tipo,
+        width:  editorBlock.width || 'completo',
         styles: editorBlock.styles || {}
     };
 
-    if (editorBlock.tipo === 'texto' || editorBlock.tipo === 'titulo') {
+    if (editorBlock.tipo === 'texto') {
         dbBlock.contenido = editorBlock.content.text || '';
+    } else if (editorBlock.tipo === 'titulo') {
+        dbBlock.contenido = editorBlock.content.text || '';
+        dbBlock.level     = editorBlock.content.level || 'h3';
     } else if (editorBlock.tipo === 'cita') {
         dbBlock.contenido = editorBlock.content.quote || '';
-        dbBlock.autor = editorBlock.content.author || '';
+        dbBlock.autor     = editorBlock.content.author || '';
     } else if (editorBlock.tipo === 'imagen') {
-        dbBlock.imagen = editorBlock.content.dbPath || '';
+        dbBlock.imagen  = editorBlock.content.dbPath || '';
         dbBlock.leyenda = editorBlock.content.caption || '';
     } else if (editorBlock.tipo === 'video') {
-        dbBlock.url = editorBlock.content.url || '';
-        dbBlock.titulo = editorBlock.content.title || '';
-        dbBlock.videoFile = editorBlock.content.videoFile || '';
+        dbBlock.url       = editorBlock.content.url         || '';
+        dbBlock.titulo    = editorBlock.content.title       || '';
+        dbBlock.videoFile = editorBlock.content.videoFile   || '';
+        dbBlock.poster    = editorBlock.content.posterDbPath || '';
     } else if (editorBlock.tipo === 'ficha') {
         dbBlock.titulo = editorBlock.content.title || 'Ficha Técnica';
-        dbBlock.items = editorBlock.content.items || '';
+        dbBlock.items  = editorBlock.content.items || '';
+    } else if (editorBlock.tipo === 'hero') {
+        dbBlock.tagline     = editorBlock.content.tagline    || '';
+        dbBlock.contenido   = editorBlock.content.title      || '';
+        dbBlock.subtitulo   = editorBlock.content.subtitle   || '';
+        dbBlock.texto_boton = editorBlock.content.buttonText || '';
+        dbBlock.url_boton   = editorBlock.content.buttonUrl  || '';
+        dbBlock.color_boton = editorBlock.content.buttonColor || '#003C8F';
+    } else if (editorBlock.tipo === 'lista') {
+        dbBlock.titulo = editorBlock.content.title || '';
+        dbBlock.items  = editorBlock.content.items || '';
+    } else if (editorBlock.tipo === 'boton') {
+        dbBlock.texto       = editorBlock.content.text      || 'Ver más';
+        dbBlock.url         = editorBlock.content.url       || '';
+        dbBlock.color       = editorBlock.content.color     || '#003C8F';
+        dbBlock.texto_color = editorBlock.content.textColor || '#ffffff';
+    } else if (editorBlock.tipo === 'espaciador') {
+        dbBlock.altura = editorBlock.content.height || '40';
+    } else if (editorBlock.tipo === 'separador') {
+        // no extra content fields
     } else {
         dbBlock.contenido = editorBlock.content.text || '';
     }
 
-    // Preserve legacy styles mapping
     const styles = editorBlock.styles || {};
     dbBlock.formato = {
-        size: styles.fontSize === '28px' ? 'muy-grande' : (styles.fontSize === '20px' ? 'grande' : 'normal'),
-        bold: styles.fontWeight === '700' || styles.fontWeight === '800',
-        italic: styles.fontStyle === 'italic',
+        size:      styles.fontSize === '28px' ? 'muy-grande' : (styles.fontSize === '20px' ? 'grande' : 'normal'),
+        bold:      styles.fontWeight === '700' || styles.fontWeight === '800',
+        italic:    styles.fontStyle === 'italic',
         underline: styles.textDecoration === 'underline',
-        color: styles.textColor === '#800A15' ? 'rojo' : (styles.textColor === '#003C8F' ? 'azul' : 'gris')
+        color:     styles.textColor === '#800A15' ? 'rojo' : (styles.textColor === '#003C8F' ? 'azul' : 'gris')
     };
 
     return dbBlock;
@@ -133,7 +179,10 @@ export default function PageBuilder({
             content: {}
         };
 
-        if (tipo === 'texto') {
+        if (tipo === 'hero') {
+            newBlock.content = { tagline: 'Institución Educativa', title: 'Encabezado Principal', subtitle: 'Escribe aquí un subtítulo descriptivo para esta sección.', buttonText: '', buttonUrl: '', buttonColor: '#003C8F' };
+            newBlock.styles.padding = 'py-20 px-12';
+        } else if (tipo === 'texto') {
             newBlock.content = { text: 'Haz clic aquí para escribir el contenido de este bloque de texto.' };
             newBlock.styles.fontSize = '16px';
             newBlock.styles.textColor = '#334155';
@@ -145,11 +194,25 @@ export default function PageBuilder({
         } else if (tipo === 'imagen') {
             newBlock.content = { url: '', caption: 'Pie de foto descriptivo' };
         } else if (tipo === 'video') {
-            newBlock.content = { url: '', title: '' };
+            newBlock.content = { url: '', title: '', poster: '', posterDbPath: '' };
         } else if (tipo === 'cita') {
             newBlock.content = { quote: 'Escribe aquí la cita destacada.', author: 'Autor' };
         } else if (tipo === 'ficha') {
             newBlock.content = { title: 'Ficha Técnica', items: 'Dato A: Valor A\nDato B: Valor B' };
+        } else if (tipo === 'lista') {
+            newBlock.content = { title: '', items: 'Primer ítem\nSegundo ítem\nTercer ítem' };
+        } else if (tipo === 'boton') {
+            newBlock.content = { text: 'Haz clic aquí', url: '', color: '#003C8F', textColor: '#ffffff' };
+        } else if (tipo === 'espaciador') {
+            newBlock.content = { height: '40' };
+        } else if (tipo === 'separador') {
+            newBlock.styles.separatorStyle = 'punto';
+        } else if (tipo === 'cards') {
+            newBlock.content = { items: [
+                { badge: 'Categoría', title: 'Tarjeta 1', desc: 'Descripción breve de la tarjeta.' },
+                { badge: 'Categoría', title: 'Tarjeta 2', desc: 'Descripción breve de la tarjeta.' },
+                { badge: 'Categoría', title: 'Tarjeta 3', desc: 'Descripción breve de la tarjeta.' },
+            ]};
         }
 
         setBlocks(p => [...p, newBlock]);
@@ -233,12 +296,13 @@ export default function PageBuilder({
                 onAddBlock={addBlock}
                 onClose={onClose}
                 onSave={() => onSave({
-                    titulo: pageTitle,
-                    resumen: initialResumen,
-                    categoria: initialCategoria,
-                    blocks: blocks.map(mapEditorBlockToDbBlock),
-                    rawBlocks: blocks,
-                    activo: status === 'published',
+                    titulo:       pageTitle,
+                    resumen:      initialResumen,
+                    categoria:    initialCategoria,
+                    publicado_en: initialPublicadoEn,
+                    blocks:       blocks.map(mapEditorBlockToDbBlock),
+                    rawBlocks:    blocks,
+                    activo:       status === 'published',
                     status
                 })}
             />
@@ -252,6 +316,7 @@ export default function PageBuilder({
                             selectedBlockId={selectedBlockId}
                             onSelectBlock={setSelectedBlockId}
                             onUpdateBlock={updateBlockContent}
+                            onUpdateBlockStyles={updateBlockStyles}
                             onDeleteBlock={deleteBlock}
                             onDuplicateBlock={duplicateBlock}
                             onMoveBlock={moveBlock}

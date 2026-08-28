@@ -1013,6 +1013,8 @@ function NoticiasTab({ noticias, flash }) {
         Object.entries(blockFilesRef).forEach(([key, file]) => {
             if (key.startsWith('v_')) {
                 fd.append(`video_bloque_${key.slice(2)}`, file);
+            } else if (key.startsWith('p_')) {
+                fd.append(`poster_bloque_${key.slice(2)}`, file);
             } else {
                 fd.append(`img_bloque_${key}`, file);
             }
@@ -1377,6 +1379,9 @@ function NoticiasTab({ noticias, flash }) {
                                 }
                                 if (raw.tipo === 'video' && raw.content?._pendingVideoFile) {
                                     blockFilesRef[`v_${idx}`] = raw.content._pendingVideoFile;
+                                }
+                                if (raw.tipo === 'video' && raw.content?._pendingPosterFile) {
+                                    blockFilesRef[`p_${idx}`] = raw.content._pendingPosterFile;
                                 }
                             });
                         }

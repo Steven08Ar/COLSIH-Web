@@ -179,10 +179,10 @@ export default function TourViewer({
                             const targetScene = scenes.find(s => s.slug === toNode.id);
                             return {
                                 showLoader: false,
-                                speed: 750, // 750ms exactos para sincronizar a la perfección con la animación CSS
+                                speed: '25rpm',
                                 effect: 'fade',
                                 rotation: true,
-                                // rotateTo espera Position = {yaw, pitch} en radianes
+                                // rotateTo expects Position = {yaw, pitch} in RADIANS (not degree strings)
                                 rotateTo: {
                                     yaw: Number(targetScene?.yaw_inicial || 0) * DEG_TO_RAD,
                                     pitch: Number(targetScene?.pitch_inicial || 0) * DEG_TO_RAD,
@@ -210,113 +210,59 @@ export default function TourViewer({
                 }
             });
 
-            // Pre-cargar todas las texturas de las escenas en memoria y caché para transiciones instantáneas
-            setTimeout(() => {
-                nodes.forEach((node) => {
-                    if (node.panorama && node.id !== initialSlug) {
-                        try { viewer.textureLoader?.preloadPanorama(node.panorama); } catch (_) {}
-                        const img = new Image();
-                        img.src = node.panorama;
-                    }
-                });
-            }, 250);
-
-            // Registrar posición del puntero para centrar el zoom cinemático exactamente donde se hizo clic
-            let lastClickOrigin = { x: 50, y: 50 };
-            const trackPointer = (e) => {
-                if (containerRef.current) {
-                    const rect = containerRef.current.getBoundingClientRect();
-                    const x = Math.max(10, Math.min(90, Math.round(((e.clientX - rect.left) / rect.width) * 100)));
-                    const y = Math.max(10, Math.min(90, Math.round(((e.clientY - rect.top) / rect.height) * 100)));
-                    lastClickOrigin = { x, y };
-                }
-            };
-            containerRef.current.addEventListener('pointerdown', trackPointer, { passive: true });
-
-            // Estado de navegación simultánea y sincronizada
-            let isNavigating = false;
-            let pendingWarpOrigin = null;
-            let navigationTimeout = null;
-
-            const cleanupNavigation = () => {
-                if (navigationTimeout) {
-                    clearTimeout(navigationTimeout);
-                    navigationTimeout = null;
-                }
-                if (containerRef.current) {
-                    containerRef.current.classList.remove('psv-walking-forward');
-                    containerRef.current.classList.remove('psv-navigating');
-                    const canvas = containerRef.current.querySelector('canvas');
-                    if (canvas) {
-                        canvas.style.transformOrigin = 'center center';
-                    }
-                }
-                isNavigating = false;
-                pendingWarpOrigin = null;
-            };
-
-            // Iniciar el zoom y aceleración hacia adelante en el INSTANTE EXACTO en que WebGL arranca el fundido
-            viewer.addEventListener('panorama-loaded', () => {
-                if (pendingWarpOrigin && containerRef.current) {
-                    const canvas = containerRef.current.querySelector('canvas');
-                    if (canvas) {
-                        canvas.style.transformOrigin = `${pendingWarpOrigin.x}% ${pendingWarpOrigin.y}%`;
-                    }
-                    // Reiniciar clase de animación para que coincida exactamente con el inicio del fundido
-                    containerRef.current.classList.remove('psv-walking-forward');
-                    void containerRef.current.offsetWidth;
-                    containerRef.current.classList.add('psv-walking-forward');
-                    pendingWarpOrigin = null;
-                }
-            });
-
-            // Al completarse el fundido de 750ms, restaurar el estado limpio de la nueva escena
-            viewer.addEventListener('transition-done', () => {
-                cleanupNavigation();
-            });
-
             // Notificar cambio de escena al padre y restaurar estado
             tourPlugin.addEventListener('node-changed', ({ node }) => {
                 setIsLoading(false);
-                cleanupNavigation();
+                if (containerRef.current) {
+                    containerRef.current.classList.remove('psv-walking-forward');
+                }
                 if (onSceneChangeRef.current && node?.id) {
                     onSceneChangeRef.current(node.id);
                 }
             });
 
-            // Manejar clic en marcadores con transición + zoom SIMULTÁNEO estilo Google Maps Street View
-            markersPlugin.addEventListener('select-marker', ({ marker }) => {
+            // Manejar clic en marcadores con transición de avance + zoom cinemático
+            let isNavigating = false;
+            markersPlugin.addEventListener('select-marker', async ({ marker }) => {
                 if (isNavigating) return;
 
                 if (marker.data?.tipo === 'enlace' && marker.data?.targetSlug) {
                     isNavigating = true;
+                    const hs = marker.data.hotspot;
                     const targetSlug = marker.data.targetSlug;
 
-                    // 1. Obtener la coordenada de pantalla exacta del marcador
-                    let originX = lastClickOrigin.x;
-                    let originY = lastClickOrigin.y;
-                    if (marker.domElement && containerRef.current) {
-                        const markerRect = marker.domElement.getBoundingClientRect();
-                        const containerRect = containerRef.current.getBoundingClientRect();
-                        if (containerRect.width > 0 && containerRect.height > 0) {
-                            originX = Math.max(10, Math.min(90, Math.round(((markerRect.left + markerRect.width / 2 - containerRect.left) / containerRect.width) * 100)));
-                            originY = Math.max(10, Math.min(90, Math.round(((markerRect.top + markerRect.height / 2 - containerRect.top) / containerRect.height) * 100)));
+                    try {
+                        // 1. Efecto cinemático de avance / zoom-in hacia el punto (sensación de caminar)
+                        if (hs && viewer) {
+                            if (containerRef.current) {
+                                containerRef.current.classList.add('psv-walking-forward');
+                            }
+
+                            const markerYaw = Number(hs.yaw || 0) * DEG_TO_RAD;
+                            const markerPitch = Number(hs.pitch || 0) * DEG_TO_RAD;
+                            const currentZoom = viewer.getZoomLevel();
+
+                            // Acercar la cámara rápidamente hacia la dirección del punto
+                            await viewer.animate({
+                                yaw: markerYaw,
+                                pitch: markerPitch,
+                                zoom: Math.min(100, Math.max(70, currentZoom + 35)),
+                                speed: '55rpm',
+                            }).catch(() => {});
                         }
+
+                        // 2. Transición suave de desvanecimiento hacia el nuevo espacio 360°
+                        await tourPlugin.setCurrentNode(targetSlug);
+                    } catch (err) {
+                        tourPlugin.setCurrentNode(targetSlug).catch(() => {});
+                    } finally {
+                        setTimeout(() => {
+                            if (containerRef.current) {
+                                containerRef.current.classList.remove('psv-walking-forward');
+                            }
+                            isNavigating = false;
+                        }, 400);
                     }
-
-                    // 2. Guardar el origen para activarlo en el momento preciso en que inicie el fundido WebGL
-                    pendingWarpOrigin = { x: originX, y: originY };
-
-                    // 3. Ocultar los marcadores viejos suavemente
-                    containerRef.current?.classList.add('psv-navigating');
-
-                    // 4. Temporizador de seguridad
-                    navigationTimeout = setTimeout(cleanupNavigation, 2500);
-
-                    // 5. Iniciar la carga y transición hacia el nuevo espacio
-                    tourPlugin.setCurrentNode(targetSlug).catch(() => {
-                        cleanupNavigation();
-                    });
                 } else if (marker.data?.tipo === 'info' && marker.data?.hotspot) {
                     setSelectedInfoHotspot(marker.data.hotspot);
                 }

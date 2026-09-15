@@ -275,7 +275,7 @@ export default function Show({ tour = null, is_preview = false }) {
                         </Link>
 
                         <div className="flex items-center gap-2.5 min-w-0 pr-1 sm:pr-3">
-                            <img src="/marca/logo-colsih.svg" alt="COLSIH" className="h-7 w-auto object-contain shrink-0 hidden xs:block" />
+                            <img src="/marca/logo-colsih.svg" alt="COLSIH" className="h-7 w-auto object-contain shrink-0 hidden sm:block" />
                             <div className="flex flex-col min-w-0">
                                 <div className="flex items-center gap-2">
                                     <h1 className="text-slate-900 dark:text-white font-extrabold text-xs sm:text-sm leading-tight truncate max-w-[140px] sm:max-w-[240px]">

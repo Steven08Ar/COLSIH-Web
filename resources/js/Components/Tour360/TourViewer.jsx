@@ -182,9 +182,10 @@ export default function TourViewer({
                                 speed: '25rpm',
                                 effect: 'fade',
                                 rotation: true,
+                                // rotateTo expects Position = {yaw, pitch} in RADIANS (not degree strings)
                                 rotateTo: {
-                                    yaw: `${Number(targetScene?.yaw_inicial || 0)}deg`,
-                                    pitch: `${Number(targetScene?.pitch_inicial || 0)}deg`,
+                                    yaw: Number(targetScene?.yaw_inicial || 0) * DEG_TO_RAD,
+                                    pitch: Number(targetScene?.pitch_inicial || 0) * DEG_TO_RAD,
                                 },
                                 zoomTo: hfovToZoom(targetScene?.hfov_inicial),
                             };
@@ -264,7 +265,9 @@ export default function TourViewer({
     const handleResetNorth = () => {
         if (!viewerRef.current) return;
         const tourPlugin = viewerRef.current.getPlugin(VirtualTourPlugin);
-        const currentId = tourPlugin?.getCurrentNode()?.id || activeSceneSlug;
+        let currentId;
+        try { currentId = tourPlugin?.getCurrentNode()?.id; } catch (_) {}
+        currentId = currentId || activeSceneSlug;
         const scene = scenes.find(s => s.slug === currentId);
         viewerRef.current.animate({
             yaw: Number(scene?.yaw_inicial || 0) * DEG_TO_RAD,

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, memo } from 'react';
 import { Head, Link } from '@inertiajs/react';
 import TourViewer from '@/Components/Tour360/TourViewer';
-import { ChevronLeft, Grid, Compass, Info, MapPin } from 'lucide-react';
+import { ChevronLeft, ChevronUp, ChevronDown, ChevronRight, Compass, MapPin, Grid, Layers } from 'lucide-react';
 
 const SceneThumbnail = memo(function SceneThumbnail({ src, alt, imgClassName, containerRef }) {
     const wrapRef = useRef(null);
@@ -222,11 +222,22 @@ export default function Show({ tour = null, is_preview = false }) {
         ? tour.scenes 
         : DEFAULT_SCENES;
 
-    // Active scene state
-    const initialSlug = rawScenes.find(s => s.es_escena_inicial)?.slug || rawScenes[0]?.slug;
+    // Obtener slug inicial respetando query param ?scene=slug si proviene del editor de vista previa
+    const getInitialSlug = () => {
+        if (typeof window !== 'undefined') {
+            const params = new URLSearchParams(window.location.search);
+            const queryScene = params.get('scene');
+            if (queryScene && rawScenes.some(s => s.slug === queryScene)) {
+                return queryScene;
+            }
+        }
+        return rawScenes.find(s => s.es_escena_inicial)?.slug || rawScenes[0]?.slug;
+    };
+
+    const initialSlug = getInitialSlug();
     const [activeSceneSlug, setActiveSceneSlug] = useState(initialSlug);
-    const [showSceneList, setShowSceneList] = useState(false);
-    const sceneListScrollRef = useRef(null);
+    const [showSceneTray, setShowSceneTray] = useState(false);
+    const sceneTrayScrollRef = useRef(null);
 
     const activeScene = rawScenes.find(s => s.slug === activeSceneSlug) || rawScenes[0];
 
@@ -240,55 +251,72 @@ export default function Show({ tour = null, is_preview = false }) {
         }
     };
 
+    const scrollTray = (direction) => {
+        if (!sceneTrayScrollRef.current) return;
+        const amount = direction === 'left' ? -260 : 260;
+        sceneTrayScrollRef.current.scrollBy({ left: amount, behavior: 'smooth' });
+    };
+
     return (
         <>
             <Head title={`Recorrido Virtual 360° | ${activeScene?.nombre || 'COLSIH'}`} />
 
             <div className="relative w-screen h-screen bg-slate-950 flex flex-col overflow-hidden font-sans select-none">
                 
-                {/* Top Navigation Bar */}
-                <header className="absolute top-0 inset-x-0 z-30 h-16 sm:h-20 px-4 sm:px-8 flex items-center justify-between bg-gradient-to-b from-slate-950/90 via-slate-950/50 to-transparent pointer-events-auto">
-                    <div className="flex items-center gap-4">
+                {/* ── TARJETA FLOTANTE SUPERIOR IZQUIERDA (Estilo Google Maps Place Header) ── */}
+                <header className="absolute top-4 sm:top-6 left-4 sm:left-6 z-30 flex items-start gap-2.5 pointer-events-auto max-w-[calc(100vw-32px)]">
+                    <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border border-slate-200/90 dark:border-slate-800 rounded-2xl shadow-xl p-2.5 sm:p-3 flex items-center gap-3 transition-all">
                         <Link
                             href="/"
-                            className="flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white px-4 py-2 rounded-2xl backdrop-blur-md transition-all text-xs font-bold shadow-lg hover:scale-105"
+                            className="w-9 h-9 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 flex items-center justify-center transition cursor-pointer shrink-0"
+                            title="Volver al Portal Institucional"
                         >
-                            <ChevronLeft className="w-4 h-4" />
-                            <span>Volver al Sitio</span>
+                            <ChevronLeft className="w-5 h-5 stroke-[2.5]" />
                         </Link>
-                        
-                        <div className="h-6 w-px bg-white/20 hidden sm:block"></div>
 
-                        <div className="flex items-center gap-3">
-                            <img src="/marca/logo-colsih.svg" alt="COLSIH" className="h-8 w-auto object-contain hidden sm:block" />
-                            <div className="flex flex-col">
-                                <span className="text-white font-extrabold text-sm sm:text-base leading-tight tracking-tight">
-                                    {tour?.nombre || 'Recorrido Virtual 360°'}
-                                </span>
-                                <span className="text-[10px] font-bold uppercase tracking-widest text-blue-400">
-                                    Colegio Santa Isabel de Hungría
+                        <div className="flex items-center gap-2.5 min-w-0 pr-1 sm:pr-3">
+                            <img src="/marca/logo-colsih.svg" alt="COLSIH" className="h-7 w-auto object-contain shrink-0 hidden xs:block" />
+                            <div className="flex flex-col min-w-0">
+                                <div className="flex items-center gap-2">
+                                    <h1 className="text-slate-900 dark:text-white font-extrabold text-xs sm:text-sm leading-tight truncate max-w-[140px] sm:max-w-[240px]">
+                                        {activeScene?.nombre || 'Espacio 360°'}
+                                    </h1>
+                                    {is_preview && (
+                                        <span className="bg-amber-100 dark:bg-amber-950/70 text-amber-800 dark:text-amber-300 border border-amber-300 dark:border-amber-800 text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider shrink-0">
+                                            Vista Previa
+                                        </span>
+                                    )}
+                                </div>
+                                <span className="text-[10px] text-slate-500 dark:text-slate-400 font-medium truncate">
+                                    Colegio Santa Isabel de Hungría • Tour 360°
                                 </span>
                             </div>
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-3">
-                        {/* Toggle Scene Drawer List button */}
-                        <button
-                            onClick={() => setShowSceneList(!showSceneList)}
-                            className={`flex items-center gap-2 px-4 py-2 rounded-2xl border text-xs font-bold transition-all backdrop-blur-md cursor-pointer ${
-                                showSceneList
-                                    ? 'bg-blue-600 border-blue-400 text-white shadow-lg'
-                                    : 'bg-white/10 hover:bg-white/20 border-white/20 text-white'
-                            }`}
-                        >
-                            <Grid className="w-4 h-4" />
-                            <span className="hidden sm:inline">Lista de Espacios</span>
-                        </button>
-                    </div>
+                    {/* Botón Explorar Espacios estilo Google Maps Chip */}
+                    <button
+                        onClick={() => setShowSceneTray(!showSceneTray)}
+                        className={`h-11 sm:h-12 px-3 sm:px-4 rounded-2xl border shadow-xl flex items-center gap-2 font-bold text-xs transition cursor-pointer backdrop-blur-md shrink-0 ${
+                            showSceneTray
+                                ? 'bg-[#1a73e8] border-blue-500 text-white shadow-blue-600/30'
+                                : 'bg-white/95 dark:bg-slate-900/95 border-slate-200/90 dark:border-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800'
+                        }`}
+                        title="Explorar galería de espacios"
+                    >
+                        <Grid className="w-4 h-4 text-inherit" />
+                        <span className="hidden sm:inline">Lugares</span>
+                        <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-black ${
+                            showSceneTray
+                                ? 'bg-white/20 text-white'
+                                : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300'
+                        }`}>
+                            {rawScenes.length}
+                        </span>
+                    </button>
                 </header>
 
-                {/* 360 Pannellum Tour Viewer */}
+                {/* ── VISOR 360 PHOTO SPHERE VIEWER ── */}
                 <main className="relative flex-1 w-full h-full">
                     <TourViewer
                         scenes={rawScenes}
@@ -299,66 +327,112 @@ export default function Show({ tour = null, is_preview = false }) {
                     />
                 </main>
 
-                {/* Drawer / Sidebar List of Scenes */}
-                {showSceneList && (
-                    <div className="fixed top-20 left-6 z-40 w-80 max-h-[calc(100vh-140px)] bg-slate-950/90 border border-white/20 backdrop-blur-xl rounded-3xl p-4 shadow-2xl flex flex-col overflow-hidden animate-fadeIn">
-                        <div className="flex items-center justify-between pb-3 mb-3 border-b border-white/10">
-                            <div className="flex items-center gap-2">
-                                <Compass className="w-4 h-4 text-blue-400" />
-                                <span className="text-xs font-extrabold text-white uppercase tracking-wider">
-                                    Espacios Disponibles
-                                </span>
-                            </div>
-                            <button
-                                onClick={() => setShowSceneList(false)}
-                                className="text-slate-400 hover:text-white text-xs font-bold p-1 rounded-lg"
-                            >
-                                ✕
-                            </button>
-                        </div>
+                {/* ── BOTÓN FLOTANTE INFERIOR: EXPLORAR LUGARES (Cuando la bandeja está cerrada) ── */}
+                {!showSceneTray && (
+                    <div className="absolute bottom-6 left-5 sm:left-6 z-20 pointer-events-auto">
+                        <button
+                            onClick={() => setShowSceneTray(true)}
+                            className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border border-slate-200/90 dark:border-slate-800 text-slate-800 dark:text-white px-4 py-2.5 rounded-full shadow-2xl flex items-center gap-2 text-xs font-extrabold hover:scale-105 active:scale-95 transition cursor-pointer group"
+                        >
+                            <Compass className="w-4 h-4 text-[#1a73e8] group-hover:rotate-45 transition-transform" />
+                            <span>Lugares ({rawScenes.length})</span>
+                            <ChevronUp className="w-3.5 h-3.5 text-slate-400" />
+                        </button>
+                    </div>
+                )}
 
-                        <div ref={sceneListScrollRef} className="flex-1 overflow-y-auto space-y-2.5 pr-1 custom-scrollbar">
-                            {rawScenes.map((scene, idx) => {
-                                const isActive = scene.slug === activeSceneSlug;
+                {/* ── BANDEJA INFERIOR DE LUGARES ESTILO GOOGLE MAPS STREET VIEW ── */}
+                {showSceneTray && (
+                    <div className="absolute bottom-4 sm:bottom-6 left-4 sm:left-6 right-20 sm:right-24 z-30 pointer-events-auto max-w-5xl animate-fadeIn">
+                        <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border border-slate-200/90 dark:border-slate-800 rounded-3xl p-3 sm:p-4 shadow-2xl flex flex-col gap-2.5">
+                            {/* Cabecera de la bandeja */}
+                            <div className="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800 px-1">
+                                <div className="flex items-center gap-2">
+                                    <Compass className="w-4 h-4 text-[#1a73e8]" />
+                                    <span className="text-xs font-extrabold text-slate-800 dark:text-white uppercase tracking-wider">
+                                        Espacios de la Institución
+                                    </span>
+                                    <span className="text-[10px] text-slate-400 font-bold">
+                                        ({rawScenes.length} ubicaciones 360°)
+                                    </span>
+                                </div>
 
-                                return (
-                                    <div
-                                        key={scene.slug || idx}
-                                        onClick={() => {
-                                            handleSceneChange(scene.slug);
-                                            setShowSceneList(false);
-                                        }}
-                                        className={`group flex items-center gap-3 p-2.5 rounded-2xl border transition-all cursor-pointer ${
-                                            isActive
-                                                ? 'bg-blue-600/30 border-blue-500/60 text-white shadow-md'
-                                                : 'bg-white/5 hover:bg-white/10 border-white/10 text-slate-300 hover:text-white'
-                                        }`}
+                                <div className="flex items-center gap-1.5">
+                                    {/* Botones de desplazamiento horizontal */}
+                                    <button
+                                        onClick={() => scrollTray('left')}
+                                        className="w-7 h-7 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 flex items-center justify-center transition cursor-pointer"
+                                        title="Desplazar a la izquierda"
                                     >
-                                        <div className="relative w-14 h-10 rounded-xl overflow-hidden shrink-0 border border-white/10 bg-slate-900">
-                                            <SceneThumbnail
-                                                src={scene.thumbnail_url || scene.imagen_url}
-                                                alt={scene.nombre}
-                                                imgClassName="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                                                containerRef={sceneListScrollRef}
-                                            />
-                                            {isActive && (
-                                                <div className="absolute inset-0 bg-blue-600/40 flex items-center justify-center">
-                                                    <MapPin className="w-4 h-4 text-white" />
-                                                </div>
-                                            )}
-                                        </div>
+                                        <ChevronLeft className="w-4 h-4" />
+                                    </button>
+                                    <button
+                                        onClick={() => scrollTray('right')}
+                                        className="w-7 h-7 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 flex items-center justify-center transition cursor-pointer"
+                                        title="Desplazar a la derecha"
+                                    >
+                                        <ChevronRight className="w-4 h-4" />
+                                    </button>
+                                    <div className="w-px h-4 bg-slate-200 dark:bg-slate-700 mx-1" />
+                                    <button
+                                        onClick={() => setShowSceneTray(false)}
+                                        className="flex items-center gap-1 text-[11px] font-bold text-slate-500 hover:text-slate-800 dark:hover:text-white px-2 py-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer"
+                                    >
+                                        <ChevronDown className="w-3.5 h-3.5" />
+                                        <span>Ocultar</span>
+                                    </button>
+                                </div>
+                            </div>
 
-                                        <div className="flex-1 min-w-0">
-                                            <span className="block text-xs font-bold truncate">
-                                                {scene.nombre}
-                                            </span>
-                                            <span className="block text-[10px] text-slate-400 font-medium truncate">
-                                                {scene.hotspots?.length || 0} puntos interactivos
-                                            </span>
+                            {/* Carrusel Horizontal de Miniaturas */}
+                            <div
+                                ref={sceneTrayScrollRef}
+                                className="flex items-center gap-3 overflow-x-auto pb-1 custom-scrollbar scroll-smooth"
+                            >
+                                {rawScenes.map((scene, idx) => {
+                                    const isActive = scene.slug === activeSceneSlug;
+
+                                    return (
+                                        <div
+                                            key={scene.slug || idx}
+                                            onClick={() => handleSceneChange(scene.slug)}
+                                            className={`group flex flex-col w-36 sm:w-44 shrink-0 rounded-2xl overflow-hidden border transition-all cursor-pointer select-none ${
+                                                isActive
+                                                    ? 'border-[#1a73e8] ring-2 ring-[#1a73e8]/50 shadow-md scale-[1.02] bg-blue-50/50 dark:bg-blue-950/30'
+                                                    : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 bg-slate-50 dark:bg-slate-900/60'
+                                            }`}
+                                        >
+                                            <div className="relative aspect-video w-full overflow-hidden bg-slate-900">
+                                                <SceneThumbnail
+                                                    src={scene.thumbnail_url || scene.imagen_url}
+                                                    alt={scene.nombre}
+                                                    imgClassName="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                                    containerRef={sceneTrayScrollRef}
+                                                />
+                                                {isActive && (
+                                                    <div className="absolute top-1.5 left-1.5 px-2 py-0.5 rounded-full bg-[#1a73e8] text-white text-[9px] font-black flex items-center gap-1 shadow-md">
+                                                        <MapPin className="w-2.5 h-2.5" />
+                                                        <span>Viendo</span>
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            <div className="p-2 sm:p-2.5 flex flex-col">
+                                                <span className={`text-xs font-bold truncate ${
+                                                    isActive
+                                                        ? 'text-[#1a73e8] dark:text-blue-400'
+                                                        : 'text-slate-800 dark:text-white'
+                                                }`}>
+                                                    {scene.nombre}
+                                                </span>
+                                                <span className="text-[10px] text-slate-400 font-medium truncate">
+                                                    {scene.hotspots?.length || 0} puntos
+                                                </span>
+                                            </div>
                                         </div>
-                                    </div>
-                                );
-                            })}
+                                    );
+                                })}
+                            </div>
                         </div>
                     </div>
                 )}

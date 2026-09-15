@@ -6,45 +6,101 @@ import '@photo-sphere-viewer/core/index.css';
 import '@photo-sphere-viewer/virtual-tour-plugin/index.css';
 import '@photo-sphere-viewer/markers-plugin/index.css';
 import { mediaUrl } from '@/utils/mediaUrl';
-import { Maximize2, Minimize2, ZoomIn, ZoomOut, RotateCw, RefreshCw, X } from 'lucide-react';
+import { Maximize2, Minimize2, Plus, Minus, RotateCw, RefreshCw, X, MapPin, Compass } from 'lucide-react';
 
 const DEG_TO_RAD = Math.PI / 180;
+const RAD_TO_DEG = 180 / Math.PI;
 const MIN_FOV = 30;
 const MAX_FOV = 100;
 const hfovToZoom = (h) => Math.max(0, Math.min(100, Math.round(((Number(h || 75) - MIN_FOV) / (MAX_FOV - MIN_FOV)) * 100)));
 
-const INFO_MARKER_HTML = `<div style="width:34px;height:34px;background:rgba(37,99,235,0.92);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:15px;cursor:pointer;box-shadow:0 0 0 6px rgba(37,99,235,0.22),0 2px 8px rgba(0,0,0,0.45);border:2px solid rgba(255,255,255,0.45);font-family:system-ui,sans-serif;letter-spacing:0;user-select:none">i</div>`;
+/**
+ * Genera el HTML del marcador de navegación estilo Google Maps Street View.
+ * Los marcadores se anclan como 2D en coordenadas esféricas exactas (yaw, pitch),
+ * rotando con la esfera 360° en lugar de flotar o deslizarse como flechas 3D.
+ */
+function createGoogleMapsNavMarkerHtml(targetName) {
+    return `
+    <div class="gmaps-nav-marker">
+        <div class="gmaps-nav-halo"></div>
+        <div class="gmaps-nav-disc">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#1a73e8" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="18 15 12 9 6 15"></polyline>
+            </svg>
+        </div>
+        <div class="gmaps-nav-pill">
+            <span style="font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:11px;font-weight:700;color:#202124;">${targetName}</span>
+            <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="#1a73e8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+        </div>
+    </div>
+    `;
+}
+
+/**
+ * Genera el HTML del marcador de información estilo Google Maps Place Pin.
+ */
+function createGoogleMapsInfoMarkerHtml(label) {
+    return `
+    <div class="gmaps-info-marker">
+        <div class="gmaps-info-halo"></div>
+        <div class="gmaps-info-disc">
+            <span style="color:#ffffff;font-family:system-ui,sans-serif;font-weight:900;font-size:14px;line-height:1;">i</span>
+        </div>
+        <div class="gmaps-info-pill">
+            <span>${label}</span>
+        </div>
+    </div>
+    `;
+}
 
 function buildNodes(scenes) {
     return scenes.map((scene) => {
-        const links = [];
         const markers = [];
 
         (scene.hotspots || []).forEach((hs) => {
+            const yaw = Number(hs.yaw || 0);
+            const pitch = Number(hs.pitch || 0);
+
             if (hs.tipo === 'enlace') {
                 const target = scenes.find(s => s.id === hs.scene_destino_id || s.slug === hs.scene_destino_slug);
                 const targetSlug = target?.slug || hs.scene_destino_slug || '';
+                const targetName = hs.texto || (target ? target.nombre : 'Siguiente espacio');
+
                 if (targetSlug) {
-                    links.push({
-                        nodeId: targetSlug,
+                    markers.push({
+                        id: `nav-${hs.id ?? Math.random().toString(36).slice(2)}`,
                         position: {
-                            yaw: `${Number(hs.yaw || 0)}deg`,
-                            pitch: `${Number(hs.pitch || 0)}deg`,
+                            yaw: `${yaw}deg`,
+                            pitch: `${pitch}deg`,
                         },
-                        name: hs.texto || (target ? `Ir a ${target.nombre}` : 'Siguiente espacio'),
+                        html: createGoogleMapsNavMarkerHtml(targetName),
+                        anchor: 'center center',
+                        data: {
+                            tipo: 'enlace',
+                            targetSlug,
+                            hotspot: hs,
+                        },
                     });
                 }
             } else {
+                const label = hs.texto
+                    ? (hs.texto.length > 30 ? hs.texto.substring(0, 30) + '…' : hs.texto)
+                    : 'Información';
+
                 markers.push({
                     id: `info-${hs.id ?? Math.random().toString(36).slice(2)}`,
                     position: {
-                        yaw: `${Number(hs.yaw || 0)}deg`,
-                        pitch: `${Number(hs.pitch || 0)}deg`,
+                        yaw: `${yaw}deg`,
+                        pitch: `${pitch}deg`,
                     },
-                    html: INFO_MARKER_HTML,
+                    html: createGoogleMapsInfoMarkerHtml(label),
                     anchor: 'center center',
-                    tooltip: hs.texto ? { content: hs.texto.substring(0, 60), position: 'top center' } : undefined,
-                    data: { hotspot: hs },
+                    data: {
+                        tipo: 'info',
+                        hotspot: hs,
+                    },
                 });
             }
         });
@@ -53,8 +109,16 @@ function buildNodes(scenes) {
             id: scene.slug,
             panorama: mediaUrl(scene.imagen_url || scene.imagen_path) || '',
             name: scene.nombre || '',
-            links,
+            // No links para evitar las flechas CSS3D del suelo que se desvían de las coordenadas
+            links: [],
+            // Todos los puntos están como markers esféricos 100% fijos a sus coordenadas (yaw, pitch)
             markers,
+            data: {
+                yaw_inicial: Number(scene.yaw_inicial || 0),
+                pitch_inicial: Number(scene.pitch_inicial || 0),
+                hfov_inicial: scene.hfov_inicial,
+                nombre: scene.nombre,
+            },
         };
     });
 }
@@ -76,10 +140,11 @@ export default function TourViewer({
     const [isAutoRotating, setIsAutoRotating] = useState(false);
     const [loadError, setLoadError] = useState(null);
     const [selectedInfoHotspot, setSelectedInfoHotspot] = useState(null);
+    const [currentYawDeg, setCurrentYawDeg] = useState(0);
 
     useEffect(() => { onSceneChangeRef.current = onSceneChange; }, [onSceneChange]);
 
-    // Initialize PSV
+    // Inicializar Photo Sphere Viewer
     useEffect(() => {
         if (!containerRef.current || !scenes || scenes.length === 0) return;
 
@@ -100,8 +165,6 @@ export default function TourViewer({
         try {
             const viewer = new Viewer({
                 container: containerRef.current,
-                // No panorama — VirtualTourPlugin owns all loading via startNodeId.
-                // defaultYaw/Pitch/ZoomLvl set the camera for the first node only.
                 defaultYaw: `${Number(initialScene?.yaw_inicial || 0)}deg`,
                 defaultPitch: `${Number(initialScene?.pitch_inicial || 0)}deg`,
                 defaultZoomLvl: hfovToZoom(initialScene?.hfov_inicial),
@@ -112,6 +175,20 @@ export default function TourViewer({
                     [VirtualTourPlugin, {
                         nodes,
                         startNodeId: initialSlug,
+                        transitionOptions: (toNode) => {
+                            const targetScene = scenes.find(s => s.slug === toNode.id);
+                            return {
+                                showLoader: false,
+                                speed: '25rpm',
+                                effect: 'fade',
+                                rotation: true,
+                                rotateTo: {
+                                    yaw: `${Number(targetScene?.yaw_inicial || 0)}deg`,
+                                    pitch: `${Number(targetScene?.pitch_inicial || 0)}deg`,
+                                },
+                                zoomTo: hfovToZoom(targetScene?.hfov_inicial),
+                            };
+                        },
                     }],
                     [MarkersPlugin, {}],
                 ],
@@ -122,22 +199,29 @@ export default function TourViewer({
             const tourPlugin = viewer.getPlugin(VirtualTourPlugin);
             const markersPlugin = viewer.getPlugin(MarkersPlugin);
 
-            // node-changed is the reliable load signal when using VirtualTourPlugin
             tourPlugin.addEventListener('node-changed', () => setIsLoading(false), { once: true });
-            // 'ready' as fallback
             viewer.addEventListener('ready', () => setIsLoading(false), { once: true });
 
-            // Only notify parent on scene change — do NOT call viewer.rotate() here.
-            // Rotating inside node-changed interrupts VirtualTourPlugin's 3D arrow
-            // rendering cycle, causing arrows to appear stuck on screen.
+            // Rastrear posición de cámara para la brújula dinámica en tiempo real
+            viewer.addEventListener('position-updated', ({ position }) => {
+                if (position && typeof position.yaw === 'number') {
+                    setCurrentYawDeg(Math.round(position.yaw * RAD_TO_DEG));
+                }
+            });
+
+            // Notificar cambio de escena al padre
             tourPlugin.addEventListener('node-changed', ({ node }) => {
+                setIsLoading(false);
                 if (onSceneChangeRef.current && node?.id) {
                     onSceneChangeRef.current(node.id);
                 }
             });
 
+            // Manejar clic en marcadores
             markersPlugin.addEventListener('select-marker', ({ marker }) => {
-                if (marker.data?.hotspot) {
+                if (marker.data?.tipo === 'enlace' && marker.data?.targetSlug) {
+                    tourPlugin.setCurrentNode(marker.data.targetSlug).catch(() => {});
+                } else if (marker.data?.tipo === 'info' && marker.data?.hotspot) {
                     setSelectedInfoHotspot(marker.data.hotspot);
                 }
             });
@@ -153,7 +237,7 @@ export default function TourViewer({
         };
     }, [scenes]);
 
-    // Sync active scene from parent
+    // Sincronizar escena activa si se cambia desde el exterior
     useEffect(() => {
         if (!viewerRef.current || !activeSceneSlug) return;
         const tourPlugin = viewerRef.current.getPlugin(VirtualTourPlugin);
@@ -166,29 +250,30 @@ export default function TourViewer({
         } catch (_) {}
     }, [activeSceneSlug]);
 
-    // Control handlers
+    // Controles estilo Google Maps
     const handleZoomIn = () => {
         if (!viewerRef.current) return;
-        viewerRef.current.zoom(Math.max(0, viewerRef.current.getZoomLevel() - 20));
+        viewerRef.current.zoom(Math.max(0, viewerRef.current.getZoomLevel() - 15));
     };
+
     const handleZoomOut = () => {
         if (!viewerRef.current) return;
-        viewerRef.current.zoom(Math.min(100, viewerRef.current.getZoomLevel() + 20));
+        viewerRef.current.zoom(Math.min(100, viewerRef.current.getZoomLevel() + 15));
     };
-    const handleResetView = () => {
+
+    const handleResetNorth = () => {
         if (!viewerRef.current) return;
         const tourPlugin = viewerRef.current.getPlugin(VirtualTourPlugin);
-        let currentId;
-        try { currentId = tourPlugin?.getCurrentNode()?.id; } catch (_) {}
+        const currentId = tourPlugin?.getCurrentNode()?.id || activeSceneSlug;
         const scene = scenes.find(s => s.slug === currentId);
-        if (scene) {
-            viewerRef.current.rotate({
-                yaw: Number(scene.yaw_inicial || 0) * DEG_TO_RAD,
-                pitch: Number(scene.pitch_inicial || 0) * DEG_TO_RAD,
-            });
-            viewerRef.current.zoom(hfovToZoom(scene.hfov_inicial));
-        }
+        viewerRef.current.animate({
+            yaw: Number(scene?.yaw_inicial || 0) * DEG_TO_RAD,
+            pitch: Number(scene?.pitch_inicial || 0) * DEG_TO_RAD,
+            zoom: hfovToZoom(scene?.hfov_inicial),
+            speed: '25rpm',
+        });
     };
+
     const toggleAutoRotate = () => {
         if (!viewerRef.current) return;
         if (isAutoRotating) {
@@ -199,11 +284,12 @@ export default function TourViewer({
             autoRotateRef.current = setInterval(() => {
                 if (!viewerRef.current) return;
                 const pos = viewerRef.current.getPosition();
-                viewerRef.current.rotate({ yaw: pos.yaw + 0.005, pitch: pos.pitch });
+                viewerRef.current.rotate({ yaw: pos.yaw + 0.004, pitch: pos.pitch });
             }, 16);
             setIsAutoRotating(true);
         }
     };
+
     const toggleFullscreen = () => {
         if (!containerRef.current) return;
         if (!document.fullscreenElement) {
@@ -214,15 +300,20 @@ export default function TourViewer({
     };
 
     return (
-        <div className={`relative w-full h-full min-h-[450px] bg-[#003C8F] overflow-hidden select-none group ${className}`}>
+        <div className={`relative w-full h-full min-h-[450px] bg-slate-950 overflow-hidden select-none group ${className}`}>
 
-            {/* PSV Container */}
+            {/* Contenedor Photo Sphere Viewer */}
             <div ref={containerRef} className="w-full h-full min-h-[450px]" />
 
-            {/* Custom Loader */}
+            {/* Cargador Google Maps Style */}
             {isLoading && (
-                <div className="absolute inset-0 z-30 flex items-center justify-center bg-[#003C8F]">
-                    <div className="w-16 h-16 rounded-full border-4 border-white/30 border-t-[#800A15] border-r-white animate-spin" />
+                <div className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-slate-950/80 backdrop-blur-sm transition-opacity duration-300">
+                    <div className="relative w-14 h-14">
+                        <div className="w-14 h-14 rounded-full border-3 border-white/20 border-t-[#1a73e8] animate-spin" />
+                    </div>
+                    <span className="mt-4 text-xs font-bold text-white/90 tracking-wider uppercase">
+                        Cargando Espacio 360°...
+                    </span>
                 </div>
             )}
 
@@ -230,11 +321,11 @@ export default function TourViewer({
             {loadError && (
                 <div className="absolute inset-0 z-40 flex flex-col items-center justify-center bg-slate-950/90 backdrop-blur-md p-6 text-center">
                     <div className="w-12 h-12 rounded-full bg-rose-500/20 text-rose-500 flex items-center justify-center mb-3 text-xl font-bold">!</div>
-                    <h4 className="text-base font-bold text-white mb-1">No se pudo cargar la escena</h4>
+                    <h4 className="text-base font-bold text-white mb-1">No se pudo cargar el espacio</h4>
                     <p className="text-xs text-slate-400 max-w-sm mb-4">{loadError}</p>
                     <button
                         onClick={() => { setIsLoading(true); setLoadError(null); }}
-                        className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition flex items-center gap-2"
+                        className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition flex items-center gap-2 cursor-pointer"
                     >
                         <RefreshCw className="w-4 h-4" />
                         Reintentar
@@ -242,60 +333,101 @@ export default function TourViewer({
                 </div>
             )}
 
-            {/* Control Dock */}
-            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 bg-slate-900/80 border border-white/15 backdrop-blur-md px-4 py-2 rounded-2xl shadow-2xl transition-opacity duration-300 opacity-90 group-hover:opacity-100">
-                <button onClick={handleZoomIn} className="p-2.5 rounded-xl text-slate-200 hover:text-white hover:bg-white/15 transition cursor-pointer" title="Acercar">
-                    <ZoomIn className="w-4 h-4" />
-                </button>
-                <button onClick={handleZoomOut} className="p-2.5 rounded-xl text-slate-200 hover:text-white hover:bg-white/15 transition cursor-pointer" title="Alejar">
-                    <ZoomOut className="w-4 h-4" />
-                </button>
-                <div className="w-px h-5 bg-white/20" />
-                <button onClick={handleResetView} className="p-2.5 rounded-xl text-slate-200 hover:text-white hover:bg-white/15 transition cursor-pointer" title="Restablecer vista">
-                    <RefreshCw className="w-4 h-4" />
-                </button>
+            {/* Barra de Controles Flotante Estilo Google Maps (Esquina inferior derecha) */}
+            <div className="absolute bottom-6 right-5 sm:right-6 z-20 flex flex-col items-center gap-2.5 select-none pointer-events-auto">
+                {/* Brújula dinámica interactiva orientada al Norte */}
                 <button
-                    onClick={toggleAutoRotate}
-                    className={`p-2.5 rounded-xl transition cursor-pointer ${isAutoRotating ? 'bg-blue-600 text-white' : 'text-slate-200 hover:text-white hover:bg-white/15'}`}
-                    title={isAutoRotating ? 'Detener rotación' : 'Rotación automática'}
-                >
-                    <RotateCw className="w-4 h-4" />
-                </button>
-                <div className="w-px h-5 bg-white/20" />
-                <button onClick={toggleFullscreen} className="p-2.5 rounded-xl text-slate-200 hover:text-white hover:bg-white/15 transition cursor-pointer" title={isFullscreen ? 'Salir pantalla completa' : 'Pantalla completa'}>
-                    {isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
-                </button>
-            </div>
-
-            {/* Info Hotspot Modal */}
-            {selectedInfoHotspot && (
-                <div
-                    className="absolute inset-0 z-50 flex items-center justify-center bg-slate-950/70 backdrop-blur-md p-4"
-                    onClick={() => setSelectedInfoHotspot(null)}
+                    onClick={handleResetNorth}
+                    className="w-10 h-10 rounded-2xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-md shadow-xl border border-slate-200/80 dark:border-slate-800 flex items-center justify-center text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 transition cursor-pointer active:scale-95 group"
+                    title="Orientar al Norte / Reestablecer encuadre inicial"
                 >
                     <div
-                        className="bg-[#0f172a]/95 border border-slate-700/80 text-white rounded-3xl p-6 md:p-8 w-full max-w-md shadow-2xl space-y-4 relative"
-                        onClick={(e) => e.stopPropagation()}
+                        className="w-6 h-6 relative flex items-center justify-center transition-transform duration-75 ease-out"
+                        style={{ transform: `rotate(${-currentYawDeg}deg)` }}
                     >
-                        <button
-                            onClick={() => setSelectedInfoHotspot(null)}
-                            className="absolute top-4 right-4 p-2 rounded-full bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white transition cursor-pointer"
-                        >
-                            <X className="w-5 h-5" />
-                        </button>
+                        <svg viewBox="0 0 24 24" className="w-5 h-5 drop-shadow-xs" fill="none">
+                            <polygon points="12,2 15.5,12 12,10 8.5,12" fill="#EA4335" />
+                            <polygon points="12,22 15.5,12 12,10 8.5,12" fill="#9AA0A6" />
+                            <circle cx="12" cy="12" r="1.5" fill="#ffffff" />
+                        </svg>
+                    </div>
+                </button>
+
+                {/* Controles de Zoom (+ / -) apilados */}
+                <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-md shadow-xl border border-slate-200/80 dark:border-slate-800 rounded-2xl overflow-hidden flex flex-col">
+                    <button
+                        onClick={handleZoomIn}
+                        className="w-10 h-10 flex items-center justify-center text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer border-b border-slate-200/80 dark:border-slate-800 active:scale-95"
+                        title="Acercar (+)"
+                    >
+                        <Plus className="w-4 h-4 stroke-[2.5]" />
+                    </button>
+                    <button
+                        onClick={handleZoomOut}
+                        className="w-10 h-10 flex items-center justify-center text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer active:scale-95"
+                        title="Alejar (-)"
+                    >
+                        <Minus className="w-4 h-4 stroke-[2.5]" />
+                    </button>
+                </div>
+
+                {/* Controles de Vista (Auto-rotar y Pantalla Completa) */}
+                <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-md shadow-xl border border-slate-200/80 dark:border-slate-800 rounded-2xl overflow-hidden flex flex-col">
+                    <button
+                        onClick={toggleAutoRotate}
+                        className={`w-10 h-10 flex items-center justify-center transition cursor-pointer active:scale-95 border-b border-slate-200/80 dark:border-slate-800 ${
+                            isAutoRotating
+                                ? 'bg-blue-600 text-white'
+                                : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'
+                        }`}
+                        title={isAutoRotating ? 'Detener rotación automática' : 'Giro automático 360°'}
+                    >
+                        <RotateCw className={`w-4 h-4 stroke-[2.2] ${isAutoRotating ? 'animate-spin' : ''}`} style={{ animationDuration: '6s' }} />
+                    </button>
+                    <button
+                        onClick={toggleFullscreen}
+                        className="w-10 h-10 flex items-center justify-center text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer active:scale-95"
+                        title={isFullscreen ? 'Salir de pantalla completa' : 'Pantalla completa'}
+                    >
+                        {isFullscreen ? <Minimize2 className="w-4 h-4 stroke-[2.2]" /> : <Maximize2 className="w-4 h-4 stroke-[2.2]" />}
+                    </button>
+                </div>
+            </div>
+
+            {/* Tarjeta de Información Estilo Google Maps Place Sheet */}
+            {selectedInfoHotspot && (
+                <div className="absolute top-4 sm:top-6 right-4 sm:right-6 z-40 max-w-sm w-full bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border border-slate-200/90 dark:border-slate-800 rounded-3xl shadow-2xl p-5 sm:p-6 text-slate-900 dark:text-white transition-all animate-fadeIn">
+                    <div className="flex items-start justify-between gap-3 pb-3 border-b border-slate-100 dark:border-slate-800">
                         <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-2xl bg-blue-600/20 border border-blue-500/30 text-blue-400 flex items-center justify-center font-extrabold text-base">i</div>
+                            <div className="w-9 h-9 rounded-2xl bg-blue-50 dark:bg-blue-600/20 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-500/30 flex items-center justify-center font-extrabold text-sm shrink-0">
+                                <MapPin className="w-4 h-4" />
+                            </div>
                             <div>
-                                <span className="text-[10px] font-black uppercase tracking-widest text-blue-400 block">Punto Informativo</span>
-                                <h4 className="text-base font-extrabold text-white tracking-tight">Información del Espacio</h4>
+                                <span className="text-[10px] font-extrabold uppercase tracking-widest text-blue-600 dark:text-blue-400 block">
+                                    Punto de Interés
+                                </span>
+                                <h4 className="text-sm font-extrabold text-slate-900 dark:text-white tracking-tight leading-snug">
+                                    Información del Espacio
+                                </h4>
                             </div>
                         </div>
-                        <div className="bg-slate-900/80 border border-slate-800 p-4 rounded-2xl text-slate-200 text-sm font-medium leading-relaxed max-h-60 overflow-y-auto">
-                            {selectedInfoHotspot.texto || 'No hay descripción para este punto.'}
-                        </div>
                         <button
                             onClick={() => setSelectedInfoHotspot(null)}
-                            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-extrabold rounded-xl py-3 text-xs transition shadow-lg shadow-blue-600/30 cursor-pointer"
+                            className="w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-400 hover:text-slate-700 dark:hover:text-white flex items-center justify-center transition cursor-pointer shrink-0"
+                            title="Cerrar"
+                        >
+                            <X className="w-4 h-4" />
+                        </button>
+                    </div>
+
+                    <div className="mt-3.5 bg-slate-50 dark:bg-slate-950/70 border border-slate-200/80 dark:border-slate-800/80 p-3.5 rounded-2xl text-slate-600 dark:text-slate-300 text-xs font-medium leading-relaxed max-h-56 overflow-y-auto">
+                        {selectedInfoHotspot.texto || 'No hay descripción disponible para este punto.'}
+                    </div>
+
+                    <div className="mt-4 flex items-center justify-end">
+                        <button
+                            onClick={() => setSelectedInfoHotspot(null)}
+                            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs transition shadow-md shadow-blue-600/20 cursor-pointer"
                         >
                             Entendido
                         </button>

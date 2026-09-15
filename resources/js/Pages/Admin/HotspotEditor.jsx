@@ -481,7 +481,7 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
                         )}
 
                         <a
-                            href={safeRoute('tour.show')}
+                            href={`/recorrido-virtual/${tour?.slug || 'colsih'}?scene=${scene?.slug || ''}&preview=1`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="bg-[#800A15] hover:bg-[#600710] border border-rose-400/30 text-white font-bold text-xs px-4 py-2.5 rounded-xl transition backdrop-blur-md shadow-lg flex items-center gap-2 cursor-pointer active:scale-95"

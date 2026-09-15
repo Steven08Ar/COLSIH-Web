@@ -95,11 +95,16 @@ export default function TourViewer({
             || scenes[0]?.slug;
 
         const nodes = buildNodes(scenes);
+        const initialScene = scenes.find(s => s.slug === initialSlug) || scenes[0];
 
         try {
             const viewer = new Viewer({
                 container: containerRef.current,
-                // No panorama here — VirtualTourPlugin manages all panorama loading via startNodeId
+                // No panorama — VirtualTourPlugin owns all loading via startNodeId.
+                // defaultYaw/Pitch/ZoomLvl set the camera for the first node only.
+                defaultYaw: `${Number(initialScene?.yaw_inicial || 0)}deg`,
+                defaultPitch: `${Number(initialScene?.pitch_inicial || 0)}deg`,
+                defaultZoomLvl: hfovToZoom(initialScene?.hfov_inicial),
                 navbar: false,
                 loadingImg: null,
                 loadingTxt: '',
@@ -117,22 +122,15 @@ export default function TourViewer({
             const tourPlugin = viewer.getPlugin(VirtualTourPlugin);
             const markersPlugin = viewer.getPlugin(MarkersPlugin);
 
-            // Use node-changed (fired by VirtualTourPlugin when first panorama loads)
-            // as the primary ready signal — more reliable than 'ready' when using VirtualTourPlugin
+            // node-changed is the reliable load signal when using VirtualTourPlugin
             tourPlugin.addEventListener('node-changed', () => setIsLoading(false), { once: true });
-            // 'ready' as secondary fallback
+            // 'ready' as fallback
             viewer.addEventListener('ready', () => setIsLoading(false), { once: true });
 
+            // Only notify parent on scene change — do NOT call viewer.rotate() here.
+            // Rotating inside node-changed interrupts VirtualTourPlugin's 3D arrow
+            // rendering cycle, causing arrows to appear stuck on screen.
             tourPlugin.addEventListener('node-changed', ({ node }) => {
-                // Apply stored initial view for this scene
-                const scene = scenes.find(s => s.slug === node?.id);
-                if (scene) {
-                    viewer.rotate({
-                        yaw: Number(scene.yaw_inicial || 0) * DEG_TO_RAD,
-                        pitch: Number(scene.pitch_inicial || 0) * DEG_TO_RAD,
-                    });
-                    viewer.zoom(hfovToZoom(scene.hfov_inicial));
-                }
                 if (onSceneChangeRef.current && node?.id) {
                     onSceneChangeRef.current(node.id);
                 }

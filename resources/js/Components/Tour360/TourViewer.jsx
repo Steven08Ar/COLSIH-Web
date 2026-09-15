@@ -210,59 +210,63 @@ export default function TourViewer({
                 }
             });
 
+            // Registrar posición del puntero para centrar el zoom cinemático exactamente donde se hizo clic
+            let lastClickOrigin = { x: 50, y: 50 };
+            const trackPointer = (e) => {
+                if (containerRef.current) {
+                    const rect = containerRef.current.getBoundingClientRect();
+                    const x = Math.max(10, Math.min(90, Math.round(((e.clientX - rect.left) / rect.width) * 100)));
+                    const y = Math.max(10, Math.min(90, Math.round(((e.clientY - rect.top) / rect.height) * 100)));
+                    lastClickOrigin = { x, y };
+                }
+            };
+            containerRef.current.addEventListener('pointerdown', trackPointer, { passive: true });
+
             // Notificar cambio de escena al padre y restaurar estado
             tourPlugin.addEventListener('node-changed', ({ node }) => {
                 setIsLoading(false);
                 if (containerRef.current) {
-                    containerRef.current.classList.remove('psv-walking-forward');
+                    setTimeout(() => {
+                        containerRef.current?.classList.remove('psv-walking-forward');
+                    }, 200);
                 }
                 if (onSceneChangeRef.current && node?.id) {
                     onSceneChangeRef.current(node.id);
                 }
             });
 
-            // Manejar clic en marcadores con transición de avance + zoom cinemático
+            // Manejar clic en marcadores con transición + zoom SIMULTÁNEO estilo Google Maps Street View
             let isNavigating = false;
-            markersPlugin.addEventListener('select-marker', async ({ marker }) => {
+            markersPlugin.addEventListener('select-marker', ({ marker }) => {
                 if (isNavigating) return;
 
                 if (marker.data?.tipo === 'enlace' && marker.data?.targetSlug) {
                     isNavigating = true;
-                    const hs = marker.data.hotspot;
                     const targetSlug = marker.data.targetSlug;
 
-                    try {
-                        // 1. Efecto cinemático de avance / zoom-in hacia el punto (sensación de caminar)
-                        if (hs && viewer) {
-                            if (containerRef.current) {
-                                containerRef.current.classList.add('psv-walking-forward');
-                            }
-
-                            const markerYaw = Number(hs.yaw || 0) * DEG_TO_RAD;
-                            const markerPitch = Number(hs.pitch || 0) * DEG_TO_RAD;
-                            const currentZoom = viewer.getZoomLevel();
-
-                            // Acercar la cámara rápidamente hacia la dirección del punto
-                            await viewer.animate({
-                                yaw: markerYaw,
-                                pitch: markerPitch,
-                                zoom: Math.min(100, Math.max(70, currentZoom + 35)),
-                                speed: '55rpm',
-                            }).catch(() => {});
+                    // 1. Centrar el punto focal del zoom exactamente donde se hizo clic
+                    if (containerRef.current) {
+                        const canvas = containerRef.current.querySelector('canvas');
+                        if (canvas) {
+                            canvas.style.transformOrigin = `${lastClickOrigin.x}% ${lastClickOrigin.y}%`;
                         }
+                        // Iniciar animación de warp/zoom hacia el frente
+                        containerRef.current.classList.add('psv-walking-forward');
+                    }
 
-                        // 2. Transición suave de desvanecimiento hacia el nuevo espacio 360°
-                        await tourPlugin.setCurrentNode(targetSlug);
-                    } catch (err) {
-                        tourPlugin.setCurrentNode(targetSlug).catch(() => {});
-                    } finally {
+                    // 2. SIMULTÁNEAMENTE iniciar el cambio de escena con fundido cruzado
+                    tourPlugin.setCurrentNode(targetSlug).catch(() => {}).finally(() => {
                         setTimeout(() => {
                             if (containerRef.current) {
                                 containerRef.current.classList.remove('psv-walking-forward');
+                                const canvas = containerRef.current.querySelector('canvas');
+                                if (canvas) {
+                                    canvas.style.transformOrigin = 'center center';
+                                }
                             }
                             isNavigating = false;
-                        }, 400);
-                    }
+                        }, 750);
+                    });
                 } else if (marker.data?.tipo === 'info' && marker.data?.hotspot) {
                     setSelectedInfoHotspot(marker.data.hotspot);
                 }

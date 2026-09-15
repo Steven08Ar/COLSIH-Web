@@ -771,29 +771,38 @@ body.mobile-menu-open #floating-whatsapp-btn {
 }
 
 /* Transición cinemática de avance estilo Street View (Zoom SIMULTÁNEO durante la transición) */
+.psv-container {
+    overflow: hidden !important;
+}
+
+.psv-marker {
+    transition: opacity 0.25s ease !important;
+}
+
+.psv-navigating .psv-marker,
 .psv-walking-forward .psv-marker {
     opacity: 0 !important;
     pointer-events: none !important;
-    transition: opacity 0.2s ease-out !important;
+    transition: opacity 0.15s ease-out !important;
 }
 
 .psv-walking-forward canvas {
-    animation: gmaps-street-view-warp 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards !important;
+    animation: gmaps-street-view-warp 750ms cubic-bezier(0.25, 1, 0.5, 1) forwards !important;
     will-change: transform, filter !important;
 }
 
 @keyframes gmaps-street-view-warp {
     0% {
         transform: scale(1);
-        filter: brightness(1) blur(0px);
+        filter: brightness(1);
     }
     45% {
-        transform: scale(1.26);
-        filter: brightness(1.06) blur(0.8px);
+        transform: scale(1.18);
+        filter: brightness(1.04);
     }
     100% {
         transform: scale(1);
-        filter: brightness(1) blur(0px);
+        filter: brightness(1);
     }
 }
 

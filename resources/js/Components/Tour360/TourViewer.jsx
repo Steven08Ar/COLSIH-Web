@@ -8,7 +8,6 @@ import '@photo-sphere-viewer/markers-plugin/index.css';
 import { mediaUrl } from '@/utils/mediaUrl';
 import { Maximize2, Minimize2, ZoomIn, ZoomOut, RotateCw, RefreshCw, X } from 'lucide-react';
 
-const RAD_TO_DEG = 180 / Math.PI;
 const DEG_TO_RAD = Math.PI / 180;
 const MIN_FOV = 30;
 const MAX_FOV = 100;
@@ -16,7 +15,7 @@ const hfovToZoom = (h) => Math.max(0, Math.min(100, Math.round(((Number(h || 75)
 
 const INFO_MARKER_HTML = `<div style="width:34px;height:34px;background:rgba(37,99,235,0.92);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:15px;cursor:pointer;box-shadow:0 0 0 6px rgba(37,99,235,0.22),0 2px 8px rgba(0,0,0,0.45);border:2px solid rgba(255,255,255,0.45);font-family:system-ui,sans-serif;letter-spacing:0;user-select:none">i</div>`;
 
-function buildNodes(scenes, onInfoClick) {
+function buildNodes(scenes) {
     return scenes.map((scene) => {
         const links = [];
         const markers = [];
@@ -95,16 +94,12 @@ export default function TourViewer({
             || scenes.find(s => s.es_escena_inicial)?.slug
             || scenes[0]?.slug;
 
-        const initialScene = scenes.find(s => s.slug === initialSlug) || scenes[0];
-        const nodes = buildNodes(scenes, setSelectedInfoHotspot);
+        const nodes = buildNodes(scenes);
 
         try {
             const viewer = new Viewer({
                 container: containerRef.current,
-                panorama: mediaUrl(initialScene?.imagen_url || initialScene?.imagen_path) || '',
-                defaultYaw: `${Number(initialScene?.yaw_inicial || 0)}deg`,
-                defaultPitch: `${Number(initialScene?.pitch_inicial || 0)}deg`,
-                defaultZoomLvl: hfovToZoom(initialScene?.hfov_inicial),
+                // No panorama here — VirtualTourPlugin manages all panorama loading via startNodeId
                 navbar: false,
                 loadingImg: null,
                 loadingTxt: '',
@@ -119,10 +114,14 @@ export default function TourViewer({
 
             viewerRef.current = viewer;
 
-            viewer.addEventListener('ready', () => setIsLoading(false), { once: true });
-
             const tourPlugin = viewer.getPlugin(VirtualTourPlugin);
             const markersPlugin = viewer.getPlugin(MarkersPlugin);
+
+            // Use node-changed (fired by VirtualTourPlugin when first panorama loads)
+            // as the primary ready signal — more reliable than 'ready' when using VirtualTourPlugin
+            tourPlugin.addEventListener('node-changed', () => setIsLoading(false), { once: true });
+            // 'ready' as secondary fallback
+            viewer.addEventListener('ready', () => setIsLoading(false), { once: true });
 
             tourPlugin.addEventListener('node-changed', ({ node }) => {
                 // Apply stored initial view for this scene

@@ -770,6 +770,15 @@ body.mobile-menu-open #floating-whatsapp-btn {
     transform: translateY(-2px);
 }
 
+/* Transición cinemática de avance estilo Street View */
+.psv-walking-forward .psv-marker {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transform: scale(1.3) !important;
+    transition: opacity 0.22s ease-out, transform 0.22s ease-out !important;
+}
+
+
 /* Carrusel de escenas - scrollbar delgado */
 .custom-scrollbar {
     scrollbar-width: thin;

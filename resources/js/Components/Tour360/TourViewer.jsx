@@ -210,18 +210,59 @@ export default function TourViewer({
                 }
             });
 
-            // Notificar cambio de escena al padre
+            // Notificar cambio de escena al padre y restaurar estado
             tourPlugin.addEventListener('node-changed', ({ node }) => {
                 setIsLoading(false);
+                if (containerRef.current) {
+                    containerRef.current.classList.remove('psv-walking-forward');
+                }
                 if (onSceneChangeRef.current && node?.id) {
                     onSceneChangeRef.current(node.id);
                 }
             });
 
-            // Manejar clic en marcadores
-            markersPlugin.addEventListener('select-marker', ({ marker }) => {
+            // Manejar clic en marcadores con transición de avance + zoom cinemático
+            let isNavigating = false;
+            markersPlugin.addEventListener('select-marker', async ({ marker }) => {
+                if (isNavigating) return;
+
                 if (marker.data?.tipo === 'enlace' && marker.data?.targetSlug) {
-                    tourPlugin.setCurrentNode(marker.data.targetSlug).catch(() => {});
+                    isNavigating = true;
+                    const hs = marker.data.hotspot;
+                    const targetSlug = marker.data.targetSlug;
+
+                    try {
+                        // 1. Efecto cinemático de avance / zoom-in hacia el punto (sensación de caminar)
+                        if (hs && viewer) {
+                            if (containerRef.current) {
+                                containerRef.current.classList.add('psv-walking-forward');
+                            }
+
+                            const markerYaw = Number(hs.yaw || 0) * DEG_TO_RAD;
+                            const markerPitch = Number(hs.pitch || 0) * DEG_TO_RAD;
+                            const currentZoom = viewer.getZoomLevel();
+
+                            // Acercar la cámara rápidamente hacia la dirección del punto
+                            await viewer.animate({
+                                yaw: markerYaw,
+                                pitch: markerPitch,
+                                zoom: Math.min(100, Math.max(70, currentZoom + 35)),
+                                speed: '55rpm',
+                            }).catch(() => {});
+                        }
+
+                        // 2. Transición suave de desvanecimiento hacia el nuevo espacio 360°
+                        await tourPlugin.setCurrentNode(targetSlug);
+                    } catch (err) {
+                        tourPlugin.setCurrentNode(targetSlug).catch(() => {});
+                    } finally {
+                        setTimeout(() => {
+                            if (containerRef.current) {
+                                containerRef.current.classList.remove('psv-walking-forward');
+                            }
+                            isNavigating = false;
+                        }, 400);
+                    }
                 } else if (marker.data?.tipo === 'info' && marker.data?.hotspot) {
                     setSelectedInfoHotspot(marker.data.hotspot);
                 }

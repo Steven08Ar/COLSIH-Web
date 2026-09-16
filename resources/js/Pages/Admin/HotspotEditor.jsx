@@ -102,6 +102,15 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
         return otherScenesList.filter((s) => (s.nombre || '').toLowerCase().includes(q));
     }, [otherScenesList, sceneSearchQuery]);
 
+    // Ref to MarkersPlugin instance and viewer-ready flag — used by marker sync effect
+    const markersPluginRef = useRef(null);
+    const viewerReadyRef = useRef(false);
+    // Always-fresh refs so PSV callbacks never capture stale closures
+    const localHotspotsRef = useRef(localHotspots);
+    const allScenesRef = useRef(allScenes);
+    useEffect(() => { localHotspotsRef.current = localHotspots; }, [localHotspots]);
+    useEffect(() => { allScenesRef.current = allScenes; }, [allScenes]);
+
     useEffect(() => {
         if (darkMode) { document.documentElement.classList.add('dark'); localStorage.setItem('sih-dark-mode', 'true'); }
         else { document.documentElement.classList.remove('dark'); localStorage.setItem('sih-dark-mode', 'false'); }
@@ -162,11 +171,30 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
         scene_destino_id: '',
     });
 
-    // Initialize PSV in 360° mode
+    // Build marker configs from hotspot data
+    const buildMarkerConfigs = (hsList, allScenesList) => hsList.map((hs) => {
+        const isEnlace = hs.tipo === 'enlace';
+        const targetScene = allScenesList.find((s) => s.id === hs.scene_destino_id);
+        const tooltipLabel = isEnlace
+            ? `Ir a: ${targetScene?.nombre || hs.texto || 'Escena'}`
+            : (hs.texto ? (hs.texto.length > 40 ? hs.texto.substring(0, 40) + '…' : hs.texto) : 'Información');
+        return {
+            id: `hs-${hs.id}`,
+            position: { yaw: `${Number(hs.yaw || 0)}deg`, pitch: `${Number(hs.pitch || 0)}deg` },
+            html: isEnlace ? LINK_MARKER_HTML : INFO_MARKER_HTML,
+            anchor: 'center center',
+            tooltip: { content: tooltipLabel, position: 'top center' },
+            data: { hotspot: hs },
+        };
+    });
+
+    // Initialize PSV only when the scene or view mode actually changes — NOT on hotspot edits
     useEffect(() => {
         if (viewMode !== '360' || !containerRef.current) return;
 
         setIsLoading(true);
+        viewerReadyRef.current = false;
+        markersPluginRef.current = null;
 
         if (viewerRef.current) {
             try { viewerRef.current.destroy(); } catch (_) {}
@@ -174,27 +202,6 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
         }
 
         const imageSrc = scene.imagen_url || mediaUrl(scene.imagen_path);
-
-        // Build markers from localHotspots
-        const buildMarkers = (hsList, allScenesList) => hsList.map((hs) => {
-            const isEnlace = hs.tipo === 'enlace';
-            const targetScene = allScenesList.find((s) => s.id === hs.scene_destino_id);
-            const tooltipLabel = isEnlace
-                ? `Ir a: ${targetScene?.nombre || hs.texto || 'Escena'}`
-                : (hs.texto ? (hs.texto.length > 40 ? hs.texto.substring(0, 40) + '…' : hs.texto) : 'Información');
-
-            return {
-                id: `hs-${hs.id}`,
-                position: {
-                    yaw: `${Number(hs.yaw || 0)}deg`,
-                    pitch: `${Number(hs.pitch || 0)}deg`,
-                },
-                html: isEnlace ? LINK_MARKER_HTML : INFO_MARKER_HTML,
-                anchor: 'center center',
-                tooltip: { content: tooltipLabel, position: 'top center' },
-                data: { hotspot: hs },
-            };
-        });
 
         try {
             const viewer = new Viewer({
@@ -213,10 +220,16 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
 
             viewer.addEventListener('ready', () => {
                 setIsLoading(false);
-                // Add all hotspot markers
-                const markersPlugin = viewer.getPlugin(MarkersPlugin);
-                buildMarkers(localHotspots, allScenes).forEach(m => {
-                    try { markersPlugin.addMarker(m); } catch (_) {}
+                const mp = viewer.getPlugin(MarkersPlugin);
+                markersPluginRef.current = mp;
+                viewerReadyRef.current = true;
+                // Add initial markers using always-fresh refs (not stale closure)
+                buildMarkerConfigs(localHotspotsRef.current, allScenesRef.current).forEach(m => {
+                    try { mp.addMarker(m); } catch (_) {}
+                });
+                // Wire up marker click → edit
+                mp.addEventListener('select-marker', ({ marker }) => {
+                    if (marker.data?.hotspot) abrirEditarHotspot(marker.data.hotspot);
                 });
             }, { once: true });
 
@@ -224,20 +237,12 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
             viewer.addEventListener('click', ({ data }) => {
                 if (activeToolRef.current !== 'hotspot') return;
                 if (data?.target?.closest?.('.psv-marker')) return;
-                const yawDeg   = (data.yaw   ?? 0) * RAD_TO_DEG;
-                const pitchDeg = (data.pitch  ?? 0) * RAD_TO_DEG;
-                abrirCrearHotspot(pitchDeg, yawDeg);
-            });
-
-            // Click on existing marker → edit
-            const markersPlugin = viewer.getPlugin(MarkersPlugin);
-            markersPlugin.addEventListener('select-marker', ({ marker }) => {
-                if (marker.data?.hotspot) {
-                    abrirEditarHotspot(marker.data.hotspot);
-                }
+                abrirCrearHotspot((data.pitch ?? 0) * RAD_TO_DEG, (data.yaw ?? 0) * RAD_TO_DEG);
             });
 
             return () => {
+                viewerReadyRef.current = false;
+                markersPluginRef.current = null;
                 if (viewerRef.current) {
                     try { viewerRef.current.destroy(); } catch (_) {}
                     viewerRef.current = null;
@@ -247,7 +252,18 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
             console.error('PSV editor init error:', err);
             setIsLoading(false);
         }
-    }, [scene, localHotspots, viewMode]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [scene.id, viewMode]); // Only re-init when switching scene or view mode
+
+    // Sync markers in real-time when hotspots change — NO PSV re-init
+    useEffect(() => {
+        if (!viewerReadyRef.current || !markersPluginRef.current) return;
+        const mp = markersPluginRef.current;
+        try { mp.clearMarkers(); } catch (_) {}
+        buildMarkerConfigs(localHotspots, allScenes).forEach(m => {
+            try { mp.addMarker(m); } catch (_) {}
+        });
+    }, [localHotspots]); // eslint-disable-line react-hooks/exhaustive-deps
 
     // 2D flat mode click handler
     const handle2DCanvasClick = (e) => {
@@ -289,17 +305,26 @@ export default function HotspotEditor({ tour, scene, hotspots = [], allScenes = 
 
     const guardarHotspot = (e) => {
         e.preventDefault();
+        const opts = {
+            preserveScroll: true,
+            preserveState: true,
+            onSuccess: () => setActiveModal(false),
+        };
         if (selectedHotspot) {
-            form.put(safeRoute('admin.hotspots.update', selectedHotspot.id), { onSuccess: () => setActiveModal(false) });
+            form.put(safeRoute('admin.hotspots.update', selectedHotspot.id), opts);
         } else {
-            form.post(safeRoute('admin.hotspots.store'), { onSuccess: () => setActiveModal(false) });
+            form.post(safeRoute('admin.hotspots.store'), opts);
         }
     };
 
     const eliminarHotspot = () => {
         if (!selectedHotspot) return;
         if (confirm('¿Eliminar este punto interactivo?')) {
-            router.delete(safeRoute('admin.hotspots.destroy', selectedHotspot.id), { onSuccess: () => setActiveModal(false) });
+            router.delete(safeRoute('admin.hotspots.destroy', selectedHotspot.id), {
+                preserveScroll: true,
+                preserveState: true,
+                onSuccess: () => setActiveModal(false),
+            });
         }
     };
 

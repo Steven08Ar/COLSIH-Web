@@ -3,6 +3,17 @@ import { useState, useEffect } from 'react';
 const WA_NUMBER = '573151458309';
 const WA_MESSAGE = encodeURIComponent('Hola, me comunico desde el sitio web del Colegio Santa Isabel de Hungría. Quisiera obtener más información.');
 
+function trackWhatsAppClick() {
+    try {
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') ?? '';
+        fetch('/whatsapp-click', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrfToken },
+            body: JSON.stringify({ pagina: window.location.pathname }),
+        }).catch(() => {});
+    } catch (_) {}
+}
+
 export default function WhatsAppButton() {
     const [isHovered, setIsHovered] = useState(false);
     const [hideForFooter, setHideForFooter] = useState(false);
@@ -45,6 +56,7 @@ export default function WhatsAppButton() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Chatear por WhatsApp"
+                onClick={trackWhatsAppClick}
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
                 className="group relative flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 bg-[#25D366] hover:bg-[#20ba5a] text-white rounded-full shadow-[0_10px_25px_rgba(37,211,102,0.45)] hover:shadow-[0_15px_35px_rgba(37,211,102,0.6)] transform hover:scale-110 active:scale-95 transition-all duration-300 focus:outline-none"

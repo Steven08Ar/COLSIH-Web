@@ -3,7 +3,7 @@ import {
     TrendingUp, TrendingDown, CreditCard, Trophy, Newspaper, Users,
     Eye, Globe, Activity, Calendar,
     MessageSquareQuote, Smartphone, Monitor, Tablet, Compass, Clock, ChevronRight,
-    ClipboardList, Mail
+    ClipboardList, Mail, MessageCircle
 } from 'lucide-react';
 import { Link } from '@inertiajs/react';
 import { mediaUrl } from '@/utils/mediaUrl';
@@ -119,6 +119,10 @@ export default function DashboardOverview({
 
     const totalVistasNoticias    = analytics?.total_vistas_noticias    ?? 0;
     const totalVistasTestimonios = analytics?.total_vistas_testimonios ?? 0;
+
+    const whatsappClicksTotal = analytics?.whatsapp_clicks_total ?? 0;
+    const whatsappClicksHoy   = analytics?.whatsapp_clicks_hoy   ?? 0;
+    const whatsappClicksMes   = analytics?.whatsapp_clicks_mes   ?? 0;
 
     const diasTrafico       = analytics?.dias_trafico       ?? [];
     const traficoMensual    = analytics?.trafico_mensual    ?? [];
@@ -291,6 +295,37 @@ export default function DashboardOverview({
                     icon={Mail}
                     accent="teal"
                 />
+            </div>
+
+            {/* ── KPI WhatsApp ── */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+                <div className="sm:col-span-1">
+                    <KpiCard
+                        label="Clics en WhatsApp"
+                        value={whatsappClicksTotal}
+                        sub={`${whatsappClicksMes} este mes`}
+                        icon={MessageCircle}
+                        accent="emerald"
+                    />
+                </div>
+                <div className="sm:col-span-1">
+                    <KpiCard
+                        label="WhatsApp hoy"
+                        value={whatsappClicksHoy}
+                        sub="Contactos del día"
+                        icon={MessageCircle}
+                        accent="emerald"
+                    />
+                </div>
+                <div className="sm:col-span-1 bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-100 dark:border-emerald-900/30 rounded-2xl p-5 flex flex-col justify-center gap-1">
+                    <div className="flex items-center gap-2 mb-1">
+                        <span className="w-2 h-2 rounded-full bg-[#25D366] animate-pulse shrink-0" />
+                        <span className="text-xs font-black text-slate-700 dark:text-white">WhatsApp Business</span>
+                    </div>
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium leading-relaxed">
+                        Cada vez que alguien toca el botón flotante de WhatsApp en cualquier página del sitio, se registra un clic aquí, independientemente del lugar.
+                    </p>
+                </div>
             </div>
 
             {/* ── Gráfico de Tráfico Minimalista Celeste ── */}

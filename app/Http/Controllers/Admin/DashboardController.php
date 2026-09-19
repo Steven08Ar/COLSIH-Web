@@ -14,6 +14,7 @@ use App\Models\Scene;
 use App\Models\Testimonio;
 use App\Models\TorneoPartido;
 use App\Models\VisitaWeb;
+use App\Models\WhatsAppClick;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -216,7 +217,12 @@ class DashboardController extends Controller
             ];
         });
 
-        // ── 10. Actividad Reciente del Sistema ──
+        // ── 10. Clics en WhatsApp ──
+        $totalWhatsappClicks = WhatsAppClick::count();
+        $whatsappClicksHoy   = WhatsAppClick::whereDate('created_at', $ahora->toDateString())->count();
+        $whatsappClicksMes   = WhatsAppClick::where('created_at', '>=', $ahora->copy()->startOfMonth())->count();
+
+        // ── 11. Actividad Reciente del Sistema ──
         $actividadesRecientes = [];
 
         $ultimasNoticias = Noticia::latest()->take(2)->get();
@@ -324,6 +330,9 @@ class DashboardController extends Controller
                 'navegadores'               => $navegadores,
                 'secciones_populares'       => $seccionesPopulares,
                 'actividades_recientes'     => $actividadesRecientes,
+                'whatsapp_clicks_total'     => $totalWhatsappClicks,
+                'whatsapp_clicks_hoy'       => $whatsappClicksHoy,
+                'whatsapp_clicks_mes'       => $whatsappClicksMes,
             ],
             'carnets'        => [],
             'equipo'         => [],

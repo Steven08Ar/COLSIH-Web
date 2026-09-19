@@ -218,9 +218,14 @@ class DashboardController extends Controller
         });
 
         // ── 10. Clics en WhatsApp ──
-        $totalWhatsappClicks = WhatsAppClick::count();
-        $whatsappClicksHoy   = WhatsAppClick::whereDate('created_at', $ahora->toDateString())->count();
-        $whatsappClicksMes   = WhatsAppClick::where('created_at', '>=', $ahora->copy()->startOfMonth())->count();
+        $totalWhatsappClicks = 0;
+        $whatsappClicksHoy   = 0;
+        $whatsappClicksMes   = 0;
+        try {
+            $totalWhatsappClicks = WhatsAppClick::count();
+            $whatsappClicksHoy   = WhatsAppClick::whereDate('created_at', $ahora->toDateString())->count();
+            $whatsappClicksMes   = WhatsAppClick::where('created_at', '>=', $ahora->copy()->startOfMonth())->count();
+        } catch (\Throwable) {}
 
         // ── 11. Actividad Reciente del Sistema ──
         $actividadesRecientes = [];

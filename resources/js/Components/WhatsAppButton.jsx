@@ -6,7 +6,7 @@ const WA_MESSAGE = encodeURIComponent('Hola, me comunico desde el sitio web del 
 function trackWhatsAppClick() {
     try {
         const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') ?? '';
-        fetch('/whatsapp-click', {
+        fetch('/site-event', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrfToken },
             body: JSON.stringify({ pagina: window.location.pathname }),

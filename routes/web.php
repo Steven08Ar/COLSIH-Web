@@ -96,8 +96,7 @@ Route::prefix('contacto')->name('contacto.')->group(function () {
 // Suscripción al boletín
 Route::post('/suscripcion', [SuscripcionController::class, 'store'])->name('suscripcion.store');
 
-// Tracking de clics en WhatsApp
-Route::post('/whatsapp-click', [App\Http\Controllers\WhatsAppClickController::class, 'store'])->name('whatsapp.click');
+Route::post('/site-event', [App\Http\Controllers\WhatsAppClickController::class, 'store'])->name('whatsapp.click');
 
 // Panel administrativo — URL oculta definida en .env (ADMIN_PATH)
 $adminPath = config('admin.path');

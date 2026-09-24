@@ -222,7 +222,7 @@ export default function Footer() {
                                 </svg>
                             </a>
                             <a
-                                href="https://www.instagram.com/2025santaisabelhungria/"
+                                href="https://www.instagram.com/col_santaisabel/"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="w-9 h-9 rounded-full bg-white/5 hover:bg-[#800A15] border border-white/10 flex items-center justify-center transition-all duration-300 hover:scale-110"

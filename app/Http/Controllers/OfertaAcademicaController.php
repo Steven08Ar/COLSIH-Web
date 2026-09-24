@@ -31,8 +31,9 @@ class OfertaAcademicaController extends Controller
 
         $docentesPreescolar = EquipoMember::where('activo', true)
             ->whereIn('nombre', $nombresPreescolar)
-            ->orderByRaw('FIELD(nombre, ' . implode(',', array_fill(0, count($nombresPreescolar), '?')) . ')', $nombresPreescolar)
-            ->get(['id', 'nombre', 'cargo', 'foto', 'foto_posicion', 'foto_posicion_x', 'foto_posicion_y', 'foto_zoom']);
+            ->get(['id', 'nombre', 'cargo', 'foto', 'foto_posicion', 'foto_posicion_x', 'foto_posicion_y', 'foto_zoom'])
+            ->sortBy(fn($m) => array_search($m->nombre, $nombresPreescolar))
+            ->values();
 
         return Inertia::render('OfertaAcademica/Preescolar', [
             'noticias'           => $noticias,

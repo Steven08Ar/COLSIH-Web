@@ -2317,7 +2317,7 @@ function photoPos(posX, posY, zoom) {
     const hi = z / 2;
     const cx = Math.max(lo, Math.min(hi, posX ?? 50));
     const cy = Math.max(lo, Math.min(hi, posY ?? 50));
-    return { position: 'absolute', width: `${z}%`, height: `${z}%`, objectFit: 'cover', left: `${cx - z / 2}%`, top: `${cy - z / 2}%` };
+    return { transform: `translate(${50 - cx}%, ${50 - cy}%) scale(${z / 100})` };
 }
 
 const INITIAL_MEMBER = {
@@ -2577,7 +2577,7 @@ function EquipoTab({ equipo = [], flash }) {
                                             <img
                                                 src={mediaUrl(p.foto)}
                                                 alt={p.nombre}
-                                                className="pointer-events-none transition-all duration-300"
+                                                className="absolute inset-0 w-full h-full object-cover pointer-events-none transition-all duration-300"
                                                 style={photoPos(p.foto_posicion_x, p.foto_posicion_y ?? p.foto_posicion, p.foto_zoom)}
                                             />
                                         ) : (
@@ -2628,7 +2628,7 @@ function EquipoTab({ equipo = [], flash }) {
                                         <img
                                             src={mediaUrl(prof.foto)}
                                             alt={prof.nombre}
-                                            className="pointer-events-none transition-all duration-300"
+                                            className="absolute inset-0 w-full h-full object-cover pointer-events-none transition-all duration-300"
                                             style={photoPos(prof.foto_posicion_x, prof.foto_posicion_y ?? prof.foto_posicion, prof.foto_zoom)}
                                         />
                                     ) : (
@@ -2699,7 +2699,7 @@ function EquipoTab({ equipo = [], flash }) {
                                             src={previewImage}
                                             alt="Foto"
                                             draggable={false}
-                                            className="pointer-events-none transition-all duration-75"
+                                            className="absolute inset-0 w-full h-full object-cover pointer-events-none transition-all duration-75"
                                             style={photoPos(form.data.foto_posicion_x, form.data.foto_posicion_y ?? form.data.foto_posicion, form.data.foto_zoom)}
                                         />
                                     ) : (

@@ -221,8 +221,8 @@ export default function Equipo({ equipo = [] }) {
                                             <img
                                                 src={mediaUrl(p.foto)}
                                                 alt={p.nombre}
-                                                className="absolute"
-                                                style={(() => { const z=p.foto_zoom??100,lo=100-z/2,hi=z/2,cx=Math.max(lo,Math.min(hi,p.foto_posicion_x??50)),cy=Math.max(lo,Math.min(hi,p.foto_posicion_y??p.foto_posicion??50)); return {width:`${z}%`,height:`${z}%`,objectFit:'cover',left:`${cx-z/2}%`,top:`${cy-z/2}%`}; })()}
+                                                className="absolute inset-0 w-full h-full object-cover"
+                                                style={(() => { const z=p.foto_zoom??100,lo=100-z/2,hi=z/2,cx=Math.max(lo,Math.min(hi,p.foto_posicion_x??50)),cy=Math.max(lo,Math.min(hi,p.foto_posicion_y??p.foto_posicion??50)); return {transform:`translate(${50-cx}%,${50-cy}%) scale(${z/100})`}; })()}
                                             />
                                         ) : (
                                             <div className="w-full h-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-400 dark:text-slate-600">
@@ -362,8 +362,8 @@ export default function Equipo({ equipo = [] }) {
                                         <img
                                             src={mediaUrl(prof.foto)}
                                             alt={prof.nombre}
-                                            className="absolute transition-all duration-300"
-                                            style={(() => { const z=prof.foto_zoom??100,lo=100-z/2,hi=z/2,cx=Math.max(lo,Math.min(hi,prof.foto_posicion_x??50)),cy=Math.max(lo,Math.min(hi,prof.foto_posicion_y??prof.foto_posicion??50)); return {width:`${z}%`,height:`${z}%`,objectFit:'cover',left:`${cx-z/2}%`,top:`${cy-z/2}%`}; })()}
+                                            className="absolute inset-0 w-full h-full object-cover transition-all duration-300"
+                                            style={(() => { const z=prof.foto_zoom??100,lo=100-z/2,hi=z/2,cx=Math.max(lo,Math.min(hi,prof.foto_posicion_x??50)),cy=Math.max(lo,Math.min(hi,prof.foto_posicion_y??prof.foto_posicion??50)); return {transform:`translate(${50-cx}%,${50-cy}%) scale(${z/100})`}; })()}
                                         />
                                     ) : (
                                         <div className="w-full h-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-400 dark:text-slate-600">

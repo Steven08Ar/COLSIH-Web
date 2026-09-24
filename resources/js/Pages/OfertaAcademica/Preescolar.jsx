@@ -125,8 +125,8 @@ function TeacherCard({ docente, idx }) {
                         <img
                             src={fotoUrl}
                             alt={docente.nombre}
-                            className="absolute"
-                            style={{ width:`${zoom}%`, height:`${zoom}%`, objectFit:'cover', left:`${posX-zoom/2}%`, top:`${posY-zoom/2}%` }}
+                            className="absolute inset-0 w-full h-full object-cover"
+                            style={{ transform: `translate(${50-posX}%,${50-posY}%) scale(${zoom/100})` }}
                             onError={() => setHasError(true)}
                         />
                     )}

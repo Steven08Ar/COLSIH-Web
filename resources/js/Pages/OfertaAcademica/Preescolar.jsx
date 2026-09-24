@@ -16,31 +16,15 @@ import { mediaUrl } from '@/utils/mediaUrl';
 
 const LINK_INSCRIPCIONES = "https://e.plataformaintegra.net/sihungria/index.php/cupo";
 
-const docentesPreescolar = [
-    {
-        nombre: 'Lic. Daniela Villamizar',
-        cargo: 'Docente de Preescolar',
-        colorCircle: 'bg-[#FFD25D]',
-        foto: 'https://media.colsih.edu.co/nuestro_colegio/equipo/docentes/Daniela%20Villamizar%20Villamizar.JPG'
-    },
-    {
-        nombre: 'Lady Diana Osorio',
-        cargo: 'Docente de Desarrollo Infantil',
-        colorCircle: 'bg-[#F3E3D4]',
-        foto: 'https://media.colsih.edu.co/nuestro_colegio/equipo/docentes/Lady%20Diana%20Osorio%20Fonseca.JPG'
-    },
-    {
-        nombre: 'Paula Lorena Cuadros',
-        cargo: 'Docente de Dimensión Comunicativa',
-        colorCircle: 'bg-[#ADA3DA]',
-        foto: 'https://media.colsih.edu.co/nuestro_colegio/equipo/docentes/Paula%20Lorena%20Cuadros%20Ballesteros.JPG'
-    },
-    {
-        nombre: 'Diana Soidé Villamizar',
-        cargo: 'Docente de Lectoescritura Inicial',
-        colorCircle: 'bg-[#90C5DE]',
-        foto: 'https://media.colsih.edu.co/nuestro_colegio/equipo/docentes/Diana%20Soid%C3%A9%20Villamizar%20Bautista.JPG'
-    }
+// Colores de blob por posición (se mantiene el diseño visual original)
+const BLOB_COLORS = ['bg-[#FFD25D]', 'bg-[#F3E3D4]', 'bg-[#ADA3DA]', 'bg-[#90C5DE]'];
+
+// Fallback si la BD no tiene docentes de preescolar aún
+const DOCENTES_FALLBACK = [
+    { nombre: 'Daniela Villamizar Villamizar', cargo: 'Docente de Preescolar',            foto: null, foto_posicion: 20, foto_posicion_x: 50, foto_posicion_y: 20, foto_zoom: 100 },
+    { nombre: 'Lady Diana Osorio Fonseca',     cargo: 'Docente de Desarrollo Infantil',   foto: null, foto_posicion: 20, foto_posicion_x: 50, foto_posicion_y: 20, foto_zoom: 100 },
+    { nombre: 'Paula Lorena Cuadros Ballesteros', cargo: 'Docente de Dimensión Comunicativa', foto: null, foto_posicion: 20, foto_posicion_x: 50, foto_posicion_y: 20, foto_zoom: 100 },
+    { nombre: 'Diana Soidé Villamizar Bautista',  cargo: 'Docente de Lectoescritura Inicial', foto: null, foto_posicion: 20, foto_posicion_x: 50, foto_posicion_y: 20, foto_zoom: 100 },
 ];
 
 const faqsPreescolar = [
@@ -113,24 +97,34 @@ const organicBlobStyles = [
 function TeacherCard({ docente, idx }) {
     const [hasError, setHasError] = useState(false);
     const blobStyle = organicBlobStyles[idx % 4];
+    const colorCircle = BLOB_COLORS[idx % BLOB_COLORS.length];
+    const fotoUrl = docente.foto ? mediaUrl(docente.foto) : null;
+    const posX = docente.foto_posicion_x ?? 50;
+    const posY = docente.foto_posicion_y ?? (docente.foto_posicion ?? 20);
+    const zoom = (docente.foto_zoom ?? 100) / 100;
 
     return (
         <ScrollReveal distance="translate-y-8" delay={idx * 100}>
             <div className="space-y-5 group flex flex-col items-center">
                 {/* Contenedor Orgánico Asimétrico Grande idéntico a Figma */}
                 <div
-                    className={`relative w-56 h-56 sm:w-64 sm:h-64 lg:w-68 lg:h-68 ${docente.colorCircle} shadow-xl group-hover:scale-105 transition-transform duration-500 overflow-hidden flex items-center justify-center`}
+                    className={`relative w-56 h-56 sm:w-64 sm:h-64 lg:w-68 lg:h-68 ${colorCircle} shadow-xl group-hover:scale-105 transition-transform duration-500 overflow-hidden flex items-center justify-center`}
                     style={blobStyle}
                 >
-                    {(!docente.foto || hasError) ? (
+                    {(!fotoUrl || hasError) ? (
                         <div className="flex flex-col items-center justify-center text-white/80 p-4">
                             <User className="w-24 h-24 stroke-[1.5]" />
                         </div>
                     ) : (
                         <img
-                            src={docente.foto}
+                            src={fotoUrl}
                             alt={docente.nombre}
                             className="w-full h-full object-cover"
+                            style={{
+                                objectPosition: `${posX}% ${posY}%`,
+                                transform: `scale(${zoom})`,
+                                transformOrigin: `${posX}% ${posY}%`,
+                            }}
                             onError={() => setHasError(true)}
                         />
                     )}
@@ -145,7 +139,8 @@ function TeacherCard({ docente, idx }) {
     );
 }
 
-export default function Preescolar({ noticias = [] }) {
+export default function Preescolar({ noticias = [], docentesPreescolar = [] }) {
+    const docentes = docentesPreescolar.length > 0 ? docentesPreescolar : DOCENTES_FALLBACK;
     const [faqOpen, setFaqOpen] = useState(null);
 
     const toggleFaq = (index) => {
@@ -228,33 +223,25 @@ export default function Preescolar({ noticias = [] }) {
                             <ScrollReveal distance="translate-y-6">
                                 <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[72px] font-['Quicksand'] font-semibold text-[#121212] leading-[1.3] tracking-tight text-center">
                                     <span className="block mb-2 font-['Quicksand'] font-semibold text-[#121212]">
-                                        El mejor lugar para
+                                        El mejor lugar para que tus hijos
                                     </span>
 
-                                    <span className="inline-flex flex-wrap items-center justify-center gap-x-3 gap-y-2 my-2 py-1">
+                                    <span className="inline-flex flex-wrap items-center justify-center gap-x-4 gap-y-2 my-2 py-1">
                                         <span className="relative inline-block font-serif italic text-[#704FE6] text-5xl sm:text-6xl md:text-7xl lg:text-[80px] font-normal px-2">
-                                            aprender
+                                            aprendan
                                             {/* Squiggle púrpura */}
                                             <svg className="absolute -bottom-2 left-0 w-full h-3 text-[#DEC8FE]" viewBox="0 0 100 20" preserveAspectRatio="none">
                                                 <path d="M0,10 Q25,18 50,10 T100,10" fill="none" stroke="currentColor" strokeWidth="6" strokeLinecap="round" />
                                             </svg>
                                         </span>
 
-                                        <span className="font-['Quicksand'] font-semibold text-[#121212] text-3xl sm:text-4xl md:text-5xl mx-1 align-baseline">
-                                            y
-                                        </span>
-
                                         <span className="relative inline-block font-serif italic text-[#FFBE17] text-5xl sm:text-6xl md:text-7xl lg:text-[80px] font-normal px-2">
-                                            jugar
+                                            jugando
                                             {/* Trazo amarillo */}
                                             <svg className="absolute -bottom-2 left-0 w-full h-3 text-[#FFD25D]" viewBox="0 0 100 20" preserveAspectRatio="none">
                                                 <path d="M0,10 Q25,2 50,14 T100,8" fill="none" stroke="currentColor" strokeWidth="6" strokeLinecap="round" />
                                             </svg>
                                         </span>
-                                    </span>
-
-                                    <span className="block mt-4 font-['Quicksand'] font-semibold text-[#121212]">
-                                        para tus hijos
                                     </span>
                                 </h1>
                             </ScrollReveal>
@@ -522,10 +509,10 @@ export default function Preescolar({ noticias = [] }) {
                             </ScrollReveal>
                         </div>
 
-                        {/* Grid de 4 Profesoras Reales de Preescolar COLSIH en Formas Orgánicas Grandes */}
+                        {/* Grid de Profesoras Reales de Preescolar COLSIH en Formas Orgánicas Grandes */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 text-center items-start">
-                            {docentesPreescolar.map((docente, idx) => (
-                                <TeacherCard key={idx} docente={docente} idx={idx} />
+                            {docentes.map((docente, idx) => (
+                                <TeacherCard key={docente.id ?? idx} docente={docente} idx={idx} />
                             ))}
                         </div>
                     </div>

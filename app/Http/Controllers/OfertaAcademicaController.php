@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\EquipoMember;
 use App\Models\Noticia;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -21,8 +22,19 @@ class OfertaAcademicaController extends Controller
             ->take(6)
             ->get(['id', 'titulo', 'slug', 'resumen', 'imagen', 'categoria', 'publicado_en']);
 
+        $docentesPreescolar = EquipoMember::where('activo', true)
+            ->where('tipo', 'docente')
+            ->where(function ($q) {
+                $q->where('area', 'like', '%Preescolar%')
+                  ->orWhere('area', 'like', '%preescolar%');
+            })
+            ->orderBy('orden')
+            ->orderBy('nombre')
+            ->get(['id', 'nombre', 'cargo', 'foto', 'foto_posicion', 'foto_posicion_x', 'foto_posicion_y', 'foto_zoom']);
+
         return Inertia::render('OfertaAcademica/Preescolar', [
-            'noticias' => $noticias,
+            'noticias'           => $noticias,
+            'docentesPreescolar' => $docentesPreescolar,
         ]);
     }
 

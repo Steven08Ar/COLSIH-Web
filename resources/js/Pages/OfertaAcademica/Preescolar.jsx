@@ -103,9 +103,11 @@ function TeacherCard({ docente, idx }) {
     const blobStyle = organicBlobStyles[idx % 4];
     const colorCircle = BLOB_COLORS[idx % BLOB_COLORS.length];
     const fotoUrl = docente.foto ? mediaUrl(docente.foto) : r2Url(docente.nombre);
-    const posX = docente.foto_posicion_x ?? 50;
-    const posY = docente.foto_posicion_y ?? (docente.foto_posicion ?? 20);
-    const zoom = (docente.foto_zoom ?? 100) / 100;
+    const zoom = docente.foto_zoom ?? 100;
+    const lo = 100 - zoom / 2;
+    const hi = zoom / 2;
+    const posX = Math.max(lo, Math.min(hi, docente.foto_posicion_x ?? 50));
+    const posY = Math.max(lo, Math.min(hi, docente.foto_posicion_y ?? docente.foto_posicion ?? 50));
 
     return (
         <ScrollReveal distance="translate-y-8" delay={idx * 100}>
@@ -123,12 +125,8 @@ function TeacherCard({ docente, idx }) {
                         <img
                             src={fotoUrl}
                             alt={docente.nombre}
-                            className="w-full h-full object-cover"
-                            style={{
-                                objectPosition: `${posX}% ${posY}%`,
-                                transform: `scale(${zoom})`,
-                                transformOrigin: `${posX}% ${posY}%`,
-                            }}
+                            className="absolute"
+                            style={{ width:`${zoom}%`, height:`${zoom}%`, objectFit:'cover', left:`${posX-zoom/2}%`, top:`${posY-zoom/2}%` }}
                             onError={() => setHasError(true)}
                         />
                     )}

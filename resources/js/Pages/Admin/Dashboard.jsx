@@ -2311,6 +2311,15 @@ const AREAS_EQUIPO = [
     'Contabilidad SENA'
 ];
 
+function photoPos(posX, posY, zoom) {
+    const z = zoom ?? 100;
+    const lo = 100 - z / 2;
+    const hi = z / 2;
+    const cx = Math.max(lo, Math.min(hi, posX ?? 50));
+    const cy = Math.max(lo, Math.min(hi, posY ?? 50));
+    return { position: 'absolute', width: `${z}%`, height: `${z}%`, objectFit: 'cover', left: `${cx - z / 2}%`, top: `${cy - z / 2}%` };
+}
+
 const INITIAL_MEMBER = {
     nombre: '',
     cargo: '',
@@ -2319,7 +2328,7 @@ const INITIAL_MEMBER = {
     foto: null,
     foto_posicion: 20,
     foto_posicion_x: 50,
-    foto_posicion_y: 20,
+    foto_posicion_y: 50,
     foto_zoom: 100,
     orden: 0,
     activo: true,
@@ -2356,47 +2365,52 @@ function EquipoTab({ equipo = [], flash }) {
             touchDist.current = Math.hypot(dx, dy);
             return;
         }
+
         const coords = getClientCoords(e);
         isDragging.current = true;
         startX.current = coords.x;
         startY.current = coords.y;
         startPosX.current = form.data.foto_posicion_x ?? 50;
-        startPosY.current = form.data.foto_posicion_y ?? form.data.foto_posicion ?? 20;
-    }
+        startPosY.current = form.data.foto_posicion_y ?? form.data.foto_posicion ?? 50;
+        const zoomAtStart = form.data.foto_zoom ?? 100;
 
-    function handleMove(e) {
-        if (e.touches && e.touches.length === 2 && touchDist.current) {
-            const dx = e.touches[0].clientX - e.touches[1].clientX;
-            const dy = e.touches[0].clientY - e.touches[1].clientY;
-            const dist = Math.hypot(dx, dy);
-            const factor = dist / touchDist.current;
-            const newZoom = Math.round(Math.max(100, Math.min(250, form.data.foto_zoom * factor)));
-            form.setData('foto_zoom', newZoom);
-            touchDist.current = dist;
-            return;
+        function onMove(me) {
+            if (me.touches && me.touches.length === 2 && touchDist.current) {
+                const dx2 = me.touches[0].clientX - me.touches[1].clientX;
+                const dy2 = me.touches[0].clientY - me.touches[1].clientY;
+                const dist = Math.hypot(dx2, dy2);
+                const factor = dist / touchDist.current;
+                const newZoom = Math.round(Math.max(100, Math.min(250, form.data.foto_zoom * factor)));
+                form.setData('foto_zoom', newZoom);
+                touchDist.current = dist;
+                return;
+            }
+            if (!isDragging.current) return;
+            const c = getClientCoords(me);
+            const dx = c.x - startX.current;
+            const dy = c.y - startY.current;
+            const width = cardRef.current?.offsetWidth || 200;
+            const height = cardRef.current?.offsetHeight || 200;
+            const lo = 100 - zoomAtStart / 2;
+            const hi = zoomAtStart / 2;
+            const nx = Math.round(Math.max(lo, Math.min(hi, startPosX.current + (dx / width) * 100)));
+            const ny = Math.round(Math.max(lo, Math.min(hi, startPosY.current + (dy / height) * 100)));
+            form.setData({ ...form.data, foto_posicion_x: nx, foto_posicion_y: ny, foto_posicion: ny });
         }
 
-        if (!isDragging.current) return;
-        const coords = getClientCoords(e);
-        const dx = coords.x - startX.current;
-        const dy = coords.y - startY.current;
-        const width = cardRef.current?.offsetWidth || 1;
-        const height = cardRef.current?.offsetHeight || 1;
+        function onEnd() {
+            isDragging.current = false;
+            touchDist.current = null;
+            window.removeEventListener('mousemove', onMove);
+            window.removeEventListener('mouseup', onEnd);
+            window.removeEventListener('touchmove', onMove);
+            window.removeEventListener('touchend', onEnd);
+        }
 
-        const nextPosX = Math.round(Math.max(0, Math.min(100, startPosX.current + (dx / width) * 100)));
-        const nextPosY = Math.round(Math.max(0, Math.min(100, startPosY.current + (dy / height) * 100)));
-
-        form.setData({
-            ...form.data,
-            foto_posicion_x: nextPosX,
-            foto_posicion_y: nextPosY,
-            foto_posicion: nextPosY,
-        });
-    }
-
-    function handleEnd() {
-        isDragging.current = false;
-        touchDist.current = null;
+        window.addEventListener('mousemove', onMove);
+        window.addEventListener('mouseup', onEnd);
+        window.addEventListener('touchmove', onMove, { passive: false });
+        window.addEventListener('touchend', onEnd);
     }
 
     function abrirCrear() {
@@ -2414,9 +2428,9 @@ function EquipoTab({ equipo = [], flash }) {
             area: m.area || 'Matemáticas',
             tipo: m.tipo || 'docente',
             foto: null,
-            foto_posicion: Number(m.foto_posicion_y ?? m.foto_posicion ?? 20),
+            foto_posicion: Number(m.foto_posicion_y ?? m.foto_posicion ?? 50),
             foto_posicion_x: Number(m.foto_posicion_x ?? 50),
-            foto_posicion_y: Number(m.foto_posicion_y ?? m.foto_posicion ?? 20),
+            foto_posicion_y: Number(m.foto_posicion_y ?? m.foto_posicion ?? 50),
             foto_zoom: Number(m.foto_zoom ?? 100),
             orden: Number(m.orden ?? 0),
             activo: !!m.activo,
@@ -2563,11 +2577,8 @@ function EquipoTab({ equipo = [], flash }) {
                                             <img
                                                 src={mediaUrl(p.foto)}
                                                 alt={p.nombre}
-                                                className="w-full h-full object-cover transition-all duration-300 pointer-events-none"
-                                                style={{
-                                                    objectPosition: `${p.foto_posicion_x ?? 50}% ${p.foto_posicion_y ?? p.foto_posicion ?? 20}%`,
-                                                    transform: `scale(${(p.foto_zoom ?? 100) / 100})`
-                                                }}
+                                                className="pointer-events-none transition-all duration-300"
+                                                style={photoPos(p.foto_posicion_x, p.foto_posicion_y ?? p.foto_posicion, p.foto_zoom)}
                                             />
                                         ) : (
                                             <div className="w-full h-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-400 dark:text-slate-600">
@@ -2617,11 +2628,8 @@ function EquipoTab({ equipo = [], flash }) {
                                         <img
                                             src={mediaUrl(prof.foto)}
                                             alt={prof.nombre}
-                                            className="w-full h-full object-cover transition-all duration-300 pointer-events-none"
-                                            style={{
-                                                objectPosition: `${prof.foto_posicion_x ?? 50}% ${prof.foto_posicion_y ?? prof.foto_posicion ?? 20}%`,
-                                                transform: `scale(${(prof.foto_zoom ?? 100) / 100})`
-                                            }}
+                                            className="pointer-events-none transition-all duration-300"
+                                            style={photoPos(prof.foto_posicion_x, prof.foto_posicion_y ?? prof.foto_posicion, prof.foto_zoom)}
                                         />
                                     ) : (
                                         <div className="w-full h-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-400 dark:text-slate-600">
@@ -2684,23 +2692,15 @@ function EquipoTab({ equipo = [], flash }) {
                                     ref={cardRef}
                                     className="w-full aspect-[4/5] bg-slate-200 dark:bg-slate-800 rounded-xl overflow-hidden relative select-none cursor-move touch-none border-2 border-blue-300 dark:border-blue-800"
                                     onMouseDown={handleStart}
-                                    onMouseMove={handleMove}
-                                    onMouseUp={handleEnd}
-                                    onMouseLeave={handleEnd}
                                     onTouchStart={handleStart}
-                                    onTouchMove={handleMove}
-                                    onTouchEnd={handleEnd}
                                 >
                                     {previewImage ? (
                                         <img
                                             src={previewImage}
                                             alt="Foto"
                                             draggable={false}
-                                            className="w-full h-full object-cover pointer-events-none transition-transform duration-75"
-                                            style={{
-                                                objectPosition: `${form.data.foto_posicion_x ?? 50}% ${form.data.foto_posicion_y ?? form.data.foto_posicion ?? 20}%`,
-                                                transform: `scale(${form.data.foto_zoom / 100})`
-                                            }}
+                                            className="pointer-events-none transition-all duration-75"
+                                            style={photoPos(form.data.foto_posicion_x, form.data.foto_posicion_y ?? form.data.foto_posicion, form.data.foto_zoom)}
                                         />
                                     ) : (
                                         <div className="w-full h-full flex items-center justify-center text-slate-400 dark:text-slate-600">
@@ -2837,14 +2837,14 @@ function EquipoTab({ equipo = [], flash }) {
                                     <div className="flex items-center gap-3">
                                         <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 w-5 shrink-0">↑ ↓</span>
                                         <input type="range" min="0" max="100"
-                                            value={form.data.foto_posicion_y ?? form.data.foto_posicion ?? 20}
+                                            value={form.data.foto_posicion_y ?? form.data.foto_posicion ?? 50}
                                             onChange={e => {
                                                 const v = Number(e.target.value);
                                                 form.setData({ ...form.data, foto_posicion_y: v, foto_posicion: v });
                                             }}
                                             className="flex-1 h-1.5 accent-blue-600 cursor-pointer"
                                         />
-                                        <span className="text-[10px] font-mono text-slate-400 w-8 text-right shrink-0">{form.data.foto_posicion_y ?? form.data.foto_posicion ?? 20}%</span>
+                                        <span className="text-[10px] font-mono text-slate-400 w-8 text-right shrink-0">{form.data.foto_posicion_y ?? form.data.foto_posicion ?? 50}%</span>
                                     </div>
 
                                     <div className="flex items-center gap-3">

@@ -22,14 +22,16 @@ class OfertaAcademicaController extends Controller
             ->take(6)
             ->get(['id', 'titulo', 'slug', 'resumen', 'imagen', 'categoria', 'publicado_en']);
 
+        $nombresPreescolar = [
+            'Daniela Villamizar Villamizar',
+            'Lady Diana Osorio Fonseca',
+            'Paula Lorena Cuadros Ballesteros',
+            'Diana Soidé Villamizar Bautista',
+        ];
+
         $docentesPreescolar = EquipoMember::where('activo', true)
-            ->where('tipo', 'docente')
-            ->where(function ($q) {
-                $q->where('area', 'like', '%Preescolar%')
-                  ->orWhere('area', 'like', '%preescolar%');
-            })
-            ->orderBy('orden')
-            ->orderBy('nombre')
+            ->whereIn('nombre', $nombresPreescolar)
+            ->orderByRaw('FIELD(nombre, ' . implode(',', array_fill(0, count($nombresPreescolar), '?')) . ')', $nombresPreescolar)
             ->get(['id', 'nombre', 'cargo', 'foto', 'foto_posicion', 'foto_posicion_x', 'foto_posicion_y', 'foto_zoom']);
 
         return Inertia::render('OfertaAcademica/Preescolar', [

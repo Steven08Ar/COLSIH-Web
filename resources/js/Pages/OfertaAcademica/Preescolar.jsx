@@ -19,12 +19,16 @@ const LINK_INSCRIPCIONES = "https://e.plataformaintegra.net/sihungria/index.php/
 // Colores de blob por posición (se mantiene el diseño visual original)
 const BLOB_COLORS = ['bg-[#FFD25D]', 'bg-[#F3E3D4]', 'bg-[#ADA3DA]', 'bg-[#90C5DE]'];
 
+// Si la BD no tiene foto, usa la URL directa de R2 por nombre (mismo patrón que Equipo.jsx)
+const R2_DOCENTES = 'https://media.colsih.edu.co/nuestro_colegio/equipo/docentes/';
+const r2Url = (nombre) => `${R2_DOCENTES}${encodeURIComponent(nombre)}.JPG`;
+
 // Fallback si la BD no tiene docentes de preescolar aún
 const DOCENTES_FALLBACK = [
-    { nombre: 'Daniela Villamizar Villamizar', cargo: 'Docente de Preescolar',            foto: null, foto_posicion: 20, foto_posicion_x: 50, foto_posicion_y: 20, foto_zoom: 100 },
-    { nombre: 'Lady Diana Osorio Fonseca',     cargo: 'Docente de Desarrollo Infantil',   foto: null, foto_posicion: 20, foto_posicion_x: 50, foto_posicion_y: 20, foto_zoom: 100 },
-    { nombre: 'Paula Lorena Cuadros Ballesteros', cargo: 'Docente de Dimensión Comunicativa', foto: null, foto_posicion: 20, foto_posicion_x: 50, foto_posicion_y: 20, foto_zoom: 100 },
-    { nombre: 'Diana Soidé Villamizar Bautista',  cargo: 'Docente de Lectoescritura Inicial', foto: null, foto_posicion: 20, foto_posicion_x: 50, foto_posicion_y: 20, foto_zoom: 100 },
+    { nombre: 'Daniela Villamizar Villamizar',    cargo: 'Docente de Preescolar',              foto: null, foto_posicion: 20, foto_posicion_x: 50, foto_posicion_y: 20, foto_zoom: 100 },
+    { nombre: 'Lady Diana Osorio Fonseca',        cargo: 'Docente de Desarrollo Infantil',     foto: null, foto_posicion: 20, foto_posicion_x: 50, foto_posicion_y: 20, foto_zoom: 100 },
+    { nombre: 'Paula Lorena Cuadros Ballesteros', cargo: 'Docente de Dimensión Comunicativa',  foto: null, foto_posicion: 20, foto_posicion_x: 50, foto_posicion_y: 20, foto_zoom: 100 },
+    { nombre: 'Diana Soidé Villamizar Bautista',  cargo: 'Docente de Lectoescritura Inicial',  foto: null, foto_posicion: 20, foto_posicion_x: 50, foto_posicion_y: 20, foto_zoom: 100 },
 ];
 
 const faqsPreescolar = [
@@ -98,7 +102,7 @@ function TeacherCard({ docente, idx }) {
     const [hasError, setHasError] = useState(false);
     const blobStyle = organicBlobStyles[idx % 4];
     const colorCircle = BLOB_COLORS[idx % BLOB_COLORS.length];
-    const fotoUrl = docente.foto ? mediaUrl(docente.foto) : null;
+    const fotoUrl = docente.foto ? mediaUrl(docente.foto) : r2Url(docente.nombre);
     const posX = docente.foto_posicion_x ?? 50;
     const posY = docente.foto_posicion_y ?? (docente.foto_posicion ?? 20);
     const zoom = (docente.foto_zoom ?? 100) / 100;

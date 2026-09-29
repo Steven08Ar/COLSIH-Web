@@ -89,17 +89,17 @@ export default function MjsFooter() {
                         </ul>
                     </div>
 
-                    {/* Col 03: Grupos */}
+                    {/* Col 03: Espiritualidad Juvenil Salesiana */}
                     <div className="space-y-4">
                         <div className="text-xs font-bold uppercase tracking-widest text-white/60">
-                            03 / ASOCIACIONISMO
+                            03 / ESPIRITUALIDAD (EJS)
                         </div>
                         <ul className="space-y-2 text-xs sm:text-sm text-slate-300 font-light">
-                            <li>ADS (Amigos de Domingo Savio)</li>
-                            <li>Club Laura Vicuña</li>
-                            <li>SALSEM & Líderes Juveniles</li>
-                            <li>Comunidad Misionera & Voluntariado</li>
-                            <li>Ministerio de Arte & Música</li>
+                            <li>Amistad sincera y alegría cotidiana</li>
+                            <li>Pedagogía del Sistema Preventivo</li>
+                            <li>Razón, Religión y Amor (Amorevolezza)</li>
+                            <li>Presencia cercana y acompañamiento</li>
+                            <li>Compromiso solidario con la vida</li>
                         </ul>
                     </div>
 

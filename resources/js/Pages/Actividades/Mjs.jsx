@@ -31,65 +31,6 @@ export default function Mjs() {
         if (el) el.scrollIntoView({ behavior: 'smooth' });
     };
 
-    // Grupos con estética editorial de revista
-    const grupos = [
-        {
-            num: '01',
-            nombre: 'Amigos de Domingo Savio (ADS)',
-            edad: '7 a 11 Años · Primaria',
-            tag: 'Primeros Pasos en el Movimiento',
-            lema: '«La santidad consiste en estar siempre alegres»',
-            desc: 'Iniciación salesiana donde los niños experimentan la amistad, la alegría del juego en equipo y el valor de ser compañeros solidarios al estilo de Domingo Savio.',
-            colorGlow: 'from-white/10',
-            borderColor: 'border-white/15',
-            accent: '#ffffff'
-        },
-        {
-            num: '02',
-            nombre: 'Club Laura Vicuña & María',
-            edad: '9 a 13 Años · Básica',
-            tag: 'Valores, Dulzura & Familia',
-            lema: '«Hacer lo ordinario de manera extraordinaria»',
-            desc: 'Formación en valores humanos, empatía, arte y devoción alegre a María Auxiliadora. Un espacio de crecimiento afectivo y espiritual para niñas y preadolescentes.',
-            colorGlow: 'from-[#F30B0F]/30',
-            borderColor: 'border-[#F30B0F]/40',
-            accent: '#F30B0F'
-        },
-        {
-            num: '03',
-            nombre: 'Semilleros Salesianos & Líderes (SALSEM)',
-            edad: '12 a 16 Años · Bachillerato',
-            tag: 'Liderazgo & Formación Juvenil',
-            lema: '«Jóvenes apóstoles de los mismos jóvenes»',
-            desc: 'El núcleo de formación de animadores y líderes. Jóvenes que aprenden oratoria, dinámicas de grupo, campamentos de supervivencia y liderazgo transformador.',
-            colorGlow: 'from-[#0B09A1]/40',
-            borderColor: 'border-[#0B09A1]/50',
-            accent: '#3B82F6'
-        },
-        {
-            num: '04',
-            nombre: 'Comunidad Misionera & Voluntariado',
-            edad: '15 a 20+ Años · Media & Egresados',
-            tag: 'Acción Social & Misión',
-            lema: '«Dar testimonio con las manos: servir y amar»',
-            desc: 'Jóvenes comprometidos que salen a servir en comunidades vulnerables de Floridablanca y misiones rurales en Santander. Fe vivida en el compromiso social.',
-            colorGlow: 'from-emerald-500/30',
-            borderColor: 'border-emerald-500/40',
-            accent: '#10B981'
-        },
-        {
-            num: '05',
-            nombre: 'Ministerio de Música & Arte Salesiano',
-            edad: 'Todas las Edades Juveniles',
-            tag: 'Ritmo, Creatividad & Teatro',
-            lema: '«Una casa salesiana sin música es como un cuerpo sin alma»',
-            desc: 'Don Bosco amaba la música y el arte como puertas directas al corazón. Canto, guitarra, percusión, danzas y teatro para poner tus dones al servicio de la comunidad.',
-            colorGlow: 'from-purple-500/30',
-            borderColor: 'border-purple-500/40',
-            accent: '#A855F7'
-        }
-    ];
-
     // Espacios e instalaciones destacadas del colegio para el MJS
     const espaciosColegio = [
         { nombre: 'Canchas Polideportivas', desc: 'Escenario para el juego libre, torneos juveniles y dinámicas de integración al aire libre.' },
@@ -111,7 +52,7 @@ export default function Mjs() {
         },
         {
             q: '¿A partir de qué edad puedo ingresar al movimiento?',
-            a: 'Recibimos niños desde los 7 años en "Amigos de Domingo Savio" hasta jóvenes universitarios o profesionales jóvenes en el grupo de Voluntariado y Animadores (hasta 24+ años).'
+            a: 'Recibimos niños y jóvenes desde los 7 años hasta jóvenes universitarios o profesionales y animadores (hasta 24+ años).'
         },
         {
             q: '¿Dónde está ubicada la sede del Movimiento Juvenil Salesiano?',
@@ -423,78 +364,7 @@ export default function Mjs() {
             </section>
 
             {/* ========================================================
-                SECTION 03: RAMAS Y GRUPOS (Editorial Magazine Cards)
-                ======================================================== */}
-            <section id="grupos" className="py-24 bg-[#05081E] text-white select-none border-t border-white/10">
-                <div className="max-w-7xl mx-auto px-6 sm:px-12">
-                    
-                    <div className="flex items-center gap-3 mb-6">
-                        <span className="text-xs uppercase tracking-[0.25em] text-white/60 font-bold">
-                            03 / ASOCIACIONISMO
-                        </span>
-                        <div className="w-12 h-[1px] bg-white/20" />
-                    </div>
-
-                    <div className="max-w-3xl mb-14">
-                        <h2 className="text-3xl sm:text-5xl font-black uppercase tracking-tight leading-[1] font-['Poppins']">
-                            ENCUENTRA TU LUGAR EN EL MOVIMIENTO.
-                        </h2>
-                        <p className="mt-3 text-slate-400 text-sm sm:text-base font-light">
-                            Cinco grupos asociativos organizados según edades e intereses. Cada uno con su propio ritmo, lema y proyecto formativo.
-                        </p>
-                    </div>
-
-                    {/* Grid de 5 Tarjetas Editoriales */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {grupos.map((g, idx) => (
-                            <div 
-                                key={idx}
-                                className={`p-8 rounded-3xl bg-white/[0.03] border ${g.borderColor} hover:bg-white/[0.06] transition-all duration-300 flex flex-col justify-between group hover:-translate-y-1 shadow-xl`}
-                            >
-                                <div>
-                                    <div className="flex items-center justify-between pb-4 border-b border-white/10 mb-5">
-                                        <span className="text-xs font-black tracking-widest text-white/50">
-                                            {g.num}
-                                        </span>
-                                        <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-white/10 text-white/90">
-                                            {g.edad}
-                                        </span>
-                                    </div>
-
-                                    <h3 className="text-xl font-bold font-['Poppins'] text-white group-hover:text-white transition-colors">
-                                        {g.nombre}
-                                    </h3>
-
-                                    <div className="mt-2 text-xs italic font-serif text-slate-300">
-                                        {g.lema}
-                                    </div>
-
-                                    <p className="mt-4 text-xs sm:text-sm text-slate-400 leading-relaxed font-light">
-                                        {g.desc}
-                                    </p>
-                                </div>
-
-                                <div className="mt-8 pt-4 border-t border-white/10 flex items-center justify-between">
-                                    <span className="text-[11px] uppercase tracking-wider text-white/60 font-semibold">
-                                        {g.tag}
-                                    </span>
-                                    <button
-                                        onClick={() => scrollTo('#contacto')}
-                                        className="inline-flex items-center gap-1.5 text-xs font-bold text-white/70 hover:text-white transition-colors cursor-pointer"
-                                    >
-                                        <span>Más detalles</span>
-                                        <ArrowUpRight className="w-4 h-4" />
-                                    </button>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-
-                </div>
-            </section>
-
-            {/* ========================================================
-                SECTION 04: RED GLOBAL SYM (130+ Países)
+                SECTION 03: RED GLOBAL SYM (130+ Países)
                 ======================================================== */}
             <section id="mundo" className="py-24 bg-[#080D3B] text-white select-none border-t border-white/10 relative overflow-hidden">
                 <div className="absolute top-1/2 right-10 w-96 h-96 rounded-full bg-[#0B09A1]/30 blur-3xl pointer-events-none" />
@@ -503,7 +373,7 @@ export default function Mjs() {
                     
                     <div className="flex items-center gap-3 mb-6">
                         <span className="text-xs uppercase tracking-[0.25em] text-white/60 font-bold">
-                            04 / RED GLOBAL SYM
+                            03 / RED GLOBAL SYM
                         </span>
                         <div className="w-12 h-[1px] bg-white/20" />
                     </div>
@@ -575,14 +445,14 @@ export default function Mjs() {
             </section>
 
             {/* ========================================================
-                SECTION 05: ESPIRITUALIDAD SALESIANA (Los 5 Pilares)
+                SECTION 04: ESPIRITUALIDAD SALESIANA (Los 5 Pilares)
                 ======================================================== */}
             <section id="espiritualidad" className="py-24 bg-[#05081E] text-white select-none border-t border-white/10">
                 <div className="max-w-7xl mx-auto px-6 sm:px-12">
                     
                     <div className="flex items-center gap-3 mb-6">
                         <span className="text-xs uppercase tracking-[0.25em] text-white/60 font-bold">
-                            05 / ESPIRITUALIDAD
+                            04 / ESPIRITUALIDAD
                         </span>
                         <div className="w-12 h-[1px] bg-white/20" />
                     </div>
@@ -652,14 +522,14 @@ export default function Mjs() {
             </section>
 
             {/* ========================================================
-                SECTION 06: PREGUNTAS FRECUENTES (Minimalist Dark FAQ)
+                SECTION 05: PREGUNTAS FRECUENTES (Minimalist Dark FAQ)
                 ======================================================== */}
             <section id="faq" className="py-24 bg-[#080D3B] text-white select-none border-t border-white/10">
                 <div className="max-w-4xl mx-auto px-6 sm:px-12">
                     
                     <div className="flex items-center gap-3 mb-6">
                         <span className="text-xs uppercase tracking-[0.25em] text-white/60 font-bold">
-                            06 / FAQ
+                            05 / FAQ
                         </span>
                         <div className="w-12 h-[1px] bg-white/20" />
                     </div>
@@ -699,7 +569,7 @@ export default function Mjs() {
             </section>
 
             {/* ========================================================
-                SECTION 07: COMUNIDAD & INFORMACIÓN (Editorial Info Card)
+                SECTION 06: COMUNIDAD & INFORMACIÓN (Editorial Info Card)
                 ======================================================== */}
             <section id="contacto" className="py-24 bg-[#05081E] text-white select-none border-t border-white/10 relative overflow-hidden">
                 {/* Glow ambient background */}
@@ -711,7 +581,7 @@ export default function Mjs() {
                         
                         <div className="max-w-2xl">
                             <span className="text-xs font-bold uppercase tracking-widest text-white/60">
-                                07 / ENCUENTROS & COMUNIDAD
+                                06 / ENCUENTROS & COMUNIDAD
                             </span>
                             <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black uppercase tracking-tight leading-[0.95] font-['Poppins'] text-white mt-2">
                                 VIVE LA EXPERIENCIA<br />

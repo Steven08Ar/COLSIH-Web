@@ -65,13 +65,6 @@ export default function MjsHeader() {
                     </button>
 
                     <button
-                        onClick={() => scrollTo('#grupos')}
-                        className="px-4 py-2 rounded-full text-xs font-semibold text-slate-700 hover:text-black transition-colors cursor-pointer"
-                    >
-                        Grupos
-                    </button>
-
-                    <button
                         onClick={() => scrollTo('#mundo')}
                         className="px-4 py-2 rounded-full text-xs font-semibold text-slate-700 hover:text-black transition-colors cursor-pointer"
                     >
@@ -147,12 +140,6 @@ export default function MjsHeader() {
                             className="py-2.5 px-4 rounded-2xl hover:bg-white/10 text-left font-semibold text-sm text-slate-300"
                         >
                             Floridablanca & COLSIH
-                        </button>
-                        <button
-                            onClick={() => scrollTo('#grupos')}
-                            className="py-2.5 px-4 rounded-2xl hover:bg-white/10 text-left font-semibold text-sm text-slate-300"
-                        >
-                            Grupos Juveniles
                         </button>
                         <button
                             onClick={() => scrollTo('#mundo')}

@@ -418,13 +418,13 @@ export default function Mjs() {
 
                         <div>
                             <div className="text-4xl sm:text-6xl font-black font-['Poppins'] text-white">
-                                2
+                                6
                             </div>
                             <div className="text-xs uppercase tracking-widest text-white/70 font-bold mt-1">
                                 Inspectorías en Colombia
                             </div>
                             <p className="text-xs text-slate-400 font-light mt-1">
-                                COM (Medellín/Santander) y COB (Bogotá).
+                                2 Provincias SDB y 4 Provincias FMA.
                             </p>
                         </div>
 
@@ -438,6 +438,127 @@ export default function Mjs() {
                             <p className="text-xs text-slate-400 font-light mt-1">
                                 Desde Valdocco, Turín hasta hoy.
                             </p>
+                        </div>
+                    </div>
+
+                    {/* Distribución Inspectorial en Colombia: SDB y FMA */}
+                    <div className="mt-16 pt-12 border-t border-white/10">
+                        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
+                            <div>
+                                <span className="text-xs uppercase tracking-[0.2em] text-[#F30B0F] font-bold">
+                                    Presencia Salesiana Nacional
+                                </span>
+                                <h3 className="text-2xl sm:text-4xl font-bold font-['Poppins'] text-white mt-1">
+                                    Inspectorías Salesianas en Colombia
+                                </h3>
+                            </div>
+                            <p className="text-xs sm:text-sm text-slate-400 max-w-md font-light">
+                                La misión salesiana en el país se articula a través de las presencias consagradas de los Salesianos de Don Bosco y de las Hijas de María Auxiliadora.
+                            </p>
+                        </div>
+
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                            {/* Bloque 1: Salesianos de Don Bosco (SDB) */}
+                            <div className="p-7 sm:p-8 rounded-3xl bg-white/[0.04] border border-white/10 hover:border-white/20 transition-all duration-300">
+                                <div className="flex items-center justify-between gap-3 mb-4">
+                                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#0B09A1]/30 border border-[#0B09A1]/50 text-blue-300 text-xs font-bold uppercase tracking-wider">
+                                        <span>SDB · Don Bosco</span>
+                                    </div>
+                                    <span className="text-xs text-slate-400 font-mono">2 Provincias</span>
+                                </div>
+                                <h4 className="text-xl font-bold text-white mb-2">
+                                    Inspectorías de los Salesianos de Don Bosco (SDB)
+                                </h4>
+                                <p className="text-xs sm:text-sm text-slate-400 font-light mb-6">
+                                    Comunidades religiosas masculinas dedicadas a la formación juvenil, parroquias, colegios y obras misioneras en el territorio colombiano:
+                                </p>
+
+                                <div className="space-y-3.5">
+                                    <div className="p-4 rounded-2xl bg-white/5 border border-white/5 hover:border-white/15 transition-all">
+                                        <div className="flex items-center justify-between text-sm font-semibold text-white">
+                                            <span>Inspectoría Salesiana San Pedro Claver</span>
+                                            <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-blue-500/20 text-blue-300">COB</span>
+                                        </div>
+                                        <p className="text-xs text-slate-300 font-light mt-1.5 flex items-start gap-1.5">
+                                            <MapPin className="w-3.5 h-3.5 text-blue-400 shrink-0 mt-0.5" />
+                                            <span>Con sede principal en <strong>Bogotá D.C.</strong>, atiende el sector oriental y central del país.</span>
+                                        </p>
+                                    </div>
+
+                                    <div className="p-4 rounded-2xl bg-white/5 border border-white/5 hover:border-white/15 transition-all">
+                                        <div className="flex items-center justify-between text-sm font-semibold text-white">
+                                            <span>Inspectoría Salesiana San Luis Beltrán</span>
+                                            <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-blue-500/20 text-blue-300">COM</span>
+                                        </div>
+                                        <p className="text-xs text-slate-300 font-light mt-1.5 flex items-start gap-1.5">
+                                            <MapPin className="w-3.5 h-3.5 text-blue-400 shrink-0 mt-0.5" />
+                                            <span>Con sede principal en <strong>Medellín</strong>, atiende el occidente y otras regiones del territorio nacional.</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Bloque 2: Hijas de María Auxiliadora (FMA) */}
+                            <div className="p-7 sm:p-8 rounded-3xl bg-white/[0.04] border border-white/10 hover:border-white/20 transition-all duration-300">
+                                <div className="flex items-center justify-between gap-3 mb-4">
+                                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#F30B0F]/20 border border-[#F30B0F]/40 text-red-300 text-xs font-bold uppercase tracking-wider">
+                                        <span>FMA · Salesianas</span>
+                                    </div>
+                                    <span className="text-xs text-slate-400 font-mono">4 Provincias</span>
+                                </div>
+                                <h4 className="text-xl font-bold text-white mb-2">
+                                    Inspectorías de las Hijas de María Auxiliadora (FMA)
+                                </h4>
+                                <p className="text-xs sm:text-sm text-slate-400 font-light mb-6">
+                                    Las hermanas salesianas están divididas en cuatro provincias con sedes principales en Bogotá y Medellín:
+                                </p>
+
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                    <div className="p-3.5 rounded-2xl bg-white/5 border border-white/5 hover:border-white/15 transition-all">
+                                        <div className="flex items-center justify-between text-xs sm:text-sm font-semibold text-white">
+                                            <span className="truncate">Ntra. Sra. de Chiquinquirá</span>
+                                            <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-red-500/20 text-red-300 shrink-0 ml-1">CBC</span>
+                                        </div>
+                                        <p className="text-[11px] text-slate-300 mt-1 flex items-start gap-1 font-light">
+                                            <MapPin className="w-3 h-3 text-red-400 shrink-0 mt-0.5" />
+                                            <span>Sede en Bogotá (Barrio La Soledad).</span>
+                                        </p>
+                                    </div>
+
+                                    <div className="p-3.5 rounded-2xl bg-white/5 border border-white/5 hover:border-white/15 transition-all">
+                                        <div className="flex items-center justify-between text-xs sm:text-sm font-semibold text-white">
+                                            <span className="truncate">Ntra. Sra. de las Nieves</span>
+                                            <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-red-500/20 text-red-300 shrink-0 ml-1">CBN</span>
+                                        </div>
+                                        <p className="text-[11px] text-slate-300 mt-1 flex items-start gap-1 font-light">
+                                            <MapPin className="w-3 h-3 text-red-400 shrink-0 mt-0.5" />
+                                            <span>Sede en Bogotá (Quinta Paredes).</span>
+                                        </p>
+                                    </div>
+
+                                    <div className="p-3.5 rounded-2xl bg-white/5 border border-white/5 hover:border-white/15 transition-all">
+                                        <div className="flex items-center justify-between text-xs sm:text-sm font-semibold text-white">
+                                            <span className="truncate">Santa María Mazzarello</span>
+                                            <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-red-500/20 text-red-300 shrink-0 ml-1">CMM</span>
+                                        </div>
+                                        <p className="text-[11px] text-slate-300 mt-1 flex items-start gap-1 font-light">
+                                            <MapPin className="w-3 h-3 text-red-400 shrink-0 mt-0.5" />
+                                            <span>Sede en Medellín.</span>
+                                        </p>
+                                    </div>
+
+                                    <div className="p-3.5 rounded-2xl bg-white/5 border border-white/5 hover:border-white/15 transition-all">
+                                        <div className="flex items-center justify-between text-xs sm:text-sm font-semibold text-white">
+                                            <span className="truncate">María Auxiliadora</span>
+                                            <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-red-500/20 text-red-300 shrink-0 ml-1">CMA</span>
+                                        </div>
+                                        <p className="text-[11px] text-slate-300 mt-1 flex items-start gap-1 font-light">
+                                            <MapPin className="w-3 h-3 text-red-400 shrink-0 mt-0.5" />
+                                            <span>Sede en Medellín.</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 

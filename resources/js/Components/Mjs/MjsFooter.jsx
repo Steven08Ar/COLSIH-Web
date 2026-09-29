@@ -109,7 +109,7 @@ export default function MjsFooter() {
                             04 / SYM MUNDIAL
                         </div>
                         <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-light">
-                            Más de 1.2 millones de jóvenes en 130+ países. Conectados con las Inspectorías Salesianas de Colombia (COM / COB / FMA) y los Encuentros Mundiales en las JMJ.
+                            Más de 1.2 millones de jóvenes en 130+ países. Conectados con las Inspectorías Salesianas de Colombia (SDB: COM y COB · FMA: CBC, CBN, CMM y CMA) y los Encuentros Mundiales en las JMJ.
                         </p>
                     </div>
 

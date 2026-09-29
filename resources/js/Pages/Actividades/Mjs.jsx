@@ -36,8 +36,7 @@ export default function Mjs() {
         { nombre: 'Canchas Polideportivas', desc: 'Escenario para el juego libre, torneos juveniles y dinámicas de integración al aire libre.' },
         { nombre: 'Salones Formativos & Liderazgo', desc: 'Espacios dotados para talleres de crecimiento personal, proyectos y animación grupal.' },
         { nombre: 'Capilla & Espacio Interior', desc: 'Lugar sagrado de recogimiento, oración mariana y encuentro espiritual.' },
-        { nombre: 'Zonas Verdes & Convivencia', desc: 'Áreas de descanso, música y diálogo fraterno entre animadores y jóvenes.' },
-        { nombre: 'Aulas de Música y Expresión', desc: 'Salones para ensayos del coro juvenil, guitarra, percusión y expresiones culturales.' }
+        { nombre: 'Zonas Verdes & Convivencia', desc: 'Áreas de descanso, música y diálogo fraterno entre animadores y jóvenes.' }
     ];
 
     // Preguntas frecuentes minimalistas

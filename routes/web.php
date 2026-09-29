@@ -63,6 +63,10 @@ Route::get('/catequesis', function () {
 Route::get('/mjs', function () {
     return inertia('Actividades/Mjs');
 })->name('mjs');
+Route::get('/mjs/login', function () {
+    return inertia('Actividades/MjsLogin');
+})->name('mjs.login');
+Route::post('/mjs/login', [AdminAuthController::class, 'login'])->name('mjs.login.post');
 Route::get('/mjc', function () {
     return inertia('Actividades/Mjc');
 })->name('mjc');

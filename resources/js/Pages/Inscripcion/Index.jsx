@@ -5,9 +5,7 @@ import AppLayout from '@/Layouts/AppLayout';
 
 const GRADOS = [
     'Prejardín', 'Jardín', 'Transición',
-    'Primero', 'Segundo', 'Tercero', 'Cuarto', 'Quinto',
-    'Sexto', 'Séptimo', 'Octavo', 'Noveno',
-    'Décimo', 'Undécimo',
+    'Primero', 'Segundo',
 ];
 
 const PASOS = ['Datos del estudiante', 'Datos del acudiente', 'Revisión y envío'];

@@ -248,7 +248,7 @@ export default function Primaria() {
                         ¡Construye el futuro académico de tus hijos con la familia COLSIH!
                     </h2>
                     <p className="text-cyan-100 text-base md:text-xl font-medium max-w-2xl mx-auto">
-                        Inscripciones abiertas para todos los grados de Básica Primaria (1° a 5°).
+                        Inscripciones abiertas con cupos disponibles para Primero (1°) y Segundo (2°).
                     </p>
                     <div className="pt-4">
                         <Link

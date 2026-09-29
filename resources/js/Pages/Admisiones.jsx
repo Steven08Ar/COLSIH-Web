@@ -39,8 +39,7 @@ const CORREO_ADMISIONES = "admisionescolsihfloridablanca@gmail.com";
 
 const cuposGrados = [
     { nivel: 'Preescolar', grados: ['Prejardín', 'Jardín', 'Transición'] },
-    { nivel: 'Primaria', grados: ['Primero (1°)', 'Segundo (2°)', 'Tercero (3°)', 'Cuarto (4°)', 'Quinto (5°)'] },
-    { nivel: 'Bachillerato', grados: ['Sexto (6°)', 'Séptimo (7°)', 'Octavo (8°)', 'Noveno (9°)'] }
+    { nivel: 'Primaria', grados: ['Primero (1°)', 'Segundo (2°)'] }
 ];
 
 const pasosProceso = [
@@ -115,7 +114,7 @@ const faqsData = [
     },
     {
         pregunta: '¿Qué documentos necesito para inscribirme?',
-        respuesta: 'Para Preescolar (Jardín y Transición): Fotocopia del Registro civil de nacimiento. Para Primaria y Bachillerato (1° a 9°): Fotocopia del observador del estudiante 2026, documento de identidad (Registro civil o Tarjeta de identidad) y boletines de calificaciones del año en curso.'
+        respuesta: 'Para Preescolar (Prejardín, Jardín y Transición): Fotocopia del Registro civil de nacimiento. Para Primaria (1° y 2°): Fotocopia del observador del estudiante 2026, documento de identidad (Registro civil o Tarjeta de identidad) y boletines de calificaciones del año en curso.'
     },
     {
         pregunta: '¿Hay descuentos por hermanos o convenios?',
@@ -211,7 +210,7 @@ export default function Admisiones() {
                                         Cupos exclusivos 2027:
                                     </span>
                                     <div className="flex flex-wrap justify-center lg:justify-start gap-2">
-                                        {['Prejardín', 'Jardín', 'Transición', 'Primero (1°)', 'Segundo (2°)', 'Tercero (3°)', 'Cuarto (4°)', 'Quinto (5°)', 'Sexto (6°)'].map((grado) => (
+                                        {['Prejardín', 'Jardín', 'Transición', 'Primero (1°)', 'Segundo (2°)'].map((grado) => (
                                             <span 
                                                 key={grado}
                                                 className="px-3.5 py-1.5 rounded-lg bg-slate-100 text-[#003C8F] font-bold text-xs"

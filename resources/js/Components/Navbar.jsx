@@ -7,6 +7,7 @@ const nosotrosLinks = [
     { label: 'Misión y Visión', href: '/nosotros/mision-vision' },
     { label: 'Valores', href: '/nosotros/valores' },
     { label: 'Equipo', href: '/nosotros/equipo' },
+    { label: 'Periódico Escolar', href: '/periodico-escolar' },
 ];
 
 const ofertaLinks = [
@@ -319,17 +320,6 @@ export default function Navbar() {
                         )}
                     </div>
 
-                    <Link 
-                        href="/periodico-escolar" 
-                        className={`transition-colors flex items-center gap-1.5 ${
-                            url.startsWith('/periodico') ? 'text-amber-300 font-extrabold' : 'hover:text-white'
-                        }`}
-                    >
-                        <span>Periódico Escolar</span>
-                        <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-bold uppercase tracking-wider border border-amber-500/30">
-                            3D
-                        </span>
-                    </Link>
 
                     <Link href="/noticias" className={`transition-colors ${url.startsWith('/noticias') ? 'text-white font-extrabold' : 'hover:text-white'}`}>Noticias</Link>
                     <Link href="/contacto" className={`transition-colors ${url === '/contacto' ? 'text-white font-extrabold' : 'hover:text-white'}`}>Contacto</Link>
@@ -476,20 +466,6 @@ export default function Navbar() {
                             </div>
                         </div>
 
-                        <Link 
-                            href="/periodico-escolar" 
-                            onClick={() => setMobileOpen(false)} 
-                            className={`flex items-center justify-between px-3 py-2 text-sm font-semibold rounded-lg ${
-                                url.startsWith('/periodico') ? 'text-amber-300 bg-white/10' : 'text-white/85'
-                            }`}
-                        >
-                            <span className="flex items-center gap-2">
-                                <span>Periódico Escolar</span>
-                            </span>
-                            <span className="text-[9px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-bold uppercase tracking-wider border border-amber-500/30">
-                                3D Libro
-                            </span>
-                        </Link>
 
                         <Link href="/noticias" onClick={() => setMobileOpen(false)} className={`block px-3 py-2 text-sm font-semibold rounded-lg ${url.startsWith('/noticias') ? 'text-white bg-white/10' : 'text-white/85'}`}>Noticias</Link>
                         <Link href="/contacto" onClick={() => setMobileOpen(false)} className={`block px-3 py-2 text-sm font-semibold rounded-lg ${url === '/contacto' ? 'text-white bg-white/10' : 'text-white/85'}`}>Contacto</Link>

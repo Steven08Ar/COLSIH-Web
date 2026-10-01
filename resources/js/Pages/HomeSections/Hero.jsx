@@ -34,9 +34,7 @@ export default function Hero({ setVideoOpen }) {
                         contain: 'strict',
                     }}
                 >
-                    {/* WebM/VP9 primero: mejor compresión para Chrome/Firefox → menos datos a decodificar */}
-                    <source src="/Video%20Home.webm" type="video/webm; codecs=vp9" />
-                    <source src="/Video%20Home.mp4" type="video/mp4; codecs=avc1.640033" />
+                    <source src="/Video%20Home.mp4" type="video/mp4" />
                 </video>
             </div>
 

@@ -29,6 +29,7 @@ export default function PeriodicoIndex() {
 
     const [currentPage, setCurrentPage] = useState(0); // 0-indexed
     const [soundEnabled, setSoundEnabled] = useState(true);
+    const soundEnabledRef = useRef(true);
     const [zoomLevel, setZoomLevel] = useState(1);
     const [panOffset, setPanOffset] = useState({ x: 0, y: 0 });
     const [isDragging, setIsDragging] = useState(false);
@@ -48,7 +49,7 @@ export default function PeriodicoIndex() {
 
     // Sintetizador Web Audio API original para el sonido de paso de hoja realista
     const playPaperSound = () => {
-        if (!soundEnabled) return;
+        if (!soundEnabledRef.current) return;
         try {
             if (!audioCtxRef.current) {
                 audioCtxRef.current = new (window.AudioContext || window.webkitAudioContext)();
@@ -536,7 +537,7 @@ export default function PeriodicoIndex() {
                 <div className="flex md:hidden relative z-30 px-3 pb-3 pt-1 bg-white items-center justify-between border-t border-slate-100">
                     {/* Botón Silenciar / Sonido en Móvil */}
                     <button
-                        onClick={() => setSoundEnabled(!soundEnabled)}
+                        onClick={() => { const v = !soundEnabled; soundEnabledRef.current = v; setSoundEnabled(v); }}
                         className={`p-2 rounded-full border shadow-sm flex items-center justify-center transition-all active:scale-90 ${
                             soundEnabled ? 'border-slate-200 text-slate-700 bg-white' : 'border-red-200 text-red-600 bg-red-50'
                         }`}
@@ -607,7 +608,7 @@ export default function PeriodicoIndex() {
                     ======================================================== */}
                 <div className="hidden md:block absolute bottom-5 left-6 z-30">
                     <button
-                        onClick={() => setSoundEnabled(!soundEnabled)}
+                        onClick={() => { const v = !soundEnabled; soundEnabledRef.current = v; setSoundEnabled(v); }}
                         className={`p-2.5 sm:px-3.5 sm:py-2 rounded-full bg-white border border-slate-200 shadow-sm flex items-center gap-2 transition-all hover:scale-105 active:scale-95 cursor-pointer ${
                             soundEnabled ? 'text-slate-700 hover:text-black hover:bg-slate-50' : 'text-red-600 bg-red-50/50'
                         }`}

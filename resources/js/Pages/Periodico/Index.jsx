@@ -140,7 +140,7 @@ export default function PeriodicoIndex() {
                     drawShadow: false, // Sin cálculo de sombras en canvas para máxima fluidez a 60 FPS
                     flippingTime: 400, // Animación natural de paso de hoja
                     useMouseEvents: true,
-                    swipeDistance: 20,
+                    swipeDistance: isMobileScreen ? 9999 : 20,
                     clickEventForward: true
                 });
 

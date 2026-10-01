@@ -264,30 +264,30 @@ export default function Show({ tour = null, is_preview = false }) {
             <div className="relative w-screen h-screen bg-slate-950 flex flex-col overflow-hidden font-sans select-none">
                 
                 {/* ── TARJETA FLOTANTE SUPERIOR IZQUIERDA (Estilo Google Maps Place Header) ── */}
-                <header className="absolute top-4 sm:top-6 left-4 sm:left-6 z-30 flex items-start gap-2.5 pointer-events-auto max-w-[calc(100vw-32px)]">
-                    <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border border-slate-200/90 dark:border-slate-800 rounded-2xl shadow-xl p-2.5 sm:p-3 flex items-center gap-3 transition-all">
+                <header className="absolute top-3 sm:top-6 left-3 sm:left-6 z-30 flex items-start gap-2 sm:gap-2.5 pointer-events-auto max-w-[calc(100vw-24px)]">
+                    <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border border-slate-200/90 dark:border-slate-800 rounded-xl sm:rounded-2xl shadow-xl p-1.5 sm:p-3 flex items-center gap-2 sm:gap-3 transition-all">
                         <Link
                             href="/"
-                            className="w-9 h-9 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 flex items-center justify-center transition cursor-pointer shrink-0"
+                            className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg sm:rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 flex items-center justify-center transition cursor-pointer shrink-0"
                             title="Volver al Portal Institucional"
                         >
-                            <ChevronLeft className="w-5 h-5 stroke-[2.5]" />
+                            <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.5]" />
                         </Link>
 
-                        <div className="flex items-center gap-2.5 min-w-0 pr-1 sm:pr-3">
-                            <img src="/marca/logo-colsih.svg" alt="COLSIH" className="h-7 w-auto object-contain shrink-0 hidden sm:block" />
+                        <div className="flex items-center gap-2 min-w-0 pr-1 sm:pr-3">
+                            <img src="/marca/logo-colsih.svg" alt="COLSIH" className="h-6 sm:h-7 w-auto object-contain shrink-0 hidden sm:block" />
                             <div className="flex flex-col min-w-0">
-                                <div className="flex items-center gap-2">
-                                    <h1 className="text-slate-900 dark:text-white font-extrabold text-xs sm:text-sm leading-tight truncate max-w-[140px] sm:max-w-[240px]">
+                                <div className="flex items-center gap-1.5">
+                                    <h1 className="text-slate-900 dark:text-white font-extrabold text-[11px] sm:text-sm leading-tight truncate max-w-[100px] sm:max-w-[240px]">
                                         {activeScene?.nombre || 'Espacio 360°'}
                                     </h1>
                                     {is_preview && (
-                                        <span className="bg-amber-100 dark:bg-amber-950/70 text-amber-800 dark:text-amber-300 border border-amber-300 dark:border-amber-800 text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider shrink-0">
-                                            Vista Previa
+                                        <span className="bg-amber-100 dark:bg-amber-950/70 text-amber-800 dark:text-amber-300 border border-amber-300 dark:border-amber-800 text-[9px] font-black px-1.5 py-0.5 rounded-full uppercase tracking-wider shrink-0">
+                                            Preview
                                         </span>
                                     )}
                                 </div>
-                                <span className="text-[10px] text-slate-500 dark:text-slate-400 font-medium truncate">
+                                <span className="text-[9px] sm:text-[10px] text-slate-500 dark:text-slate-400 font-medium truncate hidden sm:block">
                                     Colegio Santa Isabel de Hungría • Tour 360°
                                 </span>
                             </div>
@@ -297,16 +297,16 @@ export default function Show({ tour = null, is_preview = false }) {
                     {/* Botón Explorar Espacios estilo Google Maps Chip */}
                     <button
                         onClick={() => setShowSceneTray(!showSceneTray)}
-                        className={`h-11 sm:h-12 px-3 sm:px-4 rounded-2xl border shadow-xl flex items-center gap-2 font-bold text-xs transition cursor-pointer backdrop-blur-md shrink-0 ${
+                        className={`h-9 sm:h-12 px-2.5 sm:px-4 rounded-xl sm:rounded-2xl border shadow-xl flex items-center gap-1.5 sm:gap-2 font-bold text-xs transition cursor-pointer backdrop-blur-md shrink-0 ${
                             showSceneTray
                                 ? 'bg-[#1a73e8] border-blue-500 text-white shadow-blue-600/30'
                                 : 'bg-white/95 dark:bg-slate-900/95 border-slate-200/90 dark:border-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800'
                         }`}
                         title="Explorar galería de espacios"
                     >
-                        <Grid className="w-4 h-4 text-inherit" />
+                        <Grid className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-inherit" />
                         <span className="hidden sm:inline">Lugares</span>
-                        <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-black ${
+                        <span className={`text-[10px] px-1 sm:px-1.5 py-0.5 rounded-full font-black ${
                             showSceneTray
                                 ? 'bg-white/20 text-white'
                                 : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300'

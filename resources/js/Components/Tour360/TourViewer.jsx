@@ -161,6 +161,8 @@ export default function TourViewer({
 
         const nodes = buildNodes(scenes);
         const initialScene = scenes.find(s => s.slug === initialSlug) || scenes[0];
+        let isMounted = true;
+        let loadTimeout;
 
         try {
             const viewer = new Viewer({
@@ -202,6 +204,24 @@ export default function TourViewer({
 
             tourPlugin.addEventListener('node-changed', () => setIsLoading(false), { once: true });
             viewer.addEventListener('ready', () => setIsLoading(false), { once: true });
+
+            // Capturar errores de carga de panorama (ej: iOS WebGL texture limit, CORS)
+            viewer.addEventListener('error', () => {
+                if (isMounted) {
+                    setIsLoading(false);
+                    setLoadError('No se pudo cargar el panorama 360°. Verifica tu conexión e intenta de nuevo.');
+                }
+            });
+
+            // Timeout de seguridad: si en 20s no cargó, mostrar error (común en iOS con imágenes grandes)
+            loadTimeout = setTimeout(() => {
+                if (isMounted && viewerRef.current) {
+                    setIsLoading(prev => {
+                        if (prev) setLoadError('El panorama tardó demasiado en cargar. Verifica tu conexión e intenta de nuevo.');
+                        return false;
+                    });
+                }
+            }, 20000);
 
             // Rastrear posición de cámara para la brújula dinámica en tiempo real
             viewer.addEventListener('position-updated', ({ position }) => {
@@ -274,6 +294,8 @@ export default function TourViewer({
         }
 
         return () => {
+            isMounted = false;
+            clearTimeout(loadTimeout);
             if (autoRotateRef.current) { clearInterval(autoRotateRef.current); autoRotateRef.current = null; }
             if (viewerRef.current) { try { viewerRef.current.destroy(); } catch (_) {} viewerRef.current = null; }
         };
@@ -346,6 +368,9 @@ export default function TourViewer({
     return (
         <div className={`relative w-full h-full min-h-[450px] bg-slate-950 overflow-hidden select-none group ${className}`}>
 
+            {/* Ocultar loader y overlay nativos de PSV — solo usamos el nuestro */}
+            <style>{`.psv-loader,.psv-overlay{display:none!important}`}</style>
+
             {/* Contenedor Photo Sphere Viewer */}
             <div ref={containerRef} className="w-full h-full min-h-[450px]" />
 
@@ -378,18 +403,18 @@ export default function TourViewer({
             )}
 
             {/* Barra de Controles Flotante Estilo Google Maps (Esquina inferior derecha) */}
-            <div className="absolute bottom-6 right-5 sm:right-6 z-20 flex flex-col items-center gap-2.5 select-none pointer-events-auto">
+            <div className="absolute bottom-4 sm:bottom-6 right-3 sm:right-6 z-20 flex flex-col items-center gap-2 sm:gap-2.5 select-none pointer-events-auto">
                 {/* Brújula dinámica interactiva orientada al Norte */}
                 <button
                     onClick={handleResetNorth}
-                    className="w-10 h-10 rounded-2xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-md shadow-xl border border-slate-200/80 dark:border-slate-800 flex items-center justify-center text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 transition cursor-pointer active:scale-95 group"
+                    className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-md shadow-xl border border-slate-200/80 dark:border-slate-800 flex items-center justify-center text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 transition cursor-pointer active:scale-95 group"
                     title="Orientar al Norte / Reestablecer encuadre inicial"
                 >
                     <div
-                        className="w-6 h-6 relative flex items-center justify-center transition-transform duration-75 ease-out"
+                        className="w-5 h-5 sm:w-6 sm:h-6 relative flex items-center justify-center transition-transform duration-75 ease-out"
                         style={{ transform: `rotate(${-currentYawDeg}deg)` }}
                     >
-                        <svg viewBox="0 0 24 24" className="w-5 h-5 drop-shadow-xs" fill="none">
+                        <svg viewBox="0 0 24 24" className="w-4 h-4 sm:w-5 sm:h-5 drop-shadow-xs" fill="none">
                             <polygon points="12,2 15.5,12 12,10 8.5,12" fill="#EA4335" />
                             <polygon points="12,22 15.5,12 12,10 8.5,12" fill="#9AA0A6" />
                             <circle cx="12" cy="12" r="1.5" fill="#ffffff" />
@@ -398,42 +423,42 @@ export default function TourViewer({
                 </button>
 
                 {/* Controles de Zoom (+ / -) apilados */}
-                <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-md shadow-xl border border-slate-200/80 dark:border-slate-800 rounded-2xl overflow-hidden flex flex-col">
+                <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-md shadow-xl border border-slate-200/80 dark:border-slate-800 rounded-xl sm:rounded-2xl overflow-hidden flex flex-col">
                     <button
                         onClick={handleZoomIn}
-                        className="w-10 h-10 flex items-center justify-center text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer border-b border-slate-200/80 dark:border-slate-800 active:scale-95"
+                        className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer border-b border-slate-200/80 dark:border-slate-800 active:scale-95"
                         title="Acercar (+)"
                     >
-                        <Plus className="w-4 h-4 stroke-[2.5]" />
+                        <Plus className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.5]" />
                     </button>
                     <button
                         onClick={handleZoomOut}
-                        className="w-10 h-10 flex items-center justify-center text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer active:scale-95"
+                        className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer active:scale-95"
                         title="Alejar (-)"
                     >
-                        <Minus className="w-4 h-4 stroke-[2.5]" />
+                        <Minus className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.5]" />
                     </button>
                 </div>
 
                 {/* Controles de Vista (Auto-rotar y Pantalla Completa) */}
-                <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-md shadow-xl border border-slate-200/80 dark:border-slate-800 rounded-2xl overflow-hidden flex flex-col">
+                <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-md shadow-xl border border-slate-200/80 dark:border-slate-800 rounded-xl sm:rounded-2xl overflow-hidden flex flex-col">
                     <button
                         onClick={toggleAutoRotate}
-                        className={`w-10 h-10 flex items-center justify-center transition cursor-pointer active:scale-95 border-b border-slate-200/80 dark:border-slate-800 ${
+                        className={`w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center transition cursor-pointer active:scale-95 border-b border-slate-200/80 dark:border-slate-800 ${
                             isAutoRotating
                                 ? 'bg-blue-600 text-white'
                                 : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'
                         }`}
                         title={isAutoRotating ? 'Detener rotación automática' : 'Giro automático 360°'}
                     >
-                        <RotateCw className={`w-4 h-4 stroke-[2.2] ${isAutoRotating ? 'animate-spin' : ''}`} style={{ animationDuration: '6s' }} />
+                        <RotateCw className={`w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.2] ${isAutoRotating ? 'animate-spin' : ''}`} style={{ animationDuration: '6s' }} />
                     </button>
                     <button
                         onClick={toggleFullscreen}
-                        className="w-10 h-10 flex items-center justify-center text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer active:scale-95"
+                        className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer active:scale-95"
                         title={isFullscreen ? 'Salir de pantalla completa' : 'Pantalla completa'}
                     >
-                        {isFullscreen ? <Minimize2 className="w-4 h-4 stroke-[2.2]" /> : <Maximize2 className="w-4 h-4 stroke-[2.2]" />}
+                        {isFullscreen ? <Minimize2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.2]" /> : <Maximize2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.2]" />}
                     </button>
                 </div>
             </div>

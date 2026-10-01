@@ -550,22 +550,32 @@ export default function Navbar() {
         {/* Pestaña / Flecha flotante superior para bajar o esconder el header durante la lectura */}
             {isPeriodico && (
                 <div 
-                    className={`fixed left-1/2 -translate-x-1/2 z-[60] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                    className={`fixed left-1/2 -translate-x-1/2 z-40 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
                         headerRevealed ? 'top-[76px] sm:top-[84px]' : 'top-0'
                     }`}
                 >
                     <button
                         onClick={() => setHeaderRevealed(!headerRevealed)}
-                        className="px-5 py-1.5 rounded-b-2xl bg-[#08111F] hover:bg-[#0d1b30] text-white border-x border-b border-white/15 shadow-[0_10px_25px_rgba(0,0,0,0.35)] flex items-center gap-2 text-xs font-semibold cursor-pointer group transition-all backdrop-blur-md"
+                        className={`px-5 py-1.5 rounded-b-2xl bg-transparent border-x border-b flex items-center gap-2 text-xs font-semibold cursor-pointer group transition-all backdrop-blur-[2px] ${
+                            headerRevealed 
+                                ? 'text-white border-white/20 hover:bg-white/10' 
+                                : 'text-slate-800 border-slate-200/90 hover:bg-slate-100/70 shadow-sm'
+                        }`}
                         title={headerRevealed ? "Ocultar menú para continuar leyendo el periódico" : "Bajar menú del colegio"}
                     >
-                        <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.8)]" />
-                        <span className="text-[11px] tracking-wide text-white/90 group-hover:text-white font-semibold">
+                        <span className={`w-2 h-2 rounded-full animate-pulse ${
+                            headerRevealed ? 'bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.8)]' : 'bg-red-600'
+                        }`} />
+                        <span className={`text-[11px] tracking-wide font-semibold ${
+                            headerRevealed ? 'text-white/90 group-hover:text-white' : 'text-slate-700 group-hover:text-black'
+                        }`}>
                             {headerRevealed ? "Ocultar Menú" : "Menú COLSIH"}
                         </span>
                         <svg 
-                            className={`w-3.5 h-3.5 transition-transform duration-300 text-red-500 group-hover:text-red-400 ${
-                                headerRevealed ? 'rotate-180' : 'group-hover:translate-y-0.5'
+                            className={`w-3.5 h-3.5 transition-transform duration-300 ${
+                                headerRevealed 
+                                    ? 'rotate-180 text-red-400 group-hover:text-red-300' 
+                                    : 'text-red-600 group-hover:translate-y-0.5'
                             }`} 
                             fill="none" 
                             stroke="currentColor" 

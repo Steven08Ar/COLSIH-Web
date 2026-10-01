@@ -26,15 +26,15 @@ export default function PeriodicoIndex() {
     const bookContainerRef = useRef(null);
     const pageFlipRef = useRef(null);
     const audioCtxRef = useRef(null);
+    const paperBufferRef = useRef(null);
 
     const [currentPage, setCurrentPage] = useState(0); // 0-indexed
     const [soundEnabled, setSoundEnabled] = useState(true);
     const [zoomLevel, setZoomLevel] = useState(1);
     const [isLoading, setIsLoading] = useState(true);
 
-    // Sintetizador Web Audio API para el sonido de paso de hoja de papel real
-    const playPaperSound = () => {
-        if (!soundEnabled) return;
+    // Inicializar buffer de audio precalculado una sola vez para cero overhead de memoria y cero lag
+    const initAudio = () => {
         try {
             if (!audioCtxRef.current) {
                 audioCtxRef.current = new (window.AudioContext || window.webkitAudioContext)();
@@ -43,40 +43,51 @@ export default function PeriodicoIndex() {
             if (ctx.state === 'suspended') {
                 ctx.resume();
             }
-
-            const bufferSize = ctx.sampleRate * 0.22;
-            const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-            const data = buffer.getChannelData(0);
-            for (let i = 0; i < bufferSize; i++) {
-                data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (ctx.sampleRate * 0.08));
+            if (!paperBufferRef.current) {
+                const bufferSize = Math.floor(ctx.sampleRate * 0.18);
+                const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+                const data = buffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) {
+                    data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (ctx.sampleRate * 0.06));
+                }
+                paperBufferRef.current = buffer;
             }
+        } catch (e) {}
+    };
+
+    // Reproducción ultra-liviana sin recalculación de buffers
+    const playPaperSound = () => {
+        if (!soundEnabled) return;
+        try {
+            initAudio();
+            const ctx = audioCtxRef.current;
+            const buffer = paperBufferRef.current;
+            if (!ctx || !buffer) return;
 
             const noise = ctx.createBufferSource();
             noise.buffer = buffer;
 
             const filter = ctx.createBiquadFilter();
             filter.type = 'bandpass';
-            filter.frequency.setValueAtTime(1100, ctx.currentTime);
-            filter.frequency.exponentialRampToValueAtTime(350, ctx.currentTime + 0.2);
-            filter.Q.setValueAtTime(1.5, ctx.currentTime);
+            filter.frequency.setValueAtTime(1000, ctx.currentTime);
+            filter.frequency.exponentialRampToValueAtTime(320, ctx.currentTime + 0.16);
+            filter.Q.setValueAtTime(1.2, ctx.currentTime);
 
             const gain = ctx.createGain();
             gain.gain.setValueAtTime(0.01, ctx.currentTime);
-            gain.gain.linearRampToValueAtTime(0.18, ctx.currentTime + 0.03);
-            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.21);
+            gain.gain.linearRampToValueAtTime(0.14, ctx.currentTime + 0.02);
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.17);
 
             noise.connect(filter);
             filter.connect(gain);
             gain.connect(ctx.destination);
 
             noise.start(ctx.currentTime);
-            noise.stop(ctx.currentTime + 0.22);
-        } catch (e) {
-            // Ignorar si el navegador bloquea audio sin interacción previa
-        }
+            noise.stop(ctx.currentTime + 0.18);
+        } catch (e) {}
     };
 
-    // Inicializar el libro interactivo StPageFlip con vista de revista abierta (2 páginas)
+    // Inicializar el libro interactivo StPageFlip altamente optimizado
     useEffect(() => {
         let isMounted = true;
         const container = bookContainerRef.current;
@@ -89,24 +100,27 @@ export default function PeriodicoIndex() {
                 container.innerHTML = '';
                 const isMobileScreen = window.innerWidth < 768;
 
-                // Configuración de StPageFlip para revista abierta gigante a doble página
+                // Configuración de StPageFlip de alto rendimiento
+                // - showCover: true -> Portada y contraportada solas
+                // - drawShadow: false & maxShadowOpacity: 0 -> Cero cómputo de sombras para máxima fluidez
+                // - flippingTime: 450 -> Animación rápida y sin tirones
                 const pageFlip = new PageFlip(container, {
-                    width: isMobileScreen ? 420 : 580,
-                    height: isMobileScreen ? 680 : 900,
+                    width: isMobileScreen ? 380 : 560,
+                    height: isMobileScreen ? 600 : 860,
                     size: 'stretch',
-                    minWidth: 280,
+                    minWidth: 260,
                     maxWidth: 1650,
-                    minHeight: 450,
-                    maxHeight: 1400,
-                    maxShadowOpacity: 0.35,
-                    showCover: false, // Revista siempre abierta a doble página
+                    minHeight: 400,
+                    maxHeight: 1350,
+                    maxShadowOpacity: 0,
+                    showCover: true, // Portada al inicio y contraportada al final se muestran solas
                     mobileScrollSupport: false,
-                    usePortrait: isMobileScreen, // 1 pág en teléfonos, 2 págs abiertas en computadores
+                    usePortrait: isMobileScreen,
                     startPage: 0,
-                    drawShadow: true,
-                    flippingTime: 750,
+                    drawShadow: false, // Sin cálculo de sombras en canvas para máxima fluidez a 60 FPS
+                    flippingTime: 450, // Tiempo ágil para evitar sensación de congelamiento
                     useMouseEvents: true,
-                    swipeDistance: 20,
+                    swipeDistance: 25,
                     clickEventForward: true
                 });
 
@@ -130,7 +144,7 @@ export default function PeriodicoIndex() {
                 console.error('Error al inicializar PageFlip:', err);
                 if (isMounted) setIsLoading(false);
             }
-        }, 150);
+        }, 100);
 
         return () => {
             isMounted = false;
@@ -177,32 +191,32 @@ export default function PeriodicoIndex() {
         if (pageFlipRef.current) pageFlipRef.current.flipPrev();
     };
 
-    const zoomIn = () => setZoomLevel(prev => Math.min(prev + 0.25, 2.2));
+    const zoomIn = () => setZoomLevel(prev => Math.min(prev + 0.25, 2.0));
     const zoomOut = () => setZoomLevel(prev => Math.max(prev - 0.25, 0.8));
     const resetZoom = () => setZoomLevel(1);
 
     return (
         <AppLayout>
             <Head>
-                <title>Periódico Escolar Abierto · Colegio Santa Isabel de Hungría</title>
+                <title>Periódico Escolar · Colegio Santa Isabel de Hungría</title>
                 <meta 
                     name="description" 
-                    content="Edición especial interactiva del Periódico Escolar del Colegio Santa Isabel de Hungría. Revista abierta en 3D a doble página con animación de papel." 
+                    content="Edición especial interactiva del Periódico Escolar del Colegio Santa Isabel de Hungría." 
                 />
             </Head>
 
-            {/* Estilos CSS dedicados: SOMBRA PROFUNDA REALISTA EXCLUSIVA PARA EL PERIÓDICO */}
+            {/* Estilos optimizados para aceleración por hardware y cero sombras */}
             <style>{`
                 #flipbook-root {
-                    filter: drop-shadow(0 25px 50px rgba(0, 0, 0, 0.28)) 
-                            drop-shadow(0 10px 20px rgba(0, 0, 0, 0.14))
-                            drop-shadow(0 2px 6px rgba(0, 0, 0, 0.08));
+                    will-change: transform;
+                    transform: translateZ(0);
+                    contain: layout paint;
                 }
-                #flipbook-root .stf__parent {
-                    box-shadow: 0 30px 70px -15px rgba(0, 0, 0, 0.35) !important;
-                }
+                #flipbook-root .stf__parent,
+                #flipbook-root .stf__wrapper,
                 #flipbook-root .stf__item {
-                    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+                    box-shadow: none !important;
+                    filter: none !important;
                 }
             `}</style>
 
@@ -218,7 +232,11 @@ export default function PeriodicoIndex() {
                         </span>
                         <span className="hidden sm:inline-block text-slate-400">·</span>
                         <span className="hidden sm:inline-block text-[11px] text-slate-500 font-medium">
-                            Revista Abierta · Doble Página
+                            {currentPage === 0 
+                                ? 'Portada' 
+                                : currentPage >= TOTAL_PAGES - 1 
+                                    ? 'Contraportada' 
+                                    : `Páginas ${currentPage} - ${currentPage + 1} de ${TOTAL_PAGES}`}
                         </span>
                     </div>
 
@@ -237,7 +255,7 @@ export default function PeriodicoIndex() {
                 </div>
 
                 {/* ========================================================
-                    ÁREA CENTRAL: REVISTA ABIERTA GIGANTE A PANTALLA COMPLETA
+                    ÁREA CENTRAL: REVISTA A PANTALLA COMPLETA
                     ======================================================== */}
                 <div className="relative flex-grow flex items-center justify-center px-1 sm:px-4 md:px-8 overflow-hidden bg-white">
                     
@@ -245,7 +263,7 @@ export default function PeriodicoIndex() {
                     <button
                         onClick={flipPrev}
                         disabled={currentPage === 0}
-                        className={`absolute left-2 sm:left-5 md:left-7 z-30 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-white hover:bg-slate-50 border border-slate-200 text-slate-800 flex items-center justify-center shadow-lg transition-all duration-200 hover:scale-110 active:scale-95 cursor-pointer group ${
+                        className={`absolute left-2 sm:left-5 md:left-7 z-30 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-white hover:bg-slate-50 border border-slate-200 text-slate-800 flex items-center justify-center shadow-md transition-all duration-150 hover:scale-110 active:scale-95 cursor-pointer group ${
                             currentPage === 0 ? 'opacity-20 pointer-events-none' : 'opacity-95 hover:opacity-100'
                         }`}
                         title="Página Anterior (Flecha Izquierda)"
@@ -253,9 +271,9 @@ export default function PeriodicoIndex() {
                         <ChevronLeft className="w-6 h-6 sm:w-7 sm:h-7 group-hover:-translate-x-0.5 transition-transform text-slate-800" />
                     </button>
 
-                    {/* Contenedor del Libro que Ocupa Casi Todo el Viewport */}
+                    {/* Contenedor del Libro */}
                     <div 
-                        className="relative w-full h-full flex items-center justify-center transition-transform duration-300 ease-out"
+                        className="relative w-full h-full flex items-center justify-center transition-transform duration-200 ease-out"
                         style={{
                             transform: `scale(${zoomLevel})`,
                             transformOrigin: 'center center'
@@ -270,17 +288,17 @@ export default function PeriodicoIndex() {
                                         Abriendo Periódico Escolar...
                                     </h3>
                                     <p className="text-xs text-slate-500 font-light">
-                                        Cargando vista a doble página
+                                        Cargando edición interactiva
                                     </p>
                                 </div>
                             </div>
                         )}
 
-                        {/* Elemento raíz de StPageFlip: ¡Ocupa casi toda la pantalla con sombra profunda en el libro! */}
+                        {/* Elemento raíz de StPageFlip: Cero sombras, máxima fluidez y aceleración por GPU */}
                         <div 
                             ref={bookContainerRef} 
                             id="flipbook-root"
-                            className="w-[96vw] max-w-[1550px] h-[88vh] max-h-[960px] cursor-grab active:cursor-grabbing"
+                            className="w-[96vw] max-w-[1550px] h-[88vh] max-h-[960px] cursor-grab active:cursor-grabbing flex items-center justify-center"
                         />
                     </div>
 
@@ -288,7 +306,7 @@ export default function PeriodicoIndex() {
                     <button
                         onClick={flipNext}
                         disabled={currentPage >= TOTAL_PAGES - 1}
-                        className={`absolute right-2 sm:right-5 md:right-7 z-30 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-white hover:bg-slate-50 border border-slate-200 text-slate-800 flex items-center justify-center shadow-lg transition-all duration-200 hover:scale-110 active:scale-95 cursor-pointer group ${
+                        className={`absolute right-2 sm:right-5 md:right-7 z-30 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-white hover:bg-slate-50 border border-slate-200 text-slate-800 flex items-center justify-center shadow-md transition-all duration-150 hover:scale-110 active:scale-95 cursor-pointer group ${
                             currentPage >= TOTAL_PAGES - 1 ? 'opacity-20 pointer-events-none' : 'opacity-95 hover:opacity-100'
                         }`}
                         title="Página Siguiente (Flecha Derecha)"
@@ -304,7 +322,7 @@ export default function PeriodicoIndex() {
                 <div className="absolute bottom-4 sm:bottom-6 left-4 sm:left-6 z-30">
                     <button
                         onClick={() => setSoundEnabled(!soundEnabled)}
-                        className={`p-2.5 sm:px-3.5 sm:py-2 rounded-full bg-white border border-slate-200 shadow-md flex items-center gap-2 transition-all hover:scale-105 active:scale-95 cursor-pointer ${
+                        className={`p-2.5 sm:px-3.5 sm:py-2 rounded-full bg-white border border-slate-200 shadow-sm flex items-center gap-2 transition-all hover:scale-105 active:scale-95 cursor-pointer ${
                             soundEnabled ? 'text-slate-700 hover:text-black hover:bg-slate-50' : 'text-red-600 bg-red-50/50'
                         }`}
                         title={soundEnabled ? "Silenciar sonido de papel" : "Activar sonido de pasar hoja"}
@@ -326,7 +344,7 @@ export default function PeriodicoIndex() {
                 {/* ========================================================
                     ESQUINA INFERIOR DERECHA: CONTROLES DE ZOOM
                     ======================================================== */}
-                <div className="absolute bottom-4 sm:bottom-6 right-4 sm:right-6 z-30 flex items-center gap-1 p-1 sm:p-1.5 rounded-full bg-white border border-slate-200 shadow-md">
+                <div className="absolute bottom-4 sm:bottom-6 right-4 sm:right-6 z-30 flex items-center gap-1 p-1 sm:p-1.5 rounded-full bg-white border border-slate-200 shadow-sm">
                     <button
                         onClick={zoomOut}
                         disabled={zoomLevel <= 0.8}
@@ -346,7 +364,7 @@ export default function PeriodicoIndex() {
                     )}
                     <button
                         onClick={zoomIn}
-                        disabled={zoomLevel >= 2.2}
+                        disabled={zoomLevel >= 2.0}
                         className="p-1.5 sm:p-2 rounded-full hover:bg-slate-100 text-slate-700 hover:text-black disabled:opacity-30 disabled:pointer-events-none transition-colors"
                         title="Aumentar Zoom"
                     >

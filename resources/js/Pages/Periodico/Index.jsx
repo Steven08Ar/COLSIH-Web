@@ -30,8 +30,16 @@ export default function PeriodicoIndex() {
     const [currentPage, setCurrentPage] = useState(0); // 0-indexed
     const [soundEnabled, setSoundEnabled] = useState(true);
     const [zoomLevel, setZoomLevel] = useState(1);
+    const [panOffset, setPanOffset] = useState({ x: 0, y: 0 });
+    const [isDragging, setIsDragging] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [reinitKey, setReinitKey] = useState(0);
+
+    const dragStartRef = useRef({ x: 0, y: 0 });
+    const panStartRef = useRef({ x: 0, y: 0 });
+    const isPinchingRef = useRef(false);
+    const initialPinchDistRef = useRef(null);
+    const initialPinchZoomRef = useRef(1);
 
     // Sintetizador Web Audio API original para el sonido de paso de hoja realista
     const playPaperSound = () => {
@@ -187,7 +195,7 @@ export default function PeriodicoIndex() {
                 e.preventDefault();
                 pageFlipRef.current.turnToPage(TOTAL_PAGES - 1);
             } else if (e.key === 'Escape') {
-                if (zoomLevel > 1) setZoomLevel(1);
+                if (zoomLevel > 1) resetZoom();
             }
         };
 
@@ -203,9 +211,91 @@ export default function PeriodicoIndex() {
         if (pageFlipRef.current) pageFlipRef.current.flipPrev();
     };
 
-    const zoomIn = () => setZoomLevel(prev => Math.min(prev + 0.25, 2.0));
-    const zoomOut = () => setZoomLevel(prev => Math.max(prev - 0.25, 0.8));
-    const resetZoom = () => setZoomLevel(1);
+    const zoomIn = () => setZoomLevel(prev => Math.min(prev + 0.35, 2.8));
+    const zoomOut = () => {
+        setZoomLevel(prev => {
+            const next = Math.max(prev - 0.35, 1.0);
+            if (next <= 1.0) {
+                setPanOffset({ x: 0, y: 0 });
+            }
+            return next;
+        });
+    };
+    const resetZoom = () => {
+        setZoomLevel(1);
+        setPanOffset({ x: 0, y: 0 });
+    };
+
+    // Control de arrastre / paneo libre de cámara cuando hay zoom (PC y móvil)
+    const handlePointerDown = (e) => {
+        if (zoomLevel <= 1.0) return;
+        if (e.button !== undefined && e.button !== 0) return;
+        setIsDragging(true);
+        dragStartRef.current = { x: e.clientX, y: e.clientY };
+        panStartRef.current = { ...panOffset };
+        try {
+            e.currentTarget.setPointerCapture(e.pointerId);
+        } catch (err) {}
+    };
+
+    const handlePointerMove = (e) => {
+        if (!isDragging || zoomLevel <= 1.0) return;
+        const dx = e.clientX - dragStartRef.current.x;
+        const dy = e.clientY - dragStartRef.current.y;
+
+        const maxPanX = (zoomLevel - 1) * (window.innerWidth * 0.7);
+        const maxPanY = (zoomLevel - 1) * (window.innerHeight * 0.7);
+
+        setPanOffset({
+            x: Math.max(-maxPanX, Math.min(maxPanX, panStartRef.current.x + dx)),
+            y: Math.max(-maxPanY, Math.min(maxPanY, panStartRef.current.y + dy))
+        });
+    };
+
+    const handlePointerUp = (e) => {
+        if (isDragging) {
+            setIsDragging(false);
+            try {
+                e.currentTarget.releasePointerCapture(e.pointerId);
+            } catch (err) {}
+        }
+    };
+
+    // Gestos táctiles de pellizco (pinch-to-zoom) en móvil
+    const handleTouchStart = (e) => {
+        if (e.touches.length === 2) {
+            isPinchingRef.current = true;
+            const dist = Math.hypot(
+                e.touches[0].clientX - e.touches[1].clientX,
+                e.touches[0].clientY - e.touches[1].clientY
+            );
+            initialPinchDistRef.current = dist;
+            initialPinchZoomRef.current = zoomLevel;
+        }
+    };
+
+    const handleTouchMove = (e) => {
+        if (e.touches.length === 2 && isPinchingRef.current && initialPinchDistRef.current) {
+            e.preventDefault();
+            const dist = Math.hypot(
+                e.touches[0].clientX - e.touches[1].clientX,
+                e.touches[0].clientY - e.touches[1].clientY
+            );
+            const factor = dist / initialPinchDistRef.current;
+            const targetZoom = Math.min(Math.max(initialPinchZoomRef.current * factor, 1.0), 2.8);
+            setZoomLevel(targetZoom);
+            if (targetZoom <= 1.0) {
+                setPanOffset({ x: 0, y: 0 });
+            }
+        }
+    };
+
+    const handleTouchEnd = (e) => {
+        if (e.touches.length < 2) {
+            isPinchingRef.current = false;
+            initialPinchDistRef.current = null;
+        }
+    };
 
     return (
         <AppLayout>
@@ -272,9 +362,22 @@ export default function PeriodicoIndex() {
                 </div>
 
                 {/* ========================================================
-                    ÁREA CENTRAL: REVISTA A PANTALLA COMPLETA
+                    ÁREA CENTRAL: REVISTA A PANTALLA COMPLETA CON CÁMARA LIBRE
                     ======================================================== */}
-                <div className="relative flex-grow flex items-center justify-center px-1 sm:px-4 md:px-8 overflow-hidden bg-white">
+                <div 
+                    className="relative flex-grow flex items-center justify-center px-1 sm:px-4 md:px-8 overflow-hidden bg-white select-none"
+                    onPointerDown={handlePointerDown}
+                    onPointerMove={handlePointerMove}
+                    onPointerUp={handlePointerUp}
+                    onPointerCancel={handlePointerUp}
+                    onTouchStart={handleTouchStart}
+                    onTouchMove={handleTouchMove}
+                    onTouchEnd={handleTouchEnd}
+                    style={{
+                        cursor: zoomLevel > 1.0 ? (isDragging ? 'grabbing' : 'grab') : 'default',
+                        touchAction: zoomLevel > 1.0 ? 'none' : 'auto'
+                    }}
+                >
                     
                     {/* Flecha Lateral Flotante Izquierda: SOLO ESCRITORIO (hidden md:flex) */}
                     <button
@@ -288,12 +391,14 @@ export default function PeriodicoIndex() {
                         <ChevronLeft className="w-6 h-6 lg:w-7 lg:h-7 group-hover:-translate-x-0.5 transition-transform text-slate-800" />
                     </button>
 
-                    {/* Contenedor del Libro */}
+                    {/* Contenedor del Libro con Zoom y Cámara Libre (Pan) */}
                     <div 
-                        className="relative w-full h-full flex items-center justify-center transition-transform duration-200 ease-out"
+                        className="relative w-full h-full flex items-center justify-center"
                         style={{
-                            transform: `scale(${zoomLevel})`,
-                            transformOrigin: 'center center'
+                            transform: `translate3d(${panOffset.x}px, ${panOffset.y}px, 0) scale(${zoomLevel})`,
+                            transformOrigin: 'center center',
+                            transition: isDragging ? 'none' : 'transform 200ms cubic-bezier(0.2, 0.8, 0.2, 1)',
+                            willChange: 'transform'
                         }}
                     >
                         {/* Indicador de Carga */}
@@ -315,7 +420,9 @@ export default function PeriodicoIndex() {
                         <div 
                             ref={bookContainerRef} 
                             id="flipbook-root"
-                            className="w-full max-w-[1550px] h-[calc(100dvh-130px)] md:h-[88vh] md:max-h-[960px] cursor-grab active:cursor-grabbing flex items-center justify-center"
+                            className={`w-full max-w-[1550px] h-[calc(100dvh-130px)] md:h-[88vh] md:max-h-[960px] flex items-center justify-center ${
+                                zoomLevel > 1.0 ? 'pointer-events-none' : 'cursor-grab active:cursor-grabbing'
+                            }`}
                         />
                     </div>
 

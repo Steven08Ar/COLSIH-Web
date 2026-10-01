@@ -3,6 +3,13 @@ import AppLayout from '@/Layouts/AppLayout';
 import ScrollReveal from '../HomeSections/ScrollReveal';
 import { mediaUrl } from '@/utils/mediaUrl';
 
+const CATEGORIA_BADGE = {
+    noticia:     'bg-blue-600 text-white',
+    evento:      'bg-emerald-600 text-white',
+    comunicado:  'bg-[#800A15] text-white',
+    deportes:    'bg-amber-500 text-slate-950',
+};
+
 const CATEGORIAS = [
     { value: '', label: 'Todas' },
     { value: 'noticia', label: 'Noticias' },
@@ -152,15 +159,16 @@ export default function NoticiasIndex({ noticias, categoriaActual }) {
                                                         <img src="/marca/logo-colsih.svg" alt="Logo COLSIH" className="w-14 h-auto opacity-10 absolute" />
                                                     </div>
                                                 )}
-                                                {noticia.es_deporte || noticia.seccion === 'deportes' ? (
-                                                    <span className="absolute top-4 left-4 bg-amber-500 text-slate-950 font-black text-[10px] uppercase tracking-widest px-3.5 py-1.5 rounded-full shadow-md">
-                                                        Deportes
-                                                    </span>
-                                                ) : noticia.categoria ? (
-                                                    <span className="absolute top-4 left-4 bg-white/90 dark:bg-slate-900/90 backdrop-blur-xs text-[#08111F] dark:text-slate-200 font-extrabold text-[10px] uppercase tracking-widest px-3.5 py-1.5 rounded-full shadow-xs">
-                                                        {noticia.categoria}
-                                                    </span>
-                                                ) : null}
+                                                {(() => {
+                                                    const cat = (noticia.es_deporte || noticia.seccion === 'deportes') ? 'deportes' : noticia.categoria;
+                                                    if (!cat) return null;
+                                                    const cls = CATEGORIA_BADGE[cat] ?? 'bg-slate-700 text-white';
+                                                    return (
+                                                        <span className={`absolute top-4 left-4 font-black text-[10px] uppercase tracking-widest px-3.5 py-1.5 rounded-full shadow-md ${cls}`}>
+                                                            {cat}
+                                                        </span>
+                                                    );
+                                                })()}
                                             </div>
 
                                             {/* Body */}

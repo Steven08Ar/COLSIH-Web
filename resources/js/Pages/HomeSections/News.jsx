@@ -2,6 +2,13 @@ import { Link } from '@inertiajs/react';
 import ScrollReveal from './ScrollReveal';
 import { mediaUrl } from '@/utils/mediaUrl';
 
+const CATEGORIA_BADGE = {
+    noticia:    'bg-blue-600 text-white',
+    evento:     'bg-emerald-600 text-white',
+    comunicado: 'bg-[#800A15] text-white',
+    deportes:   'bg-amber-500 text-slate-950',
+};
+
 export default function News({ noticias }) {
     if (!noticias || noticias.length === 0) return null;
 
@@ -83,11 +90,16 @@ export default function News({ noticias }) {
                                                 <img src="/marca/logo-colsih.svg" alt="Logo COLSIH" className="w-14 h-auto opacity-10 absolute center" />
                                             </div>
                                         )}
-                                        {item.categoria && (
-                                            <span className="absolute top-4 left-4 bg-white/90 backdrop-blur-xs text-[#08111F] font-extrabold text-[10px] uppercase tracking-widest px-3.5 py-1.5 rounded-full shadow-xs">
-                                                {item.categoria}
-                                            </span>
-                                        )}
+                                        {(() => {
+                                            const cat = (item.es_deporte || item.seccion === 'deportes') ? 'deportes' : item.categoria;
+                                            if (!cat) return null;
+                                            const cls = CATEGORIA_BADGE[cat] ?? 'bg-slate-700 text-white';
+                                            return (
+                                                <span className={`absolute top-4 left-4 font-black text-[10px] uppercase tracking-widest px-3.5 py-1.5 rounded-full shadow-md ${cls}`}>
+                                                    {cat}
+                                                </span>
+                                            );
+                                        })()}
                                     </div>
  
                                     {/* Body */}

@@ -29,6 +29,18 @@ export default function Navbar() {
     const [scrolled, setScrolled] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
 
+    // Detección de página de periódico para auto-ocultar el header
+    const isPeriodico = url.startsWith('/periodico');
+    const [headerRevealed, setHeaderRevealed] = useState(!isPeriodico);
+
+    useEffect(() => {
+        if (isPeriodico) {
+            setHeaderRevealed(false);
+        } else {
+            setHeaderRevealed(true);
+        }
+    }, [url, isPeriodico]);
+
     // Nosotros Dropdown
     const [dropdownVisible, setDropdownVisible] = useState(false);
     const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -128,10 +140,13 @@ export default function Navbar() {
     const actividadesActive = actividadesLinks.some(l => url === l.href || url.startsWith(l.href) || url.startsWith('/actividades/'));
 
     return (
-        <header className={`fixed top-0 left-0 w-full z-50 py-4 transition-all duration-300 bg-gradient-to-b from-[#08111F]/60 to-transparent ${
-            scrolled ? 'bg-[#08111F]/40 backdrop-blur-md' : 'backdrop-blur-[2px]'
-        }`}>
-            <div className="w-full px-6 md:px-10 lg:px-16 flex items-center justify-between relative">
+        <>
+            <header className={`fixed top-0 left-0 w-full z-50 py-4 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] bg-gradient-to-b from-[#08111F]/90 to-transparent ${
+                scrolled ? 'bg-[#08111F]/80 backdrop-blur-md' : 'backdrop-blur-[2px]'
+            } ${
+                isPeriodico && !headerRevealed ? '-translate-y-full pointer-events-none' : 'translate-y-0 pointer-events-auto'
+            }`}>
+                <div className="w-full px-6 md:px-10 lg:px-16 flex items-center justify-between relative">
 
                 {/* Logo (Extremo Izquierdo) */}
                 <Link href={url === '/mjs' ? '/mjs' : '/'} className="flex items-center gap-3 group focus:outline-none shrink-0">
@@ -304,6 +319,18 @@ export default function Navbar() {
                         )}
                     </div>
 
+                    <Link 
+                        href="/periodico-escolar" 
+                        className={`transition-colors flex items-center gap-1.5 ${
+                            url.startsWith('/periodico') ? 'text-amber-300 font-extrabold' : 'hover:text-white'
+                        }`}
+                    >
+                        <span>Periódico Escolar</span>
+                        <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-bold uppercase tracking-wider border border-amber-500/30">
+                            3D
+                        </span>
+                    </Link>
+
                     <Link href="/noticias" className={`transition-colors ${url.startsWith('/noticias') ? 'text-white font-extrabold' : 'hover:text-white'}`}>Noticias</Link>
                     <Link href="/contacto" className={`transition-colors ${url === '/contacto' ? 'text-white font-extrabold' : 'hover:text-white'}`}>Contacto</Link>
                 </div>
@@ -449,6 +476,21 @@ export default function Navbar() {
                             </div>
                         </div>
 
+                        <Link 
+                            href="/periodico-escolar" 
+                            onClick={() => setMobileOpen(false)} 
+                            className={`flex items-center justify-between px-3 py-2 text-sm font-semibold rounded-lg ${
+                                url.startsWith('/periodico') ? 'text-amber-300 bg-white/10' : 'text-white/85'
+                            }`}
+                        >
+                            <span className="flex items-center gap-2">
+                                <span>Periódico Escolar</span>
+                            </span>
+                            <span className="text-[9px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-bold uppercase tracking-wider border border-amber-500/30">
+                                3D Libro
+                            </span>
+                        </Link>
+
                         <Link href="/noticias" onClick={() => setMobileOpen(false)} className={`block px-3 py-2 text-sm font-semibold rounded-lg ${url.startsWith('/noticias') ? 'text-white bg-white/10' : 'text-white/85'}`}>Noticias</Link>
                         <Link href="/contacto" onClick={() => setMobileOpen(false)} className={`block px-3 py-2 text-sm font-semibold rounded-lg ${url === '/contacto' ? 'text-white bg-white/10' : 'text-white/85'}`}>Contacto</Link>
 
@@ -504,5 +546,36 @@ export default function Navbar() {
                 </div>
             )}
         </header>
+
+        {/* Pestaña / Flecha flotante superior para bajar o esconder el header durante la lectura */}
+            {isPeriodico && (
+                <div 
+                    className={`fixed left-1/2 -translate-x-1/2 z-[60] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                        headerRevealed ? 'top-[76px] sm:top-[84px]' : 'top-0'
+                    }`}
+                >
+                    <button
+                        onClick={() => setHeaderRevealed(!headerRevealed)}
+                        className="px-4 sm:px-6 py-1.5 rounded-b-2xl bg-[#08111F]/95 hover:bg-[#0E1B31] text-white/90 hover:text-white backdrop-blur-xl border-x border-b border-white/20 shadow-[0_12px_30px_rgba(0,0,0,0.6)] flex items-center gap-2 text-xs font-semibold cursor-pointer group transition-all"
+                        title={headerRevealed ? "Ocultar menú para continuar leyendo el periódico" : "Bajar menú del colegio"}
+                    >
+                        <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+                        <span className="text-[11px] tracking-wide text-slate-300 group-hover:text-white font-medium">
+                            {headerRevealed ? "Ocultar Menú" : "Menú COLSIH"}
+                        </span>
+                        <svg 
+                            className={`w-3.5 h-3.5 transition-transform duration-300 text-amber-400 ${
+                                headerRevealed ? 'rotate-180' : 'group-hover:translate-y-0.5'
+                            }`} 
+                            fill="none" 
+                            stroke="currentColor" 
+                            viewBox="0 0 24 24"
+                        >
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                </div>
+            )}
+        </>
     );
 }

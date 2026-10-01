@@ -88,6 +88,14 @@ Route::prefix('noticias')->name('noticias.')->group(function () {
     Route::get('/{noticia:slug}', [NoticiasController::class, 'show'])->name('show');
 });
 
+// Periódico Escolar Interactivo (Flipbook 3D)
+Route::get('/periodico-escolar', function () {
+    return inertia('Periodico/Index');
+})->name('periodico.index');
+Route::get('/periodico', function () {
+    return redirect()->route('periodico.index');
+});
+
 // Recorrido virtual 360
 Route::get('/recorrido-virtual/{slug?}', [TourController::class, 'show'])->name('tour.show');
 

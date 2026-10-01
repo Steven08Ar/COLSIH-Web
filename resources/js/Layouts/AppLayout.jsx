@@ -6,12 +6,13 @@ import MJSButton from '@/Components/MJSButton';
 import PlataformaMobileButton from '@/Components/PlataformaMobileButton';
 
 export default function AppLayout({ children }) {
-    const { props } = usePage();
+    const { props, url } = usePage();
     const flash = props.flash ?? {};
+    const isPeriodico = url.startsWith('/periodico');
 
     return (
         <>
-            <div className="min-h-screen bg-white flex flex-col font-sans selection:bg-red-100 selection:text-red-900 overflow-x-hidden">
+            <div className={`min-h-screen ${isPeriodico ? 'h-screen overflow-hidden bg-[#070C16]' : 'bg-white'} flex flex-col font-sans selection:bg-red-100 selection:text-red-900 overflow-x-hidden`}>
                 <Navbar />
 
                 {/* Flash Message Banner */}
@@ -27,19 +28,19 @@ export default function AppLayout({ children }) {
                 )}
 
                 {/* Page Content */}
-                <main className="flex-grow">{children}</main>
+                <main className={`flex-grow ${isPeriodico ? 'h-full flex flex-col overflow-hidden' : ''}`}>{children}</main>
 
-                <Footer />
+                {!isPeriodico && <Footer />}
             </div>
 
-            {/* Botón Flotante de MJS (Abajo Izquierda) */}
-            <MJSButton />
-
-            {/* Botón Flotante de Plataforma en Móvil (Abajo Centro) */}
-            <PlataformaMobileButton />
-
-            {/* Botón Flotante Global de WhatsApp (Abajo Derecha) */}
-            <WhatsAppButton />
+            {/* Botones Flotantes (ocultos durante la lectura inmersiva del periódico escolar) */}
+            {!isPeriodico && (
+                <>
+                    <MJSButton />
+                    <PlataformaMobileButton />
+                    <WhatsAppButton />
+                </>
+            )}
         </>
     );
 }

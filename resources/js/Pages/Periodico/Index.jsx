@@ -26,15 +26,16 @@ export default function PeriodicoIndex() {
     const bookContainerRef = useRef(null);
     const pageFlipRef = useRef(null);
     const audioCtxRef = useRef(null);
-    const paperBufferRef = useRef(null);
 
     const [currentPage, setCurrentPage] = useState(0); // 0-indexed
     const [soundEnabled, setSoundEnabled] = useState(true);
     const [zoomLevel, setZoomLevel] = useState(1);
     const [isLoading, setIsLoading] = useState(true);
+    const [reinitKey, setReinitKey] = useState(0);
 
-    // Inicializar buffer de audio precalculado una sola vez para cero overhead de memoria y cero lag
-    const initAudio = () => {
+    // Sintetizador Web Audio API original para el sonido de paso de hoja realista
+    const playPaperSound = () => {
+        if (!soundEnabled) return;
         try {
             if (!audioCtxRef.current) {
                 audioCtxRef.current = new (window.AudioContext || window.webkitAudioContext)();
@@ -43,49 +44,53 @@ export default function PeriodicoIndex() {
             if (ctx.state === 'suspended') {
                 ctx.resume();
             }
-            if (!paperBufferRef.current) {
-                const bufferSize = Math.floor(ctx.sampleRate * 0.18);
-                const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-                const data = buffer.getChannelData(0);
-                for (let i = 0; i < bufferSize; i++) {
-                    data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (ctx.sampleRate * 0.06));
-                }
-                paperBufferRef.current = buffer;
-            }
-        } catch (e) {}
-    };
 
-    // Reproducción ultra-liviana sin recalculación de buffers
-    const playPaperSound = () => {
-        if (!soundEnabled) return;
-        try {
-            initAudio();
-            const ctx = audioCtxRef.current;
-            const buffer = paperBufferRef.current;
-            if (!ctx || !buffer) return;
+            // Generar ráfaga corta de ruido filtrado simulando el roce suave y crujido del papel
+            const bufferSize = ctx.sampleRate * 0.22;
+            const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+            const data = buffer.getChannelData(0);
+            for (let i = 0; i < bufferSize; i++) {
+                data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (ctx.sampleRate * 0.08));
+            }
 
             const noise = ctx.createBufferSource();
             noise.buffer = buffer;
 
             const filter = ctx.createBiquadFilter();
             filter.type = 'bandpass';
-            filter.frequency.setValueAtTime(1000, ctx.currentTime);
-            filter.frequency.exponentialRampToValueAtTime(320, ctx.currentTime + 0.16);
-            filter.Q.setValueAtTime(1.2, ctx.currentTime);
+            filter.frequency.setValueAtTime(1100, ctx.currentTime);
+            filter.frequency.exponentialRampToValueAtTime(350, ctx.currentTime + 0.2);
+            filter.Q.setValueAtTime(1.5, ctx.currentTime);
 
             const gain = ctx.createGain();
             gain.gain.setValueAtTime(0.01, ctx.currentTime);
-            gain.gain.linearRampToValueAtTime(0.14, ctx.currentTime + 0.02);
-            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.17);
+            gain.gain.linearRampToValueAtTime(0.16, ctx.currentTime + 0.03);
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.21);
 
             noise.connect(filter);
             filter.connect(gain);
             gain.connect(ctx.destination);
 
             noise.start(ctx.currentTime);
-            noise.stop(ctx.currentTime + 0.18);
+            noise.stop(ctx.currentTime + 0.22);
         } catch (e) {}
     };
+
+    // Detectar cambios entre móvil y escritorio para reajustar fluidamente el flipbook
+    useEffect(() => {
+        let lastIsMobile = window.innerWidth < 768;
+        const handleResize = () => {
+            const currentIsMobile = window.innerWidth < 768;
+            if (currentIsMobile !== lastIsMobile) {
+                lastIsMobile = currentIsMobile;
+                setIsLoading(true);
+                setReinitKey(prev => prev + 1);
+            }
+        };
+
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     // Inicializar el libro interactivo StPageFlip altamente optimizado
     useEffect(() => {
@@ -99,74 +104,39 @@ export default function PeriodicoIndex() {
             try {
                 container.innerHTML = '';
                 const isMobileScreen = window.innerWidth < 768;
+                const winW = window.innerWidth;
+                const winH = window.innerHeight;
 
-                // Configuración de StPageFlip de alto rendimiento
-                // - showCover: true -> Portada y contraportada solas
-                // - drawShadow: false & maxShadowOpacity: 0 -> Cero cómputo de sombras para máxima fluidez
-                // - flippingTime: 450 -> Animación rápida y sin tirones
+                // En móvil: Calculamos dimensiones óptimas para que la página sea mucho más grande
+                // Aspect ratio real del periódico = ~1.646
+                const mobileWidth = Math.min(winW - 16, 480);
+                const mobileHeight = Math.min(Math.round(mobileWidth * 1.62), Math.floor(winH - 125));
+
+                const desktopWidth = 560;
+                const desktopHeight = 860;
+
                 const pageFlip = new PageFlip(container, {
-                    width: isMobileScreen ? 380 : 560,
-                    height: isMobileScreen ? 600 : 860,
+                    width: isMobileScreen ? mobileWidth : desktopWidth,
+                    height: isMobileScreen ? mobileHeight : desktopHeight,
                     size: 'stretch',
-                    minWidth: 260,
-                    maxWidth: 1650,
-                    minHeight: 400,
-                    maxHeight: 1350,
+                    // En móvil, minWidth alto garantiza que SIEMPRE se mantenga en modo portrait de 1 sola página
+                    minWidth: isMobileScreen ? 800 : 280,
+                    maxWidth: isMobileScreen ? 600 : 1650,
+                    minHeight: isMobileScreen ? 400 : 420,
+                    maxHeight: isMobileScreen ? 1200 : 1350,
                     maxShadowOpacity: 0,
-                    showCover: true, // Portada al inicio y contraportada al final se muestran solas
+                    showCover: !isMobileScreen, // En móvil portrait, cada página (0..50) se visualiza completa
                     mobileScrollSupport: false,
                     usePortrait: isMobileScreen,
                     startPage: 0,
                     drawShadow: false, // Sin cálculo de sombras en canvas para máxima fluidez a 60 FPS
-                    flippingTime: 450, // Tiempo ágil para evitar sensación de congelamiento
+                    flippingTime: 420, // Animación natural de paso de hoja
                     useMouseEvents: true,
-                    swipeDistance: 25,
+                    swipeDistance: 20,
                     clickEventForward: true
                 });
 
                 pageFlip.loadFromImages(PAGE_IMAGES);
-
-                // Solución al bug de StPageFlip: Evitar duplicar la página en la mesa mientras se dobla en el aire
-                const render = pageFlip.getRender();
-                if (render && render.drawFrame) {
-                    render.drawFrame = function() {
-                        this.clear();
-
-                        // No dibujar la página estática si es la que está levantándose y doblándose en el aire
-                        const isFlippingPrev = 1 === this.direction && null != this.flippingPage;
-                        const isFlippingNext = 0 === this.direction && null != this.flippingPage;
-
-                        if ("portrait" !== this.orientation && null != this.leftPage && !isFlippingPrev) {
-                            this.leftPage.simpleDraw(0);
-                        }
-
-                        if (null != this.rightPage && !isFlippingNext) {
-                            this.rightPage.simpleDraw(1);
-                        }
-
-                        if (null != this.bottomPage) {
-                            this.bottomPage.draw();
-                        }
-
-                        this.drawBookShadow();
-
-                        if (null != this.flippingPage) {
-                            this.flippingPage.draw();
-                        }
-
-                        if (null != this.shadow) {
-                            this.drawOuterShadow();
-                            this.drawInnerShadow();
-                        }
-
-                        const t = this.getRect();
-                        if ("portrait" === this.orientation) {
-                            this.ctx.beginPath();
-                            this.ctx.rect(t.left + t.pageWidth, t.top, t.width, t.height);
-                            this.ctx.clip();
-                        }
-                    };
-                }
 
                 pageFlip.on('init', () => {
                     if (isMounted) {
@@ -198,7 +168,7 @@ export default function PeriodicoIndex() {
                 pageFlipRef.current = null;
             }
         };
-    }, []);
+    }, [reinitKey]);
 
     // Manejo de teclado (flechas ← y →)
     useEffect(() => {
@@ -254,6 +224,11 @@ export default function PeriodicoIndex() {
                     transform: translateZ(0);
                     contain: layout paint;
                 }
+                #flipbook-root.stf__parent {
+                    min-width: 0 !important;
+                    width: 100% !important;
+                    margin: 0 auto !important;
+                }
                 #flipbook-root .stf__parent,
                 #flipbook-root .stf__wrapper,
                 #flipbook-root .stf__item {
@@ -266,8 +241,8 @@ export default function PeriodicoIndex() {
             <div className="relative w-full h-[100dvh] bg-white text-slate-800 flex flex-col justify-between overflow-hidden select-none">
                 
                 {/* Barra Superior Minimalista Blanca */}
-                <div className="relative z-30 pt-9 sm:pt-11 pb-1 px-4 sm:px-8 flex items-center justify-between text-xs bg-white">
-                    <div className="flex items-center gap-2.5">
+                <div className="relative z-30 pt-9 sm:pt-11 pb-1 px-3 sm:px-8 flex items-center justify-between text-xs bg-white flex-shrink-0">
+                    <div className="flex items-center gap-2">
                         <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-slate-200 text-slate-800 font-semibold text-[11px] shadow-sm">
                             <BookOpen className="w-3.5 h-3.5 text-red-600" />
                             <span>Periódico Escolar COLSIH</span>
@@ -301,16 +276,16 @@ export default function PeriodicoIndex() {
                     ======================================================== */}
                 <div className="relative flex-grow flex items-center justify-center px-1 sm:px-4 md:px-8 overflow-hidden bg-white">
                     
-                    {/* Flecha Lateral Flotante Izquierda para pasar hojas */}
+                    {/* Flecha Lateral Flotante Izquierda: SOLO ESCRITORIO (hidden md:flex) */}
                     <button
                         onClick={flipPrev}
                         disabled={currentPage === 0}
-                        className={`absolute left-2 sm:left-5 md:left-7 z-30 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-white hover:bg-slate-50 border border-slate-200 text-slate-800 flex items-center justify-center shadow-md transition-all duration-150 hover:scale-110 active:scale-95 cursor-pointer group ${
+                        className={`hidden md:flex absolute left-3 lg:left-6 z-30 w-12 h-12 lg:w-14 lg:h-14 rounded-full bg-white hover:bg-slate-50 border border-slate-200 text-slate-800 items-center justify-center shadow-md transition-all duration-150 hover:scale-110 active:scale-95 cursor-pointer group ${
                             currentPage === 0 ? 'opacity-20 pointer-events-none' : 'opacity-95 hover:opacity-100'
                         }`}
                         title="Página Anterior (Flecha Izquierda)"
                     >
-                        <ChevronLeft className="w-6 h-6 sm:w-7 sm:h-7 group-hover:-translate-x-0.5 transition-transform text-slate-800" />
+                        <ChevronLeft className="w-6 h-6 lg:w-7 lg:h-7 group-hover:-translate-x-0.5 transition-transform text-slate-800" />
                     </button>
 
                     {/* Contenedor del Libro */}
@@ -340,28 +315,100 @@ export default function PeriodicoIndex() {
                         <div 
                             ref={bookContainerRef} 
                             id="flipbook-root"
-                            className="w-[96vw] max-w-[1550px] h-[88vh] max-h-[960px] cursor-grab active:cursor-grabbing flex items-center justify-center"
+                            className="w-full max-w-[1550px] h-[calc(100dvh-130px)] md:h-[88vh] md:max-h-[960px] cursor-grab active:cursor-grabbing flex items-center justify-center"
                         />
                     </div>
 
-                    {/* Flecha Lateral Flotante Derecha para pasar hojas */}
+                    {/* Flecha Lateral Flotante Derecha: SOLO ESCRITORIO (hidden md:flex) */}
                     <button
                         onClick={flipNext}
                         disabled={currentPage >= TOTAL_PAGES - 1}
-                        className={`absolute right-2 sm:right-5 md:right-7 z-30 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-white hover:bg-slate-50 border border-slate-200 text-slate-800 flex items-center justify-center shadow-md transition-all duration-150 hover:scale-110 active:scale-95 cursor-pointer group ${
+                        className={`hidden md:flex absolute right-3 lg:right-6 z-30 w-12 h-12 lg:w-14 lg:h-14 rounded-full bg-white hover:bg-slate-50 border border-slate-200 text-slate-800 items-center justify-center shadow-md transition-all duration-150 hover:scale-110 active:scale-95 cursor-pointer group ${
                             currentPage >= TOTAL_PAGES - 1 ? 'opacity-20 pointer-events-none' : 'opacity-95 hover:opacity-100'
                         }`}
                         title="Página Siguiente (Flecha Derecha)"
                     >
-                        <ChevronRight className="w-6 h-6 sm:w-7 sm:h-7 group-hover:translate-x-0.5 transition-transform text-slate-800" />
+                        <ChevronRight className="w-6 h-6 lg:w-7 lg:h-7 group-hover:translate-x-0.5 transition-transform text-slate-800" />
                     </button>
 
                 </div>
 
                 {/* ========================================================
-                    ESQUINA INFERIOR IZQUIERDA: BOTÓN DE SILENCIAR
+                    BARRA INFERIOR EN MÓVIL: BOTONES DE NAVEGACIÓN JUNTOS ABAJO
                     ======================================================== */}
-                <div className="absolute bottom-4 sm:bottom-6 left-4 sm:left-6 z-30">
+                <div className="flex md:hidden relative z-30 px-3 pb-3 pt-1 bg-white items-center justify-between border-t border-slate-100">
+                    {/* Botón Silenciar / Sonido en Móvil */}
+                    <button
+                        onClick={() => setSoundEnabled(!soundEnabled)}
+                        className={`p-2 rounded-full border shadow-sm flex items-center justify-center transition-all active:scale-90 ${
+                            soundEnabled ? 'border-slate-200 text-slate-700 bg-white' : 'border-red-200 text-red-600 bg-red-50'
+                        }`}
+                        title={soundEnabled ? "Silenciar sonido" : "Activar sonido"}
+                    >
+                        {soundEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
+                    </button>
+
+                    {/* DOCK CENTRAL: BOTONES IZQUIERDA Y DERECHA JUNTOS EN MÓVIL */}
+                    <div className="flex items-center gap-1.5 p-1 bg-white border border-slate-200 rounded-full shadow-md">
+                        <button
+                            onClick={flipPrev}
+                            disabled={currentPage === 0}
+                            className="w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 active:scale-90 disabled:opacity-20 disabled:pointer-events-none text-slate-800 flex items-center justify-center transition-all cursor-pointer"
+                            title="Página Anterior"
+                            aria-label="Página Anterior"
+                        >
+                            <ChevronLeft className="w-5 h-5 text-slate-800" />
+                        </button>
+
+                        <span className="px-2.5 text-xs font-bold text-slate-800 tabular-nums select-none min-w-[62px] text-center">
+                            {currentPage === 0 ? 'Portada' : `${currentPage + 1} / ${TOTAL_PAGES}`}
+                        </span>
+
+                        <button
+                            onClick={flipNext}
+                            disabled={currentPage >= TOTAL_PAGES - 1}
+                            className="w-9 h-9 rounded-full bg-[#08111F] hover:bg-red-700 active:scale-90 disabled:opacity-20 disabled:pointer-events-none text-white flex items-center justify-center transition-all cursor-pointer shadow-sm"
+                            title="Página Siguiente"
+                            aria-label="Página Siguiente"
+                        >
+                            <ChevronRight className="w-5 h-5 text-white" />
+                        </button>
+                    </div>
+
+                    {/* Controles de Zoom en Móvil */}
+                    <div className="flex items-center gap-0.5 p-1 rounded-full bg-white border border-slate-200 shadow-sm">
+                        <button
+                            onClick={zoomOut}
+                            disabled={zoomLevel <= 0.8}
+                            className="p-1 rounded-full hover:bg-slate-100 text-slate-700 disabled:opacity-30 disabled:pointer-events-none transition-colors"
+                            title="Reducir Zoom"
+                        >
+                            <ZoomOut className="w-3.5 h-3.5" />
+                        </button>
+                        {zoomLevel !== 1 && (
+                            <button
+                                onClick={resetZoom}
+                                className="px-1 text-[10px] font-bold text-slate-700"
+                                title="100%"
+                            >
+                                {Math.round(zoomLevel * 100)}%
+                            </button>
+                        )}
+                        <button
+                            onClick={zoomIn}
+                            disabled={zoomLevel >= 2.0}
+                            className="p-1 rounded-full hover:bg-slate-100 text-slate-700 disabled:opacity-30 disabled:pointer-events-none transition-colors"
+                            title="Aumentar Zoom"
+                        >
+                            <ZoomIn className="w-3.5 h-3.5" />
+                        </button>
+                    </div>
+                </div>
+
+                {/* ========================================================
+                    CONTROLES DE ESCRITORIO: LATERALES INFERIORES (hidden en móvil)
+                    ======================================================== */}
+                <div className="hidden md:block absolute bottom-5 left-6 z-30">
                     <button
                         onClick={() => setSoundEnabled(!soundEnabled)}
                         className={`p-2.5 sm:px-3.5 sm:py-2 rounded-full bg-white border border-slate-200 shadow-sm flex items-center gap-2 transition-all hover:scale-105 active:scale-95 cursor-pointer ${
@@ -383,10 +430,7 @@ export default function PeriodicoIndex() {
                     </button>
                 </div>
 
-                {/* ========================================================
-                    ESQUINA INFERIOR DERECHA: CONTROLES DE ZOOM
-                    ======================================================== */}
-                <div className="absolute bottom-4 sm:bottom-6 right-4 sm:right-6 z-30 flex items-center gap-1 p-1 sm:p-1.5 rounded-full bg-white border border-slate-200 shadow-sm">
+                <div className="hidden md:flex absolute bottom-5 right-6 z-30 items-center gap-1 p-1 sm:p-1.5 rounded-full bg-white border border-slate-200 shadow-sm">
                     <button
                         onClick={zoomOut}
                         disabled={zoomLevel <= 0.8}

@@ -556,15 +556,15 @@ export default function Navbar() {
                 >
                     <button
                         onClick={() => setHeaderRevealed(!headerRevealed)}
-                        className="px-5 py-1.5 rounded-b-2xl bg-white hover:bg-slate-50 text-slate-800 border-x border-b border-slate-200/90 shadow-[0_8px_20px_rgba(0,0,0,0.08)] flex items-center gap-2 text-xs font-semibold cursor-pointer group transition-all"
+                        className="px-5 py-1.5 rounded-b-2xl bg-[#08111F] hover:bg-[#0d1b30] text-white border-x border-b border-white/15 shadow-[0_10px_25px_rgba(0,0,0,0.35)] flex items-center gap-2 text-xs font-semibold cursor-pointer group transition-all backdrop-blur-md"
                         title={headerRevealed ? "Ocultar menú para continuar leyendo el periódico" : "Bajar menú del colegio"}
                     >
-                        <span className="w-2 h-2 rounded-full bg-red-600 animate-pulse" />
-                        <span className="text-[11px] tracking-wide text-slate-700 group-hover:text-black font-semibold">
+                        <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.8)]" />
+                        <span className="text-[11px] tracking-wide text-white/90 group-hover:text-white font-semibold">
                             {headerRevealed ? "Ocultar Menú" : "Menú COLSIH"}
                         </span>
                         <svg 
-                            className={`w-3.5 h-3.5 transition-transform duration-300 text-red-600 ${
+                            className={`w-3.5 h-3.5 transition-transform duration-300 text-red-500 group-hover:text-red-400 ${
                                 headerRevealed ? 'rotate-180' : 'group-hover:translate-y-0.5'
                             }`} 
                             fill="none" 

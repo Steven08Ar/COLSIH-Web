@@ -14,6 +14,23 @@ const MIN_FOV = 30;
 const MAX_FOV = 100;
 const hfovToZoom = (h) => Math.max(0, Math.min(100, Math.round(((Number(h || 75) - MIN_FOV) / (MAX_FOV - MIN_FOV)) * 100)));
 
+// iOS tiene límite de textura WebGL de 4096px — usamos proxy Laravel que redimensiona
+const IS_IOS = typeof navigator !== 'undefined' &&
+    /iPad|iPhone|iPod/.test(navigator.userAgent) &&
+    !('MSStream' in window);
+
+const R2_RECORRIDO_BASE = 'https://media.colsih.edu.co/recorrido_360/';
+
+function iosCompatibleUrl(url) {
+    if (!IS_IOS || !url) return url;
+    // Si la URL apunta a recorrido_360 en R2, redirigir al proxy Laravel
+    if (url.includes('recorrido_360/')) {
+        const filename = url.split('recorrido_360/').pop();
+        return `/tour360-proxy/${filename}`;
+    }
+    return url;
+}
+
 /**
  * Genera el HTML del marcador de navegación estilo Google Maps Street View.
  * Los marcadores se anclan como 2D en coordenadas esféricas exactas (yaw, pitch),
@@ -105,9 +122,10 @@ function buildNodes(scenes) {
             }
         });
 
+        const rawPanorama = mediaUrl(scene.imagen_url || scene.imagen_path) || '';
         return {
             id: scene.slug,
-            panorama: mediaUrl(scene.imagen_url || scene.imagen_path) || '',
+            panorama: iosCompatibleUrl(rawPanorama),
             name: scene.nombre || '',
             // No links para evitar las flechas CSS3D del suelo que se desvían de las coordenadas
             links: [],
@@ -221,13 +239,14 @@ export default function TourViewer({
             // Capturar errores de carga de panorama (PSV v5 los emite como 'error')
             viewer.addEventListener('error', () => markError());
 
-            // Timeout de seguridad — iOS silencia el error de WebGL sin disparar eventos
-            // 12s es suficiente: en iOS la textura falla casi inmediatamente pero PSV no notifica
+            // Timeout de seguridad — en iOS usamos proxy que procesa la imagen (primera vez tarda más)
             loadTimeout = setTimeout(() => {
                 if (!isMounted) return;
                 setIsLoading(false);
-                setLoadError('Tu dispositivo no pudo renderizar el panorama 360°. Esto ocurre en algunos iPhones/iPads con imágenes de alta resolución. Intenta desde una red Wi-Fi o en PC.');
-            }, 12000);
+                setLoadError(IS_IOS
+                    ? 'No se pudo cargar el panorama en tu dispositivo. Verifica tu conexión Wi-Fi e intenta de nuevo.'
+                    : 'El panorama tardó demasiado en cargar. Verifica tu conexión e intenta de nuevo.');
+            }, IS_IOS ? 30000 : 15000);
 
             // Rastrear posición de cámara para la brújula dinámica en tiempo real
             viewer.addEventListener('position-updated', ({ position }) => {
@@ -390,9 +409,11 @@ export default function TourViewer({
                     <span className="mt-4 text-xs font-bold text-white/90 tracking-wider uppercase">
                         Cargando Espacio 360°...
                     </span>
-                    <span className="mt-2 text-[10px] text-white/40 max-w-[200px] text-center leading-snug">
-                        En iPhone/iPad puede tardar hasta 12 segundos
-                    </span>
+                    {IS_IOS && (
+                        <span className="mt-2 text-[10px] text-white/40 max-w-[200px] text-center leading-snug">
+                            Optimizando imagen para iPhone/iPad...
+                        </span>
+                    )}
                 </div>
             )}
 

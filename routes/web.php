@@ -19,6 +19,44 @@ use Illuminate\Support\Facades\Route;
 // Fast handler para Chrome Devtools y requests automáticas del navegador
 Route::get('/.well-known/{any}', fn() => response()->noContent())->where('any', '.*');
 
+// Proxy de imágenes 360° redimensionadas para compatibilidad con iOS (límite WebGL 4096px)
+Route::get('/tour360-proxy/{filename}', function (string $filename) {
+    $r2Url = 'https://media.colsih.edu.co/recorrido_360/' . rawurlencode($filename);
+
+    $cacheKey = 'tour360_ios_' . md5($filename);
+    $cached = cache()->get($cacheKey);
+
+    if (!$cached) {
+        try {
+            $response = \Illuminate\Support\Facades\Http::timeout(15)->get($r2Url);
+            if (!$response->successful()) abort(404);
+            $imageData = $response->body();
+
+            // Redimensionar a máximo 4096px de ancho (límite de textura WebGL en iOS)
+            $manager = new \Intervention\Image\ImageManager(
+                new \Intervention\Image\Drivers\Gd\Driver()
+            );
+            $img = $manager->read($imageData);
+            if ($img->width() > 4096) {
+                $img->scaleDown(width: 4096);
+            }
+            $cached = $img->toJpeg(88)->toString();
+            cache()->put($cacheKey, $cached, now()->addHours(24));
+        } catch (\Throwable $e) {
+            // Si falla el resize, devolver imagen original
+            $response = \Illuminate\Support\Facades\Http::timeout(15)->get($r2Url);
+            if (!$response->successful()) abort(404);
+            $cached = $response->body();
+        }
+    }
+
+    return response($cached, 200, [
+        'Content-Type'  => 'image/jpeg',
+        'Cache-Control' => 'public, max-age=86400',
+        'Access-Control-Allow-Origin' => '*',
+    ]);
+})->where('filename', '.+');
+
 // Home
 Route::get('/', HomeController::class)->name('home');
 

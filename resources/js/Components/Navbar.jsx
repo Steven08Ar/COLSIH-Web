@@ -556,26 +556,16 @@ export default function Navbar() {
                 >
                     <button
                         onClick={() => setHeaderRevealed(!headerRevealed)}
-                        className={`px-5 py-1.5 rounded-b-2xl bg-transparent border-x border-b flex items-center gap-2 text-xs font-semibold cursor-pointer group transition-all backdrop-blur-[2px] ${
-                            headerRevealed 
-                                ? 'text-white border-white/20 hover:bg-white/10' 
-                                : 'text-slate-800 border-slate-200/90 hover:bg-slate-100/70 shadow-sm'
-                        }`}
+                        className="px-5 py-1.5 rounded-b-2xl bg-transparent border-x border-b border-slate-300/80 hover:bg-slate-100/70 text-slate-800 flex items-center gap-2 text-xs font-semibold cursor-pointer group transition-all backdrop-blur-[2px] shadow-sm"
                         title={headerRevealed ? "Ocultar menú para continuar leyendo el periódico" : "Bajar menú del colegio"}
                     >
-                        <span className={`w-2 h-2 rounded-full animate-pulse ${
-                            headerRevealed ? 'bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.8)]' : 'bg-red-600'
-                        }`} />
-                        <span className={`text-[11px] tracking-wide font-semibold ${
-                            headerRevealed ? 'text-white/90 group-hover:text-white' : 'text-slate-700 group-hover:text-black'
-                        }`}>
+                        <span className="w-2 h-2 rounded-full bg-red-600 animate-pulse" />
+                        <span className="text-[11px] tracking-wide font-semibold text-slate-800 group-hover:text-black">
                             {headerRevealed ? "Ocultar Menú" : "Menú COLSIH"}
                         </span>
                         <svg 
-                            className={`w-3.5 h-3.5 transition-transform duration-300 ${
-                                headerRevealed 
-                                    ? 'rotate-180 text-red-400 group-hover:text-red-300' 
-                                    : 'text-red-600 group-hover:translate-y-0.5'
+                            className={`w-3.5 h-3.5 transition-transform duration-300 text-red-600 ${
+                                headerRevealed ? 'rotate-180 group-hover:-translate-y-0.5' : 'group-hover:translate-y-0.5'
                             }`} 
                             fill="none" 
                             stroke="currentColor" 

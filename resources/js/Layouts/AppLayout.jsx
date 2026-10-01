@@ -12,7 +12,7 @@ export default function AppLayout({ children }) {
 
     return (
         <>
-            <div className={`min-h-screen ${isPeriodico ? 'h-screen overflow-hidden bg-[#070C16]' : 'bg-white'} flex flex-col font-sans selection:bg-red-100 selection:text-red-900 overflow-x-hidden`}>
+            <div className={`min-h-screen ${isPeriodico ? 'h-screen overflow-hidden bg-white' : 'bg-white'} flex flex-col font-sans selection:bg-red-100 selection:text-red-900 overflow-x-hidden`}>
                 <Navbar />
 
                 {/* Flash Message Banner */}

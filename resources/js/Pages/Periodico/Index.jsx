@@ -416,10 +416,13 @@ export default function PeriodicoIndex() {
                 
                 {/* Barra Superior Minimalista Blanca */}
                 <div className="relative z-30 pt-9 sm:pt-11 pb-1 px-3 sm:px-8 flex items-center justify-between text-xs bg-white flex-shrink-0">
-                    <div className="flex items-center gap-2">
-                        <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-slate-200 text-slate-800 font-semibold text-[11px] shadow-sm">
+                    <div className="flex items-center gap-1.5 sm:gap-2">
+                        <span className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-full bg-white border border-slate-200 text-slate-800 font-semibold text-[11px] shadow-sm">
                             <BookOpen className="w-3.5 h-3.5 text-red-600" />
                             <span>Periódico Escolar COLSIH</span>
+                        </span>
+                        <span className="flex items-center px-2 sm:px-2.5 py-0.5 rounded-full bg-slate-100 border border-slate-200 text-[#800A15] font-bold text-[10px] sm:text-[11px]">
+                            1.ª Edición · 2026
                         </span>
                         <span className="hidden sm:inline-block text-slate-400">·</span>
                         <span className="hidden sm:inline-block text-[11px] text-slate-500 font-medium">

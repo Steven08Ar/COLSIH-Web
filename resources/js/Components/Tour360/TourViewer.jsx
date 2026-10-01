@@ -202,26 +202,32 @@ export default function TourViewer({
             const tourPlugin = viewer.getPlugin(VirtualTourPlugin);
             const markersPlugin = viewer.getPlugin(MarkersPlugin);
 
-            tourPlugin.addEventListener('node-changed', () => setIsLoading(false), { once: true });
-            viewer.addEventListener('ready', () => setIsLoading(false), { once: true });
+            const markLoaded = () => {
+                if (!isMounted) return;
+                clearTimeout(loadTimeout);
+                setIsLoading(false);
+            };
 
-            // Capturar errores de carga de panorama (ej: iOS WebGL texture limit, CORS)
-            viewer.addEventListener('error', () => {
-                if (isMounted) {
-                    setIsLoading(false);
-                    setLoadError('No se pudo cargar el panorama 360°. Verifica tu conexión e intenta de nuevo.');
-                }
-            });
+            const markError = (msg) => {
+                if (!isMounted) return;
+                clearTimeout(loadTimeout);
+                setIsLoading(false);
+                setLoadError(msg || 'No se pudo cargar el panorama 360°. Verifica tu conexión e intenta de nuevo.');
+            };
 
-            // Timeout de seguridad: si en 20s no cargó, mostrar error (común en iOS con imágenes grandes)
+            tourPlugin.addEventListener('node-changed', markLoaded, { once: true });
+            viewer.addEventListener('ready', markLoaded, { once: true });
+
+            // Capturar errores de carga de panorama (PSV v5 los emite como 'error')
+            viewer.addEventListener('error', () => markError());
+
+            // Timeout de seguridad — iOS silencia el error de WebGL sin disparar eventos
+            // 12s es suficiente: en iOS la textura falla casi inmediatamente pero PSV no notifica
             loadTimeout = setTimeout(() => {
-                if (isMounted && viewerRef.current) {
-                    setIsLoading(prev => {
-                        if (prev) setLoadError('El panorama tardó demasiado en cargar. Verifica tu conexión e intenta de nuevo.');
-                        return false;
-                    });
-                }
-            }, 20000);
+                if (!isMounted) return;
+                setIsLoading(false);
+                setLoadError('Tu dispositivo no pudo renderizar el panorama 360°. Esto ocurre en algunos iPhones/iPads con imágenes de alta resolución. Intenta desde una red Wi-Fi o en PC.');
+            }, 12000);
 
             // Rastrear posición de cámara para la brújula dinámica en tiempo real
             viewer.addEventListener('position-updated', ({ position }) => {
@@ -232,6 +238,7 @@ export default function TourViewer({
 
             // Notificar cambio de escena al padre y restaurar estado
             tourPlugin.addEventListener('node-changed', ({ node }) => {
+                clearTimeout(loadTimeout);
                 setIsLoading(false);
                 if (containerRef.current) {
                     containerRef.current.classList.remove('psv-walking-forward');
@@ -382,6 +389,9 @@ export default function TourViewer({
                     </div>
                     <span className="mt-4 text-xs font-bold text-white/90 tracking-wider uppercase">
                         Cargando Espacio 360°...
+                    </span>
+                    <span className="mt-2 text-[10px] text-white/40 max-w-[200px] text-center leading-snug">
+                        En iPhone/iPad puede tardar hasta 12 segundos
                     </span>
                 </div>
             )}

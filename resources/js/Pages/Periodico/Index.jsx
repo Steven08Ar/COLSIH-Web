@@ -36,8 +36,15 @@ export default function PeriodicoIndex() {
     const [reinitKey, setReinitKey] = useState(0);
     const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth < 768 : false);
 
+    // Referencias para control de paneo y gestos táctiles
     const dragStartRef = useRef({ x: 0, y: 0 });
     const panStartRef = useRef({ x: 0, y: 0 });
+    const touchStartX = useRef(0);
+    const touchStartY = useRef(0);
+    const touchStartTime = useRef(0);
+    const isPanningRef = useRef(false);
+    const initialPinchDistRef = useRef(null);
+    const initialPinchZoomRef = useRef(1);
 
     // Sintetizador Web Audio API original para el sonido de paso de hoja realista
     const playPaperSound = () => {
@@ -172,6 +179,32 @@ export default function PeriodicoIndex() {
         };
     }, [reinitKey]);
 
+    // Métodos seguros para pasar página
+    const flipNext = () => {
+        setPanOffset({ x: 0, y: 0 });
+        // En móvil, al pasar de página restablecemos el zoom para ver la nueva página completa sin desajustes
+        if (typeof window !== 'undefined' && window.innerWidth < 768) {
+            setZoomLevel(1);
+        }
+        if (pageFlipRef.current) {
+            try {
+                pageFlipRef.current.flipNext();
+            } catch (e) {}
+        }
+    };
+
+    const flipPrev = () => {
+        setPanOffset({ x: 0, y: 0 });
+        if (typeof window !== 'undefined' && window.innerWidth < 768) {
+            setZoomLevel(1);
+        }
+        if (pageFlipRef.current) {
+            try {
+                pageFlipRef.current.flipPrev();
+            } catch (e) {}
+        }
+    };
+
     // Manejo de teclado (flechas ← y →)
     useEffect(() => {
         const handleKeyDown = (e) => {
@@ -199,16 +232,6 @@ export default function PeriodicoIndex() {
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, [zoomLevel]);
 
-    const flipNext = () => {
-        setPanOffset({ x: 0, y: 0 });
-        if (pageFlipRef.current) pageFlipRef.current.flipNext();
-    };
-
-    const flipPrev = () => {
-        setPanOffset({ x: 0, y: 0 });
-        if (pageFlipRef.current) pageFlipRef.current.flipPrev();
-    };
-
     const zoomIn = () => setZoomLevel(prev => Math.min(prev + 0.35, 2.5));
     const zoomOut = () => {
         setZoomLevel(prev => {
@@ -231,25 +254,20 @@ export default function PeriodicoIndex() {
             ? 25 
             : 0;
 
-    // Control de arrastre / paneo libre de cámara cuando hay zoom (PC y móvil)
-    const handlePointerDown = (e) => {
+    // --- Control de ratón para PC (Zoom y Paneo libre) ---
+    const handleMouseDown = (e) => {
         if (zoomLevel <= 1.0) return;
         if (e.target && e.target.closest('button, a')) return;
-
         setIsDragging(true);
         dragStartRef.current = { x: e.clientX, y: e.clientY };
         panStartRef.current = { ...panOffset };
-        try {
-            e.currentTarget.setPointerCapture(e.pointerId);
-        } catch (err) {}
     };
 
-    const handlePointerMove = (e) => {
+    const handleMouseMove = (e) => {
         if (!isDragging || zoomLevel <= 1.0) return;
         const dx = e.clientX - dragStartRef.current.x;
         const dy = e.clientY - dragStartRef.current.y;
 
-        // Límites proporcionales al zoom para que nunca se desborde fuera de la pantalla
         const maxPanX = Math.round((zoomLevel - 1) * (window.innerWidth * 0.45));
         const maxPanY = Math.round((zoomLevel - 1) * (window.innerHeight * 0.45));
 
@@ -259,12 +277,107 @@ export default function PeriodicoIndex() {
         });
     };
 
-    const handlePointerUp = (e) => {
+    const handleMouseUp = () => {
         if (isDragging) {
             setIsDragging(false);
-            try {
-                e.currentTarget.releasePointerCapture(e.pointerId);
-            } catch (err) {}
+        }
+    };
+
+    // --- Control táctil para móvil (Swipe ultra-fluido + Paneo en Zoom + Pinch-to-zoom) ---
+    const handleTouchStart = (e) => {
+        if (e.touches.length === 2) {
+            // Gesto de pellizco con 2 dedos (Pinch-to-zoom)
+            isPanningRef.current = false;
+            const dist = Math.hypot(
+                e.touches[0].clientX - e.touches[1].clientX,
+                e.touches[0].clientY - e.touches[1].clientY
+            );
+            initialPinchDistRef.current = dist;
+            initialPinchZoomRef.current = zoomLevel;
+            return;
+        }
+
+        if (e.touches.length === 1) {
+            const t = e.touches[0];
+            touchStartX.current = t.clientX;
+            touchStartY.current = t.clientY;
+            touchStartTime.current = Date.now();
+
+            if (zoomLevel > 1.0) {
+                isPanningRef.current = true;
+                dragStartRef.current = { x: t.clientX, y: t.clientY };
+                panStartRef.current = { ...panOffset };
+            } else {
+                isPanningRef.current = false;
+            }
+        }
+    };
+
+    const handleTouchMove = (e) => {
+        // Gesto de zoom con 2 dedos
+        if (e.touches.length === 2 && initialPinchDistRef.current) {
+            const dist = Math.hypot(
+                e.touches[0].clientX - e.touches[1].clientX,
+                e.touches[0].clientY - e.touches[1].clientY
+            );
+            const scale = dist / initialPinchDistRef.current;
+            const targetZoom = Math.min(Math.max(initialPinchZoomRef.current * scale, 1.0), 2.5);
+            setZoomLevel(targetZoom);
+            if (targetZoom <= 1.0) {
+                setPanOffset({ x: 0, y: 0 });
+            }
+            return;
+        }
+
+        // Paneo de cámara en zoom con 1 dedo
+        if (e.touches.length === 1 && zoomLevel > 1.0 && isPanningRef.current) {
+            const t = e.touches[0];
+            const dx = t.clientX - dragStartRef.current.x;
+            const dy = t.clientY - dragStartRef.current.y;
+
+            const maxPanX = Math.round((zoomLevel - 1) * (window.innerWidth * 0.45));
+            const maxPanY = Math.round((zoomLevel - 1) * (window.innerHeight * 0.45));
+
+            setPanOffset({
+                x: Math.max(-maxPanX, Math.min(maxPanX, panStartRef.current.x + dx)),
+                y: Math.max(-maxPanY, Math.min(maxPanY, panStartRef.current.y + dy))
+            });
+        }
+    };
+
+    const handleTouchEnd = (e) => {
+        if (e.touches.length < 2) {
+            initialPinchDistRef.current = null;
+        }
+
+        if (e.changedTouches.length === 1) {
+            const t = e.changedTouches[0];
+            const dx = t.clientX - touchStartX.current;
+            const dy = t.clientY - touchStartY.current;
+            const dt = Date.now() - touchStartTime.current;
+
+            if (zoomLevel > 1.0) {
+                isPanningRef.current = false;
+                // Si estando en zoom el usuario hace un deslizamiento horizontal decidido (> 65px en menos de 450ms)
+                if (Math.abs(dx) > 65 && Math.abs(dx) > Math.abs(dy) * 1.5 && dt < 450) {
+                    if (dx < 0) {
+                        flipNext();
+                    } else {
+                        flipPrev();
+                    }
+                }
+                return;
+            }
+
+            // A escala normal (1.0x): swipe horizontal natural y sin esfuerzo (distancia > 35px, < 700ms)
+            const isHorizontalSwipe = Math.abs(dx) > 35 && Math.abs(dx) > Math.abs(dy) * 1.2 && dt < 700;
+            if (isHorizontalSwipe) {
+                if (dx < 0) {
+                    flipNext();
+                } else {
+                    flipPrev();
+                }
+            }
         }
     };
 
@@ -337,13 +450,17 @@ export default function PeriodicoIndex() {
                     ======================================================== */}
                 <div 
                     className="relative flex-grow flex items-center justify-center w-full px-1 sm:px-4 md:px-8 overflow-hidden bg-white select-none"
-                    onPointerDown={handlePointerDown}
-                    onPointerMove={handlePointerMove}
-                    onPointerUp={handlePointerUp}
-                    onPointerCancel={handlePointerUp}
+                    onMouseDown={handleMouseDown}
+                    onMouseMove={handleMouseMove}
+                    onMouseUp={handleMouseUp}
+                    onMouseLeave={handleMouseUp}
+                    onTouchStart={handleTouchStart}
+                    onTouchMove={handleTouchMove}
+                    onTouchEnd={handleTouchEnd}
+                    onTouchCancel={handleTouchEnd}
                     style={{
                         cursor: zoomLevel > 1.0 ? (isDragging ? 'grabbing' : 'grab') : 'default',
-                        touchAction: zoomLevel > 1.0 ? 'none' : 'auto'
+                        touchAction: 'none'
                     }}
                 >
                     
@@ -367,7 +484,7 @@ export default function PeriodicoIndex() {
                                 ? `translate3d(calc(${panOffset.x}px + ${desktopCoverOffset}%), ${panOffset.y}px, 0) scale(${zoomLevel})`
                                 : `translate3d(${panOffset.x}px, ${panOffset.y}px, 0) scale(${zoomLevel})`,
                             transformOrigin: 'center center',
-                            transition: isDragging ? 'none' : 'transform 260ms cubic-bezier(0.2, 0.8, 0.2, 1)',
+                            transition: (isDragging || isPanningRef.current) ? 'none' : 'transform 260ms cubic-bezier(0.2, 0.8, 0.2, 1)',
                             willChange: 'transform'
                         }}
                     >
@@ -386,7 +503,7 @@ export default function PeriodicoIndex() {
                             </div>
                         )}
 
-                        {/* Elemento raíz de StPageFlip: Cero sombras, máxima fluidez y aceleración por GPU */}
+                        {/* Elemento raíz de StPageFlip: Cero sombras, fluidez nativa a 60 FPS */}
                         <div 
                             ref={bookContainerRef} 
                             id="flipbook-root"

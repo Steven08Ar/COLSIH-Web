@@ -34,12 +34,10 @@ export default function PeriodicoIndex() {
     const [isDragging, setIsDragging] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [reinitKey, setReinitKey] = useState(0);
+    const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth < 768 : false);
 
     const dragStartRef = useRef({ x: 0, y: 0 });
     const panStartRef = useRef({ x: 0, y: 0 });
-    const isPinchingRef = useRef(false);
-    const initialPinchDistRef = useRef(null);
-    const initialPinchZoomRef = useRef(1);
 
     // Sintetizador Web Audio API original para el sonido de paso de hoja realista
     const playPaperSound = () => {
@@ -89,6 +87,7 @@ export default function PeriodicoIndex() {
         let lastIsMobile = window.innerWidth < 768;
         const handleResize = () => {
             const currentIsMobile = window.innerWidth < 768;
+            setIsMobile(currentIsMobile);
             if (currentIsMobile !== lastIsMobile) {
                 lastIsMobile = currentIsMobile;
                 setIsLoading(true);
@@ -112,26 +111,22 @@ export default function PeriodicoIndex() {
             try {
                 container.innerHTML = '';
                 const isMobileScreen = window.innerWidth < 768;
-                const winW = window.innerWidth;
-                const winH = window.innerHeight;
-
-                // En móvil: Calculamos dimensiones exactas para que la página quede perfectamente centrada y a gran escala
-                const mobileWidth = Math.min(winW - 16, 430);
-                const mobileHeight = Math.min(Math.round(mobileWidth * 1.62), Math.floor(winH - 125));
 
                 const desktopWidth = 560;
                 const desktopHeight = 860;
+                const mobileWidth = 380;
+                const mobileHeight = 600;
 
                 const pageFlip = new PageFlip(container, {
                     width: isMobileScreen ? mobileWidth : desktopWidth,
                     height: isMobileScreen ? mobileHeight : desktopHeight,
-                    size: isMobileScreen ? 'fixed' : 'stretch',
-                    minWidth: isMobileScreen ? mobileWidth : 280,
-                    maxWidth: isMobileScreen ? mobileWidth : 1650,
-                    minHeight: isMobileScreen ? mobileHeight : 420,
-                    maxHeight: isMobileScreen ? mobileHeight : 1350,
+                    size: 'stretch',
+                    minWidth: isMobileScreen ? 250 : 280,
+                    maxWidth: isMobileScreen ? 550 : 1650,
+                    minHeight: isMobileScreen ? 380 : 420,
+                    maxHeight: isMobileScreen ? 1200 : 1350,
                     maxShadowOpacity: 0,
-                    showCover: !isMobileScreen, // En móvil portrait, cada página (0..50) se visualiza completa
+                    showCover: !isMobileScreen, // Portada y contraportada solas en PC; en móvil cada página es individual
                     mobileScrollSupport: false,
                     usePortrait: isMobileScreen,
                     startPage: 0,
@@ -183,15 +178,17 @@ export default function PeriodicoIndex() {
             if (!pageFlipRef.current) return;
             if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') {
                 e.preventDefault();
-                pageFlipRef.current.flipNext();
+                flipNext();
             } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
                 e.preventDefault();
-                pageFlipRef.current.flipPrev();
+                flipPrev();
             } else if (e.key === 'Home') {
                 e.preventDefault();
+                setPanOffset({ x: 0, y: 0 });
                 pageFlipRef.current.turnToPage(0);
             } else if (e.key === 'End') {
                 e.preventDefault();
+                setPanOffset({ x: 0, y: 0 });
                 pageFlipRef.current.turnToPage(TOTAL_PAGES - 1);
             } else if (e.key === 'Escape') {
                 if (zoomLevel > 1) resetZoom();
@@ -227,69 +224,43 @@ export default function PeriodicoIndex() {
         setPanOffset({ x: 0, y: 0 });
     };
 
+    // Desplazamiento dinámico en PC para centrar la Portada y Contraportada
+    const desktopCoverOffset = (!isMobile && currentPage === 0) 
+        ? -25 
+        : (!isMobile && currentPage >= TOTAL_PAGES - 1) 
+            ? 25 
+            : 0;
+
     // Control de arrastre / paneo libre de cámara cuando hay zoom (PC y móvil)
-    const activePointersRef = useRef(new Map());
-    const initialPinchRef = useRef(null);
-
     const handlePointerDown = (e) => {
-        activePointersRef.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
+        if (zoomLevel <= 1.0) return;
+        if (e.target && e.target.closest('button, a')) return;
 
-        if (activePointersRef.current.size === 2) {
-            // Pellizco para zoom con 2 dedos en móvil
-            const pts = Array.from(activePointersRef.current.values());
-            const dist = Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y);
-            initialPinchRef.current = { dist, zoom: zoomLevel };
-        } else if (activePointersRef.current.size === 1 && zoomLevel > 1.0) {
-            // Paneo de cámara en zoom con 1 dedo o ratón
-            setIsDragging(true);
-            dragStartRef.current = { x: e.clientX, y: e.clientY };
-            panStartRef.current = { ...panOffset };
-            try {
-                e.currentTarget.setPointerCapture(e.pointerId);
-            } catch (err) {}
-            e.stopPropagation();
-        }
+        setIsDragging(true);
+        dragStartRef.current = { x: e.clientX, y: e.clientY };
+        panStartRef.current = { ...panOffset };
+        try {
+            e.currentTarget.setPointerCapture(e.pointerId);
+        } catch (err) {}
     };
 
     const handlePointerMove = (e) => {
-        if (!activePointersRef.current.has(e.pointerId)) return;
-        activePointersRef.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
+        if (!isDragging || zoomLevel <= 1.0) return;
+        const dx = e.clientX - dragStartRef.current.x;
+        const dy = e.clientY - dragStartRef.current.y;
 
-        // Gesto de zoom con 2 dedos
-        if (activePointersRef.current.size === 2 && initialPinchRef.current) {
-            const pts = Array.from(activePointersRef.current.values());
-            const dist = Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y);
-            const ratio = dist / initialPinchRef.current.dist;
-            const targetZoom = Math.min(Math.max(initialPinchRef.current.zoom * ratio, 1.0), 2.5);
-            setZoomLevel(targetZoom);
-            if (targetZoom <= 1.0) {
-                setPanOffset({ x: 0, y: 0 });
-            }
-            return;
-        }
+        // Límites proporcionales al zoom para que nunca se desborde fuera de la pantalla
+        const maxPanX = Math.round((zoomLevel - 1) * (window.innerWidth * 0.45));
+        const maxPanY = Math.round((zoomLevel - 1) * (window.innerHeight * 0.45));
 
-        // Paneo con 1 dedo / ratón
-        if (isDragging && zoomLevel > 1.0) {
-            const dx = e.clientX - dragStartRef.current.x;
-            const dy = e.clientY - dragStartRef.current.y;
-
-            // Límites proporcionales al zoom para que nunca se desborde fuera de la pantalla
-            const maxPanX = Math.round((zoomLevel - 1) * (window.innerWidth * 0.45));
-            const maxPanY = Math.round((zoomLevel - 1) * (window.innerHeight * 0.45));
-
-            setPanOffset({
-                x: Math.max(-maxPanX, Math.min(maxPanX, panStartRef.current.x + dx)),
-                y: Math.max(-maxPanY, Math.min(maxPanY, panStartRef.current.y + dy))
-            });
-        }
+        setPanOffset({
+            x: Math.max(-maxPanX, Math.min(maxPanX, panStartRef.current.x + dx)),
+            y: Math.max(-maxPanY, Math.min(maxPanY, panStartRef.current.y + dy))
+        });
     };
 
     const handlePointerUp = (e) => {
-        activePointersRef.current.delete(e.pointerId);
-        if (activePointersRef.current.size < 2) {
-            initialPinchRef.current = null;
-        }
-        if (activePointersRef.current.size === 0) {
+        if (isDragging) {
             setIsDragging(false);
             try {
                 e.currentTarget.releasePointerCapture(e.pointerId);
@@ -315,10 +286,8 @@ export default function PeriodicoIndex() {
                 }
                 #flipbook-root.stf__parent {
                     min-width: 0 !important;
-                    margin: 0 auto !important;
-                }
-                .stf__wrapper {
-                    position: relative !important;
+                    width: 100% !important;
+                    height: 100% !important;
                     margin: 0 auto !important;
                 }
                 #flipbook-root .stf__parent,
@@ -367,7 +336,7 @@ export default function PeriodicoIndex() {
                     ÁREA CENTRAL: REVISTA A PANTALLA COMPLETA CON CÁMARA LIBRE
                     ======================================================== */}
                 <div 
-                    className="relative flex-grow flex items-center justify-center px-1 sm:px-4 md:px-8 overflow-hidden bg-white select-none"
+                    className="relative flex-grow flex items-center justify-center w-full px-1 sm:px-4 md:px-8 overflow-hidden bg-white select-none"
                     onPointerDown={handlePointerDown}
                     onPointerMove={handlePointerMove}
                     onPointerUp={handlePointerUp}
@@ -392,11 +361,13 @@ export default function PeriodicoIndex() {
 
                     {/* Contenedor del Libro con Zoom y Cámara Libre (Pan) */}
                     <div 
-                        className="relative flex items-center justify-center"
+                        className="relative w-full h-full flex items-center justify-center"
                         style={{
-                            transform: `translate3d(${panOffset.x}px, ${panOffset.y}px, 0) scale(${zoomLevel})`,
+                            transform: desktopCoverOffset !== 0
+                                ? `translate3d(calc(${panOffset.x}px + ${desktopCoverOffset}%), ${panOffset.y}px, 0) scale(${zoomLevel})`
+                                : `translate3d(${panOffset.x}px, ${panOffset.y}px, 0) scale(${zoomLevel})`,
                             transformOrigin: 'center center',
-                            transition: isDragging ? 'none' : 'transform 200ms cubic-bezier(0.2, 0.8, 0.2, 1)',
+                            transition: isDragging ? 'none' : 'transform 260ms cubic-bezier(0.2, 0.8, 0.2, 1)',
                             willChange: 'transform'
                         }}
                     >
@@ -419,7 +390,9 @@ export default function PeriodicoIndex() {
                         <div 
                             ref={bookContainerRef} 
                             id="flipbook-root"
-                            className="flex items-center justify-center cursor-grab active:cursor-grabbing"
+                            className={`w-full max-w-[1550px] h-[calc(100dvh-130px)] md:h-[86vh] md:max-h-[960px] flex items-center justify-center mx-auto ${
+                                zoomLevel > 1.0 ? 'pointer-events-none' : 'cursor-grab active:cursor-grabbing'
+                            }`}
                         />
                     </div>
 
@@ -500,7 +473,7 @@ export default function PeriodicoIndex() {
                         )}
                         <button
                             onClick={zoomIn}
-                            disabled={zoomLevel >= 2.0}
+                            disabled={zoomLevel >= 2.2}
                             className="p-1 rounded-full hover:bg-slate-100 text-slate-700 disabled:opacity-30 disabled:pointer-events-none transition-colors"
                             title="Aumentar Zoom"
                         >
@@ -554,7 +527,7 @@ export default function PeriodicoIndex() {
                     )}
                     <button
                         onClick={zoomIn}
-                        disabled={zoomLevel >= 2.0}
+                        disabled={zoomLevel >= 2.2}
                         className="p-1.5 sm:p-2 rounded-full hover:bg-slate-100 text-slate-700 hover:text-black disabled:opacity-30 disabled:pointer-events-none transition-colors"
                         title="Aumentar Zoom"
                     >

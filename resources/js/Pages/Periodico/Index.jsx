@@ -115,9 +115,8 @@ export default function PeriodicoIndex() {
                 const winW = window.innerWidth;
                 const winH = window.innerHeight;
 
-                // En móvil: Calculamos dimensiones óptimas para que la página sea mucho más grande
-                // Aspect ratio real del periódico = ~1.646
-                const mobileWidth = Math.min(winW - 16, 480);
+                // En móvil: Calculamos dimensiones exactas para que la página quede perfectamente centrada y a gran escala
+                const mobileWidth = Math.min(winW - 16, 430);
                 const mobileHeight = Math.min(Math.round(mobileWidth * 1.62), Math.floor(winH - 125));
 
                 const desktopWidth = 560;
@@ -126,19 +125,18 @@ export default function PeriodicoIndex() {
                 const pageFlip = new PageFlip(container, {
                     width: isMobileScreen ? mobileWidth : desktopWidth,
                     height: isMobileScreen ? mobileHeight : desktopHeight,
-                    size: 'stretch',
-                    // En móvil, minWidth alto garantiza que SIEMPRE se mantenga en modo portrait de 1 sola página
-                    minWidth: isMobileScreen ? 800 : 280,
-                    maxWidth: isMobileScreen ? 600 : 1650,
-                    minHeight: isMobileScreen ? 400 : 420,
-                    maxHeight: isMobileScreen ? 1200 : 1350,
+                    size: isMobileScreen ? 'fixed' : 'stretch',
+                    minWidth: isMobileScreen ? mobileWidth : 280,
+                    maxWidth: isMobileScreen ? mobileWidth : 1650,
+                    minHeight: isMobileScreen ? mobileHeight : 420,
+                    maxHeight: isMobileScreen ? mobileHeight : 1350,
                     maxShadowOpacity: 0,
                     showCover: !isMobileScreen, // En móvil portrait, cada página (0..50) se visualiza completa
                     mobileScrollSupport: false,
                     usePortrait: isMobileScreen,
                     startPage: 0,
                     drawShadow: false, // Sin cálculo de sombras en canvas para máxima fluidez a 60 FPS
-                    flippingTime: 420, // Animación natural de paso de hoja
+                    flippingTime: 400, // Animación natural de paso de hoja
                     useMouseEvents: true,
                     swipeDistance: 20,
                     clickEventForward: true
@@ -155,6 +153,7 @@ export default function PeriodicoIndex() {
                 pageFlip.on('flip', (e) => {
                     if (isMounted) {
                         setCurrentPage(e.data);
+                        setPanOffset({ x: 0, y: 0 }); // Centrar vista automáticamente en la nueva página
                         playPaperSound();
                     }
                 });
@@ -204,14 +203,16 @@ export default function PeriodicoIndex() {
     }, [zoomLevel]);
 
     const flipNext = () => {
+        setPanOffset({ x: 0, y: 0 });
         if (pageFlipRef.current) pageFlipRef.current.flipNext();
     };
 
     const flipPrev = () => {
+        setPanOffset({ x: 0, y: 0 });
         if (pageFlipRef.current) pageFlipRef.current.flipPrev();
     };
 
-    const zoomIn = () => setZoomLevel(prev => Math.min(prev + 0.35, 2.8));
+    const zoomIn = () => setZoomLevel(prev => Math.min(prev + 0.35, 2.5));
     const zoomOut = () => {
         setZoomLevel(prev => {
             const next = Math.max(prev - 0.35, 1.0);
@@ -227,73 +228,72 @@ export default function PeriodicoIndex() {
     };
 
     // Control de arrastre / paneo libre de cámara cuando hay zoom (PC y móvil)
+    const activePointersRef = useRef(new Map());
+    const initialPinchRef = useRef(null);
+
     const handlePointerDown = (e) => {
-        if (zoomLevel <= 1.0) return;
-        if (e.button !== undefined && e.button !== 0) return;
-        setIsDragging(true);
-        dragStartRef.current = { x: e.clientX, y: e.clientY };
-        panStartRef.current = { ...panOffset };
-        try {
-            e.currentTarget.setPointerCapture(e.pointerId);
-        } catch (err) {}
+        activePointersRef.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
+
+        if (activePointersRef.current.size === 2) {
+            // Pellizco para zoom con 2 dedos en móvil
+            const pts = Array.from(activePointersRef.current.values());
+            const dist = Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y);
+            initialPinchRef.current = { dist, zoom: zoomLevel };
+        } else if (activePointersRef.current.size === 1 && zoomLevel > 1.0) {
+            // Paneo de cámara en zoom con 1 dedo o ratón
+            setIsDragging(true);
+            dragStartRef.current = { x: e.clientX, y: e.clientY };
+            panStartRef.current = { ...panOffset };
+            try {
+                e.currentTarget.setPointerCapture(e.pointerId);
+            } catch (err) {}
+            e.stopPropagation();
+        }
     };
 
     const handlePointerMove = (e) => {
-        if (!isDragging || zoomLevel <= 1.0) return;
-        const dx = e.clientX - dragStartRef.current.x;
-        const dy = e.clientY - dragStartRef.current.y;
+        if (!activePointersRef.current.has(e.pointerId)) return;
+        activePointersRef.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
 
-        const maxPanX = (zoomLevel - 1) * (window.innerWidth * 0.7);
-        const maxPanY = (zoomLevel - 1) * (window.innerHeight * 0.7);
-
-        setPanOffset({
-            x: Math.max(-maxPanX, Math.min(maxPanX, panStartRef.current.x + dx)),
-            y: Math.max(-maxPanY, Math.min(maxPanY, panStartRef.current.y + dy))
-        });
-    };
-
-    const handlePointerUp = (e) => {
-        if (isDragging) {
-            setIsDragging(false);
-            try {
-                e.currentTarget.releasePointerCapture(e.pointerId);
-            } catch (err) {}
-        }
-    };
-
-    // Gestos táctiles de pellizco (pinch-to-zoom) en móvil
-    const handleTouchStart = (e) => {
-        if (e.touches.length === 2) {
-            isPinchingRef.current = true;
-            const dist = Math.hypot(
-                e.touches[0].clientX - e.touches[1].clientX,
-                e.touches[0].clientY - e.touches[1].clientY
-            );
-            initialPinchDistRef.current = dist;
-            initialPinchZoomRef.current = zoomLevel;
-        }
-    };
-
-    const handleTouchMove = (e) => {
-        if (e.touches.length === 2 && isPinchingRef.current && initialPinchDistRef.current) {
-            e.preventDefault();
-            const dist = Math.hypot(
-                e.touches[0].clientX - e.touches[1].clientX,
-                e.touches[0].clientY - e.touches[1].clientY
-            );
-            const factor = dist / initialPinchDistRef.current;
-            const targetZoom = Math.min(Math.max(initialPinchZoomRef.current * factor, 1.0), 2.8);
+        // Gesto de zoom con 2 dedos
+        if (activePointersRef.current.size === 2 && initialPinchRef.current) {
+            const pts = Array.from(activePointersRef.current.values());
+            const dist = Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y);
+            const ratio = dist / initialPinchRef.current.dist;
+            const targetZoom = Math.min(Math.max(initialPinchRef.current.zoom * ratio, 1.0), 2.5);
             setZoomLevel(targetZoom);
             if (targetZoom <= 1.0) {
                 setPanOffset({ x: 0, y: 0 });
             }
+            return;
+        }
+
+        // Paneo con 1 dedo / ratón
+        if (isDragging && zoomLevel > 1.0) {
+            const dx = e.clientX - dragStartRef.current.x;
+            const dy = e.clientY - dragStartRef.current.y;
+
+            // Límites proporcionales al zoom para que nunca se desborde fuera de la pantalla
+            const maxPanX = Math.round((zoomLevel - 1) * (window.innerWidth * 0.45));
+            const maxPanY = Math.round((zoomLevel - 1) * (window.innerHeight * 0.45));
+
+            setPanOffset({
+                x: Math.max(-maxPanX, Math.min(maxPanX, panStartRef.current.x + dx)),
+                y: Math.max(-maxPanY, Math.min(maxPanY, panStartRef.current.y + dy))
+            });
         }
     };
 
-    const handleTouchEnd = (e) => {
-        if (e.touches.length < 2) {
-            isPinchingRef.current = false;
-            initialPinchDistRef.current = null;
+    const handlePointerUp = (e) => {
+        activePointersRef.current.delete(e.pointerId);
+        if (activePointersRef.current.size < 2) {
+            initialPinchRef.current = null;
+        }
+        if (activePointersRef.current.size === 0) {
+            setIsDragging(false);
+            try {
+                e.currentTarget.releasePointerCapture(e.pointerId);
+            } catch (err) {}
         }
     };
 
@@ -312,11 +312,13 @@ export default function PeriodicoIndex() {
                 #flipbook-root {
                     will-change: transform;
                     transform: translateZ(0);
-                    contain: layout paint;
                 }
                 #flipbook-root.stf__parent {
                     min-width: 0 !important;
-                    width: 100% !important;
+                    margin: 0 auto !important;
+                }
+                .stf__wrapper {
+                    position: relative !important;
                     margin: 0 auto !important;
                 }
                 #flipbook-root .stf__parent,
@@ -370,9 +372,6 @@ export default function PeriodicoIndex() {
                     onPointerMove={handlePointerMove}
                     onPointerUp={handlePointerUp}
                     onPointerCancel={handlePointerUp}
-                    onTouchStart={handleTouchStart}
-                    onTouchMove={handleTouchMove}
-                    onTouchEnd={handleTouchEnd}
                     style={{
                         cursor: zoomLevel > 1.0 ? (isDragging ? 'grabbing' : 'grab') : 'default',
                         touchAction: zoomLevel > 1.0 ? 'none' : 'auto'
@@ -393,7 +392,7 @@ export default function PeriodicoIndex() {
 
                     {/* Contenedor del Libro con Zoom y Cámara Libre (Pan) */}
                     <div 
-                        className="relative w-full h-full flex items-center justify-center"
+                        className="relative flex items-center justify-center"
                         style={{
                             transform: `translate3d(${panOffset.x}px, ${panOffset.y}px, 0) scale(${zoomLevel})`,
                             transformOrigin: 'center center',
@@ -420,9 +419,7 @@ export default function PeriodicoIndex() {
                         <div 
                             ref={bookContainerRef} 
                             id="flipbook-root"
-                            className={`w-full max-w-[1550px] h-[calc(100dvh-130px)] md:h-[88vh] md:max-h-[960px] flex items-center justify-center ${
-                                zoomLevel > 1.0 ? 'pointer-events-none' : 'cursor-grab active:cursor-grabbing'
-                            }`}
+                            className="flex items-center justify-center cursor-grab active:cursor-grabbing"
                         />
                     </div>
 

@@ -26,7 +26,7 @@ export default function Hero({ setVideoOpen }) {
                     preload="auto"
                     controls={false}
                     disablePictureInPicture
-                    className="absolute top-1/2 left-1/2 w-[100vw] h-[56.25vw] min-h-[100vh] min-w-[177.77vh] -translate-x-1/2 -translate-y-1/2 object-cover brightness-75 md:brightness-[0.85] pointer-events-none"
+                    className="absolute top-1/2 left-1/2 w-[100vw] h-[56.25vw] min-h-[100vh] min-w-[177.77vh] object-cover brightness-75 md:brightness-[0.85] pointer-events-none"
                     style={{
                         willChange: 'transform',
                         backfaceVisibility: 'hidden',

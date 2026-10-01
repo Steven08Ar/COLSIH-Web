@@ -126,6 +126,48 @@ export default function PeriodicoIndex() {
 
                 pageFlip.loadFromImages(PAGE_IMAGES);
 
+                // Solución al bug de StPageFlip: Evitar duplicar la página en la mesa mientras se dobla en el aire
+                const render = pageFlip.getRender();
+                if (render && render.drawFrame) {
+                    render.drawFrame = function() {
+                        this.clear();
+
+                        // No dibujar la página estática si es la que está levantándose y doblándose en el aire
+                        const isFlippingPrev = 1 === this.direction && null != this.flippingPage;
+                        const isFlippingNext = 0 === this.direction && null != this.flippingPage;
+
+                        if ("portrait" !== this.orientation && null != this.leftPage && !isFlippingPrev) {
+                            this.leftPage.simpleDraw(0);
+                        }
+
+                        if (null != this.rightPage && !isFlippingNext) {
+                            this.rightPage.simpleDraw(1);
+                        }
+
+                        if (null != this.bottomPage) {
+                            this.bottomPage.draw();
+                        }
+
+                        this.drawBookShadow();
+
+                        if (null != this.flippingPage) {
+                            this.flippingPage.draw();
+                        }
+
+                        if (null != this.shadow) {
+                            this.drawOuterShadow();
+                            this.drawInnerShadow();
+                        }
+
+                        const t = this.getRect();
+                        if ("portrait" === this.orientation) {
+                            this.ctx.beginPath();
+                            this.ctx.rect(t.left + t.pageWidth, t.top, t.width, t.height);
+                            this.ctx.clip();
+                        }
+                    };
+                }
+
                 pageFlip.on('init', () => {
                     if (isMounted) {
                         setIsLoading(false);

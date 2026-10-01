@@ -5,14 +5,19 @@ export default function Hero({ setVideoOpen }) {
         <section className="relative flex items-center min-h-[900px] lg:min-h-[980px] h-screen w-full bg-[#08111F] overflow-hidden select-none">
             <Navbar />
 
-            {/* Background Video ("Video Home.mp4" nativo HTML5, autoplay sin bloqueo, bucle perfecto e indetectable por Brave) */}
-            <div className="absolute inset-0 w-full h-full z-0 select-none overflow-hidden pointer-events-none">
+            {/* Background Video — GPU-accelerated, sin audio, faststart requerido en archivo */}
+            <div
+                className="absolute inset-0 w-full h-full z-0 select-none overflow-hidden pointer-events-none"
+                style={{ willChange: 'transform', transform: 'translateZ(0)' }}
+            >
                 <video
                     ref={(videoEl) => {
-                        if (videoEl) {
-                            videoEl.muted = true;
-                            videoEl.play().catch(() => {});
-                        }
+                        if (!videoEl) return;
+                        videoEl.muted = true;
+                        videoEl.defaultMuted = true;
+                        // Velocidad de decodificación: hint al browser de que es contenido de fondo
+                        if ('disableRemotePlayback' in videoEl) videoEl.disableRemotePlayback = true;
+                        videoEl.play().catch(() => {});
                     }}
                     autoPlay
                     loop
@@ -21,14 +26,17 @@ export default function Hero({ setVideoOpen }) {
                     preload="auto"
                     controls={false}
                     disablePictureInPicture
-                    onEnded={(e) => {
-                        e.target.currentTime = 0;
-                        e.target.play().catch(() => {});
+                    className="absolute top-1/2 left-1/2 w-[100vw] h-[56.25vw] min-h-[100vh] min-w-[177.77vh] -translate-x-1/2 -translate-y-1/2 object-cover brightness-75 md:brightness-[0.85] pointer-events-none"
+                    style={{
+                        willChange: 'transform',
+                        backfaceVisibility: 'hidden',
+                        transform: 'translate3d(-50%, -50%, 0)',
+                        contain: 'strict',
                     }}
-                    className="absolute top-1/2 left-1/2 w-[100vw] h-[56.25vw] min-h-[100vh] min-w-[177.77vh] -translate-x-1/2 -translate-y-1/2 object-cover contrast-[1.05] brightness-75 md:brightness-[0.85] scale-105 pointer-events-none"
                 >
-                    <source src="/Video%20Home.mp4" type="video/mp4" />
-                    <source src="/Video Home.mp4" type="video/mp4" />
+                    {/* WebM/VP9 primero: mejor compresión para Chrome/Firefox → menos datos a decodificar */}
+                    <source src="/Video%20Home.webm" type="video/webm; codecs=vp9" />
+                    <source src="/Video%20Home.mp4" type="video/mp4; codecs=avc1.640033" />
                 </video>
             </div>
 

@@ -14,16 +14,15 @@ const MIN_FOV = 30;
 const MAX_FOV = 100;
 const hfovToZoom = (h) => Math.max(0, Math.min(100, Math.round(((Number(h || 75) - MIN_FOV) / (MAX_FOV - MIN_FOV)) * 100)));
 
-// iOS tiene límite de textura WebGL de 4096px — usamos proxy Laravel que redimensiona
+// Todos los móviles usan el proxy: iOS por límite de textura WebGL, Android por GPU/memoria limitada
 const IS_IOS = typeof navigator !== 'undefined' &&
     /iPad|iPhone|iPod/.test(navigator.userAgent) &&
     !('MSStream' in window);
+const IS_MOBILE = typeof navigator !== 'undefined' &&
+    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
-const R2_RECORRIDO_BASE = 'https://media.colsih.edu.co/recorrido_360/';
-
-function iosCompatibleUrl(url) {
-    if (!IS_IOS || !url) return url;
-    // Si la URL apunta a recorrido_360 en R2, redirigir al proxy Laravel
+function mobileCompatibleUrl(url) {
+    if (!IS_MOBILE || !url) return url;
     if (url.includes('recorrido_360/')) {
         const filename = url.split('recorrido_360/').pop();
         return `/tour360-proxy/${filename}`;
@@ -125,7 +124,7 @@ function buildNodes(scenes) {
         const rawPanorama = mediaUrl(scene.imagen_url || scene.imagen_path) || '';
         return {
             id: scene.slug,
-            panorama: iosCompatibleUrl(rawPanorama),
+            panorama: mobileCompatibleUrl(rawPanorama),
             name: scene.nombre || '',
             // No links para evitar las flechas CSS3D del suelo que se desvían de las coordenadas
             links: [],
@@ -158,7 +157,8 @@ export default function TourViewer({
     const [isAutoRotating, setIsAutoRotating] = useState(false);
     const [loadError, setLoadError] = useState(null);
     const [selectedInfoHotspot, setSelectedInfoHotspot] = useState(null);
-    const [currentYawDeg, setCurrentYawDeg] = useState(0);
+    // Brújula: ref directo al DOM para actualizar sin re-render de React a cada frame
+    const compassNeedleRef = useRef(null);
 
     useEffect(() => { onSceneChangeRef.current = onSceneChange; }, [onSceneChange]);
 
@@ -182,6 +182,8 @@ export default function TourViewer({
         let isMounted = true;
         let loadTimeout;
 
+        const isMobileDevice = IS_MOBILE;
+
         try {
             const viewer = new Viewer({
                 container: containerRef.current,
@@ -191,6 +193,11 @@ export default function TourViewer({
                 navbar: false,
                 loadingImg: null,
                 loadingTxt: '',
+                // Móvil: reducir velocidad de movimiento para control más suave y preciso
+                moveSpeed: isMobileDevice ? 0.8 : 1,
+                zoomSpeed: isMobileDevice ? 1.5 : 1,
+                // Deshabilitar animaciones de inercia en móvil — eliminan jank de physic scroll
+                moveInertia: !isMobileDevice,
                 plugins: [
                     [VirtualTourPlugin, {
                         nodes,
@@ -246,12 +253,13 @@ export default function TourViewer({
                 setLoadError(IS_IOS
                     ? 'No se pudo cargar el panorama en tu dispositivo. Verifica tu conexión Wi-Fi e intenta de nuevo.'
                     : 'El panorama tardó demasiado en cargar. Verifica tu conexión e intenta de nuevo.');
-            }, IS_IOS ? 30000 : 15000);
+            }, IS_MOBILE ? 30000 : 15000);
 
-            // Rastrear posición de cámara para la brújula dinámica en tiempo real
+            // Brújula: actualizar DOM directo sin pasar por React → cero re-renders durante drag
             viewer.addEventListener('position-updated', ({ position }) => {
-                if (position && typeof position.yaw === 'number') {
-                    setCurrentYawDeg(Math.round(position.yaw * RAD_TO_DEG));
+                if (position && typeof position.yaw === 'number' && compassNeedleRef.current) {
+                    const deg = Math.round(position.yaw * RAD_TO_DEG);
+                    compassNeedleRef.current.style.transform = `rotate(${-deg}deg)`;
                 }
             });
 
@@ -409,9 +417,9 @@ export default function TourViewer({
                     <span className="mt-4 text-xs font-bold text-white/90 tracking-wider uppercase">
                         Cargando Espacio 360°...
                     </span>
-                    {IS_IOS && (
+                    {IS_MOBILE && (
                         <span className="mt-2 text-[10px] text-white/40 max-w-[200px] text-center leading-snug">
-                            Optimizando imagen para iPhone/iPad...
+                            Optimizando imagen para móvil...
                         </span>
                     )}
                 </div>
@@ -442,8 +450,9 @@ export default function TourViewer({
                     title="Orientar al Norte / Reestablecer encuadre inicial"
                 >
                     <div
-                        className="w-5 h-5 sm:w-6 sm:h-6 relative flex items-center justify-center transition-transform duration-75 ease-out"
-                        style={{ transform: `rotate(${-currentYawDeg}deg)` }}
+                        ref={compassNeedleRef}
+                        className="w-5 h-5 sm:w-6 sm:h-6 relative flex items-center justify-center"
+                        style={{ willChange: 'transform', transform: 'rotate(0deg)' }}
                     >
                         <svg viewBox="0 0 24 24" className="w-4 h-4 sm:w-5 sm:h-5 drop-shadow-xs" fill="none">
                             <polygon points="12,2 15.5,12 12,10 8.5,12" fill="#EA4335" />

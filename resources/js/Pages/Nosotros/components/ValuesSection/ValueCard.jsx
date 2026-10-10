@@ -1,14 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Images, Eye } from 'lucide-react';
 import FloatingValueIcon from './FloatingValueIcon';
 
 /**
  * ValueImage
- * Renderiza el recuadro gris neutro elegante para la portada y miniaturas de los valores
- * optimizado para rendimiento (sin gradientes pesados ni filtros de desenfoque).
+ * Renderiza la imagen real con carga diferida y decodificación asíncrona (loading="lazy", decoding="async").
+ * Si la imagen no está disponible o falla, muestra el recuadro "En espera" sin bloquear la página.
  */
-function ValueImage({ isThumbnail = false }) {
+function ValueImage({ src, alt = "Valor COLSIH", isThumbnail = false }) {
+    const [hasError, setHasError] = useState(false);
+
+    if (src && !hasError) {
+        return (
+            <img 
+                src={src} 
+                alt={alt} 
+                loading="lazy"
+                decoding="async"
+                onError={() => setHasError(true)}
+                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105 will-change-transform"
+            />
+        );
+    }
+
     if (isThumbnail) {
         return (
             <div className="w-full h-full bg-slate-100 dark:bg-slate-800 flex flex-col items-center justify-center p-1 text-center select-none border border-slate-200/60 dark:border-slate-700/50">
@@ -74,9 +89,9 @@ export default function ValueCard({ value, index, onOpenGallery }) {
                     }`}
                     onClick={() => onOpenGallery(0)}
                 >
-                    <ValueImage />
+                    <ValueImage src={value.portada} alt={value.titulo} />
                     
-                    {/* Floating Zoom Indicator Tag - Sin backdrop-blur pesado */}
+                    {/* Floating Zoom Indicator Tag */}
                     <div className="absolute bottom-3 right-3 bg-black/75 text-white text-[11px] font-bold px-3 py-1 rounded-full flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10 select-none">
                         <Eye className="w-3.5 h-3.5" />
                         <span>Ver más</span>
@@ -133,7 +148,11 @@ export default function ValueCard({ value, index, onOpenGallery }) {
                                 onClick={() => onOpenGallery(thumbIdx + 1)}
                                 className="aspect-square rounded-xl overflow-hidden border border-slate-200/80 dark:border-slate-800 shadow-sm cursor-zoom-in group relative"
                             >
-                                <ValueImage isThumbnail={true} />
+                                <ValueImage 
+                                    src={value.galeria?.[thumbIdx]} 
+                                    alt={`${value.titulo} miniatura ${thumbIdx + 1}`} 
+                                    isThumbnail={true} 
+                                />
                                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/25 transition-colors flex items-center justify-center">
                                     <Eye className="w-4 h-4 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
                                 </div>

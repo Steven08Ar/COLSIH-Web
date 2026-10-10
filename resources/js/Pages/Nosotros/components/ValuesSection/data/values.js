@@ -17,9 +17,9 @@ export const valoresData = [
         iconName: "Sun",
         portada: "https://media.colsih.edu.co/nuestro_colegio/quienes_somos/colegio-afuera.JPG",
         galeria: [
-            "/nosotros_assets/historia/historia-1983.png",
-            "/nosotros_assets/historia/historia-1995.png",
-            "/nosotros_assets/historia/historia-2010.png"
+            "https://media.colsih.edu.co/home/estudiantes-colsih.png",
+            "https://media.colsih.edu.co/espacios_academicos/jardin.JPG",
+            "https://media.colsih.edu.co/home/panoramica.png"
         ]
     },
     {
@@ -32,9 +32,9 @@ export const valoresData = [
         iconName: "HandHelping",
         portada: "https://media.colsih.edu.co/home/estudiantes-colsih.png",
         galeria: [
-            "/testimonios/egresada.png",
-            "/testimonios/estudiante.png",
-            "/testimonios/padre.png"
+            "https://media.colsih.edu.co/nuestro_colegio/quienes_somos/estudiantes-espaldas.png",
+            "https://media.colsih.edu.co/ofertas_academicas/bachillerato.JPG",
+            "https://media.colsih.edu.co/home/panoramica.png"
         ]
     },
     {
@@ -47,9 +47,9 @@ export const valoresData = [
         iconName: "Heart",
         portada: "https://media.colsih.edu.co/nuestro_colegio/quienes_somos/estudiantes-espaldas.png",
         galeria: [
-            "/nosotros_assets/historia/historia-hoy.png",
-            "/nosotros_assets/historia/historia-1995.png",
-            "/nosotros_assets/historia/historia-2010.png"
+            "https://media.colsih.edu.co/nuestro_colegio/quienes_somos/colegio-afuera.JPG",
+            "https://media.colsih.edu.co/ofertas_academicas/primaria.JPG",
+            "https://media.colsih.edu.co/espacios_academicos/jardin.JPG"
         ]
     },
     {
@@ -62,9 +62,9 @@ export const valoresData = [
         iconName: "ShieldCheck",
         portada: "https://media.colsih.edu.co/nuestro_colegio/quienes_somos/colegio-afuera.JPG",
         galeria: [
-            "/testimonios/egresada.png",
-            "/testimonios/estudiante.png",
-            "/testimonios/padre.png"
+            "https://media.colsih.edu.co/home/estudiantes-colsih.png",
+            "https://media.colsih.edu.co/ofertas_academicas/SENA.JPG",
+            "https://media.colsih.edu.co/home/panoramica.png"
         ]
     },
     {
@@ -77,9 +77,9 @@ export const valoresData = [
         iconName: "Smile",
         portada: "https://media.colsih.edu.co/home/estudiantes-colsih.png",
         galeria: [
-            "/nosotros_assets/historia/historia-1983.png",
-            "/nosotros_assets/historia/historia-1995.png",
-            "/nosotros_assets/historia/historia-2010.png"
+            "https://media.colsih.edu.co/nuestro_colegio/quienes_somos/estudiantes-espaldas.png",
+            "https://media.colsih.edu.co/espacios_academicos/jardin.JPG",
+            "https://media.colsih.edu.co/ofertas_academicas/preescolar.JPG"
         ]
     },
     {
@@ -92,9 +92,9 @@ export const valoresData = [
         iconName: "Users",
         portada: "https://media.colsih.edu.co/nuestro_colegio/quienes_somos/estudiantes-espaldas.png",
         galeria: [
-            "/nosotros_assets/historia/historia-hoy.png",
-            "/nosotros_assets/historia/historia-1995.png",
-            "/nosotros_assets/historia/historia-2010.png"
+            "https://media.colsih.edu.co/home/panoramica.png",
+            "https://media.colsih.edu.co/home/estudiantes-colsih.png",
+            "https://media.colsih.edu.co/nuestro_colegio/quienes_somos/colegio-afuera.JPG"
         ]
     },
     {
@@ -107,9 +107,9 @@ export const valoresData = [
         iconName: "Lightbulb",
         portada: "https://media.colsih.edu.co/nuestro_colegio/quienes_somos/colegio-afuera.JPG",
         galeria: [
-            "/testimonios/egresada.png",
-            "/testimonios/estudiante.png",
-            "/testimonios/padre.png"
+            "https://media.colsih.edu.co/ofertas_academicas/SENA.JPG",
+            "https://media.colsih.edu.co/ofertas_academicas/bachillerato.JPG",
+            "https://media.colsih.edu.co/home/estudiantes-colsih.png"
         ]
     },
     {
@@ -122,9 +122,9 @@ export const valoresData = [
         iconName: "HeartHandshake",
         portada: "https://media.colsih.edu.co/home/estudiantes-colsih.png",
         galeria: [
-            "/nosotros_assets/historia/historia-1983.png",
-            "/nosotros_assets/historia/historia-1995.png",
-            "/nosotros_assets/historia/historia-2010.png"
+            "https://media.colsih.edu.co/nuestro_colegio/quienes_somos/estudiantes-espaldas.png",
+            "https://media.colsih.edu.co/ofertas_academicas/primaria.JPG",
+            "https://media.colsih.edu.co/home/panoramica.png"
         ]
     },
     {
@@ -137,9 +137,9 @@ export const valoresData = [
         iconName: "Star",
         portada: "https://media.colsih.edu.co/nuestro_colegio/quienes_somos/estudiantes-espaldas.png",
         galeria: [
-            "/nosotros_assets/historia/historia-hoy.png",
-            "/nosotros_assets/historia/historia-1995.png",
-            "/nosotros_assets/historia/historia-2010.png"
+            "https://media.colsih.edu.co/espacios_academicos/jardin.JPG",
+            "https://media.colsih.edu.co/ofertas_academicas/preescolar.JPG",
+            "https://media.colsih.edu.co/home/panoramica.png"
         ]
     }
 ];

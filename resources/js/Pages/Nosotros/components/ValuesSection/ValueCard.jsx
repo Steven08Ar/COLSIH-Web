@@ -6,12 +6,12 @@ import FloatingValueIcon from './FloatingValueIcon';
 /**
  * ValueImage
  * Renderiza el recuadro gris neutro elegante para la portada y miniaturas de los valores
- * mostrando la leyenda "Imagen en espera de subida" / "En espera".
+ * optimizado para rendimiento (sin gradientes pesados ni filtros de desenfoque).
  */
 function ValueImage({ isThumbnail = false }) {
     if (isThumbnail) {
         return (
-            <div className="w-full h-full bg-slate-200/90 dark:bg-slate-800/90 flex flex-col items-center justify-center p-1 text-center select-none border border-slate-300/40 dark:border-slate-700/50">
+            <div className="w-full h-full bg-slate-100 dark:bg-slate-800 flex flex-col items-center justify-center p-1 text-center select-none border border-slate-200/60 dark:border-slate-700/50">
                 <Images className="w-4 h-4 text-slate-400 dark:text-slate-500 mb-0.5" />
                 <span className="text-[8px] font-black text-slate-500 dark:text-slate-400 tracking-tighter uppercase leading-tight">
                     En espera
@@ -21,14 +21,14 @@ function ValueImage({ isThumbnail = false }) {
     }
 
     return (
-        <div className="w-full h-full bg-gradient-to-br from-slate-200 via-slate-150 to-slate-300 dark:from-slate-800 dark:via-slate-850 dark:to-slate-900 flex flex-col items-center justify-center p-6 text-center select-none border border-slate-300/60 dark:border-slate-700/60 rounded-2xl group-hover:bg-slate-300/70 transition-colors">
-            <div className="w-12 h-12 rounded-2xl bg-white/90 dark:bg-slate-700/90 flex items-center justify-center mb-2.5 text-slate-500 dark:text-slate-400 shadow-sm group-hover:scale-110 transition-transform">
+        <div className="w-full h-full bg-slate-100 dark:bg-slate-800 flex flex-col items-center justify-center p-6 text-center select-none border border-slate-200/80 dark:border-slate-700/60 rounded-2xl group-hover:bg-slate-200/70 dark:group-hover:bg-slate-750 transition-colors">
+            <div className="w-12 h-12 rounded-2xl bg-white dark:bg-slate-700 flex items-center justify-center mb-2.5 text-slate-500 dark:text-slate-400 shadow-sm group-hover:scale-105 transition-transform">
                 <Images className="w-6 h-6 text-slate-500 dark:text-slate-300" />
             </div>
             <span className="text-xs font-black text-slate-700 dark:text-slate-200 tracking-wider uppercase">
                 Imagen en espera de subida
             </span>
-            <span className="text-[10px] font-extrabold text-slate-400 dark:text-slate-500 mt-1 uppercase tracking-widest bg-slate-300/50 dark:bg-slate-700/50 px-2.5 py-0.5 rounded-full">
+            <span className="text-[10px] font-extrabold text-slate-400 dark:text-slate-500 mt-1 uppercase tracking-widest bg-slate-200/80 dark:bg-slate-700/60 px-2.5 py-0.5 rounded-full">
                 En espera
             </span>
         </div>
@@ -38,13 +38,13 @@ function ValueImage({ isThumbnail = false }) {
 export default function ValueCard({ value, index, onOpenGallery }) {
     const isEven = index % 2 === 0;
 
+    // Variante optimizada (solo opacity y translateY para ejecución 100% en GPU sin reflow de layout)
     const cardVariants = {
-        hidden: { opacity: 0, y: 50, scale: 0.98 },
+        hidden: { opacity: 0, y: 25 },
         visible: { 
             opacity: 1, 
             y: 0, 
-            scale: 1,
-            transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } 
+            transition: { duration: 0.35, ease: 'easeOut' } 
         }
     };
 
@@ -53,11 +53,11 @@ export default function ValueCard({ value, index, onOpenGallery }) {
             variants={cardVariants}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: "-60px" }}
+            viewport={{ once: true, margin: "-40px" }}
             id={`valor-${value.id}`}
-            className="w-[92%] md:w-[88%] lg:max-w-[1140px] mx-auto bg-white/80 dark:bg-slate-900/70 backdrop-blur-md border border-slate-100 dark:border-slate-800/80 rounded-[32px] md:rounded-[36px] shadow-[0_15px_40px_rgba(0,0,0,0.02)] dark:shadow-none relative p-6 md:p-8 lg:p-6 lg:min-h-[290px] flex flex-col justify-center transition-all duration-300 hover:shadow-[0_20px_50px_rgba(0,0,0,0.04)] group/card"
+            className="w-[92%] md:w-[88%] lg:max-w-[1140px] mx-auto bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-[32px] md:rounded-[36px] shadow-sm relative p-6 md:p-8 lg:p-6 lg:min-h-[290px] flex flex-col justify-center transition-shadow duration-300 hover:shadow-md group/card will-change-transform"
         >
-            {/* Overlapping circle icon badge */}
+            {/* Medalla circular de ícono */}
             <FloatingValueIcon 
                 iconName={value.iconName} 
                 alignment={isEven ? 'left' : 'right'} 
@@ -76,8 +76,8 @@ export default function ValueCard({ value, index, onOpenGallery }) {
                 >
                     <ValueImage />
                     
-                    {/* Floating Zoom Indicator Tag */}
-                    <div className="absolute bottom-3 right-3 bg-black/40 backdrop-blur-md text-white text-[11px] font-bold px-3 py-1 rounded-full flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
+                    {/* Floating Zoom Indicator Tag - Sin backdrop-blur pesado */}
+                    <div className="absolute bottom-3 right-3 bg-black/75 text-white text-[11px] font-bold px-3 py-1 rounded-full flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10 select-none">
                         <Eye className="w-3.5 h-3.5" />
                         <span>Ver más</span>
                     </div>
@@ -131,10 +131,10 @@ export default function ValueCard({ value, index, onOpenGallery }) {
                             <div 
                                 key={thumbIdx}
                                 onClick={() => onOpenGallery(thumbIdx + 1)}
-                                className="aspect-square rounded-xl overflow-hidden border border-slate-100/80 dark:border-slate-800 shadow-sm cursor-zoom-in group relative"
+                                className="aspect-square rounded-xl overflow-hidden border border-slate-200/80 dark:border-slate-800 shadow-sm cursor-zoom-in group relative"
                             >
                                 <ValueImage isThumbnail={true} />
-                                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
+                                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/25 transition-colors flex items-center justify-center">
                                     <Eye className="w-4 h-4 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
                                 </div>
                             </div>
@@ -144,7 +144,7 @@ export default function ValueCard({ value, index, onOpenGallery }) {
                     {/* Ver Galería Button */}
                     <button 
                         onClick={() => onOpenGallery(0)}
-                        className={`w-full py-2.5 rounded-xl border font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all duration-300 select-none cursor-pointer ${
+                        className={`w-full py-2.5 rounded-xl border font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-colors duration-200 select-none cursor-pointer ${
                             isEven 
                                 ? 'border-[#800A15]/15 text-[#800A15] hover:bg-[#800A15] hover:text-white dark:border-rose-900/30 dark:text-rose-400 dark:hover:bg-rose-950/20' 
                                 : 'border-[#001659]/15 text-[#001659] hover:bg-[#001659] hover:text-white dark:border-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-950/20'

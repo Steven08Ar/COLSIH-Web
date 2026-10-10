@@ -84,10 +84,10 @@ export default function Valores() {
                 }
             `}} />
 
-            {/* Main Page Outer Container */}
-            <div className="relative bg-[#FAFCFF] dark:bg-slate-950 text-slate-800 dark:text-slate-100 min-h-screen overflow-hidden pb-20 transition-colors duration-300">
+            {/* Main Page Outer Container - Optimizado sin transition-colors en elemento gigante */}
+            <div className="relative bg-[#FAFCFF] dark:bg-slate-950 text-slate-800 dark:text-slate-100 min-h-screen overflow-hidden pb-20">
                 
-                {/* Visual Backdrop Particles & Orbs */}
+                {/* Visual Backdrop Particles & Orbs (Estáticos, 0% CPU/GPU) */}
                 <SectionBackground />
 
                 {/* Hero Section */}
@@ -109,7 +109,7 @@ export default function Valores() {
                                     setFilterMenuOpen(!filterMenuOpen);
                                     setJumpMenuOpen(false);
                                 }}
-                                className="w-full px-5 py-3.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-md flex items-center justify-between gap-3 text-slate-800 dark:text-slate-100 hover:border-[#800A15] transition-all cursor-pointer select-none"
+                                className="w-full px-5 py-3.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex items-center justify-between gap-3 text-slate-800 dark:text-slate-100 hover:border-[#800A15] transition-colors cursor-pointer select-none"
                             >
                                 <div className="flex items-center gap-2.5">
                                     <div className="w-8 h-8 rounded-xl bg-[#800A15]/10 text-[#800A15] dark:text-rose-400 flex items-center justify-center">
@@ -117,25 +117,25 @@ export default function Valores() {
                                     </div>
                                     <div className="text-left">
                                         <span className="block text-[10px] font-extrabold uppercase tracking-widest text-slate-400 dark:text-slate-500">
-                                            Filtrar por Dimensión
+                                             Filtrar por Dimensión
                                         </span>
                                         <span className="block text-sm font-black text-slate-800 dark:text-white">
                                             {activeCatObj.label}
                                         </span>
                                     </div>
                                 </div>
-                                <ChevronDown className={`w-5 h-5 text-slate-400 transition-transform duration-300 ${filterMenuOpen ? 'rotate-180 text-[#800A15]' : ''}`} />
+                                <ChevronDown className={`w-5 h-5 text-slate-400 transition-transform duration-200 ${filterMenuOpen ? 'rotate-180 text-[#800A15]' : ''}`} />
                             </button>
 
                             {/* Lista Desplegable de Categorías */}
                             <AnimatePresence>
                                 {filterMenuOpen && (
                                     <motion.div
-                                        initial={{ opacity: 0, y: -10, scale: 0.98 }}
-                                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                                        exit={{ opacity: 0, y: -10, scale: 0.98 }}
-                                        transition={{ duration: 0.15 }}
-                                        className="absolute top-full left-0 right-0 mt-2 z-50 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl py-2 overflow-hidden"
+                                        initial={{ opacity: 0, y: -8 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, y: -8 }}
+                                        transition={{ duration: 0.12 }}
+                                        className="absolute top-full left-0 right-0 mt-2 z-50 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xl py-2 overflow-hidden"
                                     >
                                         {valoresCategories.map((cat) => {
                                             const isSelected = selectedCategory === cat.id;
@@ -174,7 +174,7 @@ export default function Valores() {
                                     setJumpMenuOpen(!jumpMenuOpen);
                                     setFilterMenuOpen(false);
                                 }}
-                                className="w-full px-5 py-3.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-md flex items-center justify-between gap-3 text-slate-800 dark:text-slate-100 hover:border-[#001659] transition-all cursor-pointer select-none"
+                                className="w-full px-5 py-3.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex items-center justify-between gap-3 text-slate-800 dark:text-slate-100 hover:border-[#001659] transition-colors cursor-pointer select-none"
                             >
                                 <div className="flex items-center gap-2.5">
                                     <div className="w-8 h-8 rounded-xl bg-[#001659]/10 text-[#001659] dark:text-blue-400 flex items-center justify-center">
@@ -189,18 +189,18 @@ export default function Valores() {
                                         </span>
                                     </div>
                                 </div>
-                                <ChevronDown className={`w-5 h-5 text-slate-400 transition-transform duration-300 ${jumpMenuOpen ? 'rotate-180 text-[#001659]' : ''}`} />
+                                <ChevronDown className={`w-5 h-5 text-slate-400 transition-transform duration-200 ${jumpMenuOpen ? 'rotate-180 text-[#001659]' : ''}`} />
                             </button>
 
                             {/* Lista Desplegable de Valores */}
                             <AnimatePresence>
                                 {jumpMenuOpen && (
                                     <motion.div
-                                        initial={{ opacity: 0, y: -10, scale: 0.98 }}
-                                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                                        exit={{ opacity: 0, y: -10, scale: 0.98 }}
-                                        transition={{ duration: 0.15 }}
-                                        className="absolute top-full left-0 right-0 mt-2 z-50 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl py-2 max-h-64 overflow-y-auto no-scrollbar"
+                                        initial={{ opacity: 0, y: -8 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, y: -8 }}
+                                        transition={{ duration: 0.12 }}
+                                        className="absolute top-full left-0 right-0 mt-2 z-50 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xl py-2 max-h-64 overflow-y-auto no-scrollbar"
                                     >
                                         {valoresData.map((val) => (
                                             <button
@@ -210,7 +210,7 @@ export default function Valores() {
                                                     setJumpMenuOpen(false);
                                                     if (selectedCategory !== 'todos' && val.categoria !== selectedCategory) {
                                                         setSelectedCategory('todos');
-                                                        setTimeout(() => scrollToValue(val.id), 100);
+                                                        setTimeout(() => scrollToValue(val.id), 180);
                                                     } else {
                                                         scrollToValue(val.id);
                                                     }
@@ -237,15 +237,15 @@ export default function Valores() {
 
                 </section>
 
-                {/* Main Values Cards Recorrido Section */}
+                {/* Main Values Cards Recorrido Section (Transición ágil y optimizada) */}
                 <section className="relative z-10 py-6 flex flex-col gap-10 md:gap-14 w-full">
                     <AnimatePresence mode="wait">
                         <motion.div
                             key={selectedCategory}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -20 }}
-                            transition={{ duration: 0.4 }}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.2 }}
                             className="flex flex-col gap-10 md:gap-14 w-full"
                         >
                             {filteredValores.map((val, idx) => (
@@ -262,8 +262,8 @@ export default function Valores() {
 
                 {/* Bottom Navigation & CTA Banner */}
                 <section className="relative z-10 mt-16 max-w-[1140px] mx-auto px-6">
-                    <div className="bg-gradient-to-r from-[#08111F] via-[#001659] to-[#800A15] p-8 md:p-12 rounded-[32px] text-white shadow-xl text-center space-y-4 relative overflow-hidden">
-                        <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl pointer-events-none" />
+                    <div className="bg-gradient-to-r from-[#08111F] via-[#001659] to-[#800A15] p-8 md:p-12 rounded-[32px] text-white shadow-lg text-center space-y-4 relative overflow-hidden">
+                        <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-2xl pointer-events-none" />
                         
                         <span className="text-xs font-bold uppercase tracking-widest text-amber-300 block font-sans">
                             COMPROMISO INSTITUCIONAL
@@ -278,7 +278,7 @@ export default function Valores() {
                         <div className="pt-4 flex items-center justify-center gap-4 flex-wrap">
                             <Link 
                                 href="/nosotros/mision-vision" 
-                                className="inline-flex items-center gap-2 px-6 py-3 bg-white text-[#08111F] hover:bg-slate-100 font-extrabold text-xs uppercase tracking-wider rounded-full shadow-md transition-all cursor-pointer"
+                                className="inline-flex items-center gap-2 px-6 py-3 bg-white text-[#08111F] hover:bg-slate-100 font-extrabold text-xs uppercase tracking-wider rounded-full shadow-sm transition-all cursor-pointer"
                             >
                                 <ArrowLeft className="w-4 h-4" />
                                 Misión y Visión
@@ -286,7 +286,7 @@ export default function Valores() {
 
                             <Link 
                                 href="/nosotros/equipo" 
-                                className="inline-flex items-center gap-2 px-6 py-3 bg-[#800A15] hover:bg-rose-900 text-white font-extrabold text-xs uppercase tracking-wider rounded-full shadow-md transition-all cursor-pointer"
+                                className="inline-flex items-center gap-2 px-6 py-3 bg-[#800A15] hover:bg-rose-900 text-white font-extrabold text-xs uppercase tracking-wider rounded-full shadow-sm transition-all cursor-pointer"
                             >
                                 Equipo Docente
                                 <ArrowRight className="w-4 h-4" />

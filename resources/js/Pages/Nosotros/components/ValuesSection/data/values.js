@@ -35,10 +35,8 @@ export const valoresData = [
         subtitulo: "Empatía y Servicio al Prójimo",
         descripcion: "Sentir con el otro y comprender su situación, comprometiéndonos activamente en causas comunitarias y en el bien común de nuestro entorno.",
         iconName: "HandHelping",
-        portada: "/valores/Solidaridad/IMG_8084.jpg",
+        portada: "/valores/Solidaridad/IMG_8186.jpg",
         galeria: [
-            "/valores/Solidaridad/IMG_8117.jpg",
-            "/valores/Solidaridad/IMG_8186.jpg",
             "/valores/Solidaridad/IMG_8299.jpg",
             "/valores/Solidaridad/IMG_8308.jpg",
             "/valores/Solidaridad/IMG_8321.jpg",
@@ -65,8 +63,6 @@ export const valoresData = [
         galeria: [
             "/valores/Gratitud/IMG_0638.jpg",
             "/valores/Gratitud/IMG_0653.jpg",
-            "/valores/Gratitud/IMG_0661.jpg",
-            "/valores/Gratitud/IMG_0670.jpg",
             "/valores/Gratitud/IMG_0679.jpg",
             "/valores/Gratitud/IMG_0719.jpg",
             "/valores/Gratitud/IMG_0727.jpg",
@@ -103,10 +99,8 @@ export const valoresData = [
         subtitulo: "Misericordia y Clima de Familia",
         descripcion: "Aceptación de la vulnerabilidad humana y capacidad de convivencia fraterna, promoviendo la reconciliación y la paz en el día a día.",
         iconName: "Smile",
-        portada: "/valores/Perdon/IMG_8085.jpg",
+        portada: "/valores/Perdon/IMG_8267.jpg",
         galeria: [
-            "/valores/Perdon/IMG_8089.jpg",
-            "/valores/Perdon/IMG_8267.jpg",
             "/valores/Perdon/IMG_8284.jpg",
             "/valores/Perdon/IMG_9464.jpg"
         ]
@@ -119,17 +113,12 @@ export const valoresData = [
         subtitulo: "Identidad e Integración Salesiana",
         descripcion: "Una manera concreta de vivir y estar en el mundo con orgullo por nuestro colegio, fortaleciendo el espíritu de familia de la comunidad COLSIH.",
         iconName: "Users",
-        portada: "/valores/Pertenencia/IMG_0632.jpg",
+        portada: "/valores/Pertenencia/Imagen Virgen.jpg",
         galeria: [
-            "/valores/Pertenencia/IMG_0678.jpg",
             "/valores/Pertenencia/IMG_0801.jpg",
-            "/valores/Pertenencia/IMG_0887.jpg",
             "/valores/Pertenencia/IMG_7850.jpg",
-            "/valores/Pertenencia/IMG_7853.jpg",
             "/valores/Pertenencia/IMG_7874.jpg",
-            "/valores/Pertenencia/IMG_8302.jpg",
-            "/valores/Pertenencia/IMG_9749.jpg",
-            "/valores/Pertenencia/Imagen Virgen.jpg"
+            "/valores/Pertenencia/IMG_8302.jpg"
         ]
     },
     {
@@ -166,22 +155,12 @@ export const valoresData = [
         subtitulo: "Dignidad y Tolerancia Mutua",
         descripcion: "Reconocimiento genuino del que está a mi lado, promoviendo un ambiente educativo caracterizado por la amabilidad, la inclusión y la consideración.",
         iconName: "HeartHandshake",
-        portada: "/valores/Respeto/IMG_0208.jpg",
+        portada: "/valores/Respeto/IMG_8151.jpg",
         galeria: [
-            "/valores/Respeto/IMG_0218.jpg",
-            "/valores/Respeto/IMG_0219.jpg",
-            "/valores/Respeto/IMG_0220.jpg",
-            "/valores/Respeto/IMG_0605.jpg",
-            "/valores/Respeto/IMG_0629.jpg",
-            "/valores/Respeto/IMG_0635.jpg",
-            "/valores/Respeto/IMG_0672.jpg",
-            "/valores/Respeto/IMG_0677.jpg",
-            "/valores/Respeto/IMG_0776.jpg",
-            "/valores/Respeto/IMG_0804.jpg",
-            "/valores/Respeto/IMG_0882.jpg",
-            "/valores/Respeto/IMG_0886.jpg",
-            "/valores/Respeto/IMG_8103.jpg",
-            "/valores/Respeto/IMG_9752.jpg"
+            "/valores/Respeto/IMG_8196.jpg",
+            "/valores/Respeto/IMG_8493.jpg",
+            "/valores/Respeto/IMG_9548.jpg",
+            "/valores/Respeto/IMG_9605.jpg"
         ]
     },
     {

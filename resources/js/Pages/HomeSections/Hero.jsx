@@ -140,7 +140,7 @@ export default function Hero({ setVideoOpen }) {
                                     Grados habilitados con cupo exclusivo:
                                 </span>
                                 <div className="flex flex-wrap items-center justify-center md:justify-start gap-2">
-                                    {['Prejardín', 'Jardín', 'Transición', 'Primero (1°)', 'Segundo (2°)'].map((grado) => (
+                                    {['Prejardín', 'Jardín', 'Primero (1°)', 'Segundo (2°)', 'Cuarto (4°)', 'Quinto (5°)'].map((grado) => (
                                         <span
                                             key={grado}
                                             className="px-3.5 py-1.5 rounded-xl bg-white text-[#001659] text-xs sm:text-sm font-black shadow-md border border-slate-200 hover:scale-105 transition-transform"

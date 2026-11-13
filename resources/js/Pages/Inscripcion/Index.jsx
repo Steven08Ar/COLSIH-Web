@@ -4,8 +4,8 @@ import { useState } from 'react';
 import AppLayout from '@/Layouts/AppLayout';
 
 const GRADOS = [
-    'Prejardín', 'Jardín', 'Transición',
-    'Primero', 'Segundo',
+    'Prejardín', 'Jardín',
+    'Primero', 'Segundo', 'Cuarto', 'Quinto',
 ];
 
 const PASOS = ['Datos del estudiante', 'Datos del acudiente', 'Revisión y envío'];

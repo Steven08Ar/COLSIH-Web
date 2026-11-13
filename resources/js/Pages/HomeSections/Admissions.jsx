@@ -56,8 +56,8 @@ export default function Admissions() {
     ];
 
     const gradosDisponibles = [
-        { nivel: 'Preescolar', grados: ['Prejardín', 'Jardín', 'Transición'] },
-        { nivel: 'Primaria', grados: ['Primero (1°)', 'Segundo (2°)'] }
+        { nivel: 'Preescolar', grados: ['Prejardín', 'Jardín'] },
+        { nivel: 'Primaria', grados: ['Primero (1°)', 'Segundo (2°)', 'Cuarto (4°)', 'Quinto (5°)'] }
     ];
 
     return (

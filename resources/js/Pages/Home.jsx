@@ -4,6 +4,7 @@ import LazyViewportSection from '@/Components/LazyViewportSection';
 import WhatsAppButton from '@/Components/WhatsAppButton';
 import MJSButton from '@/Components/MJSButton';
 import PlataformaMobileButton from '@/Components/PlataformaMobileButton';
+import AdmitidosPopup from '@/Components/Admisiones/AdmitidosPopup';
 
 // Import Modular Sections
 import Hero from './HomeSections/Hero';
@@ -90,6 +91,9 @@ export default function Home({ noticias, testimonios, preguntas, tour, scenes = 
 
             {/* Botón Flotante Global de WhatsApp (Abajo Derecha) */}
             <WhatsAppButton />
+
+            {/* Aviso: lista de admitidos 2027 (una vez por sesión) */}
+            <AdmitidosPopup />
 
             {/* CENTRALIZED VIDEO MODAL USING NATIVE Video Home.mp4 WITHOUT CONTROLS */}
             {videoOpen && (

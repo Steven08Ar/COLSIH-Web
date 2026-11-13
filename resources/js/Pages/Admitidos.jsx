@@ -2,7 +2,7 @@ import { Head, Link } from '@inertiajs/react';
 import AppLayout from '@/Layouts/AppLayout';
 import ScrollReveal from './HomeSections/ScrollReveal';
 import AdmitidosSection from '@/Components/Admisiones/AdmitidosSection';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Mail } from 'lucide-react';
 
 export default function Admitidos() {
     return (
@@ -46,7 +46,26 @@ export default function Admitidos() {
 
             {/* LISTADO */}
             <section className="py-14 md:py-20 bg-[#FAFCFF] font-sans">
-                <div className="max-w-[1440px] mx-auto px-6 md:px-12 lg:px-16">
+                <div className="max-w-[1440px] mx-auto px-6 md:px-12 lg:px-16 space-y-8">
+                    {/* Aviso de matrícula */}
+                    <ScrollReveal distance="translate-y-4">
+                        <div className="flex items-start gap-4 p-5 sm:p-6 rounded-3xl bg-amber-50/80 border border-amber-200">
+                            <div className="w-12 h-12 rounded-2xl bg-white text-amber-700 border border-amber-200 flex items-center justify-center shrink-0">
+                                <Mail className="w-6 h-6" />
+                            </div>
+                            <div className="space-y-1 text-left">
+                                <span className="text-xs font-bold text-amber-800 uppercase tracking-wider block">
+                                    Próximo paso · A partir del 24 de noviembre
+                                </span>
+                                <p className="text-sm sm:text-base font-medium text-slate-700 leading-relaxed">
+                                    A partir del <strong>24 de noviembre</strong> enviaremos a los correos electrónicos registrados los
+                                    documentos necesarios para realizar la matrícula, junto con las instrucciones y los pasos
+                                    que debes seguir para completar el proceso. Te recomendamos estar atento a tu bandeja de entrada y a la carpeta de spam.
+                                </p>
+                            </div>
+                        </div>
+                    </ScrollReveal>
+
                     <AdmitidosSection />
                 </div>
             </section>

@@ -272,6 +272,7 @@ export default function Navbar() {
                     </div>
 
                     <Link href="/admisiones" className={`transition-colors ${url === '/admisiones' ? 'text-white font-extrabold' : 'hover:text-white'}`}>Admisiones</Link>
+                    <Link href="/admitidos-2027" className={`transition-colors ${url === '/admitidos-2027' ? 'text-white font-extrabold' : 'hover:text-white'}`}>Admitidos 2027</Link>
 
                     {/* Actividades Dropdown */}
                     <div
@@ -454,6 +455,7 @@ export default function Navbar() {
                         </div>
 
                         <Link href="/admisiones" onClick={() => setMobileOpen(false)} className={`block px-3 py-2 text-sm font-semibold rounded-lg ${url === '/admisiones' ? 'text-white bg-white/10' : 'text-white/85'}`}>Admisiones</Link>
+                        <Link href="/admitidos-2027" onClick={() => setMobileOpen(false)} className={`block px-3 py-2 text-sm font-semibold rounded-lg ${url === '/admitidos-2027' ? 'text-white bg-white/10' : 'text-white/85'}`}>Admitidos 2027</Link>
 
                         <div>
                             <span className="block px-3 py-2 text-xs font-bold text-white/40 uppercase tracking-wider">Actividades</span>

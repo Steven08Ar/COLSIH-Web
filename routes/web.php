@@ -112,6 +112,9 @@ Route::get('/mjc', function () {
 // Admisiones
 Route::get('/admisiones', AdmisionesController::class)->name('admisiones');
 
+// Admitidos 2027
+Route::get('/admitidos-2027', fn () => inertia('Admitidos'))->name('admitidos');
+
 // Inscripción
 Route::prefix('inscripcion')->name('inscripcion.')->group(function () {
     Route::get('/', [InscripcionController::class, 'index'])->name('index');

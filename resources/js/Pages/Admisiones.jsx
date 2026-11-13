@@ -33,7 +33,6 @@ import {
     CheckCircle
 } from 'lucide-react';
 import { useState } from 'react';
-import AdmitidosSection from '@/Components/Admisiones/AdmitidosSection';
 
 const LINK_INSCRIPCIONES = "https://e.plataformaintegra.net/sihungria/index.php/cupo";
 const CORREO_ADMISIONES = "admisionescolsihfloridablanca@gmail.com";
@@ -525,11 +524,6 @@ export default function Admisiones() {
                         </ScrollReveal>
 
                     </div>
-
-                    {/* Listado de admitidos 2027 */}
-                    <ScrollReveal distance="translate-y-6" delay={400}>
-                        <AdmitidosSection />
-                    </ScrollReveal>
 
                     {/* Tarjeta Ancha Inferior: Calendario y Etapas (Sin fechas específicas) */}
                     <ScrollReveal distance="translate-y-6" delay={500}>
